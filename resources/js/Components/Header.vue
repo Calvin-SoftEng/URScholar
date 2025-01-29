@@ -225,44 +225,6 @@ onMounted(() => {
   })
 })
 
-  // export default {
-  //   props: {
-  //     dataOpenSideBar: Boolean,
-  //     clickHamburger: Function
-  //   },
-  //   name: 'headerTop',
-
-  //   theme: = ref={"dark"},
-  //   mounted() {
-  //     window.initFlowbite();
-  //   },
-  //   data() {
-  //     return {
-  //       items: [
-  //         {
-  //           label: 'Logout',
-  //           icon: 'pi pi-refresh',
-  //           command: () => {
-  //             this.$toast.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated', life: 3000 });
-  //           }
-  //         },
-  //         {
-  //           label: 'Change Password',
-  //           icon: 'pi pi-times',
-  //           command: () => {
-  //             this.$toast.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted', life: 3000 });
-  //           }
-  //         },
-  //       ]
-  //     }
-  //   },
-  //   methods: {
-  //     toggle(event) {
-  //       this.$refs.menu.toggle(event);
-  //     },
-  //   }
-  
-  // }
   </script>
   
   <style scoped>

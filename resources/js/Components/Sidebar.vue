@@ -51,11 +51,14 @@
               <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships') }]">Scholarship</span>
               </div>
               <font-awesome-icon 
-                icon="fa-solid fa-chevron-right" 
-                v-show="dataOpenSideBar" 
-                :class="{'rotate-180': isScholarshipMenuOpen} "
-                class="mr-2 transition-transform duration-200"
-              />
+              icon="fa-solid fa-chevron-right" 
+              v-show="dataOpenSideBar" 
+              :class="{
+                'rotate-180': isScholarshipMenuOpen,
+                'active text-white': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships')
+              }"
+              class="mr-2 transition-transform duration-200"
+            />
             </div>
   
             <!-- Submenu -->
@@ -103,7 +106,10 @@
               <font-awesome-icon 
                 icon="fa-solid fa-chevron-right" 
                 v-show="dataOpenSideBar" 
-                :class="{'rotate-180': isScholarsMenuOpen} "
+                :class="{
+                  'rotate-180': isScholarsMenuOpen,
+                  
+                  } "
                 class="mr-2 transition-transform duration-200"
               />
             </div>
@@ -384,44 +390,6 @@ const clickHamburger = (event) => {
   localStorage.setItem('sidebarState', dataOpenSideBar.value);
 }
 
-// const dataOpenSideBar = ref(localStorage.getItem('sidebarState') === 'true' || 'false'); 
-
-// const clickHamburger = (event) => {
-//   dataOpenSideBar.value = !dataOpenSideBar.value
-//   localStorage.setItem('sidebarState', JSON.stringify(dataOpenSideBar.value)); // Persist the state
-// }
-
-// const dataOpenSideBar = ref(true)
-
-// const clickHamburger = (event) => {
-//   dataOpenSideBar.value = !dataOpenSideBar.value
-//   localStorage.setItem('sidebarState', JSON.stringify(dataOpenSideBar.value)); // Persist the state
-// }
-
-// const methods = {
-//   toggle(event) {
-//     this.$refs.menu.toggle(event);
-//   },
-// }
-
-// export default {
-//   components: {
-//     Link,
-//   },
-//   props: {
-//     dataOpenSideBar: Boolean,
-//     clickHamburger: Function
-//   },
-//   directives: {
-//     tooltip: Tooltip
-//   },
-//   methods: {
-//     toggle(event) {
-//       this.$refs.menu.toggle(event);
-//     },
-//   },
-//   // for cascading menu
-//   setup() {
     const isScholarshipMenuOpen = ref(false)
     const isScholarsMenuOpen = ref(false)
     const menuPosition = ref(0)
@@ -471,19 +439,6 @@ const clickHamburger = (event) => {
       }
       })
     })
-
-    // return {
-    //   isScholarshipMenuOpen,
-    //   isScholarsMenuOpen,
-    //   menuPosition,
-    //   ScholarshipItems,
-    //   toggleScholarshipMenu,
-    //   sidebarWidth,
-    //   toggleScholarsMenu,
-    //   ScholarItems
-    // }
-  // }
-// }
 </script>
 
 <style>
@@ -518,16 +473,7 @@ const clickHamburger = (event) => {
   width: 22px;
   height: 22px;
 }
-/* .active {
-  background-color: #f3f4f6;
-  font-weight: bold; 
-  color: #2563eb; 
-  border-left: 4px solid #2563eb; 
-  padding-left: 12px; 
-} */
- /* .active {
-  background-color: cornflowerblue;
- } */
+
 </style>
   
   
