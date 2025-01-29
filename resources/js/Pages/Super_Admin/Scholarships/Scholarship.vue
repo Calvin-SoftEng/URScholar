@@ -130,7 +130,6 @@ import ScholarsTab from '../../../Components/Admin/ScholarsTabs/ScholarsTab.vue'
 import ScholarReqs from '../../../Components/Admin/ScholarsTabs/ScholarReqs.vue';
 
 import SlidingAddScholars from '../../../Components/Admin/ScholarsTabs/SlidingAddScholars.vue';
-import Test from '@/Components/Admin/ScholarsTabs/ScholarsTab 2.vue';
 
 // components
 

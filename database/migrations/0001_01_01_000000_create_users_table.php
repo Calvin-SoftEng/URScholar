@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
+            $table->string('suffix_name')->nullable();
             $table->string('campus')->nullable();
             $table->rememberToken();
             $table->timestamps();

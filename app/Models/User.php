@@ -25,6 +25,11 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function studentrecord()
+    {
+        return $this->hasMany(StudentRecord::class);
+    }
+
     public function message()
     {
         return $this->hasMany(Message::class);

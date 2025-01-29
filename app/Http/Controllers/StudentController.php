@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Scholarship;
 use App\Models\Requirements;
+use App\Models\StudentRecord;
 use App\Models\SubmittedRequirements;
 use App\Models\User;
 use App\Models\Scholar;
@@ -28,10 +29,18 @@ class StudentController extends Controller
     {
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
+            'suffix' => ['required', 'string', 'max:255'],
             'password' => ['required'],
             'confirm_password' => ['required', 'same:password'],
-            
+            'birthplace' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'numeric'],
+            'gender' => ['required', 'string', 'max:255'],
+            'civil_status' => ['required', 'string', 'max:255'],
+            'religion' => ['required', 'string', 'max:255'],
+            'guardian_name' => ['required', 'string', 'max:255'],
+            'relationship' => ['required', 'string', 'max:255'],
         ]);
 
         // dd($request->all());
@@ -47,6 +56,23 @@ class StudentController extends Controller
             'email_verified_at' => $user->markEmailAsVerified()
         ]);
         
+        StudentRecord::create([
+            'user_id' => $user->id,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'middle_name' => $request->middle_name,
+            'suffix' => $request->suffix,
+            'placebirth' => $request->birthplace,
+            'age' => $request->age,
+            'gender' => $request->gender,
+            'civil' => $request->civil_status,
+            'religion' => $request->religion,
+            'guardian' => $request->guardian_name,
+            'relationship' => $request->relationship,
+        ]);
+
+
+
         event(new Verified($user));
         
         return redirect()->route('student.dashboard');
