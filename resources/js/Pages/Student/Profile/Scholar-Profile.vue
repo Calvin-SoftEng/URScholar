@@ -89,8 +89,8 @@
                                     Elementary
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                    <span class="text-gray-700 text-base font-medium leading-tight">Lagay mo dito</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">Lagay mo dito</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{elem.name }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{elem.year}}</span>
                                 </div>
                             </div>
                             <div>
@@ -174,4 +174,19 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
+import { ref, onMounted, computed } from 'vue';
+
+const props = defineProps({
+    student: Object,
+    education: Object,
+});
+
+const elem = computed(() => {
+  try {
+    return JSON.parse(props.education.elem);
+  } catch (error) {
+    console.error("Invalid JSON format", error);
+    return {}; // Return empty object if parsing fails
+  }
+});
 </script>

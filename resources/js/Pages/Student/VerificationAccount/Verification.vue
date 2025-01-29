@@ -206,17 +206,17 @@
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
-                                        <Input id="email" type="text" placeholder="Elementary School" v-model="form.elementary" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Elementary School" v-model="form.elementary.name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
-                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.e_years" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.elementary.years" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
-                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.e_honors" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.elementary.honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- junior -->
@@ -229,17 +229,17 @@
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
-                                        <Input id="email" type="text" placeholder="Junior High School" v-model="form.junior" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Junior High School" v-model="form.junior.name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
-                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.j_years" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.junior.years" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
-                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.j_honors" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.junior.honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- senior -->
@@ -252,17 +252,17 @@
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
-                                        <Input id="email" type="text" placeholder="Senior High School" v-model="form.senior" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Senior High School" v-model="form.senior.name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
-                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.s_years" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.senior.years" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
-                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.s_honors" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.senior.honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- college -->
@@ -275,17 +275,17 @@
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
-                                        <Input id="email" type="text" placeholder="University" v-model="form.college" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="University" v-model="form.college.name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
-                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.c_years" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.college.years" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
-                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.c_honors" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.college.honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- vocational -->
@@ -298,17 +298,17 @@
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
-                                        <Input id="email" type="text" placeholder="School or College University" v-model="form.vocational" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="School or College University" v-model="form.vocational.name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
-                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.v_years" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.vocational.years" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
-                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.v_honors" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.vocational.honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- post -->
@@ -321,17 +321,17 @@
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
-                                        <Input id="email" type="text" placeholder="School or College University" v-model="form.postgrad" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="School or College University" v-model="form.postgrad.name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
-                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.p_years" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.postgrad.years" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
-                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.p_honors" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Firt Name" v-model="form.postgrad.honors" class="w-full border-gray-200" />
                                     </div>
                                     
                                     <div class="col-span-3 space-x-2 flex justify-end mt-4">
@@ -905,6 +905,12 @@ const form = useForm({
     religion: '',
     guardian_name: '',
     relationship: '',
+    elementary: { name: '', years: '', honors: '' },
+    junior: { name: '', years: '', honors: '' },
+    senior: { name: '', years: '', honors: '' },
+    college: { name: '', years: '', honors: '' },
+    vocational: { name: '', years: '', honors: '' },
+    postgrad: { name: '', years: '', honors: '' },
 });
 
 

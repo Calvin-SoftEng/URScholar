@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\EducationRecord;
 use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\StudentRecord;
@@ -41,10 +42,34 @@ class StudentController extends Controller
             'religion' => ['required', 'string', 'max:255'],
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
+            'elementary.name' => ['', 'string'],
+            'elementary.years' => ['', 'numeric'],
+            'elementary.honors' => ['', 'string'],
+            // 'junior.name' => ['required', 'string', 'max:255'],
+            // 'junior.years' => ['required', 'numeric'],
+            // 'junior.honors' => ['required', 'string', 'max:255'],
+            // 'senior.name' => ['required', 'string', 'max:255'],
+            // 'senior.years' => ['required', 'numeric'],
+            // 'senior.honors' => ['required', 'string', 'max:255'],
+            // 'college.name' => ['required', 'string', 'max:255'],
+            // 'college.years' => ['required', 'numeric'],
+            // 'college.honors' => ['required', 'string', 'max:255'],
+            // 'vocational.name' => ['required', 'string', 'max:255'],
+            // 'vocational.years' => ['required', 'numeric'],
+            // 'vocational.honors' => ['required', 'string', 'max:255'],
+            // 'postgrad.name' => ['required', 'string', 'max:255'],
+            // 'postgrad.years' => ['required', 'numeric'],
+            // 'postgrad.honors' => ['required', 'string', 'max:255'],
         ]);
 
         // dd($request->all());
 
+
+        $elementary = [
+            'name' => $request->elementary['name'],
+            'year' => $request->elementary['years'],
+            'honors' => $request->elementary['honors'],
+        ];
         $password = Hash::make($request->password);
 
         $user = User::where('email', $request->email)->first();
@@ -55,7 +80,7 @@ class StudentController extends Controller
             'password' => $password,
             'email_verified_at' => $user->markEmailAsVerified()
         ]);
-        
+
         StudentRecord::create([
             'user_id' => $user->id,
             'first_name' => $request->first_name,
@@ -71,10 +96,20 @@ class StudentController extends Controller
             'relationship' => $request->relationship,
         ]);
 
+        $studentrecord = StudentRecord::where('user_id', $user->id)->get();
 
+        EducationRecord::create([
+            'student_record_id' => $studentrecord->pluck('id')->first(),
+            'elem' => json_encode($elementary),
+            // 'junior' => json_encode($request->junior),
+            // 'senior' => json_encode($request->senior),
+            // 'college' => json_encode($request->college),
+            // 'vocational' => json_encode($request->vocational),
+            // 'postgrad' => json_encode($request->postgrad),
+        ]);
 
         event(new Verified($user));
-        
+
         return redirect()->route('student.dashboard');
     }
 
@@ -93,16 +128,15 @@ class StudentController extends Controller
 
         if ($submitRequirements) {
             return Inertia::render('Student/Grant-in/Grant-In', [
-            'scholarship' => $scholarship,
-            'scholar' => $scholar,
-            'requirements' => $requirements,
-        ]);
-        } 
-        else {
+                'scholarship' => $scholarship,
+                'scholar' => $scholar,
+                'requirements' => $requirements,
+            ]);
+        } else {
             return redirect()->route('student.confirmation');
         }
 
-        
+
     }
 
     public function confirmation()
@@ -124,12 +158,19 @@ class StudentController extends Controller
             'scholar' => $scholar,
             'requirements' => $requirements,
         ]);
-    
+
     }
 
     public function profile()
     {
-        return Inertia::render('Student/Profile/Scholar-Profile');
+
+        $student = StudentRecord::where('user_id', Auth::user()->id)->first();
+        $education = EducationRecord::where('student_record_id', $student->id)->first();
+
+        return Inertia::render('Student/Profile/Scholar-Profile', [
+            'student' => $student,
+            'education' => $education
+        ]);
     }
     public function application(User $user)
     {
