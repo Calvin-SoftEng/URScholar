@@ -31,6 +31,8 @@ module.exports = {
         quicksand: ['Quicksand', 'sans-serif'],
         albert: ['Albert Sans', 'sans-serif'],
         sans: ['Instrument Sans', 'sans-serif'],
+        kanit: ['Kanit', 'sans-serif'],
+        instrument: ['Instrument Sans', 'sans-serif'],
       },
       colors: {
         primary: '#003366',

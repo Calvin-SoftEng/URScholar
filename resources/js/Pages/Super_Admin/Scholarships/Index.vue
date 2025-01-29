@@ -16,8 +16,9 @@
                 </div>
 
                 <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-4xl font-albert font-extrabold text-[darkblue] dark:text-dtext text-left">
-                        URS Partnered Sponsors</h1>
+                    
+                    <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS Partnered Sponsors</h1>
 
                     <Link :href="`/sponsors/create`">
                     <button
