@@ -15,8 +15,8 @@
                     </button>
                 </div>
             </div>
-            <div class="py-3 h-full bg-gray-100">
-                <div class="mx-auto max-w-5xl sm:px-6 lg:px-8 ">
+            <div class="py-3 h-full overflow-auto bg-gray-100">
+                <div class="mx-auto overflow-auto max-w-5xl sm:px-6 lg:px-8 ">
                     <div class="flex flex-col space-y-5">
                         <div class="bg-primary text-white text-3xl font-sans font-bold p-7 rounded-lg">
                             Greetings! {{ user.name }}
@@ -64,10 +64,10 @@
                     </div>
                 </div>
 
-                <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 ">
-                    <div class="flex flex-col space-y-5 mt-10">
+                <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 overflow-auto ">
+                    <div class="flex flex-col space-y-5 mt-10 overflow-auto">
 
-                        <div class="stepper-container">
+                        <div class="stepper-container max-w-full overflow-auto">
                             <!-- Step Content -->
                             <div class="flex-grow">
                             <div v-if="activeStep === 0">
@@ -189,124 +189,124 @@
                                     </div>
                                 </div>
                             </div>
-                            <div v-if="activeStep === 1">
-                                <div class="bg-white grid grid-cols-3 gap-2 rounded-lg h-1/2 items-center justify-start p-10">
+                            <div v-if="activeStep === 1" class="overflow-x-auto w-full max-w-full border-box">
+                                <div class="bg-white border-box overflow-x-auto grid grid-cols-3 gap-2 rounded-lg h-1/2 items-center justify-start p-10">
                                     <div class="col-span-3">
                                     <h3 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">Educational Background</h3>
                                     <p class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white">Please fill-up missing required fields. Put N/A if not applicable</p>
                                     </div>
 
                                     <!-- elementary -->
-                                    <div class="col-span-3 gap-2 relative w-full flex flex-row justify-center items-center mt-4 mb-2">
+                                    <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                     <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center">
                                         Elementary
                                     </h3>
                                     <div class="pl-2 w-full h-0.5 bg-gray-200 justify-center items-center rounded-lg"></div>
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
                                         <Input id="email" type="text" placeholder="Elementary School" v-model="form.elementary" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
                                         <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.e_years" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
                                         <Input id="email" type="text" placeholder="Firt Name" v-model="form.e_honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- junior -->
-                                    <div class="col-span-3 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                    <div class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
                                         Junior High School
                                     </h3>
                                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
                                         <Input id="email" type="text" placeholder="Junior High School" v-model="form.junior" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
                                         <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.j_years" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
                                         <Input id="email" type="text" placeholder="Firt Name" v-model="form.j_honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- senior -->
-                                    <div class="col-span-3 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                    <div class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
                                         Senior High School
                                     </h3>
                                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
                                         <Input id="email" type="text" placeholder="Senior High School" v-model="form.senior" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
                                         <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.s_years" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
                                         <Input id="email" type="text" placeholder="Firt Name" v-model="form.s_honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- college -->
-                                    <div class="col-span-3 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                    <div class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
                                         College
                                     </h3>
                                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
                                         <Input id="email" type="text" placeholder="University" v-model="form.college" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
                                         <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.c_years" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
                                         <Input id="email" type="text" placeholder="Firt Name" v-model="form.c_honors" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- vocational -->
-                                    <div class="col-span-3 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                    <div class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
                                         Vocational
                                     </h3>
                                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Name of School, College or University</Label>
                                         <Input id="email" type="text" placeholder="School or College University" v-model="form.vocational" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Years Attended</Label>
                                         <Input id="email" type="text" placeholder="Ex. 2016-2020" v-model="form.v_years" class="w-full border-gray-200" />
                                     </div>
 
-                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                    <div class=" max-w-sm items-center gap-1.5">
                                         <Label for="email">Honors/Awards Recieved</Label>
                                         <Input id="email" type="text" placeholder="Firt Name" v-model="form.v_honors" class="w-full border-gray-200" />
                                     </div>
