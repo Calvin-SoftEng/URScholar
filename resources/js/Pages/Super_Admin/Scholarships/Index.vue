@@ -45,19 +45,23 @@
                                         <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"
                                             class="w-20 h-20 rounded-full" />
                                     </div>
-                                    <h2
-                                        class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
-                                        {{
-                                            sponsor.name }}</h2>
-                                    <p class="leading-relaxed text-sm text-gray-400">
+                                    <div class="flex flex-col gap-1">
+                                        <span class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
+                                            {{ sponsor.name }}
+                                        </span>
+                                        <p class="card-title text-2xl text-gray-500 font-sora font-semibold dark:text-dtext">
+                                            {{ sponsor.abbreviation }}</p>
+                                    </div>
+                                    
+                                    <p class="leading-loose text-sm text-gray-400">
                                         <span
-                                            class="px-2 border rounded-xl border-gray-200 dark:border-gray-600">Created
-                                            on: {{ new Date(sponsor.created_at).toLocaleDateString() }}</span><br>
-                                        <span
-                                            class="px-2 border rounded-xl border-gray-200 dark:border-gray-600">Sponsoring
-                                            Since: {{ new Date(sponsor.created_at).toLocaleDateString('en-US', {
+                                            class="px-2 py-0.5 border rounded-xl border-gray-200 dark:border-gray-600">Created
+                                            on: {{ new Date(sponsor.created_at).toLocaleDateString('en-US', {
                                                 year:
-                                            'numeric', month: 'long', day: 'numeric' }) }}</span>
+                                            'numeric', month: 'long', day: 'numeric' }) }}</span><br>
+                                        <span
+                                            class="px-2 py-0.5 border rounded-xl border-gray-200 dark:border-gray-600">Sponsoring
+                                            Since: {{ sponsor.since }}</span>
                                     </p>
                                     <!-- <div class="badge badge-primary text-[12px] badge-outline">DEPED</div> -->
                                     <p class="text-md text-gray-600 dark:text-dtext mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"

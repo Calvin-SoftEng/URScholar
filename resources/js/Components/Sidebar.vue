@@ -72,7 +72,7 @@
             >
               <div 
                 v-show="isScholarshipMenuOpen" 
-                class="fixed top-0 bg-white dark:bg-dprimary w-48 z-50 cursor-pointer"
+                class="fixed top-0 bg-white dark:bg-dprimary w-48 z-50 cursor-pointer shadow-xl backdrop-blur-lg"
                 :style="{ top: `${menuPosition - 9}px`, left: `${sidebarWidth + 8}px` }"
               >
                 <ul class="space-y-0">

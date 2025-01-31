@@ -15,17 +15,11 @@
                 </div>
                 
                 <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-4xl font-poppins font-extrabold text-[darkblue] text-left dark:text-dtext">Active Scholarships</h1>
-
-                    <!-- <button class="btn" @click="toggleCreate" >
-                        <span class="material-symbols-rounded">
-                        library_add
-                        </span>
-                        New Scholarship
-                    </button> -->
+                    <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS Scholarships</h1>
                 </div>
 
-                <div class="container mx-auto py-5">
+                <div class="mx-auto py-5">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <div v-for="scholarship in scholarships" :key="scholarship.id"
                             class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
