@@ -5,7 +5,7 @@
                 <span class="mr-2 font-kanit font-bold text-blue-500 tracking-[-.1rem]">\\</span>
             URS Scholarship Partners</h1>
 
-            <div class="flex justify-end items-center w-full gap-3">
+            <div v-if="!isTableVisible" class="flex justify-end items-center w-full gap-3">
                 <button @click="toggleTable"
                     class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
                     >
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="w-full mt-5">
+            <div v-if="!isTableVisible" class="w-full mt-5">
                 <div class="relative overflow-x-auto border border-gray-200 rounded-lg">
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -93,20 +93,25 @@
                 </div>
             </div>
 
-            <div v-if="isTableVisible" class="w-full py-[1px] bg-gray-200"></div>
-
             <div v-if="isTableVisible" class="w-full h-full space-y-5 mb-3">
                 <!-- creating -->
                 <div class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border">
-                    <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-5 py-2">
+                    <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-6 py-4">
                         <h2 class="text-base font-semibold text-primary font-quicksand">Scholarship Information</h2>
-                        <button
-                            class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5"
-                            >
-                            Publish
-                        </button>
+                        <div class="flex items-center gap-2">
+                            <button @click="cancel"
+                                class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5"
+                                >
+                                Cancel
+                            </button>
+                            <button
+                                class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5"
+                                >
+                                Publish
+                            </button>
+                        </div>
                     </div>
-                    <div class="flex flex-col gap-2 px-5">
+                    <div class="flex flex-col gap-2 px-5 py-2">
                         <div class="col-span-1">
                             <div class="flex flex-col w-full gap-2">
                                 <div class="w-full">
@@ -234,6 +239,10 @@ const directives = {
 const isTableVisible = ref(false);
 
 const toggleTable = () => {
+    isTableVisible.value = !isTableVisible.value;
+};
+
+const cancel = () => {
     isTableVisible.value = !isTableVisible.value;
 };
 
