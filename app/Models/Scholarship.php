@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Scholarship extends Model
 {
-    protected $fillable = ['name', 'sponsor_id', 'school_year', 'scholarshipType',  'semester', 'status', 'created_by' ];
+    protected $fillable = ['name', 'sponsor_id', 'scholarshipType', 'status', 'created_by' ];
 
     public function scholars()
     {

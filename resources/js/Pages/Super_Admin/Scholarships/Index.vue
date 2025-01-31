@@ -146,7 +146,7 @@
                             </select>
                         </div>
 
-                        <div class="w-full flex flex-col space-y-2">
+                        <!-- <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">School Year</h3>
                             <input v-model="form.school_year" type="text" id="name"
                                 placeholder="School Year"
@@ -160,7 +160,7 @@
                                 <option value="merit">First Semester</option>
                                 <option value="need">Second Semester</option>
                             </select>
-                        </div>
+                        </div> -->
                         <div class="mt-2">
                             <button type="submit"
                                 class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
