@@ -34,6 +34,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth', 'usertype:mis'])->group(function () {
+    
+
+});
 
 Route::middleware(['auth', 'usertype:super_admin'])->group(function () {
 
