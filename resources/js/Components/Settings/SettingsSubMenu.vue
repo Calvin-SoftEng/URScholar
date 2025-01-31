@@ -1,50 +1,54 @@
 <template>
-    <div class="submenu-width lg:max-h-screen bg-white dark:bg-dcontainer flex flex-col border-r transition-all duration-300"
+    <div class="submenu-width lg:max-h-screen dark:bg-dprimary flex flex-col border-r transition-all duration-300"
         id="side-bar">
         <!-- desktop -->
-        <div class="hidden lg:flex flex-col justify-between h-full bg-white dark:bg-dcontainer">
-            <div class="menu-man text-left whitespace-nowrap mt-9">
+        <div class="hidden lg:flex flex-col justify-between h-full bg-white dark:bg-dprimary">
+            <div class="text-left whitespace-nowrap mt-9">
 
-                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100" :class="[{ 'active text-dtext font-semibold border-r-4 border-primary bg-gray-100': $page.url === '/settings/sponsors' }]">
+                <Link :href="(route('settings.index'))">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/sponsors' }]">
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>Sponsors</span>
                     </router-link>
                 </div>
+                </Link>
 
-                <div class="py-3 rounded-md cursor-pointer text-blue-900 hover:bg-gray-100 hover:rounded-md">
+                <Link :href="(route('settings.adding'))">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/adding-students' }]">
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                        <span>User Management</span>
+                        <span>University Students</span>
                     </router-link>
                 </div>
+                </Link>
 
                 <!-- <Link :href="(route('coordinator.dashboard'))"> -->
-                <div class="py-3 rounded-sm cursor-pointer text-blue-900 hover:bg-gray-100 hover:rounded-md">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
                     <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
                         <span>University Calendar</span>
                     </div>
                 </div>
                 <!-- </Link> -->
 
-                <div class="py-3 rounded-md cursor-pointer text-blue-900 hover:bg-gray-100 hover:rounded-md">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
                     <router-link to="/contact" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>Mission and Vision</span>
                     </router-link>
                 </div>
 
                 <!-- <Link :href="route('messaging.index')"> -->
-                <div class="py-3 rounded-md cursor-pointer text-blue-900 hover:bg-gray-100 hover:rounded-md">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
                     <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
                         <span>Archives</span>
                     </div>
                 </div>
                 <!-- </Link> -->
 
-                <div class="py-3 rounded-md cursor-pointer text-blue-900 hover:bg-gray-100 hover:rounded-md">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>University</span>
                     </router-link>
                 </div>
-                <div class="py-3 rounded-md cursor-pointer text-blue-900 hover:bg-gray-100 hover:rounded-md">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>Courses</span>
                     </router-link>

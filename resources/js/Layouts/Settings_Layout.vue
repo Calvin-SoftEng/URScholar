@@ -7,7 +7,7 @@
 
                 <SettingsNav />
 
-                <div class="flex-1 lg:h-full h-full lg:ml-0 bg-gray-100">
+                <div class="bg-gray-50 dark:bg-dcontainer flex-1 lg:h-full h-full lg:ml-0">
                 <slot></slot>
                 </div>
             </div>

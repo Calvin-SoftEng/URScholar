@@ -12,5 +12,10 @@ class SettingsController extends Controller
         return Inertia::render('Super_Admin/Settings/Settings_Sponsor');
     }
 
+    public function adding()
+    {
+        return Inertia::render('Super_Admin/Settings/Adding_Students');
+    }
+
 
 }

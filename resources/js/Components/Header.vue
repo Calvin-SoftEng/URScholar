@@ -14,10 +14,10 @@
         </div>
 
         <!-- Theme and Notification -->
-        <div class="flex items-center space-x-4 pr-5">
+        <div class="flex items-center space-x-4 pr-5" >
           <!-- Theme Toggle -->
           <div class="border border-gray-300 inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-200 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg">
-            <label class="swap swap-rotate h-[25px] w-[25px] cursor-pointer">
+            <label class="swap swap-rotate h-[35px] w-[35px] cursor-pointer">
               <!-- Hidden Checkbox to Toggle Theme -->
               <input 
                 type="checkbox" 

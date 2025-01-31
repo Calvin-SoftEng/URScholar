@@ -78,6 +78,7 @@ Route::middleware(['auth', 'usertype:super_admin'])->group(function () {
 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
+    Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
 
     // Route::get('/scholarships/{scholarship}', [ScholarController::class, 'index'])->name('scholars.index');
     // Route::get('/coordinator/scholarships/scholars', [ScholarController::class, 'index'])->name('scholars.index');

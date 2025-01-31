@@ -192,16 +192,18 @@
           <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Settings</div>
 
           <Link :href="route('settings.index')">
-            <div v-tooltip.right="!dataOpenSideBar ? 'Settings' : ''" :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/settings/univ-calendar' }]">
+            <div v-tooltip.right="!dataOpenSideBar ? 'Settings' : ''" :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/settings') }]">
               <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                  <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url === '/settings/univ-calendar' }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url === '/settings/univ-calendar' }]">
+                  <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/settings') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/settings') }]">
                   settings
                   </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/settings/univ-calendar' }]">Settings</span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/settings') }]">Settings</span>
               </div>
             </div>
           </Link>
         </div>
+
+        
 
         <!-- account -->
         <div class="menu-man pb-5 w-full text-left px-2 justify-self-end">
