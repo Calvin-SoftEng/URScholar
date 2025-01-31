@@ -32,7 +32,7 @@
                 >
                 dashboard
                 </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/admin/dashboard' }]">Dashboard</span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/admin/dashboard' }]">Settings</span>
               </div>
               </div>
             </Link>
