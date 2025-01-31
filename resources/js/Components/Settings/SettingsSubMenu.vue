@@ -1,9 +1,15 @@
 <template>
-    <div class="submenu-width lg:max-h-screen bg-white flex flex-col border-r transition-all duration-300"
+    <div class="submenu-width lg:max-h-screen bg-white dark:bg-dcontainer flex flex-col border-r transition-all duration-300"
         id="side-bar">
         <!-- desktop -->
-        <div class="hidden lg:flex flex-col justify-between h-full bg-white">
-            <div class="menu-man text-left whitespace-nowrap mt-5 p-2">
+        <div class="hidden lg:flex flex-col justify-between h-full bg-white dark:bg-dcontainer">
+            <div class="menu-man text-left whitespace-nowrap mt-9">
+
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100" :class="[{ 'active text-dtext font-semibold border-r-4 border-primary bg-gray-100': $page.url === '/settings/sponsors' }]">
+                    <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+                        <span>Sponsors</span>
+                    </router-link>
+                </div>
 
                 <div class="py-3 rounded-md cursor-pointer text-blue-900 hover:bg-gray-100 hover:rounded-md">
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">

@@ -9,7 +9,7 @@ class SettingsController extends Controller
 
     public function index()
     {
-        return Inertia::render('Super_Admin/Settings/Univ_Calendar');
+        return Inertia::render('Super_Admin/Settings/Settings_Sponsor');
     }
 
 
