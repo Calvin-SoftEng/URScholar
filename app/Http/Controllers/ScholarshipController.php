@@ -70,8 +70,6 @@ class ScholarshipController extends Controller
             'sponsor_id' => 'required|int',
             'name' => 'required|string|max:255',
             'scholarshipType' => 'required|string|max:255',
-            'school_year' => 'required|string|max:255',
-            'semester' => 'required|string',
             // 'requirements' => 'required|array'
             // 'application' => 'required|date',
             // 'deadline' => 'required|date',
