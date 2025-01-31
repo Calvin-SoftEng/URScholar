@@ -17,4 +17,9 @@ class Scholar extends Model
     {
         return $this->hasMany(SubmittedRequirements::class);
     }
+
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
 }
