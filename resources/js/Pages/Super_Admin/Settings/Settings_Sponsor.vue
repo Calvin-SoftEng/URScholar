@@ -5,7 +5,16 @@
                 <span class="mr-2 font-kanit font-bold text-blue-500 tracking-[-.1rem]">\\</span>
             URS Scholarship Partners</h1>
 
-            <div class="flex justify-between items-center w-full">
+            <div class="flex justify-end items-center w-full gap-3">
+                <button @click="toggleTable"
+                    class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
+                    >
+                    <span class="material-symbols-rounded dark:text-dtext">
+                        library_add
+                    </span>
+                    New Sponsor
+                </button>
+
                 <div class="w-3/12">
                     <form class="max-w-md mx-auto">   
                         <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -20,15 +29,6 @@
                         </div>
                     </form>
                 </div>
-
-                <button @click="toggleTable"
-                    class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
-                    >
-                    <span class="material-symbols-rounded dark:text-dtext">
-                        library_add
-                    </span>
-                    New Sponsor
-                </button>
             </div>
 
             <div class="w-full mt-5">
