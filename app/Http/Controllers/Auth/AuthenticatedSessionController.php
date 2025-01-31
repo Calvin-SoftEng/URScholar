@@ -35,7 +35,10 @@ class AuthenticatedSessionController extends Controller
 
         $url = "";
 
-        if ($request->user()->usertype === 'super_admin') {
+        if ($request->user()->usertype === 'mis') {
+            return redirect()->route('mis.dashboard');
+        }
+        elseif ($request->user()->usertype === 'super_admin') {
             return redirect()->route('super_admin.dashboard');
         }
         elseif ($request->user()->usertype === 'coordinator') {

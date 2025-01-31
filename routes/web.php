@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScholarshipController;
 use App\Http\Controllers\ScholarController;
 use App\Http\Controllers\MessageController;
+use App\Http\Controllers\MISController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\SuperAdminController;
@@ -35,7 +36,8 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'usertype:mis'])->group(function () {
-    
+    Route::get('/mis/dashboard', [MISController::class, 'dashboard'])
+        ->name('mis.dashboard');
 
 });
 
