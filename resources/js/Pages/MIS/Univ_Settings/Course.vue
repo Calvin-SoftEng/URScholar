@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
@@ -12,7 +13,8 @@
 
             <div class="w-full h-full flex flex-col px-5 mt-5">
                 <!-- card -->
-                <div v-for="campus in campuses" :key="campus.id" class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                <div v-for="campus in campuses" :key="campus.id"
+                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                     <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                         <div>
                             <img src="" alt="">
@@ -20,23 +22,25 @@
                         </div>
                         <Link :href="`/mis/univ-settings/course/config/${campus.id}`">
                         <button
-                            class="bg-white px-3 py-1 rounded-md border-gray-100 text-primary border hover:bg-primary hover:text-dtext dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
-                            >
+                            class="bg-white px-3 py-1 rounded-md border-gray-100 text-primary border hover:bg-primary hover:text-dtext dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
                             Add Course
                         </button>
                         </Link>
                     </div>
 
-                    <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                        <div class="font-instrument font-normal text-sm text-primary">
-                            Bachelor of Science in Information Technology
+                    <div v-for="course in campus.courses" :key="course.id">
+                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                            <div class="font-instrument font-normal text-sm text-primary">
+                                {{ course.name }}
+                            </div>
                         </div>
                     </div>
+
                 </div>
 
             </div>
         </div>
-        
+
     </AuthenticatedLayout>
 </template>
 
@@ -48,6 +52,7 @@ import { ref } from 'vue';
 
 defineProps({
     campuses: Array,
+    courses: Array,
 });
 
 
