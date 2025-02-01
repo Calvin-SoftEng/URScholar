@@ -12,6 +12,7 @@ use App\Http\Controllers\MISController;
 use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\SponsorController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\SystemAdminController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -37,13 +38,13 @@ Route::middleware('auth')->group(function () {
 
 // MASTER ADMIN -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Route::middleware(['auth', 'usertype:mis'])->group(function () {
+Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     
-    Route::get('/mis/dashboard', [MISController::class, 'dashboard'])->name('mis.dashboard');
+    Route::get('/system_admin/dashboard', [SystemAdminController::class, 'dashboard'])->name('system_admin.dashboard');
 
     // univ settings
-    Route::get('/mis/univ-settings/course', [MISController::class, 'course'])->name('mis.course');
-    Route::get('/mis/univ-settings/campuses', [MISController::class, 'campuses'])->name('mis.campuses');
+    Route::get('/mis/univ-settings/course', [SystemAdminController::class, 'course'])->name('mis.course');
+    Route::get('/mis/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('mis.campuses');
 
 });
 

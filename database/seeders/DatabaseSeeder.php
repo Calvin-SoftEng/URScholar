@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'mis'
+            'usertype' => 'system_admin'
         ]);
 
         //Super Admin

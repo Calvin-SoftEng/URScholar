@@ -1,5 +1,5 @@
 <template>
-    <div v-if="$page.props.auth.user.usertype == 'mis'">
+    <div v-if="$page.props.auth.user.usertype == 'system_admin'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
         <MIS_Header class="w-full h-[50px] z-50" />

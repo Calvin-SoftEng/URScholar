@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
-            $table->enum('usertype', ['coordinator', 'student', 'super_admin', 'mis'])->default('student');
+            $table->enum('usertype', ['coordinator', 'student', 'super_admin', 'system_admin'])->default('student');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('first_name')->nullable();
