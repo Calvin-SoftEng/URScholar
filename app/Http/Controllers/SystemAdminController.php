@@ -19,4 +19,12 @@ class SystemAdminController extends Controller
     public function campuses() {
         return Inertia::render('MIS/Univ_Settings/Campus');
     }
+
+    public function course_config() {
+        return Inertia::render('MIS/Univ_Settings/CourseConfig');
+    }
+
+    public function sy_term() {
+        return Inertia::render('MIS/Univ_Settings/SY_Term');
+    }
 }

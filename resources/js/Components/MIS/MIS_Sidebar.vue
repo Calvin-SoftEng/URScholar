@@ -59,10 +59,10 @@
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">University Settings</div>
             <!-- School Year and Term Management, Campus Management, Course and College Management -->
 
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+            <Link :href="route('mis.sy_term')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/univ-settings/schoolyear-term' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">School Year and Term Management</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/univ-settings/schoolyear-term' }">School Year and Term Management</span>
                 </div>
               </div>
             </Link>
@@ -76,9 +76,9 @@
             </Link>
 
             <Link :href="route('mis.course')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/univ-settings/course' }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/mis/univ-settings/course') }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/univ-settings/course' }">Course Management</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url.startsWith('/mis/univ-settings/course') }">Course Management</span>
                 </div>
               </div>
             </Link>

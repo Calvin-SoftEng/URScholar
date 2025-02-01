@@ -2,7 +2,7 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full">
+        <div class="bg-dirtywhite p-6 h-full w-full space-y-2">
             <div>
                 <h1 class="text-2xl font-bold mb-5">Campus</h1>
             </div>
@@ -149,7 +149,7 @@
                 </div>
             </div>
         </div>
-        <!-- creating a sponsor -->
+        <!-- adding focal person -->
         <div v-if="Assigning"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
