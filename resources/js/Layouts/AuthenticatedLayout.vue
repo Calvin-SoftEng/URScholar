@@ -2,19 +2,17 @@
     <div v-if="$page.props.auth.user.usertype == 'mis'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
-        <MIS_Header class="w-full h-[50px]" />
+        <MIS_Header class="w-full h-[50px] z-50" />
 
             <!-- Content Area -->
-            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
-                <!-- Sidebar -->
+            <div class="pl-96 bg-white flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
+                <!-- Sidebar --> 
                 <MIS_Sidebar 
-                :dataOpenSideBar="openSidebar" 
-                :clickHamburger="toggleSidebar" 
-                class="lg:w-[250px] w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
+                class="lg:w-5/12 w-full  lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
                 />
 
                 <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
+                <div class="pr-96 bg-dirtywhite flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
                 <slot></slot>
                 </div>
             </div>

@@ -10,4 +10,13 @@ class MISController extends Controller
     public function dashboard() {
         return Inertia::render('MIS/Dashboard');
     }
+
+    // univ settings
+    public function course() {
+        return Inertia::render('MIS/Univ_Settings/Course');
+    }
+
+    public function campuses() {
+        return Inertia::render('MIS/Univ_Settings/Campus');
+    }
 }

@@ -35,11 +35,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// MASTER ADMIN -------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Route::middleware(['auth', 'usertype:mis'])->group(function () {
-    Route::get('/mis/dashboard', [MISController::class, 'dashboard'])
-        ->name('mis.dashboard');
+    
+    Route::get('/mis/dashboard', [MISController::class, 'dashboard'])->name('mis.dashboard');
+
+    // univ settings
+    Route::get('/mis/univ-settings/course', [MISController::class, 'course'])->name('mis.course');
+    Route::get('/mis/univ-settings/campuses', [MISController::class, 'campuses'])->name('mis.campuses');
 
 });
+
+// SCHOLARSHIP ADMIN -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth', 'usertype:super_admin'])->group(function () {
 
