@@ -44,8 +44,9 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
     // univ settings
     Route::get('/mis/univ-settings/course', [SystemAdminController::class, 'course'])->name('mis.course');
-    Route::get('/mis/univ-settings/course/config', [SystemAdminController::class, 'course_config'])->name('mis.course_config');
+    Route::get('/mis/univ-settings/course/config/{campuses}', [SystemAdminController::class, 'course_config'])->name('mis.course_config');
     Route::get('/mis/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('mis.campuses');
+    Route::post('/mis/univ-settings/campuses/store', [SystemAdminController::class, 'store_campus'])->name('mis.store_campus');
     Route::get('/mis/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_term'])->name('mis.sy_term');
 
 });

@@ -27,7 +27,7 @@
                     <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                         <div>
                             <img src="" alt="">
-                            <span class="font-semibold font-sora text-lg">University of Rizal System, Antipolo Campus</span>
+                            <span class="font-semibold font-sora text-lg">{{ campuses.name }}</span>
                         </div>
                         <div class="flex gap-1">
                             <button @click="toggleModal"
@@ -90,7 +90,7 @@
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">Call mo campus here</h2>
+                        <h2 class="text-2xl font-bold">{{ campuses.name }}</h2>
                     </span>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -106,7 +106,7 @@
                 <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
                     <div>
                         <label for="last_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Course</label>
-                        <input type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
+                        <input v-model="form.name" type="text" id="last_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required />
                     </div>
                     <div class="mt-2">
                         <button type="submit"
@@ -177,6 +177,12 @@ import { Head, Link } from '@inertiajs/vue3';
 import ContentDashboard from '@/Pages/Super_Admin/Dashboard/Content-Dashboard.vue';
 import { ref } from 'vue';
 
+defineProps({
+    campuses: Object,
+});
+
+
+
 
 const isCoursesVisible = ref(false);
 
@@ -202,5 +208,19 @@ const closeModal = () => {
 
 const resetForm = () => {
     form.value = { id: null, name: '', description: '' };
+};
+
+const form = ref({
+    id: null,
+    name: '',
+});
+
+const submitForm = async () => {
+    try {
+        router.post("/mis/univ-settings/campuses/store", form.value);
+        closeModal();
+    } catch (error) {
+        console.error("Error submitting form:", error);
+    }
 };
 </script>

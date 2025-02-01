@@ -12,13 +12,13 @@
 
             <div class="w-full h-full flex flex-col px-5 mt-5">
                 <!-- card -->
-                <div class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                <div v-for="campus in campuses" :key="campus.id" class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                     <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                         <div>
                             <img src="" alt="">
-                            <span class="font-semibold font-sora text-lg">University of Rizal System, Antipolo Campus</span>
+                            <span class="font-semibold font-sora text-lg">{{ campus.name }}</span>
                         </div>
-                        <Link :href="route('mis.course_config')">
+                        <Link :href="`/mis/univ-settings/course/config/${campus.id}`">
                         <button
                             class="bg-white px-3 py-1 rounded-md border-gray-100 text-primary border hover:bg-primary hover:text-dtext dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
                             >
@@ -45,6 +45,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import ContentDashboard from '@/Pages/Super_Admin/Dashboard/Content-Dashboard.vue';
 import { ref } from 'vue';
+
+defineProps({
+    campuses: Array,
+});
 
 
 const isCoursesVisible = ref(false);
