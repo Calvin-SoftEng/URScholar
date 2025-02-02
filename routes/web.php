@@ -102,7 +102,12 @@ Route::middleware(['auth', 'usertype:super_admin'])->group(function () {
 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings/sponsors/create', [SettingsController::class, 'create_sponsor'])->name('settings.sponsor');
+
+
+
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
+    Route::post('/settings/adding-students/store', [SettingsController::class, 'store_student'])->name('settings.store');
 
     // Route::get('/scholarships/{scholarship}', [ScholarController::class, 'index'])->name('scholars.index');
     // Route::get('/coordinator/scholarships/scholars', [ScholarController::class, 'index'])->name('scholars.index');

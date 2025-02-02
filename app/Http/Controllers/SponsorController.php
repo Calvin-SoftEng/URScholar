@@ -38,35 +38,6 @@ class SponsorController extends Controller
 
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'name' => 'required|string|max:255',
-        //     'file' => 'required|file',
-        //     'description' => 'required|string',
-        //     'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-        //     'imgName' => 'required|string',
-        // ]);
-
-        // dd($request->all());
-        
-        // $logoFile = $request->file('img');
-        // $logoFileName = $request->imgName;
-        // // $logoPath = $request->file('img')->store('sponsor/logo', 'public');
-
-        // $logoPath = Storage::disk('public')->putFileAs('sponsor/logo', $logoFile, $logoFileName);
-
-        // $filePath = $request->file('file')->store('sponsor/moa', 'public');
-        
-
-        // // $fileName = time() . '_' . $request->file('img')->getClientOriginalName();
-
-        // Sponsor::create([
-        //     'name' => $request->name,
-        //     'moa_file' => $filePath,
-        //     'description' => $request->description,
-        //     'logo' => $logoFileName,
-        //     // 'logo' => $fileName,
-        // ]);
-
         $request->validate([
             'name' => 'required|string|max:255',
             'file' => 'required|file',
