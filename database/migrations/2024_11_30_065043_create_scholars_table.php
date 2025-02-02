@@ -13,11 +13,27 @@ return new class extends Migration
     {
         Schema::create('scholars', function (Blueprint $table) {
             $table->id();
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('email');
-            $table->string('course');
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->string('hei_name');
+            $table->string('campus');
+            $table->string('grant');
+            $table->integer('batch_no');
+            $table->string('app_no');
+            $table->string('award_no');
+            $table->string('last_name');
+            $table->string('first_name');
+            $table->string('extname')->nullable();
+            $table->string('middle_name');
+            $table->string('sex');
+            $table->string('birthdate');
+            $table->string('course');
+            $table->integer('year_level');
+            $table->integer('total_units')->nullable();
+            $table->string('street');
+            $table->string('municipality');
+            $table->string('province');
+            $table->string('pwd_classification')->nullable();
+            
             $table->timestamps();
         });
     }

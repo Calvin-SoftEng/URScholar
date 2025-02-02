@@ -150,7 +150,7 @@
         </div>
 
         <div v-if="BulkAdding" class="mx-auto w-full justify-center items-center flex flex-col gap-4 ">
-            <form @submit.prevent="submitBulk" class="w-6/12 flex flex-col gap-4">
+            <form @submit.prevent="submitForm" class="w-6/12 flex flex-col gap-4">
                 <div class="flex flex-col w-full gap-4 mt-5">
                     <!-- File Drop Zone -->
                     <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Import CSV FIle of Scholars</label>
@@ -182,7 +182,7 @@
                             <img :src="form.filePreview" alt="Uploaded Preview" class="max-h-24 mb-2 rounded-lg text-gray-500" />
                             <p class="text-sm text-gray-500">{{ form.fileName }}</p>
                         </div>
-                        <input id="dropzone-file" type="file" class="hidden" accept=".csv" @change="(e) => handleFile(e.target.files[0])" @select="handleFileUpload"  />
+                        <input id="dropzone-file" type="file" class="hidden" accept=".csv" @change="(e) => handleFile(e.target.files[0])"  />
                     </label>
                     <div class="flex justify-end gap-2">
                         <button type="submit" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
@@ -310,6 +310,44 @@ const handleFileDrop = (event) => {
 };
 
 
+const handleFile = (file) => {
+    if (file) {
+        form.value.file = file;
+        form.value.fileName = file.name;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            form.value.filePreview = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+};
+
+const submitForm = async () => {
+    const formData = new FormData();
+    formData.append("file", form.value.file);
+
+    try {
+        // Send the request only when user confirms
+        router.post(`/scholarships/1/upload`, formData, {
+            preserveScroll: true,
+            onSuccess: () => {
+                headers.value = [];
+                previewData.value = [];
+                error.value = "";
+                uploadingPanel.value = false;
+                fileReadyToUpload.value = false;
+                document.getElementById("dropzone-file").value = null; // Clear file input
+                usePage().props.flash = { success: "Scholars added to the scholarship!" };
+                closePanel();
+                closeModal();
+            },
+        });
+    } catch (err) {
+        error.value = "An error occurred while uploading the file.";
+        console.error("Error during file upload:", err);
+    }
+};
+
 // const handleFile = async (file) => {
 // if (!file) return;
 
@@ -416,29 +454,29 @@ entries.value.splice(index, 1)
 }
 
 
-const submitForm = async () => {
-try {
-    if (entries.value.length === 0) {
-    alert('No data to submit!');
-    return;
-    }
+// const submitForm = async () => {
+// try {
+//     if (entries.value.length === 0) {
+//     alert('No data to submit!');
+//     return;
+//     }
 
-    const response = await fetch('/api/insert-data', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(entries.value)
-    });
+//     const response = await fetch('/api/insert-data', {
+//     method: 'POST',
+//     headers: { 'Content-Type': 'application/json' },
+//     body: JSON.stringify(entries.value)
+//     });
 
-    if (!response.ok) throw new Error('Failed to submit');
+//     if (!response.ok) throw new Error('Failed to submit');
 
-    // alert('Data submitted successfully!');
+//     // alert('Data submitted successfully!');
 
-    // Clear entries after successful submission
-    entries.value = [];
-} catch (error) {
-    console.error('Error:', error);
-}
-};
+//     // Clear entries after successful submission
+//     entries.value = [];
+// } catch (error) {
+//     console.error('Error:', error);
+// }
+// };
 
 
 </script>

@@ -7,7 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 
 class Scholar extends Model
 {
-    protected $fillable = ['first_name', 'last_name', 'email', 'course'];
+    protected $fillable = [
+        'hei_name',
+        'campus',
+        'grant',
+        'batch_no',
+        'app_no',
+        'award_no',
+        'last_name',
+        'first_name',
+        'extname',
+        'middle_name',
+        'sex',
+        'birthdate',
+        'course',
+        'year_level',
+        'total_units',
+        'street',
+        'municipality',
+        'province',
+        'pwd_classification',
+    ];
+    
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);
