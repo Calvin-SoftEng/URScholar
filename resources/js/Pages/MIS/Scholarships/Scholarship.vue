@@ -126,7 +126,7 @@ import FileUpload from 'primevue/fileupload';
 import Papa from 'papaparse';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
-import ScholarsTab from '../../../Components/Admin/ScholarsTabs/ScholarsTab.vue';
+import ScholarsTab from '../../../Components/Admin/ScholarsTabs/ScholarList.vue';
 import ScholarReqs from '../../../Components/Admin/ScholarsTabs/ScholarReqs.vue';
 
 import SlidingAddScholars from '../../../Components/Admin/ScholarsTabs/SlidingAddScholars.vue';

@@ -133,7 +133,7 @@ import Column from 'primevue/column';
 import Button from 'primevue/button';
 import FileUpload from 'primevue/fileupload';
 
-import ScholarsTab from '../../../Components/Admin/ScholarsTabs/ScholarsTab.vue';
+import ScholarsTab from '../../../Components/Admin/ScholarsTabs/ScholarList.vue';
 import ScholarReqs from '../../../Components/Admin/ScholarsTabs/ScholarReqs.vue';
 
 import SlidingAddScholars from '../../../Components/Admin/ScholarsTabs/SlidingAddScholars.vue';
