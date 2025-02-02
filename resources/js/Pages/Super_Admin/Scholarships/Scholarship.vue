@@ -74,9 +74,6 @@ import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, To
 import Adding from '../../../Components/Admin/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Admin/ScholarsTabs/ScholarList.vue';
-import ScholarReqs from '../../../Components/Admin/ScholarsTabs/ScholarReqs.vue';
-
-import SlidingAddScholars from '../../../Components/Admin/ScholarsTabs/SlidingAddScholars.vue';
 
 // components
 
@@ -86,7 +83,6 @@ const components = {
     Button,
     FileUpload,
     Papa,
-    SlidingAddScholars,
 };
 
 const addVisible = ref(false);

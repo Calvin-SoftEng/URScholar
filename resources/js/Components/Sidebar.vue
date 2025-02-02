@@ -43,7 +43,7 @@
                 { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/sponsors') }
               ]">
               <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
-                <font-awesome-icon class="text-[19px]"
+                <font-awesome-icon class="text-[19px] py-0.5"
                   :icon="['far', 'handshake']" 
                   :class="{ 'text-dtext': $page.url.startsWith('/sponsors'), 'hover:text-white': true }"
                 />
