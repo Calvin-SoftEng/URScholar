@@ -45,8 +45,8 @@ class SystemAdminController extends Controller
 
         $request->validate([
             'campus_id' => 'required|exists:campuses,id',
-            'coor_id' => 'required',
-            'cashier_id' => 'required',
+            'coor_id' => '',
+            'cashier_id' => '',
         ]);
 
         $campus = Campus::findOrFail($request['campus_id']);
