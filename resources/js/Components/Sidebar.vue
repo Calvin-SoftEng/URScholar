@@ -37,127 +37,55 @@
               </div>
             </Link>
 
-          <!-- cascading scholarship menu -->
-          <div :class="['relative py-2 rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships') }]">
-            <!-- Main menu item -->
-            <div v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''" @click="toggleScholarshipMenu" :class="['flex items-center w-full justify-between font-quicksand font-semibold cursor-pointer text-blue-900 dark:text-dtext pl-0', { 'active text-primary': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships') }]"
-            >
-              <div class="flex items-center space-x-2">
-                <span v-tooltip.right="'Scholarships'"></span> 
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships') }]"
+            <Link :href="(route('sponsor.index'))" >
+              <div v-tooltip.right="!dataOpenSideBar ? 'Sponsors' : ''" :class="[
+                'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
+                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/sponsors') }
+              ]">
+              <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
+                <font-awesome-icon class="text-[19px]"
+                  :icon="['far', 'handshake']" 
+                  :class="{ 'text-dtext': $page.url.startsWith('/sponsors'), 'hover:text-white': true }"
+                />
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/sponsors') }]">Sponsor</span>
+              </div>
+              </div>
+            </Link>
+
+            <Link :href="(route('scholarships.index'))" >
+              <div v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''" :class="[
+                'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
+                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/scholarships') }
+              ]">
+              <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/scholarships') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/scholarships') }]"
                 >
                 checkbook
                 </span>
-              <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships') }]">Scholarship</span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/scholarships') }]">Scholarships</span>
               </div>
-              <font-awesome-icon 
-              icon="fa-solid fa-chevron-right" 
-              v-show="dataOpenSideBar" 
-              :class="{
-                'rotate-180': isScholarshipMenuOpen,
-                'active text-white': $page.url.startsWith('/sponsors') || $page.url.startsWith('/scholarships')
-              }"
-              class="mr-2 transition-transform duration-200"
-            />
-            </div>
-  
-            <!-- Submenu -->
-            <Transition
-              enter-active-class="transition-all duration-300 ease-out"
-              enter-from-class="opacity-0 -translate-x-2"
-              enter-to-class="opacity-100 translate-x-0"
-              leave-active-class="transition-all duration-200 ease-in"
-              leave-from-class="opacity-100 translate-x-0"
-              leave-to-class="opacity-0 -translate-x-2"
-            >
-              <div 
-                v-show="isScholarshipMenuOpen" 
-                class="fixed top-0 bg-white dark:bg-dprimary w-48 z-50 cursor-pointer shadow-xl backdrop-blur-lg"
-                :style="{ top: `${menuPosition - 9}px`, left: `${sidebarWidth + 8}px` }"
-              >
-                <ul class="space-y-0">
-                  <li v-for="(item, index) in ScholarshipItems" :key="index">
-                    <Link
-                      :href="item.route.name"
-                      class="block px-4 py-2 text-md font-quicksand font-bold border border-gray-200 dark:bg-dsecondary dark:border-gray-600 text-blue-900 hover:bg-gray-100 dark:text-white dark:hover:bg-dprimary transition-colors duration-200"
-                    >
-                      {{ item.label }}
-                    </Link>
-                  </li>
-                </ul>
               </div>
-            </Transition>
-          </div>
-  
-          <!-- cascading scholars menu -->
-          <div class="relative py-2 rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-            <!-- Main menu item -->
-            <div v-tooltip.right="!dataOpenSideBar ? 'Scholars' : ''"
-              class="flex items-center w-full justify-between font-quicksand font-semibold cursor-pointer text-blue-900 dark:text-dtext pl-0"
-              @click="toggleScholarsMenu"
-            >
-              <div class="flex items-center space-x-2">
-                <span v-tooltip.right="''"></span> 
+            </Link>
+
+            <div v-tooltip.right="!dataOpenSideBar ? 'Scholars' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+              <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                 <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
                 school
                 </span>
-              <span v-show="dataOpenSideBar" class="pl-2">Scholars</span>
-              </div>
-              <font-awesome-icon 
-                icon="fa-solid fa-chevron-right" 
-                v-show="dataOpenSideBar" 
-                :class="{
-                  'rotate-180': isScholarsMenuOpen,
-                  
-                  } "
-                class="mr-2 transition-transform duration-200"
-              />
-            </div>
-  
-            <!-- Submenu -->
-            <Transition
-              enter-active-class="transition-all duration-300 ease-out"
-              enter-from-class="opacity-0 -translate-x-2"
-              enter-to-class="opacity-100 translate-x-0"
-              leave-active-class="transition-all duration-200 ease-in"
-              leave-from-class="opacity-100 translate-x-0"
-              leave-to-class="opacity-0 -translate-x-2"
-            >
-              <div v-show="isScholarsMenuOpen" 
-                class="fixed top-0 bg-white w-48 z-50 cursor-pointer"
-                :style="{ top: `${menuPosition - 9}px`, left: `${sidebarWidth + 8}px` }">
-                <ul class="space-y-0">
-                  <li v-for="(item, index) in ScholarItems" :key="item.label">
-                    <router-link 
-                      :to="item.route" 
-                      class="block px-4 py-2 text-md font-quicksand font-bold border border-gray-200 dark:border-gray-600 dark:bg-dsecondary text-blue-900 hover:bg-gray-100 dark:text-white dark:hover:bg-dprimary transition-colors duration-200"
-                    >
-                      {{ item.label }}
-                    </router-link>
-                  </li>
-                </ul>
-              </div>
-            </Transition>
-          </div>
-  
-            <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Communication</div>
-
-            <div v-tooltip.right="!dataOpenSideBar ? 'Feed' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-              <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                <span class="material-symbols-rounded text-blue-900 dark:text-dtext" >
-                  rate_review
-                  </span>
-                <span v-show="dataOpenSideBar" class="pl-2">Feed</span>
+                <span v-show="dataOpenSideBar" class="pl-2">Scholars</span>
               </router-link>
             </div>
+  
+            <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Communication</div>
+            
             
             <Link :href="route('messaging.index')">
-              <div v-tooltip.right="!dataOpenSideBar ? 'Messaging' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+              <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
                 <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
                     <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
                     forum
                     </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Messaging</span>
+                  <span v-show="dataOpenSideBar" class="pl-2">Group</span>
                   </div>
               </div>
             </Link>

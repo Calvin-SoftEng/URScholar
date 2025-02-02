@@ -94,8 +94,8 @@ Route::middleware(['auth', 'usertype:super_admin'])->group(function () {
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');
 
     // Messaging
-    Route::get('/messages', [MessageController::class, 'index'])->name('messaging.index');
-    Route::post('/messages', [MessageController::class, 'store'])->name('messaging.store');
+    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
+    Route::post('/group-page', [MessageController::class, 'store'])->name('messaging.store');
 
     //Applicants
     Route::get('/scholarships/{scholarship}/applicants', [ApplicationController::class, 'show'])->name('scholarships.applicants');
