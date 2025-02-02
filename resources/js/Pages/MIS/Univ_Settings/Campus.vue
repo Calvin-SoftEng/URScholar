@@ -53,10 +53,10 @@
                                         {{ campus.location }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{campus.coordinator_id ? campus.coordinator_id : 'Not Assigned'}}
+                                        {{ campus.coordinator ? campus.coordinator.name : 'Not Assigned' }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{campus.cashier_id ? campus.cashier_id : 'Not Assigned'}}
+                                        {{ campus.cashier ? campus.cashier.name : 'Not Assigned' }}
                                     </td>
                                     <td class="px-6 py-4 flex flex-row gap-2">
                                         <button class="" v-tooltip.right="'Edit Campus'">
