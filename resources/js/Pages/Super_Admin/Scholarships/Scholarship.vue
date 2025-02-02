@@ -120,8 +120,6 @@ const toggleMonitoring = () => {
 const props = defineProps({
     scholarship: Object,
     scholars: Array,
-    requirements: Object,
-    submitRequirements: Array,
 });
 
 const formData = ref({
