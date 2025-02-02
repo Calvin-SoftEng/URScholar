@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Sponsor;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -80,6 +81,17 @@ class DatabaseSeeder extends Seeder
             'usertype' => 'student'
         ]);
 
+
+        $logopath = 'storage/sponsor/logo/images.png';
+        //sponsor
+        Sponsor::factory()->create([
+            'name' => 'sponsor1',
+            'abbreviation' => 'SP1',
+            'since' => '2021-01-01',
+            'moa_file' => 'moa1.pdf',
+            'description' => 'sponsor1',
+            'logo' => 'images.png',
+        ]);
 
         //sponsor 
         // $this->call(UserTableSeeder::class);
