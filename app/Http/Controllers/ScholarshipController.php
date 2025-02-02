@@ -50,17 +50,15 @@ class ScholarshipController extends Controller
         
         $scholars = $scholarship->scholars;
 
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+        // $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
-        $reqID = $requirements->pluck('id')->first();
+        // $reqID = $requirements->pluck('id')->first();
 
-        $submitRequirements = SubmittedRequirements::where('id', $reqID)->get();
+        // $submitRequirements = SubmittedRequirements::where('id', $reqID)->get();
 
         return Inertia::render('Super_Admin/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
-            'requirements' => $requirements,
-            'submitRequirements' => $submitRequirements,
         ]);
     }
 
