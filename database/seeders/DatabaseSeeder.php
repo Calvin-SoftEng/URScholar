@@ -57,6 +57,18 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'usertype' => 'coordinator'
         ]);
+
+        //cashier
+        User::factory()->create([
+            'name' => 'cashier1',
+            'email' => 'cashier1@gmail.com',
+            'first_name' => 'John Paul',
+            'last_name' => 'Manalo',
+            'middle_name' => 'De Guzman',
+            'password' => bcrypt('password'),
+            'usertype' => 'cashier'
+        ]);
+
         //student
         User::factory()->create([
             'name' => 'student1',

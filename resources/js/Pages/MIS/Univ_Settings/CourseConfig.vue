@@ -189,6 +189,7 @@ const campusid = ref(null);
 
 const toggleModal = (campusID) => {
     isCoursesVisible.value = !isCoursesVisible.value;
+    
     campusid.value = campusID;
     form.value.id = campusid;
 };

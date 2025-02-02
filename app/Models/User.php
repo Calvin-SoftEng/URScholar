@@ -35,6 +35,11 @@ class User extends Authenticatable
         return $this->hasMany(Message::class);
     }
 
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

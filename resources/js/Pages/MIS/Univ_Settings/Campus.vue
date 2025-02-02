@@ -53,10 +53,10 @@
                                         {{ campus.location }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        Si ano
+                                        {{campus.coordinator_id ? campus.coordinator_id : 'Not Assigned'}}
                                     </td>
                                     <td class="px-6 py-4">
-                                        Si ano
+                                        {{campus.cashier_id ? campus.cashier_id : 'Not Assigned'}}
                                     </td>
                                     <td class="px-6 py-4 flex flex-row gap-2">
                                         <button class="" v-tooltip.right="'Edit Campus'">
@@ -65,7 +65,8 @@
                                                 edit
                                             </span>
                                         </button>
-                                        <button @click="toggleAssign" v-tooltip.right="'Assign Focal Person'">
+                                        <button @click="toggleAssign(campus.id)"
+                                            v-tooltip.right="'Assign Focal Person'">
                                             <span
                                                 class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-yellow-400 rounded-lg">
                                                 assignment_ind
@@ -136,27 +137,22 @@
                     </button>
                 </div>
 
-                <form class="p-4 flex flex-col gap-3">
+                <form @submit.prevent="submitAssign" class="p-4 flex flex-col gap-3">
                     <div class="w-full flex flex-col space-y-2">
                         <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Coordinator</h3>
-                        <select id="scholarshipType"
+                        <select v-model="assign.coor_id" id="scholarshipType"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                             <option value="" disabled>Coordinator List</option>
-                            <option value="merit">Maam 1</option>
-                            <option value="need">Maam 2</option>
-                            <option value="athletic">Maam 3</option>
-                            <option value="artistic">Maam 4</option>
+                            <option v-for="coor in coor" :key="coor.id" :value="coor.id"> {{ coor.name }}</option>
                         </select>
                     </div>
                     <div class="w-full flex flex-col space-y-2">
                         <h3 class="font-semibold text-gray-900 dark:text-white">Campus Cashier</h3>
-                        <select id="scholarshipType"
+                        <select v-model="assign.cashier_id" id="scholarshipType"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                             <option value="" disabled>Cashier List</option>
-                            <option value="merit">Maam 1</option>
-                            <option value="need">Maam 2</option>
-                            <option value="athletic">Maam 3</option>
-                            <option value="artistic">Maam 4</option>
+                            <option v-for="cashier in cashier" :key="cashier.id" :value="cashier.id"> {{ cashier.name }}
+                            </option>
                         </select>
                     </div>
                     <div class="mt-2">
@@ -173,13 +169,17 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import ContentDashboard from '@/Pages/Super_Admin/Dashboard/Content-Dashboard.vue';
 import { Tooltip } from 'primevue';
+import { User } from 'lucide-vue-next';
 
 defineProps({
     campuses: Array,
+    coor: Array,
+    cashier: Array,
 });
+
 
 const isTableVisible = ref(false);
 
@@ -193,9 +193,17 @@ const cancel = () => {
 
 const Assigning = ref(false);
 
-const toggleAssign = () => {
+const campusid = ref(null);
+
+const toggleAssign = (campusID) => {
     Assigning.value = !Assigning.value;
+
+    if (Assigning.value) {
+        campusid.value = campusID;
+        assign.value.campus_id = campusid;
+    }
 };
+
 
 const closeModal = () => {
     Assigning.value = false;
@@ -209,14 +217,28 @@ const resetForm = () => {
 
 
 const form = ref({
-    id: null,
     name: '',
     location: '',
+});
+
+const assign = ref({
+    campus_id: null,
+    coor_id: null,
+    cashier_id: null,
 });
 
 const submitForm = async () => {
     try {
         router.post("/mis/univ-settings/campuses/store", form.value);
+        closeModal();
+    } catch (error) {
+        console.error("Error submitting form:", error);
+    }
+};
+
+const submitAssign = async () => {
+    try {
+        router.post("/mis/univ-settings/campuses/assign", assign.value);
         closeModal();
     } catch (error) {
         console.error("Error submitting form:", error);
