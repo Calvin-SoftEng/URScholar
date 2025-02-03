@@ -25,10 +25,10 @@ return new class extends Migration
             $table->string('extname')->nullable();
             $table->string('middle_name');
             $table->string('sex');
-            $table->string('birthdate');
+            $table->date('birthdate');
             $table->string('course');
             $table->integer('year_level');
-            $table->integer('total_units')->nullable();
+            $table->string('total_units')->nullable();
             $table->string('street');
             $table->string('municipality');
             $table->string('province');

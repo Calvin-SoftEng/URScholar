@@ -77,7 +77,7 @@ class ScholarController extends Controller
             $insertedCount = 0;
 
             foreach ($records as $record) {
-                $insertData[] = [
+                Scholar::create([
                     'scholarship_id' => $scholarship->id,
                     'hei_name' => $record['HEI NAME'] ?? null,
                     'campus' => $record['CAMPUS'] ?? null,
@@ -85,10 +85,10 @@ class ScholarController extends Controller
                     'batch_no' => $record['BATCH NO.'] ?? null,
                     'app_no' => $record['APP NO'] ?? null,
                     'award_no' => $record['AWARD NO.'] ?? null,
-                    'lastname' => $record['LASTNAME'] ?? null,
-                    'firstname' => $record['FIRSTNAME'] ?? null,
+                    'last_name' => $record['LASTNAME'] ?? null,
+                    'first_name' => $record['FIRSTNAME'] ?? null,
                     'extname' => $record['EXTNAME'] ?? null,
-                    'middlename' => $record['MIDDLENAME'] ?? null,
+                    'middle_name' => $record['MIDDLENAME'] ?? null,
                     'sex' => $record['SEX'] ?? null,
                     'birthdate' => $record['BIRTHDATE'] ? date('Y-m-d', strtotime($record['BIRTHDATE'])) : null,
                     'course' => $record['COURSE/PROGRAM ENROLLED'] ?? null,
@@ -98,13 +98,13 @@ class ScholarController extends Controller
                     'municipality' => $record['MUNICIPALITY'] ?? null,
                     'province' => $record['PROVINCE'] ?? null,
                     'pwd_classification' => $record['CLASSIFICATION OF PWD'] ?? null,
-                ];
+                ]);
                 
                 $insertedCount++;
             }
 
 
-            dd($insertData);
+            // Scholar::insert($insertData);
             
             return response()->json([
                 'message' => "Successfully imported {$insertedCount} records",

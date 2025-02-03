@@ -348,56 +348,6 @@ const submitForm = async () => {
     }
 };
 
-// const handleFile = async (file) => {
-// if (!file) return;
-
-// // Set file details
-// form.value.file = file;
-// form.value.fileName = file.name;
-
-// const reader = new FileReader();
-// reader.onload = (e) => {
-//     form.value.filePreview = e.target.result;
-
-//     // Parse CSV file
-//     Papa.parse(e.target.result, {
-//     header: true,
-//     skipEmptyLines: true,
-//     complete: (results) => {
-//         if (results.data && results.data.length > 0) {
-//         const filteredData = results.data.filter((row) =>
-//             Object.values(row).some((value) => value !== "")
-//         );
-
-//         if (filteredData.length > 0) {
-//             headers.value = Object.keys(filteredData[0]);
-//             previewData.value = filteredData;
-//             error.value = "";
-//             fileReadyToUpload.value = true; // Set flag to enable confirm button
-//         } else {
-//             error.value = "No valid data found in the file";
-//             previewData.value = [];
-//             headers.value = [];
-//             fileReadyToUpload.value = false;
-//         }
-//         } else {
-//         error.value = "No data found in the file";
-//         previewData.value = [];
-//         headers.value = [];
-//         fileReadyToUpload.value = false;
-//         }
-//     },
-//     error: (err) => {
-//         error.value = "Error parsing CSV: " + err.message;
-//         previewData.value = [];
-//         headers.value = [];
-//         fileReadyToUpload.value = false;
-//     },
-//     });
-// };
-
-// reader.readAsText(file); // Read file
-// };
 
 // Function to confirm and upload the file
 const confirmUpload = async () => {
