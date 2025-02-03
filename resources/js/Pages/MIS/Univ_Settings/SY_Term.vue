@@ -2,81 +2,135 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full">
+        <div class="bg-dirtywhite p-6 h-full w-full space-y-10">
             <div>
-                <h1 class="text-2xl font-bold mb-5">Campus</h1>
-            </div>
-            <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
-                Here is the list of the University's courses. You can add and edit courses for each campus.
-            </p>
-
-            <div class="w-full h-full flex flex-col px-5 mt-5">
-
-                <button id="dropdownUsersButton" data-dropdown-toggle="dropdownUsers" data-dropdown-placement="bottom" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">Project users <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
-                </svg>
-                </button>
-
-                <!-- Dropdown menu -->
-                <div id="dropdownUsers" class="z-10 hidden bg-white rounded-lg shadow-sm w-60 dark:bg-gray-700">
-                <ul class="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200" aria-labelledby="dropdownUsersButton">
-                    <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
-                        Jese Leos
-                    </a>
-                    </li>
-                    <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-2.jpg" alt="Jese image">
-                        Robert Gough
-                    </a>
-                    </li>
-                    <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="Jese image">
-                        Bonnie Green
-                    </a>
-                    </li>
-                    <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-4.jpg" alt="Jese image">
-                        Leslie Livingston
-                    </a>
-                    </li>
-                    <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-5.jpg" alt="Jese image">
-                        Michael Gough
-                    </a>
-                    </li>
-                    <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-2.jpg" alt="Jese image">
-                        Joseph Mcfall
-                    </a>
-                    </li>
-                        <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-3.jpg" alt="Jese image">
-                        Roberta Casas
-                    </a>
-                    </li>
-                    <li>
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        <img class="w-6 h-6 me-2 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
-                        Neil Sims
-                    </a>
-                    </li>
-                </ul>
-                <a href="#" class="flex items-center p-3 text-sm font-medium text-blue-600 border-t border-gray-200 rounded-b-lg bg-gray-50 dark:border-gray-600 hover:bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-blue-500 hover:underline">
-                    <svg class="w-4 h-4 me-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
-                        <path d="M6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Zm11-3h-2V5a1 1 0 0 0-2 0v2h-2a1 1 0 1 0 0 2h2v2a1 1 0 0 0 2 0V9h2a1 1 0 1 0 0-2Z"/>
-                    </svg>
-                    Add new user
-                </a>
+                <div>
+                    <h1 class="text-2xl font-bold mb-5">School year</h1>
                 </div>
+                <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
+                    Here is the active School year of the University where you can activate new semesters.
+                </p>
 
+                <div class="w-full h-full flex flex-col px-5 mt-5 gap-2">
+                    <div class="grid grid-cols-2 items-center gap-3">
+                        <h1 class="px-2">Academic Year: </h1>
+                        <span class="items-center justify-center">2025-2026</span>
+                    </div>
+                    <div class="grid grid-cols-2 items-center gap-3">
+                        <h1 class="px-2">Status: </h1>
+                        <span class="items-center justify-center">Active</span>
+                    </div>
+                    <div class="grid grid-cols-2 items-center">
+                        <h1 class="px-2">Start Month: </h1>
+                        <div class="justify-center">
+                            <CalendarPicker v-model="selectedDate" />
+                            <!-- <p class="mt-4">Selected Date: {{ selectedDate.month }} {{ selectedDate.day }}</p> -->
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 items-center">
+                        <h1 class="px-2 mr-2">End Month: </h1>
+                        <div class="justify-center">
+                            <CalendarPicker v-model="selectedDate" />
+                            <!-- <p class="mt-4">Selected Date: {{ selectedDate.month }} {{ selectedDate.day }}</p> -->
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 items-center gap-3">
+                        <h1 class="px-2">Next Academic Year Change: </h1>
+                        <span class="items-center justify-center">Estimations</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="h-0.5 w-full bg-gray-200"></div>
+
+            <div>
+                <div>
+                    <h1 class="text-2xl font-bold mb-5">Semester</h1>
+                </div>
+                <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
+                    Here is the active School year of the University where you can activate new semesters.
+                </p>
+
+                <div class="w-full h-full flex flex-col px-5 mt-5 gap-2">
+            
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Product name
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Color
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Category
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Price
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        <span class="sr-only">Edit</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Apple MacBook Pro 17"
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        Silver
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        Laptop
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $2999
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Microsoft Surface Pro
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        White
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        Laptop PC
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $1999
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    </td>
+                                </tr>
+                                <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Magic Mouse 2
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        Black
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        Accessories
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        $99
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
             </div>
         </div>
         
@@ -88,6 +142,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link } from '@inertiajs/vue3';
 import ContentDashboard from '@/Pages/Super_Admin/Dashboard/Content-Dashboard.vue';
 import { ref } from 'vue';
+import CalendarPicker from "@/Components/MIS/CalendarPicker.vue";
+
+const selectedDate = ref({ month: "", day: "" });
 
 
 </script>

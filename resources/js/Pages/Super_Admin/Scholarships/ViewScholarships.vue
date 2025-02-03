@@ -21,9 +21,10 @@
 
                 <div class="mx-auto py-5">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <button @click="toggleSpecification">
                         <div v-for="scholarship in scholarships" :key="scholarship.id"
                             class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
-                            <Link :href="`/scholarships/${scholarship.id}`">
+                            <!-- <Link :href="`/scholarships/${scholarship.id}`"> -->
                                 <div class="card-body p-5 space-y-2">
                                     <div class="badge badge-yellow text-[14px] font-sora bg-yellow-200 dark:bg-blue-400">Ongoing</div>
                                     
@@ -40,19 +41,17 @@
                                         {{ scholarship.description }}
                                     </p>
                                 </div>
-                            </Link>
+                            <!-- </Link> -->
                         </div>
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div v-if="isCreating || isEditing"
+            <div v-if="ScholarshipSpecification"
                 class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity-ease-in duration-300 ">
                 <div class="bg-white rounded-lg shadow-xl w-4/12">
-                    <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                            <p class="text-2xl font-bold">{{ isEditing ? 'Edit Scholarship' : 'Create Scholarship' }}</p>
-                        </h3>
+                    <div class="flex items-center justify-between px-4 py-2 md:px-5 rounded-t">
                         <button type="button" @click="closeModal" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
                             <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -60,31 +59,65 @@
                         </button>
                     </div>
                     
-                    <form @submit.prevent="submitForm" class="space-y-4 p-4">
-                        <div>
-                            <label for="sponsor" class="label">Sponsor</label>
-                            <select v-model="form.sponsor_id" id="sponsor" class="select select-bordered w-full">
-                                <option value="" disabled>Select a Sponsor</option>
-                                <option v-for="sponsor in sponsors" :key="sponsor.id" :value="sponsor.id">
-                                    {{ sponsor.name }}
-                                </option>
-                            </select>
-                        </div>
-                        <div>
-                            <label for="name" class="label">Scholarship Name</label>
-                            <input v-model="form.name" type="text" id="name" placeholder="Enter Scholarship Name"
-                                class="input input-bordered w-full" />
-                        </div>
-                        <div>
-                            <label for="description" class="label">Description</label>
-                            <textarea v-model="form.description" id="description" placeholder="Enter Description"
-                                class="textarea textarea-bordered w-full"></textarea>
-                        </div>
+                    <div class=" bg-white flex justify-center items-center p-5 rounded-lg">
+                        <div class="flex flex-col space-y-2 items-center">
+                            <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
+                                <span></span> Scholars 
+                            </h1>
+                            <span class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
+                                Funded by Sponsor since Sponsor
+                            </span>
 
-                        <button type="submit" class="btn btn-primary w-full">
-                            {{ isEditing ? 'Update Scholarship' : 'Create Scholarship' }}
-                        </button>
-                    </form>
+                            <div class="py-5 text-gray-500 ">
+                                Select School Year and Semester
+                            </div>
+                            <div class="grid grid-cols-3 justify-center items-center gap-3">
+                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">Academic Year: </div>
+                                <div class="col-span-2 w-full">
+                                        <Select>
+                                            <SelectTrigger class="w-full">
+                                            <SelectValue placeholder="Select year" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                            <SelectGroup>
+                                                <!-- <SelectLabel>Gender</SelectLabel> -->
+                                                <SelectItem value="LGBTQ">
+                                                2011-2012
+                                                </SelectItem>
+                                                <SelectItem value="banana">
+                                                2010-2011
+                                                </SelectItem>
+                                            </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                </div>
+                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">Semester: </div>
+                                <div class="col-span-2 w-full">
+                                        <Select>
+                                            <SelectTrigger class="w-full">
+                                            <SelectValue placeholder="Select Semester" />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                            <SelectGroup>
+                                                <!-- <SelectLabel>Gender</SelectLabel> -->
+                                                <SelectItem value="LGBTQ">
+                                                First Semester
+                                                </SelectItem>
+                                                <SelectItem value="banana">
+                                                Second Semester
+                                                </SelectItem>
+                                            </SelectGroup>
+                                            </SelectContent>
+                                        </Select>
+                                </div>
+                            </div>
+                            <div class="pt-10 w-full">
+                                <button type="submit"
+                                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                                    Proceed to Scholarship</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -96,6 +129,10 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted, computed } from 'vue';
 import { Head, useForm, Link } from '@inertiajs/vue3';
 import { Tooltip } from 'primevue';
+
+import { Button } from '@/Components/ui/button'
+
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,} from '@/Components/ui/select'
 
 const props = defineProps({
     sponsors: {
@@ -111,8 +148,8 @@ const directives = {
     Tooltip,
 };
 
-const isCreating = ref(false);
-const isEditing = ref(false);
+const ScholarshipSpecification = ref(false);
+
 const form = ref({
     id: null,
     name: '',
@@ -125,16 +162,15 @@ const getSponsorName = (sponsorId) => {
     return sponsor ? sponsor.name : 'Unknown Sponsor';
 };
 
-const toggleCreate = () => {
-    isCreating.value = !isCreating.value;
-    if (isCreating.value) {
+const toggleSpecification = () => {
+    ScholarshipSpecification.value = !ScholarshipSpecification.value;
+    if (ScholarshipSpecification.value) {
         resetForm();
     }
 };
 
 const closeModal = () => {
-    isCreating.value = false;
-    isEditing.value = false;
+    ScholarshipSpecification.value = false;
     resetForm();
 };
 

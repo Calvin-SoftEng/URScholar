@@ -10,70 +10,41 @@
                         <li class="hover:text-gray-600">
                                 <span>Scholarships</span>
                         </li>
+                        <li class="hover:text-gray-600">
+                                <span>Specification</span>
+                        </li>
                         <li>
-                                <span class="text-blue-400 font-semibold">Scholarship Specification</span>
+                                <span class="text-blue-400 font-semibold">{{ scholarship.name }} Dashboard</span>
                         </li>
                     </ul>
                 </div>
-                
-                <div class="w-full h-full flex justify-center items-center">
-                    <div class=" bg-white flex justify-center items-center p-10 rounded-lg border border-gray-200">
-                        <div class="flex flex-col space-y-2 items-center">
+
+                <div class="w-full flex flex-row justify-between dark:bg-dcontainer dark:border dark:border-gray-600 rounded-xl mb-3">
+                    <div class="w-9/12 flex justify-between ">
+                        <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
                                 <span>{{ scholarship.name }}</span> Scholars 
+                                <span class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
+                                    Funded by Sponsor since Sponsor
+                                </span>
                             </h1>
-                            <span class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
-                                Funded by Sponsor since Sponsor
-                            </span>
-
-                            <div class="py-5 text-gray-500 ">
-                                Select School Year and Semester
-                            </div>
-                            <div class="grid grid-cols-3 justify-center items-center gap-3">
-                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">Academic Year: </div>
-                                <div class="col-span-2 w-full">
-                                        <Select>
-                                            <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Select year" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                            <SelectGroup>
-                                                <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                <SelectItem value="LGBTQ">
-                                                2011-2012
-                                                </SelectItem>
-                                                <SelectItem value="banana">
-                                                2010-2011
-                                                </SelectItem>
-                                            </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                </div>
-                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">Semester: </div>
-                                <div class="col-span-2 w-full">
-                                        <Select>
-                                            <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Select Semester" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                            <SelectGroup>
-                                                <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                <SelectItem value="LGBTQ">
-                                                First Semester
-                                                </SelectItem>
-                                                <SelectItem value="banana">
-                                                Second Semester
-                                                </SelectItem>
-                                            </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <div class="w-full mt-5">
+                    <ul class="text-primary flex space-x-3 flex-grow justify-left">
+                        <button @click="toggleList"><li class="px-4 py-2 border-b-2 cursor-pointer" :class="List ? 'border-blue-400 bg-white rounded-t-lg shadow-sm' : 'border-transparent'">Scholar List</li></button>
+                        <button @click="toggleAdd" class="px-5 py-2 border-b-2 cursor-pointer " :class="addVisible ? 'border-blue-400 bg-white rounded-t-lg shadow-sm' : 'border-transparent'">Adding</button>
+                    </ul>
+                </div>
 
-
+                <div v-if="List" class="w-full">
+                    <ScholarList :scholarship="scholarship" :scholars="scholars"/>
+                </div>
+                <div v-if="addVisible" class="w-full h-full">
+                    <Adding :scholarship="scholarship" :scholars="scholars"/>
+                </div>
             </div>
         </div>
 
@@ -96,14 +67,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { defineProps, ref, watchEffect, onBeforeMount, reactive } from 'vue';
 import { useForm, Link, usePage } from '@inertiajs/vue3';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Button from 'primevue/button';
+import FileUpload from 'primevue/fileupload';
 import Papa from 'papaparse';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
-
-import { Input } from '@/Components/ui/input'
-import { Label } from '@/Components/ui/label'
-import { Button } from '@/Components/ui/button'
-
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,} from '@/Components/ui/select'
 
 import Adding from '../../../Components/Admin/ScholarsTabs/Adding.vue';
 
@@ -112,7 +81,10 @@ import ScholarList from '../../../Components/Admin/ScholarsTabs/ScholarList.vue'
 // components
 
 const components = {
+    DataTable,
+    Column,
     Button,
+    FileUpload,
     Papa,
 };
 
