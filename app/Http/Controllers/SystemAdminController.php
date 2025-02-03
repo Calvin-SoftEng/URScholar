@@ -119,6 +119,10 @@ class SystemAdminController extends Controller
     // users ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public function roles() {
-        return Inertia::render('MIS/Univ_Settings/SY_Term');
+        return Inertia::render('MIS/User_Roles/Roles');
+    }
+
+    public function users() {
+        return Inertia::render('MIS/User_Roles/Users');
     }
 }

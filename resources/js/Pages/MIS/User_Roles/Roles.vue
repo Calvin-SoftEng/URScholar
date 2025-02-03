@@ -5,7 +5,7 @@
     <AuthenticatedLayout>
         <div class="bg-dirtywhite p-6 h-full w-full space-y-2">
             <div>
-                <h1 class="text-2xl font-bold mb-5">Campus</h1>
+                <h1 class="text-2xl font-bold mb-5">Roles</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of the University's campuses. You can add and edit campuses here, and assign

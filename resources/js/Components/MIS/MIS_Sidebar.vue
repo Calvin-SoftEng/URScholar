@@ -30,7 +30,7 @@
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">User and Role Management</div>
             <!-- Manage Admin and Users, Role-Based Access Controls, User Activity Logs -->
 
-            <Link>
+            <Link :href="route('mis.users')">
               <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
                   <span class="pl-2">Manage Admin and Users</span>
@@ -38,7 +38,7 @@
               </div>
             </Link>
 
-            <Link>
+            <Link :href="route('mis.roles')">
               <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
                   <span class="pl-2">Role-Based Access Controls</span>
