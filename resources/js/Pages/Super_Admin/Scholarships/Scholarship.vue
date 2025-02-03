@@ -37,10 +37,10 @@
                 </div>
 
                 <div v-if="List" class="w-full">
-                    <ScholarList />
+                    <ScholarList :scholarship="scholarship" :scholars="scholars"/>
                 </div>
                 <div v-if="addVisible" class="w-full h-full">
-                    <Adding />
+                    <Adding :scholarship="scholarship" :scholars="scholars"/>
                 </div>
             </div>
         </div>

@@ -328,7 +328,7 @@ const submitForm = async () => {
 
     try {
         // Send the request only when user confirms
-        router.post(`/scholarships/1/upload`, formData, {
+        router.post(`/scholarships/${props.scholarship.id}/upload`, formData, {
             preserveScroll: true,
             onSuccess: () => {
                 headers.value = [];

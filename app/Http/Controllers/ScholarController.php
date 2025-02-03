@@ -77,7 +77,7 @@ class ScholarController extends Controller
             $insertedCount = 0;
 
             foreach ($records as $record) {
-                Scholar::create([
+                $insertData[] = [
                     'scholarship_id' => $scholarship->id,
                     'hei_name' => $record['HEI NAME'] ?? null,
                     'campus' => $record['CAMPUS'] ?? null,
@@ -98,13 +98,13 @@ class ScholarController extends Controller
                     'municipality' => $record['MUNICIPALITY'] ?? null,
                     'province' => $record['PROVINCE'] ?? null,
                     'pwd_classification' => $record['CLASSIFICATION OF PWD'] ?? null,
-                ]);
+                ];
                 
                 $insertedCount++;
             }
 
 
-            // Scholar::insert($insertData);
+            Scholar::insert($insertData);
             
             return response()->json([
                 'message' => "Successfully imported {$insertedCount} records",

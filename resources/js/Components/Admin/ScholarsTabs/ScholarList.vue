@@ -80,46 +80,46 @@
           </thead>
           <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
             <tr
-              v-for="row in data"
-              :key="row.id"
+              v-for="scholar in scholars"
+              :key="scholar.id"
               class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.id }}
+                test1
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.batch }}
+                {{ scholar.batch_no }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.grant }}
+                {{ scholar.grant }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.campus }}
+                {{ scholar.campus }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.name }}
+                {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.program }}
+                {{ scholar.course }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.yearLevel1 }}
+                {{ scholar.year_level }}
               </td>
               <td class="whitespace-nowrap px-6 py-4">
                 <span
                   class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
                 >
-                  {{ row.status }}
+                  ewan
                 </span>
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.sex }}
+                {{ scholar.sex }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.birthday }}
+                {{ scholar.birthdate }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ row.email1 }}
+                
               </td>
               
 
