@@ -25,6 +25,8 @@ class SystemAdminController extends Controller
         ]);
     }
 
+    // campus ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     public function store_campus(Request $request) {
 
         $request->validate([
@@ -83,6 +85,8 @@ class SystemAdminController extends Controller
         ]);
     }
 
+    // course ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     public function course_config(Campus $campuses) {
 
         $course = $campuses->courses;
@@ -109,6 +113,12 @@ class SystemAdminController extends Controller
     }
 
     public function sy_term() {
+        return Inertia::render('MIS/Univ_Settings/SY_Term');
+    }
+
+    // users ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    public function roles() {
         return Inertia::render('MIS/Univ_Settings/SY_Term');
     }
 }
