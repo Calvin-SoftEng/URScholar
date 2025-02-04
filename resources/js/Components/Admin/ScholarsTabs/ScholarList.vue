@@ -121,7 +121,7 @@
                 <span
                   class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
                 >
-                  ewan
+                  {{ scholar.status }}
                 </span>
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
