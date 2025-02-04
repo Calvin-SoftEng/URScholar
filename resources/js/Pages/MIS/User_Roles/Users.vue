@@ -12,119 +12,86 @@
                 stakeholders.
             </p>
             <div class="w-full mt-5">
-                <div v-if="!isTableVisible" class="bg-white relative overflow-x-auto border border-gray-200 rounded-lg">
-                    <div class="flex items-center justify-between pb-4 bg-white dark:bg-gray-900 m-5">
-                        <h1 class="text-xl font-semibold font-quicksand text-primary">
-                            University of the Rizal System
-                        </h1>
-                        <button @click="toggleTable"
-                            class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
-                            Add Campus
-                        </button>
+                
+                <div class="relative overflow-x-auto border border-gray-200 rounded-lg">
+                    <div class="p-3 flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+                        <div>
+                            <label for="table-search" class="sr-only">Search</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                                    </svg>
+                                </div>
+                                <input type="text" id="table-search-users" class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for users">
+                            </div>
+                        </div>
+                        <div>
+                            <button @click="toggleAddUser"
+                                class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
+                                Add User
+                            </button>
+                        </div>
                     </div>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
+                                    User Name
+                                </th>
+                                <th scope="col" class="px-6 py-3">
+                                    Role
+                                </th>
+                                <th scope="col" class="px-6 py-3">
                                     Campus
                                 </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Location
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Scholarship Coordinator
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Campus Cashier
-                                </th>
-                                <th scope="col" class="px-1 py-3">
-                                    <span class="sr-only">Image</span>
+                                <th scope="col" class="sr-only px-6 py-3">
+                                    Action
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-for="campus in campuses" :key="campus.id">
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
-                                    <th scope="row"
-                                        class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        {{ campus.name }}
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ campus.location }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ campus.coordinator ? campus.coordinator.name : 'Not Assigned' }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ campus.cashier ? campus.cashier.name : 'Not Assigned' }}
-                                    </td>
-                                    <td class="px-6 py-4 flex flex-row gap-2">
-                                        <button class="" v-tooltip.right="'Edit Campus'">
-                                            <span
-                                                class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-blue-900 rounded-lg">
-                                                edit
-                                            </span>
-                                        </button>
-                                        <button @click="toggleAssign(campus.id)"
-                                            v-tooltip.right="'Assign Focal Person'">
-                                            <span
-                                                class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-yellow-400 rounded-lg">
-                                                assignment_ind
-                                            </span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </template>
-
+                            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <th scope="row" class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                    <img class="w-10 h-10 rounded-full" src="/docs/images/people/profile-picture-1.jpg" alt="Jese image">
+                                    <div class="ps-3">
+                                        <div class="text-base font-semibold">Neil Sims</div>
+                                        <div class="font-normal text-gray-500">neil.sims@flowbite.com</div>
+                                    </div>  
+                                </th>
+                                <td class="px-6 py-4">
+                                    Head Administrator
+                                </td>
+                                <td class="px-6 py-4">
+                                    Binangonan
+                                </td>
+                                <td class="px-6 py-4">
+                                    <button  @click="toggleEditUser" class="" v-tooltip.right="'Edit Campus'">
+                                        <span
+                                            class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-blue-900 rounded-lg">
+                                            edit
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <div v-if="isTableVisible"
-                    class="relative overflow-x-auto border bg-white border-gray-200 rounded-lg p-4">
-                    <form @submit.prevent="submitForm">
-                        <div class="flex w-full items-end justify-end">
-                            <button type="button" @click="toggleTable"
-                                class="text-primary bg-white border border-gray-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                Back
-                            </button>
-                            <button type="submit"
-                                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                Save
-                            </button>
-                        </div>
-                        <div class="flex flex-col w-full gap-4">
-                            <h1 class="text-lg font-bold font-quicksand text-primary">
-                                Enter the Campus Details
-                            </h1>
-                            <div>
-                                <label for="first_name"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Campus
-                                    Name</label>
-                                <input type="text" id="first_name" v-model="form.name"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Binangonan, Campus" required />
-                            </div>
-                            <div>
-                                <label for="last_name"
-                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Location</label>
-                                <input type="text" id="last_name" v-model="form.location"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Street" required />
-                            </div>
-                        </div>
-                    </form>
 
-                </div>
             </div>
         </div>
-        <!-- adding focal person -->
-        <div v-if="Assigning"
+        
+        
+        <!-- adding user -->
+        <div v-if="AddUser || EditUser"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">Assign Focal Person for {call mo here}</h2>
+                        <h2 class="text-2xl font-bold">
+                            {{ EditUser ? 'Edit User' : 'Add New User'}}
+                        </h2>
                     </span>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -138,27 +105,43 @@
                 </div>
 
                 <form @submit.prevent="submitAssign" class="p-4 flex flex-col gap-3">
-                    <div class="w-full flex flex-col space-y-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Coordinator</h3>
-                        <select v-model="assign.coor_id" id="scholarshipType"
-                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
-                            <option value="" disabled>Coordinator List</option>
-                            <option v-for="coor in coor" :key="coor.id" :value="coor.id"> {{ coor.name }}</option>
-                        </select>
+                    <div class="w-full flex flex-row gap-2">
+                        <div class="w-full flex flex-col space-y-2">
+                            <h3 class="font-semibold text-gray-900 dark:text-white">
+                                First Name</h3>
+                            <input v-model="form.name" type="text" id="name"
+                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                        </div>
+                        <div class="w-full flex flex-col space-y-2">
+                            <h3 class="font-semibold text-gray-900 dark:text-white">
+                                Last Name</h3>
+                            <input v-model="form.name" type="text" id="name"
+                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                        </div>
                     </div>
-                    <div class="w-full flex flex-col space-y-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">Campus Cashier</h3>
-                        <select v-model="assign.cashier_id" id="scholarshipType"
-                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
-                            <option value="" disabled>Cashier List</option>
-                            <option v-for="cashier in cashier" :key="cashier.id" :value="cashier.id"> {{ cashier.name }}
-                            </option>
-                        </select>
+                    <div class="w-full flex flex-row gap-2">
+                        <div class="w-full flex flex-col space-y-2">
+                            <h3 class="font-semibold text-gray-900 dark:text-white">Campus</h3>
+                            <select v-model="assign.coor_id" id="scholarshipType"
+                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
+                                <option value="" disabled>Coordinator List</option>
+                                <option v-for="coor in coor" :key="coor.id" :value="coor.id"> {{ coor.name }}</option>
+                            </select>
+                        </div>
+                        <div class="w-full flex flex-col space-y-2">
+                            <h3 class="font-semibold text-gray-900 dark:text-white">Role</h3>
+                            <select v-model="assign.coor_id" id="scholarshipType"
+                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
+                                <option value="" disabled>Coordinator List</option>
+                                <option v-for="coor in coor" :key="coor.id" :value="coor.id"> {{ coor.name }}</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mt-2">
                         <button type="submit"
                             class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            Assign</button>
+                            {{ EditUser ? 'Update' : 'Register'
+                                }}</button>
                     </div>
                 </form>
             </div>
@@ -180,34 +163,29 @@ defineProps({
     cashier: Array,
 });
 
-
-const isTableVisible = ref(false);
-
-const toggleTable = () => {
-    isTableVisible.value = !isTableVisible.value;
-};
-
 const cancel = () => {
     isTableVisible.value = !isTableVisible.value;
 };
 
-const Assigning = ref(false);
+const AddUser = ref(false);
+const EditUser = ref(false)
 
 const campusid = ref(null);
 
-const toggleAssign = (campusID) => {
-    Assigning.value = !Assigning.value;
+const toggleAddUser = () => {
+    AddUser.value = !AddUser.value;
 
-    if (Assigning.value) {
-        campusid.value = campusID;
-        assign.value.campus_id = campusid;
-    }
+};
+
+const toggleEditUser = () => {
+    EditUser.value = !EditUser.value;
+
 };
 
 
 const closeModal = () => {
-    Assigning.value = false;
-    isTableVisible.value = false;
+    AddUser.value = false;
+    EditUser.value = false;
     resetForm();
 };
 
@@ -246,3 +224,5 @@ const submitAssign = async () => {
 };
 
 </script>
+
+
