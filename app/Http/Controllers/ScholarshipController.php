@@ -48,10 +48,14 @@ class ScholarshipController extends Controller
     //     ]);
     // }
 
-    public function show(Scholarship $scholarship)
+    public function show(Request $request, Scholarship $scholarship)
     {
         
         $scholars = $scholarship->scholars;
+        $selectedYear = $request->input('selectedYear', '');
+        $selectedSem = $request->input('selectedSem', '');
+
+        $schoolyear = SchoolYear::where('id', $selectedYear)->first();
 
         // $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
@@ -62,6 +66,8 @@ class ScholarshipController extends Controller
         return Inertia::render('Super_Admin/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
+            'schoolyear' => $schoolyear,
+            'selectedSem' => $selectedSem,
         ]);
     }
 

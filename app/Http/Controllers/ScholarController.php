@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Scholarship;
+use App\Models\SchoolYear;
 use App\Models\Scholar;
+use App\Models\Student;
+use App\Models\Batch;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use League\Csv\Reader;
@@ -15,32 +18,46 @@ class ScholarController extends Controller
     {
         $scholars = $scholarship->scholars;
 
+        $scholars = Scholar::with('batch')->get();
+
+        $batch = Batch::where('scholarship_id', $scholarship->id)->first();
+
         return Inertia::render('Super_Admin/Scholarships/Scholars', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
+            'batch' => $batch,
         ]);
     }
 
-    public function adding(Scholarship $scholarship)
+    public function adding(Request $request, Scholarship $scholarship)
     {
 
         $scholars = $scholarship->scholars;
+        $selectedYear = $request->input('selectedYear', '');
+        $selectedSem = $request->input('selectedSem', '');
+
+        $schoolyear = SchoolYear::where('id', $selectedYear)->first();
 
         return Inertia::render(
             'Super_Admin/Scholarships/AddingScholars',
             [
                 'scholarship' => $scholarship,
                 'scholars' => $scholars,
+                'schoolyear' => $schoolyear,
+                'selectedSem' => $selectedSem,
             ]
         );
     }
 
 
-    public function upload(Request $request, Scholarship $scholarship)
+    public function upload(Request $request, Scholarship $scholarship, )
     {
         $validator = Validator::make($request->all(), [
-            'file' => 'required|file|mimes:csv,txt|max:2048'
+            'file' => 'required|file|mimes:csv,txt|max:2048',
+            'semester' => 'required',
+            'schoolyear' => 'required',
         ]);
+
 
         if ($validator->fails()) {
             return response()->json([
@@ -57,13 +74,21 @@ class ScholarController extends Controller
             $records = $csv->getRecords();
             $insertedCount = 0;
 
+            $batch = Batch::create([
+                'scholarship_id' => $scholarship->id,
+                'batch_no' => 1,
+                'school_year' => $request->schoolyear,
+                'semester' => $request->semester,
+            ]);
+
+
             foreach ($records as $record) {
                 $insertData[] = [
                     'scholarship_id' => $scholarship->id,
                     'hei_name' => $record['HEI NAME'] ?? null,
                     'campus' => $record['CAMPUS'] ?? null,
                     'grant' => $record['GRANT'] ?? null,
-                    'batch_no' => $record['BATCH NO.'] ?? null,
+                    'batch_id' => $batch->id ?? null,
                     'app_no' => $record['APP NO'] ?? null,
                     'award_no' => $record['AWARD NO.'] ?? null,
                     'last_name' => $record['LASTNAME'] ?? null,
@@ -84,13 +109,47 @@ class ScholarController extends Controller
                 $insertedCount++;
             }
 
-
+            // dd($insertData);
             Scholar::insert($insertData);
+
+            $scholars = Scholar::where('batch_id', $batch->id)->get();
+
+
+            // Fetch students
+            $students = Student::all();
+
+            // Match logic without direct relationship
+            $matchedScholars = [];
+            $unmatchedScholars = [];
+
+            foreach ($scholars as $scholar) {
+                $matched = $students->first(function ($student) use ($scholar) {
+                    return $student->course === $scholar->course && $student->year_level == $scholar->year_level && $scholar->first_name == $student->first_name
+                        && $scholar->last_name == $student->last_name && $scholar->campus == $student->campus;
+                });
+
+                if ($matched) {
+                    $scholar->update([
+                        'status' => 'Verified',
+                    ]);
+                    $matchedScholars[] = $scholar;
+                } else {
+                    $scholar->update(['status' => 'Unverified']);
+                    $unmatchedScholars[] = $scholar;
+                }
+
+            }
+
+
 
             return response()->json([
                 'message' => "Successfully imported {$insertedCount} records",
-                'status' => 'success'
+                'status' => 'success',
+                'Matched students' => count($matchedScholars),
+                'Unmatched students' => count($matchedScholars),
+                // 'matched' => 'Matched students: ' . $student->count(),
             ]);
+
 
         } catch (\Exception $e) {
             return response()->json([
@@ -100,57 +159,11 @@ class ScholarController extends Controller
         }
     }
 
-    // public function upload(Request $request, Scholarship $scholarship)
-    // {
-    //     // Check if file exists in the request
-    //     $file = $request->file('file');
-
-
-    //     \Log::info('Request data:', ['files' => $request->all()]);
-
-
-    //     if (!$file) {
-    //         return response()->json(['message' => 'No file uploaded'], 400);
-    //     }
-
-    //     // Proceed with file processing
-    //     try {
-    //         $data = array_map('str_getcsv', file($file->getRealPath()));
-    //         $header = array_shift($data);
-    //         $requiredHeaders = ['HEI NAME', 'CAMPUS', 'GRANT', 'BATCH NO.', 'APP NO', 'AWARD NO.' , 'LASTNAME', 'FIRSTNAME', 'EXTNAME' ,'MIDDLENAME', 'SEX', 'BIRTHDATE', 'COURSE/PROGRAM ENROLLED', 'YEAR LEVEL', 'TOTAL UNITS ENROLLED', 'STREET', 'MUNICIPALITY', 'PROVINCE', 'CLASSIFICATION OF PWD'];
-
-    //         if (array_diff($requiredHeaders, $header)) {
-    //             return response()->json(['message' => 'Invalid CSV format'], 422);
-    //         }
-
-    //         $insertData = [];
-    //         foreach ($data as $row) {
-    //             $rowData = array_combine($header, $row);
-    //             $insertData[] = [
-    //                 'first_name' => $rowData['first_name'],
-    //                 'last_name' => $rowData['last_name'],
-    //                 'email' => $rowData['email'],
-    //                 'course' => $rowData['course'],
-    //                 'scholarship_id' => $scholarship->id,
-    //                 'created_at' => now(),
-    //                 'updated_at' => now(),
-    //             ];
-    //         }
-
-    //         dd($insertData);
-    //         Scholar::insert($insertData);
-
-    //         return redirect()->back()->with('success', 'Scholars added to the scholarship!');
-    //     } catch (\Exception $e) {
-    //         \Log::error('Error during file upload: ' . $e->getMessage());
-    //         return response()->json(['message' => 'Error during file upload'], 500);
-    //     }
-    // }
-
 
     public function send(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;
+
 
         return Inertia::render('Super_Admin/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,

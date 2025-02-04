@@ -33,6 +33,7 @@ return new class extends Migration
             $table->string('municipality');
             $table->string('province');
             $table->string('pwd_classification')->nullable();
+            $table->enum('status', ['Verified', 'Unverified'])->default('Unverified');
             
             $table->timestamps();
         });

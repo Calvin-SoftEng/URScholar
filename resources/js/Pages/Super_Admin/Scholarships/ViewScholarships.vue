@@ -24,8 +24,9 @@
 
                 <div class="mx-auto py-5">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <button v-for="scholarship in scholarships" :key="scholarship.id" @click="toggleSpecification(scholarship)">
-                            <div 
+                        <button v-for="scholarship in scholarships" :key="scholarship.id"
+                            @click="toggleSpecification(scholarship)">
+                            <div
                                 class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
                                 <!-- <Link :href="`/scholarships/${scholarship.id}`"> -->
                                 <div class="card-body p-5 space-y-2">
@@ -46,7 +47,8 @@
                                         <span>Sponsoring Since: {{ new
                                             Date(scholarship.created_at).toLocaleDateString('en-US', {
                                                 year: 'numeric',
-                                            month: 'long', day: 'numeric' }) }}</span>
+                                                month: 'long', day: 'numeric'
+                                            }) }}</span>
                                     </p>
                                     <p class="text-md text-gray-600 mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"
                                         style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
@@ -88,7 +90,7 @@
                                 <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
                                     Academic Year: </div>
                                 <div class="col-span-2 w-full">
-                                    <Select>
+                                    <Select v-model="selectedYear">
                                         <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select year" />
                                         </SelectTrigger>
@@ -105,7 +107,7 @@
                                 <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
                                     Semester: </div>
                                 <div class="col-span-2 w-full">
-                                    <Select>
+                                    <Select v-model="selectedSem">
                                         <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select Semester" />
                                         </SelectTrigger>
@@ -124,7 +126,7 @@
                                 </div>
                             </div>
                             <div class="pt-10 w-full">
-                                <button type="submit"
+                                <button @click="openScholarship"
                                     class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
                                     Proceed to Scholarship</button>
                             </div>
@@ -139,7 +141,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted, computed } from 'vue';
-import { Head, useForm, Link } from '@inertiajs/vue3';
+import { Head, useForm, Link, router } from '@inertiajs/vue3';
+import { useRouter, useRoute } from 'vue-router'
+
 import { Tooltip } from 'primevue';
 
 import { Button } from '@/Components/ui/button'
@@ -178,16 +182,30 @@ const getSponsorName = (sponsorId) => {
     return sponsor ? sponsor.name : 'Unknown Sponsor';
 };
 
+const selectedYear = ref("");
+const selectedSem = ref("");
 
 const selectedScholarship = ref(null);
+
 const toggleSpecification = (Scholarship) => {
     ScholarshipSpecification.value = !ScholarshipSpecification.value;
 
     if (ScholarshipSpecification.value) {
         selectedScholarship.value = Scholarship;
+
+
         resetForm();
     }
 };
+
+
+const openScholarship = () => {
+    router.visit(`/scholarships/${selectedScholarship.value.id}`, {
+        data: { selectedYear: selectedYear.value, selectedSem: selectedSem.value },
+        preserveState: true
+    });
+};
+
 
 const closeModal = () => {
     ScholarshipSpecification.value = false;

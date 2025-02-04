@@ -28,7 +28,18 @@ class Scholar extends Model
         'municipality',
         'province',
         'pwd_classification',
+        'status',
     ];
+    protected $attributes = [
+        'status' => 'Unverified'
+    ];
+
+    public function scopeMatchPotentialScholars($query, $course, $yearLevel)
+    {
+        return $query->where('status', 'Unverified')
+            ->where('course', $course)
+            ->where('year_level', $yearLevel);
+    }
     
     public function scholarship()
     {

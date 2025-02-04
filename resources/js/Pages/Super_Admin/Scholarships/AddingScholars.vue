@@ -23,14 +23,14 @@
                     <div class="w-full flex justify-between ">
                         <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                <span>{{ scholarship.name }}</span> Scholars 
+                                <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span>
                             </h1>
                         </div>
                     </div>
                 </div>
 
                 <div class="w-full h-full">
-                    <Adding :scholarship="scholarship" :scholars="scholars"/>
+                    <Adding :scholarship="scholarship" :scholars="scholars" :schoolyear="schoolyear" :selectedSem="selectedSem"/>
                 </div>
                 
 
@@ -125,10 +125,12 @@ const toggleMonitoring = () => {
 const props = defineProps({
     scholarship: Object,
     scholars: Array,
+    schoolyear: Object,
+    selectedSem: Object
 });
 
 const formData = ref({
-  file: null,
+  file: null,   
   // other form fields...
 });
 

@@ -100,7 +100,7 @@
                 test1
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                {{ scholar.batch_no }}
+                {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
                 {{ scholar.grant }}
@@ -251,8 +251,11 @@ const closePanel = () => {
 };
 
 const props = defineProps({
-  scholarship: Object,
-  scholars: Array,
+    scholarship: Object,
+    scholars: Array,
+    schoolyear: Object,
+    selectedSem: Object,
+    batch: Object,
 });
 
 

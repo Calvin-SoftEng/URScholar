@@ -78,6 +78,7 @@ class SystemAdminController extends Controller
             ->orderBy('name')
             ->get();
 
+            
         return Inertia::render('MIS/Univ_Settings/Campus', [
             'campuses' => Campus::with(['coordinator', 'cashier'])->get(),
             'coor' => $coor,
