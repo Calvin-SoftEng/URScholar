@@ -16,7 +16,7 @@
             </button>
         </div>
 
-        <div v-if="ManualAdding" class="mx-auto w-full h-full justify-center items-center flex flex-col gap-2">
+        <div v-if="ManualAdding" class="mx-auto w-full h-full justify-center items-center flex flex-col gap-3">
             <form @submit.prevent="submitManual" class="w-full flex flex-col gap-2">
                 <div class="flex flex-col w-full gap-2">
                     <div class="w-full flex flex-row items-center gap-3">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <div class="w-full h-0.5 bg-gray-200 "></div>
+                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
 
                     <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
@@ -115,7 +115,7 @@
                             <label for="first_name" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
                             <Popover>
                             <PopoverTrigger as-child>
-                                <Button variant="outline" class="w-full h-10 justify-start text-left font-normal text-black">
+                                <Button variant="outline" class="w-full h-[42px] justify-start text-left font-normal bg-gray-50 border border-gray-300 text-black">
                                 <CalendarIcon class="mr-2 h-4 w-4" />
                                 {{ formatDate(form.birthdate) }}
                                 </Button>
@@ -153,7 +153,7 @@
             <form @submit.prevent="submitForm" class="w-6/12 flex flex-col gap-4">
                 <div class="flex flex-col w-full gap-4 mt-5">
                     <!-- File Drop Zone -->
-                    <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Import CSV FIle of Scholars</label>
+                    <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Import CSV File of Scholars</label>
                     <label for="dropzone-file" @dragover.prevent="handleFileDragOver" @dragleave="handleFileDragLeave" @drop.prevent="handleFileDrop"
                         class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                         :class="{ 'border-blue-500 bg-blue-50': isDragging }">

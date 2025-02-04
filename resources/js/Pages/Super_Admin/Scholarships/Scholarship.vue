@@ -11,7 +11,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">Scholarship Specification</span>
+                            <span class="text-blue-400 font-semibold">Scholarship Batches</span>
                         </li>
                     </ul>
                 </div>
@@ -21,17 +21,13 @@
                     <div class="w-full flex justify-between ">
                         <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                <span>{{ scholarship.name }}</span> Scholars
-                                <span
-                                    class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
-                                    Funded by Sponsor since Sponsor
-                                </span>
+                                <span>{{ scholarship.name }}</span> <span>1976-1977 1st Semester</span>
                             </h1>
 
                         </div>
                         <Link :href="`/scholarships/${scholarship.id}/adding-scholars`">
                         <button
-                            class="text-primary bg-white border border-gray-300 hover:bg-primary hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center transition duration-150 ease-in-out"
+                            class="text-primary bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 hover:border-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center transition duration-150 ease-in-out"
                             type="button">
                             Add Scholars
                         </button>
@@ -41,37 +37,11 @@
                     </div>
                 </div>
 
-                <div class="w-full mt-5 bg-white">
-                    <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
-                        <li><button @click="toggleList"
-                                class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
-                                :class="List ? 'border-blue-400 ' : 'border-transparent'">Scholar List</button></li>
-                        <li><button @click="toggleAdd" class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200"
-                                :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Adding</button></li>
-                    </ul>
-                </div>
-                <div v-if="List" class="w-full">
+                <div class="w-full bg-white">
+
                     <ScholarList :scholarship="scholarship" :scholars="scholars" />
+                    
                 </div>
-
-
-
-
-
-                <!-- <div class="w-full mt-5">
-                    <ul class="text-primary flex space-x-3 flex-grow justify-left">
-                        <button @click="toggleList"><li class="px-4 py-2 border-b-2 cursor-pointer" :class="List ? 'border-blue-400 bg-white rounded-t-lg shadow-sm' : 'border-transparent'">Scholar List</li></button>
-                        <button @click="toggleAdd" class="px-5 py-2 border-b-2 cursor-pointer " :class="addVisible ? 'border-blue-400 bg-white rounded-t-lg shadow-sm' : 'border-transparent'">Adding</button>
-                    </ul>
-                </div>
-
-                <div v-if="List" class="w-full">
-                    <ScholarList :scholarship="scholarship" :scholars="scholars"/>
-                </div>
-                <div v-if="addVisible" class="w-full h-full">
-                    <Adding :scholarship="scholarship" :scholars="scholars"/>
-                </div> -->
-
 
             </div>
         </div>

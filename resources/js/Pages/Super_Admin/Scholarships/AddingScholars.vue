@@ -10,8 +10,11 @@
                         <li class="hover:text-gray-600">
                                 <span>Scholarships</span>
                         </li>
+                        <li class="hover:text-gray-600">
+                                <span>Scholarship Batches</span>
+                        </li>
                         <li>
-                                <span class="text-blue-400 font-semibold">Scholarship Specification</span>
+                                <span class="text-blue-400 font-semibold">Adding Scholars</span>
                         </li>
                     </ul>
                 </div>
@@ -21,28 +24,13 @@
                         <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
                                 <span>{{ scholarship.name }}</span> Scholars 
-                                <span class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
-                                    Funded by Sponsor since Sponsor
-                                </span>
                             </h1>
-                            
                         </div>
-                        
-                        <button class="text-primary bg-white border border-gray-300 hover:bg-primary hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center transition duration-150 ease-in-out" type="button">
-                            Add Scholars 
-                        </button>
-
                     </div>
                 </div>
 
-                <div class="w-full mt-5 bg-white">
-                    <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
-                        <li><button @click="toggleList" class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200" :class="List ? 'border-blue-400 ' : 'border-transparent'">Scholar List</button></li>
-                        <li><button @click="toggleAdd" class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200" :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Adding</button></li>
-                    </ul>
-                </div>
-                <div v-if="List" class="w-full">
-                    <ScholarList :scholarship="scholarship" :scholars="scholars"/>
+                <div class="w-full h-full">
+                    <Adding :scholarship="scholarship" :scholars="scholars"/>
                 </div>
                 
 

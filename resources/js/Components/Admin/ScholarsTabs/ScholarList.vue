@@ -1,5 +1,17 @@
 <template>
-  <div class="w-full bg-white h-full p-4">
+  
+    <div class="w-full mt-5 bg-white">
+      <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
+          <li><button class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+              :class="List ? 'border-blue-400 ' : 'border-transparent'">Batch 1</button></li>
+          <li><button class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+              :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Batch 13</button></li>
+          <li><button class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+              :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Batch 13.1</button></li>
+      </ul>
+    </div>
+    
+    <div class="w-full bg-white h-full p-4">
     <!-- line sections -->
     <div class="flex flex-row justify-between items-center mb-4">
       <div>

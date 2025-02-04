@@ -78,12 +78,8 @@
                     <div class=" bg-white flex justify-center items-center p-5 rounded-lg">
                         <div class="flex flex-col space-y-2 items-center">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                <span></span> {{ selectedScholarship.name }}
+                                {{ selectedScholarship.name }}<span> Scholars</span> 
                             </h1>
-                            <span
-                                class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
-                                Tanggalin na 'to
-                            </span>
 
                             <div class="py-5 text-gray-500 ">
                                 Select School Year and Semester
