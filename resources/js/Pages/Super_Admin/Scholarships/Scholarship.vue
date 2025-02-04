@@ -5,50 +5,59 @@
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
                         <li class="hover:text-gray-600">
-                                Home
+                            Home
                         </li>
                         <li class="hover:text-gray-600">
-                                <span>Scholarships</span>
+                            <span>Scholarships</span>
                         </li>
                         <li>
-                                <span class="text-blue-400 font-semibold">Scholarship Specification</span>
+                            <span class="text-blue-400 font-semibold">Scholarship Specification</span>
                         </li>
                     </ul>
                 </div>
-                
-                <div class="w-full flex flex-row justify-between dark:bg-dcontainer dark:border dark:border-gray-600 rounded-xl mb-3">
+
+                <div
+                    class="w-full flex flex-row justify-between dark:bg-dcontainer dark:border dark:border-gray-600 rounded-xl mb-3">
                     <div class="w-full flex justify-between ">
                         <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                <span>{{ scholarship.name }}</span> Scholars 
-                                <span class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
+                                <span>{{ scholarship.name }}</span> Scholars
+                                <span
+                                    class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
                                     Funded by Sponsor since Sponsor
                                 </span>
                             </h1>
-                            
+
                         </div>
-                        <Link :href="`/scholarships/${scholarship.id}/adding-scholars`"></Link>
-                        <button class="text-primary bg-white border border-gray-300 hover:bg-primary hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center transition duration-150 ease-in-out" type="button">
-                            Add Scholars 
+                        <Link :href="`/scholarships/${scholarship.id}/adding-scholars`">
+                        <button
+                            class="text-primary bg-white border border-gray-300 hover:bg-primary hover:text-white font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center transition duration-150 ease-in-out"
+                            type="button">
+                            Add Scholars
                         </button>
+                        </Link>
+
 
                     </div>
                 </div>
 
                 <div class="w-full mt-5 bg-white">
                     <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
-                        <li><button @click="toggleList" class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200" :class="List ? 'border-blue-400 ' : 'border-transparent'">Scholar List</button></li>
-                        <li><button @click="toggleAdd" class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200" :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Adding</button></li>
+                        <li><button @click="toggleList"
+                                class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+                                :class="List ? 'border-blue-400 ' : 'border-transparent'">Scholar List</button></li>
+                        <li><button @click="toggleAdd" class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+                                :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Adding</button></li>
                     </ul>
                 </div>
                 <div v-if="List" class="w-full">
-                    <ScholarList :scholarship="scholarship" :scholars="scholars"/>
+                    <ScholarList :scholarship="scholarship" :scholars="scholars" />
                 </div>
-                
 
-                
 
-                
+
+
+
                 <!-- <div class="w-full mt-5">
                     <ul class="text-primary flex space-x-3 flex-grow justify-left">
                         <button @click="toggleList"><li class="px-4 py-2 border-b-2 cursor-pointer" :class="List ? 'border-blue-400 bg-white rounded-t-lg shadow-sm' : 'border-transparent'">Scholar List</li></button>
@@ -68,17 +77,15 @@
         </div>
 
         <ToastProvider>
-            <ToastRoot 
-                v-if="toastVisible" 
-                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full"
-            >
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
                 <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
                 <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
             </ToastRoot>
 
             <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
-        
+
     </AuthenticatedLayout>
 </template>
 
@@ -93,7 +100,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,} from '@/Components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
 import Adding from '../../../Components/Admin/ScholarsTabs/Adding.vue';
 
@@ -140,12 +147,12 @@ const props = defineProps({
 });
 
 const formData = ref({
-  file: null,
-  // other form fields...
+    file: null,
+    // other form fields...
 });
 
 const updateFile = (file) => {
-  formData.value.file = file;
+    formData.value.file = file;
 };
 
 
@@ -154,7 +161,7 @@ const toastMessage = ref("");
 
 watchEffect(() => {
     const flashMessage = usePage().props.flash?.success;
-    
+
     if (flashMessage) {
         console.log("Showing toast with message:", flashMessage);
         toastMessage.value = flashMessage;

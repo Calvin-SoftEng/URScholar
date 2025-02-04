@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SchoolYear;
 use App\Models\Sponsor;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -92,6 +93,17 @@ class DatabaseSeeder extends Seeder
             'description' => 'sponsor1',
             'logo' => 'images.png',
         ]);
+        
+        //school year
+        SchoolYear::factory()->create([
+            'year' => '2024-2025',
+        ]);
+
+        SchoolYear::factory()->create([
+            'year' => '2025-2026',
+        ]);
+
+
 
         //sponsor 
         // $this->call(UserTableSeeder::class);

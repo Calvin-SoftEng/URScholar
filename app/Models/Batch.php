@@ -13,8 +13,8 @@ class Batch extends Model
         return $this->belongsTo(Scholarship::class);
     }
 
-    public function scholar()
+    public function scholars()
     {
-        return $this->belongsTo(Scholar::class);
+        return $this->hasMany(Scholar::class);
     }
 }

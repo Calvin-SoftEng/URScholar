@@ -12,7 +12,7 @@ class Scholar extends Model
         'hei_name',
         'campus',
         'grant',
-        'batch_no',
+        'batch_id',
         'app_no',
         'award_no',
         'last_name',
@@ -40,8 +40,8 @@ class Scholar extends Model
         return $this->hasMany(SubmittedRequirements::class);
     }
 
-    public function batches()
+    public function batch()
     {
-        return $this->hasMany(Batch::class);
+        return $this->belongsTo(Batch::class);
     }
 }

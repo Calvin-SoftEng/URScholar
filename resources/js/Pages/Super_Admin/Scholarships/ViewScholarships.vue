@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Scholarships" />
     <AuthenticatedLayout>
         <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary">
@@ -13,36 +14,47 @@
                         </li>
                     </ul>
                 </div>
-                
+
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS Scholarships</h1>
+                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS
+                        Scholarships
+                    </h1>
                 </div>
 
                 <div class="mx-auto py-5">
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <button @click="toggleSpecification">
-                        <div v-for="scholarship in scholarships" :key="scholarship.id"
-                            class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
-                            <!-- <Link :href="`/scholarships/${scholarship.id}`"> -->
+                        <button v-for="scholarship in scholarships" :key="scholarship.id" @click="toggleSpecification(scholarship)">
+                            <div 
+                                class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
+                                <!-- <Link :href="`/scholarships/${scholarship.id}`"> -->
                                 <div class="card-body p-5 space-y-2">
-                                    <div class="badge badge-yellow text-[14px] font-sora bg-yellow-200 dark:bg-blue-400">Ongoing</div>
-                                    
-                                    <h2 class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">{{
-                                        scholarship.name }}</h2>
+                                    <div
+                                        class="badge badge-yellow text-[14px] font-sora bg-yellow-200 dark:bg-blue-400">
+                                        Ongoing</div>
+
+                                    <h2
+                                        class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
+                                        {{
+                                            scholarship.name }}</h2>
                                     <div class="badge badge-primary text-[12px] badge-outline">
                                         {{ getSponsorName(scholarship.sponsor_id) }}
                                     </div>
                                     <p class="leading-relaxed text-sm text-gray-400">
-                                        <span >Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span><br>
-                                        <span >Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}</span>
+                                        <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString()
+                                            }}</span><br>
+                                        <span>Sponsoring Since: {{ new
+                                            Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                            month: 'long', day: 'numeric' }) }}</span>
                                     </p>
-                                    <p class="text-md text-gray-600 mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full" style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+                                    <p class="text-md text-gray-600 mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"
+                                        style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
                                         {{ scholarship.description }}
                                     </p>
                                 </div>
-                            <!-- </Link> -->
-                        </div>
+                                <!-- </Link> -->
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -52,63 +64,67 @@
                 class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity-ease-in duration-300 ">
                 <div class="bg-white rounded-lg shadow-xl w-4/12">
                     <div class="flex items-center justify-between px-4 py-2 md:px-5 rounded-t">
-                        <button type="button" @click="closeModal" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        <button type="button" @click="closeModal"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>
                         </button>
                     </div>
-                    
+
                     <div class=" bg-white flex justify-center items-center p-5 rounded-lg">
                         <div class="flex flex-col space-y-2 items-center">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                <span></span> Scholars 
+                                <span></span> {{ selectedScholarship.name }}
                             </h1>
-                            <span class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
-                                Funded by Sponsor since Sponsor
+                            <span
+                                class="text-lg font-quicksand font-italic font-semibold text-[darkblue] text-left dark:text-dtext">
+                                Tanggalin na 'to
                             </span>
 
                             <div class="py-5 text-gray-500 ">
                                 Select School Year and Semester
                             </div>
                             <div class="grid grid-cols-3 justify-center items-center gap-3">
-                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">Academic Year: </div>
+                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
+                                    Academic Year: </div>
                                 <div class="col-span-2 w-full">
-                                        <Select>
-                                            <SelectTrigger class="w-full">
+                                    <Select>
+                                        <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select year" />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                            <SelectGroup>
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup v-for="schoolyear in schoolyears" :key="schoolyear.id">
                                                 <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                <SelectItem value="LGBTQ">
-                                                2011-2012
-                                                </SelectItem>
-                                                <SelectItem value="banana">
-                                                2010-2011
+                                                <SelectItem :value="schoolyear.id">
+                                                    {{ schoolyear.year }}
                                                 </SelectItem>
                                             </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
-                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">Semester: </div>
+                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
+                                    Semester: </div>
                                 <div class="col-span-2 w-full">
-                                        <Select>
-                                            <SelectTrigger class="w-full">
+                                    <Select>
+                                        <SelectTrigger class="w-full">
                                             <SelectValue placeholder="Select Semester" />
-                                            </SelectTrigger>
-                                            <SelectContent>
+                                        </SelectTrigger>
+                                        <SelectContent>
                                             <SelectGroup>
                                                 <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                <SelectItem value="LGBTQ">
-                                                First Semester
+                                                <SelectItem value="1st">
+                                                    First Semester
                                                 </SelectItem>
-                                                <SelectItem value="banana">
-                                                Second Semester
+                                                <SelectItem value="2nd">
+                                                    Second Semester
                                                 </SelectItem>
                                             </SelectGroup>
-                                            </SelectContent>
-                                        </Select>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
                             <div class="pt-10 w-full">
@@ -132,7 +148,7 @@ import { Tooltip } from 'primevue';
 
 import { Button } from '@/Components/ui/button'
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,} from '@/Components/ui/select'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
 const props = defineProps({
     sponsors: {
@@ -140,6 +156,10 @@ const props = defineProps({
         required: true
     },
     scholarships: {
+        type: Array,
+        required: true
+    },
+    schoolyears: {
         type: Array,
         required: true
     }
@@ -162,9 +182,13 @@ const getSponsorName = (sponsorId) => {
     return sponsor ? sponsor.name : 'Unknown Sponsor';
 };
 
-const toggleSpecification = () => {
+
+const selectedScholarship = ref(null);
+const toggleSpecification = (Scholarship) => {
     ScholarshipSpecification.value = !ScholarshipSpecification.value;
+
     if (ScholarshipSpecification.value) {
+        selectedScholarship.value = Scholarship;
         resetForm();
     }
 };
@@ -175,11 +199,11 @@ const closeModal = () => {
 };
 
 const resetForm = () => {
-    form.value = { 
-        id: null, 
-        name: '', 
-        description: '', 
-        sponsor_id: '' 
+    form.value = {
+        id: null,
+        name: '',
+        description: '',
+        sponsor_id: ''
     };
 };
 
@@ -199,7 +223,7 @@ const submitForm = async () => {
 
 <style scoped>
 .p-tooltip-text {
-  margin-left: 0px;
-  font-size: 13px !important;
+    margin-left: 0px;
+    font-size: 13px !important;
 }
 </style>

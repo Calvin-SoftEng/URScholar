@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Scholarship;
+use App\Models\SchoolYear;
 use App\Models\Requirements;
 use App\Models\Scholar;
 use App\Models\SubmittedRequirements;
@@ -24,11 +25,13 @@ class ScholarshipController extends Controller
 
         $scholarships = Scholarship::all();
         $sponsors = Sponsor::all();
+        $schoolyear = SchoolYear::all();
         // $scholarships = $sponsors->scholarships;
 
         return inertia('Super_Admin/Scholarships/ViewScholarships', [
         'sponsors' => $sponsors,
         'scholarships' => $scholarships,
+        'schoolyears' => $schoolyear,
         ]);
     }
 

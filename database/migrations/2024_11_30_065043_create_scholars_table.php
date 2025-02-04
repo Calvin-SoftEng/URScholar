@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('hei_name');
             $table->string('campus');
             $table->string('grant');
-            $table->integer('batch_no');
+            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->string('app_no');
             $table->string('award_no');
             $table->string('last_name');

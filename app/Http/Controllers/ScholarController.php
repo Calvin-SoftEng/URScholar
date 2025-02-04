@@ -21,10 +21,20 @@ class ScholarController extends Controller
         ]);
     }
 
-    public function adding() {
-        return Inertia::render('Super_Admin/Scholarships/AddingScholars');
+    public function adding(Scholarship $scholarship)
+    {
+
+        $scholars = $scholarship->scholars;
+
+        return Inertia::render(
+            'Super_Admin/Scholarships/AddingScholars',
+            [
+                'scholarship' => $scholarship,
+                'scholars' => $scholars,
+            ]
+        );
     }
-    
+
 
     public function upload(Request $request, Scholarship $scholarship)
     {
@@ -70,13 +80,13 @@ class ScholarController extends Controller
                     'province' => $record['PROVINCE'] ?? null,
                     'pwd_classification' => $record['CLASSIFICATION OF PWD'] ?? null,
                 ];
-                
+
                 $insertedCount++;
             }
 
 
             Scholar::insert($insertData);
-            
+
             return response()->json([
                 'message' => "Successfully imported {$insertedCount} records",
                 'status' => 'success'
@@ -98,7 +108,7 @@ class ScholarController extends Controller
 
     //     \Log::info('Request data:', ['files' => $request->all()]);
 
-        
+
     //     if (!$file) {
     //         return response()->json(['message' => 'No file uploaded'], 400);
     //     }
@@ -159,7 +169,7 @@ class ScholarController extends Controller
     // {
     //     // Assuming your model is named Requirement
     //     $requirements = Requirement::select('id', 'requirements_json')->get();
-        
+
     //     return response()->json($requirements);
     // }
 }
