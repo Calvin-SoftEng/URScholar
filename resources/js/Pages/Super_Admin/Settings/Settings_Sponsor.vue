@@ -69,16 +69,16 @@
                                             class="w-20 h-20 rounded-full" />
                                     </th>
                                     <td class="px-6 py-4">
-                                        {{ sponsor.name }}
+                                        {{ sponsor.name }} <span>({{ sponsor.abbreviation }})</span>
                                     </td>
                                     <td class="px-6 py-4">
                                         {{ sponsor.since }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ sponsor.created_at }}
+                                        {{ sponsor.moa_file }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        Jan 1, 2021
+                                        {{ sponsor.created_at }}
                                     </td>
                                 </tr>
                             </template>
@@ -234,7 +234,7 @@
 
 <script setup>
 import { useForm, Link, router } from '@inertiajs/vue3';
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, computed  } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { usePage } from "@inertiajs/vue3";
@@ -251,6 +251,8 @@ const directives = {
     Tooltip,
     DatePicker,
 };
+
+
 
 const isTableVisible = ref(false);
 
@@ -342,10 +344,7 @@ const handleFile = (file) => {
     }
 };
 
-// if (file.size > 4 * 1024 * 1024) { // 4MB limit
-// alert("File size exceeds the 4MB limit.");
-// return;
-// }
+
 const handleImg = (img) => {
     if (img) {
         // Generate a unique filename using timestamp

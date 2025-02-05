@@ -68,16 +68,6 @@
                                         style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
                                         {{ sponsor.description }}
                                     </p>
-                                    <!-- <div class="card-actions justify-end">
-                                        <Link :href="`/scholarships/${scholarship.id}`" class="btn btn-primary btn-sm">
-                                        View</Link>
-                                    </div>
-                                    <div class="card-actions justify-end">
-                                        <Link :href="`/scholarships/${scholarship.id}/applicants`" class="btn btn-primary btn-sm">
-                                            Applicants</Link>
-                                    </div>
-                                    <button @click="editScholarship(scholarship)"
-                                        class="btn btn-warning btn-sm">Edit</button> -->
                                     <div class="flex justify-end space-x-4">
                                         <button @click="toggleCreate(sponsor.id)">
                                         <div class="text-sm text-gray-500 cursor-pointer"
@@ -88,19 +78,15 @@
                                             </span>
                                         </div>
                                         </button>
-                                        <div class="text-sm text-gray-500">
-                                            <span
-                                                class="material-symbols-rounded text-blue-900 dark:text-dtext bg-blue-100 hover:bg-gray-200 p-3 border rounded-lg dark:bg-dsecondary dark:border-gray-600 dark:hover:border-gray-300 dark:hover:bg-dsecondary">
-                                                cancel
-                                            </span>
-                                        </div>
-                                        <div class="text-sm text-gray-500 cursor-pointer" v-tooltip="'Edit Scholarship'"
-                                            @click="editScholarship(scholarship)" type="button">
-                                            <span
-                                                class="material-symbols-rounded text-blue-900 dark:text-dtext bg-blue-100 hover:bg-gray-200 p-3 border rounded-lg dark:bg-dsecondary dark:border-gray-600 dark:hover:border-gray-300 dark:hover:bg-dsecondary">
-                                                settings
-                                            </span>
-                                        </div>
+                                        <!-- <Link :href="`/sponsors/${sponsor.id}/edit`">
+                                            <div class="text-sm text-gray-500 cursor-pointer" v-tooltip="'Edit Scholarship'"
+                                                @click="editScholarship(scholarship)" type="button">
+                                                <span
+                                                    class="material-symbols-rounded text-blue-900 dark:text-dtext bg-blue-100 hover:bg-gray-200 p-3 border rounded-lg dark:bg-dsecondary dark:border-gray-600 dark:hover:border-gray-300 dark:hover:bg-dsecondary">
+                                                    settings
+                                                </span>
+                                            </div>
+                                        </Link> -->
                                     </div>
                                 </div>
                             </div>
@@ -143,10 +129,8 @@
                             <select v-model="form.scholarshipType" id="scholarshipType"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                                 <option value="" disabled>Select Scholarship Type</option>
-                                <option value="merit">Merit-based</option>
-                                <option value="need">Need-based</option>
-                                <option value="athletic">Athletic</option>
-                                <option value="artistic">Artistic</option>
+                                <option value="merit">Grant-In</option>
+                                <option value="need">One-time Payment</option>
                             </select>
                         </div>
 

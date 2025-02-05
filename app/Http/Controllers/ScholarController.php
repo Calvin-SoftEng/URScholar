@@ -140,15 +140,20 @@ class ScholarController extends Controller
 
             }
 
+            $scholarship = $scholarship->id;
 
+            // return response()->json([
+            //     'message' => "Successfully imported {$insertedCount} records",
+            //     'status' => 'success',
+            //     'Matched students' => count($matchedScholars),
+            //     'Unmatched students' => count($matchedScholars),
+            //     // 'matched' => 'Matched students: ' . $student->count(),
+            // ]);
+            $matchedScholars = count($matchedScholars);
+            $unmatchedScholars = count($unmatchedScholars);
 
-            return response()->json([
-                'message' => "Successfully imported {$insertedCount} records",
-                'status' => 'success',
-                'Matched students' => count($matchedScholars),
-                'Unmatched students' => count($matchedScholars),
-                // 'matched' => 'Matched students: ' . $student->count(),
-            ]);
+            // return redirect()->route('scholarship.show', $scholarship->id)->with('success', "Successfully imported {$insertedCount} records. Matched students: " . count($matchedScholars) . ". Unmatched students: " . count($unmatchedScholars) . ".");
+            return redirect()->route('scholarship.show', $scholarship)->with('success', "Successfully imported {$matchedScholars} records");
 
 
         } catch (\Exception $e) {

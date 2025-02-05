@@ -86,8 +86,8 @@ class DatabaseSeeder extends Seeder
         $logopath = 'storage/sponsor/logo/images.png';
         //sponsor
         Sponsor::factory()->create([
-            'name' => 'sponsor1',
-            'abbreviation' => 'SP1',
+            'name' => 'Commissioner of Higher Education',
+            'abbreviation' => 'CHED',
             'since' => '2021-01-01',
             'moa_file' => 'moa1.pdf',
             'description' => 'sponsor1',

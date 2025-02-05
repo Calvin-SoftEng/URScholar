@@ -306,7 +306,6 @@ const submitForm = async () => {
                 headers.value = [];
                 previewData.value = [];
                 error.value = "";
-                uploadingPanel.value = false;
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input
                 usePage().props.flash = { success: "Scholars added to the scholarship!" };

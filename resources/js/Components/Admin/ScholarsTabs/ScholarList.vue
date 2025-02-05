@@ -1,5 +1,8 @@
 <template>
-  
+  <div v-if="scholars.length === 0" class="text-center py-5 mt-5">
+    <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added yet</p>
+  </div>
+  <div v-else>
     <div class="w-full mt-5 bg-white">
       <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
           <li><button class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
@@ -42,9 +45,12 @@
     </div>
 
     <!-- table -->
-    <div class="w-[1550px] justify-center items-center overflow-x-auto border rounded-lg shadow-sm ">
+    <div class="w-full justify-center items-center overflow-x-auto border rounded-lg shadow-sm ">
+      <!-- <div v-if="scholars.length === 0" class="text-center py-5">
+        <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added</p>
+      </div> -->
       <!-- Container with horizontal scroll -->
-      <div class="relative overflow-x-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+      <div class="w-[1540px] relative overflow-x-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded">
         <table class="w-full">
           <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700">
             <tr>
@@ -58,7 +64,7 @@
               <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
                 Grant
               </th>
-              <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+              <th class="whitespace-nowrap px-8 py-3 font-medium text-gray-700 dark:text-gray-300">
                 Campus
               </th>
               <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
@@ -94,7 +100,7 @@
             <tr
               v-for="scholar in scholars"
               :key="scholar.id"
-              class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
+              class="bg-white text-sm dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
                 test1
@@ -105,7 +111,7 @@
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
                 {{ scholar.grant }}
               </td>
-              <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+              <td class="whitespace-nowrap px-8 py-4 text-gray-700 dark:text-gray-300">
                 {{ scholar.campus }}
               </td>
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
@@ -117,7 +123,7 @@
               <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
                 {{ scholar.year_level }}
               </td>
-              <td class="whitespace-nowrap px-6 py-4">
+              <td class="whitespace-nowrap px-6 py-4 items-center justify-center">
                 <span
                   class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
                 >
@@ -157,23 +163,24 @@
       </div>
     </div>
 
-    <div class="mt-5 flex flex-col items-right">
-      <!-- Help text -->
-      <span class="text-sm text-gray-700 dark:text-gray-400">
-        Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span
-          class="font-semibold text-gray-900 dark:text-white">10</span> of <span
-          class="font-semibold text-gray-900 dark:text-white">100</span> Scholars
-      </span>
-      <!-- Buttons -->
-      <div class="inline-flex mt-2 xs:mt-0">
-        <button
-          class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          Prev
-        </button>
-        <button
-          class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-          Next
-        </button>
+      <div class="mt-5 flex flex-col items-right">
+        <!-- Help text -->
+        <span class="text-sm text-gray-700 dark:text-gray-400">
+          Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span
+            class="font-semibold text-gray-900 dark:text-white">10</span> of <span
+            class="font-semibold text-gray-900 dark:text-white">100</span> Scholars
+        </span>
+        <!-- Buttons -->
+        <div class="inline-flex mt-2 xs:mt-0">
+          <button
+            class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Prev
+          </button>
+          <button
+            class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+            Next
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -211,25 +218,25 @@ const components = {
   Papa,
 };
 
-const data = ref([
-  {
-    id: "S24213",
-    batch: "Batch 1.1",
-    grant: "LISTAHANAN",
-    campus: "Ngobinon",
-    name: "Carl Carl Catahimican",
-    sex: "Male",
-    birthday: "01/01/2000",
-    program: "BS in Information Technology",
-    yearLevel1: "4th Year",
-    email1: "nifna@gmail.com",
-    yearLevel2: "4th Year",
-    email2: "nifna@gmail.com",
-    yearLevel3: "4th Year",
-    email3: "nifna@gmail.com",
-    status: "Verified",
-  },
-]);
+// const data = ref([
+//   {
+//     id: "S24213",
+//     batch: "Batch 1.1",
+//     grant: "LISTAHANAN",
+//     campus: "Ngobinon",
+//     name: "Carl Carl Catahimican",
+//     sex: "Male",
+//     birthday: "01/01/2000",
+//     program: "BS in Information Technology",
+//     yearLevel1: "4th Year",
+//     email1: "nifna@gmail.com",
+//     yearLevel2: "4th Year",
+//     email2: "nifna@gmail.com",
+//     yearLevel3: "4th Year",
+//     email3: "nifna@gmail.com",
+//     status: "Verified",
+//   },
+// ]);
 
 const addingPanel = ref(false)
 const uploadingPanel = ref(false)
@@ -373,326 +380,7 @@ const confirmUpload = async () => {
   }
 };
 
-// const handleFile = (file) => {
-//   if (!file) return; // Early return if no file is provided
 
-//   // Set the file and its name in the form state
-//   form.value.file = file;
-//   form.value.fileName = file.name;
-
-//   // Initialize FileReader to read the file
-//   const reader = new FileReader();
-
-//   // On file load, handle the file preview and parsing
-//   reader.onload = (e) => {
-//     form.value.filePreview = e.target.result;
-
-//     // Use PapaParse to process the CSV file content
-//     Papa.parse(e.target.result, {
-//       header: true, // Treat the first row as header
-//       skipEmptyLines: true, // Skip empty lines
-//       complete: (results) => {
-//         if (results.data && results.data.length > 0) {
-//           // Filter out rows where all values are empty
-//           const filteredData = results.data.filter(row =>
-//             Object.values(row).some(value => value !== '')
-//           );
-
-//           // Handle valid filtered data
-//           if (filteredData.length > 0) {
-//             headers.value = Object.keys(filteredData[0]);
-//             previewData.value = filteredData;
-//             error.value = ''; // Clear any existing errors
-//             console.log('Processed data:', previewData.value); // Debug log
-//           } else {
-//             error.value = 'No valid data found in the file';
-//             previewData.value = [];
-//             headers.value = [];
-//           }
-//         } else {
-//           error.value = 'No data found in the file';
-//           previewData.value = [];
-//           headers.value = [];
-//         }
-//       },
-//       error: (err) => {
-//         // Handle any errors during CSV parsing
-//         error.value = 'Error parsing CSV: ' + err.message;
-//         previewData.value = [];
-//         headers.value = [];
-//       }
-//     });
-    
-//   };
-
-//   // Read the file as text (CSV content)
-//   reader.readAsText(file);
-// };
-
-
-// const handleFile = async (file) => {
-//   if (!file) return; // Early return if no file is provided
-
-//   // Set the file and its name in the form state
-//   form.value.file = file;
-//   form.value.fileName = file.name;
-
-//   // Initialize FileReader to read the file (CSV content)
-//   const reader = new FileReader();
-
-//   reader.onload = (e) => {
-//     form.value.filePreview = e.target.result;
-
-//     // Use PapaParse to process the CSV file content
-//     Papa.parse(e.target.result, {
-//       header: true, // Treat the first row as header
-//       skipEmptyLines: true, // Skip empty lines
-//       complete: (results) => {
-//         if (results.data && results.data.length > 0) {
-//           const filteredData = results.data.filter(row =>
-//             Object.values(row).some(value => value !== '')
-//           );
-
-//           if (filteredData.length > 0) {
-//             headers.value = Object.keys(filteredData[0]);
-//             previewData.value = filteredData;
-//             error.value = ''; // Clear any existing errors
-//             console.log('Processed data:', previewData.value);
-//           } else {
-//             error.value = 'No valid data found in the file';
-//             previewData.value = [];
-//             headers.value = [];
-//           }
-//         } else {
-//           error.value = 'No data found in the file';
-//           previewData.value = [];
-//           headers.value = [];
-//         }
-//       },
-//       error: (err) => {
-//         error.value = 'Error parsing CSV: ' + err.message;
-//         previewData.value = [];
-//         headers.value = [];
-//       }
-//     });
-//   };
-
-//   // Create a FormData object
-//   const formData = new FormData();
-//   formData.append('file', file);
-
-//   // Get the CSRF token from the meta tag (add this in your Blade template if not present)
-//   const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-//   try {
-//     // Make the request with the CSRF token included in the headers
-//     router.post(`/scholarships/${props.scholarship.id}/upload`, formData, {
-//       preserveScroll: true, // Prevents page scroll reset
-//       onSuccess: () => {
-//         headers.value = [];
-//         previewData.value = [];
-//         error.value = "";
-//         document.getElementById('file-upload').value = null; // Clear file input
-//         usePage().props.flash = { success: 'Scholars added to the scholarship!' };
-//         closePanel(); // Close the panel after successful upload
-//       },
-//     });
-
-//     // Handle the response
-//     // if (response.ok) {
-//     //   headers.value = [];
-//     //   previewData.value = [];
-//     //   error.value = "";
-//     //   document.getElementById('file-upload').value = null; // Clear file input
-
-//     //   usePage().props.flash = { success: 'Scholars added to the scholarship!' };
-//     //   closePanel();
-
-//     // } else {
-//     //   error.value = "Failed to upload file. Please try again.";
-//     // }
-//   } catch (err) {
-//     error.value = "An error occurred while uploading the file.";
-//     console.error("Error during file upload:", err);
-//   }
-
-//   // Read the file as text (CSV content)
-//   reader.readAsText(file);
-// };
-
-
-
-
-
-
-// const handleFile = (file) => {
-//   if (!file) return;
-
-//   form.value.file = file;
-//   form.value.fileName = file.name;
-
-//   const reader = new FileReader();
-
-//   reader.onload = (e) => {
-//     console.log("FileReader onload triggered");
-//     form.value.filePreview = e.target.result;
-
-//     // Log raw file data
-//     console.log("📄 Raw file content:", e.target.result.substring(0, 200)); // Show first 200 chars
-
-//     parseCSV(e.target.result);
-//   };
-
-//   reader.onerror = (error) => {
-//     console.error("FileReader error:", error);
-//   };
-
-//   reader.readAsText(file); // Ensure text reading
-// };
-
-
-
-
-// const handleFileUpload = (event) => {
-//   // eto ay para mafetch yung file
-//   const file = event.files[0];
-
-//   // eto naman ay para mafetch yung file as object
-//   if (event && event.files && event.files.length > 0) {
-//     const file = event.files[0]; // Get first file
-
-//     const reader = new FileReader();
-
-//     reader.onload = function (e) {
-//       Papa.parse(e.target.result, {
-//         header: true,
-//         complete: (results) => {
-//           if (results.data && results.data.length > 0) {
-//             // Filter out empty rows
-//             const filteredData = results.data.filter(row =>
-//               Object.values(row).some(value => value !== '')
-//             );
-
-//             if (filteredData.length > 0) {
-//               headers.value = Object.keys(filteredData[0]);
-//               previewData.value = filteredData;
-//               error.value = '';
-//               console.log('Processed data:', previewData.value); // Debug log
-//             } else {
-//               error.value = 'No valid data found in the file';
-//               previewData.value = [];
-//               headers.value = [];
-//             }
-//           } else {
-//             error.value = 'No data found in the file';
-//             previewData.value = [];
-//             headers.value = [];
-//           }
-//         },
-//         error: (err) => {
-//           error.value = 'Error parsing CSV: ' + err.message;
-//           previewData.value = [];
-//           headers.value = [];
-//         }
-//       });
-//     };
-//     reader.readAsText(file);
-//   }
-// };
-
-// const parseCSV = (csvText) => {
-//   if (!csvText || csvText.length < 1) {
-//     csvError.value = "⚠️ The file is empty!";
-//     console.error(csvError.value);
-//     return;
-//   }
-
-//   Papa.parse(csvText, {
-//     header: true,
-//     skipEmptyLines: true,
-//     complete: (results) => {
-
-//       if (!results.data || results.data.length === 0) {
-//         csvError.value = "No valid data found in the file.";
-//         console.error(csvError.value);
-//         return;
-//       }
-
-//       csvHeaders.value = Object.keys(results.data[0]);
-//       csvPreviewData.value = results.data;
-//       csvError.value = "";
-
-//       console.log("Headers:", csvHeaders.value);
-//       console.log("Data:", csvPreviewData.value);
-//     },
-//     error: (err) => {
-//       csvError.value = `Error parsing CSV: ${err.message}`;
-//       console.error(csvError.value);
-//     },
-//   });
-// };
-
-
-// const uploadFile = async (event) => {
-
-//   const file = event.target.files && event.target.files[0];
-//   const uploadUrl = `/scholarships/${props.scholarship.id}/upload`;
-// console.log("Sending request to:", uploadUrl);
-
-
-//   if (!file) {
-//     error.value = "No file selected. Please choose a file.";
-//     return;
-//   }
-
-//   // Set the file and its name in the form state
-//   form.value.file = file;
-//   form.value.fileName = file.name;
-
-//   // Initialize FileReader to read the file for preview
-//   const reader = new FileReader();
-
-//   reader.onload = async (e) => {
-//     form.value.filePreview = e.target.result; // Set file preview
-
-//     // Prepare form data for file upload
-//     const formData = new FormData();
-//     formData.append("file", form.value.file);
-
-//     try {
-//       // Sending the file to the server
-//       const response = await fetch(`/scholarships/${props.scholarship.id}/upload`, {
-//         method: "POST",
-//         body: formData,
-//       });
-
-//       if (response.ok) {
-//         headers.value = [];
-//         previewData.value = [];
-//         error.value = "";
-//         document.getElementById("file-upload").value = null; // Clear file input
-
-//         // Success message
-//         usePage().props.flash = { success: "Scholars added to the scholarship!" };
-//         closePanel();
-//       } else {
-//         const result = await response.json();
-//         error.value = result.message || "Failed to upload file. Please try again.";
-//       }
-//     } catch (err) {
-//       console.error("Upload Error:", err);
-//       error.value = "Failed to upload file. Please try again.";
-//     }
-//   };
-
-//   reader.onerror = (err) => {
-//     console.error("FileReader Error:", err);
-//     error.value = "Error reading file. Please try again.";
-//   };
-
-//   // Read the file as text for preview
-//   reader.readAsText(file);
-// };
 
 
 

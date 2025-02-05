@@ -30,19 +30,15 @@
                                 class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
                                 <!-- <Link :href="`/scholarships/${scholarship.id}`"> -->
                                 <div class="card-body p-5 space-y-2">
-                                    <div
-                                        class="badge badge-yellow text-[14px] font-sora bg-yellow-200 dark:bg-blue-400">
-                                        Ongoing</div>
-
+                                    <div class="badge badge-info text-[12px] badge-outline">
+                                        {{ getSponsorName(scholarship.sponsor_id) }}
+                                    </div>
                                     <h2
                                         class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
                                         {{
                                             scholarship.name }}</h2>
-                                    <div class="badge badge-primary text-[12px] badge-outline">
-                                        {{ getSponsorName(scholarship.sponsor_id) }}
-                                    </div>
-                                    <p class="leading-relaxed text-sm text-gray-400">
-                                        <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString()
+                                    <p class="leading-relaxed items-start justify-start text-sm text-gray-400">
+                                        <span class="justify-start items-start">Created on: {{ new Date(scholarship.created_at).toLocaleDateString()
                                             }}</span><br>
                                         <span>Sponsoring Since: {{ new
                                             Date(scholarship.created_at).toLocaleDateString('en-US', {
