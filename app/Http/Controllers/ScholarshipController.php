@@ -52,6 +52,7 @@ class ScholarshipController extends Controller
     {
         
         $scholars = $scholarship->scholars;
+        
         $selectedYear = $request->input('selectedYear', '');
         $selectedSem = $request->input('selectedSem', '');
 

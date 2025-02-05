@@ -21,7 +21,7 @@
                     <div class="w-full flex justify-between ">
                         <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span>
+                                <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
                             </h1>
 
                         </div>

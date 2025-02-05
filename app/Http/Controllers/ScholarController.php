@@ -140,7 +140,12 @@ class ScholarController extends Controller
 
             }
 
-            $scholarship = $scholarship->id;
+
+            $schoolyear = SchoolYear::where('id', $request->schoolyear)->first();
+
+
+
+            $selectedSem = $request->semester;
 
             // return response()->json([
             //     'message' => "Successfully imported {$insertedCount} records",
@@ -149,11 +154,29 @@ class ScholarController extends Controller
             //     'Unmatched students' => count($matchedScholars),
             //     // 'matched' => 'Matched students: ' . $student->count(),
             // ]);
+
+
             $matchedScholars = count($matchedScholars);
             $unmatchedScholars = count($unmatchedScholars);
 
             // return redirect()->route('scholarship.show', $scholarship->id)->with('success', "Successfully imported {$insertedCount} records. Matched students: " . count($matchedScholars) . ". Unmatched students: " . count($unmatchedScholars) . ".");
-            return redirect()->route('scholarship.show', $scholarship)->with('success', "Successfully imported {$matchedScholars} records");
+
+
+            return redirect()->route('scholarship.show', [
+                'scholarship' => $scholarship,
+                'scholars' => $scholars,
+                'schoolyear' => $schoolyear,
+                'selectedSem' => $selectedSem,
+
+                'success' => "Successfully imported {$insertedCount} records. Matched students: " . $matchedScholars . ". Unmatched students: " . $unmatchedScholars . "."
+            ]);
+
+            //     return Inertia::render('Super_Admin/Scholarships/Scholarship', [
+            //     'scholarship' => $scholarship,
+            //     'scholars' => $scholars,
+            //     'schoolyear' => $schoolyear,
+            //     'selectedSem' => $selectedSem,
+            // ])->with('success', "Successfully imported {$insertedCount} records. Matched students: " . $matchedScholars . ". Unmatched students: " . $unmatchedScholars . ".");
 
 
         } catch (\Exception $e) {
