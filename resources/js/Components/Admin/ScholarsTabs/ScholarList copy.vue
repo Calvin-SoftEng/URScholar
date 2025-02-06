@@ -1,73 +1,18 @@
 <template>
-  <div class="w-full mt-5 bg-white">
-    <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
-      <li v-for="batch in batches" :key="batch.id"><button  @click="toggleBatch(batch.id)" class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
-          :class="List ? 'border-blue-400 ' : 'border-transparent'">Batch {{ batch.batch_no }}</button>
-
-
-          <!-- Scholars Table -->
-        <div v-show="expandedBatches.has(batch.id)" class="border-t">
-          <table class="min-w-full divide-y divide-gray-200">
-            <thead class="bg-gray-50">
-              <tr>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">HEI</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
-              <tr v-for="scholar in batch.scholars" :key="scholar.id" class="hover:bg-gray-50">
-                <td class="px-6 py-4 whitespace-nowrap">
-                  {{ `${scholar.last_name}, ${scholar.first_name} ${scholar.middle_name}` }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  {{ scholar.course }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  {{ scholar.hei_name }}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <span 
-                    :class="{
-                      'px-2 py-1 text-xs font-medium rounded-full': true,
-                      'bg-green-100 text-green-800': scholar.status === 'Verified',
-                      'bg-yellow-100 text-yellow-800': scholar.status === 'Unverified'
-                    }"
-                  >
-                    {{ scholar.status }}
-                  </span>
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap">
-                  <button 
-                    class="text-indigo-600 hover:text-indigo-900"
-                    @click="router.visit(route('scholars.show', scholar.id))"
-                  >
-                    View
-                  </button>
-                </td>
-              </tr>
-
-              <tr v-if="batch.scholars.length === 0">
-                <td colspan="5" class="px-6 py-4 text-center text-gray-500">
-                  No scholars in this batch
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        </li>
-    </ul>
-
-
-  </div>
-
-
-  <div class="text-center py-5 mt-5">
+  <div v-if="scholars.length === 0" class="text-center py-5 mt-5">
     <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added yet</p>
   </div>
-  <div>
+  <div v-else>
+    <div class="w-full mt-5 bg-white">
+      <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
+        <li><button class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+            :class="List ? 'border-blue-400 ' : 'border-transparent'">Batch 1</button></li>
+        <li><button class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+            :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Batch 13</button></li>
+        <li><button class="px-5 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+            :class="addVisible ? 'border-blue-400 ' : 'border-transparent'">Batch 13.1</button></li>
+      </ul>
+    </div>
 
     <div class="w-full bg-white h-full p-4">
       <!-- line sections -->
@@ -272,6 +217,7 @@ const components = {
 
 const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
 
+const semesters = ['First', 'Second', 'Summer']
 
 const toggleBatch = (batchId) => {
   if (expandedBatches.value.has(batchId)) {

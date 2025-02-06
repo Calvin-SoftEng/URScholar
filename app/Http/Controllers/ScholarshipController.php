@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
+use App\Models\Batch;
 use App\Models\Requirements;
 use App\Models\Scholar;
 use App\Models\SubmittedRequirements;
@@ -29,48 +30,67 @@ class ScholarshipController extends Controller
         // $scholarships = $sponsors->scholarships;
 
         return inertia('Super_Admin/Scholarships/ViewScholarships', [
-        'sponsors' => $sponsors,
-        'scholarships' => $scholarships,
-        'schoolyears' => $schoolyear,
+            'sponsors' => $sponsors,
+            'scholarships' => $scholarships,
+            'schoolyears' => $schoolyear,
         ]);
     }
-
-    // for dashboard
-    // public function dashboard_scholarship(Sponsor $sponsors)
-    // {
-    //     $scholarships = Scholarship::all();
-    //     $sponsors = Sponsor::all();
-    //     // $scholarships = $sponsors->scholarships;
-
-    //     return inertia('Components/Admin/Dashboard/ActiveScholarship', [
-    //     'sponsors' => $sponsors,
-    //     'scholarships' => $scholarships,
-    //     ]);
-    // }
 
     public function show(Request $request, Scholarship $scholarship)
     {
-        
-        $scholars = $scholarship->scholars;
-        
-        $selectedYear = $request->input('selectedYear', '');
-        $selectedSem = $request->input('selectedSem', '');
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->with([
+                'scholars' => function ($query) {
+                    $query->orderBy('last_name')
+                        ->orderBy('first_name');
+                }
+            ])
+            ->when($request->input('selectedYear'), function ($query, $year) {
+                return $query->where('school_year', $year);
+            })
+            ->when($request->input('selectedSem'), function ($query, $sem) {
+                return $query->where('semester', $sem);
+            })
+            ->orderBy('batch_no', 'desc')
+            ->get();
 
-        $schoolyear = SchoolYear::where('id', $selectedYear)->first();
-
-        // $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-        // $reqID = $requirements->pluck('id')->first();
-
-        // $submitRequirements = SubmittedRequirements::where('id', $reqID)->get();
+        $schoolyear = null;
+        if ($request->input('selectedYear')) {
+            $schoolyear = SchoolYear::find($request->input('selectedYear'));
+        }
 
         return Inertia::render('Super_Admin/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
-            'scholars' => $scholars,
+            'batches' => $batches,
             'schoolyear' => $schoolyear,
-            'selectedSem' => $selectedSem,
+            'selectedSem' => $request->input('selectedSem', ''),
         ]);
     }
+
+    // public function show(Request $request, Scholarship $scholarship)
+    // {
+
+    //     $scholars = $scholarship->scholars;
+
+
+    //     $selectedYear = $request->input('selectedYear', '');
+    //     $selectedSem = $request->input('selectedSem', '');
+
+    //     $schoolyear = SchoolYear::where('id', $selectedYear)->first();
+
+    //     // $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+    //     // $reqID = $requirements->pluck('id')->first();
+
+    //     // $submitRequirements = SubmittedRequirements::where('id', $reqID)->get();
+
+    //     return Inertia::render('Super_Admin/Scholarships/Scholarship', [
+    //         'scholarship' => $scholarship,
+    //         'scholars' => $scholars,
+    //         'schoolyear' => $schoolyear,
+    //         'selectedSem' => $selectedSem,
+    //     ]);
+    // }
 
     public function store(Request $request, Sponsor $sponsor)
     {
@@ -82,7 +102,7 @@ class ScholarshipController extends Controller
             // 'application' => 'required|date',
             // 'deadline' => 'required|date',
         ]);
-        
+
         //dd($request);
         Scholarship::create($request->all());
 

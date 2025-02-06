@@ -37,7 +37,7 @@
 
                 <div class="w-full bg-white">
 
-                    <ScholarList :scholarship="scholarship" :batches="batches"/>
+                    <ScholarList :scholarship="scholarship" :scholars="scholars" :batch="batch"/>
                     
                 </div>
 
@@ -111,9 +111,10 @@ const toggleMonitoring = () => {
 
 const props = defineProps({
     scholarship: Object,
+    scholars: Array,
     schoolyear: Object,
     selectedSem: Object,
-    batches: Array,
+    batch: Object,
 });
 
 const selectedSem = ref("");
