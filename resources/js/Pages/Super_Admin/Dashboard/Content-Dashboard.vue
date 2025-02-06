@@ -13,7 +13,7 @@
                 </div>
                 </div>
                 <!-- Second Layer with Single Card -->
-                <div class="bg-black box-border rounded h-[65%] dark:bg-dcontainer">
+                <div class="bg-dirtywhite box-border rounded h-[65%] dark:bg-dcontainer">
                 <!-- <ContentComponent /> -->
                 </div>
             </div>
@@ -22,7 +22,7 @@
                 <div class="h-full rounded-xl shadow-md dark:bg-dcontainer">
                     <Calendar />
                 </div>
-                <div class="bg-black rounded h-[65%] dark:bg-dcontainer"></div>
+                <div class="bg-dirtywhite rounded h-[65%] dark:bg-dcontainer"></div>
             </div>
         </div>
     </div>
