@@ -380,13 +380,19 @@ const submitForm = async () => {
         router.post(`/scholarships/${props.scholarship.id}/upload`, formData, {
             preserveScroll: true,
             onSuccess: () => {
+                console.log("Scholars added to the scholarship!");
                 headers.value = [];
                 previewData.value = [];
                 error.value = "";
-                uploadingPanel.value = false;
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input
-                usePage().props.flash = { success: "Scholars added to the scholarship!" };
+                
+                // Handle flash message for success toast
+                const successMessage = usePage().props.flash?.success;
+                if (successMessage) {
+                    usePage().props.flash = { success: successMessage }; // Show toast message
+                }
+                
                 closePanel();
                 closeModal();
             },

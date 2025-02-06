@@ -14,6 +14,11 @@ use League\Csv\Reader;
 
 class ScholarController extends Controller
 {
+    public function scholars() {
+        return Inertia::render('Super_Admin/Scholars/Scholars');
+    }
+
+    
     public function show(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;
@@ -173,6 +178,18 @@ class ScholarController extends Controller
                             'success' => "Successfully imported {$insertedCount} records. Matched students: " . $matchedScholars . ". Unmatched students: " . $unmatchedScholars . "."
                         ]
                     ]);
+
+            // return Inertia::render('Super_Admin/Scholarships/Scholarship', [
+            //     'scholarship' => $scholarship,
+            //     'scholars' => $scholars,
+            //     'schoolyear' => $schoolyear,
+            //     'selectedSem' => $selectedSem,
+            // ])->with('flash', [
+            //     'success' => "Successfully imported {$insertedCount} records. Matched students: {$matchedScholars}. Unmatched students: {$unmatchedScholars}."
+            // ]);
+
+            
+            
 
         } catch (\Exception $e) {
             return response()->json([

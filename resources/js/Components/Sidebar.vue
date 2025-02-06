@@ -67,14 +67,29 @@
               </div>
             </Link>
 
-            <div v-tooltip.right="!dataOpenSideBar ? 'Scholars' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+            <Link :href="(route('scholars.show'))" >
+              <div v-tooltip.right="!dataOpenSideBar ? 'Scholars' : ''" :class="[
+                'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
+                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/urs-scholars') }
+              ]">
+              <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/urs-scholars') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/urs-scholars') }]"
+                >
+                school
+                </span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/urs-scholars') }]">Scholars</span>
+              </div>
+              </div>
+            </Link>
+
+            <!-- <div v-tooltip.right="!dataOpenSideBar ? 'Scholars' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
               <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                 <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
                 school
                 </span>
                 <span v-show="dataOpenSideBar" class="pl-2">Scholars</span>
               </router-link>
-            </div>
+            </div> -->
   
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Communication</div>
             

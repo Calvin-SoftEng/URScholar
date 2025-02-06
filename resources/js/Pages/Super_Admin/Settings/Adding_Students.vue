@@ -153,8 +153,9 @@
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">{{ isEditing ? 'Edit Sponsor Information' : 'Add New Scholarship'
-                            }}</h2>
+                        <h2 class="text-2xl font-bold">
+                            Add Students
+                            </h2>
                     </span>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -255,13 +256,10 @@ const toggleCreate = () => {
 
 const closeModal = () => {
     isCreating.value = false;
-    isEditing.value = false;
-    isPublishing.value = false;
     resetForm();
 };
 
 const isFileDragging = ref(false);
-const isImgDragging = ref(false);
 
 const previewFile = (event) => {
     const file = event.target.files[0];
@@ -309,7 +307,6 @@ const submitForm = async () => {
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input
                 usePage().props.flash = { success: "Scholars added to the scholarship!" };
-                closePanel();
                 closeModal();
             },
         });
@@ -327,7 +324,6 @@ const activeateForm = async () => {
         console.error('Error submitting form:', error);
     }
 };
-
 
 
 // radix vue testing

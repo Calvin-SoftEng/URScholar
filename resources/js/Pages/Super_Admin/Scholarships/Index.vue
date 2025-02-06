@@ -20,7 +20,7 @@
                     <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                         <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS Partnered Sponsors</h1>
 
-                    <Link :href="`/sponsors/create`">
+                    <!-- <Link :href="`/sponsors/create`">
                     <button
                         class="btn shadow-md bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
                         >
@@ -29,7 +29,7 @@
                         </span>
                         New Sponsor
                     </button>
-                    </Link>
+                    </Link> -->
 
                 </div>
 
@@ -218,7 +218,6 @@ const toggleCreate = (sponsorID) => {
 const closeModal = () => {
     isCreating.value = false;
     isEditing.value = false;
-    isPublishing.value = false;
     resetForm();
 };
 
@@ -230,7 +229,7 @@ const editScholarship = (scholarship) => {
 
 
 const resetForm = () => {
-    form.value = { id: null, name: '', description: '' };
+    form.value = { id: null, name: '', description: '', scholarshipType: '', school_year: '', semester: '', application: '', deadline: '' };
 };
 
 

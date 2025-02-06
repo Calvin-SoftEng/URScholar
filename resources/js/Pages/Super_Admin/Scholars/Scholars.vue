@@ -14,73 +14,138 @@
               </li>
               <li>
               <a>
-                  <span>Scholarships</span>
-              </a>
-              </li>
-              <li>
-              <a>
-                  <span class="text-blue-400 font-semibold">{{ scholarship.name }} Dashboard</span>
+                <span class="text-blue-400 font-semibold">Scholars</span>
               </a>
               </li>
             </ul>
           </div>
           <div class="flex justify-between items-center mb-4">
             <h1 class="text-4xl font-poppins font-extrabold text-[darkblue] text-left">
-              <span>{{ scholarship.name }}</span> Scholars 2024-2025 ganyan</h1>
-          </div>
-
-          <div>
-            <h1 class="text-black">
-              bfbeafbaefpbeafaiefbapeb
+              <!-- <span>{{ scholarship.name }}</span> Scholars 2024-2025 ganyan -->
             </h1>
           </div>
 
-          <div class="w-full h-full bg-[#F8F8FA] justify-between items-center mb-4 px-32">
-            <!-- table -->
-            <div class="bg-white">
-              <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                  <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                    <tr>
-                      <th scope="col" class="px-6 py-3">Requirements</th>
-                      <th scope="col" class="px-6 py-3">File Uploaded</th>
-                      <th scope="col" class="px-6 py-3">Date Submitted</th>
-                      <th scope="col" class="px-6 py-3">Status</th>
-                      <th scope="col" class="px-6 py-3">
-                        <span class="sr-only">Expand</span>
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-for="(scholar, index) in scholars" :key="scholar.id">
-                      <!-- Main Row -->
-                      <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                          {{ scholar.id }}
-                        </th>
-                        <td class="px-6 py-2">
-                          {{ `${scholar.first_name} ${scholar.last_name}` }}
-                        </td>
-                        <td class="px-6 py-2">
-                          {{ scholar.course }}
-                        </td>
-                        <td class="px-6 py-2">
-                          {{ scholar.course }}
-                        </td>
-                        <td class="px-6 py-2">
-                          <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">Default</span>
-                        </td>
-                        <td class="px-2 py-2 flex flex-row-reverse text-right items-center">
-                            <button type="button" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-800/80 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                              View Requirements</button>
-                        </td>
-                      </tr>
-                    </template>
-                  </tbody>
-                </table>
-              </div>
+           <!-- table -->
+          <div class="w-full justify-center items-center overflow-x-auto border rounded-lg shadow-sm ">
+            <!-- <div v-if="scholars.length === 0" class="text-center py-5">
+              <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added</p>
+            </div> -->
+            <!-- Container with horizontal scroll -->
+            <div class="w-[1540px] relative overflow-x-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+              <table class="w-full">
+                <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700">
+                  <tr>
+                    <!-- First 5 columns visible by default -->
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      URScholar ID
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Batch No.
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Grant
+                    </th>
+                    <th class="whitespace-nowrap px-8 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Campus
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Scholar's Name
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Degree Program
+                    </th>
+                    <!-- Additional scrollable columns -->
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Year Level
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Status
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Sex
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Birthday
+                    </th>
+                    <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
+                      Email Address
+                    </th>
+
+                    <!-- Sticky actions column -->
+                    <th class="whitespace-nowrap px-10 py-3 font-medium text-gray-700 dark:text-gray-300 sticky right-0 bg-gray-200 dark:bg-gray-700 shadow-lg sr-only">
+                      Action
+                    </th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                  <tr
+                    v-for="scholar in scholars"
+                    :key="scholar.id"
+                    class="bg-white text-sm dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      test1
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.grant }}
+                    </td>
+                    <td class="whitespace-nowrap px-8 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.campus }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.course }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.year_level }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 items-center justify-center">
+                      <span
+                        class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400"
+                      >
+                        {{ scholar.status }}
+                      </span>
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.sex }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      {{ scholar.birthdate }}
+                    </td>
+                    <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
+                      
+                    </td>
+                    
+
+                    <!-- Sticky actions cell -->
+                    <td class="whitespace-nowrap px-10 py-4 sticky right-0 bg-gray-200 dark:bg-gray-800 shadow-lg">
+                      <button
+                        class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        aria-label="View Details"
+                      >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
+
+
+
       </div>
     </div>
     </AuthenticatedLayout>

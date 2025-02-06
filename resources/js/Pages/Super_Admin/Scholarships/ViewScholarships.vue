@@ -86,8 +86,8 @@
                                 <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
                                     Academic Year: </div>
                                 <div class="col-span-2 w-full">
-                                    <Select v-model="selectedYear">
-                                        <SelectTrigger class="w-full">
+                                    <Select v-model="selectedYear" required>
+                                        <SelectTrigger class="w-full border" :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
                                             <SelectValue placeholder="Select year" />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -103,13 +103,12 @@
                                 <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
                                     Semester: </div>
                                 <div class="col-span-2 w-full">
-                                    <Select v-model="selectedSem">
-                                        <SelectTrigger class="w-full">
+                                    <Select v-model="selectedSem" required>
+                                        <SelectTrigger class="w-full border" :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
                                             <SelectValue placeholder="Select Semester" />
                                         </SelectTrigger>
                                         <SelectContent>
                                             <SelectGroup>
-                                                <!-- <SelectLabel>Gender</SelectLabel> -->
                                                 <SelectItem value="1st">
                                                     First Semester
                                                 </SelectItem>
@@ -121,6 +120,12 @@
                                     </Select>
                                 </div>
                             </div>
+                            <p v-if="formErrors.selectedSem" class="text-red-500 text-sm mt-1">
+                                {{ formErrors.selectedSem }}
+                            </p>
+                            <p v-if="formErrors.selectedYear" class="text-red-500 text-sm mt-1">
+                                {{ formErrors.selectedYear }}
+                            </p>
                             <div class="pt-10 w-full">
                                 <button @click="openScholarship"
                                     class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
@@ -183,19 +188,37 @@ const selectedSem = ref("");
 
 const selectedScholarship = ref(null);
 
+const formErrors = ref({
+    selectedSem: "",
+    selectedYear: "",
+});
+
 const toggleSpecification = (Scholarship) => {
     ScholarshipSpecification.value = !ScholarshipSpecification.value;
 
     if (ScholarshipSpecification.value) {
         selectedScholarship.value = Scholarship;
-
-
-        resetForm();
     }
+    resetForm();
 };
 
 
 const openScholarship = () => {
+    formErrors.value.selectedSem = "";
+    formErrors.value.selectedYear = "";
+
+    // Validate
+    if (!selectedSem.value && !selectedYear.value) {   
+        formErrors.value.selectedSem = "Semester selection is required.";
+        formErrors.value.selectedYear = "Academic Year selection is required.";
+        return; // Stop form submission
+    }
+
+    const formData = new FormData();
+    formData.append("selectedYear", selectedYear.value);
+    formData.append("semester", selectedSem.value); // Make sure it's being passed
+
+
     router.visit(`/scholarships/${selectedScholarship.value.id}`, {
         data: { selectedYear: selectedYear.value, selectedSem: selectedSem.value },
         preserveState: true
@@ -213,22 +236,12 @@ const resetForm = () => {
         id: null,
         name: '',
         description: '',
-        sponsor_id: ''
+        sponsor_id: '',
+        selectedYear: null,
+        selectedSem: null,
     };
 };
 
-const submitForm = async () => {
-    try {
-        if (isEditing.value) {
-            await useForm(form.value).put(`/scholarships/${form.value.id}`);
-        } else {
-            await useForm(form.value).post('/scholarships');
-        }
-        closeModal();
-    } catch (error) {
-        console.error('Error submitting form:', error);
-    }
-};
 </script>
 
 <style scoped>
