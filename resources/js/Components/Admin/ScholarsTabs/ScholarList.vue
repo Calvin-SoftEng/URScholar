@@ -103,7 +103,7 @@
                           test1
                         </td>
                         <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
+                          {{ batch.batch_no }}
                         </td>
                         <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
                           {{ scholar.grant }}
