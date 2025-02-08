@@ -10,12 +10,18 @@ use App\Models\Student;
 use App\Models\Batch;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 use League\Csv\Reader;
 
 class ScholarController extends Controller
 {
     public function scholars() {
-        return Inertia::render('Super_Admin/Scholars/Scholars');
+
+        return Inertia::render('Super_Admin/Scholars/Scholars', [
+            'scholars' => Scholar::all(),
+            'userType' => Auth::user()->usertype,
+            'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null
+        ]);
     }
 
     

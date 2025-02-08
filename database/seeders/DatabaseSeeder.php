@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'system_admin'
+            'usertype' => 'system_admin',
+            'campus' => 'Morong'
         ]);
 
         //Super Admin
@@ -35,7 +36,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'super_admin'
+            'usertype' => 'super_admin',
+            'campus' => 'Morong'
         ]);
 
 
@@ -47,7 +49,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'coordinator'
+            'usertype' => 'coordinator',
+            'campus' => 'Binangonan'
         ]);
 
         User::factory()->create([
