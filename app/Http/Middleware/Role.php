@@ -29,8 +29,9 @@ class Role
                 case 'system_admin':
                     return redirect()->route('system_admin.dashboard');
                 case 'super_admin':
+                    return redirect()->route('staff.dashboard');
                 case 'coordinator':
-                    return redirect()->route('super_admin.dashboard');
+                    return redirect()->route('staff.dashboard');
                 case 'student':
                     return $request->$user->hasVerifiedEmail() 
                         ? redirect()->route('student.dashboard')
