@@ -217,12 +217,7 @@ class ScholarController extends Controller
         ]);
     }
 
-
-    // public function index()
-    // {
-    //     // Assuming your model is named Requirement
-    //     $requirements = Requirement::select('id', 'requirements_json')->get();
-
-    //     return response()->json($requirements);
-    // }
+    public function scholar_expand_details() {
+        return Inertia::render('Super_Admin/Scholarships/ScholarDetails');
+    }
 }

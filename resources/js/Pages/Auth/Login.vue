@@ -64,12 +64,12 @@ const submit = () => {
                     <span class="max-w-[90%] text-sm">Enter the details sent by the Scholarship Office</span>
                 </div>
                 <div>
-                    <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
+                    <InputLabel for="email" value="Email" class="font-quicksand font-bold text-lg mb-1" />
                     <input placeholder="name@gmail.com" title="Input title" name="input-name" type="email" id="email" v-model="form.email" required autofocus autocomplete="username"
                     class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-[myblack] focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
-                    <InputLabel for="password" value="Password" class="font-poppins font-semibold text-md mt-6 mb-2"/>
+                    <InputLabel for="password" value="Password" class="font-quicksand font-bold text-base mt-6 mb-2"/>
 
                     <div class="relative w-full">
                         <input :type="showPassword ? 'text' : 'password'" placeholder="Password" title="Input title" name="input-name" id="password"
@@ -97,59 +97,59 @@ const submit = () => {
 </template>
 
 <!-- <div>
-                <InputLabel for="email" value="Email" />
+<InputLabel for="email" value="Email" />
 
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="mt-1 block w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
+<TextInput
+    id="email"
+    type="email"
+    class="mt-1 block w-full"
+    v-model="form.email"
+    required
+    autofocus
+    autocomplete="username"
+/>
 
-                <InputError class="mt-2" :message="form.errors.email" />
-            </div>
+<InputError class="mt-2" :message="form.errors.email" />
+</div>
 
-            <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+<div class="mt-4">
+<InputLabel for="password" value="Password" />
 
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="mt-1 block w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="current-password"
-                />
+<TextInput
+    id="password"
+    type="password"
+    class="mt-1 block w-full"
+    v-model="form.password"
+    required
+    autocomplete="current-password"
+/>
 
-                <InputError class="mt-2" :message="form.errors.password" />
-            </div>
+<InputError class="mt-2" :message="form.errors.password" />
+</div>
 
-            <div class="mt-4 block">
-                <label class="flex items-center">
-                    <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-gray-600"
-                        >Remember me</span
-                    >
-                </label>
-            </div>
+<div class="mt-4 block">
+<label class="flex items-center">
+    <Checkbox name="remember" v-model:checked="form.remember" />
+    <span class="ms-2 text-sm text-gray-600"
+        >Remember me</span
+    >
+</label>
+</div>
 
-            <div class="mt-4 flex items-center justify-end">
-                <Link
-                    v-if="canResetPassword"
-                    :href="route('password.request')"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                    Forgot your password?
-                </Link>
+<div class="mt-4 flex items-center justify-end">
+<Link
+    v-if="canResetPassword"
+    :href="route('password.request')"
+    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+>
+    Forgot your password?
+</Link>
 
-                <PrimaryButton
-                    class="ms-4"
-                    :class="{ 'opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Log in
-                </PrimaryButton>
-            </div> -->
+<PrimaryButton
+    class="ms-4"
+    :class="{ 'opacity-25': form.processing }"
+    :disabled="form.processing"
+>
+    Log in
+</PrimaryButton>
+</div> -->

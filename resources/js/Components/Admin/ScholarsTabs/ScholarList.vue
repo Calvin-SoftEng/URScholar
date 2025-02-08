@@ -139,17 +139,17 @@
                         <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
 
                         </td>
-
-
                         <!-- Sticky actions cell -->
                         <td class="whitespace-nowrap px-10 py-4 sticky right-0 bg-gray-200 dark:bg-gray-800 shadow-lg">
-                          <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                            aria-label="View Details">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          </button>
+                          <Link :href="route('scholars_expand_details.details')">
+                            <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                              aria-label="View Details">
+                              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                  d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                              </svg>
+                            </button>
+                          </Link>
                         </td>
                       </tr>
                     </tbody>

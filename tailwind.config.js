@@ -23,7 +23,7 @@ module.exports = {
     },
     extend: {
       fontFamily: {
-        poppins: ['Poppins', 'sans-serif'],
+        // poppins: ['Poppins', 'sans-serif'],
         cocogoose: ['Cocogoose', 'sans-serif'],
         onest: ['Onest', 'sans-serif'],
         sora: ['Sora', 'sans-serif'],

@@ -33,7 +33,7 @@ function handleImageError() {
 <template>
     <Head title="Welcome" />
 
-    <div class="">
+    <div class="scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded">
         <FloatingNav/>
         <Section_1/>
         <Section_2/>
