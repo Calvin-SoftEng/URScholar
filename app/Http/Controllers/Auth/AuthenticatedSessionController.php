@@ -13,9 +13,6 @@ use Inertia\Response;
 
 class AuthenticatedSessionController extends Controller
 {
-    /**
-     * Display the login view.
-     */
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [
@@ -24,46 +21,31 @@ class AuthenticatedSessionController extends Controller
         ]);
     }
 
-    /**
-     * Handle an incoming authentication request.
-     */
     public function store(LoginRequest $request): RedirectResponse
     {
         $request->authenticate();
 
         $request->session()->regenerate();
 
-        $url = "";
+        $user = $request->user();
 
-        if ($request->user()->usertype === 'system_admin') {
-            return redirect()->route('system_admin.dashboard');
+        // Redirect based on user type
+        switch ($user->usertype) {
+            case 'system_admin':
+                return redirect()->route('system_admin.dashboard');
+            case 'super_admin':
+                return redirect()->route('staff.dashboard');
+            case 'coordinator':
+                return redirect()->route('staff.dashboard');
+            case 'student':
+                return $user->hasVerifiedEmail()
+                    ? redirect()->route('student.dashboard')
+                    : redirect()->route('student.verify-account');
+            default:
+                return redirect()->intended('welcome');
         }
-        elseif ($request->user()->usertype === 'super_admin') {
-            return redirect()->route('super_admin.dashboard');
-        }
-        elseif ($request->user()->usertype === 'coordinator') {
-            $url = '/coordinator/dashboard';
-        }
-        elseif ($request->user()->usertype === 'student') {
-
-            if ($request->user()->hasVerifiedEmail()) {
-                return redirect()->route('student.dashboard');
-            }
-            else {
-                return redirect()->route('student.verify-account');
-            }
-            
-        }
-        else {
-            $url = 'dashboard';
-        }
-
-        return redirect()->intended($url);
     }
 
-    /**
-     * Destroy an authenticated session.
-     */
     public function destroy(Request $request): RedirectResponse
     {
         Auth::guard('web')->logout();

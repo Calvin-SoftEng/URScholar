@@ -1,0 +1,252 @@
+<template>
+
+    <Head title="Scholarships" />
+    <AuthenticatedLayout>
+        <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary">
+            <div class="w-full mx-auto p-3 rounded-xl text-white">
+                <div class="breadcrumbs text-sm text-gray-400 mb-5">
+                    <ul>
+                        <li class="hover:text-gray-600">
+                            Home
+                        </li class="hover:text-gray-600">
+                        <li>
+                            <span class="text-blue-400 font-semibold dark:text-gray-300">Scholarships</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="flex justify-between items-center mb-4">
+                    <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS
+                        Scholarships
+                    </h1>
+                </div>
+
+                <div class="mx-auto py-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <button v-for="scholarship in scholarships" :key="scholarship.id"
+                            @click="toggleSpecification(scholarship)">
+                            <div
+                                class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
+                                <!-- <Link :href="`/scholarships/${scholarship.id}`"> -->
+                                <div class="card-body p-5 space-y-2">
+                                    <div class="badge badge-info text-[12px] badge-outline">
+                                        {{ getSponsorName(scholarship.sponsor_id) }}
+                                    </div>
+                                    <h2
+                                        class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
+                                        {{
+                                            scholarship.name }}</h2>
+                                    <p class="leading-relaxed items-start justify-start text-sm text-gray-400">
+                                        <span class="justify-start items-start">Created on: {{ new Date(scholarship.created_at).toLocaleDateString()
+                                            }}</span><br>
+                                        <span>Sponsoring Since: {{ new
+                                            Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                year: 'numeric',
+                                                month: 'long', day: 'numeric'
+                                            }) }}</span>
+                                    </p>
+                                    <p class="text-md text-gray-600 mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"
+                                        style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+                                        {{ scholarship.description }}
+                                    </p>
+                                </div>
+                                <!-- </Link> -->
+                            </div>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div v-if="ScholarshipSpecification"
+                class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity-ease-in duration-300 ">
+                <div class="bg-white rounded-lg shadow-xl w-4/12">
+                    <div class="flex items-center justify-between px-4 py-2 md:px-5 rounded-t">
+                        <button type="button" @click="closeModal"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class=" bg-white flex justify-center items-center p-5 rounded-lg">
+                        <div class="flex flex-col space-y-2 items-center">
+                            <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
+                                {{ selectedScholarship.name }}<span> Scholars</span> 
+                            </h1>
+
+                            <div class="py-5 text-gray-500 ">
+                                Select School Year and Semester
+                            </div>
+                            <div class="grid grid-cols-3 justify-center items-center gap-3">
+                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
+                                    Academic Year: </div>
+                                <div class="col-span-2 w-full">
+                                    <Select v-model="selectedYear" required>
+                                        <SelectTrigger class="w-full border" :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
+                                            <SelectValue placeholder="Select year" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup v-for="schoolyear in schoolyears" :key="schoolyear.id">
+                                                <!-- <SelectLabel>Gender</SelectLabel> -->
+                                                <SelectItem :value="schoolyear.id">
+                                                    {{ schoolyear.year }}
+                                                </SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
+                                    Semester: </div>
+                                <div class="col-span-2 w-full">
+                                    <Select v-model="selectedSem" required>
+                                        <SelectTrigger class="w-full border" :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
+                                            <SelectValue placeholder="Select Semester" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                <SelectItem value="1st">
+                                                    First Semester
+                                                </SelectItem>
+                                                <SelectItem value="2nd">
+                                                    Second Semester
+                                                </SelectItem>
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                            <p v-if="formErrors.selectedSem" class="text-red-500 text-sm mt-1">
+                                {{ formErrors.selectedSem }}
+                            </p>
+                            <p v-if="formErrors.selectedYear" class="text-red-500 text-sm mt-1">
+                                {{ formErrors.selectedYear }}
+                            </p>
+                            <div class="pt-10 w-full">
+                                <button @click="openScholarship"
+                                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                                    Proceed to Scholarship</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>
+
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { ref, onMounted, computed } from 'vue';
+import { Head, useForm, Link, router } from '@inertiajs/vue3';
+import { useRouter, useRoute } from 'vue-router'
+
+import { Tooltip } from 'primevue';
+
+import { Button } from '@/Components/ui/button'
+
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
+
+const props = defineProps({
+    sponsors: {
+        type: Array,
+        required: true
+    },
+    scholarships: {
+        type: Array,
+        required: true
+    },
+    schoolyears: {
+        type: Array,
+        required: true
+    }
+});
+const directives = {
+    Tooltip,
+};
+
+const ScholarshipSpecification = ref(false);
+
+const form = ref({
+    id: null,
+    name: '',
+    description: '',
+    sponsor_id: ''
+});
+
+const getSponsorName = (sponsorId) => {
+    const sponsor = props.sponsors.find(s => s.id === sponsorId);
+    return sponsor ? sponsor.name : 'Unknown Sponsor';
+};
+
+const selectedYear = ref("");
+const selectedSem = ref("");
+
+const selectedScholarship = ref(null);
+
+const formErrors = ref({
+    selectedSem: "",
+    selectedYear: "",
+});
+
+const toggleSpecification = (Scholarship) => {
+    ScholarshipSpecification.value = !ScholarshipSpecification.value;
+
+    if (ScholarshipSpecification.value) {
+        selectedScholarship.value = Scholarship;
+    }
+    resetForm();
+};
+
+
+const openScholarship = () => {
+    formErrors.value.selectedSem = "";
+    formErrors.value.selectedYear = "";
+
+    // Validate
+    if (!selectedSem.value && !selectedYear.value) {   
+        formErrors.value.selectedSem = "Semester selection is required.";
+        formErrors.value.selectedYear = "Academic Year selection is required.";
+        return; // Stop form submission
+    }
+
+    const formData = new FormData();
+    formData.append("selectedYear", selectedYear.value);
+    formData.append("semester", selectedSem.value); // Make sure it's being passed
+
+
+    router.visit(`/scholarships/${selectedScholarship.value.id}`, {
+        data: { selectedYear: selectedYear.value, selectedSem: selectedSem.value },
+        preserveState: true
+    });
+};
+
+
+const closeModal = () => {
+    ScholarshipSpecification.value = false;
+    resetForm();
+};
+
+const resetForm = () => {
+    form.value = {
+        id: null,
+        name: '',
+        description: '',
+        sponsor_id: '',
+        selectedYear: null,
+        selectedSem: null,
+    };
+};
+
+</script>
+
+<style scoped>
+.p-tooltip-text {
+    margin-left: 0px;
+    font-size: 13px !important;
+}
+</style>

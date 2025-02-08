@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
 use App\Models\Scholar;
@@ -17,7 +18,7 @@ class ScholarController extends Controller
 {
     public function scholars() {
 
-        return Inertia::render('Super_Admin/Scholars/Scholars', [
+        return Inertia::render('Staff/Scholars/Scholars', [
             'scholars' => Scholar::all(),
             'userType' => Auth::user()->usertype,
             'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null
@@ -33,7 +34,7 @@ class ScholarController extends Controller
 
         $batch = Batch::where('scholarship_id', $scholarship->id)->first();
 
-        return Inertia::render('Super_Admin/Scholarships/Scholars', [
+        return Inertia::render('Staff/Scholarships/Scholars', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
             'batch' => $batch,
@@ -50,7 +51,7 @@ class ScholarController extends Controller
         $schoolyear = SchoolYear::where('id', $selectedYear)->first();
 
         return Inertia::render(
-            'Super_Admin/Scholarships/AddingScholars',
+            'Staff/Scholarships/AddingScholars',
             [
                 'scholarship' => $scholarship,
                 'scholars' => $scholars,
@@ -174,7 +175,7 @@ class ScholarController extends Controller
             //     'success' => "Successfully imported {$insertedCount} records. Matched students: " . $matchedScholars . ". Unmatched students: " . $unmatchedScholars . "."
             // ]);
 
-            return Inertia::render('Super_Admin/Scholarships/Scholarship', [
+            return Inertia::render('Staff/Scholarships/Scholarship', [
                 'scholarship' => $scholarship,
                 'scholars' => $scholars,
                 'schoolyear' => $schoolyear,
@@ -211,7 +212,7 @@ class ScholarController extends Controller
         $scholars = $scholarship->scholars;
 
 
-        return Inertia::render('Super_Admin/Scholarships/SendingAccess', [
+        return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
         ]);
@@ -219,7 +220,7 @@ class ScholarController extends Controller
 
     public function expand_requirements()
     {
-        return Inertia::render('Super_Admin/Scholarships/ScholarRequirements', [
+        return Inertia::render('Staff/Scholarships/ScholarRequirements', [
         ]);
     }
 

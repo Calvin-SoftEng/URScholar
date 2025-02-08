@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
 use App\Models\Student;
+use App\Http\Controllers\Controller;
 use App\Models\Sponsor;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class SettingsController extends Controller
 
         $sponsors = Sponsor::all();
         
-        return Inertia::render('Super_Admin/Settings/Settings_Sponsor', 
+        return Inertia::render('Staff/Settings/Settings_Sponsor', 
             ['sponsors' => $sponsors]
         );
     }
@@ -25,7 +26,7 @@ class SettingsController extends Controller
     {
 
         $students = Student::all();
-        return Inertia::render('Super_Admin/Settings/Adding_Students', 
+        return Inertia::render('Staff/Settings/Adding_Students', 
             ['students' => $students]
         );
     }
