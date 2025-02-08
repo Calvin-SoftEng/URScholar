@@ -5,12 +5,13 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ScholarshipController;
-use App\Http\Controllers\ScholarController;
-use App\Http\Controllers\MessageController;
+use App\Http\Controllers\Staff\ScholarshipController;
+use App\Http\Controllers\Staff\ScholarController;
+use App\Http\Controllers\Staff\MessageController;
 use App\Http\Controllers\MISController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\SponsorController;
+use App\Http\Controllers\Staff\SettingsController;
+use App\Http\Controllers\Staff\SponsorController;
+use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\SystemAdminController;
 use Illuminate\Foundation\Application;
@@ -24,11 +25,11 @@ Route::get('/', function () {
         'laravelVersion' => Application::VERSION,
         'phpVersion' => PHP_VERSION,
     ]);
-});
+})->name('welcome');
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return Inertia::render('Dashboard');
+// })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -61,13 +62,10 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 // SCHOLARSHIP ADMIN -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Route::middleware(['auth', 'usertype:super_admin'])->group(function () {
+Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function () {
 
-    Route::get('/admin/dashboard', [SuperAdminController::class, 'dashboard'])
-        ->name('super_admin.dashboard');
-
-    //Admin-dashboard
-    // Route::get('/admin/dashboard', [ScholarshipController::class, 'dashboard_scholarship'])->name('scholarships.dashboard_scholarship');
+    Route::get('/staff-dashboard', [StaffController::class, 'dashboard'])
+        ->name('staff.dashboard');
 
     //Sponsors
     Route::get('/sponsors', [SponsorController::class, 'index'])->name('sponsor.index');
@@ -110,14 +108,8 @@ Route::middleware(['auth', 'usertype:super_admin'])->group(function () {
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/sponsors/create', [SettingsController::class, 'create_sponsor'])->name('settings.sponsor');
 
-
-
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
     Route::post('/settings/adding-students/store', [SettingsController::class, 'store_student'])->name('settings.store');
-
-    // Route::get('/scholarships/{scholarship}', [ScholarController::class, 'index'])->name('scholars.index');
-    // Route::get('/coordinator/scholarships/scholars', [ScholarController::class, 'index'])->name('scholars.index');
-    // Route::inertia('/coordinator/scholarships/scholars', 'Coordinator/Scholarships/Scholars')->name('scholars');
 
 });
 
@@ -153,7 +145,6 @@ Route::middleware(['auth'])->group(function () {
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');
     Route::post('/verify-account/verifying', [StudentController::class, 'verifyingAccount'])->name('student.verify-account.verifying');
-
 
 });
 

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Message;
@@ -22,7 +23,7 @@ class MessageController extends Controller
         $messages = Message::with('user')->latest()->get();
 
         // Return the chat page using Inertia, passing the messages and user data
-        return Inertia::render('Super_Admin/Messaging/Messaging', [
+        return Inertia::render('Staff/Messaging/Messaging', [
             'messages' => $messages,
             'currentUser' => Auth::user(),
         ]);

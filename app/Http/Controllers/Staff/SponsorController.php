@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Sponsor;
 use Inertia\Inertia;
@@ -13,14 +14,14 @@ class SponsorController extends Controller
     {
         $sponsors = Sponsor::all();
         
-        return inertia('Super_Admin/Scholarships/Index', ['sponsors' => $sponsors]);
+        return inertia('Staff/Scholarships/Index', ['sponsors' => $sponsors]);
     }
 
     public function show(Sponsor $sponsor)
     {
         $scholarship = $sponsor->scholarship;
 
-        return Inertia::render('Super_Admin/Scholarships/CreateScholarships', [
+        return Inertia::render('Staff/Scholarships/CreateScholarships', [
             'sponsors' => $sponsor,
             'scholarships' => $scholarship,
         ]);
@@ -29,7 +30,7 @@ class SponsorController extends Controller
     public function create(Sponsor $sponsor)
     {
 
-        return Inertia::render('Super_Admin/Scholarships/CreateSponsor', [
+        return Inertia::render('Staff/Scholarships/CreateSponsor', [
             'sponsor' => $sponsor,
         ]);
 

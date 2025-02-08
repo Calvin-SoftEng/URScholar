@@ -22,7 +22,7 @@
               </svg>
             </div>
             
-            <Link :href="(route('super_admin.dashboard'))" >
+            <Link :href="(route('staff.dashboard'))" >
               <div v-tooltip.right="!dataOpenSideBar ? 'Dashboard' : ''" :class="[
                 'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
                 { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/admin/dashboard' }
@@ -249,7 +249,7 @@
         <div class="w-full flex flex-row items-center space-x-6">
           <!-- Dashboard Link -->
           <div class="flex items-center cursor-pointer">
-            <Link :href="route('super_admin.dashboard')" class="flex items-center space-x-2 text-blue-900 font-quicksand font-semibold">
+            <Link :href="route('staff.dashboard')" class="flex items-center space-x-2 text-blue-900 font-quicksand font-semibold">
               <span class="material-symbols-rounded text-[24px]" style="color: #0D47A1;" v-tooltip.right="'Dashboard'">
                 dashboard
               </span>

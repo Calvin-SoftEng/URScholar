@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Staff;
 
 use Inertia\Inertia;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
 use App\Models\Batch;
+use App\Http\Controllers\Controller;
 use App\Models\Requirements;
 use App\Models\Scholar;
 use App\Models\SubmittedRequirements;
@@ -18,7 +19,7 @@ class ScholarshipController extends Controller
     public function index()
     {
         $scholarships = Scholarship::all();
-        return inertia('Super_Admin/Scholarships/Index', ['scholarships' => $scholarships]);
+        return inertia('Staff/Scholarships/Index', ['scholarships' => $scholarships]);
     }
 
     public function scholarship(Sponsor $sponsors)
@@ -29,7 +30,7 @@ class ScholarshipController extends Controller
         $schoolyear = SchoolYear::all();
         // $scholarships = $sponsors->scholarships;
 
-        return inertia('Super_Admin/Scholarships/ViewScholarships', [
+        return inertia('Staff/Scholarships/ViewScholarships', [
             'sponsors' => $sponsors,
             'scholarships' => $scholarships,
             'schoolyears' => $schoolyear,
@@ -59,7 +60,7 @@ class ScholarshipController extends Controller
             $schoolyear = SchoolYear::find($request->input('selectedYear'));
         }
 
-        return Inertia::render('Super_Admin/Scholarships/Scholarship', [
+        return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
             'schoolyear' => $schoolyear,
@@ -113,7 +114,7 @@ class ScholarshipController extends Controller
     {
         $scholars = $scholarship->scholars;
 
-        return Inertia::render('Super_Admin/Scholarships/SendingAccess', [
+        return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
         ]);
@@ -150,7 +151,7 @@ class ScholarshipController extends Controller
     {
         $scholars = $scholarship->scholars;
 
-        return Inertia::render('Super_Admin/Scholarships/ScholarshipTabs/Requirements', [
+        return Inertia::render('Staff/Scholarships/ScholarshipTabs/Requirements', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
         ]);
