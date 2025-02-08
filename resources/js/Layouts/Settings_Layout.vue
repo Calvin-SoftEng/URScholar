@@ -21,6 +21,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted } from 'vue';
 import { Head, useForm, Link, } from '@inertiajs/vue3';
 import { Tooltip } from 'primevue';
-import SettingsNav from '../Components/Settings/SettingsSubMenu.vue';
+import SettingsNav from '../Components/Staff/Settings/SettingsSubMenu.vue';
 
 </script>

@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import ContentDashboard from '@/Pages/Super_Admin/Dashboard/Content-Dashboard.vue';
+import ContentDashboard from '@/Pages/Staff/Dashboard/Content-Dashboard.vue';
 import { Head } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 

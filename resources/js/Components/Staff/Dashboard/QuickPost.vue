@@ -1,6 +1,6 @@
 <template>
     <!-- Content Container -->
-    <div class="bg-dirtywhite w-full h-full p-5 space-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
+    <div class="bg-white w-full h-full p-5 space-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
         <span class="font-poppins font-semibold text-xl dark:text-dtext">Announce to Everyone</span>
         
         <!-- Card -->

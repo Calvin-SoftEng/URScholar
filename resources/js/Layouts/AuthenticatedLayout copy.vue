@@ -472,7 +472,7 @@ defineProps({
 
 <script setup>
 // import router from '../../router';
-import headerTop from '../Components/Header.vue'
+import headerTop from '../Components/Side_and_Head/Header.vue'
 // import sidebar from '../Components/Sidebar.vue'
 // import { ref } from 'vue';
 import { ref, onMounted } from 'vue'

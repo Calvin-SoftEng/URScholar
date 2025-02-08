@@ -64,7 +64,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function () {
 
-    Route::get('/staff-dashboard', [StaffController::class, 'dashboard'])
+    Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
         ->name('staff.dashboard');
 
     //Sponsors

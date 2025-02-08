@@ -4,11 +4,11 @@
       <div class="hidden lg:flex justify-between items-center h-[50px] place-content-center">
         <div class="flex items-center space-x-4">
           <div class="pl-1">
-            <img src="../../assets/images/logo-hori.png" alt="Light Mode Logo" 
+            <img src="../../../assets/images/logo-hori.png" alt="Light Mode Logo" 
                 class="w-[180px] h-[40px] dark:hidden">
 
             <!-- Dark Mode Logo -->
-            <img src="../../assets/images/logo-hori-white.png" alt="Dark Mode Logo" 
+            <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo" 
                 class="w-[180px] h-[40px] hidden dark:block">
           </div>
         </div>
@@ -91,7 +91,7 @@
       <div class="flex lg:hidden justify-between items-center h-[50px] place-content-center">
         <div class="flex items-center space-x-4">
           <div class="pl-1">
-            <img src="../../assets/images/logo-hori.png" alt="" class="w-[145px] h-[35px]">
+            <img src="../../../assets/images/logo-hori.png" alt="" class="w-[145px] h-[35px]">
           </div>
         </div>
   
