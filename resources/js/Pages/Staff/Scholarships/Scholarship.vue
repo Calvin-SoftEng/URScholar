@@ -70,9 +70,9 @@ import { Button } from '@/Components/ui/button'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
-import Adding from '../../../Components/Admin/ScholarsTabs/Adding.vue';
+import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
-import ScholarList from '../../../Components/Admin/ScholarsTabs/ScholarList.vue';
+import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
 
 // components
 
