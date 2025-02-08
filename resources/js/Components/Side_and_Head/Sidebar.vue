@@ -45,7 +45,7 @@
               <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
                 <font-awesome-icon class="text-[19px] py-1"
                   :icon="['far', 'handshake']" 
-                  :class="{ 'text-dtext': $page.url.startsWith('/sponsors'), 'hover:text-white text-[19px] py-0.5': true }"
+                  :class="{ 'text-dtext': $page.url.startsWith('/sponsors'), 'text-[19px] py-0.5': true }"
                 />
                 <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/sponsors') }]">Sponsor</span>
               </div>

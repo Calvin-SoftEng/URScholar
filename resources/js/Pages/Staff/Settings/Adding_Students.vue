@@ -256,6 +256,7 @@ const toggleCreate = () => {
 
 const closeModal = () => {
     isCreating.value = false;
+    isEditing.value = false;
     resetForm();
 };
 
