@@ -19,7 +19,7 @@ class EmailController extends Controller
     {
         $scholars = $scholarship->scholars;
 
-        return Inertia::render('Super_Admin/Scholarships/SendingAccess', [
+        return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
         ]);
@@ -44,34 +44,39 @@ class EmailController extends Controller
             'application_start' => $request['application'],
             'deadline' => $request['deadline'],
         ]);
-        
+
         // Create the same requirement for all scholars
         foreach ($scholars as $scholar) {
 
-            $userExists = User::where('email', $scholar['email'])->exists();
+            if ($scholar->email) {
 
-            $password = Str::random(8);
+                $userExists = User::where('email', $scholar->email)->exists();
 
-            if (!$userExists) {
-                User::create([
-                    'name' => $scholar['first_name'] . ' ' . $scholar['last_name'],
-                    'email' => $scholar['email'],
-                    'first_name' => $scholar['first_name'],
-                    'last_name' => $scholar['last_name'],
-                    'password' => bcrypt($password),
-                ]);
+                $password = Str::random(8);
+
+                if (!$userExists) {
+                    User::create([
+                        'name' => $scholar['first_name'] . ' ' . $scholar['last_name'],
+                        'email' => $scholar['email'],
+                        'first_name' => $scholar['first_name'],
+                        'last_name' => $scholar['last_name'],
+                        'password' => bcrypt($password),
+                    ]);
+                }
+
+                //Sending Emails
+                $mailData = [
+                    'title' => 'Your Scholarship Application Login Details',
+                    'body' => "You have been successfully registered for the scholarship application. Your login credentials are:\n\n" .
+                        "Email: " . $scholar['email'] . "\n" .
+                        "Password: " . $password . "\n\n" .
+                        "Please log in and complete the application process."
+                ];
+
+                Mail::to($scholar->email)->send(new SendEmail($mailData));
+
             }
 
-            //Sending Emails
-            $mailData = [
-                'title' => 'Your Scholarship Application Login Details',
-                'body' => "You have been successfully registered for the scholarship application. Your login credentials are:\n\n" .
-                    "Email: " . $scholar['email'] . "\n" .
-                    "Password: " . $password . "\n\n" .
-                    "Please log in and complete the application process."
-            ];
-
-            Mail::to($scholar->email)->send(new SendEmail($mailData));
         }
 
         return redirect()->route('requirements.index', $scholarship->id)->with('success', 'Messages has been sent to scholars');

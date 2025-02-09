@@ -1,4 +1,5 @@
 <template>
+
     <Head title="Scholarships" />
     <AuthenticatedLayout>
         <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] overflow-auto dark:bg-dprimary">
@@ -34,7 +35,9 @@
                             class="text-3xl font-poppins font-extrabold text-[darkblue] text-left underline underline-offset-4 dark:text-dtext">
                             Pending Scholars</h1>
 
-                        <button class="btn bg-blue-900 text-white dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary" type="submit">
+                        <button
+                            class="btn bg-blue-900 text-white dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
+                            type="submit">
                             <span class="material-symbols-rounded">
                                 send
                             </span>
@@ -44,14 +47,16 @@
 
                     <div class="w-full h-full space-y-5 mb-3">
                         <!-- partnership content -->
-                        <div class="w-full h-[30%] px-5 py-5 bg-[white] rounded-lg shadow-md space-y-5 dark:bg-dsecondary dark:border dark:border-gray-600">
+                        <div
+                            class="w-full h-[30%] px-5 py-5 bg-[white] rounded-lg shadow-md space-y-5 dark:bg-dsecondary dark:border dark:border-gray-600">
                             <h3 class="font-semibold text-gray-900 dark:text-white">
                                 Recipients</h3>
                             <div
                                 class="flex flex-wrap gap-2 bg-gray-50 w-full h-full border border-gray-300 rounded-lg p-2.5 dark:bg-dsecondary dark:border dark:border-gray-600">
-                                <span v-for="(scholar, index) in scholars" :key="scholar.id"
-                                    class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">{{
-                                    scholar.email }}</span>
+                                <span v-for="(scholar, index) in scholars.filter(s => s.email)" :key="scholar.id"
+                                    class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">
+                                    {{ scholar.email }}
+                                </span>
                             </div>
 
                             <h3 class="font-semibold text-gray-900 dark:text-white">
@@ -76,19 +81,20 @@
                                                 Timeline</h3>
                                             <div class="flex flex-row gap-3 w-full">
                                                 <div class="relative w-full">
-                                                    <DatePicker class="w-full dark:bg-dsecondary dark:text-white" v-model="selectedStart"
-                                                    @update:model-value="handleDateStart" placeholder="Submission Start" />
+                                                    <DatePicker class="w-full dark:bg-dsecondary dark:text-white"
+                                                        v-model="selectedStart" @update:model-value="handleDateStart"
+                                                        placeholder="Submission Start" />
                                                 </div>
                                                 <div class="relative w-full">
-                                                    <DatePicker class="w-full dark:bg-dsecondary dark:text-white" v-model="selectedEnd"
-                                                    @update:model-value="handleDateEnd" placeholder="Submission Deadline" />
+                                                    <DatePicker class="w-full dark:bg-dsecondary dark:text-white"
+                                                        v-model="selectedEnd" @update:model-value="handleDateEnd"
+                                                        placeholder="Submission Deadline" />
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="w-full">
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Requirements</h3>
-                                            <ul
-                                                class="w-full text-sm font-medium text-gray-900 dark:text-white">
+                                            <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                                 <div class="flex items-center mb-4 w-full">
                                                     <form @submit.prevent="addItem" class="flex items-center w-full">
                                                         <input v-model="newItem" type="text" placeholder="Enter an item"
@@ -125,10 +131,8 @@
             </form>
         </div>
         <ToastProvider>
-            <ToastRoot 
-                v-if="toastVisible" 
-                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full"
-            >
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
                 <ToastTitle class="font-semibold dark:text-dtext">Sent Successfully!</ToastTitle>
                 <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
             </ToastRoot>
@@ -173,7 +177,7 @@ const form = ref({
 
 const formatDateTime = (date) => {
     if (!date) return '';
-    
+
     const d = new Date(date);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
@@ -233,7 +237,7 @@ const toastMessage = ref("");
 
 watchEffect(() => {
     const flashMessage = usePage().props.flash?.success;
-    
+
     if (flashMessage) {
         console.log("Showing toast with message:", flashMessage);
         toastMessage.value = flashMessage;
@@ -256,16 +260,16 @@ watchEffect(() => {
 }
 
 .dark .p-datepicker {
-  background-color: #333;
-  color: white;
+    background-color: #333;
+    color: white;
 }
 
 .dark .p-inputtext {
-  background-color: #444;
-  color: white;
+    background-color: #444;
+    color: white;
 }
 
 .dark .p-inputtext:focus {
-  background-color: #555;
+    background-color: #555;
 }
 </style>
