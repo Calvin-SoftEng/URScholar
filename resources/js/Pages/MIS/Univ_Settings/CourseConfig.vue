@@ -173,7 +173,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, Link, router } from '@inertiajs/vue3';
-import ContentDashboard from '@/Pages/Super_Admin/Dashboard/Content-Dashboard.vue';
 import { ref } from 'vue';
 
 const props = defineProps({

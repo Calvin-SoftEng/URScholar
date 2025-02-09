@@ -93,7 +93,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
-import ContentDashboard from '@/Pages/Super_Admin/Dashboard/Content-Dashboard.vue';
 import { Tooltip } from 'primevue';
 import { User } from 'lucide-vue-next';
 
