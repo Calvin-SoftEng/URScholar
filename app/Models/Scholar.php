@@ -28,6 +28,7 @@ class Scholar extends Model
         'municipality',
         'province',
         'pwd_classification',
+        'email',
         'status',
     ];
     protected $attributes = [

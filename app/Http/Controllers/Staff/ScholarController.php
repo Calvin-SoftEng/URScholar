@@ -16,7 +16,8 @@ use League\Csv\Reader;
 
 class ScholarController extends Controller
 {
-    public function scholars() {
+    public function scholars()
+    {
 
         return Inertia::render('Staff/Scholars/Scholars', [
             'scholars' => Scholar::all(),
@@ -25,7 +26,7 @@ class ScholarController extends Controller
         ]);
     }
 
-    
+
     public function show(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;
@@ -68,21 +69,21 @@ class ScholarController extends Controller
             'semester' => 'required',
             'schoolyear' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json([
                 'message' => 'Invalid file format',
                 'errors' => $validator->errors()
             ], 422);
         }
-    
+
         try {
             $file = $request->file('file');
             $csv = Reader::createFromPath($file->getPathname(), 'r');
             $csv->setHeaderOffset(0);
 
             $firstRecord = $csv->fetchOne();
-            
+
             $batch = Batch::create([
                 'scholarship_id' => $scholarship->id,
                 'batch_no' => $firstRecord['BATCH NO.'],  // Added the period here
@@ -92,7 +93,7 @@ class ScholarController extends Controller
 
             // Get all records after creating the batch
             $records = iterator_to_array($csv->getRecords());
-    
+
             $insertData = [];
             foreach ($records as $record) {
                 $insertData[] = [
@@ -120,39 +121,43 @@ class ScholarController extends Controller
                     'updated_at' => now(),
                 ];
             }
-    
+
             // Bulk insert scholars
             Scholar::insert($insertData);
-    
+
             // Get the newly inserted scholars for this batch
             $scholars = Scholar::where('batch_id', $batch->id)->get();
-            
+
             // Verify scholars against existing students
             $students = Student::all();
             $matchedCount = 0;
             $unmatchedCount = 0;
-    
+
             foreach ($scholars as $scholar) {
                 $matched = $students->first(function ($student) use ($scholar) {
-                    return $student->course === $scholar->course && 
-                           $student->year_level == $scholar->year_level && 
-                           $scholar->first_name == $student->first_name && 
-                           $scholar->last_name == $student->last_name && 
-                           $scholar->campus == $student->campus;
+                    return $student->course === $scholar->course &&
+                        $student->year_level == $scholar->year_level &&
+                        $scholar->first_name == $student->first_name &&
+                        $scholar->last_name == $student->last_name &&
+                        $scholar->campus == $student->campus;
                 });
-    
+
                 // Update status directly without collecting in arrays
                 if ($matched) {
-                    $scholar->update(['status' => 'Verified']);
+                    // Update status and copy email from matched student
+                    $scholar->update([
+                        'status' => 'Verified',
+                        'email' => $matched->email // Copy email from matched student
+                    ]);
                     $matchedCount++;
                 } else {
                     $scholar->update(['status' => 'Unverified']);
                     $unmatchedCount++;
                 }
             }
-    
+
             $schoolyear = SchoolYear::find($request->schoolyear);
-    
+
             // return Inertia::render('Staff/Scholarships/Scholarship', [
             //     'scholarship' => $scholarship,
             //     'scholars' => $scholars,
@@ -162,12 +167,14 @@ class ScholarController extends Controller
             //         'success' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
             //     ]
             // ]);
+
+
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
-            ->with('flash', [
-                'type' => 'success',
-                'message' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
-            ]);
-    
+                ->with('flash', [
+                    'type' => 'success',
+                    'message' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
+                ]);
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error processing CSV file: ' . $e->getMessage(),
@@ -309,8 +316,8 @@ class ScholarController extends Controller
     //         //     'success' => "Successfully imported {$insertedCount} records. Matched students: {$matchedScholars}. Unmatched students: {$unmatchedScholars}."
     //         // ]);
 
-            
-            
+
+
 
     //     } catch (\Exception $e) {
     //         return response()->json([
