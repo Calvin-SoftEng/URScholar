@@ -42,9 +42,9 @@ class Role
         }
 
         // For students, always check email verification
-        if ($user->usertype === 'student' && !$request->$user->hasVerifiedEmail()) {
-            return redirect()->route('student.verify-account');
-        }
+        // if ($user->usertype === 'student' && !$request->$user->hasVerifiedEmail()) {
+        //     return redirect()->route('student.verify-account');
+        // }
 
         return $next($request);
     }
