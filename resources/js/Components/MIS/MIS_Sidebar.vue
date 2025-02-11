@@ -85,35 +85,6 @@
 
 
             <div class="h-0.5 bg-gray-100 w-full"></div>
-            <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase ">Scholarship Settings</div>
-            <!-- Scholarship Categoies, Eligibility Criteria, Scholarship Forms -->
-
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">Scholarship Categoies</span>
-                </div>
-              </div>
-            </Link>
-
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">Eligibility Criteria</span>
-                </div>
-              </div>
-            </Link>
-
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">Scholarship Forms</span>
-                </div>
-              </div>
-            </Link>
-
-
-            <div class="h-0.5 bg-gray-100 w-full"></div>
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">Security and Backup</div>
             <!-- System Logs and Audit Trail, Data Backup and Restore, User Access Restrictions -->
 

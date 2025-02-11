@@ -35,7 +35,7 @@
                     </div>
                 </div>
 
-                <div class="w-full bg-white">
+                <div class="bg-white">
 
                     <ScholarList :scholarship="scholarship" :batches="batches"/>
                     

@@ -89,6 +89,9 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::get('/scholarships/{scholarship}/requirements', [ScholarshipController::class, 'requirementsTab'])->name('requirementsTab.requirements');
     Route::get('/scholarships/{scholarship}/send-access', [EmailController::class, 'index'])->name('requirements.index');
 
+    Route::get('/scholarships/scholar-scholarship-details', [ScholarshipController::class, 'scholar_scholarship_details'])->name('scholarships.scholar_scholarship_details');
+
+
     //Scholars
     Route::get('/urs-scholars', [ScholarController::class, 'scholars'])->name('scholars.show');
     
@@ -96,6 +99,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');
+
 
     // Messaging
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');

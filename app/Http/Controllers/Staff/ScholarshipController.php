@@ -156,6 +156,10 @@ class ScholarshipController extends Controller
             'scholars' => $scholars,
         ]);
     }
+
+    public function scholar_scholarship_details() {
+        return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details');
+    }
 }
 
 

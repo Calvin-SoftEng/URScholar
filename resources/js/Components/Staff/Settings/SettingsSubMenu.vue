@@ -21,13 +21,19 @@
                 </div>
                 </Link>
 
-                <!-- <Link :href="(route('coordinator.dashboard'))"> -->
-                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
-                    <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                        <span>University Calendar</span>
-                    </div>
+                <!-- <Link :href="(route('settings.adding'))"> -->
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/adding-students' }]">
+                    <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+                        <span>Scholarship Forms</span>
+                    </router-link>
                 </div>
                 <!-- </Link> -->
+
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/adding-students' }]">
+                    <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+                        <span>Scholarship Categories</span>
+                    </router-link>
+                </div>
 
                 <!-- <Link :href="route('messaging.index')"> -->
                 <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">

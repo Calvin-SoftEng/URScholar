@@ -44,84 +44,51 @@
               </div>
 
               <!-- table -->
-              <div class="w-full justify-center items-center overflow-x-auto border rounded-lg shadow-sm ">
-                <!-- <div v-if="scholars.length === 0" class="text-center py-5">
-                <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added</p>
-              </div> -->
-                <!-- Container with horizontal scroll -->
-                <div class="w-[1535px] relative overflow-x-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded">
-                  <table class="w-full">
-                    <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700">
-                      <tr>
-                        <!-- First 5 columns visible by default -->
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          URScholar ID
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Batch No.
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Grant
-                        </th>
-                        <th class="whitespace-nowrap px-8 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Campus
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Scholar's Name
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Degree Program
-                        </th>
-                        <!-- Additional scrollable columns -->
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Year Level
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Status
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Sex
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Birthday
-                        </th>
-                        <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                          Email Address
-                        </th>
-
-                        <!-- Sticky actions column -->
-                        <th
-                          class="whitespace-nowrap px-10 py-3 font-medium text-gray-700 dark:text-gray-300 sticky right-0 bg-gray-200 dark:bg-gray-700 shadow-lg sr-only">
-                          Action
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                      <tr v-for="scholar in batch.scholars" :key="scholar.id"
-                        class="bg-white text-sm dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          test1
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ batch.batch_no }}
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.grant }}
-                        </td>
-                        <td class="whitespace-nowrap px-8 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.campus }}
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.course }}
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.year_level }}
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 items-center justify-center">
-                          <span
+              <div class="overflow-x-auto text-black font-poppins border rounded-lg">
+                <table class="table rounded-lg">
+                  <!-- head -->
+                  <thead class="justify-center items-center">
+                    <tr class="text-sm uppercase">
+                      <th>URScholar ID</th>
+                      <th>Scholar</th>
+                      <th>Campus</th>
+                      <th>Grant</th>
+                      <th>Email</th>
+                      <th>Status</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- row 1 -->
+                    <tr v-for="scholar in batch.scholars" :key="scholar.id"
+                    class="text-sm">
+                      <td>test1</td>
+                      <td>
+                        <div class="flex items-center gap-3">
+                          <div class="avatar">
+                            <div class="mask rounded-full h-12 w-12">
+                              <img
+                                src="../../../../assets/images/no_userpic.png"
+                                alt="Avatar Tailwind CSS Component" />
+                            </div>
+                          </div>
+                          <div>
+                            <div class="font-normal"> {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}</div>
+                            <div class="text-sm opacity-50">
+                              {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        {{ scholar.campus }}
+                      </td>
+                      <td>
+                        {{ scholar.grant }}
+                      </td>
+                      <td>{{ scholar.email ? scholar.email : 'dummy@gmail.com' }}</td>
+                      <td>
+                        <span
                             :class="{
                               'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
                               'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
@@ -130,19 +97,8 @@
                             {{ scholar.status }}
                           </span>
                         </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.sex }}
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.birthdate }}
-                        </td>
-                        <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                          {{ scholar.email ? scholar.email : 'N/A' }}
-                        </td>
-
-
-                        <!-- Sticky actions cell -->
-                        <td class="whitespace-nowrap px-10 py-4 sticky right-0 bg-gray-200 dark:bg-gray-800 shadow-lg">
+                      <th>
+                        <Link :href="route('scholarships.scholar_scholarship_details')">
                           <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             aria-label="View Details">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,12 +106,14 @@
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                           </button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
+                        </Link>
+                      </th>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
+
+
               <div class="mt-5 flex flex-col items-right">
                 <!-- Help text -->
                 <span class="text-sm text-gray-700 dark:text-gray-400">
@@ -253,7 +211,12 @@ const closePanel = () => {
   entries.value = false;
 };
 
-
+const getYearSuffix = (year) => {
+  if (year === 1) return "st";
+  if (year === 2) return "nd";
+  if (year === 3) return "rd";
+  return "th";
+};
 
 const form = ref({
   file: null,
