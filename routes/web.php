@@ -60,7 +60,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 });
 
-// SCHOLARSHIP ADMIN -------------------------------------------------------------------------------------------------------------------------------------------------------
+// SCHOLARSHIP STAFF -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function () {
 
@@ -116,6 +116,9 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::post('/settings/adding-students/store', [SettingsController::class, 'store_student'])->name('settings.store');
 
 });
+
+
+
 
 Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     // dashboard

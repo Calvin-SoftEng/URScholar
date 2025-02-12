@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
 use App\Models\Scholar;
+use App\Models\Campus;
+use App\Models\Course;
 use App\Models\Student;
 use App\Models\Batch;
 use Inertia\Inertia;
@@ -51,6 +53,14 @@ class ScholarController extends Controller
 
         $schoolyear = SchoolYear::where('id', $selectedYear)->first();
 
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->where('school_year', $selectedYear)
+            ->where('semester', $selectedSem)
+            ->first();
+
+        $campuses = Campus::all();
+        $course = Course::all();
+
         return Inertia::render(
             'Staff/Scholarships/AddingScholars',
             [
@@ -58,6 +68,9 @@ class ScholarController extends Controller
                 'scholars' => $scholars,
                 'schoolyear' => $schoolyear,
                 'selectedSem' => $selectedSem,
+                'batch' => $batch,
+                'campuses' => $campuses,
+                'course' => $course,
             ]
         );
     }

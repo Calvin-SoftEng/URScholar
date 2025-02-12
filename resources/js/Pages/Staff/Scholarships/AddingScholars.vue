@@ -30,7 +30,8 @@
                 </div>
 
                 <div class="w-full h-full">
-                    <Adding :scholarship="scholarship" :scholars="scholars" :schoolyear="schoolyear" :selectedSem="selectedSem"/>
+                    <Adding :scholarship="scholarship" :scholars="scholars" :schoolyear="schoolyear" :selectedSem="selectedSem" :batch="batch"
+                    :campuses="campuses" :course="course"/>
                 </div>
                 
 
@@ -126,7 +127,10 @@ const props = defineProps({
     scholarship: Object,
     scholars: Array,
     schoolyear: Object,
-    selectedSem: Object
+    selectedSem: Object,
+    batch: Array,
+    campuses: Array,
+    course: Array,
 });
 
 const formData = ref({

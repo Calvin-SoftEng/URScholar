@@ -30,9 +30,19 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <input type="text" id="first_name" placeholder="Ex. Batch 1.1"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
+                            <Select v-model="form.batch">
+                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
+                                    <SelectValue placeholder="Select Batch" class="text-black" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem v-for="batchItem in batch" :key="batchItem.id"
+                                            :value="batchItem.id">
+                                            {{ batchItem.id }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div class="w-full">
                             <label for="first_name"
@@ -52,15 +62,9 @@
                                     <SelectValue placeholder="Select Campus" class="text-black" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectGroup>
-                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                        <SelectItem value="LGBTQ">
-                                            Binangonan
-                                        </SelectItem>
-                                        <SelectItem value="banana">
-                                            Marilaque
-                                        </SelectItem>
-                                    </SelectGroup>
+                                    <SelectItem v-for="campus in campuses" :key="campus.id" :value="campus.id">
+                                        {{ campus.name }}
+                                    </SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -68,9 +72,19 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Course and
                                 Program</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
+                            <Select v-model="form.course">
+                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
+                                    <SelectValue placeholder="Select Course" class="text-black" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem v-for="course in filteredCourses" :key="course.id"
+                                            :value="course.id">
+                                            {{ course.name }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </div>
                         <div class="w-full">
                             <label for="first_name"
@@ -254,7 +268,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect } from 'vue';
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, computed, watch } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -318,7 +332,10 @@ const props = defineProps({
     scholarship: Object,
     scholars: Array,
     schoolyear: Object,
-    selectedSem: Object
+    selectedSem: Object,
+    batch: Array,
+    campuses: Array,
+    course: Array,
 });
 
 
@@ -328,7 +345,26 @@ const form = ref({
     schoolyear: props.schoolyear.id,
     fileName: null,
     filePreview: null,
+
+    // Other form fields...
+
+    campus: null,
+    course: null,
 });
+
+// Add new reactive refs for courses data
+const filteredCourses = computed(() => {
+    if (!form.value.campus) return [];
+    return props.course.filter(course => course.campus_id === form.value.campus);
+});
+
+// Watch for campus changes to reset course selection
+watch(() => form.value.campus, (newValue) => {
+    if (newValue !== form.value.campus) {
+        form.value.course = null;
+    }
+});
+
 
 const previewData = ref([]);
 const headers = ref([]);
@@ -386,13 +422,13 @@ const submitForm = async () => {
                 error.value = "";
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input
-                
+
                 // Handle flash message for success toast
                 const successMessage = usePage().props.flash?.success;
                 if (successMessage) {
                     usePage().props.flash = { success: successMessage }; // Show toast message
                 }
-                
+
                 closePanel();
                 closeModal();
             },
@@ -457,32 +493,6 @@ const resetForm = () => {
 const removeEntry = (index) => {
     entries.value.splice(index, 1)
 }
-
-
-// const submitForm = async () => {
-// try {
-//     if (entries.value.length === 0) {
-//     alert('No data to submit!');
-//     return;
-//     }
-
-//     const response = await fetch('/api/insert-data', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify(entries.value)
-//     });
-
-//     if (!response.ok) throw new Error('Failed to submit');
-
-//     // alert('Data submitted successfully!');
-
-//     // Clear entries after successful submission
-//     entries.value = [];
-// } catch (error) {
-//     console.error('Error:', error);
-// }
-// };
-
 
 </script>
 
