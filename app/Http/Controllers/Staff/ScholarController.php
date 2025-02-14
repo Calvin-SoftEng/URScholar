@@ -56,7 +56,7 @@ class ScholarController extends Controller
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year', $selectedYear)
             ->where('semester', $selectedSem)
-            ->first();
+            ->get();
 
         $campuses = Campus::all();
         $course = Course::all();
