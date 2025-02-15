@@ -39,7 +39,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             <div v-for="sponsor in sponsors" :key="sponsor.id"
                                 class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
-                                <div class="card-body p-3 space-y-2">
+                                <div class="card-body p-6 space-y-2">
                                     <!-- logo -->
                                     <div class="flex justify-center">
                                         <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"
@@ -52,39 +52,72 @@
                                         <div class="flex flex-row justify-center items-center">
                                             <p class="card-title text-2xl text-gray-500 font-sora font-semibold dark:text-dtext">
                                             {{ sponsor.abbreviation }}</p>
-                                            <!-- <span class="flex justify-center items-center text-primary text-xs px-2 border rounded-xl border-gray-200 dark:border-gray-600">
-                                                Sponsoring Since: {{ sponsor.since }}
-                                            </span> -->
                                             <div class="badge badge-secondary badge-outline text-xs ">Sponsoring Since: {{ sponsor.since }}</div>
                                         </div>
                                     </div>
-                                    <!-- <div class="badge badge-primary text-[12px] badge-outline">DEPED</div> -->
-                                    <!-- <p class="text-md text-gray-600 dark:text-dtext mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"
-                                        style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
-                                        {{ sponsor.description }}
-                                    </p> -->
-
                                     <div class="w-full flex flex-col space-y-2">
                                         <p class="leading-loose text-sm text-gray-400">
                                             Active Scholarships:
                                         </p>
-                                        <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
-                                            <span>
-                                                Isko Name
-                                            </span>
-                                            <div class="flex flex-row gap-1">
-                                                <span class="material-symbols-rounded text-base text-white">
-                                                pending_actions
-                                                </span>
+
+                                        <!-- Scrollable Container -->
+                                        <div class="max-h-40 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-300">
+                                            <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
                                                 <span>
-                                                    Deadline
+                                                    Isko Name
                                                 </span>
+                                                <div class="flex flex-row gap-1">
+                                                    <span class="material-symbols-rounded text-base text-white">
+                                                        pending_actions
+                                                    </span>
+                                                    <span>
+                                                        Deadline
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
+                                                <span>
+                                                    Isko Name
+                                                </span>
+                                                <div class="flex flex-row gap-1">
+                                                    <span class="material-symbols-rounded text-base text-white">
+                                                        pending_actions
+                                                    </span>
+                                                    <span>
+                                                        Deadline
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
+                                                <span>
+                                                    Isko Name
+                                                </span>
+                                                <div class="flex flex-row gap-1">
+                                                    <span class="material-symbols-rounded text-base text-white">
+                                                        pending_actions
+                                                    </span>
+                                                    <span>
+                                                        Deadline
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
+                                                <span>
+                                                    Isko Name
+                                                </span>
+                                                <div class="flex flex-row gap-1">
+                                                    <span class="material-symbols-rounded text-base text-white">
+                                                        pending_actions
+                                                    </span>
+                                                    <span>
+                                                        Deadline
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="h-10 p-2 rounded-lg bg-blue-500">
-                                            TDP
-                                        </div>
                                     </div>
+
                                     <div class="flex justify-end space-x-4">
                                         <button @click="toggleCreate(sponsor.id)">
                                         <div class="text-sm text-gray-500 cursor-pointer"
@@ -95,15 +128,6 @@
                                             </span>
                                         </div>
                                         </button>
-                                        <!-- <Link :href="`/sponsors/${sponsor.id}/edit`">
-                                            <div class="text-sm text-gray-500 cursor-pointer" v-tooltip="'Edit Scholarship'"
-                                                @click="editScholarship(scholarship)" type="button">
-                                                <span
-                                                    class="material-symbols-rounded text-blue-900 dark:text-dtext bg-blue-100 hover:bg-gray-200 p-3 border rounded-lg dark:bg-dsecondary dark:border-gray-600 dark:hover:border-gray-300 dark:hover:bg-dsecondary">
-                                                    settings
-                                                </span>
-                                            </div>
-                                        </Link> -->
                                     </div>
                                 </div>
                             </div>
