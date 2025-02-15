@@ -3,140 +3,149 @@
   <div v-if="!batches || batches.length === 0" class="text-center py-5 mt-5">
     <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added yet</p>
   </div>
-  
+
   <div v-else class="w-full mt-5 bg-white">
     <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
-      <li v-for="batch in batches" :key="batch.id"><button  @click="toggleBatch(batch.id)" class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
-          :class="expandedBatches === batch.id ? 'border-blue-400' : 'border-transparent'">Batch {{ batch.batch_no }}</button>
+      <li v-for="batch in batches" :key="batch.id"><button @click="toggleBatch(batch.id)"
+          class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
+          :class="expandedBatches === batch.id ? 'border-blue-400' : 'border-transparent'">Batch {{ batch.batch_no
+          }}</button>
       </li>
     </ul>
 
-        <div v-for="batch in batches" :key="batch.id">
-          <div>
-            <div v-if="expandedBatches === batch.id" class="w-full bg-white h-full p-4">
-              <!-- line sections -->
-              <div class="flex flex-row justify-between items-center mb-4">
-                <div>
-                  <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-                  <button type="button"
-                    class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                    Send Access Details</button>
-                  </Link>
-                </div>
-                <form class="w-3/12">
-                  <label for="default-search"
-                    class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-                  <div class="relative">
-                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                      <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                      </svg>
-                    </div>
-                    <input type="search" id="default-search" v-model="searchQuery"
-                      class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Search Scholar" required />
-                  </div>
-                </form>
-              </div>
+    <div v-for="batch in batches" :key="batch.id">
+      <div>
+        <div v-if="expandedBatches === batch.id" class="w-full bg-white h-full p-4">
+          <!-- line sections -->
+          <div class="flex flex-row justify-between items-center mb-4">
+            <div>
+              <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
+              <button type="button"
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                Send Access Details</button>
+              </Link>
 
-              <!-- table -->
-              <div class="overflow-x-auto text-black font-poppins border rounded-lg">
-                <table class="table rounded-lg">
-                  <!-- head -->
-                  <thead class="justify-center items-center">
-                    <tr class="text-sm uppercase">
-                      <th>URScholar ID</th>
-                      <th>Scholar</th>
-                      <th>Campus</th>
-                      <th>Grant</th>
-                      <th>Email</th>
-                      <th>Status</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <!-- row 1 -->
-                    <tr v-for="scholar in filteredScholars(batch)" :key="scholar.id"
-                    class="text-sm">
-                      <td>test1</td>
-                      <td>
-                        <div class="flex items-center gap-3">
-                          <div class="avatar">
-                            <div class="mask rounded-full h-12 w-12">
-                              <img
-                                src="../../../../assets/images/no_userpic.png"
-                                alt="Avatar Tailwind CSS Component" />
-                            </div>
-                          </div>
-                          <div>
-                            <div class="font-normal"> {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}</div>
-                            <div class="text-sm opacity-50">
-                              {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        {{ scholar.campus }}
-                      </td>
-                      <td>
-                        {{ scholar.grant }}
-                      </td>
-                      <td>{{ scholar.email ? scholar.email : 'dummy@gmail.com' }}</td>
-                      <td>
-                        <span
-                            :class="{
-                              'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
-                              'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
-                            }"
-                            class="text-xs font-medium px-2.5 py-0.5 rounded">
-                            {{ scholar.status }}
-                          </span>
-                        </td>
-                      <th>
-                        <Link :href="route('scholarships.scholar_scholarship_details')">
-                          <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                            aria-label="View Details">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          </button>
-                        </Link>
-                      </th>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
-
-              <div class="mt-5 flex flex-col items-right">
-                <!-- Help text -->
-                <span class="text-sm text-gray-700 dark:text-gray-400">
-                  Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span
-                    class="font-semibold text-gray-900 dark:text-white">10</span> of <span
-                    class="font-semibold text-gray-900 dark:text-white">100</span> Scholars
+              <button @click="openReport(batch.id)" type="button"
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                <span class="flex items-center">
+                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+                  </svg>
+                  View Report
                 </span>
-                <!-- Buttons -->
-                <div class="inline-flex mt-2 xs:mt-0">
-                  <button
-                    class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    Prev
-                  </button>
-                  <button
-                    class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                    Next
-                  </button>
+              </button>
+            </div>
+            <form class="w-3/12">
+              <label for="default-search"
+                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+              <div class="relative">
+                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                  </svg>
                 </div>
+                <input type="search" id="default-search" v-model="searchQuery"
+                  class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Search Scholar" required />
               </div>
+            </form>
+          </div>
+
+          <!-- table -->
+          <div class="overflow-x-auto text-black font-poppins border rounded-lg">
+            <table class="table rounded-lg">
+              <!-- head -->
+              <thead class="justify-center items-center">
+                <tr class="text-sm uppercase">
+                  <th>URScholar ID</th>
+                  <th>Scholar</th>
+                  <th>Campus</th>
+                  <th>Grant</th>
+                  <th>Email</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- row 1 -->
+                <tr v-for="scholar in filteredScholars(batch)" :key="scholar.id" class="text-sm">
+                  <td>test1</td>
+                  <td>
+                    <div class="flex items-center gap-3">
+                      <div class="avatar">
+                        <div class="mask rounded-full h-12 w-12">
+                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-normal"> {{ scholar.last_name }}, {{ scholar.first_name }} {{
+                          scholar.middle_name }}</div>
+                        <div class="text-sm opacity-50">
+                          {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    {{ scholar.campus }}
+                  </td>
+                  <td>
+                    {{ scholar.grant }}
+                  </td>
+                  <td>{{ scholar.email ? scholar.email : 'dummy@gmail.com' }}</td>
+                  <td>
+                    <span :class="{
+                      'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
+                      'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
+                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
+                      {{ scholar.status }}
+                    </span>
+                  </td>
+                  <th>
+                    <Link :href="route('scholarships.scholar_scholarship_details')">
+                    <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                      aria-label="View Details">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </button>
+                    </Link>
+                  </th>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+          <div class="mt-5 flex flex-col items-right">
+            <!-- Help text -->
+            <span class="text-sm text-gray-700 dark:text-gray-400">
+              Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span
+                class="font-semibold text-gray-900 dark:text-white">10</span> of <span
+                class="font-semibold text-gray-900 dark:text-white">100</span> Scholars
+            </span>
+            <!-- Buttons -->
+            <div class="inline-flex mt-2 xs:mt-0">
+              <button
+                class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                Prev
+              </button>
+              <button
+                class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                Next
+              </button>
             </div>
           </div>
         </div>
-        
+      </div>
+    </div>
 
-      
+
+
     <ToastProvider>
       <ToastRoot v-if="toastVisible"
         class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
@@ -179,11 +188,11 @@ const searchQuery = ref('');
 // Add the filtered scholars function
 const filteredScholars = (batch) => {
   if (!batch.scholars) return [];
-  
+
   if (!searchQuery.value) return batch.scholars;
-  
+
   const query = searchQuery.value.toLowerCase();
-  return batch.scholars.filter(scholar => 
+  return batch.scholars.filter(scholar =>
     scholar.first_name?.toLowerCase().includes(query) ||
     scholar.last_name?.toLowerCase().includes(query) ||
     scholar.middle_name?.toLowerCase().includes(query) ||
@@ -196,6 +205,15 @@ const filteredScholars = (batch) => {
 
 const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
 
+// Add download report functionality
+const openReport = async (batchId) => {
+  try {
+    // Open URL in new tab instead of creating blob
+    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
+  } catch (err) {
+    console.error('Failed to open report:', err);
+  }
+};
 
 // const toggleBatch = (batchId) => {
 //   if (expandedBatches.value.has(batchId)) {

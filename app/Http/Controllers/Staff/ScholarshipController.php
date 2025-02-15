@@ -11,6 +11,7 @@ use App\Models\Requirements;
 use App\Models\Scholar;
 use App\Models\SubmittedRequirements;
 use App\Models\Sponsor;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -155,6 +156,19 @@ class ScholarshipController extends Controller
             'scholarship' => $scholarship,
             'scholars' => $scholars,
         ]);
+    }
+
+    public function downloadBatchReport(Scholarship $scholarship, Batch $batch)
+    {
+        $scholars = $batch->scholars;
+        
+        $pdf = PDF::loadView('reports.scholarship-report', [
+            'scholarship' => $scholarship,
+            'batch' => $batch,
+            'scholars' => $scholars
+        ]);
+        
+        return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
 
     public function scholar_scholarship_details() {
