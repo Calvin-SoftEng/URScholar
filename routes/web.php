@@ -103,6 +103,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
 
     // Messaging
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
+    Route::get('/messages', [MessageController::class, 'conversation']);
     Route::post('/group-page', [MessageController::class, 'store'])->name('messaging.store');
 
     //Applicants

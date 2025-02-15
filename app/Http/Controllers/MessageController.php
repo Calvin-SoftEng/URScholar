@@ -14,7 +14,7 @@ class MessageController extends Controller
 {
     public function conversation()
     {
-        return Inertia::render('Coordinator/Messaging/Messaging');
+        return Message::with('user')->latest()->get();
     }
     public function index(User $user)
     {
@@ -26,9 +26,7 @@ class MessageController extends Controller
         return Inertia::render('Staff/Messaging/Messaging', [
             'messages' => $messages,
             'currentUser' => Auth::user(),
-        ]);
-
-        
+        ]);        
     }
 
     public function store(Request $request)
@@ -47,7 +45,7 @@ class MessageController extends Controller
         ]);
 
         // MessageSent::dispatch($message);
-        broadcast(new MessageSent($message))->toOthers();
+        broadcast(new MessageSent($message->load('user')))->toOthers();
 
         return back();
     }
