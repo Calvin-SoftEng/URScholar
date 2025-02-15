@@ -22,10 +22,16 @@
               <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
               <button type="button"
                 class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                <font-awesome-icon :icon="['fas', 'share-from-square']" class="mr-1" />
                 Send Access Details</button>
               </Link>
 
               <button @click="openReport(batch.id)" type="button"
+                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium focus:outline-none bg-blue-600 text-white rounded-lg border border-gray-200 hover:bg-blue-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
+                <font-awesome-icon :icon="['fas', 'file-circle-plus']" class="mr-1"  />
+                Generate Report</button>
+
+              <!-- <button  type="button"
                 class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
                 <span class="flex items-center">
                   <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -34,7 +40,7 @@
                   </svg>
                   View Report
                 </span>
-              </button>
+              </button> -->
             </div>
             <form class="w-3/12">
               <label for="default-search"

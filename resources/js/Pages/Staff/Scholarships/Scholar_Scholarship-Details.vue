@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout>
         <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-            <div class="w-full h-full mx-auto rounded-xl text-white">
+            <div class="w-full mx-auto rounded-xl text-white">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
                         <li class="hover:text-gray-600">
@@ -19,23 +19,7 @@
                     </ul>
                 </div>
 
-                <!-- <div class="w-full flex flex-row justify-between dark:bg-dcontainer dark:border dark:border-gray-600 rounded-xl mb-3">
-                    <div class="w-full flex justify-between ">
-                        <button @click="openScholarship"
-                            class="text-primary bg-white border border-gray-200 hover:bg-gray-100 hover:text-blue-700 hover:border-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center transition duration-150 ease-in-out"
-                            type="button">
-                            Back
-                        </button>
-
-                        <div class="flex flex-col space-y-1">
-                            <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span>
-                            </h1>
-                        </div>
-                    </div>
-                </div> -->
-
-                <div class="w-full flex justify-center items-center h-full bg-dirtywhite dark:text-dprimary relative">
+                <div class="w-full h-full flex justify-center items-center bg-dirtywhite dark:text-dprimary relative">
                     <!-- Close Button -->
                     <button class="absolute top-4 right-10">
                         <span class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition">
@@ -43,48 +27,153 @@
                         </span>
                     </button>
 
-                    <div class="grid grid-cols-4 gap-3 py-3 h-full w-9/12">
+                    <div class="h-full grid grid-cols-4 gap-3 py-3 w-9/12">
                         <!-- 25% Column -->
-                        <div class="w-full h-full flex flex-col space-y-3">
-                            <div class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer">
-                                <div class="bg-black rounded-lg w-full aspect-square">
+                        <div class="w-full h-full flex flex-col">
+                            <div class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
+                                <div class="flex-1 flex flex-col space-y-5">
+                                    <div class="bg-black rounded-lg w-full aspect-square">
 
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center p-2">
+                                        <span class="text-black text-xl font-albert text-center">Full Name</span>
+                                        <span class="text-gray-400 text-albert">ID</span>
+                                    </div>
+
+                                    <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                    <div class="flex flex-col p-2 space-y-2">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
+                                            <span class="text-base text-primary">BSIT</span>
+                                        </div>
+
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
+                                            <span class="text-base text-primary">BSIT</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                    <div class="flex flex-col p-2 space-y-2">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Contact No.</span>
+                                            <span class="text-base text-primary">BSIT</span>
+                                        </div>
+
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Email Address</span>
+                                            <span class="text-base text-primary">BSIT</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Ensure button stays at the bottom -->
+                                <div class="mt-auto w-full flex justify-end">
+                                    <button class="w-full rounded-md py-1 bg-blue-600">More Details</button>
                                 </div>
                             </div>
                         </div>
+
                         <!-- 75% Column -->
                         <div class="col-span-3 h-full flex flex-col space-y-3">
-                            <!-- First Layer with 2 Column Cards -->
-                            <div class="grid grid-cols-2 gap-3 h-[45%]">
-                                <div class="h-full p-3 rounded-xl shadow-md space-y-2 bg-white text-black dark:bg-dcontainer">
-                                    <span class="text-black">Profile</span>
+                            <!-- Second Layer with Single Card --> 
+                            <div class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
+                                <h1 class="text-black font-normal text-xl font-quicksand">Requirements Checking</h1>
+                                <div class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
-                                    <div class="flex flex-col">
-                                        <span>Name</span>
-                                        <span>Name</span>
-                                        <span>Name</span>
-                                        <span>Name</span>
-                                        <span>Name</span>
+                                    <!-- Requirement Item -->
+                                    <div class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                        <div class="flex flex-col">
+                                            <span class="font-bold">Scholarship Application Form</span>
+                                            <span>Document.pdf</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                                            <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
+                                            <span class="font-medium">Jan 1, 2023</span>
+                                        </div>
+                                        <div>
+                                            <span class="bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400 text-sm font-medium px-2.5 py-0.5 rounded">
+                                                Approved
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <button @click="toggleCheck"
+                                                class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
+                                                <span class="material-symbols-rounded text-base">open_in_full</span>
+                                                <span class="font-medium text-sm">View</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="h-full p-3 rounded-xl shadow-md bg-white dark:bg-dcontainer">
-                                    <span class="text-black">Monitoring</span>
+                                    
                                 </div>
                             </div>
-                            <!-- Second Layer with Single Card -->
-                            <div class="bg-white p-3 box-border rounded shadow-md h-[55%] dark:bg-dcontainer">
-                                <h1 class="text-black">Requirements Checking</h1>
 
-                                <div class="w-full flex flex-col space-y-2">
-                                    <div class="bg-blue-900 w-full rounded-sm h-5">
+                            <div class="bg-white p-8 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
+                                <h1 class="text-black font-normal text-lg font-quicksand">Monitoring</h1>
+                                <div class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
+                                    <div class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                        <div class="flex flex-col">
+                                            <span>Document.pdf</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                                            <span class="font-medium">First Semester - @nd Year</span>
+                                        </div>
+                                        <div>
+                                            <button @click="toggleCheck"
+                                                class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
+                                                <span class="material-symbols-rounded text-base">open_in_full</span>
+                                                <span class="font-medium text-sm">View</span>
+                                            </button>
+                                        </div>
                                     </div>
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <!-- viewing docs -->
+                <div v-if="Checking"
+                    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+                    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Call Document Name Here</h2>
+                            <button type="button"
+                                class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition"
+                                data-modal-hide="default-modal">
+                                <span class="material-symbols-rounded text-lg">open_in_new</span>
+                                <span class="font-medium">Open in New Tab</span>
+                            </button>
+                        </div>
+
+
+                        <div class="p-4 flex flex-col gap-3">
+                            <div class="w-full flex flex-col p-10">
+                                <img src="../../../../assets/images/psa_sample.png" alt="">
+                            </div>
+
+                            <div class="w-full flex flex-col space-y-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">*If Returning Requirement</h3>
+                                <textarea id="return-requirement"
+                                    placeholder="Add a message in returning"
+                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full h-32 resize-none text-left dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"></textarea>
+                            </div>
+
+
+                            <!-- Close Button -->
+                            <div class="mt-2 flex flex-row justify-end">
+                                <button type="button" @click="closeModal"
+                                    class="text-white font-sans w-4/12 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                                    Save
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -118,12 +207,24 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
+import { Check } from 'lucide-vue-next';
 
 // components
 
 const components = {
     Button,
     Papa,
+};
+
+const Checking = ref(false);
+
+const toggleCheck = () => {
+    Checking.value = !Checking.value;
+};
+
+const closeModal = () => {
+    Checking.value = false;
+    resetForm();
 };
 
 
