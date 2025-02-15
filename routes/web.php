@@ -7,7 +7,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ScholarshipController;
 use App\Http\Controllers\Staff\ScholarController;
-use App\Http\Controllers\Staff\MessageController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\MISController;
 use App\Http\Controllers\Staff\SettingsController;
 use App\Http\Controllers\Staff\SponsorController;
