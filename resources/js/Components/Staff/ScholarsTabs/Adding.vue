@@ -23,14 +23,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
-                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN"
+                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="form.grant"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <Select v-model="form.batch">
+                            <Select v-model="form.batch_id">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Batch" class="text-black" />
                                 </SelectTrigger>
@@ -48,7 +48,7 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Higher Education
                                 Institution</label>
-                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System"
+                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System" v-model="hei_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required value="University of Rizal System" readonly/>
                         </div>
@@ -169,11 +169,11 @@
                                 <SelectContent>
                                     <SelectGroup>
                                         <!-- <SelectLabel>Gender</SelectLabel> -->
-                                        <SelectItem value="LGBTQ">
-                                            LGBTQ
+                                        <SelectItem value="Male">
+                                            Male
                                         </SelectItem>
-                                        <SelectItem value="banana">
-                                            Banana
+                                        <SelectItem value="Female">
+                                            Female
                                         </SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
