@@ -36,38 +36,55 @@
                 <!-- List of Scholarships -->
                 <div v-if="!Showcase">
                     <div class="py-5">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             <div v-for="sponsor in sponsors" :key="sponsor.id"
                                 class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
-                                <div class="card-body p-5 space-y-2">
+                                <div class="card-body p-3 space-y-2">
                                     <!-- logo -->
-                                    <div>
+                                    <div class="flex justify-center">
                                         <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"
                                             class="w-20 h-20 rounded-full" />
                                     </div>
-                                    <div class="flex flex-col gap-1">
+                                    <div class="flex flex-col gap-1 ">
                                         <span class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
                                             {{ sponsor.name }}
                                         </span>
-                                        <p class="card-title text-2xl text-gray-500 font-sora font-semibold dark:text-dtext">
+                                        <div class="flex flex-row justify-center items-center">
+                                            <p class="card-title text-2xl text-gray-500 font-sora font-semibold dark:text-dtext">
                                             {{ sponsor.abbreviation }}</p>
+                                            <!-- <span class="flex justify-center items-center text-primary text-xs px-2 border rounded-xl border-gray-200 dark:border-gray-600">
+                                                Sponsoring Since: {{ sponsor.since }}
+                                            </span> -->
+                                            <div class="badge badge-secondary badge-outline text-xs ">Sponsoring Since: {{ sponsor.since }}</div>
+                                        </div>
                                     </div>
-                                    
-                                    <p class="leading-loose text-sm text-gray-400">
-                                        <span
-                                            class="px-2 py-0.5 border rounded-xl border-gray-200 dark:border-gray-600">Created
-                                            on: {{ new Date(sponsor.created_at).toLocaleDateString('en-US', {
-                                                year:
-                                            'numeric', month: 'long', day: 'numeric' }) }}</span><br>
-                                        <span
-                                            class="px-2 py-0.5 border rounded-xl border-gray-200 dark:border-gray-600">Sponsoring
-                                            Since: {{ sponsor.since }}</span>
-                                    </p>
                                     <!-- <div class="badge badge-primary text-[12px] badge-outline">DEPED</div> -->
-                                    <p class="text-md text-gray-600 dark:text-dtext mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"
+                                    <!-- <p class="text-md text-gray-600 dark:text-dtext mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"
                                         style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
                                         {{ sponsor.description }}
-                                    </p>
+                                    </p> -->
+
+                                    <div class="w-full flex flex-col space-y-2">
+                                        <p class="leading-loose text-sm text-gray-400">
+                                            Active Scholarships:
+                                        </p>
+                                        <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
+                                            <span>
+                                                Isko Name
+                                            </span>
+                                            <div class="flex flex-row gap-1">
+                                                <span class="material-symbols-rounded text-base text-white">
+                                                pending_actions
+                                                </span>
+                                                <span>
+                                                    Deadline
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="h-10 p-2 rounded-lg bg-blue-500">
+                                            TDP
+                                        </div>
+                                    </div>
                                     <div class="flex justify-end space-x-4">
                                         <button @click="toggleCreate(sponsor.id)">
                                         <div class="text-sm text-gray-500 cursor-pointer"
