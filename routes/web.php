@@ -93,6 +93,8 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
 
     //Scholars
     Route::get('/urs-scholars', [ScholarController::class, 'scholars'])->name('scholars.show');
+
+    Route::get('/urs-scholars/scholar-information', [ScholarController::class, 'scholar_information'])->name('scholars.scholar_information');
     
     Route::get('/scholarships/{scholarship}/adding-scholars', [ScholarController::class, 'adding'])->name('scholars.adding');
 

@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout>
         <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-            <div class="w-full mx-auto rounded-xl text-white">
+            <div class="w-full mx-auto p-3 rounded-xl text-white">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
                         <li class="hover:text-gray-600">

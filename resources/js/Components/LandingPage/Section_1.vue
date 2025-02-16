@@ -1,5 +1,6 @@
 <template>
-    <section class="relative py-14 px-6 text-center h-screen bg-white flex justify-center items-start" style="padding-top: 25vh;">
+    <section class="relative py-14 px-6 text-center h-screen flex justify-center items-start bg-gradient-to-b from-[#E9F4FF] to-white" style="padding-top: 25vh;">
+
         <!-- Background Image Positioned Bottom Right -->
         <div class="absolute bottom-0 right-0 w-10/12 max-w-xl">
             <img src="../../../assets/images/vector1.png" class="w-full h-auto" alt="">
@@ -7,8 +8,8 @@
 
         <!-- Text Content -->
         <div class="relative z-10 space-y-6">
-            <h1 class="text-8xl font-extrabold text-[#18181A] mb-4 font-albert leading-snug">
-                Find <span class="text-primary">Scholarships</span> you <br>
+            <h1 class="text-8xl font-extrabold text-myblack mb-4 font-albert leading-snug">
+                Find <span class="bg-gradient-to-b from-[#112844] to-[#0D3B80] bg-clip-text text-transparent font-semibold">Scholarships</span> you<br>
                 never knew you <br>
                 <span class="text-primary">Qualified</span> For!
             </h1>

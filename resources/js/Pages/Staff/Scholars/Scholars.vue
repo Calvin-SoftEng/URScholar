@@ -1,27 +1,18 @@
 <template>
   <AuthenticatedLayout>
-    <div class="flex-1 h-full max-w-full overflow-hidden">
+    <div class="flex-1 h-full px-10 py-5 bg-[#F8F8FA] max-w-full overflow-hidden">
       <!-- Main content container with max width constraint -->
-      <div class="w-full h-full p-5 bg-[#F8F8FA]">
-        <div class="w-full p-3 rounded-xl">
-          <!-- Breadcrumbs navigation -->
-          <div class="breadcrumbs text-sm text-gray-400 mb-5">
+      <div class="w-full mx-auto p-3 rounded-xl text-white">
+        <div class="breadcrumbs text-sm text-gray-400 mb-5">
             <ul>
-              <li>
-                <a>
-                  <span class="material-symbols-rounded mr-2" style="color: #0D47A1; font-size: 20px;">
-                    dashboard
-                  </span>
-                  Home
-                </a>
-              </li>
-              <li>
-                <a>
-                  <span class="text-blue-400 font-semibold">Scholars</span>
-                </a>
-              </li>
+                <li class="hover:text-gray-600">
+                    Home
+                </li>
+                <li>
+                    <span class="text-blue-400 font-semibold">Scholars</span>
+                </li>
             </ul>
-          </div>
+        </div>
 
           
           <!-- Header section with title and search -->
@@ -130,14 +121,16 @@
                     </span>
                   </td>
                   <th>
-                    <!-- <Link :href="route('scholarships.scholar_scholarship_details')"> -->
-                    <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                      aria-label="View Details">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
-                    </button>
+                    <!-- <Link :href="route('scholars.scholar_information')"> -->
+                    <Link :href="route('scholars.scholar_information')">
+                      <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        aria-label="View Details">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </button>
+                    </Link>
                     <!-- </Link> -->
                   </th>
                 </tr>
@@ -147,7 +140,6 @@
 
         </div>
       </div>
-    </div>
   </AuthenticatedLayout>
 </template>
 

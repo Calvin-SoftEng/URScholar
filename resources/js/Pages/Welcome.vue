@@ -31,9 +31,9 @@ function handleImageError() {
 </script>
 
 <template>
-    <Head title="Welcome" />
+    <!-- <Head title="Welcome" /> -->
 
-    <div class="">
+    <div class="bg-[#E9F4FF]">
         <FloatingNav/>
         <Section_1/>
         <Section_2/>
