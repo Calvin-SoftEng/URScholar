@@ -101,17 +101,19 @@
                                             <span class="font-bold">{{ req.requirement }}</span>
                                             <span>{{ req.submitted_requirements }}</span>
                                         </div>
-                                        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                            <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
-                                            <span class="font-medium">Jan 1, 2023</span>
-                                        </div>
-                                        <div>
-                                            <span :class="statusClass(req.status)"
-                                                class="text-sm font-medium px-2.5 py-0.5 rounded border">
-                                                {{ req.status }}
-                                            </span>
-                                        </div>
-                                        <div>
+                                        
+                                        
+                                        <div class="flex flex-row gap-5 items-center justify-center">
+                                            <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                                                <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
+                                                <span class="font-medium">Jan 1, 2023</span>
+                                            </div>
+                                            <div>
+                                                <span :class="statusClass(req.status)"
+                                                    class="text-sm font-medium px-2.5 py-0.5 rounded border">
+                                                    {{ req.status }}
+                                                </span>
+                                            </div>
                                             <button @click="toggleCheck(req)"
                                                 class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                 <span class="material-symbols-rounded text-base">open_in_full</span>
