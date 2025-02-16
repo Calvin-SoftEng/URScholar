@@ -165,7 +165,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect } from 'vue';
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -212,6 +212,12 @@ const filteredScholars = (batch) => {
 };
 
 const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
+
+onMounted(() => {
+  if (props.batches && props.batches.length > 0) {
+    expandedBatches.value = props.batches[0].id;
+  }
+});
 
 // Add download report functionality
 const openReport = async (batchId) => {

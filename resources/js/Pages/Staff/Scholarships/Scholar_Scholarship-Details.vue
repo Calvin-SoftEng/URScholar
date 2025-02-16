@@ -112,7 +112,7 @@
                                             </span>
                                         </div>
                                         <div>
-                                            <button @click="toggleCheck"
+                                            <button @click="toggleCheck(req)"
                                                 class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                 <span class="material-symbols-rounded text-base">open_in_full</span>
                                                 <span class="font-medium text-sm">View</span>
@@ -153,7 +153,7 @@
                 </div>
 
                 <!-- viewing docs -->
-                <div v-if="Checking"
+                <!-- <div v-if="Checking"
                     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
                     <div
                         class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
@@ -171,6 +171,56 @@
                             <iframe v-if="selectedRequirement" :src="`/storage/${selectedRequirement.path}`"
                                 class="w-full h-[80vh]" frameborder="0">
                             </iframe>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div v-if="Checking"
+                    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+                    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
+                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">{{ selectedRequirement?.requirement }}</h2>
+                            <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
+                                class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
+                                <span class="material-symbols-rounded text-lg">open_in_new</span>
+                                <span class="font-medium">Open in New Tab</span>
+                            </a>
+                        </div>
+
+                        <div class="p-4 flex flex-col gap-3">
+                            <div class="w-full flex justify-center p-5">
+                                <!-- Display Image -->
+                                <img v-if="selectedRequirement?.submitted_requirements.match(/\.(jpg|jpeg|png|gif)$/i)"
+                                    :src="`/storage/${selectedRequirement.path}`"
+                                    class="rounded-lg border shadow-sm max-w-full h-auto" alt="Submitted File">
+
+                                <!-- Display PDF -->
+                                <iframe v-else-if="selectedRequirement?.submitted_requirements.match(/\.(pdf)$/i)"
+                                    :src="`/storage/${selectedRequirement.path}#toolbar=0`"
+                                    class="w-full h-[600px] border rounded-lg"></iframe>
+
+                                <!-- Display Message for Other File Types -->
+                                <p v-else class="text-gray-600">
+                                    Cannot preview this file type. <a :href="`/storage/${selectedRequirement.path}`"
+                                        class="text-blue-600 underline" target="_blank">Download here</a>.
+                                </p>
+                            </div>
+
+                            <!-- Returning Requirement Message -->
+                            <div class="w-full flex flex-col space-y-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">*If Returning Requirement</h3>
+                                <textarea id="return-requirement"
+                                    placeholder="Add a message in returning"
+                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full h-32 resize-none text-left dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"></textarea>
+                            </div>
+
+                            <!-- Close Button -->
+                            <div class="mt-2 flex flex-row justify-end">
+                                <button type="button" @click="closeModal"
+                                    class="text-white font-sans w-4/12 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                                    Close
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -261,6 +311,7 @@ const toggleCheck = (req) => {
 
 const closeModal = () => {
     Checking.value = false;
+    selectedRequirement.value = null;
     resetForm();
 };
 
