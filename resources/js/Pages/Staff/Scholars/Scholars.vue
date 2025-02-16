@@ -121,10 +121,8 @@
                   <td class="px-5">
                     <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500"/> {{ scholar.email ? scholar.email : 'dummy@gmail.com' }}
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.year_level }}
-                  </td>
-                  <td class="whitespace-nowrap px-6 py-4 items-center justify-center">
+                  <td class="px-5">
+
                     <span :class="{
                       'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
                       'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
