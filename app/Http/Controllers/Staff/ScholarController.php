@@ -23,7 +23,7 @@ class ScholarController extends Controller
     {
 
         return Inertia::render('Staff/Scholars/Scholars', [
-            'scholars' => Scholar::all(),
+            'scholars' => Scholar::where('status', 'verified')->get(),
             'userType' => Auth::user()->usertype,
             'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null
         ]);
