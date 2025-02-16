@@ -113,8 +113,10 @@
                     {{ scholar.year_level }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 items-center justify-center">
-                    <span
-                      class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                    <span :class="{
+                      'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
+                      'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
+                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
                       {{ scholar.status }}
                     </span>
                   </td>
@@ -210,7 +212,8 @@ const filteredScholars = computed(() => {
     );
   }
 
-  return filtered;
+  // Prioritize scholars with "Verified" status
+  return filtered.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
 });
 
 const expandedRows = ref([]);
