@@ -11,6 +11,7 @@ use App\Models\Campus;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Batch;
+use App\Models\Requirements;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -32,13 +33,18 @@ class ScholarController extends Controller
     {
 
         $scholar = Scholar::findOrFail($id);
+        $scholarship = $scholar->scholarship;
 
-        // $scholar = Scholar::with('batch')->first();
 
-        // $batch = Batch::where('scholarship_id', $scholarship->id)->first();
+        $batch = Batch::where('scholarship_id', $scholarship->id)->first();
+
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
 
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
             'scholar' => $scholar,
+            'scholarship' => $scholarship,
+            'batch' => $batch,
+            'requirements' => $requirements,
         ]);
 
     }

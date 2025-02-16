@@ -38,7 +38,8 @@
 
                                     </div>
                                     <div class="flex flex-col items-center justify-center p-2">
-                                        <span class="text-black text-xl font-albert text-center">{{ scholar.last_name }},
+                                        <span class="text-black text-xl font-albert text-center">{{ scholar.last_name
+                                            }},
                                             {{ scholar.first_name }}
                                             {{ scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
                                                 word.charAt(0).toUpperCase()).join('.') + '.' : '' }}
@@ -90,14 +91,14 @@
                             <div
                                 class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
                                 <h1 class="text-black font-normal text-xl font-quicksand">Requirements Checking</h1>
-                                <div
+                                <div 
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
                                     <!-- Requirement Item -->
-                                    <div
+                                    <div 
                                         class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
-                                            <span class="font-bold">Scholarship Application Form</span>
+                                            <span class="font-bold"> Form</span>
                                             <span>Document.pdf</span>
                                         </div>
                                         <div class="flex items-center gap-2 text-gray-900 dark:text-white">
@@ -209,7 +210,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, computed } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import Papa from 'papaparse';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
@@ -230,6 +231,8 @@ import { Check } from 'lucide-vue-next';
 const props = defineProps({
     scholar: Object,
     scholarship: Object,
+    batch: Object,
+    requirements: Object,
 });
 
 const components = {
@@ -237,6 +240,14 @@ const components = {
     Papa,
 };
 
+const parsedRequirements = computed(() => {
+    try {
+        return JSON.parse(props.requirements);
+    } catch (error) {
+        console.error("Error parsing requirements JSON:", error);
+        return [];
+    }
+});
 
 const Checking = ref(false);
 
