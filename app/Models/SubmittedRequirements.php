@@ -6,11 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubmittedRequirements extends Model
 {
-    protected $fillable = ['scholar_id', 'requirement_id','submitted_requirements'];
-
-    protected $casts = [
-        'submitted_requirements' => 'array',
-    ];
+    protected $fillable = ['scholar_id', 'requirement_id', 'requirement','submitted_requirements', 'path'];
 
     public function scholar()
     {

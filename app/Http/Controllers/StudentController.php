@@ -195,6 +195,7 @@ class StudentController extends Controller
 
         $request->validate([
             'files.*' => 'required|file|',
+            'req' => 'array'
         ]);
 
         $scholar = Scholar::where('email', Auth::user()->email)->first();
@@ -205,21 +206,28 @@ class StudentController extends Controller
 
         $reqID = $requirements->pluck('id')->first();
 
-        // dd($request);
+        
 
         $uploadedFiles = [];
 
 
-        foreach ($request->file('files') as $file) {
-            $path = $file->store('uploads', 'public');
+        foreach ($request->file('files') as $index => $file) {
+
+            $path = $file->store('requirements/' . $scholar->id, 'public');
+
+
+            // Get the corresponding requirement name
+            $requirementName = $request->req[$index] ?? 'Unknown Requirement';
 
 
             $uploadedFile = SubmittedRequirements::create([
                 'scholar_id' => $scholar->id,
                 'requirement_id' => $reqID,
-                'submitted_requirements' => $file->getClientOriginalName()
+                'requirement' => $requirementName,
+                'submitted_requirements' => $file->getClientOriginalName(),
+                'path' => $path
             ]);
-    
+
             $uploadedFiles[] = $uploadedFile;
         }
 

@@ -91,15 +91,15 @@
                             <div
                                 class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
                                 <h1 class="text-black font-normal text-xl font-quicksand">Requirements Checking</h1>
-                                <div 
+                                <div
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
                                     <!-- Requirement Item -->
-                                    <div 
+                                    <div v-for="req in submittedRequirements" :key="req.id"
                                         class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
-                                            <span class="font-bold"> Form</span>
-                                            <span>Document.pdf</span>
+                                            <span class="font-bold">{{ req.requirement }}</span>
+                                            <span>{{ req.submitted_requirements }}</span>
                                         </div>
                                         <div class="flex items-center gap-2 text-gray-900 dark:text-white">
                                             <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
@@ -138,7 +138,7 @@
                                             <span class="font-medium">First Semester - @nd Year</span>
                                         </div>
                                         <div>
-                                            <button @click="toggleCheck"
+                                            <button @click="toggleCheck(req)"
                                                 class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                 <span class="material-symbols-rounded text-base">open_in_full</span>
                                                 <span class="font-medium text-sm">View</span>
@@ -159,38 +159,24 @@
                         class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
                         <div
                             class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Call Document Name Here</h2>
-                            <button type="button"
-                                class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition"
-                                data-modal-hide="default-modal">
-                                <span class="material-symbols-rounded text-lg">open_in_new</span>
-                                <span class="font-medium">Open in New Tab</span>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Viewing Document</h2>
+                            <button type="button" @click="closeModal"
+                                class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
+                                <span class="material-symbols-rounded text-lg">close</span>
+                                <span class="font-medium">Close</span>
                             </button>
                         </div>
 
-
                         <div class="p-4 flex flex-col gap-3">
-                            <div class="w-full flex flex-col p-10">
-                                <img src="../../../../assets/images/psa_sample.png" alt="">
-                            </div>
-
-                            <div class="w-full flex flex-col space-y-2">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">*If Returning Requirement</h3>
-                                <textarea id="return-requirement" placeholder="Add a message in returning"
-                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full h-32 resize-none text-left dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"></textarea>
-                            </div>
-
-
-                            <!-- Close Button -->
-                            <div class="mt-2 flex flex-row justify-end">
-                                <button type="button" @click="closeModal"
-                                    class="text-white font-sans w-4/12 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                    Save
-                                </button>
-                            </div>
+                            <iframe v-if="selectedRequirement"
+                                :src="`/storage/${selectedRequirement.path}`" class="w-full h-[80vh]"
+                                frameborder="0">
+                            </iframe>
                         </div>
                     </div>
                 </div>
+
+
 
             </div>
         </div>
@@ -232,7 +218,7 @@ const props = defineProps({
     scholar: Object,
     scholarship: Object,
     batch: Object,
-    requirements: Object,
+    submittedRequirements: Array,
 });
 
 const components = {
@@ -240,19 +226,26 @@ const components = {
     Papa,
 };
 
-const parsedRequirements = computed(() => {
-    try {
-        return JSON.parse(props.requirements);
-    } catch (error) {
-        console.error("Error parsing requirements JSON:", error);
-        return [];
-    }
-});
+
+// const parsedRequirements = computed(() => {
+//     try {
+//         if (Array.isArray(props.requirements.requirements)) {
+//             return props.requirements.requirements;
+//         }
+//         return JSON.parse(props.requirements.requirements);
+//     } catch (error) {
+//         console.error("Error parsing requirements JSON:", error);
+//         return [];
+//     }
+// });
 
 const Checking = ref(false);
 
-const toggleCheck = () => {
-    Checking.value = !Checking.value;
+const selectedRequirement = ref(null);
+
+const toggleCheck = (req) => {
+    selectedRequirement.value = req;
+    Checking.value = true;
 };
 
 const closeModal = () => {

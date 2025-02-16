@@ -41,7 +41,8 @@
                                             v-for="(req, index) in requirement.requirements" :key="index">
                                             <!-- Requirement name -->
                                             <div class="mb-2">
-                                                <span class="font-medium text-gray-700">{{ req }}</span>
+                                                <input type="hidden" v-model="form.req[index]">
+                                                <span class="font-medium text-gray-700" >{{ req }}</span>
                                             </div>
 
                                             <!-- File input with preview -->
@@ -139,6 +140,7 @@ const props = defineProps({
 // Form to handle multiple files for different requirements
 const form = useForm({
     files: {},
+    req: [],
     requirement_files: [] // Array to store requirement-file mappings
 });
 
@@ -148,7 +150,10 @@ const handleFile = (event, reqIndex, requirementName) => {
     if (file) {
         // Store the file with its requirement info
         form.files[reqIndex] = file;
-        
+
+        // Store the requirement name at the same index in req[]
+        form.req[reqIndex] = requirementName;
+
         // Store the mapping of requirement to file
         form.requirement_files.push({
             requirement_name: requirementName,
@@ -156,7 +161,6 @@ const handleFile = (event, reqIndex, requirementName) => {
         });
     }
 };
-
 // Submit form with files
 const submitRequirements = async () => {
     try {
@@ -167,6 +171,7 @@ const submitRequirements = async () => {
             onSuccess: () => {
                 // Clear files after successful upload
                 form.files = {};
+                form.req = [];  // Clear requirement names
                 form.requirement_files = [];
             },
         });
@@ -174,4 +179,5 @@ const submitRequirements = async () => {
         console.error('Error submitting form:', error);
     }
 };
+
 </script>

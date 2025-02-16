@@ -12,6 +12,7 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\Batch;
 use App\Models\Requirements;
+use App\Models\SubmittedRequirements;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -30,24 +31,23 @@ class ScholarController extends Controller
     }
 
     public function scholar($id)
-    {
+{
+    $scholar = Scholar::findOrFail($id);
+    $scholarship = $scholar->scholarship;
+    $batch = Batch::where('scholarship_id', $scholarship->id)->first();
+    $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
+    
+    // Get the submitted requirements for this scholar
+    $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
 
-        $scholar = Scholar::findOrFail($id);
-        $scholarship = $scholar->scholarship;
-
-
-        $batch = Batch::where('scholarship_id', $scholarship->id)->first();
-
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
-
-        return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
-            'scholar' => $scholar,
-            'scholarship' => $scholarship,
-            'batch' => $batch,
-            'requirements' => $requirements,
-        ]);
-
-    }
+    return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
+        'scholar' => $scholar,
+        'scholarship' => $scholarship,
+        'batch' => $batch,
+        'requirements' => $requirements,
+        'submittedRequirements' => $submittedRequirements
+    ]);
+}
     public function show(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;
