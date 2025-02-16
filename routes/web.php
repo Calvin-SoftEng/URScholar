@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ApplicationController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
@@ -158,6 +159,9 @@ Route::middleware(['auth'])->group(function () {
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');
    
+    // qrcode
+    Route::get('/generate-qr', [QrCodeController::class, 'show']);
+    Route::get('/download-qr', [QrCodeController::class, 'download'])->name('download.qr');
 
 });
 
