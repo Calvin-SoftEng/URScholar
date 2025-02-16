@@ -1,20 +1,17 @@
 <template>
     <AuthenticatedLayout>
         <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-            <div class="w-full mx-auto p-3 rounded-xl text-white">
+            <div class="w-full mx-auto rounded-xl text-white">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
                         <li class="hover:text-gray-600">
                             Home
                         </li>
                         <li class="hover:text-gray-600">
-                            <span>Scholarships</span>
-                        </li>
-                        <li class="hover:text-gray-600">
-                            <span>Scholarship Batches</span>
+                            <span>Scholars</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">Scholar Details</span>
+                            <span class="text-blue-400 font-semibold">Scholar Information</span>
                         </li>
                     </ul>
                 </div>
@@ -28,22 +25,14 @@
                         </span>
                     </button>
 
-                    <div class="h-full grid grid-cols-4 gap-3 py-3 w-9/12">
+            
                         <!-- 25% Column -->
-                        <div class="w-full h-full flex flex-col">
+                        <div class=" h-full flex flex-col w-9/12">
                             <div
                                 class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
                                 <div class="flex-1 flex flex-col space-y-5">
-                                    <div class="bg-black rounded-lg w-full aspect-square">
-
-                                    </div>
                                     <div class="flex flex-col items-center justify-center p-2">
-                                        <span class="text-black text-xl font-albert text-center">{{ scholar.last_name
-                                            }},
-                                            {{ scholar.first_name }}
-                                            {{ scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
-                                                word.charAt(0).toUpperCase()).join('.') + '.' : '' }}
-                                        </span>
+
                                         <span class="text-gray-400 text-albert">ID</span>
                                     </div>
 
@@ -52,12 +41,12 @@
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <span class="text-base text-primary">{{ scholar.course }}</span>
+                                            <!-- <span class="text-base text-primary">{{ scholar.course }}</span> -->
                                         </div>
 
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                            <span class="text-base text-primary">{{ scholar.campus }}</span>
+                                            <!-- <span class="text-base text-primary">{{ scholar.campus }}</span> -->
                                         </div>
                                     </div>
 
@@ -73,7 +62,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Email
                                                 Address</span>
-                                            <span class="text-base text-primary">{{ scholar.email }}</span>
+                                            <!-- <span class="text-base text-primary">{{ scholar.email }}</span> -->
                                         </div>
                                     </div>
                                 </div>
@@ -85,71 +74,7 @@
                             </div>
                         </div>
 
-                        <!-- 75% Column -->
-                        <div class="col-span-3 h-full flex flex-col space-y-3">
-                            <!-- Second Layer with Single Card -->
-                            <div
-                                class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
-                                <h1 class="text-black font-normal text-xl font-quicksand">Requirements Checking</h1>
-                                <div 
-                                    class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
-                                    <!-- Requirement Item -->
-                                    <div 
-                                        class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
-                                        <div class="flex flex-col">
-                                            <span class="font-bold"> Form</span>
-                                            <span>Document.pdf</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                            <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
-                                            <span class="font-medium">Jan 1, 2023</span>
-                                        </div>
-                                        <div>
-                                            <span
-                                                class="bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400 text-sm font-medium px-2.5 py-0.5 rounded">
-                                                Approved
-                                            </span>
-                                        </div>
-                                        <div>
-                                            <button @click="toggleCheck"
-                                                class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                <span class="font-medium text-sm">View</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                            <div
-                                class="bg-white p-8 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
-                                <h1 class="text-black font-normal text-lg font-quicksand">Monitoring</h1>
-                                <div
-                                    class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
-
-                                    <div
-                                        class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
-                                        <div class="flex flex-col">
-                                            <span>Document.pdf</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                            <span class="font-medium">First Semester - @nd Year</span>
-                                        </div>
-                                        <div>
-                                            <button @click="toggleCheck"
-                                                class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                <span class="font-medium text-sm">View</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- viewing docs -->
@@ -210,7 +135,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, computed } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import Papa from 'papaparse';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
@@ -231,8 +156,6 @@ import { Check } from 'lucide-vue-next';
 const props = defineProps({
     scholar: Object,
     scholarship: Object,
-    batch: Object,
-    requirements: Object,
 });
 
 const components = {
@@ -240,14 +163,6 @@ const components = {
     Papa,
 };
 
-const parsedRequirements = computed(() => {
-    try {
-        return JSON.parse(props.requirements);
-    } catch (error) {
-        console.error("Error parsing requirements JSON:", error);
-        return [];
-    }
-});
 
 const Checking = ref(false);
 

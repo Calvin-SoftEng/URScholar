@@ -390,4 +390,9 @@ class ScholarController extends Controller
     {
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details');
     }
+
+    public function scholar_information()
+    {
+        return Inertia::render('Staff/Scholars/Scholar_Information');
+    }
 }

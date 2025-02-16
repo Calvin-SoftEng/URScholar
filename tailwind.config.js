@@ -39,7 +39,7 @@ module.exports = {
         navy: '#3A4C7E',
         lightblue: '#D2CFFE',
         dirtywhite: '#F8F8FA',
-        myblack: '#18181A',
+        myblack: '#1B1B1F',
 
         lprimary: '#F5F7FA',
         lhover: '#A3B1C6',
