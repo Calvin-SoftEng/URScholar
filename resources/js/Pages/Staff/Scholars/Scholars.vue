@@ -122,10 +122,14 @@
                     <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500"/> {{ scholar.email ? scholar.email : 'dummy@gmail.com' }}
                   </td>
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
                     {{ scholar.year_level }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 items-center justify-center">
+=======
+                  <td class="px-5">
+>>>>>>> Stashed changes
 =======
                   <td class="px-5">
 >>>>>>> Stashed changes
