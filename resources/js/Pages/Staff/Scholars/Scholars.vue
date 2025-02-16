@@ -1,118 +1,134 @@
 <template>
   <AuthenticatedLayout>
-    <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] overflow-x-auto">
-      <div class="w-full mx-auto p-3 rounded-xl text-white overflow-x-auto">
-        <div class="breadcrumbs text-sm text-gray-400 mb-5">
-          <ul>
-            <li>
-              <a>
-                <span class="material-symbols-rounded mr-2" style="color: #0D47A1; font-size: 20px;">
-                  dashboard
-                </span>
-                Home
-              </a>
-            </li>
-            <li>
-              <a>
-                <span class="text-blue-400 font-semibold">Scholars</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="flex justify-between items-center mb-4">
-          <h1 class="text-4xl font-poppins font-extrabold text-[darkblue] text-left">
-            <!-- <span>{{ scholarship.name }}</span> Scholars 2024-2025 -->
-          </h1>
+    <div class="flex-1 h-full max-w-full overflow-hidden">
+      <!-- Main content container with max width constraint -->
+      <div class="w-full h-full p-5 bg-[#F8F8FA]">
+        <div class="w-full p-3 rounded-xl">
+          <!-- Breadcrumbs navigation -->
+          <div class="breadcrumbs text-sm text-gray-400 mb-5">
+            <ul>
+              <li>
+                <a>
+                  <span class="material-symbols-rounded mr-2" style="color: #0D47A1; font-size: 20px;">
+                    dashboard
+                  </span>
+                  Home
+                </a>
+              </li>
+              <li>
+                <a>
+                  <span class="text-blue-400 font-semibold">Scholars</span>
+                </a>
+              </li>
+            </ul>
+          </div>
 
-          <!-- Search Bar -->
-          <div class="flex items-center w-full max-w-md">
-            <div class="relative w-full">
-              <input
-                type="text"
-                v-model="searchQuery"
-                placeholder="Search scholars..."
-                class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-              />
-              <span class="absolute right-3 top-2.5 text-gray-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </span>
+          
+          <!-- Header section with title and search -->
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+            <!-- <h1 class="text-2xl sm:text-4xl font-poppins font-extrabold text-[darkblue] text-left">
+              <span>{{ scholarship.name }}</span> Scholars 2024-2025
+            </h1> -->
+
+            <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
+              <!-- Icon -->
+              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <font-awesome-icon :icon="['fas', 'users']" class="text-2xl" />
+              </div>
+
+              <!-- Text Content -->
+              <div class="flex flex-col">
+                <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
+                <span class="font-semibold text-xl text-gray-900">1,000</span>
+              </div>
+            </div>
+
+
+            <!-- Search Bar -->
+            <div class="flex items-center justify-end w-full sm:w-auto sm:max-w-md">
+              <div class="relative w-full">
+                <input
+                  type="text"
+                  v-model="searchQuery"
+                  placeholder="Search scholars..."
+                  class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                />
+                <span class="absolute right-3 top-2.5 text-gray-400">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                  </svg>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- table -->
-        <div class="w-full justify-center items-center overflow-x-auto border rounded-lg shadow-sm">
-          <div
-            class="w-[1540px] relative overflow-x-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded">
-            <table class="w-full">
-              <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700">
-                <tr>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    URScholar ID
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Batch No.
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Grant
-                  </th>
-                  <th class="whitespace-nowrap px-8 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Campus
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Scholar's Name
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Degree Program
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Year Level
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Status
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Sex
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Birthday
-                  </th>
-                  <th class="whitespace-nowrap px-6 py-3 font-medium text-gray-700 dark:text-gray-300">
-                    Email Address
-                  </th>
-                  <th
-                    class="whitespace-nowrap px-10 py-3 font-medium text-gray-700 dark:text-gray-300 sticky right-0 bg-gray-200 dark:bg-gray-700 shadow-lg sr-only">
-                    Action
-                  </th>
+          <!-- table -->
+          <div class="bg-white overflow-x-auto text-black font-poppins border rounded-lg overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-[70vh]">
+            <table class="table rounded-lg">
+              <!-- head -->
+              <thead class="justify-center items-center sticky top-[-1px] z-10 shadow-sm bg-white">
+                <tr class="font-normal text-sm uppercase">
+                  <th class="border-x border-gray-100">URScholar ID</th>
+                  <th class="border-x border-gray-100">Scholar</th>
+                  <th class="border-x border-gray-100">Course</th>
+                  <th class="border-x border-gray-100">Campus</th>
+                  <th class="border-x border-gray-100">Grant</th>
+                  <th class="border-x border-gray-100">Email</th>
+                  <th class="border-x border-gray-100">Status</th>
+                  <th class="border-x border-gray-100"></th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                <tr v-for="scholar in filteredScholars" :key="scholar.id"
-                  class="bg-white text-sm dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700">
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    test1
+              <tbody>
+                <!-- row 1 -->
+                <tr v-for="scholar in filteredScholars" :key="scholar.id" class="text-sm">
+                  <td class="px-5">test1</td>
+                  <td class="px-5">
+                    <div class="flex items-center gap-3">
+                      <div class="avatar">
+                        <div class="mask rounded-full h-12 w-12">
+                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-normal">
+                          {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
+                          <font-awesome-icon v-if="scholar.sex === 'Male'" :icon="['fas', 'mars']" class="text-blue-500" />
+                          <font-awesome-icon v-if="scholar.sex === 'Female'" :icon="['fas', 'venus']" class="text-pink-500" />
+                        </div>
+
+                        <div class="text-sm opacity-50">
+                          <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
+                          {{ scholar.sex }}, <span> <font-awesome-icon :icon="['far', 'calendar']" class="mr-1 text-gray-500" /> {{ formatDate(scholar.birthdate) }}</span>
+                        </div>
+                      </div>
+                    </div>
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
+                  <td class="px-5 items-center">
+                    <span class="material-symbols-rounded text-sm text-gray-400 mr-1">
+                    local_library
+                    </span> {{ scholar.course }}
+                    <br />
+                    <span class="badge badge-ghost badge-base">{{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year</span>
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.grant }}
-                  </td>
-                  <td class="whitespace-nowrap px-8 py-4 text-gray-700 dark:text-gray-300">
+                  <td class="px-5">
                     {{ scholar.campus }}
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
+                  <td class="px-5">
+                    Batch {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
+                    <br />
+                    <span class="badge badge-ghost badge-base">{{ scholar.grant }}</span>
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.course }}
+                  <td class="px-5">
+                    <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500"/> {{ scholar.email ? scholar.email : 'dummy@gmail.com' }}
                   </td>
+<<<<<<< Updated upstream
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
                     {{ scholar.year_level }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 items-center justify-center">
+=======
+                  <td class="px-5">
+>>>>>>> Stashed changes
                     <span :class="{
                       'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
                       'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
@@ -120,16 +136,8 @@
                       {{ scholar.status }}
                     </span>
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.sex }}
-                  </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.birthdate }}
-                  </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700 dark:text-gray-300">
-                    {{ scholar.email }}
-                  </td>
-                  <td class="whitespace-nowrap px-10 py-4 sticky right-0 bg-gray-200 dark:bg-gray-800 shadow-lg">
+                  <th>
+                    <Link :href="route('scholarships.scholar_scholarship_details')">
                     <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                       aria-label="View Details">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,11 +145,13 @@
                           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </button>
-                  </td>
+                    </Link>
+                  </th>
                 </tr>
               </tbody>
             </table>
           </div>
+
         </div>
       </div>
     </div>
@@ -215,6 +225,23 @@ const filteredScholars = computed(() => {
   // Prioritize scholars with "Verified" status
   return filtered.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
 });
+
+const getYearSuffix = (year) => {
+  if (year === 1) return "st";
+  if (year === 2) return "nd";
+  if (year === 3) return "rd";
+  return "th";
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return "N/A"; // Handle empty/null values
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    month: "short",
+    day: "2-digit",
+    year: "numeric",
+  });
+};
 
 const expandedRows = ref([]);
 const showPanel = ref(false);
