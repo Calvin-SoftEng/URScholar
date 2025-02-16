@@ -22,21 +22,27 @@
                 <div class="w-full h-full flex justify-center items-center bg-dirtywhite dark:text-dprimary relative">
                     <!-- Close Button -->
                     <button class="absolute top-4 right-10">
-                        <span class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition">
-                        arrow_back
+                        <span
+                            class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition">
+                            arrow_back
                         </span>
                     </button>
 
                     <div class="h-full grid grid-cols-4 gap-3 py-3 w-9/12">
                         <!-- 25% Column -->
                         <div class="w-full h-full flex flex-col">
-                            <div class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
+                            <div
+                                class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
                                 <div class="flex-1 flex flex-col space-y-5">
                                     <div class="bg-black rounded-lg w-full aspect-square">
 
                                     </div>
                                     <div class="flex flex-col items-center justify-center p-2">
-                                        <span class="text-black text-xl font-albert text-center">Full Name</span>
+                                        <span class="text-black text-xl font-albert text-center">{{ scholar.last_name }},
+                                            {{ scholar.first_name }}
+                                            {{ scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                                word.charAt(0).toUpperCase()).join('.') + '.' : '' }}
+                                        </span>
                                         <span class="text-gray-400 text-albert">ID</span>
                                     </div>
 
@@ -45,12 +51,12 @@
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <span class="text-base text-primary">BSIT</span>
+                                            <span class="text-base text-primary">{{ scholar.course }}</span>
                                         </div>
 
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                            <span class="text-base text-primary">BSIT</span>
+                                            <span class="text-base text-primary">{{ scholar.campus }}</span>
                                         </div>
                                     </div>
 
@@ -58,13 +64,15 @@
 
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Contact No.</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Contact
+                                                No.</span>
                                             <span class="text-base text-primary">BSIT</span>
                                         </div>
 
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Email Address</span>
-                                            <span class="text-base text-primary">BSIT</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Email
+                                                Address</span>
+                                            <span class="text-base text-primary">{{ scholar.email }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -78,13 +86,16 @@
 
                         <!-- 75% Column -->
                         <div class="col-span-3 h-full flex flex-col space-y-3">
-                            <!-- Second Layer with Single Card --> 
-                            <div class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
+                            <!-- Second Layer with Single Card -->
+                            <div
+                                class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
                                 <h1 class="text-black font-normal text-xl font-quicksand">Requirements Checking</h1>
-                                <div class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
+                                <div
+                                    class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
                                     <!-- Requirement Item -->
-                                    <div class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                    <div
+                                        class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
                                             <span class="font-bold">Scholarship Application Form</span>
                                             <span>Document.pdf</span>
@@ -94,7 +105,8 @@
                                             <span class="font-medium">Jan 1, 2023</span>
                                         </div>
                                         <div>
-                                            <span class="bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400 text-sm font-medium px-2.5 py-0.5 rounded">
+                                            <span
+                                                class="bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400 text-sm font-medium px-2.5 py-0.5 rounded">
                                                 Approved
                                             </span>
                                         </div>
@@ -106,15 +118,18 @@
                                             </button>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
 
-                            <div class="bg-white p-8 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
+                            <div
+                                class="bg-white p-8 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
                                 <h1 class="text-black font-normal text-lg font-quicksand">Monitoring</h1>
-                                <div class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
+                                <div
+                                    class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
-                                    <div class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                    <div
+                                        class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
                                             <span>Document.pdf</span>
                                         </div>
@@ -129,7 +144,7 @@
                                             </button>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -139,8 +154,10 @@
                 <!-- viewing docs -->
                 <div v-if="Checking"
                     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-                    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <div
+                        class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
+                        <div
+                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                             <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Call Document Name Here</h2>
                             <button type="button"
                                 class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition"
@@ -158,8 +175,7 @@
 
                             <div class="w-full flex flex-col space-y-2">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">*If Returning Requirement</h3>
-                                <textarea id="return-requirement"
-                                    placeholder="Add a message in returning"
+                                <textarea id="return-requirement" placeholder="Add a message in returning"
                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full h-32 resize-none text-left dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"></textarea>
                             </div>
 
@@ -211,10 +227,16 @@ import { Check } from 'lucide-vue-next';
 
 // components
 
+const props = defineProps({
+    scholar: Object,
+    scholarship: Object,
+});
+
 const components = {
     Button,
     Papa,
 };
+
 
 const Checking = ref(false);
 

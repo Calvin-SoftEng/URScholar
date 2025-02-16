@@ -28,7 +28,20 @@ class ScholarController extends Controller
         ]);
     }
 
+    public function scholar($id)
+    {
 
+        $scholar = Scholar::findOrFail($id);
+
+        // $scholar = Scholar::with('batch')->first();
+
+        // $batch = Batch::where('scholarship_id', $scholarship->id)->first();
+
+        return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
+            'scholar' => $scholar,
+        ]);
+
+    }
     public function show(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;
@@ -367,7 +380,8 @@ class ScholarController extends Controller
     //     return response()->json($requirements);
     // }
 
-    public function scholar_scholarship_details() {
+    public function scholar_scholarship_details()
+    {
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details');
     }
 }

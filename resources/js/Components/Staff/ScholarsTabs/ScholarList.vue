@@ -101,7 +101,7 @@
                   <td>
                     {{ scholar.grant }}
                   </td>
-                  <td>{{ scholar.email ? scholar.email : 'dummy@gmail.com' }}</td>
+                  <td>{{ scholar.email ? scholar.email : 'N/A' }}</td>
                   <td>
                     <span :class="{
                       'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
@@ -111,7 +111,7 @@
                     </span>
                   </td>
                   <th>
-                    <Link :href="route('scholarships.scholar_scholarship_details')">
+                    <Link :href="`/scholarships/scholar=${scholar.id}`">
                     <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                       aria-label="View Details">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -195,18 +195,20 @@ const searchQuery = ref('');
 const filteredScholars = (batch) => {
   if (!batch.scholars) return [];
 
-  if (!searchQuery.value) return batch.scholars;
-
-  const query = searchQuery.value.toLowerCase();
-  return batch.scholars.filter(scholar =>
-    scholar.first_name?.toLowerCase().includes(query) ||
-    scholar.last_name?.toLowerCase().includes(query) ||
-    scholar.middle_name?.toLowerCase().includes(query) ||
-    scholar.email?.toLowerCase().includes(query) ||
-    scholar.course?.toLowerCase().includes(query) ||
-    scholar.campus?.toLowerCase().includes(query) ||
-    scholar.grant?.toLowerCase().includes(query)
+  let scholars = batch.scholars.filter(scholar =>
+    scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.email?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.campus?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
+
+  // Sort so that 'Verified' scholars appear first
+  scholars.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
+
+  return scholars;
 };
 
 const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default

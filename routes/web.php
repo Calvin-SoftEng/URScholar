@@ -88,7 +88,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::get('/scholarships/{scholarship}/requirements', [ScholarshipController::class, 'requirementsTab'])->name('requirementsTab.requirements');
     Route::get('/scholarships/{scholarship}/send-access', [EmailController::class, 'index'])->name('requirements.index');
 
-    Route::get('/scholarships/scholar-scholarship-details', [ScholarshipController::class, 'scholar_scholarship_details'])->name('scholarships.scholar_scholarship_details');
+    Route::get('/scholarships/scholar={id}', [ScholarController::class, 'scholar'])->name('scholarships.scholar_scholarship_details');
 
 
     //Scholars
