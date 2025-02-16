@@ -97,46 +97,49 @@
                             <span>Deadline</span>
                             <br>
                             <form @submit.prevent="submitRequirements" class="space-y-6">
-                                <div v-for="req in returnedRequirements" :key="req.id"
-                                    class="bg-white border rounded-lg shadow-sm p-4">
-                                    <div class="mb-4">
-                                        <h3 class="font-medium text-gray-900">{{ req.requirement }}</h3>
-                                        <p class="text-sm text-gray-600 mt-1">Return reason: {{ req.return_message }}
-                                        </p>
-                                    </div>
-
-                                    <div class="space-y-2">
-                                        <input type="file" @change="(e) => handleFile(e, req.id, req.requirement)"
-                                            :id="'file_' + req.id" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none hover:bg-gray-100" />
-
-                                        <div v-if="form.files[req.id]"
-                                            class="flex items-center gap-2 text-sm text-gray-600">
-                                            <font-awesome-icon :icon="['fas', 'file']" />
-                                            <span>{{ form.files[req.id].name }}</span>
-                                            <button type="button" @click="removeFile(req.id)"
-                                                class="text-red-600 hover:text-red-800">
-                                                <font-awesome-icon :icon="['fas', 'times']" />
-                                            </button>
-                                        </div>
-
-                                        <p v-if="form.errors[`files.${req.id}`]" class="mt-1 text-sm text-red-600">
-                                            {{ form.errors[`files.${req.id}`] }}
-                                        </p>
-                                    </div>
+                            <div v-for="req in returnedRequirements" :key="req.id"
+                                class="bg-white border rounded-lg shadow-sm p-4">
+                                <div class="mb-4">
+                                    <h3 class="font-medium text-gray-900">{{ req.requirement }}</h3>
+                                    <p class="text-sm text-gray-600 mt-1">Return reason: {{ req.return_message }}</p>
                                 </div>
 
-                                <div class="flex justify-end">
-                                    <button type="submit" :disabled="form.processing" 
-                                                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none
-                                                    focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
-                                                    transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed
-                                                    flex items-center justify-center gap-2">
-                                            <span class="material-symbols-rounded">outbox</span>
-                                            <span>{{ form.processing ? 'Submitting...' : 'Submit again' }}</span>
+                                <div class="space-y-2">
+                                    <input type="file" @change="(e) => handleFile(e, req.id, req.requirement)"
+                                        :id="'file_' + req.id" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none hover:bg-gray-100" />
+
+                                    <div v-if="form.files[req.id]"
+                                        class="flex items-center gap-2 text-sm text-gray-600">
+                                        <font-awesome-icon :icon="['fas', 'file']" />
+                                        <span>{{ form.files[req.id].name }}</span>
+                                        <button type="button" @click="removeFile(req.id)"
+                                            class="text-red-600 hover:text-red-800">
+                                            <font-awesome-icon :icon="['fas', 'times']" />
                                         </button>
+                                    </div>
+
+                                    <p v-if="form.errors[`files.${req.id}`]" class="mt-1 text-sm text-red-600">
+                                        {{ form.errors[`files.${req.id}`] }}
+                                    </p>
                                 </div>
-                            </form>
+                            </div>
+
+                            <div v-if="returnedRequirements.length === 0" class="text-center py-8">
+                                <p class="text-gray-500">No returned requirements to resubmit.</p>
+                            </div>
+
+                            <div v-if="returnedRequirements.length > 0" class="flex justify-end">
+                                <button type="submit" :disabled="form.processing || Object.keys(form.files).length === 0"
+                                    class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none
+                                        focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
+                                        transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed
+                                        flex items-center justify-center gap-2">
+                                    <span class="material-symbols-rounded">outbox</span>
+                                    <span>{{ form.processing ? 'Submitting...' : 'Submit again' }}</span>
+                                </button>
+                            </div>
+                        </form>
                         </div>
 
                     </div>
@@ -164,51 +167,59 @@ const returnedRequirements = computed(() => props.submitReq || []);
 
 const form = useForm({
     files: {},
-    requirement_files: []
+    requirements: []
 });
-
 
 const handleFile = (event, reqId, requirementName) => {
     const file = event.target.files[0];
     if (file) {
+        // Store file with requirement ID as key
         form.files[reqId] = file;
-        form.requirement_files.push({
-            requirement_id: reqId,
-            requirement_name: requirementName,
-            file: file
-        });
+        
+        // Find existing requirement in the array
+        const existingIndex = form.requirements.findIndex(r => r.id === reqId);
+        if (existingIndex >= 0) {
+            // Update existing requirement
+            form.requirements[existingIndex].requirement = requirementName;
+        } else {
+            // Add new requirement to array
+            form.requirements.push({
+                id: reqId,
+                requirement: requirementName
+            });
+        }
     }
 };
 
 const removeFile = (reqId) => {
+    // Remove file
     delete form.files[reqId];
-    form.requirement_files = form.requirement_files.filter(
-        item => item.requirement_id !== reqId
-    );
+    
+    // Remove from requirements array
+    form.requirements = form.requirements.filter(r => r.id !== reqId);
+    
+    // Reset file input
+    const fileInput = document.getElementById(`file_${reqId}`);
+    if (fileInput) {
+        fileInput.value = '';
+    }
 };
 
-const submitRequirements = async () => {
-    try {
-        const formData = new FormData();
-
-        form.requirement_files.forEach(item => {
-            formData.append(`files[${item.requirement_id}]`, item.file);
-            formData.append(`requirements[${item.requirement_id}]`, item.requirement_name);
-        });
-
-        form.post('/student/application/re-upload', {
-            forceFormData: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                form.reset();
-                // Show success message or redirect
-            },
-            onError: (errors) => {
-                console.error('Upload errors:', errors);
-            }
-        });
-    } catch (error) {
-        console.error('Form submission error:', error);
-    }
+const submitRequirements = () => {
+    form.post('/student/application/re-upload', {
+        forceFormData: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            // Show success message
+            alert('Requirements resubmitted successfully!');
+            // Reset form
+            form.reset();
+            // Optionally reload the page to show updated status
+            window.location.reload();
+        },
+        onError: (errors) => {
+            console.error('Upload errors:', errors);
+        }
+    });
 };
 </script>

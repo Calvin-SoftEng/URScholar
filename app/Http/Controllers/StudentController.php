@@ -195,49 +195,62 @@ class StudentController extends Controller
     public function applicationReupload(Request $request)
     {
         $request->validate([
+            'files' => 'required|array',
             'files.*' => 'required|file',
-            'req' => 'array'
+            'requirements' => 'required|array',
+            'requirements.*.id' => 'required|exists:submitted_requirements,id',
+            'requirements.*.requirement' => 'required|string',
         ]);
 
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
-        $requirements = Requirements::where('id', $scholarship->id)->get();
-        $reqID = $requirements->pluck('id')->first();
+        if (!$scholar) {
+            return response()->json(['message' => 'Scholar not found'], 404);
+        }
 
         $uploadedFiles = [];
 
-        foreach ($request->file('files') as $index => $file) {
-            // Get the corresponding requirement name
-            $requirementName = $request->req[$index] ?? 'Unknown Requirement';
+        // Process each file
+        foreach ($request->file('files') as $submissionId => $file) {
+            // Find the corresponding requirement data
+            $requirementData = collect($request->requirements)->firstWhere('id', $submissionId);
+            if (!$requirementData) {
+                continue; // Skip if no matching requirement data found
+            }
 
-            DD($requirementName);
-            // Find existing submitted requirement
+            // Find the specific returned submission by its ID
             $existingSubmission = SubmittedRequirements::where([
+                'id' => $submissionId,
                 'scholar_id' => $scholar->id,
-                'requirement_id' => $reqID,
-                'requirement' => $requirementName
+                'status' => 'Returned'
             ])->first();
 
-
+            if (!$existingSubmission) {
+                continue; // Skip if this submission doesn't exist or isn't returned
+            }
 
             // Store the new file
             $path = $file->store('requirements/' . $scholar->id, 'public');
 
-            if ($existingSubmission) {
-                // Delete old file if it exists
-                if (Storage::disk('public')->exists($existingSubmission->path)) {
-                    Storage::disk('public')->delete($existingSubmission->path);
-                }
+            // Delete old file if it exists
+            // if (Storage::disk('public')->exists($existingSubmission->path)) {
+            //     Storage::disk('public')->delete($existingSubmission->path);
+            // }
 
-                // Update existing record
-                $existingSubmission->update([
-                    'submitted_requirements' => $file->getClientOriginalName(),
-                    'path' => $path,
-                    'status' => 'Pending'  // Added status update
-                ]);
+            // Update the existing record
+            $existingSubmission->update([
+                'submitted_requirements' => $file->getClientOriginalName(),
+                'path' => $path,
+                'status' => 'Pending',
+                'message' => null,
+            ]);
 
-                $uploadedFiles[] = $existingSubmission;
-            }
+            $uploadedFiles[] = $existingSubmission;
+        }
+
+        if (empty($uploadedFiles)) {
+            return response()->json([
+                'message' => 'No valid returned requirements found to update',
+            ], 422);
         }
 
         return response()->json([
@@ -253,6 +266,8 @@ class StudentController extends Controller
             'files.*' => 'required|file|',
             'req' => 'array'
         ]);
+
+
 
         $scholar = Scholar::where('email', Auth::user()->email)->first();
 
