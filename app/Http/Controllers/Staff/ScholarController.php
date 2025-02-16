@@ -48,6 +48,31 @@ class ScholarController extends Controller
             'submittedRequirements' => $submittedRequirements
         ]);
     }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'submittedReq' => 'required|exists:submitted_requirements,id',
+            'status' => 'required|in:Pending,Returned,Approved',
+            'message' => 'nullable|string|max:255',
+        ]);
+
+        // dd($request);
+
+        $requirement = SubmittedRequirements::findOrFail($request->submittedReq);
+        $requirement->status = $request->status;
+
+        if ($request->status === 'Returned') {
+            $requirement->message = $request->message; // Save the return message
+        } else {
+            $requirement->message = null; // Clear remarks for other statuses
+        }
+
+        $requirement->save();
+
+        return response()->json(['message' => 'Requirement status updated successfully!']);
+    }
+
     public function show(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;

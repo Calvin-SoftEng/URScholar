@@ -89,6 +89,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::get('/scholarships/{scholarship}/send-access', [EmailController::class, 'index'])->name('requirements.index');
 
     Route::get('/scholarships/scholar={id}', [ScholarController::class, 'scholar'])->name('scholarships.scholar_scholarship_details');
+    Route::post('/scholarships/scholar/update-requirements', [ScholarController::class, 'updateStatus'])->name('scholarships.updateStatus');
 
 
     //Scholars
@@ -101,6 +102,8 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');
     Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
+
+    
 
 
     // Messaging
@@ -143,7 +146,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');
-     Route::post('/verify-account/verifying', [StudentController::class, 'verifyingAccount'])->name('student.verify-account.verifying');
+    Route::post('/verify-account/verifying', [StudentController::class, 'verifyingAccount'])->name('student.verify-account.verifying');
 
 
     Route::get('/available-scholarships', [ApplicationController::class, 'index'])->name('available.index');

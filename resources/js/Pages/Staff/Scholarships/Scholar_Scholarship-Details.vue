@@ -101,11 +101,12 @@
                                             <span class="font-bold">{{ req.requirement }}</span>
                                             <span>{{ req.submitted_requirements }}</span>
                                         </div>
-                                        
-                                        
+
+
                                         <div class="flex flex-row gap-5 items-center justify-center">
                                             <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                                <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
+                                                <span
+                                                    class="material-symbols-rounded text-lg">assignment_turned_in</span>
                                                 <span class="font-medium">Jan 1, 2023</span>
                                             </div>
                                             <div>
@@ -179,9 +180,12 @@
 
                 <div v-if="Checking"
                     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-                    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
-                        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{ selectedRequirement?.requirement }}</h2>
+                    <div
+                        class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
+                        <div
+                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{
+                                selectedRequirement?.requirement }}</h2>
                             <div class="flex items-center justify-between gap-10">
                                 <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
                                     class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
@@ -191,8 +195,8 @@
                                 <button type="button" @click="closeModal"
                                     class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                                     data-modal-hide="default-modal">
-                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 14 14">
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 14 14">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                             stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                                     </svg>
@@ -222,19 +226,18 @@
                             <!-- Returning Requirement Message -->
                             <div class="w-full flex flex-col space-y-2">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">*If Returning Requirement</h3>
-                                <textarea id="return-requirement"
-                                    placeholder="Add a message in returning"
+                                <textarea id="return-requirement" placeholder="Add a message in returning" v-model="returnMessage"
                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-6/12 h-32 resize-none text-left dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"></textarea>
                             </div>
 
                             <!-- Close Button -->
                             <div class="mt-2 flex flex-row justify-between">
-                                <button type="button" @click="closeModal"
-                                    class="text-white font-sans w-full bg-gradient-to-r bg-red-500 from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                                <button type="button" @click="updateRequirementStatus('Returned')"
+                                    class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                                     Return
                                 </button>
-                                <button type="button" @click="closeModal"
-                                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                                <button type="button" @click="updateRequirementStatus('Approved')"
+                                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                                     Approve
                                 </button>
                             </div>
@@ -332,7 +335,33 @@ const closeModal = () => {
     resetForm();
 };
 
+const returnMessage = ref('');
 
+const updateRequirementStatus = (status) => {
+
+    if (selectedRequirement.value) {
+
+        // Send an update request to the backend
+        router.post('/scholarships/scholar/update-requirements', {
+            submittedReq: selectedRequirement.value.id,
+            status: status,
+            message: status === 'Returned' ? returnMessage.value : null
+        }, {
+            onSuccess: () => {
+                toastMessage.value = `Requirement ${status.toLowerCase()} successfully!`;
+                toastVisible.value = true;
+                closeModal();
+
+                setTimeout(() => {
+                    toastVisible.value = false;
+                }, 3000);
+            },
+            onError: (errors) => {
+                console.error(errors);
+            }
+        });
+    }
+};
 
 const toastVisible = ref(false);
 const toastMessage = ref("");

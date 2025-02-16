@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('requirement');
             $table->string('submitted_requirements');
             $table->string('path');
+            $table->string('message')->nullable();
             $table->enum('status', ['Approved', 'Pending', 'Returned'])->default('Pending');
             $table->timestamps();
         });
