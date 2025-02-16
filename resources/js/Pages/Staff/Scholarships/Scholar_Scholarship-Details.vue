@@ -106,9 +106,9 @@
                                             <span class="font-medium">Jan 1, 2023</span>
                                         </div>
                                         <div>
-                                            <span
-                                                class="bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400 text-sm font-medium px-2.5 py-0.5 rounded">
-                                                Approved
+                                            <span :class="statusClass(req.status)"
+                                                class="text-sm font-medium px-2.5 py-0.5 rounded border">
+                                                {{ req.status }}
                                             </span>
                                         </div>
                                         <div>
@@ -168,9 +168,8 @@
                         </div>
 
                         <div class="p-4 flex flex-col gap-3">
-                            <iframe v-if="selectedRequirement"
-                                :src="`/storage/${selectedRequirement.path}`" class="w-full h-[80vh]"
-                                frameborder="0">
+                            <iframe v-if="selectedRequirement" :src="`/storage/${selectedRequirement.path}`"
+                                class="w-full h-[80vh]" frameborder="0">
                             </iframe>
                         </div>
                     </div>
@@ -226,6 +225,18 @@ const components = {
     Papa,
 };
 
+const statusClass = (status) => {
+    switch (status) {
+        case 'Pending':
+            return 'bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-yellow-400 border-yellow-400';
+        case 'Returned':
+            return 'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border-red-400';
+        case 'Approved':
+            return 'bg-green-100 text-green-800 dark:bg-gray-700 dark:text-green-400 border-green-400';
+        default:
+            return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400 border-gray-400';
+    }
+};
 
 // const parsedRequirements = computed(() => {
 //     try {
