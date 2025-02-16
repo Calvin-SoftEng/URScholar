@@ -16,7 +16,7 @@
                         Congratulations! You are qualified for the {{ scholarship.name }} Scholarship!
                     </h1>
                     <div class="p-24 font-inter text-lg">
-                        <p>Dear {{ scholar.last_name + ', ' + scholar.first_name }},</p>
+                        <p>Dear, {{ scholar.first_name + ' ' + scholar.last_name }}</p>
                         <br>
                         <p class="leading-loose indent-6">We are thrilled to inform you that you have been officially qualified for a scholarship under {{ scholarship.name }} in the URScholar System! Your dedication and hard work have truly paid off, and we are excited to support you on your academic journey.</p>
                         <br>

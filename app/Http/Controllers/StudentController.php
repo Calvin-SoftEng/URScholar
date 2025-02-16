@@ -205,32 +205,22 @@ class StudentController extends Controller
 
         $reqID = $requirements->pluck('id')->first();
 
+        // dd($request);
 
         $uploadedFiles = [];
 
-        foreach ($request->file('files') as $index => $file) {
-            if ($file) {
-                $path = $file->store('requirements/' . Auth::user()->name, 'public');
-                $uploadedFiles = [
-                    'requirement_index' => $index,
-                    'path' => $path,
-                    'original_name' => $file->getClientOriginalName()
-                ];
-            }
-        }
 
-        // $requirement->update([
-        //     'submitted_requirements' => json_encode($uploadedFiles)
-        // ]);
+        foreach ($request->file('files') as $file) {
+            $path = $file->store('uploads', 'public');
 
-        $doneSubmit = SubmittedRequirements::create([
-            'scholar_id' => $scholar->id,
-            'requirement_id' => $reqID,
-            'submitted_requirements' => $uploadedFiles
-        ]);
 
-        if ($doneSubmit) {
-            return redirect()->route('student.scholarship');
+            $uploadedFile = SubmittedRequirements::create([
+                'scholar_id' => $scholar->id,
+                'requirement_id' => $reqID,
+                'submitted_requirements' => $file->getClientOriginalName()
+            ]);
+    
+            $uploadedFiles[] = $uploadedFile;
         }
 
     }

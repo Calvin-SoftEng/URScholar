@@ -141,6 +141,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');
+     Route::post('/verify-account/verifying', [StudentController::class, 'verifyingAccount'])->name('student.verify-account.verifying');
 
 
     Route::get('/available-scholarships', [ApplicationController::class, 'index'])->name('available.index');
@@ -151,7 +152,7 @@ Route::middleware(['auth'])->group(function () {
 
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');
-    Route::post('/verify-account/verifying', [StudentController::class, 'verifyingAccount'])->name('student.verify-account.verifying');
+   
 
 });
 

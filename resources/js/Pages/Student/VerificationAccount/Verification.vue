@@ -875,7 +875,7 @@
     </div>
 </template>
 <script setup>
-import { Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage, router} from '@inertiajs/vue3';
 import { ref, nextTick, onMounted } from 'vue';
 import FloatLabel from 'primevue/floatlabel';
 import InputText from 'primevue/inputtext';
@@ -932,10 +932,21 @@ const formatDate = (date) => {
 };
 
 
-const submit = () => {
-    form.post(route('student.verify-account.verifying'), {
-        onFinish: () => form.reset(),
-    });
+// const submit = () => {
+//     form.post(route('student.verify-account.verifying'), {
+//         onFinish: () => form.reset(),
+//     });
+// };
+
+const submit = async () => {
+    try {
+        router.post(`/verify-account/verifying`, form.value);
+        //await useForm(form.value).post(`/sponsors/create-scholarship`);
+        // await form.post(`/sponsors/${props.sponsor.id}/create`)
+        // resetForm();
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
 };
 
 const activeStep = ref(0);
