@@ -122,7 +122,6 @@
                     <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500"/> {{ scholar.email ? scholar.email : 'dummy@gmail.com' }}
                   </td>
                   <td class="px-5">
-
                     <span :class="{
                       'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
                       'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
@@ -131,7 +130,7 @@
                     </span>
                   </td>
                   <th>
-                    <Link :href="route('scholarships.scholar_scholarship_details')">
+                    <!-- <Link :href="route('scholarships.scholar_scholarship_details')"> -->
                     <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                       aria-label="View Details">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -139,7 +138,7 @@
                           d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                     </button>
-                    </Link>
+                    <!-- </Link> -->
                   </th>
                 </tr>
               </tbody>
@@ -216,7 +215,6 @@ const filteredScholars = computed(() => {
     );
   }
 
-  // Prioritize scholars with "Verified" status
   return filtered.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
 });
 
