@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class StudentController extends Controller
 {
@@ -123,20 +124,21 @@ class StudentController extends Controller
 
         $reqID = $requirements->pluck('id')->first();
 
-        $submitRequirements = SubmittedRequirements::where('id', $reqID)->exists();
+        $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->where('status', 'Returned')
+            ->get();
 
 
-        if ($submitRequirements) {
+        if ($submitReq) {
             return Inertia::render('Student/Grant-in/Grant-In', [
                 'scholarship' => $scholarship,
                 'scholar' => $scholar,
                 'requirements' => $requirements,
+                'submitReq' => $submitReq,
             ]);
         } else {
             return redirect()->route('student.confirmation');
         }
-
-
     }
 
     public function confirmation()
@@ -190,6 +192,60 @@ class StudentController extends Controller
         ]);
     }
 
+    public function applicationReupload(Request $request)
+    {
+        $request->validate([
+            'files.*' => 'required|file',
+            'req' => 'array'
+        ]);
+
+        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+        $requirements = Requirements::where('id', $scholarship->id)->get();
+        $reqID = $requirements->pluck('id')->first();
+
+        $uploadedFiles = [];
+
+        foreach ($request->file('files') as $index => $file) {
+            // Get the corresponding requirement name
+            $requirementName = $request->req[$index] ?? 'Unknown Requirement';
+
+            DD($requirementName);
+            // Find existing submitted requirement
+            $existingSubmission = SubmittedRequirements::where([
+                'scholar_id' => $scholar->id,
+                'requirement_id' => $reqID,
+                'requirement' => $requirementName
+            ])->first();
+
+
+
+            // Store the new file
+            $path = $file->store('requirements/' . $scholar->id, 'public');
+
+            if ($existingSubmission) {
+                // Delete old file if it exists
+                if (Storage::disk('public')->exists($existingSubmission->path)) {
+                    Storage::disk('public')->delete($existingSubmission->path);
+                }
+
+                // Update existing record
+                $existingSubmission->update([
+                    'submitted_requirements' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'status' => 'Pending'  // Added status update
+                ]);
+
+                $uploadedFiles[] = $existingSubmission;
+            }
+        }
+
+        return response()->json([
+            'message' => 'Files uploaded successfully',
+            'files' => $uploadedFiles
+        ]);
+    }
+
     public function applicationUpload(Request $request)
     {
 
@@ -206,7 +262,7 @@ class StudentController extends Controller
 
         $reqID = $requirements->pluck('id')->first();
 
-        
+
 
         $uploadedFiles = [];
 

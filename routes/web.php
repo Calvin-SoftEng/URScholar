@@ -133,6 +133,8 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     // scholarship
     Route::get('/student/scholarship', [StudentController::class, 'scholarship'])->name('student.scholarship');
+    Route::post('/student/application/re-upload', [StudentController::class, 'applicationReupload'])->name('student.application.reupload');
+
     Route::get('/student/scholarship/confirmation', [StudentController::class, 'confirmation'])->name('student.confirmation');
 
     //profile
@@ -143,6 +145,8 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     // application
     Route::get('/student/application', [StudentController::class, 'application'])->name('student.application');
     Route::post('/student/application/upload', [StudentController::class, 'applicationUpload'])->name('student.application.upload');
+    
+
 
 
     //VerifyAccount

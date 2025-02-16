@@ -161,6 +161,8 @@ const handleFile = (event, reqIndex, requirementName) => {
         });
     }
 };
+
+
 // Submit form with files
 const submitRequirements = async () => {
     try {
