@@ -4,20 +4,41 @@
     <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added yet</p>
   </div>
 
-  <div v-else class="w-full mt-5 bg-white">
-    <ul class="text-primary flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
-      <li v-for="batch in batches" :key="batch.id"><button @click="toggleBatch(batch.id)"
-          class="px-4 py-2 border-b-2 cursor-pointer hover:border-gray-200"
-          :class="expandedBatches === batch.id ? 'border-blue-400' : 'border-transparent'">Batch {{ batch.batch_no
-          }}</button>
-      </li>
-    </ul>
+  <div v-else class="w-full mt-5 bg-white rounded-xl">
+    <div class="p-4 flex flex-row justify-between items-center">
+      <span>SY 2024 - Semester</span>
+      <form class="w-3/12">
+        <label for="default-search"
+          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+          </div>
+          <input type="search" id="default-search" v-model="searchQuery"
+            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search Scholar" required />
+        </div>
+      </form>
+    </div>
+    <div class="bg-gray-100 mx-4 rounded-lg p-1">
+      <ul class="flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
+        <li v-for="batch in batches" :key="batch.id"><button @click="toggleBatch(batch.id)"
+            class="px-10 py-1 border-b-2 cursor-pointer hover:bg-gray-300 hover:text-gray-600 rounded-lg"
+            :class="expandedBatches === batch.id ? 'bg-white text-primary' : 'bg-gray-100 text-gray-400'">Batch {{ batch.batch_no
+            }}</button>
+        </li>
+      </ul>
+    </div>
 
     <div v-for="batch in batches" :key="batch.id">
       <div>
         <div v-if="expandedBatches === batch.id" class="w-full bg-white h-full p-4">
           <!-- line sections -->
-          <div class="flex flex-row justify-between items-center mb-4">
+          <!-- <div class="flex flex-row justify-end items-center mb-4">
             <div>
               <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
               <button type="button"
@@ -30,42 +51,15 @@
                 class="py-2.5 px-5 me-2 mb-2 text-sm font-medium focus:outline-none bg-blue-600 text-white rounded-lg border border-gray-200 hover:bg-blue-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
                 <font-awesome-icon :icon="['fas', 'file-circle-plus']" class="mr-1"  />
                 Generate Report</button>
-
-              <!-- <button  type="button"
-                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
-                <span class="flex items-center">
-                  <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
-                  </svg>
-                  View Report
-                </span>
-              </button> -->
             </div>
-            <form class="w-3/12">
-              <label for="default-search"
-                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-              <div class="relative">
-                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                  <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                  </svg>
-                </div>
-                <input type="search" id="default-search" v-model="searchQuery"
-                  class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Search Scholar" required />
-              </div>
-            </form>
-          </div>
+          </div> -->
 
           <!-- table -->
-          <div class="overflow-x-auto text-black font-poppins border rounded-lg">
+          <div class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <!-- head -->
-              <thead class="justify-center items-center">
-                <tr class="text-sm uppercase">
+              <thead class="justify-center items-center bg-gray-100">
+                <tr class="text-xs uppercase">
                   <th>URScholar ID</th>
                   <th>Scholar</th>
                   <th>Campus</th>
@@ -82,7 +76,7 @@
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
-                        <div class="mask rounded-full h-12 w-12">
+                        <div class="mask rounded-full h-10 w-10">
                           <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
@@ -112,12 +106,9 @@
                   </td>
                   <th>
                     <Link :href="`/scholarships/scholar=${scholar.id}`">
-                    <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    <button class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">
-                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                      </svg>
+                      <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                     </Link>
                   </th>
