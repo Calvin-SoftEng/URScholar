@@ -1,0 +1,383 @@
+<template>
+  <!-- Global "No Scholars" Message (if no batches exist) -->
+  <div v-if="!batches || batches.length === 0" class="text-center py-5 mt-5">
+    <p class="bg-white p-5 rounded-lg text-lg shadow-sm text-gray-700 dark:text-gray-300">No scholars added yet</p>
+  </div>
+
+  <div v-else class="w-full mt-5 rounded-xl">
+    <!-- <div class="p-4 flex flex-row justify-between items-center">
+      <span>SY 2024 - Semester</span>
+      <form class="w-3/12">
+        <label for="default-search"
+          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+        <div class="relative">
+          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
+          </div>
+          <input type="search" id="default-search" v-model="searchQuery"
+            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Search Scholar" required />
+        </div>
+      </form>
+    </div> -->
+    <!-- <div class="bg-gray-100 mx-4 rounded-lg p-1">
+      <ul class="flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
+        <li v-for="batch in batches" :key="batch.id"><button @click="toggleBatch(batch.id)"
+            class="px-10 py-1 border-b-2 cursor-pointer hover:bg-gray-300 hover:text-gray-600 rounded-lg"
+            :class="expandedBatches === batch.id ? 'bg-white text-primary' : 'bg-gray-100 text-gray-400'">Batch {{ batch.batch_no
+            }}</button>
+        </li>
+      </ul>
+    </div> -->
+
+    <span>List of Batches</span>
+    <div v-for="batch in batches" :key="batch.id" class="bg-gradient-to-r from-white to-[#D2CFFE] w-full rounded-lg p-5 shadow-sm hover:bg-lightblue">
+      <div class="flex flex-row justify-between items-center">
+        <span>Batch {{ batch.batch_no }}</span>
+        <div class="grid grid-cols-2">
+          <div class="flex flex-col">
+            <span>No of Scholars</span>
+            <span>200</span>
+          </div>
+          <div class="flex flex-col">
+            <span>No of Unverified Scholars</span>
+            <span>200</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <ToastProvider>
+      <ToastRoot v-if="toastVisible"
+        class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+        <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
+        <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+      </ToastRoot>
+
+      <ToastViewport class="fixed bottom-4 right-4" />
+    </ToastProvider>
+  </div>
+</template>
+
+<script setup>
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted } from 'vue';
+import { useForm, Link, usePage, router } from '@inertiajs/vue3';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Button from 'primevue/button';
+import FileUpload from 'primevue/fileupload';
+import Papa from 'papaparse';
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+
+const props = defineProps({
+  scholarship: Object,
+  schoolyear: Object,
+  selectedSem: Object,
+  batches: Array,
+});
+
+const components = {
+  DataTable,
+  Column,
+  Button,
+  FileUpload,
+  Papa,
+};
+
+const searchQuery = ref('');
+
+// Add the filtered scholars function
+const filteredScholars = (batch) => {
+  if (!batch.scholars) return [];
+
+  let scholars = batch.scholars.filter(scholar =>
+    scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.email?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.campus?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+
+  // Sort so that 'Verified' scholars appear first
+  scholars.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
+
+  return scholars;
+};
+
+const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
+
+onMounted(() => {
+  if (props.batches && props.batches.length > 0) {
+    expandedBatches.value = props.batches[0].id;
+  }
+});
+
+// Add download report functionality
+const openReport = async (batchId) => {
+  try {
+    // Open URL in new tab instead of creating blob
+    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
+  } catch (err) {
+    console.error('Failed to open report:', err);
+  }
+};
+
+// const toggleBatch = (batchId) => {
+//   if (expandedBatches.value.has(batchId)) {
+//     expandedBatches.value.delete(batchId)
+//   } else {
+//     expandedBatches.value.add(batchId)
+//   }
+// }
+// const expandedBatches = ref(null); // Track the currently open batch
+
+const toggleBatch = (batchId) => {
+  expandedBatches.value = expandedBatches.value === batchId ? null : batchId;
+};
+
+const addingPanel = ref(false)
+const uploadingPanel = ref(false)
+
+const toggleAdd = () => {
+  addingPanel.value = !addingPanel.value
+}
+
+const toggleUpload = () => {
+  uploadingPanel.value = !uploadingPanel.value
+}
+
+const closePanel = () => {
+  previewData.value = [];
+  headers.value = [];
+  uploadingPanel.value = false;
+  addingPanel.value = false;
+  entries.value = false;
+};
+
+const getYearSuffix = (year) => {
+  if (year === 1) return "st";
+  if (year === 2) return "nd";
+  if (year === 3) return "rd";
+  return "th";
+};
+
+const form = ref({
+  file: null,
+  fileName: null,
+  filePreview: null,
+});
+
+const previewData = ref([]);
+const headers = ref([]);
+const error = ref('');
+const fileReadyToUpload = ref(false);
+
+const isFileDragging = ref(false);
+
+const previewFile = (event) => {
+  const file = event.target.files[0];
+  handleFile(file);
+};
+
+const handleFileDragOver = () => {
+  isFileDragging.value = true;
+};
+
+const handleFileDragLeave = () => {
+  isFileDragging.value = false;
+};
+
+const handleFileDrop = (event) => {
+  isFileDragging.value = false;
+  const file = event.dataTransfer.files[0];
+  handleFile(file);
+};
+
+
+const handleFile = async (file) => {
+  if (!file) return;
+
+  // Set file details
+  form.value.file = file;
+  form.value.fileName = file.name;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    form.value.filePreview = e.target.result;
+
+    // Parse CSV file
+    Papa.parse(e.target.result, {
+      header: true,
+      skipEmptyLines: true,
+      complete: (results) => {
+        if (results.data && results.data.length > 0) {
+          const filteredData = results.data.filter((row) =>
+            Object.values(row).some((value) => value !== "")
+          );
+
+          if (filteredData.length > 0) {
+            headers.value = Object.keys(filteredData[0]);
+            previewData.value = filteredData;
+            error.value = "";
+            fileReadyToUpload.value = true; // Set flag to enable confirm button
+          } else {
+            error.value = "No valid data found in the file";
+            previewData.value = [];
+            headers.value = [];
+            fileReadyToUpload.value = false;
+          }
+        } else {
+          error.value = "No data found in the file";
+          previewData.value = [];
+          headers.value = [];
+          fileReadyToUpload.value = false;
+        }
+      },
+      error: (err) => {
+        error.value = "Error parsing CSV: " + err.message;
+        previewData.value = [];
+        headers.value = [];
+        fileReadyToUpload.value = false;
+      },
+    });
+  };
+
+  reader.readAsText(file); // Read file
+};
+
+// Function to confirm and upload the file
+const confirmUpload = async () => {
+  if (!form.value.file) return;
+
+  const formData = new FormData();
+  formData.append("file", form.value.file);
+
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
+
+  try {
+    // Send the request only when user confirms
+    router.post(`/scholarships/${props.scholarship.id}/upload`, formData, {
+      preserveScroll: true,
+      onSuccess: () => {
+        headers.value = [];
+        previewData.value = [];
+        error.value = "";
+        uploadingPanel.value = false;
+        fileReadyToUpload.value = false;
+        document.getElementById("dropzone-file").value = null; // Clear file input
+        usePage().props.flash = { success: "Scholars added to the scholarship!" };
+        closePanel();
+      },
+    });
+  } catch (err) {
+    error.value = "An error occurred while uploading the file.";
+    console.error("Error during file upload:", err);
+  }
+};
+
+
+
+
+
+//adding
+
+const addingheaders = ["First Name", "Last Name", "Email", "Course"]
+
+const formData = reactive({
+  first_name: '',
+  last_name: '',
+  email: '',
+  course: ''
+})
+const entries = ref([])
+
+const addEntry = () => {
+  if (formData.first_name && formData.last_name && formData.email && formData.course) {
+    entries.value.push({ ...formData })
+    resetForm()
+  }
+}
+
+const resetForm = () => {
+  formData.first_name = ''
+  formData.last_name = ''
+  formData.email = ''
+  formData.course = ''
+}
+
+const removeEntry = (index) => {
+  entries.value.splice(index, 1)
+}
+
+
+const submitForm = async () => {
+  try {
+    if (entries.value.length === 0) {
+      alert('No data to submit!');
+      return;
+    }
+
+    const response = await fetch('/api/insert-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(entries.value)
+    });
+
+    if (!response.ok) throw new Error('Failed to submit');
+
+    // alert('Data submitted successfully!');
+
+    // Clear entries after successful submission
+    entries.value = [];
+  } catch (error) {
+    console.error('Error:', error);
+  }
+};
+
+
+</script>
+
+
+<style>
+/* override the prime vue componentss */
+
+.p-fileupload-choose-button {
+  background-color: #003366 !important;
+  color: white !important;
+  border-radius: 4px;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateX(0);
+}
+
+/* Fade transition for backdrop */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

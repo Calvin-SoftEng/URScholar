@@ -68,22 +68,21 @@
                         </h1>
                     </div>
                     <div class="flex gap-2">
-                        <button @click="openScholarship"
-                            class="px-4 py-2 text-sm text-primary bg-dirtywhite border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
-                            <span><font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2 text-sm"/>Import Scholars</span>
-                        </button>
                         <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-                            <button @click="importScholars" class="px-4 py-2 text-sm text-primary bg-dirtywhite border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
-                                <span><font-awesome-icon :icon="['far', 'envelope']" class="mr-2 text-sm"/>Send Email</span>
+                            <button class="px-4 py-2 text-sm text-primary bg-dirtywhite border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
+                                <span><font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2 text-sm"/>Import Scholars</span>
                             </button>
                         </Link>
+                    <button @click="importScholars" class="px-4 py-2 text-sm text-primary bg-dirtywhite border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
+                        <span><font-awesome-icon :icon="['far', 'envelope']" class="mr-2 text-sm"/>Send Email</span>
+                    </button>
                     </div>
                 </div>
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
                 <!-- Stats Section -->
-                <!-- <div class="grid grid-cols-5">
+                <div class="grid grid-cols-5">
                     <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                         <div class="flex flex-row space-x-3 items-center">
                             <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base"/>
@@ -130,7 +129,7 @@
                     </div>
                 </div>
 
-                <div class="w-full h-[1px] bg-gray-200"></div> -->
+                <div class="w-full h-[1px] bg-gray-200"></div>
                 
                 <!-- <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
                     <div class="w-full mx-auto p-3 rounded-xl text-white"
@@ -139,7 +138,7 @@
                             
                     </div>
                 </div> -->
-                <!-- <ScholarList :scholarship="scholarship" :batches="batches" /> -->
+                <ScholarList :scholarship="scholarship" :batches="batches" />
                 <Batches :scholarship="scholarship" :batches="batches" />
             </div>
         </div>
