@@ -61,57 +61,17 @@
                                         </p>
 
                                         <!-- Scrollable Container -->
-                                        <div class="max-h-40 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-300">
+                                        <div v-for="scholarship in sponsor.scholarship" :key="scholarship.id" class="max-h-40 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-gray-300">
                                             <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
                                                 <span>
-                                                    Isko Name
+                                                    {{scholarship.name}}
                                                 </span>
                                                 <div class="flex flex-row gap-1">
                                                     <span class="material-symbols-rounded text-base text-white">
                                                         pending_actions
                                                     </span>
                                                     <span>
-                                                        Deadline
-                                                    </span>
-                                                </div>
-                                            </div>
-
-                                            <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
-                                                <span>
-                                                    Isko Name
-                                                </span>
-                                                <div class="flex flex-row gap-1">
-                                                    <span class="material-symbols-rounded text-base text-white">
-                                                        pending_actions
-                                                    </span>
-                                                    <span>
-                                                        Deadline
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
-                                                <span>
-                                                    Isko Name
-                                                </span>
-                                                <div class="flex flex-row gap-1">
-                                                    <span class="material-symbols-rounded text-base text-white">
-                                                        pending_actions
-                                                    </span>
-                                                    <span>
-                                                        Deadline
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div class="flex flex-row p-2 rounded-lg bg-blue-500 justify-between">
-                                                <span>
-                                                    Isko Name
-                                                </span>
-                                                <div class="flex flex-row gap-1">
-                                                    <span class="material-symbols-rounded text-base text-white">
-                                                        pending_actions
-                                                    </span>
-                                                    <span>
-                                                        Deadline
+                                                        {{scholarship.status}}
                                                     </span>
                                                 </div>
                                             </div>
