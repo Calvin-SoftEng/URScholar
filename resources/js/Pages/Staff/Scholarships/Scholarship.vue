@@ -221,6 +221,8 @@ const props = defineProps({
 
 const selectedSem = ref("");
 
+selectedSem.value = props.selectedSem;
+
 const openScholarship = () => {
     router.visit(`/scholarships/${props.scholarship.id}/adding-scholars`, {
         data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
