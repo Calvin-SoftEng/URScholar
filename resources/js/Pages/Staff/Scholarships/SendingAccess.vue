@@ -3,26 +3,26 @@
     <AuthenticatedLayout>
         <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <form @submit.prevent="submitForm">
-            <div class="w-full mx-auto space-y-3">
-                <div class="breadcrumbs text-sm text-gray-400 mb-2">
-                    <ul>
-                        <li class="hover:text-gray-600">
-                            Home
-                        </li>
-                        <li class="hover:text-gray-600">
-                            <span>Scholarships</span>
-                        </li>
-                        <li class="hover:text-gray-600"> 
-                            <span>{{ scholarship.name  }}</span>
-                        </li>
-                        <li class="hover:text-gray-600"> 
-                            <span>Batch 1</span>
-                        </li>
-                        <li>
-                            <span class="text-blue-400 font-semibold">Sending Access</span>
-                        </li>
-                    </ul>
-                </div>
+                <div class="w-full mx-auto space-y-3">
+                    <div class="breadcrumbs text-sm text-gray-400 mb-2">
+                        <ul>
+                            <li class="hover:text-gray-600">
+                                Home
+                            </li>
+                            <li class="hover:text-gray-600">
+                                <span>Scholarships</span>
+                            </li>
+                            <li class="hover:text-gray-600"> 
+                                <span>{{ scholarship.name }}</span>
+                            </li>
+                            <li class="hover:text-gray-600"> 
+                                <span>Batch 1</span>
+                            </li>
+                            <li>
+                                <span class="text-blue-400 font-semibold">Sending Access</span>
+                            </li>
+                        </ul>
+                    </div>
 
                     <div class="flex justify-between items-center mb-4">
                         <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
@@ -31,11 +31,16 @@
 
                         <button
                             class="btn bg-blue-900 text-white dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
-                            type="submit">
-                            <span class="material-symbols-rounded">
+                            type="submit"
+                            :disabled="isLoading">
+                            <span v-if="!isLoading" class="material-symbols-rounded">
                                 send
                             </span>
-                            Forward
+                            <svg v-else class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {{ isLoading ? 'Processing...' : 'Forward' }}
                         </button>
                     </div>
 
@@ -124,6 +129,37 @@
                 </div>
             </form>
         </div>
+        
+        <!-- Loading Modal -->
+        <div v-if="isLoading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center dark:bg-dsecondary">
+                <div class="flex justify-center mb-4">
+                    <svg class="animate-spin h-12 w-12 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 dark:text-white">Processing Your Request</h3>
+                <p class="text-gray-600 dark:text-gray-300">Please wait while we send notifications to scholars...</p>
+            </div>
+        </div>
+        
+        <!-- Success Modal -->
+        <div v-if="showSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full text-center dark:bg-dsecondary">
+                <div class="flex justify-center mb-4">
+                    <span class="material-symbols-rounded text-green-500 text-6xl">
+                        check_circle
+                    </span>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-900 mb-2 dark:text-white">Success!</h3>
+                <p class="text-gray-600 mb-6 dark:text-gray-300">{{ successMessage }}</p>
+                <button @click="closeSuccessModal" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200">
+                    Continue
+                </button>
+            </div>
+        </div>
+        
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
@@ -139,7 +175,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted, computed, watchEffect } from 'vue';
-import { Head, useForm, Link, usePage } from '@inertiajs/vue3';
+import { Head, useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
 import { useDateFormat, useNow } from '@vueuse/core'
@@ -168,6 +204,10 @@ const form = ref({
     deadline: '',
 });
 
+// Loading and success modal states
+const isLoading = ref(false);
+const showSuccessModal = ref(false);
+const successMessage = ref('');
 
 const formatDateTime = (date) => {
     if (!date) return '';
@@ -200,29 +240,59 @@ const addItem = () => {
 
 const removeItem = (index) => {
     items.value = items.value.filter((_, i) => i !== index);
+    form.value.requirements = items.value;
 };
-
 
 const resetForm = () => {
     form.value = {
         subject: '',
         content: '',
-        requirements: {},
-        appplication: '',
+        requirements: [],
+        application: '',
         deadline: '',
     };
+    items.value = [];
+    selectedStart.value = null;
+    selectedEnd.value = null;
+    formattedStart.value = '';
+    formattedEnd.value = '';
 };
 
-
-// useDateFormat(form.value.application, 'YYYY-MM-DD');
-// useDateFormat(form.value.deadline, 'YYYY-MM-DD');
+const closeSuccessModal = () => {
+    showSuccessModal.value = false;
+    router.visit(`/scholarships/${props.scholarship.id}/requirements`);
+};
 
 const submitForm = async () => {
+    if (items.value.length === 0) {
+        alert('Please add at least one requirement item.');
+        return;
+    }
+    
+    if (!form.value.application || !form.value.deadline) {
+        alert('Please set both submission start and deadline dates.');
+        return;
+    }
+    
+    isLoading.value = true;
+    
     try {
-        await useForm(form.value).post(`/scholarships/${props.scholarship.id}/send-access/send`);
+        const response = await useForm(form.value).post(`/scholarships/${props.scholarship.id}/send-access/send`);
+        
+        // Wait a bit to show the loading state (simulating processing time)
+        setTimeout(() => {
+            isLoading.value = false;
+            
+            // Show success modal
+            successMessage.value = 'Messages have been successfully sent to all scholars.';
+            showSuccessModal.value = true;
+        }, 2000);
+        
         resetForm();
     } catch (error) {
         console.error('Error submitting form:', error);
+        isLoading.value = false;
+        alert('An error occurred while processing your request. Please try again.');
     }
 };
 
@@ -243,8 +313,6 @@ watchEffect(() => {
         }, 3000);
     }
 });
-
-
 </script>
 
 <style scoped>

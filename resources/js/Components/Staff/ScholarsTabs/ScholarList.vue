@@ -66,7 +66,7 @@
               <tbody>
                 <!-- row 1 -->
                 <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
-                  <td>test1</td>
+                  <td>{{ scholar.id || 'test1' }}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
@@ -94,21 +94,25 @@
                   </td>
                   <td>
                     <!-- Progress Label -->
-                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">4/5</span>
+                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
+                      {{ scholar.requirements_progress || calculateRequirementsProgress(scholar) }}
+                    </span>
                     <!-- Progress Bar Container -->
                     <div class="w-full bg-gray-200 rounded-full h-2">
                       <!-- Progress Bar -->
-                      <div class="bg-yellow-300 h-full rounded-full" style="width: 80%;"></div>
+                      <div class="bg-yellow-300 h-full rounded-full" 
+                           :style="`width: ${calculateRequirementsPercentage(scholar)}%;`"></div>
                     </div>
                   </td>
                   <td>
-                    <!-- <span :class="{
-                      'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
-                      'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
-                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ scholar.status }}
-                    </span> -->
-                    <span class="bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-blue-400 border border-yellow-400 text-xs font-medium px-2.5 py-0.5 rounded">Completed</span>
+                    <span 
+                      :class="{
+                        'bg-green-100 text-green-800 border border-green-400': isRequirementsComplete(scholar),
+                        'bg-yellow-100 text-yellow-800 border border-yellow-400': !isRequirementsComplete(scholar)
+                      }" 
+                      class="text-xs font-medium px-2.5 py-0.5 rounded">
+                      {{ isRequirementsComplete(scholar) ? 'Complete' : 'Incomplete' }}
+                    </span>
                   </td>
                   <th>
                     <Link :href="`/scholarships/scholar=${scholar.id}`">
@@ -158,35 +162,60 @@
           </div>
 
           <div v-show="showRequirements">
-            <div class="w-6/12">
+            <div class="w-full">
                 <h3 class="font-semibold text-gray-900 dark:text-white">Requirements</h3>
-                <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
-                    <div class="flex items-center mb-4 w-full">
-                        <form @submit.prevent="addItem" class="flex items-center w-full">
-                            <input v-model="newItem" type="text" placeholder="Enter an item"
-                                class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
-                            <button type="submit"
-                                class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
-                                Add
-                            </button>
-                        </form>
-                    </div>
-
-                    <form @submit.prevent="removeItem">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div v-for="(item, index) in items" :key="index"
-                                class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
-                                <span>{{ item }}</span>
-                                <button @click="removeItem(index)"
-                                    class="flex items-center text-red-500 hover:text-red-700">
-                                    <span class="material-symbols-rounded text-red-600">
-                                        delete
+                <div class="overflow-x-auto shadow-md sm:rounded-lg mt-4">
+                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <tr>
+                                <th scope="col" class="px-4 py-3">ID</th>
+                                <th scope="col" class="px-4 py-3">Scholar ID</th>
+                                <th scope="col" class="px-4 py-3">Requirement ID</th>
+                                <th scope="col" class="px-4 py-3">Form</th>
+                                <th scope="col" class="px-4 py-3">Submitted Requirements</th>
+                                <th scope="col" class="px-4 py-3">Path</th>
+                                <th scope="col" class="px-4 py-3">Status</th>
+                                <th scope="col" class="px-4 py-3">Created At</th>
+                                <th scope="col" class="px-4 py-3">Updated At</th>
+                                <th scope="col" class="px-4 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(scholar, index) in getAllSubmittedRequirements()" :key="index" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <td class="px-4 py-3">{{ scholar.id }}</td>
+                                <td class="px-4 py-3">{{ scholar.scholar_id }}</td>
+                                <td class="px-4 py-3">{{ scholar.requirement_id }}</td>
+                                <td class="px-4 py-3">{{ scholar.requirement ? scholar.requirement.name : 'N/A' }}</td>
+                                <td class="px-4 py-3">{{ getFileNameFromPath(scholar.path) }}</td>
+                                <td class="px-4 py-3">{{ truncatePath(scholar.path) }}</td>
+                                <td class="px-4 py-3">
+                                    <span 
+                                        :class="{
+                                            'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Approved',
+                                            'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.status === 'Pending',
+                                            'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Rejected'
+                                        }" 
+                                        class="px-2 py-1 rounded text-xs">
+                                        {{ scholar.status }}
                                     </span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </ul>
+                                </td>
+                                <td class="px-4 py-3">{{ formatDate(scholar.created_at) }}</td>
+                                <td class="px-4 py-3">{{ formatDate(scholar.updated_at) }}</td>
+                                <td class="px-4 py-3 flex gap-2">
+                                    <a :href="scholar.path" target="_blank" class="text-blue-600 hover:underline">View</a>
+                                    <button @click="updateStatus(scholar.id, 'Approved')" 
+                                        :class="{'opacity-50': scholar.status === 'Approved'}"
+                                        :disabled="scholar.status === 'Approved'"
+                                        class="text-green-600 hover:underline">Approve</button>
+                                    <button @click="updateStatus(scholar.id, 'Rejected')" 
+                                        :class="{'opacity-50': scholar.status === 'Rejected'}"
+                                        :disabled="scholar.status === 'Rejected'"
+                                        class="text-red-600 hover:underline">Reject</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
           </div>
 
@@ -240,6 +269,122 @@ const components = {
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const searchQuery = ref('');
+const toastVisible = ref(false);
+const toastMessage = ref('');
+
+// Requirements Management
+const showRequirements = ref(false);
+const newItem = ref('');
+const items = ref([]);
+
+// Helper functions for requirements
+const calculateRequirementsProgress = (scholar) => {
+  if (!scholar.submitted_requirements) return '0/0';
+  
+  const totalRequired = getBatchRequirementsCount(scholar);
+  const approved = scholar.submitted_requirements.filter(req => req.status === 'Approved').length;
+  
+  return `${approved}/${totalRequired}`;
+};
+
+const calculateRequirementsPercentage = (scholar) => {
+  if (!scholar.submitted_requirements) return 0;
+  
+  const totalRequired = getBatchRequirementsCount(scholar);
+  if (totalRequired === 0) return 0;
+  
+  const approved = scholar.submitted_requirements.filter(req => req.status === 'Approved').length;
+  return (approved / totalRequired) * 100;
+};
+
+const isRequirementsComplete = (scholar) => {
+  if (!scholar.submitted_requirements) return false;
+  
+  const totalRequired = getBatchRequirementsCount(scholar);
+  if (totalRequired === 0) return false;
+  
+  const approved = scholar.submitted_requirements.filter(req => req.status === 'Approved').length;
+  return approved === totalRequired;
+};
+
+const getBatchRequirementsCount = (scholar) => {
+  // Find which batch this scholar belongs to
+  for (const batch of props.batches) {
+    if (batch.scholars && batch.scholars.find(s => s.id === scholar.id)) {
+      return batch.requirements ? batch.requirements.length : 0;
+    }
+  }
+  return 0;
+};
+
+// Get all submitted requirements from all scholars in all batches
+const getAllSubmittedRequirements = () => {
+  const allRequirements = [];
+  
+  props.batches.forEach(batch => {
+    if (batch.scholars) {
+      batch.scholars.forEach(scholar => {
+        if (scholar.submitted_requirements) {
+          scholar.submitted_requirements.forEach(req => {
+            allRequirements.push({
+              ...req,
+              scholar_id: scholar.id,
+              scholar_name: `${scholar.last_name}, ${scholar.first_name} ${scholar.middle_name || ''}`
+            });
+          });
+        }
+      });
+    }
+  });
+  
+  return allRequirements;
+};
+
+// Helper functions for file paths
+const getFileNameFromPath = (path) => {
+  if (!path) return 'No file';
+  return path.split('/').pop() || path;
+};
+
+const truncatePath = (path) => {
+  if (!path) return '';
+  return path.length > 30 ? `...${path.substring(path.length - 30)}` : path;
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleString();
+};
+
+// Update status of a submitted requirement
+const updateStatus = (id, status) => {
+  // This would typically make an API call
+  router.post(`/requirements/${id}/status`, { status }, {
+    preserveScroll: true,
+    onSuccess: () => {
+      toastMessage.value = `Requirement status updated to ${status}`;
+      toastVisible.value = true;
+      setTimeout(() => { toastVisible.value = false; }, 3000);
+      
+      // Refresh data or update local state
+      // This is a simplified approach - you might want to refresh the page or update the state directly
+      props.batches.forEach(batch => {
+        if (batch.scholars) {
+          batch.scholars.forEach(scholar => {
+            if (scholar.submitted_requirements) {
+              scholar.submitted_requirements.forEach(req => {
+                if (req.id === id) {
+                  req.status = status;
+                }
+              });
+            }
+          });
+        }
+      });
+    }
+  });
+};
 
 // Modify the filteredScholars function to handle pagination
 const filteredScholars = computed(() => {
@@ -305,15 +450,12 @@ watch(searchQuery, () => {
   currentPage.value = 1;
 });
 
-
-const showRequirements = ref(false);
-
-// Function to toggle the visibility of the table and second div
+// Function to toggle the visibility of the table and requirements view
 const openRequirements = () => {
   showRequirements.value = !showRequirements.value;
 };
 
-const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
+const expandedBatches = ref(null); // Track the currently open batch
 
 onMounted(() => {
   if (props.batches && props.batches.length > 0) {
@@ -322,58 +464,65 @@ onMounted(() => {
 });
 
 // Add download report functionality
-const openReport = async (batchId) => {
+const openReport = async () => {
   try {
     // Open URL in new tab instead of creating blob
-    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
+    window.open(`/scholarships/${props.scholarship.id}/batch/${expandedBatches.value}/report`, '_blank');
   } catch (err) {
     console.error('Failed to open report:', err);
   }
 };
 
-// const toggleBatch = (batchId) => {
-//   if (expandedBatches.value.has(batchId)) {
-//     expandedBatches.value.delete(batchId)
-//   } else {
-//     expandedBatches.value.add(batchId)
-//   }
-// }
-// const expandedBatches = ref(null); // Track the currently open batch
-
 const toggleBatch = (batchId) => {
   expandedBatches.value = expandedBatches.value === batchId ? null : batchId;
 };
 
-const addingPanel = ref(false)
-const uploadingPanel = ref(false)
+const addingPanel = ref(false);
+const uploadingPanel = ref(false);
 
 const toggleAdd = () => {
-  addingPanel.value = !addingPanel.value
-}
+  addingPanel.value = !addingPanel.value;
+};
 
 const toggleUpload = () => {
-  uploadingPanel.value = !uploadingPanel.value
-}
+  uploadingPanel.value = !uploadingPanel.value;
+};
 
 const closePanel = () => {
   previewData.value = [];
   headers.value = [];
   uploadingPanel.value = false;
   addingPanel.value = false;
-  entries.value = false;
 };
 
 const getYearSuffix = (year) => {
-  if (year === 1) return "st";
-  if (year === 2) return "nd";
-  if (year === 3) return "rd";
+  if (!year) return '';
+  const yearNum = parseInt(year);
+  if (yearNum === 1) return "st";
+  if (yearNum === 2) return "nd";
+  if (yearNum === 3) return "rd";
   return "th";
 };
 
+// Function to add a new requirement
+const addItem = () => {
+  if (newItem.value.trim()) {
+    items.value.push(newItem.value.trim());
+    newItem.value = '';
+    
+    // Here you would typically also make an API call to add this requirement to the backend
+  }
+};
 
-
+// Function to remove a requirement
+const removeItem = (index) => {
+  if (index >= 0 && index < items.value.length) {
+    items.value.splice(index, 1);
+    
+    // Here you would typically also make an API call to remove this requirement from the backend
+  }
+};
 </script>
-
 
 <style>
 /* override the prime vue componentss */

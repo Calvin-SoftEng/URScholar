@@ -40,7 +40,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Submitted Requirements</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">2/10</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
@@ -48,7 +48,7 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Completed Scholars</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">2/50</p>
                             </div>
                         </div>
                     </div>
