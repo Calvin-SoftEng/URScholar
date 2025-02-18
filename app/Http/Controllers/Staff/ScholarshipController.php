@@ -40,10 +40,21 @@ class ScholarshipController extends Controller
 
     public function batch(Request $request, $scholarshipId, $batchId)
     {
-        $scholarship = Scholarship::with('requirements')->findOrFail($scholarshipId);
+        $scholarship = Scholarship::findOrFail($scholarshipId);
 
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
+            ->with([
+                'scholars' => function ($query) {
+                    $query->orderBy('last_name')
+                        ->orderBy('first_name')
+                        ->with([
+                            'submittedRequirements' => function ($query) {
+                                $query->with('requirement');
+                            }
+                        ]);
+                },
+            ])
             ->when($request->input('selectedYear'), function ($query, $year) {
                 return $query->where('school_year', $year);
             })
@@ -51,15 +62,30 @@ class ScholarshipController extends Controller
                 return $query->where('semester', $sem);
             })
             ->orderBy('batch_no', 'desc')
-            ->first();
+            ->get();
 
-        $scholars = $batch->scholars;
+        // Calculate requirements stats for each scholar
+        foreach ($batch as $batchItem) {
+            if (isset($batchItem->scholars)) {
+                foreach ($batchItem->scholars as $scholar) {
+                    $totalRequirements = $batchItem->requirements->count();
+                    $submittedApproved = $scholar->submitted_requirements->where('status', 'Approved')->count();
+
+                    $scholar->requirements_progress = "$submittedApproved/$totalRequirements";
+                    $scholar->is_requirements_complete = ($submittedApproved === $totalRequirements);
+                }
+            }
+        }
+
+        $schoolyear = null;
+        if ($request->input('selectedYear')) {
+            $schoolyear = SchoolYear::find($request->input('selectedYear'));
+        }
 
         return Inertia::render('Staff/Scholarships/Scholarship_Batch', [
             'scholarship' => $scholarship,
             'batches' => $batch,
-            'scholars' => $scholars,
-            'schoolyear' => $request->input('selectedYear') ? SchoolYear::find($request->input('selectedYear')) : null,
+            'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
         ]);
     }
