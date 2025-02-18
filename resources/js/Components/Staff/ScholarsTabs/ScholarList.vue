@@ -50,7 +50,7 @@
       </ul>
     </div> -->
 
-    <div v-for="scholar in scholars" :key="scholar.id">
+    <div>
       <div>
         <div class="w-full bg-white h-full p-4">
 
@@ -71,7 +71,7 @@
               </thead>
               <tbody>
                 <!-- row 1 -->
-                <tr class="text-sm">
+                <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
                   <td>test1</td>
                   <td>
                     <div class="flex items-center gap-3">
