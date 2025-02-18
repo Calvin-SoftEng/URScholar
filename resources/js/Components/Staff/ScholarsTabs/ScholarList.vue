@@ -100,23 +100,21 @@
                     {{ scholar.grant }}
                   </td>
                   <td>
-                    <!-- Progress Label -->
-                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">4/5</span>
-                    <!-- Progress Bar Container -->
+                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
+                      {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
+                    </span>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                      <!-- Progress Bar -->
-                      <div class="bg-yellow-300 h-full rounded-full" style="width: 80%;"></div>
+                      <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }"></div>
                     </div>
                   </td>
                   <td>
-                    <!-- <span :class="{
-                      'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
-                      'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
+                    <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete' && scholar.totalRequirements > 0,
+                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submitted' && scholar.totalRequirements === 0,
+                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ scholar.status }}
-                    </span> -->
-                    <span
-                      class="bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-blue-400 border border-yellow-400 text-xs font-medium px-2.5 py-0.5 rounded">Completed</span>
+                      {{ scholar.status || 'Incomplete' }}
+                    </span>
                   </td>
                   <th>
                     <Link :href="`/scholarships/scholar=${scholar.id}`">

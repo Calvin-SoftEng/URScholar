@@ -53,7 +53,26 @@ class ScholarshipController extends Controller
             ->orderBy('batch_no', 'desc')
             ->first();
 
-        $scholars = $batch->scholars;
+        $scholars = $batch->scholars->map(function ($scholar) {
+            $submittedRequirements = $scholar->submittedRequirements()->count();
+            $totalRequirements = $scholar->submittedRequirements()->count();
+            $approvedRequirements = $scholar->submittedRequirements()->where('status', 'Approved')->count();
+
+            $status = ($totalRequirements > 0 && $approvedRequirements === $totalRequirements) ? 'Complete' : 'Incomplete';
+
+            return [
+                'id' => $scholar->id,
+                'first_name' => $scholar->first_name,
+                'last_name' => $scholar->last_name,
+                'middle_name' => $scholar->middle_name,
+                'campus' => $scholar->campus,
+                'grant' => $scholar->grant,
+                'status' => $status,
+                'submittedRequirements' => $approvedRequirements,
+                'totalRequirements' => $totalRequirements,
+                'progress' => $totalRequirements > 0 ? ($approvedRequirements / $totalRequirements) * 100 : 0,
+            ];
+        });
 
         return Inertia::render('Staff/Scholarships/Scholarship_Batch', [
             'scholarship' => $scholarship,
@@ -63,6 +82,7 @@ class ScholarshipController extends Controller
             'selectedSem' => $request->input('selectedSem', ''),
         ]);
     }
+
 
     public function show(Request $request, Scholarship $scholarship)
     {
