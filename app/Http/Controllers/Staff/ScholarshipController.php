@@ -38,6 +38,38 @@ class ScholarshipController extends Controller
         ]);
     }
 
+    public function batch(Request $request,  Scholarship $scholarship)
+    {
+        
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->with([
+                'scholars' => function ($query) {
+                    $query->orderBy('last_name')
+                        ->orderBy('first_name');
+                }
+            ])
+            ->when($request->input('selectedYear'), function ($query, $year) {
+                return $query->where('school_year', $year);
+            })
+            ->when($request->input('selectedSem'), function ($query, $sem) {
+                return $query->where('semester', $sem);
+            })
+            ->orderBy('batch_no', 'desc')
+            ->get();
+
+        $schoolyear = null;
+        if ($request->input('selectedYear')) {
+            $schoolyear = SchoolYear::find($request->input('selectedYear'));
+        }
+
+        return Inertia::render('Staff/Scholarships/Scholarship_Batch', [
+            'scholarship' => $scholarship,
+            'batches' => $batches,
+            'schoolyear' => $schoolyear,
+            'selectedSem' => $request->input('selectedSem', ''),
+        ]);
+    }
+
     public function show(Request $request, Scholarship $scholarship)
     {
         $batches = Batch::where('scholarship_id', $scholarship->id)

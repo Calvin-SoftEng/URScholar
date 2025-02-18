@@ -54,7 +54,10 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">Scholarship Batches</span>
+                            <span class="text-blue-400 font-semibold">{{ scholarship.name  }}</span>
+                        </li>
+                        <li>
+                            <span class="text-blue-400 font-semibold"> Batch 1 </span>
                         </li>
                     </ul>
                 </div>
@@ -139,7 +142,7 @@
                     </div>
                 </div> -->
                 <ScholarList :scholarship="scholarship" :batches="batches" />
-                <Batches :scholarship="scholarship" :batches="batches" />
+                <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
 

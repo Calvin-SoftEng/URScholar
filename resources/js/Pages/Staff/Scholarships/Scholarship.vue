@@ -54,7 +54,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">Scholarship Batches</span>
+                            <span class="text-blue-400 font-semibold">{{ scholarship.name  }} {{ props.selectedSem }}</span>
                         </li>
                     </ul>
                 </div>
@@ -140,7 +140,7 @@
                     </div>
                 </div> -->
                 <!-- <ScholarList :scholarship="scholarship" :batches="batches" /> -->
-                <Batches :scholarship="scholarship" :batches="batches" />
+                <Batches :scholarship="scholarship" :batches="batches" :schoolyear="schoolyear" :selectedSem="selectedSem"/>
             </div>
         </div>
 

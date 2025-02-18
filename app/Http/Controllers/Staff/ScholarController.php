@@ -33,6 +33,7 @@ class ScholarController extends Controller
     public function scholar($id)
     {
         $scholar = Scholar::findOrFail($id);
+        
         $scholarship = $scholar->scholarship;
         $batch = Batch::where('scholarship_id', $scholarship->id)->first();
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
