@@ -49,12 +49,11 @@ class ScholarshipController extends Controller
                     $query->orderBy('last_name')
                         ->orderBy('first_name')
                         ->with([
-                            'submitted_requirements' => function ($query) {
+                            'submittedRequirements' => function ($query) {
                                 $query->with('requirement');
                             }
                         ]);
                 },
-                'requirements'
             ])
             ->when($request->input('selectedYear'), function ($query, $year) {
                 return $query->where('school_year', $year);
@@ -66,17 +65,17 @@ class ScholarshipController extends Controller
             ->get();
 
         // Calculate requirements stats for each scholar
-        foreach ($batch as $batchItem) {
-            if (isset($batchItem->scholars)) {
-                foreach ($batchItem->scholars as $scholar) {
-                    $totalRequirements = $batchItem->requirements->count();
-                    $submittedApproved = $scholar->submitted_requirements->where('status', 'Approved')->count();
+        // foreach ($batch as $batchItem) {
+        //     if (isset($batchItem->scholars)) {
+        //         foreach ($batchItem->scholars as $scholar) {
+        //             $totalRequirements = $batchItem->requirements->count();
+        //             $submittedApproved = $scholar->submitted_requirements->where('status', 'Approved')->count();
 
-                    $scholar->requirements_progress = "$submittedApproved/$totalRequirements";
-                    $scholar->is_requirements_complete = ($submittedApproved === $totalRequirements);
-                }
-            }
-        }
+        //             $scholar->requirements_progress = "$submittedApproved/$totalRequirements";
+        //             $scholar->is_requirements_complete = ($submittedApproved === $totalRequirements);
+        //         }
+        //     }
+        // }
 
         $schoolyear = null;
         if ($request->input('selectedYear')) {
