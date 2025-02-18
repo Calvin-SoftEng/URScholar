@@ -102,7 +102,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::get('/scholarships/{scholarship}/adding-scholars', [ScholarController::class, 'adding'])->name('scholars.adding');
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
-    Route::get('/scholarships/{scholarship}/{batch}', [ScholarshipController::class, 'batch'])->name('scholarship.batch');
+    Route::get('/scholarships/{scholarshipId}/batch/{batchId}', [ScholarshipController::class, 'batch'])->name('scholarship.batch');
 
 
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');

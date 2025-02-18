@@ -225,7 +225,7 @@ const selectedSem = ref("");
 
 const openScholarship = () => {
     router.visit(`/scholarships/${props.scholarship.id}/adding-scholars`, {
-        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
+        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem, scholarship: props.scholarship.id},
         preserveState: true
     });
 };

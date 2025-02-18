@@ -38,10 +38,12 @@ class ScholarshipController extends Controller
         ]);
     }
 
-    public function batch(Request $request,  Scholarship $scholarship)
+    public function batch(Request $request, $scholarshipId, $batchId)
     {
-        
-        $batches = Batch::where('scholarship_id', $scholarship->id)
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        $batch = Batch::where('id', $batchId)
+            ->where('scholarship_id', $scholarship->id)
             ->with([
                 'scholars' => function ($query) {
                     $query->orderBy('last_name')
@@ -64,7 +66,7 @@ class ScholarshipController extends Controller
 
         return Inertia::render('Staff/Scholarships/Scholarship_Batch', [
             'scholarship' => $scholarship,
-            'batches' => $batches,
+            'batches' => $batch,
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
         ]);
@@ -193,17 +195,18 @@ class ScholarshipController extends Controller
     public function downloadBatchReport(Scholarship $scholarship, Batch $batch)
     {
         $scholars = $batch->scholars;
-        
+
         $pdf = PDF::loadView('reports.scholarship-report', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars
         ]);
-        
+
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
 
-    public function scholar_scholarship_details() {
+    public function scholar_scholarship_details()
+    {
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details');
     }
 }

@@ -37,7 +37,7 @@
     <span>List of Batches {{ props.selectedSem }} {{ schoolyear.year }}</span>
     <div v-for="batch in batches" :key="batch.id"
       class="bg-gradient-to-r from-white to-[#D2CFFE] w-full rounded-lg p-5 shadow-sm hover:bg-lightblue">
-      <div @click="openScholarship" class="flex flex-row justify-between items-center">
+      <div @click="() => openBatch(batch.id)" class="flex flex-row justify-between items-center">
         <span>Batch {{ batch.batch_no }}</span>
         <div class="grid grid-cols-2">
           <div class="flex flex-col">
@@ -113,15 +113,14 @@ const filteredScholars = (batch) => {
   return scholars;
 };
 
-const formErrors = ref({
-    selectedSem: "",
-    selectedYear: "",
-});
 
-
-const openScholarship = () => {
-    router.visit(`/scholarships/${props.scholarship.id}/${props.batches.id}`, {
-        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
+const openBatch = (batchId) => {
+    router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}`, {
+        data: { 
+            scholarship: props.scholarship.id,
+            selectedYear: props.schoolyear.id, 
+            selectedSem: props.selectedSem 
+        },
         preserveState: true
     });
 };
