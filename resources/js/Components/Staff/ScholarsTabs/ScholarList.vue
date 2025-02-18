@@ -65,7 +65,7 @@
                   <th>Campus</th>
                   <th>Grant</th>
                   <th>Requirements</th>
-                  <th>Status {{ props }}</th>
+                  <th>Status</th>
                   <th></th>
                 </tr>
               </thead>
