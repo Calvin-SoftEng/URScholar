@@ -279,6 +279,7 @@ const items = ref([]);
 
 // Helper functions for requirements
 const calculateRequirementsProgress = (scholar) => {
+
   if (!scholar.submitted_requirements) return '0/0';
   
   const totalRequired = getBatchRequirementsCount(scholar);
@@ -308,6 +309,7 @@ const isRequirementsComplete = (scholar) => {
 };
 
 const getBatchRequirementsCount = (scholar) => {
+  
   // Find which batch this scholar belongs to
   for (const batch of props.batches) {
     if (batch.scholars && batch.scholars.find(s => s.id === scholar.id)) {
