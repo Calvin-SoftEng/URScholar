@@ -1,12 +1,22 @@
 <template>
   <!-- Global "No Scholars" Message (if no batches exist) -->
-  <div v-if="!batches || batches.length === 0" class="text-center py-5 mt-5">
+  <!-- <div v-if="!batches || batches.length === 0" class="text-center py-5 mt-5">
     <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added yet</p>
-  </div>
+  </div> -->
 
-  <div v-else class="w-full mt-5 bg-white rounded-xl">
-    <div class="p-4 flex flex-row justify-between items-center">
-      <span>SY 2024 - Semester</span>
+  <div class="w-full mt-5 bg-white rounded-xl">
+    <div class="px-4 pt-4 flex flex-row justify-between items-center">
+      <div class="flex flex-row gap-2">
+        <button class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded" @click="openReport">
+          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report
+        </button>
+        <button class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded" @click="openRequirements">
+          <font-awesome-icon :icon="['fas', 'folder-open']" class="mr-2 text-sm" />View Requirements
+        </button>
+        <button class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded" @click="openReport">
+          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
+        </button>
+      </div>
       <form class="w-3/12">
         <label for="default-search"
           class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -24,7 +34,7 @@
         </div>
       </form>
     </div>
-    <div class="bg-gray-100 mx-4 rounded-lg p-1">
+    <!-- <div class="bg-gray-100 mx-4 rounded-lg p-1">
       <ul class="flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
         <li v-for="batch in batches" :key="batch.id"><button @click="toggleBatch(batch.id)"
             class="px-10 py-1 border-b-2 cursor-pointer hover:bg-gray-300 hover:text-gray-600 rounded-lg"
@@ -32,30 +42,14 @@
             }}</button>
         </li>
       </ul>
-    </div>
+    </div> -->
 
     <div v-for="batch in batches" :key="batch.id">
       <div>
         <div v-if="expandedBatches === batch.id" class="w-full bg-white h-full p-4">
-          <!-- line sections -->
-          <!-- <div class="flex flex-row justify-end items-center mb-4">
-            <div>
-              <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-              <button type="button"
-                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                <font-awesome-icon :icon="['fas', 'share-from-square']" class="mr-1" />
-                Send Access Details</button>
-              </Link>
-
-              <button @click="openReport(batch.id)" type="button"
-                class="py-2.5 px-5 me-2 mb-2 text-sm font-medium focus:outline-none bg-blue-600 text-white rounded-lg border border-gray-200 hover:bg-blue-700 hover:text-white focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700">
-                <font-awesome-icon :icon="['fas', 'file-circle-plus']" class="mr-1"  />
-                Generate Report</button>
-            </div>
-          </div> -->
 
           <!-- table -->
-          <div class="overflow-x-auto font-poppins border rounded-lg">
+          <div v-show="!showRequirements" class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <!-- head -->
               <thead class="justify-center items-center bg-gray-100">
@@ -64,14 +58,14 @@
                   <th>Scholar</th>
                   <th>Campus</th>
                   <th>Grant</th>
-                  <th>Email</th>
+                  <th>Requirements</th>
                   <th>Status</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <!-- row 1 -->
-                <tr v-for="scholar in filteredScholars(batch)" :key="scholar.id" class="text-sm">
+                <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
                   <td>test1</td>
                   <td>
                     <div class="flex items-center gap-3">
@@ -81,8 +75,11 @@
                         </div>
                       </div>
                       <div>
-                        <div class="font-normal"> {{ scholar.last_name }}, {{ scholar.first_name }} {{
-                          scholar.middle_name }}</div>
+                        <div class="font-normal">
+                            {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
+                            <!-- Show verified icon if scholar.status is 'Verified' -->
+                            <span v-if="scholar.status === 'Verified'" class="material-symbols-rounded text-sm text-blue-600">verified</span>
+                        </div>
                         <div class="text-sm opacity-50">
                           {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
                         </div>
@@ -95,14 +92,23 @@
                   <td>
                     {{ scholar.grant }}
                   </td>
-                  <td>{{ scholar.email ? scholar.email : 'N/A' }}</td>
                   <td>
-                    <span :class="{
+                    <!-- Progress Label -->
+                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">4/5</span>
+                    <!-- Progress Bar Container -->
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                      <!-- Progress Bar -->
+                      <div class="bg-yellow-300 h-full rounded-full" style="width: 80%;"></div>
+                    </div>
+                  </td>
+                  <td>
+                    <!-- <span :class="{
                       'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
                       'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
                       {{ scholar.status }}
-                    </span>
+                    </span> -->
+                    <span class="bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-blue-400 border border-yellow-400 text-xs font-medium px-2.5 py-0.5 rounded">Completed</span>
                   </td>
                   <th>
                     <Link :href="`/scholarships/scholar=${scholar.id}`">
@@ -115,30 +121,81 @@
                 </tr>
               </tbody>
             </table>
-          </div>
-
-
-          <div class="mt-5 flex flex-col items-right">
-            <!-- Help text -->
-            <span class="text-sm text-gray-700 dark:text-gray-400">
-              Showing <span class="font-semibold text-gray-900 dark:text-white">1</span> to <span
-                class="font-semibold text-gray-900 dark:text-white">10</span> of <span
-                class="font-semibold text-gray-900 dark:text-white">100</span> Scholars
-            </span>
-            <!-- Buttons -->
-            <div class="inline-flex mt-2 xs:mt-0">
-              <button
-                class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                Prev
-              </button>
-              <button
-                class="flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                Next
-              </button>
+            <!-- Pagination controls -->
+            <div v-if="totalScholars > 10" class="mt-5 flex flex-col items-right">
+              <span class="text-sm text-gray-700 dark:text-gray-400">
+                Showing 
+                <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span> 
+                to 
+                <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span> 
+                of 
+                <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span> 
+                Scholars
+              </span>
+              <div class="inline-flex mt-2 xs:mt-0">
+                <button
+                  @click="prevPage"
+                  :disabled="currentPage === 1"
+                  :class="[
+                    'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                    currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+                  ]"
+                >
+                  Prev
+                </button>
+                <button
+                  @click="nextPage"
+                  :disabled="currentPage === totalPages"
+                  :class="[
+                    'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                    currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+                  ]"
+                >
+                  Next
+                </button>
+              </div>
             </div>
           </div>
+
+          <div v-show="showRequirements">
+            <div class="w-6/12">
+                <h3 class="font-semibold text-gray-900 dark:text-white">Requirements</h3>
+                <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
+                    <div class="flex items-center mb-4 w-full">
+                        <form @submit.prevent="addItem" class="flex items-center w-full">
+                            <input v-model="newItem" type="text" placeholder="Enter an item"
+                                class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
+                            <button type="submit"
+                                class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
+                                Add
+                            </button>
+                        </form>
+                    </div>
+
+                    <form @submit.prevent="removeItem">
+                        <div class="grid grid-cols-2 gap-4">
+                            <div v-for="(item, index) in items" :key="index"
+                                class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
+                                <span>{{ item }}</span>
+                                <button @click="removeItem(index)"
+                                    class="flex items-center text-red-500 hover:text-red-700">
+                                    <span class="material-symbols-rounded text-red-600">
+                                        delete
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </ul>
+            </div>
+          </div>
+
         </div>
       </div>
+    </div>
+
+    <div>
+
     </div>
 
 
@@ -156,7 +213,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted } from 'vue';
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted, computed, watch } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -180,13 +237,22 @@ const components = {
   Papa,
 };
 
+const currentPage = ref(1);
+const itemsPerPage = 10;
 const searchQuery = ref('');
 
-// Add the filtered scholars function
-const filteredScholars = (batch) => {
-  if (!batch.scholars) return [];
+// Modify the filteredScholars function to handle pagination
+const filteredScholars = computed(() => {
+  // Combine all scholars from all batches
+  const allScholars = props.batches.reduce((acc, batch) => {
+    if (batch.scholars) {
+      acc.push(...batch.scholars);
+    }
+    return acc;
+  }, []);
 
-  let scholars = batch.scholars.filter(scholar =>
+  // Apply search filter
+  let scholars = allScholars.filter(scholar =>
     scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -200,6 +266,51 @@ const filteredScholars = (batch) => {
   scholars.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
 
   return scholars;
+});
+
+// Pagination computed properties
+const paginatedScholars = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  return filteredScholars.value.slice(startIndex, endIndex);
+});
+
+const totalScholars = computed(() => {
+  return filteredScholars.value.length;
+});
+
+const totalPages = computed(() => {
+  return Math.ceil(totalScholars.value / itemsPerPage);
+});
+
+// Display range computed properties
+const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage + 1);
+const endIndex = computed(() => Math.min(currentPage.value * itemsPerPage, totalScholars.value));
+
+// Pagination methods
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+// Reset page when search changes
+watch(searchQuery, () => {
+  currentPage.value = 1;
+});
+
+
+const showRequirements = ref(false);
+
+// Function to toggle the visibility of the table and second div
+const openRequirements = () => {
+  showRequirements.value = !showRequirements.value;
 };
 
 const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
@@ -259,178 +370,6 @@ const getYearSuffix = (year) => {
   return "th";
 };
 
-const form = ref({
-  file: null,
-  fileName: null,
-  filePreview: null,
-});
-
-const previewData = ref([]);
-const headers = ref([]);
-const error = ref('');
-const fileReadyToUpload = ref(false);
-
-const isFileDragging = ref(false);
-
-const previewFile = (event) => {
-  const file = event.target.files[0];
-  handleFile(file);
-};
-
-const handleFileDragOver = () => {
-  isFileDragging.value = true;
-};
-
-const handleFileDragLeave = () => {
-  isFileDragging.value = false;
-};
-
-const handleFileDrop = (event) => {
-  isFileDragging.value = false;
-  const file = event.dataTransfer.files[0];
-  handleFile(file);
-};
-
-
-const handleFile = async (file) => {
-  if (!file) return;
-
-  // Set file details
-  form.value.file = file;
-  form.value.fileName = file.name;
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    form.value.filePreview = e.target.result;
-
-    // Parse CSV file
-    Papa.parse(e.target.result, {
-      header: true,
-      skipEmptyLines: true,
-      complete: (results) => {
-        if (results.data && results.data.length > 0) {
-          const filteredData = results.data.filter((row) =>
-            Object.values(row).some((value) => value !== "")
-          );
-
-          if (filteredData.length > 0) {
-            headers.value = Object.keys(filteredData[0]);
-            previewData.value = filteredData;
-            error.value = "";
-            fileReadyToUpload.value = true; // Set flag to enable confirm button
-          } else {
-            error.value = "No valid data found in the file";
-            previewData.value = [];
-            headers.value = [];
-            fileReadyToUpload.value = false;
-          }
-        } else {
-          error.value = "No data found in the file";
-          previewData.value = [];
-          headers.value = [];
-          fileReadyToUpload.value = false;
-        }
-      },
-      error: (err) => {
-        error.value = "Error parsing CSV: " + err.message;
-        previewData.value = [];
-        headers.value = [];
-        fileReadyToUpload.value = false;
-      },
-    });
-  };
-
-  reader.readAsText(file); // Read file
-};
-
-// Function to confirm and upload the file
-const confirmUpload = async () => {
-  if (!form.value.file) return;
-
-  const formData = new FormData();
-  formData.append("file", form.value.file);
-
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute("content");
-
-  try {
-    // Send the request only when user confirms
-    router.post(`/scholarships/${props.scholarship.id}/upload`, formData, {
-      preserveScroll: true,
-      onSuccess: () => {
-        headers.value = [];
-        previewData.value = [];
-        error.value = "";
-        uploadingPanel.value = false;
-        fileReadyToUpload.value = false;
-        document.getElementById("dropzone-file").value = null; // Clear file input
-        usePage().props.flash = { success: "Scholars added to the scholarship!" };
-        closePanel();
-      },
-    });
-  } catch (err) {
-    error.value = "An error occurred while uploading the file.";
-    console.error("Error during file upload:", err);
-  }
-};
-
-
-
-
-
-//adding
-
-const addingheaders = ["First Name", "Last Name", "Email", "Course"]
-
-const formData = reactive({
-  first_name: '',
-  last_name: '',
-  email: '',
-  course: ''
-})
-const entries = ref([])
-
-const addEntry = () => {
-  if (formData.first_name && formData.last_name && formData.email && formData.course) {
-    entries.value.push({ ...formData })
-    resetForm()
-  }
-}
-
-const resetForm = () => {
-  formData.first_name = ''
-  formData.last_name = ''
-  formData.email = ''
-  formData.course = ''
-}
-
-const removeEntry = (index) => {
-  entries.value.splice(index, 1)
-}
-
-
-const submitForm = async () => {
-  try {
-    if (entries.value.length === 0) {
-      alert('No data to submit!');
-      return;
-    }
-
-    const response = await fetch('/api/insert-data', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(entries.value)
-    });
-
-    if (!response.ok) throw new Error('Failed to submit');
-
-    // alert('Data submitted successfully!');
-
-    // Clear entries after successful submission
-    entries.value = [];
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
 
 
 </script>

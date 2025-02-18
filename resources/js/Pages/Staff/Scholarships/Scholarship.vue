@@ -54,7 +54,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">{{ scholarship.name  }} {{ props.selectedSem }}</span>
+                            <span class="text-blue-400 font-semibold">{{ scholarship.name  }}</span>
                         </li>
                     </ul>
                 </div>
@@ -79,8 +79,6 @@
                         </Link>
                     </div>
                 </div>
-
-                <div class="w-full h-[1px] bg-gray-200"></div>
 
                 <!-- Stats Section -->
                 <!-- <div class="grid grid-cols-5">

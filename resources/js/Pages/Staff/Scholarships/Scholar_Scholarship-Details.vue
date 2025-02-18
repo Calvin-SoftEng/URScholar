@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-            <div class="w-full mx-auto p-3 rounded-xl text-white">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+            <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
                         <li class="hover:text-gray-600">
@@ -10,8 +10,11 @@
                         <li class="hover:text-gray-600">
                             <span>Scholarships</span>
                         </li>
-                        <li class="hover:text-gray-600">
-                            <span>Scholarship Batches</span>
+                        <li class="hover:text-gray-600"> 
+                            <span>{{ scholarship.name  }}</span>
+                        </li>
+                        <li class="hover:text-gray-600"> 
+                            <span>Batch 1</span>
                         </li>
                         <li>
                             <span class="text-blue-400 font-semibold">Scholar Details</span>
@@ -19,7 +22,7 @@
                     </ul>
                 </div>
 
-                <div class="w-full h-full flex justify-center items-center bg-dirtywhite dark:text-dprimary relative">
+                <div class="w-full h-full flex justify-center items-center dark:text-dprimary relative">
                     <!-- Close Button -->
                     <button class="absolute top-4 right-10">
                         <span
@@ -90,7 +93,7 @@
                             <!-- Second Layer with Single Card -->
                             <div
                                 class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
-                                <h1 class="text-black font-normal text-xl font-quicksand">Requirements Checking</h1>
+                                <h1 class="text-black font-normal text-xl font-poppins">Requirements Checking</h1>
                                 <div
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
@@ -128,7 +131,7 @@
 
                             <div
                                 class="bg-white p-8 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
-                                <h1 class="text-black font-normal text-lg font-quicksand">Monitoring</h1>
+                                <h1 class="text-black font-normal text-lg font-poppins">Monitoring</h1>
                                 <div
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 

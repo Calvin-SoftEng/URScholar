@@ -66,12 +66,21 @@ class EmailController extends Controller
 
                 //Sending Emails
                 $mailData = [
-                    'title' => 'Your Scholarship Application Login Details',
-                    'body' => "You have been successfully registered for the scholarship application. Your login credentials are:\n\n" .
-                        "Email: " . $scholar['email'] . "\n" .
-                        "Password: " . $password . "\n\n" .
-                        "Please log in and complete the application process."
+                    'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                    'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
+                        "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
+                        "Here are your login credentials:\n\n" .
+                        "*Email: " . $scholar['email'] . "\n" .
+                        "*Password: " . $password . "\n\n" .
+                        "*Next Steps:\n" .
+                        " - Log in to your account using the details above.\n" .
+                        " - Complete your application by submitting the required documents.\n" .
+                        " - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                        "*Application Deadline: " . $request['deadline'] . "\n\n" .
+                        "Click the following link to access your portal: " . 
+                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
                 ];
+                
 
                 Mail::to($scholar->email)->send(new SendEmail($mailData));
 

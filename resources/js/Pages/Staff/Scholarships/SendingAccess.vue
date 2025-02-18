@@ -1,39 +1,33 @@
 <template>
-
     <Head title="Scholarships" />
     <AuthenticatedLayout>
-        <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] overflow-auto dark:bg-dprimary">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <form @submit.prevent="submitForm">
-                <div class="w-full mx-auto p-3 rounded-xl text-white">
-                    <div class="breadcrumbs text-sm text-gray-400 mb-5">
-                        <ul>
-                            <li>
-                                <a>
-                                    Home
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <span>Scholarships</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <span>Dashboard</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a>
-                                    <span class="text-blue-400 font-semibold ">Sending Access</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
+            <div class="w-full mx-auto space-y-3">
+                <div class="breadcrumbs text-sm text-gray-400 mb-2">
+                    <ul>
+                        <li class="hover:text-gray-600">
+                            Home
+                        </li>
+                        <li class="hover:text-gray-600">
+                            <span>Scholarships</span>
+                        </li>
+                        <li class="hover:text-gray-600"> 
+                            <span>{{ scholarship.name  }}</span>
+                        </li>
+                        <li class="hover:text-gray-600"> 
+                            <span>Batch 1</span>
+                        </li>
+                        <li>
+                            <span class="text-blue-400 font-semibold">Sending Access</span>
+                        </li>
+                    </ul>
+                </div>
 
                     <div class="flex justify-between items-center mb-4">
-                        <h1
-                            class="text-3xl font-poppins font-extrabold text-[darkblue] text-left underline underline-offset-4 dark:text-dtext">
-                            Pending Scholars</h1>
+                        <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>Pending Scholars</span>
+                        </h1>
 
                         <button
                             class="btn bg-blue-900 text-white dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary"
