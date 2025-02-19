@@ -104,16 +104,17 @@
                       {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
                     </span>
                     <div class="w-full bg-gray-200 rounded-full h-2">
-                      <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }"></div>
+                      <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }">
+                      </div>
                     </div>
                   </td>
                   <td>
                     <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete' && scholar.totalRequirements > 0,
-                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submitted' && scholar.totalRequirements === 0,
+                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
+                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
                       'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ scholar.status || 'Incomplete' }}
+                      {{ scholar.status }}
                     </span>
                   </td>
                   <th>
@@ -193,6 +194,7 @@ const props = defineProps({
   selectedSem: Object,
   batches: Object,
   scholars: Array,
+  requirements: Array,
 });
 
 const components = {

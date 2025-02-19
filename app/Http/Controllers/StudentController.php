@@ -286,15 +286,9 @@ class StudentController extends Controller
 
             $path = $file->store('requirements/' . $scholar->id, 'public');
 
-
-            // Get the corresponding requirement name
-            $requirementName = $request->req[$index] ?? 'Unknown Requirement';
-
-
             $uploadedFile = SubmittedRequirements::create([
                 'scholar_id' => $scholar->id,
                 'requirement_id' => $reqID,
-                'requirement' => $requirementName,
                 'submitted_requirements' => $file->getClientOriginalName(),
                 'path' => $path
             ]);

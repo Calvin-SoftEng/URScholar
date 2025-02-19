@@ -40,7 +40,11 @@ class ScholarshipController extends Controller
 
     public function batch(Request $request, $scholarshipId, $batchId)
     {
-        $scholarship = Scholarship::with('requirements')->findOrFail($scholarshipId);
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        // Get all requirements for this scholarship
+        $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
+        $totalRequirements = $requirements->count();
 
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
@@ -53,12 +57,28 @@ class ScholarshipController extends Controller
             ->orderBy('batch_no', 'desc')
             ->first();
 
-        $scholars = $batch->scholars->map(function ($scholar) {
-            $submittedRequirements = $scholar->submittedRequirements()->count();
-            $totalRequirements = $scholar->scholarship->requirements()->count();
-            $approvedRequirements = $scholar->submittedRequirements()->where('status', 'Approved')->count();
+        $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements, $scholarshipId) {
+            // Get approved requirements for this scholar
+            $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->where('status', 'Approved')
+                ->count();
 
-            $status = ($totalRequirements > 0 && $approvedRequirements === $totalRequirements) ? 'Complete' : 'Incomplete';
+            // Determine status
+            $status = 'No submission';
+            if ($totalRequirements > 0) {
+                if ($approvedRequirements === 0) {
+                    $status = 'No submission';
+                } elseif ($approvedRequirements === $totalRequirements) {
+                    $status = 'Complete';
+                } else {
+                    $status = 'Incomplete';
+                }
+            }
+
+            // Calculate progress percentage
+            $progress = $totalRequirements > 0
+                ? ($approvedRequirements / $totalRequirements) * 100
+                : 0;
 
             return [
                 'id' => $scholar->id,
@@ -70,7 +90,7 @@ class ScholarshipController extends Controller
                 'status' => $status,
                 'submittedRequirements' => $approvedRequirements,
                 'totalRequirements' => $totalRequirements,
-                'progress' => $totalRequirements > 0 ? ($approvedRequirements / $totalRequirements) * 100 : 0,
+                'progress' => $progress,
             ];
         });
 
@@ -78,7 +98,10 @@ class ScholarshipController extends Controller
             'scholarship' => $scholarship,
             'batches' => $batch,
             'scholars' => $scholars,
-            'schoolyear' => $request->input('selectedYear') ? SchoolYear::find($request->input('selectedYear')) : null,
+            'requirements' => $requirements,
+            'schoolyear' => $request->input('selectedYear')
+                ? SchoolYear::find($request->input('selectedYear'))
+                : null,
             'selectedSem' => $request->input('selectedSem', ''),
         ]);
     }

@@ -62,7 +62,7 @@
                             
                     </div>
                 </div> -->
-                <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"/>
+                <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars" :requirements="requirements"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -141,6 +141,7 @@ const props = defineProps({
     selectedSem: Object,
     batches: Object,
     scholars: Array,
+    requirements: Array,
 });
 
 
