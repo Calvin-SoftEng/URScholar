@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('requirement_id')->constrained()->onDelete('cascade');
-            $table->string('requirement');
             $table->string('submitted_requirements');
             $table->string('path');
             $table->string('message')->nullable();

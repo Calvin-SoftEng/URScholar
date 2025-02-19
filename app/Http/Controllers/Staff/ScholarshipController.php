@@ -55,7 +55,7 @@ class ScholarshipController extends Controller
 
         $scholars = $batch->scholars->map(function ($scholar) {
             $submittedRequirements = $scholar->submittedRequirements()->count();
-            $totalRequirements = $scholar->submittedRequirements()->count();
+            $totalRequirements = $scholar->scholarship->requirements()->count();
             $approvedRequirements = $scholar->submittedRequirements()->where('status', 'Approved')->count();
 
             $status = ($totalRequirements > 0 && $approvedRequirements === $totalRequirements) ? 'Complete' : 'Incomplete';

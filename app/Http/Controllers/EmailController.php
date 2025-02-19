@@ -38,12 +38,21 @@ class EmailController extends Controller
         // dd($request->all());
         $scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
 
-        Requirements::create([
-            'scholarship_id' => $scholarship->id,
-            'requirements' => $request['requirements'],
-            'application_start' => $request['application'],
-            'deadline' => $request['deadline'],
-        ]);
+        // Create the requirements for the scholarship
+        $req = [];
+        foreach ($request['requirements'] as $requirement) {
+
+            $req[] = [
+                'scholarship_id' => $scholarship->id,
+                'requirements' => $requirement,
+                'application_start' => $request['application'],
+                'deadline' => $request['deadline'],
+            ];
+
+        }
+
+        Requirements::insert($req);
+
 
         // Create the same requirement for all scholars
         foreach ($scholars as $scholar) {
@@ -77,10 +86,10 @@ class EmailController extends Controller
                         " - Complete your application by submitting the required documents.\n" .
                         " - Stay updated with announcements and notifications regarding your application status.\n\n" .
                         "*Application Deadline: " . $request['deadline'] . "\n\n" .
-                        "Click the following link to access your portal: " . 
+                        "Click the following link to access your portal: " .
                         "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
                 ];
-                
+
 
                 Mail::to($scholar->email)->send(new SendEmail($mailData));
 

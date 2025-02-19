@@ -147,8 +147,8 @@ class StudentController extends Controller
         $scholar = Scholar::where('email', Auth::user()->email)->first();
 
         $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
-
-        $requirements = Requirements::where('id', $scholarship->id)->get();
+        
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         $reqID = $requirements->pluck('id')->first();
 
@@ -301,6 +301,5 @@ class StudentController extends Controller
 
             $uploadedFiles[] = $uploadedFile;
         }
-
     }
 }
