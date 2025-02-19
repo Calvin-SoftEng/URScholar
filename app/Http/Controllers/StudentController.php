@@ -117,29 +117,42 @@ class StudentController extends Controller
     public function scholarship()
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
-
-        $requirements = Requirements::where('id', $scholarship->id)->get();
-
-        $reqID = $requirements->pluck('id')->first();
-
-        $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->where('status', 'Returned')
-            ->get();
-
-
-        if ($submitReq) {
-            return Inertia::render('Student/Grant-in/Grant-In', [
-                'scholarship' => $scholarship,
-                'scholar' => $scholar,
-                'requirements' => $requirements,
-                'submitReq' => $submitReq,
-            ]);
-        } else {
+        if (!$scholar) {
             return redirect()->route('student.confirmation');
         }
+
+        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+        if (!$scholarship) {
+            return redirect()->route('student.confirmation');
+        }
+
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+        $requirementIds = $requirements->pluck('id')->toArray();
+
+        // Fetch only returned submitted requirements related to the scholarship
+        $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->where('status', 'Returned')
+            ->whereIn('requirement_id', $requirementIds)
+            ->get();
+
+        // Map submitted requirements with their corresponding requirement details
+        $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
+            $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
+            return [
+                'id' => $submitted->id,  // Submitted Requirement ID
+                'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
+                'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
+                'status' => $submitted->status,
+            ];
+        });
+
+        return Inertia::render('Student/Grant-in/Grant-In', [
+            'scholarship' => $scholarship,
+            'scholar' => $scholar,
+            'submitReq' => $returnedRequirements,
+        ]);
     }
+
 
     public function confirmation()
     {
@@ -147,7 +160,7 @@ class StudentController extends Controller
         $scholar = Scholar::where('email', Auth::user()->email)->first();
 
         $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
-        
+
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         $reqID = $requirements->pluck('id')->first();
@@ -191,12 +204,12 @@ class StudentController extends Controller
             'requirements' => $requirements
         ]);
     }
-
+    
     public function applicationReupload(Request $request)
     {
         $request->validate([
             'files' => 'required|array',
-            'files.*' => 'required|file',
+            'files.*' => 'required|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
             'requirements' => 'required|array',
             'requirements.*.id' => 'required|exists:submitted_requirements,id',
             'requirements.*.requirement' => 'required|string',
@@ -209,15 +222,12 @@ class StudentController extends Controller
 
         $uploadedFiles = [];
 
-        // Process each file
         foreach ($request->file('files') as $submissionId => $file) {
-            // Find the corresponding requirement data
             $requirementData = collect($request->requirements)->firstWhere('id', $submissionId);
             if (!$requirementData) {
-                continue; // Skip if no matching requirement data found
+                continue;
             }
 
-            // Find the specific returned submission by its ID
             $existingSubmission = SubmittedRequirements::where([
                 'id' => $submissionId,
                 'scholar_id' => $scholar->id,
@@ -225,16 +235,16 @@ class StudentController extends Controller
             ])->first();
 
             if (!$existingSubmission) {
-                continue; // Skip if this submission doesn't exist or isn't returned
+                continue;
+            }
+
+            // Delete old file if it exists
+            if ($existingSubmission->path && Storage::disk('public')->exists($existingSubmission->path)) {
+                Storage::disk('public')->delete($existingSubmission->path);
             }
 
             // Store the new file
             $path = $file->store('requirements/' . $scholar->id, 'public');
-
-            // Delete old file if it exists
-            // if (Storage::disk('public')->exists($existingSubmission->path)) {
-            //     Storage::disk('public')->delete($existingSubmission->path);
-            // }
 
             // Update the existing record
             $existingSubmission->update([
@@ -244,7 +254,12 @@ class StudentController extends Controller
                 'message' => null,
             ]);
 
-            $uploadedFiles[] = $existingSubmission;
+            $uploadedFiles[] = [
+                'id' => $existingSubmission->id,
+                'requirement_id' => $existingSubmission->requirement_id,
+                'file_name' => $file->getClientOriginalName(),
+                'status' => 'Pending',
+            ];
         }
 
         if (empty($uploadedFiles)) {
@@ -258,6 +273,7 @@ class StudentController extends Controller
             'files' => $uploadedFiles
         ]);
     }
+
 
     public function applicationUpload(Request $request)
     {
