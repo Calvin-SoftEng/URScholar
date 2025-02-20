@@ -132,7 +132,14 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
-    Route::get('/system_admin/dashboard', [CashierController::class, 'dashboard'])->name('cashier.dashboard');
+    Route::get('/cashier/dashboard', [CashierController::class, 'dashboard'])->name('cashier.dashboard');
+
+
+    // Scholarship_Payouts
+    Route::get('/cashier/scholarships', [CashierController::class, 'scholarships'])->name('cashier.active_scholarships');
+    Route::get('/cashier/scholarships/batches', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
+    Route::get('/cashier/scholarships/batches/payouts', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
+
 
     // univ settings
     Route::get('/mis/univ-settings/course', [SystemAdminController::class, 'course'])->name('mis.course');

@@ -1,4 +1,5 @@
 <template>
+    <!-- sys admin ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'system_admin'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
@@ -18,6 +19,8 @@
             </div>
         </div>
     </div>
+
+    <!-- super_admin ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'super_admin'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
@@ -39,6 +42,8 @@
             </div>
         </div>
     </div>
+
+    <!-- coordinator ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'coordinator'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
@@ -60,6 +65,31 @@
             </div>
         </div>
     </div>
+
+    <!-- cashier ---------------------------------------------------------------------------------------------------------------------------------------- -->
+    <div v-if="$page.props.auth.user.usertype == 'cashier'">
+        <div class="w-full h-screen flex flex-col overflow-hidden">
+        <!-- Header -->
+        <headerTop class="w-full h-[50px]" />
+
+            <!-- Content Area -->
+            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
+                <!-- Sidebar -->
+                <Cashier_Sidebar 
+                :dataOpenSideBar="openSidebar" 
+                :clickHamburger="toggleSidebar" 
+                class="lg:w-[250px] w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
+                />
+
+                <!-- Main Content -->
+                <div class="flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
+                <slot></slot>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- student ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'student'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
@@ -89,6 +119,7 @@
 import headerTop from '../Components/Side_and_Head/Header.vue'
 import sidebar from '../Components/Side_and_Head/Sidebar.vue'
 import coor_sidebar from '../Components/Side_and_Head/Coor_Sidebar.vue'
+import Cashier_Sidebar from '@/Components/Cashier/Cashier_Sidebar.vue'
 
 import HeaderNav from '../Components/Student/Header.vue'
 
