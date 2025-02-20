@@ -4,6 +4,7 @@ use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\QrCodeController;
 use App\Http\Controllers\ApplicationController;
+use App\Http\Controllers\CashierController;
 use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ScholarshipController;
@@ -41,7 +42,7 @@ Route::middleware('auth')->group(function () {
 // MASTER ADMIN -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
-    
+
     Route::get('/system_admin/dashboard', [SystemAdminController::class, 'dashboard'])->name('system_admin.dashboard');
 
     // univ settings
@@ -63,7 +64,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 // SCHOLARSHIP STAFF -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function () {
+Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function () {
 
     Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
         ->name('staff.dashboard');
@@ -80,7 +81,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::get('/scholarships', [ScholarshipController::class, 'scholarship'])->name('scholarships.index');
     // Route::post('/scholarships', [ScholarshipController::class, 'store'])->name('scholarships.store');
     Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
-    
+
 
     // expand
     Route::get('/scholarships/submitted-requirements', [ScholarController::class, 'expand_requirements'])->name('requirements.expand_requirements');
@@ -98,7 +99,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::get('/urs-scholars', [ScholarController::class, 'scholars'])->name('scholars.show');
 
     Route::get('/urs-scholars/scholar-information', [ScholarController::class, 'scholar_information'])->name('scholars.scholar_information');
-    
+
     Route::get('/scholarships/{scholarship}/adding-scholars', [ScholarController::class, 'adding'])->name('scholars.adding');
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
@@ -108,7 +109,7 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');
     Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
 
-    
+
 
 
     // Messaging
@@ -127,7 +128,28 @@ Route::middleware(['auth',  'usertype:super_admin,coordinator'])->group(function
 
 });
 
+// CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Route::middleware(['auth', 'usertype:cashier'])->group(function () {
+
+    Route::get('/system_admin/dashboard', [CashierController::class, 'dashboard'])->name('cashier.dashboard');
+
+    // univ settings
+    Route::get('/mis/univ-settings/course', [SystemAdminController::class, 'course'])->name('mis.course');
+    Route::get('/mis/univ-settings/course/config/{campuses}', [SystemAdminController::class, 'course_config'])->name('mis.course_config');
+    Route::post('/mis/univ-settings/course/config/{campuses}/store', [SystemAdminController::class, 'store_course_config'])->name('mis.course_config');
+
+    Route::get('/mis/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('mis.campuses');
+    Route::post('/mis/univ-settings/campuses/store', [SystemAdminController::class, 'store_campus'])->name('mis.store_campus');
+    Route::post('/mis/univ-settings/campuses/assign', [SystemAdminController::class, 'assign_campus'])->name('mis.assign_campus');
+
+    Route::get('/mis/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_term'])->name('mis.sy_term');
+
+    // user settings
+    Route::get('/mis/user-settings/user-roles', [SystemAdminController::class, 'roles'])->name('mis.roles');
+    Route::get('/mis/user-settings/users', [SystemAdminController::class, 'users'])->name('mis.users');
+
+});
 
 
 Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
@@ -145,11 +167,11 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
 
     // Route::get('/student/scholarship', [StudentController::class, 'scholarship'])->name('student.scholarships');
-    
+
     // application
     Route::get('/student/application', [StudentController::class, 'application'])->name('student.application');
     Route::post('/student/application/upload', [StudentController::class, 'applicationUpload'])->name('student.application.upload');
-    
+
 
 
 
@@ -159,14 +181,15 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
 
     Route::get('/available-scholarships', [ApplicationController::class, 'index'])->name('available.index');
-    Route::post('/applications', [ApplicationController::class, 'store'])->name('application.store');;
+    Route::post('/applications', [ApplicationController::class, 'store'])->name('application.store');
+    ;
 });
 
 Route::middleware(['auth'])->group(function () {
 
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');
-   
+
     // qrcode
     Route::get('/generate-qr', [QrCodeController::class, 'show']);
     Route::get('/download-qr', [QrCodeController::class, 'download'])->name('download.qr');

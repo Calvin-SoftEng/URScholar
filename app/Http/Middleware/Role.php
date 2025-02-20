@@ -17,7 +17,7 @@ class Role
         }
 
         $user = Auth::user();
-        
+
         // Handle comma-separated user types
         $allowedTypes = collect($userTypes)
             ->flatMap(fn($type) => explode(',', $type))
@@ -32,8 +32,10 @@ class Role
                     return redirect()->route('staff.dashboard');
                 case 'coordinator':
                     return redirect()->route('staff.dashboard');
+                case 'cashier':
+                    return redirect()->route('cashier.dashboard');
                 case 'student':
-                    return $request->$user->hasVerifiedEmail() 
+                    return $request->$user->hasVerifiedEmail()
                         ? redirect()->route('student.dashboard')
                         : redirect()->route('student.verify-account');
                 default:
