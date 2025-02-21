@@ -60,15 +60,19 @@
         class="bg-gradient-to-r from-white to-[#D2CFFE] w-full rounded-lg p-5 shadow-sm hover:bg-lightblue">
         <div class="flex flex-row justify-between items-center cursor-pointer">
             <span>Batch 1</span>
-            <div class="grid grid-cols-2">
-            <div class="flex flex-col">
-                <span>No of Scholars</span>
-                <span>200</span>
-            </div>
-            <div class="flex flex-col">
-                <span>No of Unverified Scholars</span>
-                <span>200</span>
-            </div>
+            <div class="grid grid-cols-3 gap-5 items-center">
+                <div class="flex flex-col justify-center items-center">
+                    <span>Status</span>
+                    <span class="bg-green-100 text-green-800 border border-green-400 text-xs font-medium px-2.5 py-0.5 rounded">Completed</span>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+                    <span>Claimed</span>
+                    <span>200</span>
+                </div>
+                <div class="flex flex-col justify-center items-center">
+                    <span>Assigned</span>
+                    <span>200</span>
+                </div>
             </div>
         </div>
         </div>

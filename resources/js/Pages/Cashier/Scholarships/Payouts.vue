@@ -38,7 +38,7 @@
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
-                                    <p class="text-gray-500 text-sm">Submitted Requirements</p>
+                                    <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">2</p>
                             </div>
@@ -46,7 +46,7 @@
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
-                                    <p class="text-gray-500 text-sm">Completed Scholars</p>
+                                    <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">2</p>
                             </div>
