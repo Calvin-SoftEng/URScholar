@@ -30,7 +30,7 @@
               <!-- Text Content -->
               <div class="flex flex-col">
                 <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
-                <span class="font-semibold text-xl text-gray-900">1,000</span>
+                <span class="font-semibold text-xl text-gray-900">{{props.scholars.length}}</span>
               </div>
             </div>
 

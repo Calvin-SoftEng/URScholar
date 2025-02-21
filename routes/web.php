@@ -158,6 +158,7 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
 });
 
+// STUDENT -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     // dashboard

@@ -59,6 +59,8 @@ class ScholarshipController extends Controller
 
         $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements, $scholarshipId) {
             // Get approved requirements for this scholar
+
+            
             $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Approved')
                 ->count();
