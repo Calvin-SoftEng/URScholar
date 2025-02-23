@@ -30,6 +30,7 @@ class StudentController extends Controller
     public function verifyingAccount(Request $request)
     {
         $request->validate([
+            //Personal Information
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -43,24 +44,28 @@ class StudentController extends Controller
             'religion' => ['required', 'string', 'max:255'],
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
-            'elementary.name' => ['', 'string'],
-            'elementary.years' => ['', 'numeric'],
-            'elementary.honors' => ['', 'string'],
-            // 'junior.name' => ['', 'string',
-            // 'junior.years' => ['', 'numeric'],
-            // 'junior.honors' => ['', 'string'],
-            // 'senior.name' => ['', 'string'],
-            // 'senior.years' => ['', 'numeric'],
-            // 'senior.honors' => ['', 'string'],
-            // 'college.name' => ['', 'string'],
-            // 'college.years' => ['', 'numeric'],
-            // 'college.honors' => ['', 'string'],
-            // 'vocational.name' => ['', 'string'],
-            // 'vocational.years' => ['', 'numeric'],
-            // 'vocational.honors' => ['', 'string'],
-            // 'postgrad.name' => ['', 'string'],
-            // 'postgrad.years' => ['', 'numeric'],
-            // 'postgrad.honors' => ['', 'string'],
+
+            //Educaiton Information
+            'education.elementary.name' => ['', 'string'],
+            'education.elementary.years' => ['', 'numeric'],
+            'education.elementary.honors' => ['', 'string'],
+            'junior.name' => ['', 'string',],
+            'junior.years' => ['', 'numeric'],
+            'junior.honors' => ['', 'string'],
+            'senior.name' => ['', 'string'],
+            'senior.years' => ['', 'numeric'],
+            'senior.honors' => ['', 'string'],
+            'college.name' => ['', 'string'],
+            'college.years' => ['', 'numeric'],
+            'college.honors' => ['', 'string'],
+            'vocational.name' => ['', 'string'],
+            'vocational.years' => ['', 'numeric'],
+            'vocational.honors' => ['', 'string'],
+            'postgrad.name' => ['', 'string'],
+            'postgrad.years' => ['', 'numeric'],
+            'postgrad.honors' => ['', 'string'],
+
+            //Family Information
             // 'mother.first_name' => ['', 'string'],
             // 'mother.middle_name' => ['', 'string'],
             // 'mother.last_name' => ['', 'string'],
@@ -81,14 +86,43 @@ class StudentController extends Controller
             // 'father.batch' => ['', 'string'],
         ]);
 
-        dd($request->all());
-
-
-        $elementary = [
-            'name' => $request->elementary['name'],
-            'year' => $request->elementary['years'],
-            'honors' => $request->elementary['honors'],
+        //dd($request->all());
+        
+        $education = [
+            'elementary' => [
+                'name' => $request->education['elementary']['name'],
+                'years' => $request->education['elementary']['years'],
+                'honors' => $request->education['elementary']['honors'],
+            ],
+            'junior' => [
+                'name' => $request->education['junior']['name'],
+                'years' => $request->education['junior']['years'],
+                'honors' => $request->education['junior']['honors'],
+            ],
+            'senior' => [
+                'name' => $request->education['senior']['name'],
+                'years' => $request->education['senior']['years'],
+                'honors' => $request->education['senior']['honors'],
+            ],
+            'college' => [
+                'name' => $request->education['college']['name'],
+                'years' => $request->education['college']['years'],
+                'honors' => $request->education['college']['honors'],
+            ],
+            'vocational' => [
+                'name' => $request->education['vocational']['name'],
+                'years' => $request->education['vocational']['years'],
+                'honors' => $request->education['vocational']['honors'],
+            ],
+            'postgrad' => [
+                'name' => $request->education['postgrad']['name'],
+                'years' => $request->education['postgrad']['years'],
+                'honors' => $request->education['postgrad']['honors'],
+            ],
         ];
+
+        dd($education);
+
         $password = Hash::make($request->password);
 
         $user = User::where('email', $request->email)->first();
@@ -119,12 +153,12 @@ class StudentController extends Controller
 
         EducationRecord::create([
             'student_record_id' => $studentrecord->pluck('id')->first(),
-            'elem' => json_encode($elementary),
-            // 'junior' => json_encode($request->junior),
-            // 'senior' => json_encode($request->senior),
-            // 'college' => json_encode($request->college),
-            // 'vocational' => json_encode($request->vocational),
-            // 'postgrad' => json_encode($request->postgrad),
+            'elementary' => json_encode($education['elementary']),
+            'junior' => json_encode($education['junior']),
+            'senior' => json_encode($education['senior']),
+            'college' => json_encode($education['college']),
+            'vocational' => json_encode($education['vocational']),
+            'postgrad' => json_encode($education['postgrad']),
         ]);
 
         event(new Verified($user));

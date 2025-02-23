@@ -220,19 +220,19 @@
                                         <div class=" max-w-sm items-center gap-1.5">
                                             <Label for="email">Name of School, College or University</Label>
                                             <Input id="email" type="text" placeholder="Elementary School"
-                                                v-model="form.education.elemetary.name" class="w-full border-gray-200" />
+                                                v-model="form.education.elementary.name" class="w-full border-gray-200" />
                                         </div>
 
                                         <div class=" max-w-sm items-center gap-1.5">
                                             <Label for="email">Years Attended</Label>
                                             <Input id="email" type="text" placeholder="Ex. 2016-2020"
-                                                v-model="form.education.elemetary.years" class="w-full border-gray-200" />
+                                                v-model="form.education.elementary.years" class="w-full border-gray-200" />
                                         </div>
 
                                         <div class=" max-w-sm items-center gap-1.5">
                                             <Label for="email">Honors/Awards Recieved</Label>
                                             <Input id="email" type="text" placeholder="Ex. Academic Awards"
-                                                v-model="form.education.elemetary.honors" class="w-full border-gray-200" />
+                                                v-model="form.education.elementary.honors" class="w-full border-gray-200" />
                                         </div>
 
                                         <!-- junior -->
@@ -944,7 +944,7 @@ const form = ref({
     guardian_name: '',
     relationship: '',
     education: {
-        elemetary: { name: '', years: '', honors: '' },
+        elementary: { name: '', years: '', honors: '' },
         junior: { name: '', years: '', honors: '' },
         senior: { name: '', years: '', honors: '' },
         college: { name: '', years: '', honors: '' },
