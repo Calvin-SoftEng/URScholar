@@ -131,11 +131,11 @@
                                             <SelectContent>
                                             <SelectGroup>
                                                 <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                <SelectItem value="LGBTQ">
-                                                LGBTQ
+                                                <SelectItem value="Male">
+                                                Male
                                                 </SelectItem>
-                                                <SelectItem value="banana">
-                                                Banana
+                                                <SelectItem value="Female">
+                                                Female
                                                 </SelectItem>
                                             </SelectGroup>
                                             </SelectContent>
@@ -373,48 +373,48 @@
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">First Name</Label>
-                                        <Input id="email" type="text" placeholder="First Name" v-model="form.m_first_name" class="w-full border border-gray-200" />
+                                        <Input id="email" type="text" placeholder="First Name" v-model="form.mother.first_name" class="w-full border border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Last Name</Label>
-                                        <Input id="email" type="text" placeholder="Last Name" v-model="form.m_last_name" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Last Name" v-model="form.mother.last_name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Middle Name</Label>
-                                        <Input id="email" type="text" placeholder="Middle Name" v-model="form.m_middle_name" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Middle Name" v-model="form.mother.middle_name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Age</Label>
-                                        <Input id="email" type="text" placeholder="Age" v-model="form.m_age" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Age" v-model="form.mother.age" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="col-span-3 grid w-full items-center gap-1.5">
                                         <Label for="email">Address</Label>
-                                        <Input id="email" type="text" placeholder="Permanent Address" v-model="form.m_address" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Permanent Address" v-model="form.mother.address" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Citizenship</Label>
-                                        <Input id="email" type="text" placeholder="Ex. Filipino" v-model="form.m_citizenship" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. Filipino" v-model="form.mother.citizenship" class="w-full border-gray-200" />
                                     </div>
                                     
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Occupation</Label>
-                                        <Input id="email" type="text" placeholder="Occupation" v-model="form.m_occupation" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Occupation" v-model="form.mother.occupation" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Educational Attainment</Label>
-                                        <Input id="email" type="text" placeholder="Ex. College Graudate" v-model="form.m_education" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. College Graudate" v-model="form.mother.education" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="col-span-2 grid w-full items-center gap-1.5">
                                         <Label for="email">Batch (If Alumna of this High School/University)</Label>
-                                        <Input id="email" type="text" placeholder="Type N/A if none" v-model="form.m_batch" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Type N/A if none" v-model="form.mother.batch" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- father -->
@@ -427,48 +427,48 @@
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">First Name</Label>
-                                        <Input id="email" type="text" placeholder="First Name" v-model="form.f_first_name" class="w-full border border-gray-200" />
+                                        <Input id="email" type="text" placeholder="First Name" v-model="form.father.first_name" class="w-full border border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Last Name</Label>
-                                        <Input id="email" type="text" placeholder="Last Name" v-model="form.f_last_name" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Last Name" v-model="form.father.last_name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Middle Name</Label>
-                                        <Input id="email" type="text" placeholder="Middle Name" v-model="form.f_middle_name" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Middle Name" v-model="form.father.middle_name" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Age</Label>
-                                        <Input id="email" type="text" placeholder="Age" v-model="form.f_age" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Age" v-model="form.father.age" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="col-span-3 grid w-full items-center gap-1.5">
                                         <Label for="email">Address</Label>
-                                        <Input id="email" type="text" placeholder="Permanent Address" v-model="form.f_address" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Permanent Address" v-model="form.father.address" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Citizenship</Label>
-                                        <Input id="email" type="text" placeholder="Ex. Filipino" v-model="form.f_citizenship" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. Filipino" v-model="form.father.citizenship" class="w-full border-gray-200" />
                                     </div>
                                     
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Occupation</Label>
-                                        <Input id="email" type="text" placeholder="Occupation" v-model="form.f_occupation" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Occupation" v-model="form.father.occupation" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="grid w-full max-w-sm items-center gap-1.5">
                                         <Label for="email">Educational Attainment</Label>
-                                        <Input id="email" type="text" placeholder="Ex. College Graduate" v-model="form.f_education" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Ex. College Graduate" v-model="form.father.education" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="col-span-2 grid w-full items-center gap-1.5">
                                         <Label for="email">Batch (If Alumna of this High School/University)</Label>
-                                        <Input id="email" type="text" placeholder="Type N/A if none" v-model="form.f_batch" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Type N/A if none" v-model="form.father.batch" class="w-full border-gray-200" />
                                     </div>
 
                                     <!-- fam  info -->
@@ -481,22 +481,22 @@
 
                                     <div class="col-span-2 grid w-full items-center gap-1.5">
                                         <Label for="marital-status" class="text-gray-500">C.1 Marital Status of Parents</Label>
-                                        <RadioGroup default-value="comfortable" class="grid grid-cols-2 gap-2">
+                                        <RadioGroup default-value="comfortable" class="grid grid-cols-2 gap-2" v-model="form.marital_status">
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r1" value="Married" />
-                                            <Label for="r1">Married</Label>
+                                            <RadioGroupItem id="m1" value="Married" />
+                                            <Label for=",1">Married</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r2" value="living_together" />
-                                            <Label for="r2">Living Together</Label>
+                                            <RadioGroupItem id=",2" value="living_together" />
+                                            <Label for=",2">Living Together</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r3" value="not_married" />
-                                            <Label for="r3">Not Married</Label>
+                                            <RadioGroupItem id=",3" value="not_married" />
+                                            <Label for=",3">Not Married</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r4" value="seperated" />
-                                            <Label for="r4">Seperated</Label>
+                                            <RadioGroupItem id=",4" value="seperated" />
+                                            <Label for="r,4">Seperated</Label>
                                             </div>
                                         </RadioGroup>
                                     </div>
@@ -504,49 +504,49 @@
 
                                     <div class="col-span-2 grid w-full items-center gap-1.5">
                                         <Label for="marital-status" class="text-gray-500">C.2 Monthly Family Income</Label>
-                                        <RadioGroup default-value="comfortable" class="grid grid-cols-2 gap-2">
+                                        <RadioGroup default-value="comfortable" class="grid grid-cols-2 gap-2" v-model="form.income_sources">
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r1" value="below" />
-                                            <Label for="r1">10,000 and below</Label>
+                                            <RadioGroupItem id="i1" value="below" />
+                                            <Label for="i1">10,000 and below</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
                                             <RadioGroupItem id="r2" value="mid" />
-                                            <Label for="r2">20,001 - 30,000</Label>
+                                            <Label for="ri2">20,001 - 30,000</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r3" value="average" />
-                                            <Label for="r3">10,001 - 20,000</Label>
+                                            <RadioGroupItem id="i3" value="average" />
+                                            <Label for="i3">10,001 - 20,000</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r4" value="above" />
-                                            <Label for="r4">30,001 and above</Label>
+                                            <RadioGroupItem id="i4" value="above" />
+                                            <Label for="i4">30,001 and above</Label>
                                             </div>
                                         </RadioGroup>
                                     </div>
 
                                     <div class="col-span-1 grid w-full items-center gap-1.5">
                                         <Label for="email" class="text-gray-500">C.3 Other Source of Income</Label>
-                                        <Input id="email" type="text" placeholder="Income Sources" v-model="form.income_sources" class="w-full border-gray-200" />
+                                        <Input id="email" type="text" placeholder="Income Sources" v-model="form.other_income" class="w-full border-gray-200" />
                                     </div>
 
                                     <div class="col-span-3 grid w-full items-center gap-1.5">
                                         <Label for="marital-status" class="text-gray-500">C.4 Family Type of Housing</Label>
-                                        <RadioGroup default-value="comfortable" class="flex flex-row gap-2">
+                                        <RadioGroup default-value="comfortable" class="flex flex-row gap-2" v-model="form.otherSelected">
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r1" value="owned" />
-                                            <Label for="r1">Owned</Label>
+                                            <RadioGroupItem id="h1" value="owned" />
+                                            <Label for="h1">Owned</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r2" value="settler" />
-                                            <Label for="r2">Settler</Label>
+                                            <RadioGroupItem id="h2" value="settler" />
+                                            <Label for="h2">Settler</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r3" value="rental" />
-                                            <Label for="r3">Rental</Label>
+                                            <RadioGroupItem id="h3" value="rental" />
+                                            <Label for="h3">Rental</Label>
                                             </div>
                                             <div class="flex items-center space-x-2">
-                                            <RadioGroupItem id="r4" value="other" v-model="otherSelected" />
-                                            <Label for="r4">Others, please specify:</Label>
+                                            <RadioGroupItem id="h4" value="other" />
+                                            <Label for="h4">Others, please specify:</Label>
                                             <input
                                                 v-if="otherSelected === 'other'"
                                                 type="text"
@@ -921,6 +921,15 @@ const form = ref({
     college: { name: '', years: '', honors: '' },
     vocational: { name: '', years: '', honors: '' },
     postgrad: { name: '', years: '', honors: '' },
+    mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '' },
+    father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '' },
+    marital_status: '',
+    income_sources: '',
+    other_income: '',
+    otherSelected: '',
+    otherText: '',
+    formEntries: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
+    organizations: [{ name: '', membership_dates: '', position: '' }],
     img: null,
     imgName: null,
     imgPreview: null,
@@ -1004,6 +1013,7 @@ const formEntries = ref([
 const addEntry = () => {
   saveScrollPosition(); // Save scroll position before adding entry
   formEntries.value.push({ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' });
+  form.value.formEntries = formEntries.value;
   nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
 };
 
