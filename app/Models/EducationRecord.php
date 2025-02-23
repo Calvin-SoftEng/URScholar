@@ -8,6 +8,7 @@ class EducationRecord extends Model
 {
 
     protected $fillable = [
+        'student_record_id',
         'elementary',
         'junior',
         'senior',

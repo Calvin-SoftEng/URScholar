@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\EducationRecord;
+use App\Models\FamilyRecord;
 use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\StudentRecord;
@@ -66,27 +67,32 @@ class StudentController extends Controller
             'postgrad.honors' => ['', 'string'],
 
             //Family Information
-            // 'mother.first_name' => ['', 'string'],
-            // 'mother.middle_name' => ['', 'string'],
-            // 'mother.last_name' => ['', 'string'],
-            // 'mother.age' => ['', 'string'],
-            // 'mother.address' => ['', 'string'],
-            // 'mother.citizenship' => ['', 'string'],
-            // 'mother.occupation' => ['', 'string'],
-            // 'mother.education' => ['', 'string'],
-            // 'mother.batch' => ['', 'string'],
-            // 'father.first_name' => ['', 'string'],
-            // 'father.middle_name' => ['', 'string'],
-            // 'father.last_name' => ['', 'string'],
-            // 'father.age' => ['', 'string'],
-            // 'father.address' => ['', 'string'],
-            // 'father.citizenship' => ['', 'string'],
-            // 'father.occupation' => ['', 'string'],
-            // 'father.education' => ['', 'string'],
-            // 'father.batch' => ['', 'string'],
+            'mother.first_name' => ['', 'string'],
+            'mother.middle_name' => ['', 'string'],
+            'mother.last_name' => ['', 'string'],
+            'mother.age' => ['', 'string'],
+            'mother.address' => ['', 'string'],
+            'mother.citizenship' => ['', 'string'],
+            'mother.occupation' => ['', 'string'],
+            'mother.education' => ['', 'string'],
+            'mother.batch' => [ 'string'],
+
+            'father.first_name' => ['', 'string'],
+            'father.middle_name' => ['', 'string'],
+            'father.last_name' => ['', 'string'],
+            'father.age' => ['', 'string'],
+            'father.address' => ['', 'string'],
+            'father.citizenship' => ['', 'string'],
+            'father.occupation' => ['', 'string'],
+            'father.education' => ['', 'string'],
+            'father.batch' => ['string'],
+
+            'marital_status' => ['required', 'string'],
+            'monthly_income' => ['required', 'string'],
+            'other_income' => ['required', 'string'],
+            'family_housing' => ['required', 'string'],
         ]);
 
-        //dd($request->all());
         
         $education = [
             'elementary' => [
@@ -121,7 +127,30 @@ class StudentController extends Controller
             ],
         ];
 
-        dd($education);
+
+        $mother = [
+            'first_name' => $request->mother['first_name'],
+            'middle_name' => $request->mother['middle_name'],
+            'last_name' => $request->mother['last_name'],
+            'age' => $request->mother['age'],
+            'address' => $request->mother['address'],
+            'citizenship' => $request->mother['citizenship'],
+            'occupation' => $request->mother['occupation'],
+            'education' => $request->mother['education'],
+            'batch' => $request->mother['batch'],
+        ];
+
+        $father = [
+            'first_name' => $request->father['first_name'],
+            'middle_name' => $request->father['middle_name'],
+            'last_name' => $request->father['last_name'],
+            'age' => $request->father['age'],
+            'address' => $request->father['address'],
+            'citizenship' => $request->father['citizenship'],
+            'occupation' => $request->father['occupation'],
+            'education' => $request->father['education'],
+            'batch' => $request->father['batch'],
+        ];
 
         $password = Hash::make($request->password);
 
@@ -151,14 +180,27 @@ class StudentController extends Controller
 
         $studentrecord = StudentRecord::where('user_id', $user->id)->get();
 
+        $studentrecordID = $studentrecord->pluck('id')->first();
+
+
         EducationRecord::create([
-            'student_record_id' => $studentrecord->pluck('id')->first(),
+            'student_record_id' => $studentrecordID,
             'elementary' => json_encode($education['elementary']),
             'junior' => json_encode($education['junior']),
             'senior' => json_encode($education['senior']),
             'college' => json_encode($education['college']),
             'vocational' => json_encode($education['vocational']),
             'postgrad' => json_encode($education['postgrad']),
+        ]);
+
+        FamilyRecord::create([
+            'student_record_id' => $studentrecordID,
+            'mother' => json_encode($mother),
+            'father' => json_encode($father),
+            'marital_status' => $request->marital_status,
+            'monthly_income' => $request->monthly_income,
+            'other_income' => $request->other_income,
+            'family_housing' => $request->family_housing,
         ]);
 
         event(new Verified($user));
@@ -233,12 +275,15 @@ class StudentController extends Controller
 
         $student = StudentRecord::where('user_id', Auth::user()->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
+        $family = FamilyRecord::where('student_record_id', $student->id)->first();
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
-            'education' => $education
+            'education' => $education,
+            'family' => $family,
         ]);
     }
+    
     public function application(User $user)
     {
 

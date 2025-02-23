@@ -570,7 +570,7 @@
                                             <Label for="marital-status" class="text-gray-500">C.2 Monthly Family
                                                 Income</Label>
                                             <RadioGroup default-value="comfortable" class="grid grid-cols-2 gap-2"
-                                                v-model="form.income_sources">
+                                                v-model="form.monthly_income">
                                                 <div class="flex items-center space-x-2">
                                                     <RadioGroupItem id="i1" value="below" />
                                                     <Label for="i1">10,000 and below</Label>
@@ -600,7 +600,7 @@
                                             <Label for="marital-status" class="text-gray-500">C.4 Family Type of
                                                 Housing</Label>
                                             <RadioGroup default-value="comfortable" class="flex flex-row gap-2"
-                                                v-model="form.otherSelected">
+                                                v-model="form.family_housing">
                                                 <div class="flex items-center space-x-2">
                                                     <RadioGroupItem id="h1" value="owned" />
                                                     <Label for="h1">Owned</Label>
@@ -616,7 +616,7 @@
                                                 <div class="flex items-center space-x-2">
                                                     <RadioGroupItem id="h4" value="other" />
                                                     <Label for="h4">Others, please specify:</Label>
-                                                    <input v-if="otherSelected === 'other'" type="text"
+                                                    <input v-if="family_housing === 'other'" type="text"
                                                         v-model="otherText" placeholder="Type here..."
                                                         class="border-b border-gray-400 outline-none w-32 px-2 text-sm" />
                                                 </div>
@@ -954,9 +954,9 @@ const form = ref({
     mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '' },
     father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '' },
     marital_status: '',
-    income_sources: '',
+    monthly_income: '',
     other_income: '',
-    otherSelected: '',
+    family_housing: '',
     otherText: '',
     formEntries: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
     organizations: [{ name: '', membership_dates: '', position: '' }],
