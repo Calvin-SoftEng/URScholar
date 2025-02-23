@@ -1066,7 +1066,7 @@ const organizations = ref([
 // Add a new organization entry
 const addOrganization = () => {
     saveScrollPosition(); // Save scroll position before adding entry
-    form.organizations = organizations.value;
+    form.value.organizations = organizations.value;
     organizations.value.push({ name: '', membership_dates: '', position: '' });
     nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
 };

@@ -114,17 +114,17 @@
                     </div>
                 </div>
             </div>
-
             
         </div>
         <!-- creating a sponsor --> 
         <div v-if="isCreating"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
-            <div  v-for="sponsor in sponsors" :key="sponsor.id" class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">{{ isEditing ? 'Edit Sponsor Information' : 'Add New Scholarship'
-                            }}</h2>
+                        <h2 class="text-2xl font-bold">
+                        Add New Scholarship
+                        </h2>
                     </span>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -174,7 +174,7 @@
                     <div class="mt-2">
                         <button type="submit"
                             class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            {{ isEditing ? 'Update Scholarship' : 'Create Scholarship' }}</button>
+                            Create Scholarship</button>
                     </div>
                 </form>
             </div>
@@ -228,16 +228,16 @@ const form = ref({
     deadline: null,
 });
 
+// const toggleCreate = (sponsorID) => {
+//     isCreating.value = !isCreating.value;
+//     if (isCreating.value) {
+//         sponsorid.value = sponsorID;
+//         form.value.sponsor_id = sponsorID;
+//     }
+// };
+
 const toggleCreate = (sponsorID) => {
-    // if (isCreating.value && sponsorid.value === sponsorID) {
-    //     isCreating.value = false;
-    //     sponsorid.value = null;
-    // } else {
-    //     isCreating.value = true;
-    //     sponsorid.value = sponsorID;
-    //     form.value.sponsor_id = sponsorID;
-    // }
-    isCreating.value = !isCreating.value;
+    isCreating.value = isCreating.value === sponsorID ? null : sponsorID;
     if (isCreating.value) {
         sponsorid.value = sponsorID;
         form.value.sponsor_id = sponsorID;

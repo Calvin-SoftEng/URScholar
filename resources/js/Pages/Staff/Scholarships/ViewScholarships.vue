@@ -2,8 +2,8 @@
 
     <Head title="Scholarships" />
     <AuthenticatedLayout>
-        <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary">
-            <div class="w-full mx-auto p-3 rounded-xl text-white">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+            <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
                         <li class="hover:text-gray-600">
