@@ -31,4 +31,9 @@ class Scholarship extends Model
     {
         return $this->belongsTo(Sponsor::class);
     }
+
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class);
+    }
 }

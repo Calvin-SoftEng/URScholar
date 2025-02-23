@@ -17,4 +17,9 @@ class Batch extends Model
     {
         return $this->hasMany(Scholar::class);
     }
+
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class);
+    }
 }
