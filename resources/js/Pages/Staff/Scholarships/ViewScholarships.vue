@@ -2,7 +2,7 @@
 
     <Head title="Scholarships" />
     <AuthenticatedLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
@@ -60,80 +60,79 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div v-if="ScholarshipSpecification"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity-ease-in duration-300 ">
+            <div class="bg-white dark:bg-dprimary rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between px-4 py-2 md:px-5 rounded-t">
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
 
-            <div v-if="ScholarshipSpecification"
-                class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity-ease-in duration-300 ">
-                <div class="bg-white rounded-lg shadow-xl w-4/12">
-                    <div class="flex items-center justify-between px-4 py-2 md:px-5 rounded-t">
-                        <button type="button" @click="closeModal"
-                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                            data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                viewBox="0 0 14 14">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                            </svg>
-                        </button>
-                    </div>
+                <div class=" bg-white dark:bg-dprimary flex justify-center items-center p-5 rounded-lg">
+                    <div class="flex flex-col space-y-2 items-center">
+                        <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
+                            {{ selectedScholarship.name }}<span> Scholars</span> 
+                        </h1>
 
-                    <div class=" bg-white flex justify-center items-center p-5 rounded-lg">
-                        <div class="flex flex-col space-y-2 items-center">
-                            <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                                {{ selectedScholarship.name }}<span> Scholars</span> 
-                            </h1>
-
-                            <div class="py-5 text-gray-500 ">
-                                Select School Year and Semester
+                        <div class="py-5 text-gray-500 ">
+                            Select School Year and Semester
+                        </div>
+                        <div class="grid grid-cols-3 justify-center items-center gap-3">
+                            <div class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                                Academic Year: </div>
+                            <div class="col-span-2 w-full">
+                                <Select v-model="selectedYear" required>
+                                    <SelectTrigger class="w-full border" :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
+                                        <SelectValue placeholder="Select year" class="dark:text-dtext" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup v-for="schoolyear in schoolyears" :key="schoolyear.id">
+                                            <!-- <SelectLabel>Gender</SelectLabel> -->
+                                            <SelectItem :value="schoolyear.id">
+                                                {{ schoolyear.year }}
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
-                            <div class="grid grid-cols-3 justify-center items-center gap-3">
-                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
-                                    Academic Year: </div>
-                                <div class="col-span-2 w-full">
-                                    <Select v-model="selectedYear" required>
-                                        <SelectTrigger class="w-full border" :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
-                                            <SelectValue placeholder="Select year" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup v-for="schoolyear in schoolyears" :key="schoolyear.id">
-                                                <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                <SelectItem :value="schoolyear.id">
-                                                    {{ schoolyear.year }}
-                                                </SelectItem>
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div class="col-span-1 text-primary font-quicksand font-bold text-base justify-center">
-                                    Semester: </div>
-                                <div class="col-span-2 w-full">
-                                    <Select v-model="selectedSem" required>
-                                        <SelectTrigger class="w-full border" :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
-                                            <SelectValue placeholder="Select Semester" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectGroup>
-                                                <SelectItem value="1st">
-                                                    First Semester
-                                                </SelectItem>
-                                                <SelectItem value="2nd">
-                                                    Second Semester
-                                                </SelectItem>
-                                            </SelectGroup>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                            <div class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                                Semester: </div>
+                            <div class="col-span-2 w-full">
+                                <Select v-model="selectedSem" required>
+                                    <SelectTrigger class="w-full border" :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
+                                        <SelectValue placeholder="Select Semester" class="dark:text-dtext"/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectItem value="1st">
+                                                First Semester
+                                            </SelectItem>
+                                            <SelectItem value="2nd">
+                                                Second Semester
+                                            </SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
                             </div>
-                            <p v-if="formErrors.selectedSem" class="text-red-500 text-sm mt-1">
-                                {{ formErrors.selectedSem }}
-                            </p>
-                            <p v-if="formErrors.selectedYear" class="text-red-500 text-sm mt-1">
-                                {{ formErrors.selectedYear }}
-                            </p>
-                            <div class="pt-10 w-full">
-                                <button @click="openScholarship"
-                                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                                    Proceed to Scholarship</button>
-                            </div>
+                        </div>
+                        <p v-if="formErrors.selectedSem" class="text-red-500 text-sm mt-1">
+                            {{ formErrors.selectedSem }}
+                        </p>
+                        <p v-if="formErrors.selectedYear" class="text-red-500 text-sm mt-1">
+                            {{ formErrors.selectedYear }}
+                        </p>
+                        <div class="pt-10 w-full">
+                            <button @click="openScholarship"
+                                class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                                Proceed to Scholarship</button>
                         </div>
                     </div>
                 </div>
