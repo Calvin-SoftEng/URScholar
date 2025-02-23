@@ -29,4 +29,9 @@ class StudentRecord extends Model
     {
         return $this->hasMany(EducationRecord::class);
     }
+
+    public function familyrecord()
+    {
+        return $this->hasOne(FamilyRecord::class);
+    }
 }

@@ -6,23 +6,23 @@ use Illuminate\Database\Eloquent\Model;
 
 class EducationRecord extends Model
 {
+
     protected $fillable = [
-        'student_record_id',
-        'elem',
+        'elementary',
         'junior',
         'senior',
         'college',
-        'vocal',
-        'postg',
+        'vocational',
+        'postgrad',
     ];
 
     protected $casts = [
-        'elem' => 'array',
+        'elementary' => 'array',
         'junior' => 'array',
         'senior' => 'array',
         'college' => 'array',
-        'vocal' => 'array',
-        'postg' => 'array',
+        'vocational' => 'array',
+        'postgrad' => 'array',
     ];
     
     public function studentrecord()
