@@ -23,13 +23,13 @@
                 </div>
 
                 <div class="mx-auto py-5">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="flex w-full flex-col gap-6">
                         <button v-for="scholarship in scholarships" :key="scholarship.id"
                             @click="toggleSpecification(scholarship)">
                             <div
                                 class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
                                     dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
-                                <div class="card-body p-6 space-y-3">
+                                <div class="card-body p-6 space-y-3 items-start">
                                     <!-- Sponsor Badge -->
                                     <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                         {{ getSponsorName(scholarship.sponsor_id) }}
