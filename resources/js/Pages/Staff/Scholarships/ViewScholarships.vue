@@ -27,32 +27,35 @@
                         <button v-for="scholarship in scholarships" :key="scholarship.id"
                             @click="toggleSpecification(scholarship)">
                             <div
-                                class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
-                                <!-- <Link :href="`/scholarships/${scholarship.id}`"> -->
-                                <div class="card-body p-5 space-y-2">
-                                    <div class="badge badge-info text-[12px] badge-outline">
+                                class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
+                                    dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
+                                <div class="card-body p-6 space-y-3">
+                                    <!-- Sponsor Badge -->
+                                    <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                         {{ getSponsorName(scholarship.sponsor_id) }}
                                     </div>
-                                    <h2
-                                        class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
-                                        {{
-                                            scholarship.name }}</h2>
-                                    <p class="leading-relaxed items-start justify-start text-sm text-gray-400">
-                                        <span class="justify-start items-start">Created on: {{ new Date(scholarship.created_at).toLocaleDateString()
-                                            }}</span><br>
-                                        <span>Sponsoring Since: {{ new
-                                            Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long', day: 'numeric'
-                                            }) }}</span>
+
+                                    <!-- Scholarship Title -->
+                                    <h2 class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
+                                        {{ scholarship.name }}
+                                    </h2>
+
+                                    <!-- Scholarship Dates -->
+                                    <p class="text-sm text-gray-500">
+                                        <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
+                                        <span>Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                            year: 'numeric', month: 'long', day: 'numeric'
+                                        }) }}</span>
                                     </p>
-                                    <p class="text-md text-gray-600 mb-4 text-justify overflow-hidden text-overflow-truncate line-clamp-4 h-24 max-w-full"
-                                        style=" display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden;">
+
+                                    <!-- Scholarship Description -->
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
+                                        style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
                                         {{ scholarship.description }}
                                     </p>
                                 </div>
-                                <!-- </Link> -->
                             </div>
+
                         </button>
                     </div>
                 </div>

@@ -1,9 +1,8 @@
 <template>
-
     <Head title="Scholarships" />
     <AuthenticatedLayout>
-        <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-            <div class="w-full mx-auto p-3 rounded-xl text-white">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+            <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
                         <li class="hover:text-gray-600">
@@ -39,7 +38,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             <div v-for="sponsor in sponsors" :key="sponsor.id"
                                 class="card border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400">
-                                <div class="card-body p-6 space-y-2">
+                                <div class="card-body p-6 space-y-4">
                                     <!-- logo -->
                                     <div class="flex justify-center">
                                         <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"

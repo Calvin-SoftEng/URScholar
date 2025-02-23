@@ -12,7 +12,7 @@
           @click="openReport">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report
         </button>
-        <button
+        <!-- <button
           class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
           @click="openRequirements">
           <font-awesome-icon :icon="['fas', 'folder-open']" class="mr-2 text-sm" />View Requirements
@@ -21,7 +21,7 @@
           class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
           @click="openReport">
           <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
-        </button>
+        </button> -->
       </div>
       <form class="w-3/12">
         <label for="default-search"
@@ -113,7 +113,7 @@
                       'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
                       'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
                       'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
-                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
+                    }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       {{ scholar.status }}
                     </span>
                   </td>
@@ -129,8 +129,10 @@
                 </tr>
               </tbody>
             </table>
-            <!-- Pagination controls -->
-            <div v-if="totalScholars > 10" class="mt-5 flex flex-col items-right">
+            
+          </div>
+          <!-- Pagination controls -->
+          <div v-if="totalScholars > 10" class="mt-5 flex flex-col items-right">
               <span class="text-sm text-gray-700 dark:text-gray-400">
                 Showing
                 <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
@@ -155,7 +157,6 @@
                 </button>
               </div>
             </div>
-          </div>
         </div>
       </div>
     </div>
