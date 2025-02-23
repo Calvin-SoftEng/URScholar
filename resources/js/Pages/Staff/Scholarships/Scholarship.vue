@@ -1,6 +1,6 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
@@ -26,12 +26,12 @@
                     </div>
                     <div class="flex gap-2">
                         <button @click="openScholarship"
-                            class="px-4 py-2 text-sm text-primary bg-dirtywhite border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
-                            <span><font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2 text-sm"/>Import Scholars</span>
+                            class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
+                            <span><font-awesome-icon :icon="['fas', 'user-plus']" class="mr-2 text-sm dark:text-dtext"/>Import Scholars</span>
                         </button>
                         <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-                            <button @click="importScholars" class="px-4 py-2 text-sm text-primary bg-dirtywhite border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
-                                <span><font-awesome-icon :icon="['far', 'envelope']" class="mr-2 text-sm"/>Send Email</span>
+                            <button @click="importScholars" class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
+                                <span><font-awesome-icon :icon="['far', 'envelope']" class="mr-2 text-sm dark:text-dtext"/>Send Email</span>
                             </button>
                         </Link>
                     </div>
@@ -179,17 +179,24 @@
                 </div>
 
                 <!-- body -->
-                <div class="p-4 flex flex-col gap-3">
-                    <label for="batchSelection" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                <div class="py-4 px-8 flex flex-col gap-3">
+                    <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
                         Select a Batch to Forward:
                     </label>
-                    <select id="batchSelection" v-model="selectedBatch"
-                        class="w-full p-2 border rounded-lg dark:bg-gray-800 dark:text-white focus:ring-blue-500 focus:border-blue-500">
-                        <option value="all">Send All Batch List</option>
-                        <option v-for="batch in batches" :key="batch.id" :value="batch.id">
-                            {{ batch.batch_no }}
-                        </option>
-                    </select>
+                    <!-- Checkbox List -->
+                    <div class="flex flex-col gap-2">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <span class="text-gray-900 dark:text-white">Send All Batch List</span>
+                        </label>
+
+                        <label v-for="batch in batches" :key="batch.id" class="flex items-center space-x-2">
+                            <input type="checkbox" :value="batch.id" v-model="selectedBatches"
+                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                            <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
+                        </label>
+                    </div>
 
                     <!-- Forward Button -->
                     <div class="mt-2">

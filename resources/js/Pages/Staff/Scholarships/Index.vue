@@ -47,9 +47,12 @@
                                             {{ sponsor.name }} 
                                             <span class="text-gray-500 dark:text-gray-400">({{ sponsor.abbreviation }})</span>
                                         </span>
-                                        <div class="badge text-xs dark:bg-dsecondary dark:text-dtext">
+                                        <!-- <div class="badge text-xs dark:bg-dsecondary dark:text-dtext">
+
                                             Sponsoring Since: {{ sponsor.since }}
-                                        </div>
+                                        </div> -->
+                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-dsecondary dark:text-blue-400 border border-blue-400 dark:border-gray-600">
+                                            Sponsoring Since: {{ sponsor.since }}</span>
                                     </div>
 
                                    <!-- Active Scholarships (Centered) -->
@@ -114,7 +117,6 @@
                     </div>
                 </div>
             </div>
-            
         </div>
         <!-- creating a sponsor --> 
         <div v-if="isCreating"
