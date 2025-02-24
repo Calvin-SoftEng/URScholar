@@ -8,6 +8,7 @@ use App\Models\SchoolYear;
 use App\Models\Batch;
 use App\Http\Controllers\Controller;
 use App\Models\Requirements;
+use App\Models\Payout;
 use App\Models\Scholar;
 use App\Models\SubmittedRequirements;
 use App\Models\Sponsor;
@@ -136,11 +137,11 @@ class ScholarshipController extends Controller
             'scholarship' => $scholarship,
             'batches' => $batches,
             'scholars' => $scholarship->scholars()
-            ->whereDoesntHave('submittedRequirements', function($query) {
-                $query->where('status', '!=', 'approved');
-            })
-            ->whereHas('submittedRequirements')
-            ->get(),
+                ->whereDoesntHave('submittedRequirements', function ($query) {
+                    $query->where('status', '!=', 'approved');
+                })
+                ->whereHas('submittedRequirements')
+                ->get(),
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
         ]);
@@ -172,6 +173,45 @@ class ScholarshipController extends Controller
             'scholarship' => $scholarship,
             'scholars' => $scholars,
         ]);
+    }
+
+    public function forward(Request $request)
+    {
+        $validated = $request->validate([
+            'scholarship_id' => 'required|integer',
+            'scholars' => 'required|array', // Array of scholar IDs
+            'batch_ids' => 'required|array', // Array of batch IDs
+            'batch_ids.*' => 'integer',
+        ]);
+
+        $scholarshipId = $validated['scholarship_id'];
+        $scholars = $validated['scholars']; // Array of scholar IDs
+        $batchIds = $validated['batch_ids']; // Array of batch IDs
+
+        $dataToInsert = [];
+
+        foreach ($batchIds as $batchId) {
+            foreach ($scholars as $scholarId) {
+                $dataToInsert[] = [
+                    'scholarship_id' => $scholarshipId,
+                    'batch_id' => $batchId,
+                    'scholar_id' => $scholarId,
+                    'status' => 'pending', // Default status
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+        }
+
+        dd($dataToInsert);
+
+        // Insert all records at once
+        Payout::insert($dataToInsert);
+
+        return response()->json([
+            'message' => 'Scholars successfully assigned to batches!',
+            'inserted_count' => count($dataToInsert),
+        ], 201);
     }
 
 

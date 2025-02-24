@@ -87,9 +87,12 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/submitted-requirements', [ScholarController::class, 'expand_requirements'])->name('requirements.expand_requirements');
 
     Route::post('/scholarships/{scholarship}/send-access/send', [EmailController::class, 'send'])->name('requirements.send');
+
     //ScholarshipsTabs
     Route::get('/scholarships/{scholarship}/requirements', [ScholarshipController::class, 'requirementsTab'])->name('requirementsTab.requirements');
     Route::get('/scholarships/{scholarship}/send-access', [EmailController::class, 'index'])->name('requirements.index');
+    
+    Route::post('/scholarship/forward-batches', [ScholarshipController::class, 'forward'])->name('scholars.forward');
 
     Route::get('/scholarships/scholar={id}', [ScholarController::class, 'scholar'])->name('scholarships.scholar_scholarship_details');
     Route::post('/scholarships/scholar/update-requirements', [ScholarController::class, 'updateStatus'])->name('scholarships.updateStatus');
@@ -171,7 +174,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     Route::get('/student/scholarship/confirmation', [StudentController::class, 'confirmation'])->name('student.confirmation');
     Route::post('/student/application/upload', [StudentController::class, 'applicationUpload'])->name('student.application.upload');
-    
+
     //profile
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
 
