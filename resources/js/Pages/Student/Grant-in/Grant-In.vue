@@ -24,11 +24,18 @@
                             <img src="../../../../assets/images/qrcodesample.png" alt="" class="w-20 h-20">
                             <span class="pl-2">Download your QR Code</span>
                         </div> -->
-                        <a href="{{ route('download.qr') }}" download="QRCode.png"
+
+                        <!-- <a href="{{ route('download.qr') }}" download="QRCode.png"
                             class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3 cursor-pointer hover:bg-gray-100">
                             <img src="../../../../assets/images/qrcodesample.png" alt="QR Code" class="w-20 h-20">
                             <span class="pl-2">Download your QR Code</span>
-                        </a>
+                        </a> -->
+
+                        <button @click="isQrCodeVisible = true"
+                            class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3 cursor-pointer hover:bg-gray-100">
+                            <img src="../../../../assets/images/qrcodesample.png" alt="QR Code" class="w-20 h-20">
+                            <span class="pl-2">Download your QR Code</span>
+                        </button>
                         <!-- tracker -->
                         <div class="w-full h-1/12 space-y-3 bg-white shadow-lg rounded-lg items-center p-3">
                             <span class="pl-2">Recent Activities</span>
@@ -144,6 +151,36 @@
                 </div>
             </div>
         </div>
+        <!-- qrcode --> 
+        <div v-if="isQrCodeVisible"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity duration-300">
+            
+            <!-- Modal Content -->
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-700 rounded-lg shadow-xl w-full max-w-lg">
+            
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between p-4 border-b dark:border-gray-600">
+                <h2 class="text-xl font-bold text-gray-900 dark:text-white">QR Code Download</h2>
+                <button @click="isQrCodeVisible = false"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg w-8 h-8 flex items-center justify-center dark:hover:bg-gray-600 dark:hover:text-white">
+                <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                </button>
+            </div>
+
+                <!-- Modal Body -->
+                <div class="p-5 flex flex-col items-center">
+                    <img :src="qrCodeImage" alt="QR Code" class="w-40 h-40 object-cover rounded-lg shadow-md">
+                    <p class="text-gray-700 dark:text-gray-300 mt-4 text-sm">Scan the QR code or click below to download it.</p>
+                    <a :href="qrCodeImage" download="QR_Code.png"
+                    class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition">
+                    Download QR Code
+                    </a>
+                </div>
+            </div>
+        </div>
     </AuthenticatedLayout>
 </template>
 
@@ -202,6 +239,17 @@ const removeFile = (reqId) => {
     if (fileInput) {
         fileInput.value = '';
     }
+};
+
+const isQrCodeVisible = ref(false);
+
+const qrCodeImage = ref(new URL("@/assets/images/qrcodesample.png", import.meta.url).href);
+
+
+const closeModal = () => {
+    isCreating.value = false;
+    isEditing.value = false;
+    resetForm();
 };
 
 const submitRequirements = () => {
