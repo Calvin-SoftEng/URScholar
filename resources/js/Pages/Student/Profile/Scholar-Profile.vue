@@ -2,8 +2,9 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <div class="w-full bg-dirtywhite shadow-sm ">
-            <h1 class="text-3xl font-bold font-sora text-left p-3 mx-10">My Profile</h1>
+        <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row px-10">
+            <h1 class="text-3xl font-bold font-sora text-left p-3">My Profile</h1>
+            <button class="text-sm font-semibold text-black">Edit Profile</button>
         </div>
         <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2">
             <div class="mx-auto w-7/12 sm:px-6 lg:px-8 ">
