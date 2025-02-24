@@ -381,7 +381,6 @@ class StudentController extends Controller
         ]);
 
 
-
         $scholar = Scholar::where('email', Auth::user()->email)->first();
 
         $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();

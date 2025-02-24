@@ -170,15 +170,16 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::post('/student/application/re-upload', [StudentController::class, 'applicationReupload'])->name('student.application.reupload');
 
     Route::get('/student/scholarship/confirmation', [StudentController::class, 'confirmation'])->name('student.confirmation');
-
+    Route::post('/student/application/upload', [StudentController::class, 'applicationUpload'])->name('student.application.upload');
+    
     //profile
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
 
     // Route::get('/student/scholarship', [StudentController::class, 'scholarship'])->name('student.scholarships');
 
     // application
-    Route::get('/student/application', [StudentController::class, 'application'])->name('student.application');
-    Route::post('/student/application/upload', [StudentController::class, 'applicationUpload'])->name('student.application.upload');
+    // Route::get('/student/application', [StudentController::class, 'application'])->name('student.application');
+
 
 
 

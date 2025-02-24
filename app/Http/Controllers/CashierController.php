@@ -26,4 +26,9 @@ class CashierController extends Controller
     {
         return Inertia::render('Cashier/Scholarships/Payouts');
     }
+
+    public function payouts()
+    {
+        return Inertia::render('Cashier/Scholarships/Payouts');
+    }
 }

@@ -60,7 +60,7 @@ class ScholarshipController extends Controller
         $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements, $scholarshipId) {
             // Get approved requirements for this scholar
 
-            
+
             $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Approved')
                 ->count();
@@ -135,35 +135,17 @@ class ScholarshipController extends Controller
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
+            'scholars' => $scholarship->scholars()
+            ->whereDoesntHave('submittedRequirements', function($query) {
+                $query->where('status', '!=', 'approved');
+            })
+            ->whereHas('submittedRequirements')
+            ->get(),
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
         ]);
     }
 
-    // public function show(Request $request, Scholarship $scholarship)
-    // {
-
-    //     $scholars = $scholarship->scholars;
-
-
-    //     $selectedYear = $request->input('selectedYear', '');
-    //     $selectedSem = $request->input('selectedSem', '');
-
-    //     $schoolyear = SchoolYear::where('id', $selectedYear)->first();
-
-    //     // $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-    //     // $reqID = $requirements->pluck('id')->first();
-
-    //     // $submitRequirements = SubmittedRequirements::where('id', $reqID)->get();
-
-    //     return Inertia::render('Super_Admin/Scholarships/Scholarship', [
-    //         'scholarship' => $scholarship,
-    //         'scholars' => $scholars,
-    //         'schoolyear' => $schoolyear,
-    //         'selectedSem' => $selectedSem,
-    //     ]);
-    // }
 
     public function store(Request $request, Sponsor $sponsor)
     {
