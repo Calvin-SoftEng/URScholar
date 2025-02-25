@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Scholarship extends Model
 {
-    protected $fillable = ['name', 'sponsor_id', 'school_year', 'scholarshipType',  'semester', 'status', 'created_by' ];
+    protected $fillable = ['name', 'sponsor_id', 'scholarshipType', 'status', 'created_by' ];
 
     public function scholars()
     {
@@ -17,6 +17,11 @@ class Scholarship extends Model
         return $this->hasMany(Applicant::class);
     }
 
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
+
     public function requirements()
     {
         return $this->belongsTo(Requirements::class);
@@ -25,5 +30,10 @@ class Scholarship extends Model
     public function sponsor()
     {
         return $this->belongsTo(Sponsor::class);
+    }
+
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class);
     }
 }

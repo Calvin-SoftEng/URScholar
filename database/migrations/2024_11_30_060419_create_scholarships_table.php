@@ -15,9 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
-            $table->string('school_year');
             $table->string('scholarshipType');
-            $table->string('semester');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });

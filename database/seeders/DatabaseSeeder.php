@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\SchoolYear;
+use App\Models\Sponsor;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -14,6 +16,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(2)->create();
+        //MIS
+        User::factory()->create([
+            'name' => 'mis1',
+            'email' => 'mis1@gmail.com',
+            'first_name' => 'John Paul',
+            'last_name' => 'Manalo',
+            'middle_name' => 'De Guzman',
+            'password' => bcrypt('password'),
+            'usertype' => 'system_admin',
+            'campus' => 'Morong'
+        ]);
+
         //Super Admin
         User::factory()->create([
             'name' => 'superadmin1',
@@ -22,7 +36,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'super_admin'
+            'usertype' => 'super_admin',
+            'campus' => 'Morong'
         ]);
 
 
@@ -34,7 +49,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'coordinator'
+            'usertype' => 'coordinator',
+            'campus' => 'Binangonan'
         ]);
 
         User::factory()->create([
@@ -46,6 +62,18 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'usertype' => 'coordinator'
         ]);
+
+        //cashier
+        User::factory()->create([
+            'name' => 'cashier1',
+            'email' => 'cashier1@gmail.com',
+            'first_name' => 'John Paul',
+            'last_name' => 'Manalo',
+            'middle_name' => 'De Guzman',
+            'password' => bcrypt('password'),
+            'usertype' => 'cashier'
+        ]);
+
         //student
         User::factory()->create([
             'name' => 'student1',
@@ -56,6 +84,28 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'usertype' => 'student'
         ]);
+
+
+        $logopath = 'storage/sponsor/logo/images.png';
+        //sponsor
+        Sponsor::factory()->create([
+            'name' => 'Commissioner of Higher Education',
+            'abbreviation' => 'CHED',
+            'since' => '2021-01-01',
+            'moa_file' => 'moa1.pdf',
+            'description' => 'sponsor1',
+            'logo' => 'images.png',
+        ]);
+        
+        //school year
+        SchoolYear::factory()->create([
+            'year' => '2024-2025',
+        ]);
+
+        SchoolYear::factory()->create([
+            'year' => '2025-2026',
+        ]);
+
 
 
         //sponsor 

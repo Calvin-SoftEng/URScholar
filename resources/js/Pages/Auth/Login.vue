@@ -6,6 +6,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 defineProps({
     canResetPassword: {
@@ -15,6 +16,12 @@ defineProps({
         type: String,
     },
 });
+
+const showPassword = ref(false);
+
+const togglePassword = () => {
+  showPassword.value = !showPassword.value;
+};
 
 const form = useForm({
     email: '',
@@ -54,37 +61,30 @@ const submit = () => {
             <div class="w-full fit-content relative flex flex-col gap-1 px-10 py-9">
                 <div class="flex flex-col items-start justify-start mb-8">
                     <p class="font-extrabold font-sora text-2xl">Login to your Account</p>
-                    <span class="max-w-[80%]">Testing Subtitles</span>
+                    <span class="max-w-[90%] text-sm">Enter the details sent by the Scholarship Office</span>
                 </div>
                 <div>
                     <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
-                    
-                    <!-- <TextInput
-                        id="email"
-                        type="email"
-                        class="mt-1 block w-full"
-                        v-model="form.email"
-                        required
-                        autofocus
-                        autocomplete="username"
-                        aria-placeholder="Your Scholar ID"
-                    /> -->
-                    <input placeholder="name@mail.com" title="Input title" name="input-name" type="email" id="email" v-model="form.email" required autofocus autocomplete="username"
+                    <input placeholder="name@gmail.com" title="Input title" name="input-name" type="email" id="email" v-model="form.email" required autofocus autocomplete="username"
                     class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-[myblack] focus:outline-none focus:border-blue-500">
                 </div>
                 <div>
                     <InputLabel for="password" value="Password" class="font-poppins font-semibold text-md mt-6 mb-2"/>
 
-                    <!-- <TextInput
-                        id="password"
-                        type="password"
-                        class="mt-1 block w-full"
-                        v-model="form.password"
-                        required
-                        autocomplete="current-password"
-                    /> -->
-                    <input placeholder="Password" title="Input title" name="input-name" type="text" id="password" v-model="form.password" required autofocus autocomplete="current-password"
-                    class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-[myblack] focus:outline-none focus:border-blue-500">
+                    <div class="relative w-full">
+                        <input :type="showPassword ? 'text' : 'password'" placeholder="Password" title="Input title" name="input-name" id="password"
+                        v-model="form.password" required autofocus autocomplete="current-password"
+                        class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-[myblack] focus:outline-none focus:border-blue-500"
+                        />
+
+                        <!-- Show eye icon only when input has a value -->
+                        <font-awesome-icon
+                        v-if="form.password"
+                        :icon="showPassword ? ['far', 'eye-slash'] : ['far', 'eye']"
+                        @click="togglePassword"
+                        class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue-900"
+                        />
+                    </div>
                 </div>
                 <button class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5" :class="{ 'opacity-25': form.processing }"
                 :disabled="form.processing">LOGIN NOW</button>
