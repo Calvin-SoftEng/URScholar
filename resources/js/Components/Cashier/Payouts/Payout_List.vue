@@ -10,7 +10,7 @@
         <button
           class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
           @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
+          <font-awesome-icon :icon="['fas', 'file-pdf']" class="mr-2 text-sm" />Generate Report
         </button>
       </div>
       <form class="w-3/12">
