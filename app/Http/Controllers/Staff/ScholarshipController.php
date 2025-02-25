@@ -190,24 +190,20 @@ class ScholarshipController extends Controller
 
         $dataToInsert = [];
 
-        foreach ($batchIds as $batchId) {
-            foreach ($scholars as $scholarId) {
-                $dataToInsert[] = [
-                    'scholarship_id' => $scholarshipId,
-                    'batch_id' => $batchId,
-                    'scholar_id' => $scholarId['id'],
-                    'status' => 'pending', // Default status
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+        foreach ($scholars as $scholarId) {
+            $dataToInsert[] = [
+                'scholarship_id' => $scholarshipId,
+                'batch_id' => $scholarId['batch_id'],
+                'scholar_id' => $scholarId['id'],
+                'status' => 'pending', // Default status
+                'created_at' => now(),
+                'updated_at' => now(),
+            ];
 
-                //dd($dataToInsert);
-                // Check if the scholar already has a payout record for this scholarship
+            //dd($dataToInsert);
+            // Check if the scholar already has a payout record for this scholarship
 
-            }
         }
-
-        dd($dataToInsert);
 
         // Insert all records at once
         Payout::insert($dataToInsert);
