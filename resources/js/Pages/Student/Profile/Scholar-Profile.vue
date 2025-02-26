@@ -245,30 +245,34 @@
                             </div>
                         </div>
 
-                        <div v-if="isQRModalOpen"
-                            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-                            @click.self="closeModal">
-                            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
-                                <div class="flex justify-between items-center mb-4">
-                                    <h3 class="text-lg font-medium text-gray-900">Your QR Code</h3>
-                                    <button @click="closeQRModal" class="text-gray-400 hover:text-gray-500">
-                                        <font-awesome-icon :icon="['fas', 'times']" class="w-5 h-5" />
-                                    </button>
-                                </div>
-
-                                <div class="text-center py-4">
-                                    <button @click="generateQRCode"
-                                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
-                                        Regenerate
-                                    </button>
-                                    <button @click="downloadQRCode"
-                                        class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80">
-                                        Download
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        
                     </div>
+                </div>
+            </div>
+        </div>
+        <div v-if="isQRModalOpen"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            @click.self="closeModal">
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-medium text-gray-900">Your QR Code</h3>
+                    <button @click="closeQRModal" class="text-gray-400 hover:text-gray-500">
+                        <font-awesome-icon :icon="['fas', 'times']" class="w-5 h-5" />
+                    </button>
+                </div>
+
+                <div class="border border-gray-300 p-4 aspect-square flex items-center justify-center w-full">
+
+                </div>
+                <div class="text-center py-4 gap-2 flex items-center justify-center">
+                    <button @click="generateQRCode"
+                        class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300">
+                        Regenerate
+                    </button>
+                    <button @click="downloadQRCode"
+                        class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80">
+                        Download
+                    </button>
                 </div>
             </div>
         </div>
