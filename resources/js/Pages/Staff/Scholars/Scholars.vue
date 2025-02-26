@@ -71,7 +71,7 @@
               <tbody>
                 <!-- row 1 -->
                 <tr v-for="scholar in filteredScholars" :key="scholar.id" class="text-sm">
-                  <td class="px-5">test1</td>
+                  <td class="px-5">{{scholar.urscholar_id}}</td>
                   <td class="px-5">
                     <div class="flex items-center gap-3">
                       <div class="avatar">

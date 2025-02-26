@@ -72,7 +72,7 @@
               <tbody>
                 <!-- row 1 -->
                 <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
-                  <td>test1</td>
+                  <td>{{scholar.urscholar_id}}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">

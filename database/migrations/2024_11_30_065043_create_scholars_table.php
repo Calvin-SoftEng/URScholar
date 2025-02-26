@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('campus');
             $table->string('grant');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
+            $table->string('urscholar_id')->unique();
+            $table->string('qr_code')->nullable();
             $table->string('app_no');
             $table->string('award_no');
             $table->string('last_name');

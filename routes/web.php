@@ -177,6 +177,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     //profile
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
+    Route::get('/myProfile/generate/{urscholar_id}', [StudentController::class, 'generate'])->name('qrcode.generate');
 
     // Route::get('/student/scholarship', [StudentController::class, 'scholarship'])->name('student.scholarships');
 

@@ -13,6 +13,8 @@ class Scholar extends Model
         'campus',
         'grant',
         'batch_id',
+        'urscholar_id',
+        'qr_code',
         'app_no',
         'award_no',
         'last_name',

@@ -85,6 +85,7 @@ class ScholarshipController extends Controller
 
             return [
                 'id' => $scholar->id,
+                'urscholar_id' => $scholar->urscholar_id,
                 'first_name' => $scholar->first_name,
                 'last_name' => $scholar->last_name,
                 'middle_name' => $scholar->middle_name,

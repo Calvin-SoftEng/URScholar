@@ -7,6 +7,7 @@ use App\Models\FamilyRecord;
 use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\StudentRecord;
+use App\Models\Student;
 use App\Models\SubmittedRequirements;
 use App\Models\User;
 use App\Models\Scholar;
@@ -16,6 +17,8 @@ use Inertia\Inertia;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use chillerlan\QRCode\QRCode;
+use chillerlan\QRCode\QROptions;
 
 class StudentController extends Controller
 {
@@ -75,7 +78,7 @@ class StudentController extends Controller
             'mother.citizenship' => ['', 'string'],
             'mother.occupation' => ['', 'string'],
             'mother.education' => ['', 'string'],
-            'mother.batch' => [ 'string'],
+            'mother.batch' => ['string'],
 
             'father.first_name' => ['', 'string'],
             'father.middle_name' => ['', 'string'],
@@ -93,7 +96,7 @@ class StudentController extends Controller
             'family_housing' => ['required', 'string'],
         ]);
 
-        
+
         $education = [
             'elementary' => [
                 'name' => $request->education['elementary']['name'],
@@ -276,14 +279,60 @@ class StudentController extends Controller
         $student = StudentRecord::where('user_id', Auth::user()->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
+        $scholar = Scholar::where('email', Auth::user()->email)->first();
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
             'education' => $education,
             'family' => $family,
+            'scholar' => $scholar
         ]);
     }
-    
+
+    public function generate($urscholar_id)
+    {
+        // Check if the student belongs to the authenticated user
+        $scholar = Scholar::where('urscholar_id', $urscholar_id)
+            ->where('user_id', Auth::user()->email)
+            ->firstOrFail();
+
+        dd($scholar);
+
+        
+        // Set up QR code options
+        $options = new QROptions([
+            'version' => 5,
+            'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+            'eccLevel' => QRCode::ECC_L,
+            'scale' => 10,
+            'imageBase64' => false,
+        ]);
+
+        // Create QR code instance
+        $qrcode = new QRCode($options);
+
+        // Data to encode - you can customize this based on your needs
+        // For example, a URL to the scholar's profile
+        $data = route('scholar.profile', ['urscholar_id' => $urscholar_id]);
+
+        // Generate QR code as PNG
+        $qrImage = $qrcode->render($data);
+
+        // Save to storage
+        $qrFilename = 'qrcodes/' . $urscholar_id . '.png';
+        Storage::disk('public')->put($qrFilename, $qrImage);
+
+        // Update student record with QR code path
+        $scholar->qr_code = 'storage/' . $qrFilename;
+        $scholar->save();
+
+        // Return the path
+        return response()->json([
+            'path' => asset($scholar->qr_code),
+            'filename' => $urscholar_id . '.png'
+        ]);
+    }
+
     public function application(User $user)
     {
 
@@ -301,7 +350,7 @@ class StudentController extends Controller
             'requirements' => $requirements
         ]);
     }
-    
+
     public function applicationReupload(Request $request)
     {
         $request->validate([

@@ -33,7 +33,7 @@ class ScholarController extends Controller
     public function scholar($id)
     {
         $scholar = Scholar::findOrFail($id);
-        
+
         $scholarship = $scholar->scholarship;
         $batch = Batch::where('scholarship_id', $scholarship->id)->first();
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
@@ -144,7 +144,7 @@ class ScholarController extends Controller
 
             $batch = Batch::create([
                 'scholarship_id' => $scholarship->id,
-                'batch_no' => $firstRecord['BATCH NO.'],  // Added the period here
+                'batch_no' => $firstRecord['BATCH NO.'],
                 'school_year' => $request->schoolyear,
                 'semester' => $request->semester,
             ]);
@@ -152,11 +152,27 @@ class ScholarController extends Controller
             // Get all records after creating the batch
             $records = iterator_to_array($csv->getRecords());
 
+            // Get the next available urscholar_id
+            $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')
+                ->orderByRaw('CAST(SUBSTRING(urscholar_id, 5) AS UNSIGNED) DESC')
+                ->value('urscholar_id');
+
+            $nextId = 1; // Default starting number
+            if ($highestId) {
+                $currentNumber = (int) substr($highestId, 4);
+                $nextId = $currentNumber + 1;
+            }
+
             $insertData = [];
             foreach ($records as $record) {
+                // Generate urscholar_id with leading zeros (URS-0001 format)
+                $urscholarId = 'URS-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+                $nextId++;
+
                 $insertData[] = [
                     'scholarship_id' => $scholarship->id,
                     'batch_id' => $batch->id,
+                    'urscholar_id' => $urscholarId, // Add the new urscholar_id field
                     'hei_name' => $record['HEI NAME'] ?? null,
                     'campus' => $record['CAMPUS'] ?? null,
                     'grant' => $record['GRANT'] ?? null,
@@ -215,17 +231,6 @@ class ScholarController extends Controller
             }
 
             $schoolyear = SchoolYear::find($request->schoolyear);
-
-            // return Inertia::render('Staff/Scholarships/Scholarship', [
-            //     'scholarship' => $scholarship,
-            //     'scholars' => $scholars,
-            //     'schoolyear' => $schoolyear,
-            //     'selectedSem' => $request->semester,
-            //     'flash' => [
-            //         'success' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
-            //     ]
-            // ]);
-
 
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
