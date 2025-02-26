@@ -144,6 +144,10 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
     Route::get('/cashier/scholarships/batches/payouts', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
 
 
+
+    Route::post('/cashier/verify-qr', [CashierController::class, 'verify_qr'])->name('cashier.verify_qr');
+
+
     // univ settings
     Route::get('/mis/univ-settings/course', [SystemAdminController::class, 'course'])->name('mis.course');
     Route::get('/mis/univ-settings/course/config/{campuses}', [SystemAdminController::class, 'course_config'])->name('mis.course_config');

@@ -331,8 +331,9 @@ class StudentController extends Controller
         // Get the public URL
         // $qrCodeUrl = Storage::disk('public')->url($filename);
         
-        // // Update QR code in database
-        // $scholar->qr_code = $qrCodeUrl;
+        
+        // // // Update QR code in database
+        $scholar->qr_code = Hash::make($qrData);
         $scholar->save();
 
         // Return the path
