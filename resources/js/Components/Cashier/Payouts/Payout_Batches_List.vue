@@ -55,10 +55,9 @@
     </div>
 
 
-    <Link :href="(route('cashier.payouts'))">
-    <div class="bg-gradient-to-r from-white to-[#D2CFFE] w-full rounded-lg p-5 shadow-sm hover:bg-lightblue">
-        <div class="flex flex-row justify-between items-center cursor-pointer">
-            <span>Batch 1</span>
+    <div v-for="batch in batches" :key="batch.id" class="bg-gradient-to-r from-white to-[#D2CFFE] w-full rounded-lg p-5 shadow-sm hover:bg-lightblue">
+        <div @click="() => openBatch(batch.id)" class="flex flex-row justify-between items-center cursor-pointer">
+            <span>Batch {{batch.batch_no}}</span>
             <div class="grid grid-cols-3 gap-5 items-center">
                 <div class="flex flex-col justify-center items-center">
                     <span>Status</span>
@@ -76,8 +75,6 @@
             </div>
         </div>
     </div>
-    </Link>
-
 </template>
 
 <script setup>
@@ -92,4 +89,12 @@ const props = defineProps({
     batches: Array,
 });
 
+const openBatch = (batchId) => {
+    router.visit(`/cashier/scholarships/${props.scholarship.id}/batch/${batchId}`, {
+        data: { 
+            scholarship: props.scholarship.id,
+        },
+        preserveState: true
+    });
+};
 </script>

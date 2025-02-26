@@ -46,9 +46,19 @@ class CashierController extends Controller
         ]);
     }
 
-    public function student_payouts()
+    public function student_payouts($scholarshipId, $batchId)
     {
-        return Inertia::render('Cashier/Scholarships/Payouts');
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        $batch = Batch::where('id', $batchId)
+            ->where('scholarship_id', $scholarship->id)
+            ->orderBy('batch_no', 'desc')
+            ->first();
+
+        return Inertia::render('Cashier/Scholarships/Payouts', [
+            'scholarship' => $scholarship,
+            'batch' => $batch
+        ]);
     }
 
     public function payouts()

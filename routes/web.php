@@ -146,7 +146,7 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
     Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
 
-    Route::get('/cashier/scholarships/batches/payouts', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
+    Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
 
 
 
