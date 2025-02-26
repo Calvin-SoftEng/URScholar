@@ -106,6 +106,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/{scholarship}/adding-scholars', [ScholarController::class, 'adding'])->name('scholars.adding');
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
+
+
+
     Route::get('/scholarships/{scholarshipId}/batch/{batchId}', [ScholarshipController::class, 'batch'])->name('scholarship.batch');
 
 
@@ -140,7 +143,9 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
     // Scholarship_Payouts
     Route::get('/cashier/scholarships', [CashierController::class, 'scholarships'])->name('cashier.active_scholarships');
-    Route::get('/cashier/scholarships/batches', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
+
+    Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
+
     Route::get('/cashier/scholarships/batches/payouts', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
 
 

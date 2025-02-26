@@ -179,20 +179,15 @@
 
             <!-- QR Code Scanner -->
             <div class="p-4 flex flex-col space-y-4">
-              <div class="qr-scanner">
-                <QrcodeStream @decode="onDecode" @init="onInit" class="qr-scanner-box" />
+              <QrcodeStream @detect="onDetect" v-if="isScanning" class="border p-2" />
 
-                <div v-if="loading" class="loading">
-                  <p>Processing QR Code...</p>
-                </div>
-
-                <div v-if="successMessage" class="success">
-                  <p class="text-green-600 font-semibold">{{ successMessage }}</p>
-                </div>
-
-                <div v-if="errorMessage" class="error">
-                  <p class="text-red-500 font-semibold">{{ errorMessage }}</p>
-                </div>
+              <div v-if="scannedResult" class="mt-4">
+                <p v-if="successMessage" class="text-green-500">{{ successMessage }}</p>
+                <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
+                <QrcodeStream @detect="onDetect" class="border p-2" />
+                <button @click="restartScan" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded">
+                  Scan Again
+                </button>
               </div>
             </div>
             <!-- <div class="mt-2">
@@ -321,49 +316,36 @@ const closeCamera = () => {
   OpenCamera.value = false;
 }
 
-const loading = ref(false);
-const successMessage = ref(null);
+
+const scannedResult = ref(null);
 const errorMessage = ref(null);
-const debugData = ref(null);
+const successMessage = ref(null);
+const isScanning = ref(true);
 
-const onDecode = (decodedText) => {
-  try {
-    loading.value = true;
-    successMessage.value = null;
-    errorMessage.value = null;
-    debugData.value = decodedText; // Debugging output
+const onDetect = async (detectedCodes) => {
+  if (detectedCodes.length > 0) {
+    scannedResult.value = detectedCodes[0].rawValue;
+    isScanning.value = false;
 
-    const scannedData = JSON.parse(decodedText); // Parse JSON from QR code
-
-    // Send scanned data to Laravel backend
-    router.post(
-      "/cashier/verify-qr",
-      {
-        id: scannedData.id,
-        timestamp: scannedData.timestamp,
+    // Send scanned QR code data to Laravel
+    router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
+      onSuccess: (page) => {
+        successMessage.value = page.props.flash.message;
+        errorMessage.value = null;
       },
-      {
-        onSuccess: (page) => {
-          successMessage.value = page.props.flash.message || "QR Code Verified!";
-        },
-        onError: (err) => {
-          errorMessage.value = err.message || "Invalid QR Code";
-        },
-        onFinish: () => {
-          loading.value = false;
-        },
+      onError: (errors) => {
+        errorMessage.value = errors.message;
+        successMessage.value = null;
       }
-    );
-  } catch (err) {
-    loading.value = false;
-    errorMessage.value = "Invalid QR Code format";
+    });
   }
 };
 
-const onInit = (promise) => {
-  promise.catch(() => {
-    errorMessage.value = "Camera access was denied.";
-  });
+const restartScan = () => {
+  scannedResult.value = null;
+  isScanning.value = true;
+  errorMessage.value = null;
+  successMessage.value = null;
 };
 
 // Add download report functionality

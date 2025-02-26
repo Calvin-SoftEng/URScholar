@@ -63,12 +63,12 @@
                     <div class="text-3xl font-semibold text-gray-700">
                         
                         <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>Isko Name</span> <span>Payout List</span>
+                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{scholarship.name}}</span> <span>Payout List</span>
                         </h1>
                     </div>
                 </div>
 
-                <Payout_Batches/>
+                <Payout_Batches :scholarship="scholarship" :batches="batches"/>
             </div>
         </div>
 
@@ -103,7 +103,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
-import Payout_Batches from '../../../Components/Cashier/Payouts/Payout_Batches.vue';
+import Payout_Batches from '../../../Components/Cashier/Payouts/Payout_Batches_List.vue';
 
 // components
 
@@ -142,8 +142,6 @@ const toggleMonitoring = () => {
 
 const props = defineProps({
     scholarship: Object,
-    schoolyear: Object,
-    selectedSem: Object,
     batches: Array,
 });
 
