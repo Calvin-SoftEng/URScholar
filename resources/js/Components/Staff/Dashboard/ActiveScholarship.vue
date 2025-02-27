@@ -4,13 +4,13 @@
         <div class="flex flex-col h-full gap-3">
             <div class="flex-col p-2 block bg-white border rounded border-gray-200 w-full">
                 <div>
-                    open
+                    {{ scholarship.status }}
                 </div>
                 <div>
                     {{ scholarship.name }}
                 </div>
                 <div>
-                    Funded Since
+                    {{ getSponsorDetails(scholarship.sponsor_id).since }}
                 </div>
                 <div>
                     Description
@@ -31,13 +31,11 @@ import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
-    sponsors: {
-        type: Array,
-        required: true
-    },
-    scholarships: {
-        type: Array,
-        required: true
-    }
+    scholarships: Array,
+    sponsors: Array,
 });
+
+const getSponsorDetails = (sponsorId) => {
+    return props.sponsors.find(s => s.id === sponsorId) || { name: 'Unknown Sponsor' };
+};
 </script>

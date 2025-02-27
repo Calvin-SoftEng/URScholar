@@ -14,7 +14,7 @@
                 </div>
                 <!-- Second Layer with Single Card -->
                 <div class="bg-white box-border rounded shadow-md h-[65%] dark:bg-dcontainer">
-                <!-- <ContentComponent /> -->
+                    <!-- <ContentComponent /> -->
                 </div>
             </div>
             <!-- 25% Column -->
@@ -45,18 +45,10 @@ const components = {
 };
 
 const props = defineProps({
-    sponsors: {
-        type: Array,
-        required: true
-    },
-    scholarships: {
-        type: Array,
-        required: true
-    }
+    scholarships: Array,
+    sponsors: Array,
 });
 
 </script>
 
-<style>
-
-</style>
+<style></style>
