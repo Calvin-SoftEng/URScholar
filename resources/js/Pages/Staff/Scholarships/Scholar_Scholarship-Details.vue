@@ -1,6 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
@@ -10,10 +11,10 @@
                         <li class="hover:text-gray-600">
                             <span>Scholarships</span>
                         </li>
-                        <li class="hover:text-gray-600"> 
-                            <span>{{ scholarship.name  }}</span>
+                        <li class="hover:text-gray-600">
+                            <span>{{ scholarship.name }}</span>
                         </li>
-                        <li class="hover:text-gray-600"> 
+                        <li class="hover:text-gray-600">
                             <span>Batch 1</span>
                         </li>
                         <li>
@@ -42,10 +43,10 @@
                                     </div>
                                     <div class="flex flex-col items-center justify-center p-2">
                                         <span class="text-black text-xl font-albert text-center">{{ scholar.last_name
-                                            }},
+                                        }},
                                             {{ scholar.first_name }}
-                                            {{ scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
-                                                word.charAt(0).toUpperCase()).join('.') + '.' : '' }}
+                                            {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                                word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                         </span>
                                         <span class="text-gray-400 text-albert">ID</span>
                                     </div>
@@ -157,30 +158,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- viewing docs -->
-                <!-- <div v-if="Checking"
-                    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-                    <div
-                        class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
-                        <div
-                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Viewing Document</h2>
-                            <button type="button" @click="closeModal"
-                                class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
-                                <span class="material-symbols-rounded text-lg">close</span>
-                                <span class="font-medium">Close</span>
-                            </button>
-                        </div>
-
-                        <div class="p-4 flex flex-col gap-3">
-                            <iframe v-if="selectedRequirement" :src="`/storage/${selectedRequirement.path}`"
-                                class="w-full h-[80vh]" frameborder="0">
-                            </iframe>
-                        </div>
-                    </div>
-                </div> -->
-
                 <div v-if="Checking"
                     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
                     <div
@@ -229,7 +206,8 @@
                             <!-- Returning Requirement Message -->
                             <div class="w-full flex flex-col space-y-2">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">*If Returning Requirement</h3>
-                                <textarea id="return-requirement" placeholder="Add a message in returning" v-model="returnMessage"
+                                <textarea id="return-requirement" placeholder="Add a message in returning"
+                                    v-model="returnMessage"
                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-6/12 h-32 resize-none text-left dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"></textarea>
                             </div>
 
@@ -277,12 +255,6 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
-
-import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
-
-import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
-import { Check } from 'lucide-vue-next';
 
 // components
 
@@ -351,9 +323,10 @@ const updateRequirementStatus = (status) => {
             message: status === 'Returned' ? returnMessage.value : null
         }, {
             onSuccess: () => {
+                closeModal();
                 toastMessage.value = `Requirement ${status.toLowerCase()} successfully!`;
                 toastVisible.value = true;
-                closeModal();
+
 
                 setTimeout(() => {
                     toastVisible.value = false;

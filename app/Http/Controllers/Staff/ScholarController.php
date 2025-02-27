@@ -58,20 +58,25 @@ class ScholarController extends Controller
             'message' => 'nullable|string|max:255',
         ]);
 
-        // dd($request);
-
         $requirement = SubmittedRequirements::findOrFail($request->submittedReq);
         $requirement->status = $request->status;
 
-        if ($request->status === 'Returned') {
-            $requirement->message = $request->message; // Save the return message
+        // Save message for both Returned and Approved statuses
+        if ($request->message) {
+            $requirement->message = $request->message;
         } else {
-            $requirement->message = null; // Clear remarks for other statuses
+            $requirement->message = null; // Clear message if not provided
         }
 
         $requirement->save();
 
-        return response()->json(['message' => 'Requirement status updated successfully!']);
+        // Define status-specific messages for the response
+        $statusMessage = $request->status === 'Approved'
+            ? 'Requirement approved successfully!'
+            : 'Requirement returned successfully!';
+
+        return back()->with('success', $statusMessage);
+
     }
 
     public function show(Scholarship $scholarship)

@@ -131,7 +131,7 @@ class CashierController extends Controller
 
             return back()->with('flash', [
                 'type' => 'success',
-                'message' => 'Grant successfully claimed for Scholar: ' . $scholar->first_name . ' ' . $scholar->last_name
+                'message' => 'Grant successfully claimed for Scholar: '
             ]);
 
         } catch (\Exception $e) {
