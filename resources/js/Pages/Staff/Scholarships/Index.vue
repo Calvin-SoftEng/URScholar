@@ -159,6 +159,41 @@
                         </select>
                     </div>
 
+                    <!-- Show only if One-time Payment is selected -->
+                    <div v-if="form.scholarshipType === 'One-time Payment'" class="space-y-3">
+                        <hr class="border-t border-gray-300 dark:border-gray-600 my-4">
+
+                        <div class="flex flex-row gap-2">
+                            <div class="grid w-full max-w-sm items-center gap-1.5">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Deadline</h3>
+                                <Popover>
+                                    <PopoverTrigger as-child>
+                                        <Button variant="outline"
+                                            class="w-full h-10 justify-start text-left font-normal bg-gray-50 border border-gray-300 rounded-lg p-2.5">
+                                            <CalendarIcon class="mr-2 h-4 w-4" />
+                                            {{ formatDate(form.birthdate) }}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent class="w-auto p-0 ">
+                                        <Calendar v-model="form.birthdate" initial-focus />
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+
+                            <div class="w-full flex flex-col space-y-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Limit Recipients</h3>
+                                <input type="number" id="name"
+                                    placeholder="Enter Number of Recipients"
+                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                            </div>
+                        </div>
+
+                        <div class="w-full flex flex-col space-y-2">
+                            <h3 class="font-semibold text-gray-900 dark:text-white">Limit Course</h3>
+                            <input type="text" id="name"
+                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                        </div>
+                    </div>
                     <!-- <div class="w-full flex flex-col space-y-2">
                         <h3 class="font-semibold text-gray-900 dark:text-white">School Year</h3>
                         <input v-model="form.school_year" type="text" id="name"
@@ -204,6 +239,18 @@ import { Tooltip } from 'primevue';
 import { set } from 'date-fns';
 import { DatePicker } from 'primevue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+
+import { Input } from '@/Components/ui/input'
+import { Button } from '@/Components/ui/button'
+import { Calendar } from '@/Components/ui/calendar'
+
+import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover'
+import { cn } from '@/lib/utils'
+import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
+import { Calendar as CalendarIcon } from 'lucide-vue-next'
+
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
+import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group'
 
 
 const props = defineProps({
@@ -348,6 +395,16 @@ watchEffect(() => {
         }, 3000);
     }
 });
+
+
+const df = new DateFormatter('en-US', {
+    dateStyle: 'long',
+})
+
+const formatDate = (date) => {
+    if (!date) return "Pick a date";
+    return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(date));
+};
 
 </script>
 
