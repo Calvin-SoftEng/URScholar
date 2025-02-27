@@ -97,7 +97,7 @@
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                    scholar.urscholar_i }}</span>
+                                    scholar.urscholar_id }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'school']"

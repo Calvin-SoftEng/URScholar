@@ -97,7 +97,6 @@ class StudentController extends Controller
             'family_housing' => ['required', 'string'],
         ]);
 
-        dd($request->birthdate);
 
         $education = [
             'elementary' => [
@@ -174,6 +173,7 @@ class StudentController extends Controller
             'last_name' => $request->last_name,
             'middle_name' => $request->middle_name,
             'suffix' => $request->suffix,
+            'birthdate' => $request->birthdate,
             'placebirth' => $request->birthplace,
             'age' => $request->age,
             'gender' => $request->gender,
