@@ -62,7 +62,7 @@
                             
                     </div>
                 </div> -->
-                <Payout_List/>
+                <Payout_List :scholarship="scholarship" :batch="batch" :payouts="payouts"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -135,11 +135,8 @@ const toggleMonitoring = () => {
 
 const props = defineProps({
     scholarship: Object,
-    schoolyear: Object,
-    selectedSem: Object,
-    batches: Object,
-    scholars: Array,
-    requirements: Array,
+    batch: Object,
+    payouts: Array,
 });
 
 

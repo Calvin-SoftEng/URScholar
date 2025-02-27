@@ -44,13 +44,14 @@
                   <th>URScholar ID</th>
                   <th>Scholar</th>
                   <th>Grant</th>
+                  <th>Campus</th>
                   <th>Status</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="text-sm">
-                  <td>test1</td>
+                <tr v-for="payout in filteredPayouts" :key="payout.id" class="text-sm">
+                  <td>{{ payout.scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
@@ -60,102 +61,32 @@
                       </div>
                       <div>
                         <div class="font-normal">
-                          Raul, John Mark
-                          <!-- <span v-if="scholar.status === 'Verified'"
-                            class="material-symbols-rounded text-sm text-blue-600">verified</span> -->
+                          {{ payout.scholar.last_name }}, {{ payout.scholar.first_name }} {{ payout.scholar.middle_name }}
                         </div>
                         <div class="text-sm opacity-50">
-                          <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
-                          4th year, Bachelor of Science in Information Technology
+                          {{ payout.scholar.year_level }}{{ getYearSuffix(payout.scholar.year_level) }} year, {{
+                          payout.scholar.course }}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    Binangonan
+                    {{ payout.scholar.grant }}
                   </td>
                   <td>
-                    LISTAHANAN
+                    {{ payout.scholar.campus }}
                   </td>
                   <td>
-                    <!-- <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
+                    <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': payout.status === 'Claimed',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': payout.status === 'Pending'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      Claimed
-                    </span> -->
-                    <span
-                      class="bg-green-100 text-green-800 border border-green-400 text-xs font-medium px-2.5 py-0.5 rounded">Claimed</span>
-                  </td>
-                </tr>
-                <tr class="text-sm">
-                  <td>test2</td>
-                  <td>
-                    <div class="flex items-center gap-3">
-                      <div class="avatar">
-                        <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
-                        </div>
-                      </div>
-                      <div>
-                        <div class="font-normal">
-                          Eyy, Eyy
-                          <!-- <span v-if="scholar.status === 'Verified'"
-                            class="material-symbols-rounded text-sm text-blue-600">verified</span> -->
-                        </div>
-                        <div class="text-sm opacity-50">
-                          <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
-                          4th year, Bachelor of Science in Information Technology
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    Binangonan
-                  </td>
-                  <td>
-                    LISTAHANAN
-                  </td>
-                  <td>
-                    <!-- <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
-                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      Claimed
-                    </span> -->
-                    <span
-                      class="bg-gray-200 text-gray-500 border border-gray-400 text-xs font-medium px-2.5 py-0.5 rounded">Pending</span>
+                      {{ payout.status }}
+                    </span>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <!-- <div v-if="totalScholars > 10" class="mt-5 flex flex-col items-right">
-              <span class="text-sm text-gray-700 dark:text-gray-400">
-                Showing
-                <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
-                to
-                <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
-                of
-                <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span>
-                Scholars
-              </span>
-              <div class="inline-flex mt-2 xs:mt-0">
-                <button @click="prevPage" :disabled="currentPage === 1" :class="[
-                  'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                  currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
-                ]">
-                  Prev
-                </button>
-                <button @click="nextPage" :disabled="currentPage === totalPages" :class="[
-                  'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                  currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
-                ]">
-                  Next
-                </button>
-              </div>
-            </div> -->
           </div>
         </div>
         <!-- open cam -->
@@ -182,31 +113,24 @@
               <QrcodeStream @detect="onDetect" v-if="isScanning" class="border p-2" />
 
               <div v-if="scannedResult" class="mt-4">
-                <p v-if="successMessage" class="text-green-500">{{ successMessage }}</p>
-                <p v-if="errorMessage" class="text-red-500">{{ errorMessage }}</p>
-                <QrcodeStream @detect="onDetect" class="border p-2" />
-                <button @click="restartScan" class="bg-blue-500 text-white px-4 py-2 mt-4 rounded">
-                  Scan Again
-                </button>
+                <p v-if="successMessage" class="text-green-500 font-medium">{{ successMessage }}</p>
+                <p v-if="errorMessage" class="text-red-500 font-medium">{{ errorMessage }}</p>
+                <div class="mt-4 flex justify-center">
+                  <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                    Scan Again
+                  </button>
+                </div>
               </div>
             </div>
-            <!-- <div class="mt-2">
-                  <button type="submit"
-                      class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                      {{ isEditing ? 'Update Scholarship' : 'Create Scholarship' }}</button>
-              </div> -->
           </div>
         </div>
-
       </div>
     </div>
-
-
 
     <ToastProvider>
       <ToastRoot v-if="toastVisible"
         class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-        <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
+        <ToastTitle class="font-semibold dark:text-dtext">{{ toastTitle }}</ToastTitle>
         <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
       </ToastRoot>
 
@@ -227,11 +151,8 @@ import { QrcodeStream } from "vue-qrcode-reader";
 
 const props = defineProps({
   scholarship: Object,
-  schoolyear: Object,
-  selectedSem: Object,
-  batches: Object,
-  scholars: Array,
-  requirements: Array,
+  batch: Object,
+  payouts: Array,
 });
 
 const components = {
@@ -241,87 +162,45 @@ const components = {
   FileUpload,
 };
 
-
-const currentPage = ref(1);
-const itemsPerPage = 10;
 const searchQuery = ref('');
-
-// Modify the filteredScholars function to handle pagination
-const filteredScholars = computed(() => {
-  // Use props.scholars directly instead of accessing from batches
-  const allScholars = props.scholars || [];
-
-  // Apply search filter
-  let scholars = allScholars.filter(scholar =>
-    scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.email?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.campus?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
-
-  // Sort so that 'Verified' scholars appear first
-  scholars.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
-
-  return scholars;
-});
-
-// Pagination computed properties
-const paginatedScholars = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  return filteredScholars.value.slice(startIndex, endIndex);
-});
-
-const totalScholars = computed(() => {
-  return filteredScholars.value.length;
-});
-
-const totalPages = computed(() => {
-  return Math.ceil(totalScholars.value / itemsPerPage);
-});
-
-// Display range computed properties
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage + 1);
-const endIndex = computed(() => Math.min(currentPage.value * itemsPerPage, totalScholars.value));
-
-// Pagination methods
-const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
-};
-
-const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
-};
-
-// Reset page when search changes
-watch(searchQuery, () => {
-  currentPage.value = 1;
-});
-
-
+const showRequirements = ref(false);
 const OpenCamera = ref(false);
+const scannedResult = ref(null);
+const errorMessage = ref(null);
+const successMessage = ref(null);
+const isScanning = ref(true);
+const toastVisible = ref(false);
+const toastTitle = ref('');
+const toastMessage = ref('');
 
+// Filtered payouts based on search query
+const filteredPayouts = computed(() => {
+  return props.payouts.filter(payout =>
+    payout.scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    payout.scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    payout.scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    payout.scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    payout.scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    payout.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+// Toggle camera visibility
 const toggleCamera = () => {
   OpenCamera.value = !OpenCamera.value;
+  if (OpenCamera.value) {
+    isScanning.value = true;
+    scannedResult.value = null;
+    errorMessage.value = null;
+    successMessage.value = null;
+  }
 };
 
 const closeCamera = () => {
   OpenCamera.value = false;
 }
 
-
-const scannedResult = ref(null);
-const errorMessage = ref(null);
-const successMessage = ref(null);
-const isScanning = ref(true);
-
+// Handle QR code detection
 const onDetect = async (detectedCodes) => {
   if (detectedCodes.length > 0) {
     scannedResult.value = detectedCodes[0].rawValue;
@@ -330,17 +209,30 @@ const onDetect = async (detectedCodes) => {
     // Send scanned QR code data to Laravel
     router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
       onSuccess: (page) => {
-        successMessage.value = page.props.flash.message;
+        const flashMessage = page.props.flash.message;
+        successMessage.value = flashMessage;
         errorMessage.value = null;
+
+        // Show toast notification
+        showToast('Success', flashMessage);
+
+        // If successful, refresh the payouts list
+        if (page.props.flash.type === 'success') {
+          router.reload();
+        }
       },
       onError: (errors) => {
-        errorMessage.value = errors.message;
+        errorMessage.value = errors.message || 'An error occurred';
         successMessage.value = null;
+
+        // Show toast notification for error
+        showToast('Error', errors.message || 'An error occurred');
       }
     });
   }
 };
 
+// Restart QR scanner
 const restartScan = () => {
   scannedResult.value = null;
   isScanning.value = true;
@@ -348,39 +240,29 @@ const restartScan = () => {
   successMessage.value = null;
 };
 
-// Add download report functionality
-const openReport = async (batchId) => {
+// Open batch report
+const openReport = () => {
   try {
-    // Open URL in new tab instead of creating blob
-    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
+    window.open(`/scholarships/${props.scholarship.id}/batch/${props.batch.id}/report`, '_blank');
   } catch (err) {
     console.error('Failed to open report:', err);
+    showToast('Error', 'Failed to open report');
   }
 };
 
-const toggleBatch = (batchId) => {
-  expandedBatches.value = expandedBatches.value === batchId ? null : batchId;
+// Show toast notification
+const showToast = (title, message) => {
+  toastTitle.value = title;
+  toastMessage.value = message;
+  toastVisible.value = true;
+
+  // Hide toast after 3 seconds
+  setTimeout(() => {
+    toastVisible.value = false;
+  }, 3000);
 };
 
-const addingPanel = ref(false)
-const uploadingPanel = ref(false)
-
-const toggleAdd = () => {
-  addingPanel.value = !addingPanel.value
-}
-
-const toggleUpload = () => {
-  uploadingPanel.value = !uploadingPanel.value
-}
-
-const closePanel = () => {
-  previewData.value = [];
-  headers.value = [];
-  uploadingPanel.value = false;
-  addingPanel.value = false;
-  entries.value = false;
-};
-
+// Helper function for year level suffix
 const getYearSuffix = (year) => {
   if (year === 1) return "st";
   if (year === 2) return "nd";
@@ -388,7 +270,13 @@ const getYearSuffix = (year) => {
   return "th";
 };
 
-
+// Check for flash messages on component mount
+onMounted(() => {
+  const { flash } = usePage().props;
+  if (flash && flash.message) {
+    showToast(flash.type === 'success' ? 'Success' : 'Error', flash.message);
+  }
+});
 
 </script>
 
