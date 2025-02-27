@@ -9,11 +9,24 @@
         <div class="absolute inset-0 bg-blue-900 bg-opacity-30 mix-blend-multiply"></div>
 
         <!-- Content -->
-        <div class="relative z-10">
-            <h1 class="text-5xl font-bold text-white mb-4">Welcome Ulit</h1>
+        <div class="relative z-10 space-y-5">
+            <h1 class="text-5xl font-bold text-white mb-4">Scholarship Sponsors of URS</h1>
             <p class="text-lg text-gray-200 max-w-2xl mx-auto">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla nec purus feugiat, vestibulum mi nec, ultricies leo.
             </p>
+
+            <div class="flex justify-center gap-2">
+                <div class="bg-white rounded-lg p-4">
+                    <img src="" alt="">
+                    <p>mfemfamfefmapofemfp</p>
+                </div>
+                <div class="bg-white rounded-lg p-4">
+                    
+                </div>
+                <div class="bg-white rounded-lg p-4">
+                    
+                </div>
+            </div>
         </div>
     </section>
 

@@ -19,7 +19,8 @@
             <div class="py-3 h-full box-border bg-gray-100">
                 <div class="mx-auto h-full max-w-5xl sm:px-6 lg:px-8 ">
                     <div class="flex flex-col space-y-5">
-                        <div class="bg-primary text-white text-3xl font-sans font-bold p-7 rounded-lg">
+                        <div class="bg-primary text-white font-sans font-bold rounded-lg 
+                                    p-7 text-3xl sm:p-4 sm:text-sm sm:text-blue-500">
                             Greetings! {{ user.name }}
                         </div>
 
@@ -66,7 +67,8 @@
                             <div class="flex-grow">
                                 <div v-if="activeStep === 0">
                                     <div
-                                        class="bg-white grid grid-cols-3 gap-6 rounded-lg h-1/2 items-center justify-start p-10">
+                                        class="bg-white grid grid-cols-3 gap-6 rounded-lg h-1/2 items-center justify-start p-10 
+                                        sm:px-6 lg:px-8 sm:grid-cols-1">
                                         <div class="col-span-3">
                                             <h3
                                                 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
@@ -76,13 +78,13 @@
                                                 Please fill-up missing required fields</p>
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
                                             <Label for="email">First Name</Label>
                                             <Input id="email" type="text" placeholder="First Name"
                                                 v-model="form.first_name" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
                                             <Label for="email">Last Name</Label>
                                             <Input id="email" type="text" placeholder="Last Name"
                                                 v-model="form.last_name" class="w-full border-gray-200" />
