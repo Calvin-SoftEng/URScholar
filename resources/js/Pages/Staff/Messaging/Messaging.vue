@@ -24,7 +24,7 @@ const sendMessage = () => {
         onSuccess: () => {
             fetchMessages(); // Fetch messages after sending
             form.value.content = ''; // Clear input after sending
-            
+
         },
     });
 };
@@ -48,9 +48,9 @@ onMounted(() => {
 });
 
 const fetchMessages = async () => {
-    const res = await fetch("/group-page'");
-    const data = await res.json();
-    messages.value = data.messages;
+    const { data } = await router.get(route("messaging.index"));
+
+    messages.value = data;
 };
 </script>
 
