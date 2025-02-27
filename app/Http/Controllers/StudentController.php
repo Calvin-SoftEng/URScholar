@@ -41,6 +41,7 @@ class StudentController extends Controller
             'suffix' => ['required', 'string', 'max:255'],
             'password' => ['required'],
             'confirm_password' => ['required', 'same:password'],
+            'birthdate' => ['required', 'date'],
             'birthplace' => ['required', 'string', 'max:255'],
             'age' => ['required', 'numeric'],
             'gender' => ['required', 'string', 'max:255'],
@@ -96,6 +97,7 @@ class StudentController extends Controller
             'family_housing' => ['required', 'string'],
         ]);
 
+        dd($request->birthdate);
 
         $education = [
             'elementary' => [
