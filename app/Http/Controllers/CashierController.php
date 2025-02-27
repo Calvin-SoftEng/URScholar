@@ -9,6 +9,7 @@ use App\Models\Scholarship;
 use App\Models\Batch;
 use App\Models\Scholar;
 use App\Models\Sponsor;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class CashierController extends Controller
@@ -123,8 +124,8 @@ class CashierController extends Controller
 
             // Update the payout status
             $payout->status = 'Claimed';
-            //$payout->claimed_at = now();
-            //$payout->claimed_by = auth()->id(); // Assuming the cashier is logged in
+            $payout->claimed_at = now();
+            $payout->claimed_by = Auth::user()->id; // Assuming the cashier is logged in
             $payout->save();
 
             return back()->with('flash', [

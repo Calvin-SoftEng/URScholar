@@ -17,6 +17,8 @@ return new class extends Migration
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['Claimed', 'Pending'])->default('Pending');
+            $table->timestamp('claimed_at')->nullable();
+            $table->foreignId('claimed_by')->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }
