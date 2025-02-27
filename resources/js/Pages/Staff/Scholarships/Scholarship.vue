@@ -12,7 +12,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">{{ scholarship.name }}</span>
+                            <span class="text-blue-400 font-semibold">{{ scholarship.name }} </span>
                         </li>
                     </ul>
                 </div>
@@ -24,7 +24,7 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{
-                                scholarship.name }}</span> <span>scholarship type</span>
+                                scholarship.name }}</span> <span>{{ scholarship.scholarshipType }}</span>
                         </h1>
                     </div>
                     <div class="flex gap-2">

@@ -29,30 +29,35 @@
                             <div
                                 class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
                                     dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
-                                <div class="card-body p-6 space-y-3 items-start">
-                                    <!-- Sponsor Badge -->
-                                    <div class="badge badge-info text-xs badge-outline px-3 py-1">
-                                        {{ getSponsorName(scholarship.sponsor_id) }}
+                                <div class="card-body p-6 flex flex-row justify-between">
+                                    <div>
+                                        <!-- Sponsor Badge -->
+                                        <div class="badge badge-info text-xs badge-outline px-3 py-1">
+                                            {{ getSponsorName(scholarship.sponsor_id) }}
+                                        </div>
+
+                                        <!-- Scholarship Title -->
+                                        <h2 class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
+                                            {{ scholarship.name }}
+                                        </h2>
+
+                                        <!-- Scholarship Dates -->
+                                        <p class="text-sm text-gray-500">
+                                            <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
+                                            <span>Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                year: 'numeric', month: 'long', day: 'numeric'
+                                            }) }}</span>
+                                        </p>
+
+                                        <!-- Scholarship Description -->
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
+                                            style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
+                                            {{ scholarship.description }}
+                                        </p>
                                     </div>
-
-                                    <!-- Scholarship Title -->
-                                    <h2 class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
-                                        {{ scholarship.name }}
-                                    </h2>
-
-                                    <!-- Scholarship Dates -->
-                                    <p class="text-sm text-gray-500">
-                                        <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
-                                        <span>Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                            year: 'numeric', month: 'long', day: 'numeric'
-                                        }) }}</span>
-                                    </p>
-
-                                    <!-- Scholarship Description -->
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
-                                        style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
-                                        {{ scholarship.description }}
-                                    </p>
+                                    <div>
+                                        <p>fnaemfeof</p>
+                                    </div>
                                 </div>
                             </div>
 
