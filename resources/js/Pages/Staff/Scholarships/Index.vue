@@ -27,10 +27,10 @@
                     <div class="py-12">
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                             <div v-for="sponsor in sponsors" :key="sponsor.id"
-                            class="relative bg-white border border-gray-300 rounded-lg shadow-lg hover:shadow-xl hover:border-gray-400 
-                                dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 
-                                before:absolute before:top-0 before:left-0 before:right-0 before:h-10 before:rounded-t-lg before:bg-white 
-                                dark:before:bg-dcontainer dark:before:border-dsecondary">
+                                class="relative bg-white border border-gray-300 rounded-lg shadow-lg hover:shadow-xl hover:border-gray-400 
+                                    dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 
+                                    before:absolute before:top-0 before:left-0 before:right-0 before:h-10 before:rounded-t-lg before:bg-white 
+                                    dark:before:bg-dcontainer dark:before:border-dsecondary flex flex-col min-h-[400px]">
 
                                 <!-- Logo Positioned Above Card with Border Around It -->
                                 <div class="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-white dark:bg-dcontainer 
@@ -40,27 +40,25 @@
                                 </div>
 
                                 <!-- Card Content -->
-                                <div class="mt-5 pt-12 p-6 flex flex-col justify-between min-h-[350px]">
-                                    <!-- Sponsor Name & Info (Fixed at Top) -->
-                                    <div class="flex flex-col gap-3 text-center justify-center items-center flex-grow">
+                                <div class="mt-12 pt-12 p-3 flex flex-col flex-grow">
+                                    <!-- Sponsor Name & Info -->
+                                    <div class="flex flex-col items-center text-center gap-1">
                                         <span class="text-3xl font-semibold text-gray-800 dark:text-dtext">
                                             {{ sponsor.name }} 
                                             <span class="text-gray-500 dark:text-gray-400">({{ sponsor.abbreviation }})</span>
                                         </span>
-                                        <!-- <div class="badge text-xs dark:bg-dsecondary dark:text-dtext">
-
+                                        <span class="inline-flex bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded-full dark:bg-dsecondary dark:text-blue-400 border border-blue-400 dark:border-gray-600">
                                             Sponsoring Since: {{ sponsor.since }}
-                                        </div> -->
-                                        <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-dsecondary dark:text-blue-400 border border-blue-400 dark:border-gray-600">
-                                            Sponsoring Since: {{ sponsor.since }}</span>
+                                        </span>
                                     </div>
 
-                                   <!-- Active Scholarships (Centered) -->
-                                    <div class="flex flex-col flex-grow justify-start">
+
+                                    <!-- Active Scholarships -->
+                                    <div class="flex flex-col flex-grow mt-4 justify-end">
                                         <p class="text-sm text-gray-400 mb-2">Active Scholarships:</p>
 
-                                        <div class="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 flex flex-col justify-center">
-                                            <!-- No Scholarships Available (Centered) -->
+                                        <div class="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer flex flex-col gap-2">
+                                            <!-- No Scholarships Available -->
                                             <div v-if="sponsor.scholarship.length === 0" 
                                                 class="p-3 text-gray-500 text-center bg-gray-100 rounded-lg border border-gray-300 shadow-sm 
                                                     dark:bg-dsecondary dark:text-gray-400 dark:border-gray-600 flex items-center justify-center h-full">
@@ -68,7 +66,7 @@
                                             </div>
 
                                             <!-- Scholarships List -->
-                                            <div v-else v-for="scholarship in sponsor.scholarship" :key="scholarship.id" class="space-y-1">
+                                            <div v-else v-for="scholarship in sponsor.scholarship" :key="scholarship.id">
                                                 <div class="flex flex-row p-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 border border-blue-400 shadow-lg 
                                                     hover:shadow-xl transition-all duration-300 justify-between items-center text-white 
                                                     dark:from-dsecondary dark:to-dprimary dark:border-gray-600">
@@ -76,7 +74,7 @@
                                                     <!-- Scholarship Name -->
                                                     <div class="flex flex-col">
                                                         <span class="font-semibold text-lg">
-                                                        {{ scholarship.name }}
+                                                            {{ scholarship.name }}
                                                         </span>
                                                         <span class="font-normal text-sm">
                                                             {{ scholarship.scholarshipType }}
@@ -94,28 +92,31 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-                                    <!-- Action Button (Also Sticks to Bottom) -->
-                                    <div class="mt-4 flex justify-end">
-                                        <button @click="toggleCreate(sponsor.id)">
-                                            <div class="text-sm text-gray-500 cursor-pointer"
-                                                v-tooltip="'Create Scholarship'">
-                                                <span
-                                                    class="material-symbols-rounded text-blue-900 dark:text-dtext bg-blue-100 hover:bg-gray-200 p-3 border rounded-lg dark:bg-dsecondary dark:border-gray-600 dark:hover:border-gray-300 dark:hover:bg-dsecondary">
-                                                    open_in_browser
-                                                </span>
-                                            </div>
-                                        </button>
-                                    </div>
+                                <!-- Sticky Button at the Bottom -->
+                                <div class="p-3 mt-auto flex justify-end">
+                                    <button @click="toggleCreate(sponsor.id)">
+                                        <div class="text-sm text-gray-500 cursor-pointer"
+                                            v-tooltip="'Create Scholarship'">
+                                            <span
+                                                class="material-symbols-rounded text-blue-900 dark:text-dtext bg-blue-100 hover:bg-gray-200 p-3 border rounded-lg dark:bg-dsecondary dark:border-gray-600 dark:hover:border-gray-300 dark:hover:bg-dsecondary">
+                                                open_in_browser
+                                            </span>
+                                        </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
+
+
+
             </div>
         </div>
         <!-- creating a sponsor --> 
@@ -153,8 +154,8 @@
                         <select v-model="form.scholarshipType" id="scholarshipType"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                             <option value="" disabled>Select Scholarship Type</option>
-                            <option value="merit">Grant-In</option>
-                            <option value="need">One-time Payment</option>
+                            <option value="Need-Based">Need-Based</option>
+                            <option value="One-time Payment">One-time Payment</option>
                         </select>
                     </div>
 

@@ -19,6 +19,7 @@ module.exports = {
       padding: "2rem",
       screens: {
         "2xl": "1400px",
+        "sm": "360px", // Custom breakpoint for 360px
       },
     },
     extend: {
@@ -128,6 +129,10 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
         "collapsible-down": "collapsible-down 0.2s ease-in-out",
         "collapsible-up": "collapsible-up 0.2s ease-in-out",
+      },
+      screens: {
+        sm: "360px", // Custom breakpoint for 360px (ensure it's accessible globally)
+        md: "768px",
       },
     },
   },
