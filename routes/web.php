@@ -120,7 +120,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     // Messaging
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
-    Route::post('/group-page', [MessageController::class, 'store'])->name('messaging.store');
+    Route::post('/group-page/message', [MessageController::class, 'store'])->name('messaging.store');
 
     //Applicants
     Route::get('/scholarships/{scholarship}/applicants', [ApplicationController::class, 'show'])->name('scholarships.applicants');
