@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['Claimed', 'Pending'])->default('Pending');
             $table->timestamp('claimed_at')->nullable();
-            $table->foreignId('claimed_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('claimed_by')->nullable()->constrained('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

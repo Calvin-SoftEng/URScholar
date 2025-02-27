@@ -126,6 +126,7 @@ class CashierController extends Controller
             $payout->status = 'Claimed';
             $payout->claimed_at = now();
             $payout->claimed_by = Auth::user()->id; // Assuming the cashier is logged in
+            //dd($payout);
             $payout->save();
 
             return back()->with('flash', [
