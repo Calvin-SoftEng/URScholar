@@ -1,9 +1,11 @@
 <template>
     <SettingsLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <h1 class="text-2xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>University of Rizal System Students
+                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>University of Rizal
+                    System Students
                 </h1>
 
                 <div class="flex justify-end items-center w-full gap-3">
@@ -25,8 +27,8 @@
                                     placeholder="Search" required />
                                 <button type="submit"
                                     class="absolute top-0 end-0 p-2 text-sm font-medium h-full text-white bg-blue-900 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                                        viewBox="0 0 20 20">
+                                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 20 20">
                                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                             stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                     </svg>
@@ -96,7 +98,8 @@
                         </div>
                         <table
                             class="mt-2 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg overflow-y-auto">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <thead
+                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         Student Name
@@ -156,7 +159,7 @@
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
                         <h2 class="text-2xl font-bold">
                             Add Students
-                            </h2>
+                        </h2>
                     </span>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -261,6 +264,14 @@ const closeModal = () => {
     resetForm();
 };
 
+const resetForm = () => {
+    form.value = {
+        file: null,
+        fileName: null,
+        filePreview: null,
+    };
+};
+
 const isFileDragging = ref(false);
 
 const previewFile = (event) => {
@@ -303,13 +314,15 @@ const submitForm = async () => {
         router.post(`/settings/adding-students/store`, formData, {
             preserveScroll: true,
             onSuccess: () => {
+                closeModal();
+                usePage().props.flash = { success: "Scholars added to the scholarship!" };
                 headers.value = [];
                 previewData.value = [];
                 error.value = "";
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input
-                usePage().props.flash = { success: "Scholars added to the scholarship!" };
-                closeModal();
+
+
             },
         });
     } catch (err) {
