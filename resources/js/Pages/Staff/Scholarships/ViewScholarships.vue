@@ -30,7 +30,7 @@
                                 class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
                                     dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
                                 <div class="card-body p-6 flex flex-row justify-between">
-                                    <div>
+                                    <div class="space-y-3 items-start justify-start">
                                         <!-- Sponsor Badge -->
                                         <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                             {{ getSponsorName(scholarship.sponsor_id) }}
@@ -55,8 +55,15 @@
                                             {{ scholarship.description }}
                                         </p>
                                     </div>
-                                    <div>
-                                        <p>fnaemfeof</p>
+                                    <div class="flex flex-row gap-2 items-start">
+                                        <div class="flex flex-col space-y-2 items-center">
+                                            <span>No. of Batches</span>
+                                            <span>34</span>
+                                        </div>
+                                        <div class="flex flex-col space-y-2 items-center">
+                                            <span>No. of Campuses</span>
+                                            <span>2</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
