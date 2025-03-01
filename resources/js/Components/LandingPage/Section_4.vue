@@ -57,9 +57,11 @@
 
                         <!-- Apply Button -->
                         <div class="flex items-center justify-center">
-                            <button class="bg-primary text-white px-10 py-2 rounded-lg shadow hover:bg-primary-dark transition whitespace-nowrap">
-                                Apply Now
-                            </button>
+                            <Link :href="route('landing_page.schoalrship_apply_details')">
+                                <button class="bg-primary text-white px-10 py-2 rounded-lg shadow hover:bg-primary-dark transition whitespace-nowrap">
+                                    Apply Now
+                                </button>
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -70,3 +72,7 @@
     </section>
 
 </template>
+
+<script setup>
+import { Link } from '@inertiajs/vue3';
+</script>

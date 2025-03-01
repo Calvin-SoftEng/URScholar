@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\QrCodeController;
@@ -195,8 +196,6 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
 
 
-
-
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');
     Route::post('/verify-account/verifying', [StudentController::class, 'verifyingAccount'])->name('student.verify-account.verifying');
@@ -219,6 +218,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+// Landing Page -------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Route::get('/applying-scholarship', [LandingPageController::class, 'scholarship_apply_details'])->name('landing_page.schoalrship_apply_details');
 
 require __DIR__ . '/auth.php';
