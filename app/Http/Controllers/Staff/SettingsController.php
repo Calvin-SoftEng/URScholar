@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Staff;
 
 use App\Models\Student;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Sponsor;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class SettingsController extends Controller
@@ -16,8 +18,9 @@ class SettingsController extends Controller
     {
 
         $sponsors = Sponsor::all();
-        
-        return Inertia::render('Staff/Settings/Settings_Sponsor', 
+
+        return Inertia::render(
+            'Staff/Settings/Settings_Sponsor',
             ['sponsors' => $sponsors]
         );
     }
@@ -26,7 +29,8 @@ class SettingsController extends Controller
     {
 
         $students = Student::all();
-        return Inertia::render('Staff/Settings/Adding_Students', 
+        return Inertia::render(
+            'Staff/Settings/Adding_Students',
             ['students' => $students]
         );
     }
@@ -42,18 +46,18 @@ class SettingsController extends Controller
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
         ]);
-        
 
-        
+
+
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
         // $logoFileName = $request->imgName;
         $originalFileName = $logoFile->getClientOriginalName();
         Storage::disk('public')->putFileAs('sponsor/logo', $logoFile, $originalFileName);
-        
+
         // Store the MOA file
         $filePath = $request->file('file')->store('sponsor/moa', 'public');
-        
+
 
         // dd($originalFileName);
         // Save sponsor record in the database
@@ -66,6 +70,13 @@ class SettingsController extends Controller
             'logo' => $originalFileName, // Save only the filename in the database
         ]);
 
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Create',
+            'description' => 'Created a new sponsor: ' . $request->name,
+        ]);
+
         return redirect()->route('sponsor.index')->with('success', 'Sponsor added successfully!');
     }
 
@@ -76,7 +87,7 @@ class SettingsController extends Controller
 
         \Log::info('Request data:', ['files' => $request->all()]);
 
-        
+
         if (!$file) {
             return response()->json(['message' => 'No file uploaded'], 400);
         }
@@ -109,6 +120,12 @@ class SettingsController extends Controller
             // dd($insertData);
             Student::insert($insertData);
 
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Create',
+                'description' => 'Added ' . count($insertData) . ' students',
+            ]);
+            
             return redirect()->back()->with('success', 'Scholars added to the scholarship!');
         } catch (\Exception $e) {
             \Log::error('Error during file upload: ' . $e->getMessage());

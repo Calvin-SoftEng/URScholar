@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Staff;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
 use App\Models\Scholar;
@@ -236,6 +237,12 @@ class ScholarController extends Controller
             }
 
             $schoolyear = SchoolYear::find($request->schoolyear);
+
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Create',
+                'description' => 'Scholars added to ' . $scholarship->name . ' for ' . $schoolyear->name . ' ' . $request->semester,
+            ]);
 
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [

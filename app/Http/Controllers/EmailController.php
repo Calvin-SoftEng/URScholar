@@ -9,6 +9,8 @@ use App\Models\User;
 use App\Models\Scholar;
 use Inertia\Inertia;
 use App\Mail\SendEmail;
+use App\Models\ActivityLog;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -96,6 +98,12 @@ class EmailController extends Controller
             }
 
         }
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Email',
+            'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name,
+        ]);
 
         return redirect()->route('requirements.index', $scholarship->id)->with('success', 'Messages has been sent to scholars');
     }

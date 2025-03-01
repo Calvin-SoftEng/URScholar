@@ -7,6 +7,7 @@ use App\Models\Scholarship;
 use App\Models\SchoolYear;
 use App\Models\Batch;
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
@@ -14,6 +15,7 @@ use App\Models\SubmittedRequirements;
 use App\Models\Sponsor;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ScholarshipController extends Controller
@@ -163,6 +165,12 @@ class ScholarshipController extends Controller
         //dd($request);
         Scholarship::create($request->all());
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Create',
+            'description' => 'Scholarship created ' . $request['name'],
+        ]);
+
         return redirect()->route('sponsor.index')->with('success', 'Check out view scholarships');
     }
 
@@ -208,6 +216,12 @@ class ScholarshipController extends Controller
 
         // Insert all records at once
         Payout::insert($dataToInsert);
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Forward',
+            'description' => 'Scholars forwarded to cashiers',
+        ]);
 
         return response()->json([
             'message' => 'Scholars successfully assigned to batches!',
