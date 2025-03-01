@@ -43,6 +43,14 @@ class ScholarshipController extends Controller
 
     public function batch(Request $request, $scholarshipId, $batchId)
     {
+
+        //Checking if scholar's payment claimed
+        $payroll = Payout::where('scholarship_id', $scholarshipId)
+            ->where('batch_id', $batchId)
+            ->where('status', 'claimed')
+            ->get();
+
+
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
         // Get all requirements for this scholarship
