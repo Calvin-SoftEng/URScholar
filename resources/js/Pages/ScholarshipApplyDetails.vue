@@ -5,7 +5,7 @@
         <div class="flex w-full mt-10 my-auto max-w-8xl mx-auto gap-3">
             <div class="w-3/4 p-4 flex flex-col space-y-4"> <!-- 75% width -->
                 <div>
-                    <button class="flex items-center gap-2 px-4 py-2 bg-white text-primary rounded-md shadow-md hover:bg-gray-100 transition shadow-md">
+                    <button class="flex items-center gap-2 px-4 py-2 bg-white text-primary rounded-md shadow-md hover:bg-gray-100 transition">
                         <span class="material-symbols-rounded text-lg">arrow_back_ios</span>
                         <span>Back</span>
                     </button>

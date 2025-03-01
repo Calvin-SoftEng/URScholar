@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title inertia>{{ config('app.name', 'URScholar') }}</title>
-        <link rel="icon" href="{{ asset('image/logo_web.png') }}" type="image/png">
+        <link rel="icon" href="{{ asset('image/web_logo.png') }}" type="image/png">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
