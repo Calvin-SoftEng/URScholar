@@ -225,6 +225,13 @@ class StudentController extends Controller
             return redirect()->route('student.confirmation');
         }
 
+        $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->where('status', 'Pending')
+            ->first();
+        if (!$submittedRequirements) {
+            return redirect()->route('student.confirmation');
+        }
+
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $requirementIds = $requirements->pluck('id')->toArray();
 
@@ -468,5 +475,7 @@ class StudentController extends Controller
 
             $uploadedFiles[] = $uploadedFile;
         }
+
+        return redirect()->route('student.scholarship');
     }
 }
