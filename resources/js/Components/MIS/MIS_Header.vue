@@ -55,7 +55,7 @@
         <!-- avatar -->
         <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start"
           class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-          src="/docs/images/people/profile-picture-5.jpg" alt="User dropdown">
+          src="" alt="User dropdown">
 
         <!-- Notifs Dropdown menu -->
         <div id="dropdownNotification"
