@@ -14,7 +14,7 @@ class LandingPageController extends Controller
 {
     public function index(): Response
     {
-        $scholarships = Scholarship::all();
+        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
 
