@@ -23,7 +23,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Age</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Date of Birth</span>
@@ -35,7 +35,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Civil Status</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -49,7 +49,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Gender</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Religion</span>
@@ -62,7 +62,7 @@
                         <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                             <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
                             <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
-                                }}</span>
+                            }}</span>
                         </div>
                         <!-- qr -->
                         <div
@@ -90,7 +90,7 @@
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.last_name
-                                }},
+                                    }},
                                     {{ student.first_name }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
@@ -116,9 +116,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
-                                        }}</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -127,9 +127,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -138,9 +138,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -149,9 +149,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -160,9 +160,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -171,9 +171,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                         </div>
@@ -283,10 +283,10 @@
                 </div>
 
                 <div class="text-center py-4 gap-2 flex items-center justify-center">
-                    <button @click="generateQRCode" :disabled="loading"
+                    <!-- <button @click="forceRegenerateQRCode" :disabled="loading"
                         class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 disabled:opacity-50">
                         {{ loading ? 'Generating...' : 'Regenerate' }}
-                    </button>
+                    </button> -->
                     <button @click="downloadQRCode" :disabled="!qrCodeUrl || loading"
                         class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80 disabled:opacity-50">
                         Download
@@ -300,7 +300,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watch } from 'vue';
 import axios from 'axios';
 
 const props = defineProps({
@@ -310,17 +310,29 @@ const props = defineProps({
     scholar: Object,
 });
 
+// QR Code state management
 const isQRModalOpen = ref(false);
 const qrCodeUrl = ref(null);
 const loading = ref(false);
 const error = ref(null);
 
+// Watch for qrCodeUrl in page props (for when returning from generation)
+watch(() => props.flash?.qrCodeUrl, (newUrl) => {
+    if (newUrl) {
+        qrCodeUrl.value = newUrl;
+    }
+});
+
 const openQRModal = () => {
     isQRModalOpen.value = true;
-    // Generate QR code when modal is opened if we don't have one already
-    // if (!qrCodeUrl.value) {
-    //     generateQRCode();
-    // }
+
+    // Check if the scholar has an existing QR code
+    if (props.scholar && props.scholar.qr_code && props.scholar.qr_code !== 'NULL') {
+        qrCodeUrl.value = props.scholar.qr_code;
+    } else {
+        // If no QR code exists, generate one
+        generateQRCode();
+    }
 };
 
 const closeQRModal = () => {
@@ -331,11 +343,22 @@ const generateQRCode = () => {
     loading.value = true;
     error.value = null;
 
+    // Make sure we have a valid scholar ID
+    if (!props.scholar || !props.scholar.urscholar_id) {
+        error.value = 'Scholar information not available.';
+        loading.value = false;
+        return;
+    }
+
     router.visit(`/myProfile/generate/${props.scholar.urscholar_id}`, {
         method: 'get',
         preserveState: true,
         onSuccess: (page) => {
-            qrCodeUrl.value = page.props.qrCodeUrl;
+            if (page.props.flash?.qrCodeUrl) {
+                qrCodeUrl.value = page.props.flash.qrCodeUrl;
+            } else {
+                error.value = 'QR code generation failed. Please try again.';
+            }
             loading.value = false;
         },
         onError: (errors) => {
@@ -347,18 +370,49 @@ const generateQRCode = () => {
 };
 
 const downloadQRCode = () => {
-    if (qrCodeUrl.value) {
-        // Create a temporary anchor element for downloading
+    if (!qrCodeUrl.value) {
+        error.value = 'No QR code available to download.';
+        return;
+    }
+
+    try {
+        loading.value = true;
+
+        // Create a new element
         const link = document.createElement('a');
+
+        // Set attributes
         link.href = qrCodeUrl.value;
         link.download = `qr_code_${props.scholar.urscholar_id}.png`;
+
+        // Append to document
         document.body.appendChild(link);
+
+        // Trigger click
         link.click();
+
+        // Remove from document
         document.body.removeChild(link);
-    } else {
-        error.value = 'No QR code available to download.';
+
+    } catch (err) {
+        console.error("Download failed:", err);
+        error.value = 'Failed to download QR code.';
+    } finally {
+        loading.value = false;
     }
 };
+
+// Initialize QR code URL on component mount
+onMounted(() => {
+    if (props.scholar && props.scholar.qr_code && props.scholar.qr_code !== 'NULL') {
+        qrCodeUrl.value = props.scholar.qr_code;
+    }
+
+    // Also check if there's a flash message with a QR code URL
+    if (props.flash?.qrCodeUrl) {
+        qrCodeUrl.value = props.flash.qrCodeUrl;
+    }
+});
 
 const elementary = computed(() => {
     try {

@@ -27,7 +27,8 @@
                                 scholarship.name }}</span> <span>{{ scholarship.scholarshipType }}</span>
                         </h1>
                     </div>
-                    <div class="flex gap-2">
+                    <!--Condition for scholarship type-->
+                    <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
                         <button @click="openScholarship"
                             class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
                             <span><font-awesome-icon :icon="['fas', 'user-plus']"

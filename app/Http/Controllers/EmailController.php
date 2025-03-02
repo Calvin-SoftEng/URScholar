@@ -105,6 +105,10 @@ class EmailController extends Controller
             'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name,
         ]);
 
-        return redirect()->route('requirements.index', $scholarship->id)->with('success', 'Messages has been sent to scholars');
+        return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
+            ->with('flash', [
+                'type' => 'success',
+                'message' => "Successfully sent email to all scholars",
+            ]);
     }
 }

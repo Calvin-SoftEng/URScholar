@@ -226,7 +226,6 @@ class StudentController extends Controller
         }
 
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->where('status', 'Pending')
             ->first();
         if (!$submittedRequirements) {
             return redirect()->route('student.confirmation');
@@ -328,7 +327,7 @@ class StudentController extends Controller
         $qrcode = (new QRCode($options))->render($qrData);
 
         // Generate a unique filename
-        $filename = 'qr_codes/' . $scholar->urscholar_id . '_' . time() . '.png';
+        $filename = 'qr_codes/' . $scholar->urscholar_id . '.png';
         
     
         // Save QR code to storage
@@ -349,24 +348,6 @@ class StudentController extends Controller
         return response()->json([
             'path' => asset($scholar->qr_code),
             'filename' => $urscholar_id . '.png'
-        ]);
-    }
-
-    public function application(User $user)
-    {
-
-        // $scholars = $user->scholars;
-        $scholars = Scholar::where('email', Auth::user()->email)->with('scholarship')->get();
-
-        $scholarshipIds = $scholars->pluck('scholarship_id')->unique();
-        $scholarships = Scholarship::whereIn('id', $scholarshipIds)->with('requirements')->get();
-
-        $requirements = Requirements::where('scholarship_id', $scholarships->first()->id)->get();
-
-        return Inertia::render('Student/Application/Application', [
-            'scholars' => $scholars,
-            'scholarships' => $scholarships,
-            'requirements' => $requirements
         ]);
     }
 
