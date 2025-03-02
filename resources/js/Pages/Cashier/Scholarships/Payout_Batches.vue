@@ -160,7 +160,7 @@
                 <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
                         <h2 class="text-2xl font-bold">
-                            Forwarding Batch List
+                            Send Payroll
                         </h2>
                     </span>
                     <button type="button" @click="closeModal"
