@@ -173,6 +173,11 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
 });
 
+// Staff and Cashier Profile -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    Route::get('/account/profile', [ProfileController::class, 'view_profile'])->name('view.profile');
+
+
 // STUDENT -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {

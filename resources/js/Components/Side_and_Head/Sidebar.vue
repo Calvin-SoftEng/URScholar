@@ -139,7 +139,6 @@
         </div>
 
         
-
         <!-- account -->
         <div class="menu-man pb-5 w-full text-left px-2 justify-self-end">
           <!-- Dropdown Toggle Button -->
@@ -175,7 +174,7 @@
             <ul class="text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownTopButton">
               <li class="flex items-left space-x-2 px-4 py-1 hover:bg-gray-100 hover:rounded-t-lg dark:hover:bg-dcontainer dark:hover:text-white">
-                <Link :href="route('profile.edit')" method="post" as="button" class="flex items-center justify-start space-x-2 py-2 ">
+                <Link :href="route('view.profile')" class="flex items-center justify-start space-x-2 py-2 ">
                   <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
                     person
                   </span>

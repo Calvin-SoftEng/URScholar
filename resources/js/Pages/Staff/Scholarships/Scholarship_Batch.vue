@@ -95,8 +95,12 @@
                 </div>
 
                 <!-- Main content -->
-                <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                    :requirements="requirements" @update:stats="updateStats" />
+                <!-- <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                    :requirements="requirements" @update:stats="updateStats" /> -->
+
+                <!-- Payroll Table -->
+                <PayrollTable />
+
             </div>
         </div>
 
@@ -122,6 +126,7 @@ import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
+import PayrollTable from '@/Components/Staff/ScholarsTabs/PayrollTable.vue';
 import { cloneDeep, isEqual } from 'lodash';
 
 const props = defineProps({

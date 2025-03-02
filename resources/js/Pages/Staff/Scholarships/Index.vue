@@ -115,8 +115,6 @@
                 </div>
 
 
-
-
             </div>
         </div>
         <!-- creating a sponsor --> 
@@ -160,7 +158,7 @@
                     </div>
 
                     <!-- Show only if One-time Payment is selected -->
-                    <div v-if="form.scholarshipType === 'One-time Payment'" class="space-y-3">
+                    <!-- <div v-if="form.scholarshipType === 'One-time Payment'" class="space-y-3">
                         <hr class="border-t border-gray-300 dark:border-gray-600 my-4">
 
                         <div class="flex flex-row gap-2">
@@ -193,7 +191,9 @@
                             <input type="text" id="name"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                         </div>
-                    </div>
+                    </div> -->
+
+                    
                     <!-- <div class="w-full flex flex-col space-y-2">
                         <h3 class="font-semibold text-gray-900 dark:text-white">School Year</h3>
                         <input v-model="form.school_year" type="text" id="name"
