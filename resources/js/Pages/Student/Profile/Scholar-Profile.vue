@@ -23,7 +23,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Age</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Date of Birth</span>
@@ -35,7 +35,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Civil Status</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -49,7 +49,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Gender</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Religion</span>
@@ -62,13 +62,13 @@
                         <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                             <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
                             <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
-                            }}</span>
+                                }}</span>
                         </div>
                         <!-- qr -->
                         <div
                             class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
                             <div v-if="scholar.qr_code" class="w-20 h-20">
-                                <img :src="scholar.qr_code" alt="QR Code" class="w-full h-full">
+                                <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code" class="w-full h-full">
                             </div>
                             <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
                                 <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
@@ -90,7 +90,7 @@
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.last_name
-                                    }},
+                                }},
                                     {{ student.first_name }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
@@ -116,9 +116,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
-                                    }}</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -127,9 +127,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -138,9 +138,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -149,9 +149,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -160,9 +160,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -171,9 +171,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                         </div>
@@ -274,7 +274,8 @@
                     </div>
 
                     <!-- Show QR code if available -->
-                    <img v-else-if="qrCodeUrl" :src="qrCodeUrl" alt="QR Code" class="max-w-full max-h-full" />
+                    <img v-else-if="qrCodeUrl" :src="`/storage/qr_codes/${qrCodeUrl}`" alt="QR Code"
+                        class="max-w-full max-h-full" />
 
                     <!-- Show placeholder if no QR code yet -->
                     <div v-else class="flex items-center justify-center">
@@ -369,7 +370,7 @@ const generateQRCode = () => {
     });
 };
 
-const downloadQRCode = () => {
+const downloadQRCode = async () => {
     if (!qrCodeUrl.value) {
         error.value = 'No QR code available to download.';
         return;
@@ -378,21 +379,31 @@ const downloadQRCode = () => {
     try {
         loading.value = true;
 
-        // Create a new element
+        // Fetch the QR code image as a Blob
+        const response = await fetch(qrCodeUrl.value);
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch QR code.');
+        }
+
+        const blob = await response.blob();
+
+        // Ensure it's a valid image
+        if (blob.type !== 'image/png') {
+            throw new Error('Invalid QR code file format.');
+        }
+
+        // Create a temporary download link
         const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `${props.scholar.urscholar_id}.png`;
 
-        // Set attributes
-        link.href = qrCodeUrl.value;
-        link.download = `qr_code_${props.scholar.urscholar_id}.png`;
-
-        // Append to document
+        // Append, click, and remove the link
         document.body.appendChild(link);
-
-        // Trigger click
         link.click();
-
-        // Remove from document
         document.body.removeChild(link);
+
+        error.value = null; // Clear any errors
 
     } catch (err) {
         console.error("Download failed:", err);
@@ -401,6 +412,7 @@ const downloadQRCode = () => {
         loading.value = false;
     }
 };
+
 
 // Initialize QR code URL on component mount
 onMounted(() => {

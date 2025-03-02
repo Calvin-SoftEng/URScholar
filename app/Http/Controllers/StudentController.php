@@ -299,12 +299,17 @@ class StudentController extends Controller
 
     public function generate($urscholar_id)
     {
-        // Check if the student belongs to the authenticated user
-        $scholar = Scholar::where('urscholar_id', $urscholar_id)
-            ->firstOrFail();
+        // Find the scholar record
+        $scholar = Scholar::where('urscholar_id', $urscholar_id)->firstOrFail();
 
-        // dd($scholar);
-
+        // Check if the scholar already has a QR code
+        if ($scholar->qr_code) {
+            return response()->json([
+                'message' => 'QR code already exists.',
+                'path' => asset('storage/qr_codes/' . $scholar->urscholar_id . '.png'),
+                'filename' => $urscholar_id . '.png'
+            ]);
+        }
 
         // Set up QR code options
         $options = new QROptions([
@@ -313,40 +318,30 @@ class StudentController extends Controller
             'scale' => 10,
             'imageBase64' => false,
         ]);
-        
-        // Data to encode in QR code
-        // You can customize this with whatever data you want to include
+
+        // Data to encode in the QR code
         $qrData = json_encode([
             'id' => $scholar->urscholar_id,
             'name' => $scholar->first_name . ' ' . $scholar->last_name,
             'timestamp' => now()->timestamp,
         ]);
-        
 
-        // Generate QR code
+        // Generate the QR code
         $qrcode = (new QRCode($options))->render($qrData);
 
-        // Generate a unique filename
-        $filename = 'qr_codes/' . $scholar->urscholar_id . '.png';
-        
-    
-        // Save QR code to storage
-        Storage::disk('public')->put(
-            $filename, 
-            $qrcode
-        );
-        
-        // Get the public URL
-        // $qrCodeUrl = Storage::disk('public')->url($filename);
-        
-        
-        // // // Update QR code in database
-        $scholar->qr_code = Hash::make($qrData);
+        // Define the file path
+        $filename = $scholar->urscholar_id . '.png';
+
+        // Save the QR code to storage
+        Storage::disk('public')->put('qr_codes/' . $filename, $qrcode);
+
+        // Update the scholar record with the QR code path
+        $scholar->qr_code = $filename;
         $scholar->save();
 
-        // Return the path
         return response()->json([
-            'path' => asset($scholar->qr_code),
+            'message' => 'QR code generated successfully.',
+            'path' => asset('storage/' . $filename),
             'filename' => $urscholar_id . '.png'
         ]);
     }

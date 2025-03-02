@@ -33,7 +33,7 @@
 
                         <button @click="isQrCodeVisible = true"
                             class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3 cursor-pointer hover:bg-gray-100">
-                            <img src="../../../../assets/images/qrcodesample.png" alt="QR Code" class="w-20 h-20">
+                            <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code" class="w-20 h-20">
                             <span class="pl-2">Download your QR Code</span>
                         </button>
                         <!-- tracker -->
@@ -172,7 +172,7 @@
 
                 <!-- Modal Body -->
                 <div class="p-5 flex flex-col items-center">
-                    <img :src="qrCodeImage" alt="QR Code" class="w-40 h-40 object-cover rounded-lg shadow-md">
+                    <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code" class="w-40 h-40 object-cover rounded-lg shadow-md">
                     <p class="text-gray-700 dark:text-gray-300 mt-4 text-sm">Scan the QR code or click below to download it.</p>
                     <a :href="qrCodeImage" download="QR_Code.png"
                     class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition">

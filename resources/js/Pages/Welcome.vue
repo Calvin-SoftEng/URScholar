@@ -22,6 +22,18 @@ defineProps({
         type: String,
         required: true,
     },
+    scholarships: {
+        type: Array,
+        required: true,
+    },
+    sponsors: {
+        type: Array,
+        required: true,
+    },
+    schoolyears: {
+        type: String,
+        required: true,
+    },
 });
 
 function handleImageError() {
@@ -40,7 +52,7 @@ function handleImageError() {
         <Section_1/>
         <Section_2/>
         <Section_3/>
-        <Section_4/>
+        <Section_4 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears"/>
         <SectionFooter/>
     </div>
 </template>

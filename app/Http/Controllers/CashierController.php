@@ -11,6 +11,8 @@ use App\Models\Scholar;
 use App\Models\Sponsor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class CashierController extends Controller
 {
@@ -101,16 +103,24 @@ class CashierController extends Controller
                 return back()->withErrors(['message' => 'Scholar not found']);
             }
 
-            // Recreate QR data for hash checking
-            $qrData = json_encode([
-                'id' => $scholar->urscholar_id,
-                'name' => $scholar->first_name . ' ' . $scholar->last_name,
-                'timestamp' => $scannedData['timestamp'],
-            ], JSON_UNESCAPED_SLASHES);
+            // Check if the QR code filename matches the expected format
+            $expectedQrFilename = $scholar->urscholar_id . '.png';
 
-            // Verify the QR Code
-            if (!Hash::check($qrData, $scholar->qr_code)) {
-                return back()->withErrors(['message' => 'QR Code verification failed']);
+            if ($scholar->qr_code !== $expectedQrFilename) {
+                return back()->withErrors(['message' => 'QR Code does not match scholar records']);
+            }
+
+            // Verify the QR Code matches the stored one (no hash checking needed now)
+            if (!Storage::disk('public')->exists('qr_codes/' . $expectedQrFilename)) {
+                return back()->withErrors(['message' => 'QR Code file not found']);
+            }
+
+            // Optional: Verify timestamp is not too old (e.g., 24 hours)
+            $qrTimestamp = Carbon::createFromTimestamp($scannedData['timestamp']);
+            $currentTime = Carbon::now();
+
+            if ($currentTime->diffInHours($qrTimestamp) > 24) {
+                return back()->withErrors(['message' => 'QR Code has expired']);
             }
 
             // QR is valid, now check if the scholar has a pending payout
@@ -126,12 +136,11 @@ class CashierController extends Controller
             $payout->status = 'Claimed';
             $payout->claimed_at = now();
             $payout->claimed_by = Auth::user()->id; // Assuming the cashier is logged in
-            //dd($payout);
             $payout->save();
 
             return back()->with('flash', [
                 'type' => 'success',
-                'message' => 'Grant successfully claimed for Scholar: '
+                'message' => 'Grant successfully claimed for Scholar: ' . $scholar->first_name . ' ' . $scholar->last_name
             ]);
 
         } catch (\Exception $e) {
