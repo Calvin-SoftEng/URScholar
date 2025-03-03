@@ -66,10 +66,7 @@ module.exports = {
   			]
   		},
   		colors: {
-  			primary: {
-  				DEFAULT: 'hsl(var(--primary))',
-  				foreground: 'hsl(var(--primary-foreground))'
-  			},
+			primary: '#003366',
   			navy: '#3A4C7E',
   			lightblue: '#5BC0BE',
   			dirtywhite: '#F8F8FA',
