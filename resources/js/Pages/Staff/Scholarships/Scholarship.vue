@@ -150,6 +150,8 @@
                                             <label for="suffixName" class="text-sm font-medium text-gray-700">Scholarship Name</label>
                                             <input 
                                                 id="suffixName" 
+                                                :value="scholarship.name"
+                                                readonly
                                                 type="text" 
                                                 placeholder="Scholarship Name" 
                                                 class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
@@ -160,6 +162,8 @@
                                             <label for="suffixName" class="text-sm font-medium text-gray-700">Scholarship Type</label>
                                             <input 
                                                 id="suffixName" 
+                                                :value="scholarship.scholarshipType"
+                                                readonly
                                                 type="text" 
                                                 placeholder="Scholarship Type" 
                                                 class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
