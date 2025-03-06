@@ -95,8 +95,19 @@ class StudentController extends Controller
             'monthly_income' => ['required', 'string'],
             'other_income' => ['required', 'string'],
             'family_housing' => ['required', 'string'],
+
+            'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'imgName' => 'required|string',
         ]);
 
+        // Store the logo file in the local directory with a known path
+        $logoFile = $request->file('img');
+
+        // $logoFileName = $request->imgName;
+        $originalFileName = $logoFile->getClientOriginalName();
+
+
+        Storage::disk('public')->putFileAs('user/profile', $logoFile, $originalFileName);
 
         $education = [
             'elementary' => [
@@ -161,6 +172,7 @@ class StudentController extends Controller
         $user = User::where('email', $request->email)->first();
 
         $user->update([
+            'picture' => $originalFileName,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'password' => $password,

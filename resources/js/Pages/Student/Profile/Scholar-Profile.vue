@@ -13,7 +13,7 @@
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- pic -->
                         <div class="border w-80 h-80 rounded-lg">
-                            <img src="" alt="">
+                            <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
                         </div>
                         <!-- info -->
                         <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">

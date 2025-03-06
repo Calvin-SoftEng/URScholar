@@ -22,7 +22,7 @@
 
       <!-- navigations -->
       <div>
-        
+
       </div>
 
       <!-- Theme and Notification -->
@@ -63,9 +63,17 @@
         </button>
 
         <!-- avatar -->
-        <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start"
-          class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-          src="/docs/images/people/profile-picture-5.jpg" alt="User dropdown">
+        <div v-if="$page.props.auth.user.picture">
+          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+            data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+            :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+        </div>
+        <div v-else>
+          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+            data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+            :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+        </div>
+
 
         <!-- Notifs Dropdown menu -->
         <div id="dropdownNotification"
@@ -121,7 +129,8 @@
           </div>
           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
             <li>
-              <Link :href="(route('student.profile'))" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+              <Link :href="(route('student.profile'))"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
             </li>
           </ul>
           <div class="py-1 text-left">
