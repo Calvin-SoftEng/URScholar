@@ -59,7 +59,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     // univ settings
     Route::get('/system_admin/univ-settings/courses', [SystemAdminController::class, 'courses'])->name('sa.courses');
     Route::get('/system_admin/univ-settings/course/config/{campuses}', [SystemAdminController::class, 'course_config'])->name('sa.course_config');
-    Route::post('/system_admin/univ-settings/course/config/{campuses}/store', [SystemAdminController::class, 'store_course_config'])->name('sa.course_config');
+    Route::post('/system_admin/univ-settings/course/config/{campuses}/store', [SystemAdminController::class, 'store_course_config'])->name('sa.course_config_store');
 
     Route::get('/system_admin/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('sa.campuses');
     Route::post('/system_admin/univ-settings/campuses/store', [SystemAdminController::class, 'store_campus'])->name('sa.store_campus');

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Campus;
+use App\Models\Course;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
 use App\Models\User;
@@ -107,6 +109,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
+        //Campus
+        Campus::create([
+            'name' => 'University of the Rizal System, Morong Campus',
+            'location' => 'Morong, Rizal',
+        ]);
+
+        //Course
+        Course::create([
+            'name' => 'BSIT',
+            'campus_id' => 1,
+        ]);
 
         //sponsor 
         // $this->call(UserTableSeeder::class);

@@ -45,7 +45,7 @@ class SystemAdminController extends Controller
             'location' => $request->location,
         ]);
 
-        return redirect()->route('mis.campuses');
+        return redirect()->route('sa.campuses');
     }
 
     public function assign_campus(Request $request, Campus $campus) {
@@ -113,7 +113,7 @@ class SystemAdminController extends Controller
             'name' => $request->name,
         ]);
 
-        return redirect()->route('mis.course_config');
+        return redirect()->route('sa.course_config');
     }
 
     public function sy_and_term() {

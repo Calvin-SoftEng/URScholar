@@ -228,7 +228,7 @@ const assign = ref({
 
 const submitForm = async () => {
     try {
-        router.post("/mis/univ-settings/campuses/store", form.value);
+        router.post("/system_admin/univ-settings/campuses/store", form.value);
         closeModal();
     } catch (error) {
         console.error("Error submitting form:", error);
@@ -237,7 +237,7 @@ const submitForm = async () => {
 
 const submitAssign = async () => {
     try {
-        router.post("/mis/univ-settings/campuses/assign", assign.value);
+        router.post("/system_admin/univ-settings/campuses/assign", assign.value);
         closeModal();
     } catch (error) {
         console.error("Error submitting form:", error);

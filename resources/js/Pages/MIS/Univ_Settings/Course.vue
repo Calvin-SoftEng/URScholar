@@ -20,7 +20,7 @@
                             <img src="" alt="">
                             <span class="font-semibold font-sora text-lg">{{ campus.name }}</span>
                         </div>
-                        <Link :href="`/mis/univ-settings/course/config/${campus.id}`">
+                        <Link :href="`/system_admin/univ-settings/course/config/${campus.id}`">
                         <button
                             class="bg-white px-3 py-1 rounded-md border-gray-100 text-primary border hover:bg-primary hover:text-dtext dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
                             Add Course

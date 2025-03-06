@@ -228,7 +228,7 @@ const form = ref({
 
 const submitForm = async () => {
     try {
-        router.post(`/mis/univ-settings/course/config/${props.campuses.id}/store`, form.value);
+        router.post(`/system_admin/univ-settings/course/config/${props.campuses.id}/store`, form.value);
         closeModal();
     } catch (error) {
         console.error("Error submitting form:", error);
