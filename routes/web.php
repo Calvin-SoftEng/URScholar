@@ -16,7 +16,8 @@ use App\Http\Controllers\Staff\SettingsController;
 use App\Http\Controllers\Staff\SponsorController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\SuperAdminController;
-use App\Http\Controllers\SystemAdminController;
+// use App\Http\Controllers\SystemAdminController;
+use App\Http\Controllers\MIS\SystemAdminController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -48,20 +49,23 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
     Route::get('/system_admin/dashboard', [SystemAdminController::class, 'dashboard'])->name('system_admin.dashboard');
 
-    // univ settings
-    Route::get('/mis/univ-settings/course', [SystemAdminController::class, 'course'])->name('mis.course');
-    Route::get('/mis/univ-settings/course/config/{campuses}', [SystemAdminController::class, 'course_config'])->name('mis.course_config');
-    Route::post('/mis/univ-settings/course/config/{campuses}/store', [SystemAdminController::class, 'store_course_config'])->name('mis.course_config');
-
-    Route::get('/mis/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('mis.campuses');
-    Route::post('/mis/univ-settings/campuses/store', [SystemAdminController::class, 'store_campus'])->name('mis.store_campus');
-    Route::post('/mis/univ-settings/campuses/assign', [SystemAdminController::class, 'assign_campus'])->name('mis.assign_campus');
-
-    Route::get('/mis/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_term'])->name('mis.sy_term');
+    // portal branding
+    Route::get('/system_admin/univ-settings/portal-branding', [SystemAdminController::class, 'portal_branding'])->name('sa.portal_branding');
 
     // user settings
-    Route::get('/mis/user-settings/user-roles', [SystemAdminController::class, 'roles'])->name('mis.roles');
-    Route::get('/mis/user-settings/users', [SystemAdminController::class, 'users'])->name('mis.users');
+    Route::get('/system_admin/user-settings/system-users_roles', [SystemAdminController::class, 'system_user_roles'])->name('sa.user_roles');
+    Route::get('/system_admin/user-settings/users', [SystemAdminController::class, 'system_users'])->name('sa.users');
+
+    // univ settings
+    Route::get('/system_admin/univ-settings/courses', [SystemAdminController::class, 'courses'])->name('sa.courses');
+    Route::get('/system_admin/univ-settings/course/config/{campuses}', [SystemAdminController::class, 'course_config'])->name('sa.course_config');
+    Route::post('/system_admin/univ-settings/course/config/{campuses}/store', [SystemAdminController::class, 'store_course_config'])->name('sa.course_config');
+
+    Route::get('/system_admin/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('sa.campuses');
+    Route::post('/system_admin/univ-settings/campuses/store', [SystemAdminController::class, 'store_campus'])->name('sa.store_campus');
+    Route::post('/system_admin/univ-settings/campuses/assign', [SystemAdminController::class, 'assign_campus'])->name('sa.assign_campus');
+
+    Route::get('/system_admin/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_and_term'])->name('sa.sy_term');
 
 });
 

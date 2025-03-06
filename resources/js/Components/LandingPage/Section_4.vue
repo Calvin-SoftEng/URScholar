@@ -22,55 +22,77 @@
 
             <div class="w-full h-[1px] bg-gray-200"></div>
 
-            <div class="flex flex-col space-y-4">
-                <div  v-for="scholarship in scholarships" :key="scholarship.id" class="p-4 bg-white border border-gray-200 rounded-xl shadow-md">
-                    <div class="flex text-left gap-4">
-                        <!-- Scholarship Image -->
-                        <img :src="`/storage/sponsor/logo/${getSponsorDetails(scholarship.sponsor_id).logo}`" alt="logo" class="w-16 h-16 rounded-md object-cover">
+            <div class="w-full flex flex-col items-center space-y-4">
+                <!-- Check if scholarships exist -->
+                <template v-if="scholarships.length > 0">
+                    <div v-for="scholarship in scholarships" :key="scholarship.id" 
+                        class="p-10 max-w-4l bg-white border border-gray-200 rounded-xl shadow-md">
+                        
+                        <div class="flex items-start gap-6">
+                            <!-- Scholarship Image -->
+                            <img 
+                                :src="`/storage/sponsor/logo/${getSponsorDetails(scholarship.sponsor_id).logo}`" 
+                                alt="logo" 
+                                class="w-20 h-20 rounded-lg object-cover"
+                            >
 
-                        <!-- Scholarship Details -->
-                        <div class="flex flex-col flex-grow space-y-2">
-                            <span class="font-semibold text-lg">{{scholarship.name}}</span>
-                            <span class="text-sm text-gray-600">Funded by {{ getSponsorDetails(scholarship.sponsor_id).name }} <span class="font-medium">Since {{ getSponsorDetails(scholarship.sponsor_id).since }}</span></span>
-                            <p class="text-sm text-gray-700">
-                                {{ getSponsorDetails(scholarship.sponsor_id).description }}
-                            </p>
+                            <!-- Scholarship Details -->
+                            <div class="flex flex-col flex-grow space-y-2">
+                                <span class="font-semibold text-lg text-gray-800">{{ scholarship.name }}</span>
+                                <span class="text-sm text-gray-600">
+                                    Funded by <span class="font-medium">{{ getSponsorDetails(scholarship.sponsor_id).name }}</span> 
+                                    <span class="text-gray-500">Since {{ getSponsorDetails(scholarship.sponsor_id).since }}</span>
+                                </span>
+                                <p class="text-sm text-gray-700 leading-relaxed">
+                                    {{ getSponsorDetails(scholarship.sponsor_id).description }}
+                                </p>
 
-                            <!-- Scholarship Info -->
-                            <div class="flex gap-6 mt-2">
-                                <div class="flex flex-col">
-                                    <span class="text-gray-500 text-sm">Scholarship for</span>
-                                    <span class="font-medium">All Courses</span>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="text-gray-500 text-sm">Application</span>
-                                    <span class="font-medium text-green-600">Ongoing</span>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="text-gray-500 text-sm">Deadline</span>
-                                    <span class="font-medium text-red-500">Bukas na</span>
+                                <!-- Scholarship Info -->
+                                <div class="flex gap-6 mt-3">
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 text-sm">Scholarship for</span>
+                                        <span class="font-medium text-gray-800">All Courses</span>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 text-sm">Application</span>
+                                        <span class="font-medium text-green-600">Ongoing</span>
+                                    </div>
+                                    <div class="flex flex-col">
+                                        <span class="text-gray-500 text-sm">Deadline</span>
+                                        <span class="font-medium text-red-500">Bukas na</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Vertical Separator -->
-                        <div class="w-[1px] bg-gray-300 self-stretch"></div>
+                        <!-- Divider -->
+                        <div class="h-[1px] bg-gray-300 my-4"></div>
 
-                        <!-- Apply Button -->
-                        <div class="flex items-center justify-center">
-                            <Link :href="route('landing_page.schoalrship_apply_details')">
-                            <button
-                                class="bg-primary text-white px-10 py-2 rounded-lg shadow hover:bg-primary-dark transition whitespace-nowrap">
-                                Apply Now
-                            </button>
+                        <!-- Apply Button (Centered) -->
+                        <div class="flex justify-center">
+                            <Link :href="route('landing_page.scholarship_apply_details')">
+                                <button 
+                                    class="bg-primary text-white px-8 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200"
+                                >
+                                    Apply Now
+                                </button>
                             </Link>
                         </div>
                     </div>
+                </template>
+
+                <!-- If No Scholarships Available -->
+                <div v-else class="max-w-4xl flex flex-col items-center justify-center p-10 text-center bg-white border border-gray-200 rounded-xl shadow-md">
+                    <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 14l-2-2m0 0l-2-2m2 2h8m4 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span class="text-lg font-semibold text-gray-700">No scholarships available</span>
+                    <p class="text-gray-500 text-sm mt-2">Check back later for new opportunities.</p>
                 </div>
-
             </div>
-        </div>
 
+
+        </div>
     </section>
 
 </template>

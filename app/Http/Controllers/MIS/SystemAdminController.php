@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\MIS;
 
+use App\Http\Controllers\Controller;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\User;
@@ -14,12 +15,16 @@ class SystemAdminController extends Controller
         return Inertia::render('MIS/Dashboard');
     }
 
-    // univ settings
-    public function course() {
+
+    // system config ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public function portal_branding() {
+        return Inertia::render('MIS/System_Config/Portal_Branding');
+    }
+
+    // univ settings ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public function courses() {
         $campuses = Campus::with('courses')->get();
-
         
-
         return Inertia::render('MIS/Univ_Settings/Course', [
             'campuses' => $campuses,
         ]);
@@ -65,8 +70,6 @@ class SystemAdminController extends Controller
     public function campuses() {
 
         $campuses = Campus::all();
-
-
         
         $coor = User::whereIn('usertype', ['coordinator'])
             ->select('id', 'name', 'usertype')
@@ -113,17 +116,25 @@ class SystemAdminController extends Controller
         return redirect()->route('mis.course_config');
     }
 
-    public function sy_term() {
+    public function sy_and_term() {
         return Inertia::render('MIS/Univ_Settings/SY_Term');
     }
 
     // users ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public function roles() {
+    // public function user_roles() {
+    //     return Inertia::render('MIS/User_Roles/Roles');
+    // }
+
+    // public function roles() {
+    //     return Inertia::render('MIS/User_Roles/Roles');
+    // }
+
+    public function system_user_roles() {
         return Inertia::render('MIS/User_Roles/Roles');
     }
 
-    public function users() {
+    public function system_users() {
         return Inertia::render('MIS/User_Roles/Users');
     }
 }
