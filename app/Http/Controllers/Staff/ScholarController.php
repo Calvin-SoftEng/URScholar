@@ -273,13 +273,49 @@ class ScholarController extends Controller
             'first_name' => 'required',
             'middle_name' => 'nullable',
             'sex' => 'required',
-            //'birthdate' => 'required|date',
+            'birthdate' => 'required|date',
             'province' => 'required',
             'municipality' => 'required',
             'street' => 'required',
         ]);
 
-        dd($request->all());
+        $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')
+                ->orderByRaw('CAST(SUBSTRING(urscholar_id, 5) AS UNSIGNED) DESC')
+                ->value('urscholar_id');
+
+            $nextId = 1; // Default starting number
+            if ($highestId) {
+                $currentNumber = (int) substr($highestId, 4);
+                $nextId = $currentNumber + 1;
+            }
+
+        $scholar = Scholar::create([
+            'grant' => $request->grant,
+            'batch_id' => $request->batch_id,
+            'hei_name' => $request->hei_name,
+            'urscholar_id' => 'URS-' . str_pad($nextId, 4, '0', STR_PAD_LEFT),
+            'campus' => $request->campus,
+            'course' => $request->course,
+            'year_level' => $request->year,
+            'app_no' => $request->app_no,
+            'award_no' => $request->award_no,
+            'last_name' => $request->last_name,
+            'first_name' => $request->first_name,
+            'middle_name' => $request->middle_name,
+            'sex' => $request->sex,
+            'birthdate' => $request->birthdate,
+            'province' => $request->province,
+            'municipality' => $request->municipality,
+            'street' => $request->street,
+            'scholarship_id' => $scholarship->id,
+        ]);
+
+        dd($scholar);
+    
+        // You might want to handle any relationships here
+        // For example, attaching the scholar to the scholarship if needed
+    
+        return redirect()->back()->with('success', 'Scholar added successfully!');
 
     }
 

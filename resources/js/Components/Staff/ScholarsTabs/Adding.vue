@@ -287,7 +287,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect, computed, watch } from 'vue';
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, computed, watch, onMounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -304,6 +304,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover
 import { cn } from '@/lib/utils'
 import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
+import { initFlowbite } from 'flowbite';
 
 const df = new DateFormatter('en-US', {
     dateStyle: 'long',
@@ -573,6 +574,9 @@ const removeEntry = (index) => {
     entries.value.splice(index, 1)
 }
 
+onMounted(() => {
+    initFlowbite();
+});
 </script>
 
 
