@@ -114,11 +114,21 @@ class DatabaseSeeder extends Seeder
             'name' => 'Morong',
             'location' => 'Morong, Rizal',
         ]);
+        
+        Campus::create([
+            'name' => 'Binangonan',
+            'location' => 'Binangonan, Rizal',
+        ]);
 
         //Course
         Course::create([
             'name' => 'BSIT',
             'campus_id' => 1,
+        ]);
+
+        Course::create([
+            'name' => 'BSBA',
+            'campus_id' => 2,
         ]);
 
         //sponsor 

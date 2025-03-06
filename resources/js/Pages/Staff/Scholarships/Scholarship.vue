@@ -48,7 +48,8 @@
 
                 <div v-if="scholarship.scholarshipType == 'Need-Based'">
                     <div v-if="!batches || batches.length === 0" class="text-center py-5 mt-5">
-                        <p class="bg-white p-5 rounded-lg text-lg shadow-sm text-gray-700 dark:text-gray-300">No scholars
+                        <p class="bg-white p-5 rounded-lg text-lg shadow-sm text-gray-700 dark:text-gray-300">No
+                            scholars
                             added yet</p>
                     </div>
 
@@ -64,7 +65,8 @@
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
                                     <p class="text-4xl font-semibold font-kanit">55</p>
-                                    <button class="px-3 bg-blue-400 text-white rounded-full text-sm">2 new Batch</button>
+                                    <button class="px-3 bg-blue-400 text-white rounded-full text-sm">2 new
+                                        Batch</button>
                                 </div>
                             </div>
 
@@ -147,134 +149,111 @@
                                 <div class="mt-5 font-inter text-lg space-y-3">
                                     <div class="flex flex-row w-full gap-3">
                                         <div class="flex flex-col space-y-2 w-full">
-                                            <label for="suffixName" class="text-sm font-medium text-gray-700">Scholarship Name</label>
-                                            <input 
-                                                id="suffixName" 
-                                                :value="scholarship.name"
-                                                readonly
-                                                type="text" 
-                                                placeholder="Scholarship Name" 
-                                                class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                                            />
-                                            </div>
+                                            <label for="suffixName"
+                                                class="text-sm font-medium text-gray-700">Scholarship Name</label>
+                                            <input id="suffixName" :value="scholarship.name" readonly type="text"
+                                                placeholder="Scholarship Name"
+                                                class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
+                                        </div>
 
                                         <div class="flex flex-col space-y-2 w-full">
-                                            <label for="suffixName" class="text-sm font-medium text-gray-700">Scholarship Type</label>
-                                            <input 
-                                                id="suffixName" 
-                                                :value="scholarship.scholarshipType"
-                                                readonly
-                                                type="text" 
-                                                placeholder="Scholarship Type" 
-                                                class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none"
-                                            />
+                                            <label for="suffixName"
+                                                class="text-sm font-medium text-gray-700">Scholarship Type</label>
+                                            <input id="suffixName" :value="scholarship.scholarshipType" readonly
+                                                type="text" placeholder="Scholarship Type"
+                                                class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
                                         </div>
                                     </div>
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
-                                        <!-- Total Recipients Input -->
-                                        <div>
-                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700">
-                                                Number of Recipients
-                                            </label>
-                                            <input id="totalRecipients" type="number" v-model="totalRecipients" min="1" placeholder="Enter total recipients" class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded"
-                                                @input="distributeRecipients"/>
-                                        </div>
+                                    <!-- Total Recipients Input -->
+                                    <div>
+                                        <label for="totalRecipients" class="text-sm font-medium text-gray-700">
+                                            Number of Recipients
+                                        </label>
+                                        <input id="totalRecipients" type="number" v-model="totalRecipients" min="1"
+                                            placeholder="Enter total recipients"
+                                            class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded"
+                                            @input="distributeRecipients" />
+                                    </div>
 
-                                        <!-- Campus Selection & Recipient Distribution -->
-                                        <div class="grid grid-cols-2 w-full gap-3">
-                                            <!-- Left Side: Campus Selection & Recipient Distribution -->
-                                            <div class="flex flex-col space-y-3">
-                                                <!-- Header with Label & Stats -->
-                                                <div class="flex flex-row justify-between items-center py-2">
-
-                                                    <div class="flex flex-col space-y-2">
-                                                        <label class="text-sm font-medium">Distribute Recipients per Selected Campus</label>
-                                                        <div class="flex flex-row text-sm gap-4">
-                                                            <div>Allocated: {{ allocatedRecipients }} of {{ totalRecipients }}</div>
-                                                            <div v-if="allocatedRecipients !== parseInt(totalRecipients)" class="text-red-500 font-medium">
-                                                                *{{ parseInt(totalRecipients) - allocatedRecipients }} recipients still need to be allocated
-                                                            </div>
+                                    <!-- Campus Selection & Recipient Distribution -->
+                                    <div class="grid grid-cols-2 w-full gap-3">
+                                        <!-- Left Side: Campus Selection & Recipient Distribution -->
+                                        <div class="flex flex-col space-y-3">
+                                            <!-- Header with Label & Stats -->
+                                            <div class="flex flex-row justify-between items-center py-2">
+                                                <div class="flex flex-col space-y-2">
+                                                    <label class="text-sm font-medium">Distribute Recipients per
+                                                        Selected Campus</label>
+                                                    <div class="flex flex-row text-sm gap-4">
+                                                        <div>Allocated: {{ allocatedRecipients }} of {{ totalRecipients
+                                                            }}</div>
+                                                        <div v-if="allocatedRecipients !== parseInt(totalRecipients)"
+                                                            class="text-red-500 font-medium">
+                                                            *{{ parseInt(totalRecipients) - allocatedRecipients }}
+                                                            recipients still need to be allocated
                                                         </div>
-                                                    </div>
-                                                    <div class="flex flex-col text-sm">   
-                                                        <!-- Stats & Reset Button -->
-                                                        <div class="flex items-center text-sm text-gray-600 space-x-3">
-                                                            <!-- Allocated Recipients Info -->
-                                                            
-
-                                                            <!-- Reset to Auto-Distribution Button -->
-                                                            <button 
-                                                                @click="distributeRecipients" 
-                                                                class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600"
-                                                            >
-                                                                <span class="material-symbols-rounded text-base">restart_alt</span>
-                                                                <span>Reset to Auto Distribution</span>
-                                                            </button>
-                                                        </div>
-
-                                                        
                                                     </div>
                                                 </div>
-
-                                                <!-- Campus Selection List -->
-                                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div v-for="campus in campuses" :key="campus.id" 
-                                                        class="flex flex-row items-center space-x-2"
-                                                    >
-                                                        <!-- Checkbox to select campus -->
-                                                        <input 
-                                                            type="checkbox" 
-                                                            :id="`campus-${campus.id}`"
-                                                            v-model="campus.selected"
-                                                            @change="distributeRecipients"
-                                                            class="rounded"
-                                                        />
-                                                        <label 
-                                                            :for="`campus-${campus.id}`" 
-                                                            class="text-sm font-medium leading-none cursor-pointer"
-                                                        >
-                                                            {{ campus.name }}
-                                                        </label>
-
-                                                        <!-- Recipients per campus input -->
-                                                        <input
-                                                            type="number"
-                                                            v-model="campus.recipients"
-                                                            :readonly="!campus.selected"
-                                                            :class="`w-20 px-2 py-1 border rounded-md text-center ${
-                                                                !campus.selected ? 'bg-gray-100 border-gray-300' : 'bg-white border-blue-300'
-                                                            }`"
-                                                            min="0"
-                                                            :max="totalRecipients"
-                                                            @input="onRecipientManualChange(campus.id)"
-                                                        />
+                                                <div class="flex flex-col text-sm">
+                                                    <!-- Stats & Reset Button -->
+                                                    <div class="flex items-center text-sm text-gray-600 space-x-3">
+                                                        <!-- Reset to Auto-Distribution Button -->
+                                                        <button @click="distributeRecipients"
+                                                            class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600">
+                                                            <span
+                                                                class="material-symbols-rounded text-base">restart_alt</span>
+                                                            <span>Reset to Auto Distribution</span>
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <!-- Right Side: Course List Display Grouped by Campus -->
-                                            <div class="flex flex-col space-y-4">
-                                                <div v-for="campus in selectedCampuses" :key="campus.id"
-                                                    class="py-3 px-4 bg-gray-50 border rounded-md"
-                                                >
-                                                    <!-- Selected Campus Name -->
-                                                    <div class="text-sm font-semibold text-gray-700 mb-2">
+                                            <!-- Campus Selection List -->
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div v-for="campus in campusesData" :key="campus.id"
+                                                    class="flex flex-row items-center space-x-2">
+                                                    <!-- Checkbox to select campus -->
+                                                    <input type="checkbox" :id="`campus-${campus.id}`"
+                                                        v-model="campus.selected" @change="distributeRecipients"
+                                                        class="rounded" />
+                                                    <label :for="`campus-${campus.id}`"
+                                                        class="text-sm font-medium leading-none cursor-pointer">
                                                         {{ campus.name }}
-                                                    </div>
+                                                    </label>
 
-                                                    <!-- Courses Offered for this Campus -->
-                                                    <div v-for="course in campus.courses" :key="course" class="mt-1">
-                                                        <input type="checkbox" :id="`course-${campus.id}-${course}`" v-model="selectedCoursesMap[course]" class="rounded" />
-                                                        <label :for="`course-${campus.id}-${course}`" class="text-sm ml-2 cursor-pointer">{{ course }}</label>
-                                                    </div>
+                                                    <!-- Recipients per campus input -->
+                                                    <input type="number" v-model="campus.recipients"
+                                                        :readonly="!campus.selected" :class="`w-20 px-2 py-1 border rounded-md text-center ${!campus.selected ? 'bg-gray-100 border-gray-300' : 'bg-white border-blue-300'
+                                                            }`" min="0" :max="totalRecipients" @input="onRecipientManualChange(campus.id)" />
                                                 </div>
                                             </div>
                                         </div>
 
+                                        <!-- Right Side: Course List Display Grouped by Campus -->
+                                        <div class="flex flex-col space-y-4">
+                                            <div v-for="campus in selectedCampuses" :key="campus.id"
+                                                class="py-3 px-4 bg-gray-50 border rounded-md">
+                                                <!-- Selected Campus Name -->
+                                                <div class="text-sm font-semibold text-gray-700 mb-2">
+                                                    {{ campus.name }}
+                                                </div>
 
-                                            <div class="w-full border-t border-gray-200 my-4"></div>
+                                                <!-- Courses Offered for this Campus -->
+                                                <div v-for="course in campus.courses" :key="course" class="mt-1">
+                                                    <input type="checkbox" :id="`course-${campus.id}-${course}`"
+                                                        v-model="selectedCoursesMap[course]" class="rounded" />
+                                                    <label :for="`course-${campus.id}-${course}`"
+                                                        class="text-sm ml-2 cursor-pointer">{{ course }}</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="w-full border-t border-gray-200 my-4"></div>
 
 
                                     <div class="flex flex-row space-x-2">
@@ -317,8 +296,10 @@
                                             </label>
                                             <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                                 <div class="flex items-center mb-4 w-full">
-                                                    <form @submit.prevent="addCriteria" class="flex items-center w-full">
-                                                        <input v-model="newCriteria" type="text" placeholder="Enter an item"
+                                                    <form @submit.prevent="addCriteria"
+                                                        class="flex items-center w-full">
+                                                        <input v-model="newCriteria" type="text"
+                                                            placeholder="Enter an item"
                                                             class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
                                                         <button type="submit"
                                                             class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
@@ -444,7 +425,9 @@ const props = defineProps({
     scholarship: Object,
     schoolyear: Object,
     selectedSem: String,
-    scholars: Array // Add scholars prop
+    scholars: Array, // Add scholars prop
+    campuses: Array,
+    courses: Array,
 });
 
 // Forward batch modal state
@@ -538,62 +521,76 @@ const removeCriteria = (index) => {
 // Total number of recipients
 const totalRecipients = ref(40);
 
-// Campus data (5 campuses with selection state)
-const campuses = ref([
-  { id: 1, name: "Campus A", selected: false, recipients: 0, courses: ["Biology", "Engineering"] },
-  { id: 2, name: "Campus B", selected: false, recipients: 0, courses: ["Computer Science", "Physics"] },
-  { id: 3, name: "Campus C", selected: false, recipients: 0, courses: ["Mathematics", "Nursing"] },
-  { id: 4, name: "Campus D", selected: false, recipients: 0, courses: ["Law", "Business Administration"] },
-  { id: 5, name: "Campus E", selected: false, recipients: 0, courses: ["Psychology", "Architecture"] },
-]);
+// Create reactive campus array from props with selection state
+const campusesData = ref([]);
+
+// Initialize campus data from props
+onMounted(() => {
+    // Transform props.campuses into the format we need
+    if (props.campuses && props.campuses.length > 0) {
+        campusesData.value = props.campuses.map(campus => ({
+            id: campus.id,
+            name: campus.name,
+            selected: false,
+            recipients: 0,
+            // Get courses associated with this campus
+            courses: props.courses
+                ? props.courses.filter(course => course.campus_id === campus.id)
+                    .map(course => course.name)
+                : []
+        }));
+    }
+    // Initial distribution
+    distributeRecipients();
+});
 
 // Compute selected campuses dynamically
-const selectedCampuses = computed(() => 
-  campuses.value.filter(campus => campus.selected)
+const selectedCampuses = computed(() =>
+    campusesData.value.filter(campus => campus.selected)
 );
 
 // Calculate total allocated recipients
 const allocatedRecipients = computed(() => {
-  return campuses.value.reduce((sum, campus) => sum + parseInt(campus.recipients || 0), 0);
+    return campusesData.value.reduce((sum, campus) => sum + parseInt(campus.recipients || 0), 0);
 });
 
 // Function to distribute recipients equally when checking/unchecking a campus
 const distributeRecipients = () => {
-  const selectedCount = selectedCampuses.value.length;
+    const selectedCount = selectedCampuses.value.length;
 
-  if (selectedCount === 0) {
-    campuses.value.forEach(campus => campus.recipients = 0);
-    return;
-  }
-
-  const share = Math.floor(totalRecipients.value / selectedCount);
-  const remainder = totalRecipients.value % selectedCount;
-
-  campuses.value.forEach(campus => {
-    if (!campus.selected) {
-      campus.recipients = 0;
-      return;
+    if (selectedCount === 0) {
+        campusesData.value.forEach(campus => campus.recipients = 0);
+        return;
     }
-    
-    // Find the index in the selected campuses array
-    const index = selectedCampuses.value.findIndex(c => c.id === campus.id);
-    campus.recipients = share + (index < remainder ? 1 : 0);
-  });
+
+    const share = Math.floor(totalRecipients.value / selectedCount);
+    const remainder = totalRecipients.value % selectedCount;
+
+    campusesData.value.forEach(campus => {
+        if (!campus.selected) {
+            campus.recipients = 0;
+            return;
+        }
+
+        // Find the index in the selected campuses array
+        const index = selectedCampuses.value.findIndex(c => c.id === campus.id);
+        campus.recipients = share + (index < remainder ? 1 : 0);
+    });
 };
 
 // Handle manual change to a campus's recipients
 const onRecipientManualChange = (changedCampusId) => {
-  const changedCampus = campuses.value.find(c => c.id === changedCampusId);
-  
-  // Ensure value is a valid number and not less than 0
-  changedCampus.recipients = Math.max(0, parseInt(changedCampus.recipients) || 0);
-  
-  // If changing this would exceed total, cap it
-  if (allocatedRecipients.value > totalRecipients.value) {
-    changedCampus.recipients = Math.max(0, 
-      parseInt(changedCampus.recipients) - (allocatedRecipients.value - totalRecipients.value)
-    );
-  }
+    const changedCampus = campusesData.value.find(c => c.id === changedCampusId);
+
+    // Ensure value is a valid number and not less than 0
+    changedCampus.recipients = Math.max(0, parseInt(changedCampus.recipients) || 0);
+
+    // If changing this would exceed total, cap it
+    if (allocatedRecipients.value > totalRecipients.value) {
+        changedCampus.recipients = Math.max(0,
+            parseInt(changedCampus.recipients) - (allocatedRecipients.value - totalRecipients.value)
+        );
+    }
 };
 
 // Watch total recipients and automatically redistribute
@@ -604,29 +601,26 @@ const selectedCoursesMap = ref({});
 
 // Compute selected courses dynamically based on checked campuses
 const selectedCourses = computed(() => {
-  let courses = [];
-  campuses.value.forEach((campus) => {
-    if (campus.selected) {
-      courses = [...new Set([...courses, ...campus.courses])]; // Remove duplicates
-    }
-  });
+    let courses = [];
+    campusesData.value.forEach((campus) => {
+        if (campus.selected) {
+            courses = [...new Set([...courses, ...campus.courses])]; // Remove duplicates
+        }
+    });
 
-  // Sync the selected courses in the map
-  selectedCoursesMap.value = courses.reduce((acc, course) => {
-    acc[course] = selectedCoursesMap.value[course] || false;
-    return acc;
-  }, {});
+    // Sync the selected courses in the map
+    selectedCoursesMap.value = courses.reduce((acc, course) => {
+        acc[course] = selectedCoursesMap.value[course] || false;
+        return acc;
+    }, {});
 
-  return courses;
+    return courses;
 });
 
 // Update selected courses whenever a campus is checked/unchecked
 const updateSelectedCourses = () => {
-  selectedCourses.value; // Triggers computed property update
+    selectedCourses.value; // Triggers computed property update
 };
-
-// Initial distribution
-distributeRecipients();
 
 // Watch for changes in individual batch selections
 watchEffect(() => {
@@ -734,7 +728,6 @@ const toggleReqs = () => {
 const toggleMonitoring = () => {
     activeTab.value = "monitoring";
 };
-
 
 const openBatch = (batchId) => {
     router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}`, {

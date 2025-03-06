@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Models\Course;
 use Inertia\Inertia;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
 use App\Models\Batch;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Campus;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
@@ -147,6 +149,9 @@ class ScholarshipController extends Controller
             $schoolyear = SchoolYear::find($request->input('selectedYear'));
         }
 
+        $campuses = Campus::all();
+        $courses = Course::all();
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
@@ -158,6 +163,8 @@ class ScholarshipController extends Controller
                 ->get(),
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
+            'campuses' => $campuses,
+            'courses' => $courses,
         ]);
     }
 
