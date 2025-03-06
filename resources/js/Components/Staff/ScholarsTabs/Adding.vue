@@ -23,14 +23,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
-                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="form.grant"
+                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="manual.grant"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <Select v-model="form.batch_id">
+                            <Select v-model="manual.batch_id">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Batch" class="text-black" />
                                 </SelectTrigger>
@@ -48,16 +48,17 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Higher Education
                                 Institution</label>
-                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System" v-model="hei_name"
+                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System"
+                                v-model="manual.hei_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required value="University of Rizal System" readonly/>
+                                required value="University of Rizal System" readonly />
                         </div>
                     </div>
                     <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                            <Select v-model="form.campus">
+                            <Select v-model="manual.campus">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Campus" class="text-black" />
                                 </SelectTrigger>
@@ -72,14 +73,13 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Course and
                                 Program</label>
-                            <Select v-model="form.course">
+                            <Select v-model="manual.course">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Course" class="text-black" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectItem v-for="course in filteredCourses" :key="course.id"
-                                            :value="course.id">
+                                        <SelectItem v-for="course in course" :key="course.id" :value="course.id">
                                             {{ course.name }}
                                         </SelectItem>
                                     </SelectGroup>
@@ -89,7 +89,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Year Level</label>
-                            <Select v-model="form.year">
+                            <Select v-model="manual.year">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Year" class="text-black" />
                                 </SelectTrigger>
@@ -121,7 +121,7 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Application
                                 No.</label>
-                            <input v-model="formData.app_no" type="text" id="first_name"
+                            <input v-model="manual.app_no" type="text" id="first_name"
                                 placeholder="00000-00000000-00000"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
@@ -129,7 +129,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Award No.</label>
-                            <input v-model="formData.award_no" type="text" id="first_name"
+                            <input v-model="manual.award_no" type="text" id="first_name"
                                 placeholder="###-00-00-00000-0000-00000"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
@@ -139,14 +139,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.first_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.last_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -155,14 +155,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.middle_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
-                            <Select v-model="form.sex">
+                            <Select v-model="manual.sex">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Sex" class="text-black" />
                                 </SelectTrigger>
@@ -182,25 +182,25 @@
                     </div>
                     <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birth Date</label>
-                            <Popover>
-                                <PopoverTrigger as-child>
-                                    <Button variant="outline"
-                                        class="w-full h-[42px] justify-start text-left font-normal bg-gray-50 border border-gray-300 text-black">
-                                        <CalendarIcon class="mr-2 h-4 w-4" />
-                                        {{ formatDate(form.birthdate) }}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent class="w-auto p-0">
-                                    <Calendar v-model="form.birthdate" initial-focus />
-                                </PopoverContent>
-                            </Popover>
+                            <Label for="birthdate">Date of Birth</Label>
+                            <div class="relative max-w-sm">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                    </svg>
+                                </div>
+                                <input v-model="manual.birthdate" id="datepicker-autohide" datepicker
+                                    datepicker-autohide type="text"
+                                    class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Select Birthdate">
+                            </div>
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                            <input v-model="formData.province" type="text" id="first_name"
+                            <input v-model="manual.province" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -209,14 +209,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Municipality</label>
-                            <input v-model="formData.municipality" type="text" id="first_name"
+                            <input v-model="manual.municipality" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
-                            <input v-model="formData.street" type="text" id="first_name"
+                            <input v-model="manual.street" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -357,6 +357,69 @@ const props = defineProps({
     course: Array,
 });
 
+
+const manual = ref({
+    grant: '',
+    batch_id: '',
+    hei_name: 'University of Rizal System',
+    campus: '',
+    course: '',
+    year: '',
+    app_no: '',
+    award_no: '',
+    first_name: '',
+    last_name: '',
+    middle_name: '',
+    sex: '',
+    birthdate: null,
+    province: '',
+    municipality: '',
+    street: '',
+    semester: props.selectedSem,         // Add this line
+    schoolyear: props.schoolyear.id      // Add this line
+});
+
+const submitManual = async () => {
+    try {
+        router.post(`/scholarships/${props.scholarship.id}/manual-upload`, manual.value, {
+            onSuccess: () => {
+                // Show success message
+                showToast("Scholar added successfully!");
+                // Reset form
+                resetManualForm();
+            },
+            onError: (errors) => {
+                // Handle validation errors
+                console.error('Validation errors:', errors);
+            }
+        });
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
+};
+
+const resetManualForm = () => {
+    manual.value = {
+        grant: '',
+        batch_id: '',
+        hei_name: 'University of Rizal System',
+        campus: '',
+        course: '',
+        year: '',
+        app_no: '',
+        award_no: '',
+        first_name: '',
+        last_name: '',
+        middle_name: '',
+        sex: '',
+        birthdate: null,
+        province: '',
+        municipality: '',
+        street: '',
+        semester: props.selectedSem,
+        schoolyear: props.schoolyear.id
+    };
+};
 
 const form = ref({
     file: null,

@@ -258,6 +258,31 @@ class ScholarController extends Controller
         }
     }
 
+    public function manual(Request $request, Scholarship $scholarship)
+    {
+        $request->validate([
+            'grant' => 'required',
+            'batch_id' => 'required',
+            'hei_name' => 'required',
+            'campus' => 'required',
+            'course' => 'required',
+            'year' => 'required',
+            'app_no' => 'required',
+            'award_no' => 'required',
+            'last_name' => 'required',
+            'first_name' => 'required',
+            'middle_name' => 'nullable',
+            'sex' => 'required',
+            //'birthdate' => 'required|date',
+            'province' => 'required',
+            'municipality' => 'required',
+            'street' => 'required',
+        ]);
+
+        dd($request->all());
+
+    }
+
 
     public function send(Scholarship $scholarship)
     {
