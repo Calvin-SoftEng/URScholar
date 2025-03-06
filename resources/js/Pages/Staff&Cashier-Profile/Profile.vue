@@ -37,8 +37,8 @@
 
                                     <!-- Name -->
                                     <div class="flex flex-col">
-                                        <span class="text-lg font-semibold text-primary drop-shadow-md">Name</span>
-                                        <span class="text-base font-medium text-primary opacity-50">Coordinator</span>
+                                        <span class="text-lg font-semibold text-primary drop-shadow-md">{{$page.props.auth.user.last_name}}, {{$page.props.auth.user.first_name}}</span>
+                                        <span class="text-base font-medium text-primary opacity-50">{{$page.props.auth.user.usertype}}</span>
                                     </div>
                                 </div>
                             </div>
