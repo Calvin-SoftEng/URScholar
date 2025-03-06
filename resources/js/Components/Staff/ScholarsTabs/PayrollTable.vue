@@ -50,7 +50,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="text-sm">
+                <tr v-for="payout in payout" :key="payout.id" class="text-sm">
                   <td>
                     <!-- {{ payout.scholar.urscholar_id }} -->
                       id
@@ -64,37 +64,31 @@
                       </div>
                       <div>
                         <div class="font-normal">
-                          <!-- {{ payout.scholar.last_name }}, {{ payout.scholar.first_name }} {{ payout.scholar.middle_name }} -->
-                            Jaypee Suson
+                          {{ getScholarDetails(payout.scholar_id).last_name }}, {{ getScholarDetails(payout.scholar_id).first_name }} {{ getScholarDetails(payout.scholar_id).middle_name }}
                         </div>
                         <div class="text-sm opacity-50">
-                          <!-- {{ payout.scholar.year_level }}{{ getYearSuffix(payout.scholar.year_level) }} year, {{
-                          payout.scholar.course }} -->
-                            4th year, BSIT
+                          {{ getScholarDetails(payout.scholar_id).year_level }}{{ getYearSuffix(getScholarDetails(payout.scholar_id).year_level) }} year,
+                          {{ getScholarDetails(payout.scholar_id).course }}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    <!-- {{ payout.scholar.grant }} -->
-                      Listahanan
+                    {{ getScholarDetails(payout.scholar_id).grant }}
                   </td>
                   <td>
-                    <!-- {{ payout.scholar.campus }} -->
-                      Ngobinon
+                    {{ getScholarDetails(payout.scholar_id).campus }}
                   </td>
                   <td>
-                    <!-- <span :class="{
+                    <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': payout.status === 'Claimed',
                       'bg-yellow-100 text-yellow-800 border border-yellow-400': payout.status === 'Pending'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
                       {{ payout.status }}
-                    </span> -->
-                    Claimed
+                    </span>
                   </td>
                   <td>
-                    <!-- {{ payout.scholar.campus }} -->
-                      Kahapon
+                    {{ payout.claimted_at }}
                   </td>
                 </tr>
               </tbody>
@@ -164,7 +158,8 @@ import { QrcodeStream } from "vue-qrcode-reader";
 const props = defineProps({
   scholarship: Object,
   batch: Object,
-  payouts: Array,
+  payout: Array,
+  scholars: Array,
 });
 
 const components = {
@@ -172,6 +167,10 @@ const components = {
   Column,
   Button,
   FileUpload,
+};
+
+const getScholarDetails = (scholarsID) => {
+    return props.scholars.find(s => s.id === scholarsID) || { name: 'Unknown scholar' };
 };
 
 const searchQuery = ref('');

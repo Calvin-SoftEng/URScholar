@@ -39,7 +39,7 @@
                             <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ selectedSem?.name || 'Semester'
-                            }}</span>
+                        }}</span>
                     </div>
 
                     <!-- Stats Section -->
@@ -82,7 +82,8 @@
                         </Select>
 
                         <!-- Refresh button that only appears when data has changed -->
-                        <Button v-if="dataChanged" variant="outline" @click="refreshData" class="flex items-center gap-2">
+                        <Button v-if="dataChanged" variant="outline" @click="refreshData"
+                            class="flex items-center gap-2">
                             <font-awesome-icon :icon="['fas', 'sync']" :class="{ 'animate-spin': refreshing }" />
                             Refresh Data
                         </Button>
@@ -94,12 +95,15 @@
                     </Button>
                 </div>
 
-                <!-- Main content -->
-                <!-- <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                    :requirements="requirements" @update:stats="updateStats" /> -->
-
-                <!-- Payroll Table -->
-                <PayrollTable />
+                <div v-if="hasPayrollData">
+                    <!-- Payroll Table -->
+                    <PayrollTable :payout="payout" :scholars="scholars" />
+                </div>
+                <div v-else>
+                    <!-- Scholar List -->
+                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                        :requirements="requirements" @update:stats="updateStats" />
+                </div>
 
             </div>
         </div>
@@ -136,6 +140,7 @@ const props = defineProps({
     batches: Array,
     scholars: Array,
     requirements: Array,
+    payout: Array
 });
 
 // State management
@@ -168,6 +173,11 @@ const toast = ref({
     title: '',
     message: '',
     type: 'success'
+});
+
+// Computed property
+const hasPayrollData = computed(() => {
+    return props.payout && props.payout.length > 0;
 });
 
 // Calculate initial stats and store original data

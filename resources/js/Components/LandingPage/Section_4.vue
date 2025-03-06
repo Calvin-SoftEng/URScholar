@@ -96,4 +96,5 @@ const props = defineProps({
 const getSponsorDetails = (sponsorId) => {
     return props.sponsors.find(s => s.id === sponsorId) || { name: 'Unknown Sponsor' };
 };
+
 </script>

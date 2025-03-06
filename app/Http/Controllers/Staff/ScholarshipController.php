@@ -45,7 +45,7 @@ class ScholarshipController extends Controller
     {
 
         //Checking if scholar's payment claimed
-        $payroll = Payout::where('scholarship_id', $scholarshipId)
+        $payout = Payout::where('scholarship_id', $scholarshipId)
             ->where('batch_id', $batchId)
             ->where('status', 'claimed')
             ->get();
@@ -100,6 +100,8 @@ class ScholarshipController extends Controller
                 'last_name' => $scholar->last_name,
                 'middle_name' => $scholar->middle_name,
                 'campus' => $scholar->campus,
+                'course' => $scholar->course,
+                'year_level' => $scholar->year_level,
                 'grant' => $scholar->grant,
                 'status' => $status,
                 'submittedRequirements' => $approvedRequirements,
@@ -112,6 +114,7 @@ class ScholarshipController extends Controller
             'scholarship' => $scholarship,
             'batches' => $batch,
             'scholars' => $scholars,
+            'payout' => $payout,
             'requirements' => $requirements,
             'schoolyear' => $request->input('selectedYear')
                 ? SchoolYear::find($request->input('selectedYear'))
