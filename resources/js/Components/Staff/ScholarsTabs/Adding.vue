@@ -121,7 +121,7 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Application
                                 No.</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="formData.app_no" type="text" id="first_name"
                                 placeholder="00000-00000000-00000"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
@@ -129,7 +129,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Award No.</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="formData.award_no" type="text" id="first_name"
                                 placeholder="###-00-00-00000-0000-00000"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
@@ -183,7 +183,7 @@
                     <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
                             <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Birth Date</label>
                             <Popover>
                                 <PopoverTrigger as-child>
                                     <Button variant="outline"
@@ -200,7 +200,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="formData.province" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -209,21 +209,21 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Municipality</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="formData.municipality" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="formData.street" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button type="submit"
+                    <button type="submit" @submit.prevent="submitManual"
                         class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                         Add Scholar
                     </button>
@@ -366,9 +366,6 @@ const form = ref({
     filePreview: null,
 
     // Other form fields...
-
-    campus: null,
-    course: null,
 });
 
 // Add new reactive refs for courses data
