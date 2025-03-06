@@ -2,187 +2,210 @@
     <AuthenticatedLayout>
         <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
-                <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row px-10">
-                    <h1 class="text-3xl font-bold font-sora text-left p-3">My Profile</h1>
-                    <button class="text-sm font-semibold text-black">Edit Profile</button>
+                <div class="justify-between flex flex-row items-start">
+                    <div class="breadcrumbs text-sm text-gray-400">
+                        <ul>
+                            <li class="hover:text-gray-600">
+                                Home
+                            </li>
+                            <li>
+                                <span class="text-blue-400 font-semibold dark:text-gray-300">My Profile</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <button @click="toggleEdit">{{ isEditing ? "Save" : "Edit Profile" }}</button>
                 </div>
                 <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2">
-                    <div class="mx-auto w-7/12 sm:px-6 lg:px-8 ">
-                        <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
-                                <!-- pic -->
-                                <div class="border w-80 h-80 rounded-lg">
-                                    <img src="" alt="">
-                                </div>
-                                <!-- info -->
-                                <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
-                                    <span class="text-gray-500 text-sm">Permanent Address</span>
-                                    <span class="text-gray-900 text-base font-semibold leading-tight"></span>
-                                    <div class="w-full flex flex-row gap-2 py-2">
-                                        <div class="w-[40%] flex flex-col items-left gap-1">
-                                            <span class="text-gray-500 text-sm">Age</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">
-                                                feafeafaefe
-                                            </span>
-                                        </div>
-                                        <div class="w-[60%] flex flex-col items-left gap-1">
-                                            <span class="text-gray-500 text-sm">Date of Birth</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">
-                                                fefaefaef
-                                            </span>
-                                        </div>
+                    <div v-if="!isEditing" class="mx-auto w-7/12 sm:px-6 lg:px-8">
+                        <div class="relative w-full">
+                            <!-- Background Image -->
+                            <img
+                            src="../../../assets/images/profile_bg.jpg"
+                            alt="Profile Background"
+                            class="w-full h-48 object-cover rounded-t-lg"
+                            />
+
+                            <!-- Profile Section -->
+                            <div class="absolute left-1/2 -bottom-14 transform -translate-x-1/2 w-[95%] bg-white/50 backdrop-blur-md border border-white/30 shadow-sm rounded-xl px-5 py-5">
+                                <div class="gap-4 flex flex-row items-center">
+                                    <!-- Profile Picture -->
+                                    <img
+                                    src=""
+                                    alt="Profile Picture"
+                                    class="w-20 h-20 rounded-xl border-2 border-white shadow-sm"
+                                    />
+
+                                    <!-- Name -->
+                                    <div class="flex flex-col">
+                                        <span class="text-lg font-semibold text-primary drop-shadow-md">Name</span>
+                                        <span class="text-base font-medium text-primary opacity-50">Coordinator</span>
                                     </div>
-                                    <div class="w-full flex flex-row gap-2 py-2">
-                                        <div class="w-[40%] flex flex-col items-left gap-1">
-                                            <span class="text-gray-500 text-sm">Civil Status</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">
-                                            feafaefef
-                                            </span>
-                                        </div>
-                                        <div class="w-[60%] flex flex-col items-left gap-1">
-                                            <span class="text-gray-500 text-sm">Place of Birth</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">
-                                                fefefefa
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
-                                    <div class="w-full flex flex-row gap-2">
-                                        <div class="w-[40%] flex flex-col items-left gap-1">
-                                            <span class="text-gray-500 text-sm">Gender</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">
-                                                faefaefea
-                                            </span>
-                                        </div>
-                                        <div class="w-[60%] flex flex-col items-left gap-1">
-                                            <span class="text-gray-500 text-sm">Religion</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">
-                                                faefaefe
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!-- gmail -->
-                                <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
-                                    <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
-                                    <span class="pl-2 text-gray-900 text-base font-bold">
-                                    fefafefa
-                                    </span>
                                 </div>
                             </div>
-                            <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
-                                <div class="w-full h-1/12">
-                                    <span class="font-italic font-sora text-3xl font-bold uppercase">Pangalan</span>
-                                </div>
+                        </div>
+                        <div class="relative w-full flex justify-center mt-20 flex-col">
 
-                                <div
-                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
-                                    <div class="w-full flex flex-row items-center gap-2">
-                                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
-                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">
-                                            feafaefefaef
+                            <!-- Student ID -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">User ID</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                            <!-- First Name -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">First Name</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                            <!-- Middle Name -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Middle Name</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Last Name</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                            <!-- Campus -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Campus</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                            <!-- Age -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Age</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                            <!-- Role -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Role</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Address</label>
+                                <span class="my-3 flex">User ID</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                        <!-- Edit Profile Section -->
+                        <div v-if="isEditing" class="mx-auto w-7/12 sm:px-6 lg:px-8">
+                        <div class="relative w-full">
+                            <img
+                            src="../../../assets/images/profile_bg.jpg"
+                            alt="Profile Background"
+                            class="w-full h-48 object-cover rounded-t-lg"
+                            />
+
+                            <div class="absolute left-1/2 -bottom-14 transform -translate-x-1/2 w-[95%] bg-white/50 backdrop-blur-md border border-white/30 shadow-sm rounded-xl px-5 py-5">
+                                <div class="gap-4 flex flex-row items-center">
+                                    <div class="relative w-20 h-20">
+                                        <img src="" alt="Profile Picture" class="w-full h-full rounded-xl border-2 border-white shadow-sm object-cover" />
+                                        
+                                        <!-- Upload Icon at Bottom-Right -->
+                                        <label for="profile-pic" class="absolute -bottom-1 -right-1 rounded-full shadow cursor-pointer">
+                                            <span class="material-symbols-rounded text-primary text-lg bg-white px-1.5 py-0.5 rounded-full">
+                                                add_photo_alternate
+                                            </span>
+                                        </label>
+                                        
+                                        <input type="file" id="profile-pic" class="hidden">
+                                    </div>
+
+                                    <div class="flex flex-col">
+                                        <span contenteditable="true" 
+                                            class="text-lg font-semibold text-primary drop-shadow-sm border-b-2 border-gray-300 focus:border-gray-400 outline-none">
+                                            Name
+                                        </span>
+
+                                        <span contenteditable="true" class="text-base font-medium text-primary opacity-50 border-b border-transparent focus:border-gray-400 outline-none">
+                                            Coordinator
                                         </span>
                                     </div>
-                                    <div class="w-full flex flex-row items-center gap-2">
-                                        <font-awesome-icon :icon="['fas', 'id-card-clip']"
-                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">
-                                            feafaefefae
-                                        </span>
-                                    </div>
-                                    <div class="w-full flex flex-row items-center gap-2">
-                                        <font-awesome-icon :icon="['fas', 'school']"
-                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">Lagay mo dito</span>
-                                    </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="relative w-full flex justify-center mt-20 flex-col">
 
-                                <!-- education -->
-                                <div
-                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
-                                    <h1 class="text-base">Education</h1>
-                                    <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                            Elementary
-                                        </h3>
-                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                feafaefef
-                                            </span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                feafaefaefa
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                            Junior High School
-                                        </h3>
-                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                feafaefaefaef
-                                            </span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                \feaffeafaef
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                            Senior High School
-                                        </h3>
-                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                fefaefefaef
-                                            </span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                feafaefafaef
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                            College
-                                        </h3>
-                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                faefaefaefe
-                                            </span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                fefaefaefaf
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                            Vocational
-                                        </h3>
-                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                feafafefaefe
-                                            </span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                fefaefaefa
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                            Post Graduate
-                                        </h3>
-                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                feafaefeafeaf
-                                            </span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                feafaefaefaef
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">User ID</label>
+                                <input type="text" placeholder="Enter User ID" class="w-full h-[43px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
 
+                            <!-- First Name -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">First Name</label>
+                                <input type="text" placeholder="Enter First Name" class="w-full h-[43px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <!-- Middle Name -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Middle Name</label>
+                                <input type="text" placeholder="Enter Middle Name" class="w-full h-[43px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Last Name</label>
+                                <input type="text" placeholder="Enter Last Name" class="w-full h-[43px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <!-- Campus -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Campus</label>
+                                <select class="w-full h-[43px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Select Campus</option>
+                                    <option>Campus A</option>
+                                    <option>Campus B</option>
+                                    <option>Campus C</option>
+                                </select>
+                            </div>
+
+                            <!-- Age -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Age</label>
+                                <input type="number" placeholder="Enter Age" class="w-full h-[43px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            </div>
+
+                            <!-- Role -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Role</label>
+                                <select class="w-full h-[43px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option>Select Role</option>
+                                    <option>Student</option>
+                                    <option>Faculty</option>
+                                    <option>Admin</option>
+                                </select>
+                            </div>
+
+                            <!-- Address -->
+                            <div class="mb-4">
+                                <label class="block text-primary font-medium mb-1">Address</label>
+                                <textarea placeholder="Enter Address" class="w-full h-[80px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+                            </div>
+
+                            <!-- Save & Cancel Buttons -->
+                            <div class="flex justify-between">
+                            <button
+                                @click="toggleEdit"
+                                class="mt-4 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition"
+                            >
+                                Save
+                            </button>
+                            <button
+                                @click="toggleEdit"
+                                class="mt-4 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition"
+                            >
+                                Cancel
+                            </button>
                             </div>
                         </div>
                     </div>
@@ -217,11 +240,21 @@ import { Button } from '@/Components/ui/button'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,} from '@/Components/ui/select'
 
+import Profile from '@/Components/Profile/Profile.vue';
+import EditProfile from '@/Components/Profile/EditProfile.vue';
+
 // components
 
 const components = {
     Button,
 };
+
+const isEditing = ref(false);
+
+const toggleEdit = () => {
+    isEditing.value = !isEditing.value;
+};
+
 
 const formData = ref({
   file: null,   

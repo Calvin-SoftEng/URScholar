@@ -12,9 +12,10 @@
                 <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- pic -->
-                        <div class="border w-80 h-80 rounded-lg">
-                            <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                        <div class="border w-80 h-80 rounded-lg overflow-hidden">
+                            <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="Profile Picture" class="w-full h-full object-cover">
                         </div>
+
                         <!-- info -->
                         <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
                             <span class="text-gray-500 text-sm">Permanent Address</span>
@@ -81,7 +82,9 @@
                     </div>
                     <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                         <div class="w-full h-1/12">
-                            <span class="font-italic font-sora text-3xl font-bold uppercase">Pangalan</span>
+                            <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
+                                }},
+                                    {{ student.first_name }}</span>
                         </div>
 
                         <div
@@ -89,9 +92,7 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.last_name
-                                }},
-                                    {{ student.first_name }}</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -102,7 +103,7 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">Lagay mo dito</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus }}, Campus</span>
                             </div>
                         </div>
 
