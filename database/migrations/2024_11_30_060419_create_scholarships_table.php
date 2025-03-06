@@ -19,6 +19,16 @@ return new class extends Migration
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
+
+        Schema::create('requirements', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->string('requirements');
+            $table->date('application_start');
+            $table->date('deadline');
+            $table->timestamps();
+        });
+
     }
 
     /**
@@ -26,6 +36,8 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('requirements');
         Schema::dropIfExists('scholarships');
+        
     }
 };

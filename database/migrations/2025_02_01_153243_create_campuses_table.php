@@ -28,6 +28,30 @@ return new class extends Migration {
                 ->onDelete('set null');
             $table->timestamps();
         });
+
+        Schema::create('courses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('campus_id')->constrained();
+            $table->timestamps();
+        });
+
+        Schema::create('school_years', function (Blueprint $table) {
+            $table->id();
+            $table->string('year');
+            $table->timestamps();
+        });
+
+        Schema::create('students', function (Blueprint $table) {
+            $table->id();
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('email');
+            $table->string('course');
+            $table->string('campus');
+            $table->string('year_level');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -35,6 +59,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::dropIfExists('students');
+        Schema::dropIfExists('school_years');
+        Schema::dropIfExists('courses');
         Schema::dropIfExists('campuses');
     }
 };
