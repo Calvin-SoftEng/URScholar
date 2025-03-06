@@ -111,7 +111,7 @@ class DatabaseSeeder extends Seeder
 
         //Campus
         Campus::create([
-            'name' => 'University of the Rizal System, Morong Campus',
+            'name' => 'Morong',
             'location' => 'Morong, Rizal',
         ]);
 
