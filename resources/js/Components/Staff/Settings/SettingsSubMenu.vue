@@ -21,13 +21,13 @@
                 </div>
                 </Link>
 
-                <!-- <Link :href="(route('settings.adding'))"> -->
-                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" >
+                <Link :href="(route('settings.scholarship_forms'))">
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/scholarship-forms' }]" >
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>Scholarship Forms</span>
                     </router-link>
                 </div>
-                <!-- </Link> -->
+                </Link>
 
                 <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" >
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">

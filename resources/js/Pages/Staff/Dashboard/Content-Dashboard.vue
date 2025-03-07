@@ -15,6 +15,7 @@
                 <!-- Second Layer with Single Card -->
                 <div class="bg-white box-border rounded shadow-md h-[65%] dark:bg-dcontainer">
                     <!-- <ContentComponent /> -->
+                    <ScholarshipActivities />
                 </div>
             </div>
             <!-- 25% Column -->
@@ -37,6 +38,7 @@ import { ref } from 'vue';
 import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
 import QuickPost from '../../../Components/Staff/Dashboard/QuickPost.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
+import ScholarshipActivities from '@/Components/Staff/Dashboard/ScholarshipActivities.vue';
 
 const components = {
     ActiveScholarship,

@@ -140,6 +140,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
     Route::post('/settings/adding-students/store', [SettingsController::class, 'store_student'])->name('settings.store');
 
+    Route::get('/settings/scholarship-forms', [SettingsController::class, 'scholarship_forms'])->name('settings.scholarship_forms');
+
 });
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------

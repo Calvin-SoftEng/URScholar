@@ -135,4 +135,9 @@ class SettingsController extends Controller
             return response()->json(['message' => 'Error during file upload'], 500);
         }
     }
+
+    public function scholarship_forms()
+    {
+        return Inertia::render('Staff/Settings/Scholarship_Forms');
+    }
 }
