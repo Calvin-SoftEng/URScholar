@@ -232,6 +232,6 @@ Route::middleware(['auth'])->group(function () {
 
 // Landing Page -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Route::get('/applying-scholarship', [LandingPageController::class, 'scholarship_apply_details'])->name('landing_page.schoalrship_apply_details');
+Route::get('/applying-scholarship', [LandingPageController::class, 'scholarship_apply_details'])->name('landing_page.scholarship_apply_details');
 
 require __DIR__ . '/auth.php';
