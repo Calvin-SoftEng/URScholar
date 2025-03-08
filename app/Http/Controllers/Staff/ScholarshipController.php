@@ -177,11 +177,11 @@ class ScholarshipController extends Controller
             'name' => 'required|string|max:255',
             'scholarshipType' => 'required|string|max:255',
             // 'requirements' => 'required|array'
-            // 'application' => 'required|date',
-            // 'deadline' => 'required|date',
+            'application' => 'required|date',
+            'deadline' => 'required|date',
         ]);
 
-        //dd($request);
+        dd($request);
         Scholarship::create($request->all());
 
         ActivityLog::create([

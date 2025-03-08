@@ -168,7 +168,10 @@
                                             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                         </svg>
                                     </div>
-                                    <input :value="selectedStart" @input="selectedStart = $event.target.value" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
+                                    <!-- <input :value="selectedStart" @input="selectedStart = $event.target.value" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Submission Start Date"> -->
+                                        <input v-model="selectedStart" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                         placeholder="Submission Start Date">
                                 </div>
@@ -184,9 +187,12 @@
                                             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                         </svg>
                                     </div>
-                                    <input :value="selectedEnd" @input="selectedEnd = $event.target.value" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
+                                    <!-- <input :value="selectedEnd" @input="selectedEnd = $event.target.value" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Submission Deadline">
+                                        placeholder="Submission Deadline"> -->
+                                        <input v-model="selectedEnd" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Submission Start Date">
                                 </div>
                             </div>
                         </div>
@@ -251,8 +257,8 @@ const isEditing = ref(false);
 const Showcase = ref(false);
 const sponsorid = ref(null);
 
-const selectedStart = ref(""); // Stores the selected start date
-const selectedEnd = ref("");   // Stores the selected end date
+const selectedStart = ref(''); // Stores the selected start date
+const selectedEnd = ref('');   // Stores the selected end date
 
 
 const form = ref({
@@ -261,8 +267,8 @@ const form = ref({
     scholarshipType: null,
     school_year: null,
     semester: null,
-    application: null,
-    deadline: null,
+    application: '',
+    deadline: '',
 });
 
 // const toggleCreate = (sponsorID) => {
@@ -282,48 +288,104 @@ const toggleCreate = (sponsorID) => {
     initFlowbite(); // Initialize Flowbite first
 };
 
-onMounted(() => {
 
-    const startInput = document.getElementById("datepicker-range-start");
-    if (startInput) {
-        startInput.value = selectedStart.value; // Keep the previous value
-        startInput.addEventListener("changeDate", (event) => {
-            const date = new Date(event.target.value); 
-            form.value.application = date.toISOString().split("T")[0]; 
-            console.log("Application:", form.value.application);
-            selectedStart.value = event.target.value; 
-        });
-    }
+// onMounted(() => {
+//     initFlowbite(); // Initialize Flowbite first
+//     const startInput = document.getElementById("datepicker-range-start");
+//     if (startInput) {
+//         startInput.value = selectedStart.value; // Keep the previous value
+//         startInput.addEventListener("input", (event) => {
+//         console.log("Start Date Selected:", event.target.value);
+//         selectedStart.value = event.target.value;
+//     });
+//     }
  
+//     const endInput = document.getElementById("datepicker-range-end");
+//     if (endInput) {
+//         endInput.value = selectedEnd.value; // Keep the previous value
+//         endInput.addEventListener("input", (event) => {
+//         console.log("Deadline Selected:", event.target.value);
+//         selectedEnd.value = event.target.value;
+//     });
+//     }
 
-    const endInput = document.getElementById("datepicker-range-end");
-    if (endInput) {
-        endInput.value = selectedEnd.value; // Keep the previous value
-        endInput.addEventListener("changeDate", (event) => {
-            const date = new Date(event.target.value); 
-            form.value.deadline = date.toISOString().split("T")[0]; 
-            selectedEnd.value = event.target.value; 
-        });
-    }
-    initFlowbite(); // Initialize Flowbite first
+//     console.log("Start Input:", startInput);
+//     console.log("End Input:", endInput);
+// });
+
+// watch(isCreating, (newValue) => {
+//     if (newValue) {
+//         setTimeout(() => {
+//             initFlowbite(); // Initialize the modal components
+//         }, 200);
+//     }
+// });
+
+// // Make sure we're using .value for the refs correctly
+// watch(() => selectedStart.value, (newVal) => {
+//     const input = document.getElementById("datepicker-range-start");
+//     if (input && newVal) {
+//         input.value = newVal;
+//     }
+// });
+
+// watch(() => selectedEnd.value, (newVal) => {
+//     const input = document.getElementById("datepicker-range-end");
+//     if (input && newVal) {
+//         input.value = newVal;
+//     }
+// });
+
+
+onMounted(() => {
+    initFlowbite(); // Initialize Flowbite globally
+
+    // 🎯 Start Date Picker
+    watch(isCreating, (newValue) => {
+        if (newValue) {
+            setTimeout(() => {
+                initFlowbite(); // Initialize Flowbite when modal is accessed
+                
+                const startInput = document.getElementById("datepicker-range-start");
+                if (startInput) {
+                    startInput.value = selectedStart.value; // Keep the previous value
+                    startInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.application = date.toISOString().split("T")[0]; 
+                        console.log("Application:", form.value.application);
+                        selectedStart.value = event.target.value; 
+                    });
+                } else {
+                    console.warn("Start datepicker not found.");
+                }
+
+                const endInput = document.getElementById("datepicker-range-end");
+                if (endInput) {
+                    endInput.value = selectedEnd.value; // Keep the previous value
+                    endInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.deadline = date.toISOString().split("T")[0]; 
+                        selectedEnd.value = event.target.value; 
+                    });
+                } else {
+                    console.warn("End datepicker not found.");
+                }
+            }, 200); // Small delay to ensure modal is in the DOM
+        }
+    });
 });
 
-// Ensure selected values persist
-watch(selectedStart, (newVal) => {
-    document.getElementById("datepicker-range-start").value = newVal;
+// 🎯 Sync Input Values
+watch(() => selectedStart.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-start");
+    if (input) input.value = newVal;
 });
 
-watch(selectedEnd, (newVal) => {
-    document.getElementById("datepicker-range-end").value = newVal;
+watch(() => selectedEnd.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-end");
+    if (input) input.value = newVal;
 });
 
-watch(isCreating, (newValue) => {
-    if (newValue) {
-        setTimeout(() => {
-            initFlowbite(); // Initialize the modal components
-        }, 200);
-    }
-});
 
 
 
