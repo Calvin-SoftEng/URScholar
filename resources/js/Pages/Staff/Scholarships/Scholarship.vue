@@ -583,8 +583,27 @@ onMounted(() => {
                 : []
         }));
     }
+
+    if (props.batches && props.batches.length > 0) {
+        expandedBatches.value = props.batches[0].id;
+    }
+
+    // Initialize Flowbite Datepicker
+    const dateInput = document.getElementById("datepicker-autohide");
+    if (dateInput) {
+        const datepicker = new Datepicker(dateInput, {
+            autohide: true,
+            format: "yyyy-mm-dd", // Adjust format as needed
+        });
+
+        dateInput.addEventListener("changeDate", (event) => {
+            form.value.birthdate = event.target.value;
+        });
+    }
+
     // Initial distribution
     distributeRecipients();
+    initFlowbite();
 });
 
 // Compute selected campuses dynamically
@@ -827,28 +846,6 @@ const openBatch = (batchId) => {
 };
 
 const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
-
-onMounted(() => {
-    if (props.batches && props.batches.length > 0) {
-        expandedBatches.value = props.batches[0].id;
-    }
-
-    // Initialize Flowbite Datepicker
-    const dateInput = document.getElementById("datepicker-autohide");
-    if (dateInput) {
-        const datepicker = new Datepicker(dateInput, {
-            autohide: true,
-            format: "yyyy-mm-dd", // Adjust format as needed
-        });
-
-        dateInput.addEventListener("changeDate", (event) => {
-            form.value.birthdate = event.target.value;
-        });
-    }
-    
-    restoreScrollPosition(); // Make sure to restore scroll position after initial load
-    initFlowbite();
-});
 
 
 const selectedSem = ref("");
