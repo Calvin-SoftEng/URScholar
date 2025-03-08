@@ -168,14 +168,53 @@
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
+                                    <div class="flex flex-row w-6/12 gap-3 pr-2">
+                                        <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                                            <!-- Application Start Date -->
+                                            <div class="flex flex-col w-full">
+                                                <label for="datepicker-range-start" class="text-sm font-medium text-gray-700 mb-1">Application Start</label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                        </svg>
+                                                    </div>
+                                                    <input id="datepicker-range-start" name="start" type="text" 
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Select start date">
+                                                </div>
+                                            </div>
+
+                                            <span class="text-gray-500">to</span>
+
+                                            <!-- Application Deadline -->
+                                            <div class="flex flex-col w-full">
+                                                <label for="datepicker-range-end" class="text-sm font-medium text-gray-700 mb-1">Application Deadline</label>
+                                                <div class="relative">
+                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                        </svg>
+                                                    </div>
+                                                    <input id="datepicker-range-end" name="end" type="text" 
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                        placeholder="Select end date">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="w-full border-t border-gray-200 my-4"></div>
+
                                     <!-- Total Recipients Input -->
-                                    <div>
+                                    <div class="flex w-6/12 pr-2 flex-col">
                                         <label for="totalRecipients" class="text-sm font-medium text-gray-700">
                                             Number of Recipients
                                         </label>
                                         <input id="totalRecipients" type="number" v-model="form.totalRecipients" min="1"
                                             placeholder="Enter total recipients"
-                                            class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded"
+                                            class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded-lg"
                                             @input="distributeRecipients" />
                                     </div>
 
@@ -264,33 +303,17 @@
                                             <label for="totalRecipients" class="text-sm font-medium text-gray-700">
                                                 List Criteria and Eligibility
                                             </label>
-                                            <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
-                                                <div class="flex items-center mb-4 w-full">
-                                                    <form @submit.prevent="addReq" class="flex items-center w-full">
-                                                        <input v-model="newReq" type="text" placeholder="Enter an item"
-                                                            class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
-                                                        <button type="submit"
-                                                            class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
-                                                            Add
-                                                        </button>
-                                                    </form>
+                                            <!-- Campus Selection List -->
+                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mt-2">
+                                                <div class="flex items-center space-x-2">
+                                                    <!-- Checkbox to accept terms and conditions -->
+                                                    <input id="accept-terms" type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                                    <label for="accept-terms" class="text-sm font-medium text-gray-700 cursor-pointer">
+                                                        First Condition
+                                                    </label>
                                                 </div>
+                                            </div>
 
-                                                <form @submit.prevent="removeReq">
-                                                    <div class="flex flex-col gap-2">
-                                                        <div v-for="(reqs, index) in reqs" :key="index"
-                                                            class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
-                                                            <span>{{ reqs }}</span>
-                                                            <button @click="removeItem(index)"
-                                                                class="flex items-center text-red-500 hover:text-red-700">
-                                                                <span class="material-symbols-rounded text-red-600">
-                                                                    delete
-                                                                </span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </ul>
                                         </div>
 
                                         <div class="w-full">
@@ -426,6 +449,7 @@ import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, To
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
 import { Checkbox } from '@/Components/ui/checkbox'
 import { Input } from '@/Components/ui/input'
+import { initFlowbite } from 'flowbite';
 
 // Define props to include scholars data
 const props = defineProps({
@@ -808,7 +832,24 @@ onMounted(() => {
     if (props.batches && props.batches.length > 0) {
         expandedBatches.value = props.batches[0].id;
     }
+
+    // Initialize Flowbite Datepicker
+    const dateInput = document.getElementById("datepicker-autohide");
+    if (dateInput) {
+        const datepicker = new Datepicker(dateInput, {
+            autohide: true,
+            format: "yyyy-mm-dd", // Adjust format as needed
+        });
+
+        dateInput.addEventListener("changeDate", (event) => {
+            form.value.birthdate = event.target.value;
+        });
+    }
+    
+    restoreScrollPosition(); // Make sure to restore scroll position after initial load
+    initFlowbite();
 });
+
 
 const selectedSem = ref("");
 
