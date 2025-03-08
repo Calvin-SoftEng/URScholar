@@ -137,4 +137,9 @@ class SystemAdminController extends Controller
     public function system_users() {
         return Inertia::render('MIS/User_Roles/Users');
     }
+
+    public function activity_logs() {
+        return Inertia::render('MIS/User_Roles/Activity_Logs');
+    }
+    
 }

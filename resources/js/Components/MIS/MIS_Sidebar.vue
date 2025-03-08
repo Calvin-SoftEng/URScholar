@@ -54,10 +54,10 @@
               </div>
             </Link>
 
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+            <Link :href="route('sa.activity_logs')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/activity-logs' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">User Activity Logs</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/user-settings/activity-logs' }">User Activity Logs</span>
                 </div>
               </div>
             </Link>
