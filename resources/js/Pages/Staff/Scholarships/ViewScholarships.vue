@@ -2,7 +2,8 @@
 
     <Head title="Scholarships" />
     <AuthenticatedLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
@@ -26,32 +27,42 @@
                     <div class="flex w-full flex-col gap-6">
 
                         <!-- Need-Based Scholarships -->
-                        <h2 class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
+                        <h2
+                            class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
                             Need-Based Scholarships
                         </h2>
 
                         <button v-for="scholarship in needBasedScholarships" :key="scholarship.id"
                             @click="toggleSpecification(scholarship)">
-                            <div
-                                class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
+                            <div class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
                                     dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
                                 <div class="card-body p-6 flex flex-row justify-between">
                                     <div class="space-y-3 items-start justify-start">
                                         <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                             {{ getSponsorName(scholarship.sponsor_id) }}
                                         </div>
-                                        <h2 class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
+                                        <h2
+                                            class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
                                             {{ scholarship.name }}
                                         </h2>
                                         <p class="text-sm text-gray-500">
-                                            <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
-                                            <span>Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                year: 'numeric', month: 'long', day: 'numeric'
-                                            }) }}</span>
+                                            <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString()
+                                                }}</span> <br>
+                                            <span>Sponsoring Since: {{ new
+                                                Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                    year: 'numeric', month: 'long', day: 'numeric'
+                                                }) }}</span>
                                         </p>
                                         <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
                                             style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
-                                            deadline na dito
+                                            <span class="font-medium">Requirements Deadline:</span> {{
+                                                scholarship.requirements && scholarship.requirements.length > 0
+                                                    ? new Date(scholarship.requirements[0].deadline).toLocaleDateString('en-US',
+                                            {
+                                            year: 'numeric', month: 'long', day: 'numeric'
+                                            })
+                                            : 'No deadline set'
+                                            }}
                                         </p>
                                     </div>
                                     <div class="flex flex-row gap-2 items-start">
@@ -69,28 +80,31 @@
                         </button>
 
                         <!-- Divider -->
-                        <h2 class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
+                        <h2
+                            class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
                             One-Time Payment Scholarships
                         </h2>
-                        
+
                         <button v-for="scholarship in oneTimeScholarships" :key="scholarship.id"
                             @click="toggleSpecification(scholarship)">
-                            <div
-                                class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
+                            <div class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
                                     dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
                                 <div class="card-body p-6 flex flex-row justify-between">
                                     <div class="space-y-3 items-start justify-start">
                                         <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                             {{ getSponsorName(scholarship.sponsor_id) }}
                                         </div>
-                                        <h2 class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
+                                        <h2
+                                            class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
                                             {{ scholarship.name }}
                                         </h2>
                                         <p class="text-sm text-gray-500">
-                                            <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
-                                            <span>Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                year: 'numeric', month: 'long', day: 'numeric'
-                                            }) }}</span>
+                                            <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString()
+                                                }}</span> <br>
+                                            <span>Sponsoring Since: {{ new
+                                                Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                    year: 'numeric', month: 'long', day: 'numeric'
+                                                }) }}</span>
                                         </p>
                                         <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
                                             style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
@@ -124,8 +138,8 @@
                         data-modal-hide="default-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                     </button>
                 </div>
@@ -133,18 +147,20 @@
                 <div class=" bg-white dark:bg-dprimary flex justify-center items-center p-5 rounded-lg">
                     <div class="flex flex-col space-y-2 items-center">
                         <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
-                            {{ selectedScholarship.name }}<span> Scholars</span> 
+                            {{ selectedScholarship.name }}<span> Scholars</span>
                         </h1>
 
                         <div class="py-5 text-gray-500 ">
                             Select School Year and Semester
                         </div>
                         <div class="grid grid-cols-3 justify-center items-center gap-3">
-                            <div class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                            <div
+                                class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
                                 Academic Year: </div>
                             <div class="col-span-2 w-full">
                                 <Select v-model="selectedYear" required>
-                                    <SelectTrigger class="w-full border" :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
+                                    <SelectTrigger class="w-full border"
+                                        :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
                                         <SelectValue placeholder="Select year" class="dark:text-dtext" />
                                     </SelectTrigger>
                                     <SelectContent>
@@ -157,12 +173,14 @@
                                     </SelectContent>
                                 </Select>
                             </div>
-                            <div class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                            <div
+                                class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
                                 Semester: </div>
                             <div class="col-span-2 w-full">
                                 <Select v-model="selectedSem" required>
-                                    <SelectTrigger class="w-full border" :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
-                                        <SelectValue placeholder="Select Semester" class="dark:text-dtext"/>
+                                    <SelectTrigger class="w-full border"
+                                        :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
+                                        <SelectValue placeholder="Select Semester" class="dark:text-dtext" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -219,17 +237,17 @@ const props = defineProps({
     schoolyears: {
         type: Array,
         required: true
-    }
+    },
 });
 const directives = {
     Tooltip,
 };
 
-const needBasedScholarships = computed(() => 
+const needBasedScholarships = computed(() =>
     props.scholarships.filter(scholarship => scholarship.scholarshipType === 'Need-Based')
 );
 
-const oneTimeScholarships = computed(() => 
+const oneTimeScholarships = computed(() =>
     props.scholarships.filter(scholarship => scholarship.scholarshipType === 'One-time Payment')
 );
 
@@ -245,6 +263,10 @@ const form = ref({
 const getSponsorName = (sponsorId) => {
     const sponsor = props.sponsors.find(s => s.id === sponsorId);
     return sponsor ? sponsor.name : 'Unknown Sponsor';
+};
+
+const formatDate = (date) => {
+    return new Date(date).toLocaleDateString();
 };
 
 const selectedYear = ref("");
@@ -272,7 +294,7 @@ const openScholarship = () => {
     formErrors.value.selectedYear = "";
 
     // Validate
-    if (!selectedSem.value && !selectedYear.value) {   
+    if (!selectedSem.value && !selectedYear.value) {
         formErrors.value.selectedSem = "Semester selection is required.";
         formErrors.value.selectedYear = "Academic Year selection is required.";
         return; // Stop form submission

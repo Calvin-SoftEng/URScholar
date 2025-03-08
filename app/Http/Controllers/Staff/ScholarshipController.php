@@ -32,10 +32,10 @@ class ScholarshipController extends Controller
     public function scholarship(Sponsor $sponsors)
     {
 
-        $scholarships = Scholarship::all();
+        $scholarships = Scholarship::with('requirements')->get();
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
-        // $scholarships = $sponsors->scholarships;
+        
 
         return inertia('Staff/Scholarships/ViewScholarships', [
             'sponsors' => $sponsors,
