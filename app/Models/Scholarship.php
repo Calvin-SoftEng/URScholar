@@ -27,6 +27,16 @@ class Scholarship extends Model
         return $this->belongsTo(Requirements::class);
     }
 
+    public function criteria()
+    {
+        return $this->hasMany(Criteria::class);
+    }
+
+    public function campusRecipients()
+    {
+        return $this->hasMany(CampusRecipients::class);
+    }
+
     public function sponsor()
     {
         return $this->belongsTo(Sponsor::class);

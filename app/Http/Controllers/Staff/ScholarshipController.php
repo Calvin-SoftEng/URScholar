@@ -10,6 +10,7 @@ use App\Models\Batch;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Campus;
+use App\Models\CampusRecipients;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
@@ -192,6 +193,45 @@ class ScholarshipController extends Controller
         return redirect()->route('sponsor.index')->with('success', 'Check out view scholarships');
     }
 
+
+    public function one_time(Request $request, Scholarship $scholarship)
+    {
+        $validated = $request->validate([
+            'total_recipients' => 'required|integer|min:1',
+            'campus_recipients' => 'required|array',
+            'campus_recipients.*.campus_id' => 'required|exists:campuses,id',
+            'campus_recipients.*.slots' => 'required|integer|min:1',
+            'campus_recipients.*.remaining_slots' => 'required|integer|min:1',
+            'campus_recipients.*.selected_campus' => 'required|json',
+        ]);
+
+        $campus_recipients = $validated['campus_recipients'];
+
+        foreach ($campus_recipients as $campusRecipient) {
+            // Check if record exists
+            $existingRecord = CampusRecipients::where('scholarship_id', $scholarship->id)
+                ->where('campus_id', $campusRecipient['campus_id'])
+                ->first();
+
+            if ($existingRecord) {
+                // Update existing record
+                $existingRecord->update([
+                    'selected_campus' => $campusRecipient['selected_campus'],
+                    'slots' => $campusRecipient['slots'],
+                    'remaining_slots' => $campusRecipient['remaining_slots'],
+                ]);
+            } else {
+                // Insert new record
+                CampusRecipients::create([
+                    'scholarship_id' => $scholarship->id,
+                    'campus_id' => $campusRecipient['campus_id'],
+                    'selected_campus' => $campusRecipient['selected_campus'],
+                    'slots' => $campusRecipient['slots'],
+                    'remaining_slots' => $campusRecipient['remaining_slots'],
+                ]);
+            }
+        }
+    }
     public function send(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;

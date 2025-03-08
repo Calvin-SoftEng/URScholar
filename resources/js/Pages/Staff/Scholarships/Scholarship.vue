@@ -138,8 +138,9 @@
                     </div>
                 </div>
 
+                <!--ONE TIME PAYMENT PROCESS-->
                 <div v-else>
-                    <form action="">
+                    <form @submit.prevent="submitForm">
                         <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
                             <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
                             <div class="w-full block bg-white p-5 flex-col items-center mx-auto sm:px-6 lg:px-8">
@@ -172,7 +173,7 @@
                                         <label for="totalRecipients" class="text-sm font-medium text-gray-700">
                                             Number of Recipients
                                         </label>
-                                        <input id="totalRecipients" type="number" v-model="totalRecipients" min="1"
+                                        <input id="totalRecipients" type="number" v-model="form.totalRecipients" min="1"
                                             placeholder="Enter total recipients"
                                             class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded"
                                             @input="distributeRecipients" />
@@ -188,11 +189,12 @@
                                                     <label class="text-sm font-medium">Distribute Recipients per
                                                         Selected Campus</label>
                                                     <div class="flex flex-row text-sm gap-4">
-                                                        <div>Allocated: {{ allocatedRecipients }} of {{ totalRecipients
+                                                        <div>Allocated: {{ allocatedRecipients }} of {{
+                                                            form.totalRecipients
                                                             }}</div>
-                                                        <div v-if="allocatedRecipients !== parseInt(totalRecipients)"
+                                                        <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                             class="text-red-500 font-medium">
-                                                            *{{ parseInt(totalRecipients) - allocatedRecipients }}
+                                                            *{{ parseInt(form.totalRecipients) - allocatedRecipients }}
                                                             recipients still need to be allocated
                                                         </div>
                                                     </div>
@@ -227,7 +229,8 @@
                                                     <!-- Recipients per campus input -->
                                                     <input type="number" v-model="campus.recipients"
                                                         :readonly="!campus.selected" :class="`w-20 px-2 py-1 border rounded-md text-center ${!campus.selected ? 'bg-gray-100 border-gray-300' : 'bg-white border-blue-300'
-                                                            }`" min="0" :max="totalRecipients" @input="onRecipientManualChange(campus.id)" />
+                                                            }`" min="0" :max="form.totalRecipients"
+                                                        @input="onRecipientManualChange(campus.id)" />
                                                 </div>
                                             </div>
                                         </div>
@@ -329,7 +332,12 @@
                             </div>
                             <!-- </div> -->
                         </div>
-                        <button>Save</button>
+                        <div class="flex justify-end mt-8">
+                            <button type="submit" @click="submitForm"
+                                class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                                {{ isSubmitting ? 'Creating...' : 'Create Scholarship' }}
+                            </button>
+                        </div>
                     </form>
                 </div>
 
@@ -489,6 +497,17 @@ const selectAllBatches = () => {
     }
 };
 
+// Form data
+const form = ref({
+    name: '',
+    scholarshipType: '',
+    totalRecipients: 40,
+    reqs: [],
+    criteria: [],
+    amount: 0,
+});
+
+
 const newReq = ref("");
 const reqs = ref([]);
 
@@ -621,6 +640,49 @@ const selectedCourses = computed(() => {
 const updateSelectedCourses = () => {
     selectedCourses.value; // Triggers computed property update
 };
+
+const submitForm = () => {
+
+    // Prepare campus recipients data for the backend
+    const campusRecipients = selectedCampuses.value.map(campus => ({
+        campus_id: campus.id,
+        slots: parseInt(campus.recipients),
+        remaining_slots: parseInt(campus.recipients),
+        selected_campus: JSON.stringify(
+            campus.courses
+                .filter(course => selectedCoursesMap.value[course])
+                .map(course => ({ course }))
+        ),
+    }));
+
+    // Create the payload
+    const payload = {
+        // name: form.value.name,
+        // scholarship_type: form.value.scholarshipType,
+        total_recipients: form.value.totalRecipients,
+        // requirements: form.value.reqs,
+        // criteria: form.value.criteria,
+        amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
+        campus_recipients: campusRecipients,
+    };
+
+    // Submit the form to the backend
+    router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, payload, {
+        onSuccess: () => {
+            showToast('Success', 'Scholarship created successfully');
+            setTimeout(() => {
+                router.visit('/scholarships');
+            }, 1500);
+        },
+        onError: (errors) => {
+            showToast('Error', 'There was an error creating the scholarship');
+            errors.value = errors;
+            isSubmitting.value = false;
+        },
+    });
+
+}
+
 
 // Watch for changes in individual batch selections
 watchEffect(() => {

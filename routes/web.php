@@ -85,6 +85,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     //Scholarships
     Route::post('/sponsors/create-scholarship', [ScholarshipController::class, 'store'])->name('scholarships.store');
 
+    Route::post('/sholarships/{scholarship}/one-time-payment', [ScholarshipController::class, 'one_time'])->name('scholarships.one_time');
+
     Route::get('/scholarships', [ScholarshipController::class, 'scholarship'])->name('scholarships.index');
     // Route::post('/scholarships', [ScholarshipController::class, 'store'])->name('scholarships.store');
     Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
