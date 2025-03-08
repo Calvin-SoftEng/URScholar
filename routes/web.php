@@ -55,6 +55,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     // user settings
     Route::get('/system_admin/user-settings/system-users_roles', [SystemAdminController::class, 'system_user_roles'])->name('sa.user_roles');
     Route::get('/system_admin/user-settings/users', [SystemAdminController::class, 'system_users'])->name('sa.users');
+    Route::get('/system_admin/user-settings/activity-logs', [SystemAdminController::class, 'activity_logs'])->name('sa.activity_logs');
 
     // univ settings
     Route::get('/system_admin/univ-settings/courses', [SystemAdminController::class, 'courses'])->name('sa.courses');
