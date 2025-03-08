@@ -10,15 +10,16 @@
                 <div class="w-full mt-5">
                     <div class="relative overflow-x-auto border border-gray-200 rounded-lg w-full p-5 bg-white">
                         
-                        <!-- Personal Information -->
-                        <div class="mb-10">
-                            <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Personal Information</h2>
+
+                        <!-- Family Information -->
+                        <div class="mb-5">
+                            <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Scholarship Criteria</h2>
                             <div class="mt-3 space-y-5">
                                 
-                                <!-- Gender Selection -->
+                                <!-- Marital Selection -->
                                 <div class="flex justify-between items-center">
                                     <div>
-                                        <span class="text-gray-600">Gender:</span>
+                                        <span class="text-gray-600">Marital Status of Parents:</span>
                                         <div class="flex gap-3 mt-1">
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Bai</span>
@@ -34,17 +35,7 @@
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Bai</span>
                                                 <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div><div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
                                                     </button>
                                                     <button class="p-1 rounded hover:bg-gray-200">
@@ -52,91 +43,10 @@
                                                     </button>
                                                 </div>
                                             </div>
-
-                                        </div>
-                                    </div>
-                                    <button @click="toggleAdd" class="text-blue-600 text-sm hover:underline">Add Gender</button>
-                                </div>
-
-                                <!-- Civil Status -->
-                                <div class="flex justify-between items-center">
-                                    <div>
-                                        <span class="text-gray-600">Civil Status:</span>
-                                        <div class="flex gap-3 mt-1">
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Bai</span>
                                                 <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div><div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div><div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    <button @click="toggleAdd" class="text-blue-600 text-sm hover:underline">Add Civil Status</button>
-                                </div>
-
-                            </div>
-                        </div>
-
-                        <!-- Family Information -->
-                        <div class="mb-5">
-                            <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Family Information</h2>
-                            <div class="mt-3 space-y-5">
-                                
-                                <!-- Marital Selection -->
-                                <div class="flex justify-between items-center">
-                                    <div>
-                                        <span class="text-gray-600">Marital Status of Parents:</span>
-                                        <div class="flex gap-3 mt-1">
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div><div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div><div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
                                                     </button>
                                                     <button class="p-1 rounded hover:bg-gray-200">
@@ -155,18 +65,39 @@
                                     <div>
                                         <span class="text-gray-600">Monthly Family Income:</span>
                                         <div class="flex gap-3 mt-1">
-                                            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 flex items-center gap-2">
-                                                Bai
-                                                <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                            </button>
-                                            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 flex items-center gap-2">
-                                                Bai
-                                                <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                            </button>
-                                            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 flex items-center gap-2">
-                                                Bai
-                                                <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary" />
-                                            </button>
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Bai</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Bai</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Bai</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
 
                                         </div>
                                     </div>
@@ -178,19 +109,39 @@
                                     <div>
                                         <span class="text-gray-600">Family Type of Housing:</span>
                                         <div class="flex gap-3 mt-1">
-                                            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 flex items-center gap-2">
-                                                Bai
-                                                <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                            </button>
-                                            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 flex items-center gap-2">
-                                                Bai
-                                                <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                            </button>
-                                            <button class="px-3 py-1 border rounded-md hover:bg-gray-100 flex items-center gap-2">
-                                                Bai
-                                                <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary" />
-                                            </button>
-
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Bai</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Bai</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Bai</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <button @click="toggleAdd" class="text-blue-600 text-sm hover:underline">Add Housing type</button>

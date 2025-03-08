@@ -129,7 +129,6 @@
                                             <input v-model="form.birthdate" id="datepicker-autohide" datepicker datepicker-autohide type="text" class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select Birthdate">
                                             </div>
                                         </div>
-
                                         
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
@@ -145,10 +144,10 @@
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Gender</Label>
-                                            <Select v-model="form.gender">
+                                            <Label for="email">Sex</Label>
+                                            <Select v-model="form.sex">
                                                 <SelectTrigger class="w-full">
-                                                    <SelectValue placeholder="Select Gender" />
+                                                    <SelectValue placeholder="Select Sex" />
                                                 </SelectTrigger>
                                                 <SelectContent>
                                                     <SelectGroup>
@@ -955,7 +954,7 @@ const form = ref({
     birthdate: '',
     birthplace: '',
     age: '',
-    gender: '',
+    sex: '',
     civil_status: '',
     religion: '',
     guardian_name: '',

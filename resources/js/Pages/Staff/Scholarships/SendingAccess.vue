@@ -73,7 +73,7 @@
                                         <div>
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Set Submission
                                                 Timeline</h3>
-                                            <div class="flex flex-row gap-3 w-full">
+                                            <!-- <div class="flex flex-row gap-3 w-full">
                                                 <div class="relative w-full">
                                                     <DatePicker class="w-full dark:bg-dsecondary dark:text-white"
                                                         v-model="selectedStart" @update:model-value="handleDateStart"
@@ -83,6 +83,37 @@
                                                     <DatePicker class="w-full dark:bg-dsecondary dark:text-white"
                                                         v-model="selectedEnd" @update:model-value="handleDateEnd"
                                                         placeholder="Submission Deadline" />
+                                                </div>
+                                            </div> -->
+                                                <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                                                <!-- Application Start Date -->
+                                                <div class="flex flex-col w-full">
+                                                    <div class="relative">
+                                                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                            </svg>
+                                                        </div>
+                                                        <input v-model="selectedStart" id="datepicker-range-start" name="start" type="text" 
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Submission Start Date">
+                                                    </div>
+                                                </div>
+
+                                                <span class="text-gray-500">to</span>
+
+                                                <!-- Application Deadline -->
+                                                <div class="flex flex-col w-full">
+                                                    <div class="relative">
+                                                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                            </svg>
+                                                        </div>
+                                                        <input v-model="selectedEnd" id="datepicker-range-end" name="end" type="text" 
+                                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                            placeholder="Submission Deadline">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,6 +175,7 @@ import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
 import { useDateFormat, useNow } from '@vueuse/core'
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import { initFlowbite } from 'flowbite';
 
 const props = defineProps({
     scholarship: Object,
@@ -175,6 +207,23 @@ const formatDateTime = (date) => {
     const d = new Date(date);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
+
+onMounted(() => {
+    // Initialize Flowbite Datepicker
+    const dateInput = document.getElementById("datepicker-autohide");
+    if (dateInput) {
+        const datepicker = new Datepicker(dateInput, {
+            autohide: true,
+            format: "yyyy-mm-dd", // Adjust format as needed
+        });
+
+        dateInput.addEventListener("changeDate", (event) => {
+            form.value.birthdate = event.target.value;
+        });
+    }
+
+    initFlowbite();
+});
 
 const handleDateStart = () => {
     formattedStart.value = formatDateTime(selectedStart.value);

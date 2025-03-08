@@ -44,7 +44,7 @@ class StudentController extends Controller
             'birthdate' => ['required', 'date'],
             'birthplace' => ['required', 'string', 'max:255'],
             'age' => ['required', 'numeric'],
-            'gender' => ['required', 'string', 'max:255'],
+            'sex' => ['required', 'string', 'max:255'],
             'civil_status' => ['required', 'string', 'max:255'],
             'religion' => ['required', 'string', 'max:255'],
             'guardian_name' => ['required', 'string', 'max:255'],
