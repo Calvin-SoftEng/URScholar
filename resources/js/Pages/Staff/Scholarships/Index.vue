@@ -156,59 +156,41 @@
                             <option value="One-time Payment">One-time Payment</option>
                         </select>
                     </div>
-
-                    <!-- Show only if One-time Payment is selected -->
-                    <!-- <div v-if="form.scholarshipType === 'One-time Payment'" class="space-y-3">
-                        <hr class="border-t border-gray-300 dark:border-gray-600 my-4">
-
-                        <div class="flex flex-row gap-2">
-                            <div class="grid w-full max-w-sm items-center gap-1.5">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Deadline</h3>
-                                <Popover>
-                                    <PopoverTrigger as-child>
-                                        <Button variant="outline"
-                                            class="w-full h-10 justify-start text-left font-normal bg-gray-50 border border-gray-300 rounded-lg p-2.5">
-                                            <CalendarIcon class="mr-2 h-4 w-4" />
-                                            {{ formatDate(form.birthdate) }}
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent class="w-auto p-0 ">
-                                        <Calendar v-model="form.birthdate" initial-focus />
-                                    </PopoverContent>
-                                </Popover>
+                    <div>
+                        <h3 class="font-semibold text-gray-900 dark:text-white">Set Scholarship
+                            Timeline</h3>
+                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                            <!-- Application Start Date -->
+                            <div class="flex flex-col w-full">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    <input :value="selectedStart" @input="selectedStart = $event.target.value" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Submission Start Date">
+                                </div>
                             </div>
 
-                            <div class="w-full flex flex-col space-y-2">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">Limit Recipients</h3>
-                                <input type="number" id="name"
-                                    placeholder="Enter Number of Recipients"
-                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                            <span class="text-gray-500">to</span>
+
+                            <!-- Application Deadline -->
+                            <div class="flex flex-col w-full">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    <input :value="selectedEnd" @input="selectedEnd = $event.target.value" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Submission Deadline">
+                                </div>
                             </div>
                         </div>
-
-                        <div class="w-full flex flex-col space-y-2">
-                            <h3 class="font-semibold text-gray-900 dark:text-white">Limit Course</h3>
-                            <input type="text" id="name"
-                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-                        </div>
-                    </div> -->
-
-                    
-                    <!-- <div class="w-full flex flex-col space-y-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">School Year</h3>
-                        <input v-model="form.school_year" type="text" id="name"
-                            placeholder="School Year"
-                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                     </div>
-                    <div class="w-full flex flex-col space-y-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">Semester</h3>
-                        <select v-model="form.semester" id="scholarshipType"
-                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
-                            <option value="" disabled>Select Semester</option>
-                            <option value="merit">First Semester</option>
-                            <option value="need">Second Semester</option>
-                        </select>
-                    </div> -->
                     <div class="mt-2">
                         <button type="submit"
                             class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
@@ -232,7 +214,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ref, onMounted, watchEffect } from 'vue';
+import { ref, onMounted, watchEffect, watch } from 'vue';
 import { usePage } from "@inertiajs/vue3";
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { Tooltip } from 'primevue';
@@ -251,6 +233,8 @@ import { Calendar as CalendarIcon } from 'lucide-vue-next'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group'
+import { initFlowbite } from 'flowbite';
+import { Datepicker } from "flowbite";
 
 
 const props = defineProps({
@@ -266,6 +250,9 @@ const isCreating = ref(false);
 const isEditing = ref(false);
 const Showcase = ref(false);
 const sponsorid = ref(null);
+
+const selectedStart = ref(""); // Stores the selected start date
+const selectedEnd = ref("");   // Stores the selected end date
 
 
 const form = ref({
@@ -292,7 +279,53 @@ const toggleCreate = (sponsorID) => {
         sponsorid.value = sponsorID;
         form.value.sponsor_id = sponsorID;
     }
+    initFlowbite(); // Initialize Flowbite first
 };
+
+onMounted(() => {
+
+    const startInput = document.getElementById("datepicker-range-start");
+    if (startInput) {
+        startInput.value = selectedStart.value; // Keep the previous value
+        startInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value); 
+            form.value.application = date.toISOString().split("T")[0]; 
+            console.log("Application:", form.value.application);
+            selectedStart.value = event.target.value; 
+        });
+    }
+ 
+
+    const endInput = document.getElementById("datepicker-range-end");
+    if (endInput) {
+        endInput.value = selectedEnd.value; // Keep the previous value
+        endInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value); 
+            form.value.deadline = date.toISOString().split("T")[0]; 
+            selectedEnd.value = event.target.value; 
+        });
+    }
+    initFlowbite(); // Initialize Flowbite first
+});
+
+// Ensure selected values persist
+watch(selectedStart, (newVal) => {
+    document.getElementById("datepicker-range-start").value = newVal;
+});
+
+watch(selectedEnd, (newVal) => {
+    document.getElementById("datepicker-range-end").value = newVal;
+});
+
+watch(isCreating, (newValue) => {
+    if (newValue) {
+        setTimeout(() => {
+            initFlowbite(); // Initialize the modal components
+        }, 200);
+    }
+});
+
+
 
 
 const closeModal = () => {

@@ -94,7 +94,7 @@
                                                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                                             </svg>
                                                         </div>
-                                                        <input v-model="selectedStart" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
+                                                        <input :value="selectedStart" @input="selectedStart = $event.target.value" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Submission Start Date">
                                                     </div>
@@ -110,7 +110,7 @@
                                                                 <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                                             </svg>
                                                         </div>
-                                                        <input v-model="selectedEnd" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
+                                                        <input :value="selectedEnd" @input="selectedEnd = $event.target.value" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
                                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
                                                             placeholder="Submission Deadline">
                                                     </div>
@@ -169,7 +169,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ref, onMounted, computed, watchEffect, nextTick } from 'vue';
+import { ref, onMounted, computed, watchEffect, nextTick, watch } from 'vue';
 import { Head, useForm, Link, usePage } from '@inertiajs/vue3';
 import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
@@ -209,42 +209,8 @@ const formatDateTime = (date) => {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
-onMounted(() => {
-    // 🎯 Start Date Picker
-    const startInput = document.getElementById("datepicker-range-start");
-    if (startInput) {
-        startInput.value = selectedStart.value; // Keep the previous value
-        startInput.addEventListener("changeDate", (event) => {
-            selectedStart.value = event.target.value;
-            console.log("Selected Start Date:", selectedStart.value);
-        });
-    }
-
-    // 🎯 End Date Picker
-    const endInput = document.getElementById("datepicker-range-end");
-    if (endInput) {
-        endInput.value = selectedEnd.value; // Keep the previous value
-        endInput.addEventListener("changeDate", (event) => {
-            selectedEnd.value = event.target.value;
-            console.log("Selected End Date:", selectedEnd.value);
-        });
-    }
-    restoreScrollPosition();
-    initFlowbite(); // Initialize Flowbite first
-});
-
 const restoreScrollPosition = () => {
     window.scrollTo(0, scrollPosition.value);
-};
-
-const handleDateStart = () => {
-    formattedStart.value = formatDateTime(selectedStart.value);
-    form.value.application = formattedStart.value;
-};
-
-const handleDateEnd = () => {
-    formattedEnd.value = formatDateTime(selectedEnd.value);
-    form.value.deadline = formattedEnd.value;
 };
 
 // dynamic requirements
@@ -273,6 +239,41 @@ const resetForm = () => {
         deadline: '',
     };
 };
+
+onMounted(() => {
+    initFlowbite(); // Initialize Flowbite first
+    // 🎯 Start Date Picker
+    const startInput = document.getElementById("datepicker-range-start");
+    if (startInput) {
+        startInput.value = selectedStart.value; // Keep the previous value
+        startInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value); // ✅ Get selected date
+            form.value.application = date.toISOString().split("T")[0]; 
+            console.log("Application:", form.value.application);
+            selectedStart.value = event.target.value; 
+        });
+    }
+ 
+    // 🎯 End Date Picker
+    const endInput = document.getElementById("datepicker-range-end");
+    if (endInput) {
+        endInput.value = selectedEnd.value; // Keep the previous value
+        endInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value); // ✅ Get selected date
+            form.value.deadline = date.toISOString().split("T")[0]; 
+            selectedEnd.value = event.target.value; 
+        });
+    }
+});
+
+// Ensure selected values persist
+watch(selectedStart, (newVal) => {
+    document.getElementById("datepicker-range-start").value = newVal;
+});
+
+watch(selectedEnd, (newVal) => {
+    document.getElementById("datepicker-range-end").value = newVal;
+});
 
 
 // useDateFormat(form.value.application, 'YYYY-MM-DD');

@@ -390,6 +390,43 @@
 
                 <!-- body -->
                 <div class="py-4 px-8 flex flex-col gap-3">
+                    <div class="mb-4">
+                        <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                            Select a Batch to Forward:
+                        </label>
+                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                            <!-- Application Start Date -->
+                            <div class="flex flex-col w-full">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    <input :value="selectedStart" @input="selectedStart = $event.target.value" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Submission Start Date">
+                                </div>
+                            </div>
+
+                            <span class="text-gray-500">to</span>
+
+                            <!-- Application Deadline -->
+                            <div class="flex flex-col w-full">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        </svg>
+                                    </div>
+                                    <input :value="selectedEnd" @input="selectedEnd = $event.target.value" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        placeholder="Submission Deadline">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
                         Select a Batch to Forward:
                     </label>
@@ -469,6 +506,9 @@ const isLoading = ref(false);
 const isSubmitting = ref(false);
 const batchesWithScholars = ref([]);
 
+const selectedStart = ref(""); // Stores the selected start date
+const selectedEnd = ref("");   // Stores the selected end date
+
 const toggleSendBatch = async () => {
     ForwardBatchList.value = true;
 
@@ -525,7 +565,7 @@ const selectAllBatches = () => {
 const form = ref({
     name: '',
     scholarshipType: '',
-    totalRecipients: 40,
+    totalRecipients: 0,
     reqs: [],
     criteria: [],
     amount: 0,
@@ -561,8 +601,6 @@ const removeCriteria = (index) => {
     criteria.value.splice(index, 1);
 };
 
-// Total number of recipients
-const totalRecipients = ref(40);
 
 // Create reactive campus array from props with selection state
 const campusesData = ref([]);
@@ -601,26 +639,71 @@ onMounted(() => {
         });
     }
 
+    const startInput = document.getElementById("datepicker-range-start");
+    if (startInput) {
+        startInput.value = selectedStart.value; // Keep the previous value
+        startInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value); 
+            form.value.application = date.toISOString().split("T")[0]; 
+            console.log("Application:", form.value.application);
+            selectedStart.value = event.target.value; 
+        });
+    }
+
+
+    const endInput = document.getElementById("datepicker-range-end");
+    if (endInput) {
+        endInput.value = selectedEnd.value; // Keep the previous value
+        endInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value); 
+            form.value.deadline = date.toISOString().split("T")[0]; 
+            selectedEnd.value = event.target.value; 
+        });
+    }
+
     // Initial distribution
     distributeRecipients();
     initFlowbite();
 });
 
+
+// Ensure selected values persist
+watch(selectedStart, (newVal) => {
+document.getElementById("datepicker-range-start").value = newVal;
+});
+
+watch(selectedEnd, (newVal) => {
+document.getElementById("datepicker-range-end").value = newVal;
+});
+
+watch(ForwardBatchList, (newValue) => {
+if (newValue) {
+    setTimeout(() => {
+        initFlowbite(); // Initialize the modal components
+    }, 200);
+}
+});
+
 // Compute selected campuses dynamically
-const selectedCampuses = computed(() =>
+const selectedCampuses = computed(() => 
     campusesData.value.filter(campus => campus.selected)
 );
 
 // Calculate total allocated recipients
 const allocatedRecipients = computed(() => {
-    return campusesData.value.reduce((sum, campus) => sum + parseInt(campus.recipients || 0), 0);
+    return campusesData.value.reduce(
+        (sum, campus) => sum + parseInt(campus.recipients || 0), 0
+    );
 });
+
+// Helper to access the total recipients value
+const totalRecipients = computed(() => parseInt(form.value.totalRecipients) || 0);
 
 // Function to distribute recipients equally when checking/unchecking a campus
 const distributeRecipients = () => {
     const selectedCount = selectedCampuses.value.length;
 
-    if (selectedCount === 0) {
+    if (selectedCount === 0 || totalRecipients.value === 0) {
         campusesData.value.forEach(campus => campus.recipients = 0);
         return;
     }
@@ -656,7 +739,10 @@ const onRecipientManualChange = (changedCampusId) => {
 };
 
 // Watch total recipients and automatically redistribute
-watch(totalRecipients, distributeRecipients);
+watch(() => form.value.totalRecipients, distributeRecipients);
+
+// Initial distribution
+distributeRecipients();
 
 // Store selected courses
 const selectedCoursesMap = ref({});

@@ -24,35 +24,34 @@
 
                 <div class="mx-auto py-5">
                     <div class="flex w-full flex-col gap-6">
-                        <button v-for="scholarship in scholarships" :key="scholarship.id"
+
+                        <!-- Need-Based Scholarships -->
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
+                            Need-Based Scholarships
+                        </h2>
+
+                        <button v-for="scholarship in needBasedScholarships" :key="scholarship.id"
                             @click="toggleSpecification(scholarship)">
                             <div
                                 class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
                                     dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
                                 <div class="card-body p-6 flex flex-row justify-between">
                                     <div class="space-y-3 items-start justify-start">
-                                        <!-- Sponsor Badge -->
                                         <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                             {{ getSponsorName(scholarship.sponsor_id) }}
                                         </div>
-
-                                        <!-- Scholarship Title -->
                                         <h2 class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
                                             {{ scholarship.name }}
                                         </h2>
-
-                                        <!-- Scholarship Dates -->
                                         <p class="text-sm text-gray-500">
                                             <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
                                             <span>Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
                                                 year: 'numeric', month: 'long', day: 'numeric'
                                             }) }}</span>
                                         </p>
-
-                                        <!-- Scholarship Description -->
                                         <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
                                             style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
-                                            {{ scholarship.description }}
+                                            deadline na dito
                                         </p>
                                     </div>
                                     <div class="flex flex-row gap-2 items-start">
@@ -67,10 +66,53 @@
                                     </div>
                                 </div>
                             </div>
+                        </button>
 
+                        <!-- Divider -->
+                        <h2 class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
+                            One-Time Payment Scholarships
+                        </h2>
+                        
+                        <button v-for="scholarship in oneTimeScholarships" :key="scholarship.id"
+                            @click="toggleSpecification(scholarship)">
+                            <div
+                                class="card border bg-white transition-shadow duration-300 hover:shadow-lg hover:border-gray-400 
+                                    dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 rounded-lg">
+                                <div class="card-body p-6 flex flex-row justify-between">
+                                    <div class="space-y-3 items-start justify-start">
+                                        <div class="badge badge-info text-xs badge-outline px-3 py-1">
+                                            {{ getSponsorName(scholarship.sponsor_id) }}
+                                        </div>
+                                        <h2 class="text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
+                                            {{ scholarship.name }}
+                                        </h2>
+                                        <p class="text-sm text-gray-500">
+                                            <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
+                                            <span>Sponsoring Since: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                year: 'numeric', month: 'long', day: 'numeric'
+                                            }) }}</span>
+                                        </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
+                                            style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
+                                            Deadline dito
+                                        </p>
+                                    </div>
+                                    <div class="flex flex-row gap-2 items-start">
+                                        <div class="flex flex-col space-y-2 items-center">
+                                            <span>No. of Batches</span>
+                                            <span>34</span>
+                                        </div>
+                                        <div class="flex flex-col space-y-2 items-center">
+                                            <span>No. of Campuses</span>
+                                            <span>2</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
         <div v-if="ScholarshipSpecification"
@@ -182,6 +224,14 @@ const props = defineProps({
 const directives = {
     Tooltip,
 };
+
+const needBasedScholarships = computed(() => 
+    props.scholarships.filter(scholarship => scholarship.scholarshipType === 'Need-Based')
+);
+
+const oneTimeScholarships = computed(() => 
+    props.scholarships.filter(scholarship => scholarship.scholarshipType === 'One-time Payment')
+);
 
 const ScholarshipSpecification = ref(false);
 
