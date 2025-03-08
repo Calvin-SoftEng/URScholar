@@ -55,13 +55,7 @@
                                         </p>
                                         <p class="text-sm text-gray-600 dark:text-gray-300 overflow-hidden text-ellipsis line-clamp-3"
                                             style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
-                                            <span class="font-medium">Requirements Deadline:</span> {{
-                                                scholarship.requirements && scholarship.requirements.length > 0
-                                                    ? new Date(scholarship.requirements[0].deadline).toLocaleDateString('en-US',
-                                            {
-                                            year: 'numeric', month: 'long', day: 'numeric'
-                                            })
-                                            : 'No deadline set'
+                                            <span class="font-medium">Requirements Deadline:</span> {{scholarship.date_end
                                             }}
                                         </p>
                                     </div>

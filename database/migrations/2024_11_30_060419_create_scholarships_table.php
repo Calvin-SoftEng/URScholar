@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
             $table->string('scholarshipType');
+            $table->date('date_start');
+            $table->date('date_end');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
@@ -24,8 +26,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->string('requirements');
-            $table->date('application_start');
-            $table->date('deadline');
+            $table->date('date_start');
+            $table->date('date_end');
             $table->timestamps();
         });
 

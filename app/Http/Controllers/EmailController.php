@@ -47,8 +47,8 @@ class EmailController extends Controller
             $req[] = [
                 'scholarship_id' => $scholarship->id,
                 'requirements' => $requirement,
-                'application_start' => $request['application'],
-                'deadline' => $request['deadline'],
+                'date_start' => $request['application'],
+                'date_end' => $request['deadline'],
             ];
 
         }
