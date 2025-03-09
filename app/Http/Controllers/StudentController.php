@@ -466,4 +466,20 @@ class StudentController extends Controller
 
         return redirect()->route('student.scholarship');
     }
+
+    public function register()
+    {
+
+        $student = StudentRecord::where('user_id', Auth::user()->id)->first();
+        $education = EducationRecord::where('student_record_id', $student->id)->first();
+        $family = FamilyRecord::where('student_record_id', $student->id)->first();
+        $scholar = Scholar::where('email', Auth::user()->email)->first();
+
+        return Inertia::render('Student/Profile/Scholar-Profile', [
+            'student' => $student,
+            'education' => $education,
+            'family' => $family,
+            'scholar' => $scholar
+        ]);
+    }
 }

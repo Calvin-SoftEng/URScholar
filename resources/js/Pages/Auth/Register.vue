@@ -4,21 +4,30 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, router } from '@inertiajs/vue3';
+import { ref, onMounted, watchEffect, watch } from 'vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
 import { Input } from '@/Components/ui/input'
 
-const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
+const props = defineProps({
+    campus: Array,
 });
 
-const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+
+const form = ref({
+    email: '',
+    campus: '',
+});
+
+const submit = async () => {
+    try {
+        router.post(`/register/checking`, form.value);
+        //await useForm(form.value).post(`/sponsors/create-scholarship`);
+        // await form.post(`/sponsors/${props.sponsor.id}/create`)
+        // resetForm();
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
 };
 
 
@@ -26,7 +35,7 @@ const submit = () => {
 
 <template>
     <RegisterLayout>
-        <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center"> 
+        <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center">
             <!-- header login -->
             <div class="relative flex items-center justify-center">
                 <div class="absolute z-10 w-[50%] h-[50%]">
@@ -47,11 +56,21 @@ const submit = () => {
                 </div> -->
                 <div>
                     <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
-                    <Input type="text" placeholder="Enter Student ID" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
+                    <Input type="text" placeholder="Enter Email" v-model="form.email"
+                        class="w-full h-[43px] bg-gray-50 border border-gray-300" />
                 </div>
                 <div>
                     <InputLabel for="email" value="Campus" class="font-poppins font-semibold text-md mb-2" />
-                    <Input type="text" placeholder="Enter Student ID" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
+                    <Select v-model="form.campus">
+                        <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
+                            <SelectValue placeholder="Select Campus" class="text-black" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem v-for="campus in campus" :key="campus.id" :value="campus.name">
+                                {{ campus.name }}
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
                 <!-- <div>
                     <InputLabel for="email" value="Year Level" class="font-poppins font-semibold text-md mb-2" />
@@ -61,11 +80,12 @@ const submit = () => {
                     <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
                     <Input type="text" placeholder="Enter Student ID" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
                 </div> -->
-                <button class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5" :class="{ 'opacity-25': form.processing }"
-                :disabled="form.processing">REGISTER</button>
+                <button type="submit"
+                    class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5"
+                    :class="{ 'opacity-25': form.processing }" :disabled="form.processing">REGISTER</button>
             </div>
             <div class="mt-10 mb-3 font-poppins text-sm text-gray-500">
-                URScholar 2024. All rights reserved 
+                URScholar 2024. All rights reserved
             </div>
         </form>
     </RegisterLayout>

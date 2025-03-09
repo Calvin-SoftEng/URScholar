@@ -28,11 +28,21 @@
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
-                        <button @click="openScholarship"
-                            class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
-                            <span><font-awesome-icon :icon="['fas', 'user-plus']"
-                                    class="mr-2 text-sm dark:text-dtext" />Import Scholars</span>
-                        </button>
+                        <div v-if="students.length == 0" class="flex flex-col items-end">
+                            <button @click="openScholarship" disabled
+                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins"
+                                title="You need to add students before importing scholars">
+                                <span><font-awesome-icon :icon="['fas', 'user-plus']"
+                                        class="mr-2 text-sm dark:text-dtext" />Import Scholars</span>
+                            </button>
+                        </div>
+                        <div v-else>
+                            <button @click="openScholarship"
+                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
+                                <span><font-awesome-icon :icon="['fas', 'user-plus']"
+                                        class="mr-2 text-sm dark:text-dtext" />Import Scholars</span>
+                            </button>
+                        </div>
                         <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
                         <button @click="importScholars"
                             class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
@@ -169,18 +179,25 @@
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
                                     <div class="flex flex-row w-6/12 gap-3 pr-2">
-                                        <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                                        <div id="date-range-picker" date-rangepicker
+                                            class="flex items-center gap-4 w-full">
                                             <!-- Application Start Date -->
                                             <div class="flex flex-col w-full">
-                                                <label for="datepicker-range-start" class="text-sm font-medium text-gray-700 mb-1">Application Start</label>
+                                                <label for="datepicker-range-start"
+                                                    class="text-sm font-medium text-gray-700 mb-1">Application
+                                                    Start</label>
                                                 <div class="relative">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                    <div
+                                                        class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path
+                                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                         </svg>
                                                     </div>
-                                                    <input id="datepicker-range-start" name="start" type="text" 
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <input id="datepicker-range-start" name="start" type="text"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select start date">
                                                 </div>
                                             </div>
@@ -189,15 +206,21 @@
 
                                             <!-- Application Deadline -->
                                             <div class="flex flex-col w-full">
-                                                <label for="datepicker-range-end" class="text-sm font-medium text-gray-700 mb-1">Application Deadline</label>
+                                                <label for="datepicker-range-end"
+                                                    class="text-sm font-medium text-gray-700 mb-1">Application
+                                                    Deadline</label>
                                                 <div class="relative">
-                                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                    <div
+                                                        class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="currentColor" viewBox="0 0 20 20">
+                                                            <path
+                                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                         </svg>
                                                     </div>
-                                                    <input id="datepicker-range-end" name="end" type="text" 
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                                    <input id="datepicker-range-end" name="end" type="text"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select end date">
                                                 </div>
                                             </div>
@@ -307,8 +330,10 @@
                                             <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mt-2">
                                                 <div class="flex items-center space-x-2">
                                                     <!-- Checkbox to accept terms and conditions -->
-                                                    <input id="accept-terms" type="checkbox" class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                    <label for="accept-terms" class="text-sm font-medium text-gray-700 cursor-pointer">
+                                                    <input id="accept-terms" type="checkbox"
+                                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                                    <label for="accept-terms"
+                                                        class="text-sm font-medium text-gray-700 cursor-pointer">
                                                         First Condition
                                                     </label>
                                                 </div>
@@ -391,20 +416,25 @@
                 <!-- body -->
                 <div class="py-4 px-8 flex flex-col gap-3">
                     <div class="mb-4">
-                        <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                        <label for="batchSelection"
+                            class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
                             Select a Batch to Forward:
                         </label>
-                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                        <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
                             <!-- Application Start Date -->
                             <div class="flex flex-col w-full">
                                 <div class="relative">
                                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                         </svg>
                                     </div>
-                                    <input :value="selectedStart" @input="selectedStart = $event.target.value" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input :value="selectedStart" @input="selectedStart = $event.target.value"
+                                        id="datepicker-range-start" name="start" type="text" autocomplete="off"
+                                        lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         placeholder="Submission Start Date">
                                 </div>
                             </div>
@@ -415,12 +445,15 @@
                             <div class="flex flex-col w-full">
                                 <div class="relative">
                                     <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                            <path
+                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                         </svg>
                                     </div>
-                                    <input :value="selectedEnd" @input="selectedEnd = $event.target.value" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                    <input :value="selectedEnd" @input="selectedEnd = $event.target.value"
+                                        id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
+                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                         placeholder="Submission Deadline">
                                 </div>
                             </div>
@@ -497,6 +530,7 @@ const props = defineProps({
     scholars: Array, // Add scholars prop
     campuses: Array,
     courses: Array,
+    students: Array,
 });
 
 // Forward batch modal state
@@ -643,10 +677,10 @@ onMounted(() => {
     if (startInput) {
         startInput.value = selectedStart.value; // Keep the previous value
         startInput.addEventListener("changeDate", (event) => {
-            const date = new Date(event.target.value); 
-            form.value.application = date.toISOString().split("T")[0]; 
+            const date = new Date(event.target.value);
+            form.value.application = date.toISOString().split("T")[0];
             console.log("Application:", form.value.application);
-            selectedStart.value = event.target.value; 
+            selectedStart.value = event.target.value;
         });
     }
 
@@ -655,9 +689,9 @@ onMounted(() => {
     if (endInput) {
         endInput.value = selectedEnd.value; // Keep the previous value
         endInput.addEventListener("changeDate", (event) => {
-            const date = new Date(event.target.value); 
-            form.value.deadline = date.toISOString().split("T")[0]; 
-            selectedEnd.value = event.target.value; 
+            const date = new Date(event.target.value);
+            form.value.deadline = date.toISOString().split("T")[0];
+            selectedEnd.value = event.target.value;
         });
     }
 
@@ -669,23 +703,23 @@ onMounted(() => {
 
 // Ensure selected values persist
 watch(selectedStart, (newVal) => {
-document.getElementById("datepicker-range-start").value = newVal;
+    document.getElementById("datepicker-range-start").value = newVal;
 });
 
 watch(selectedEnd, (newVal) => {
-document.getElementById("datepicker-range-end").value = newVal;
+    document.getElementById("datepicker-range-end").value = newVal;
 });
 
 watch(ForwardBatchList, (newValue) => {
-if (newValue) {
-    setTimeout(() => {
-        initFlowbite(); // Initialize the modal components
-    }, 200);
-}
+    if (newValue) {
+        setTimeout(() => {
+            initFlowbite(); // Initialize the modal components
+        }, 200);
+    }
 });
 
 // Compute selected campuses dynamically
-const selectedCampuses = computed(() => 
+const selectedCampuses = computed(() =>
     campusesData.value.filter(campus => campus.selected)
 );
 

@@ -16,6 +16,7 @@ use App\Models\Payout;
 use App\Models\Scholar;
 use App\Models\SubmittedRequirements;
 use App\Models\Sponsor;
+use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -153,6 +154,8 @@ class ScholarshipController extends Controller
         $campuses = Campus::all();
         $courses = Course::all();
 
+        $students = Student::all();
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
@@ -166,6 +169,7 @@ class ScholarshipController extends Controller
             'selectedSem' => $request->input('selectedSem', ''),
             'campuses' => $campuses,
             'courses' => $courses,
+            'students' => $students,
         ]);
     }
 
