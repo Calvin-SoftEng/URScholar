@@ -13,5 +13,6 @@ class Student extends Model
         'course',
         'campus',
         'year_level',
+        'semester',
     ];
 }

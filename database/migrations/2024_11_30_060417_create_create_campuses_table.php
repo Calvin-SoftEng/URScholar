@@ -50,6 +50,7 @@ return new class extends Migration {
             $table->string('course');
             $table->string('campus');
             $table->string('year_level');
+            $table->string('semester');
             $table->timestamps();
         });
     }

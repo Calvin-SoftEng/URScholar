@@ -356,6 +356,7 @@ const props = defineProps({
     batch: Array,
     campuses: Array,
     course: Array,
+    errors: Object,
 });
 
 
@@ -493,7 +494,7 @@ const submitForm = async () => {
 
     try {
         // Send the request only when user confirms
-        router.post(`/scholarships/${props.scholarship.id}/upload`, formData, {
+        router.post(`/scholarships/${props.scholarship.id}/checking-upload`, formData, {
             preserveScroll: true,
             onSuccess: () => {
                 console.log("Scholars added to the scholarship!");

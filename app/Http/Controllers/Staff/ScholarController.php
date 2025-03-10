@@ -126,6 +126,25 @@ class ScholarController extends Controller
         );
     }
 
+    public function checking(Request $request, Scholarship $scholarship)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|file|mimes:csv,txt|max:2048',
+            'semester' => 'required',
+            'schoolyear' => 'required',
+        ]);
+
+        // dd($validator);
+
+        $checkStudent = Student::where('semester', $request->semester)
+            ->get();
+
+        if ($checkStudent) {
+            return back()->withErrors([
+                'student' => 'Update the student information first before adding scholars.',
+            ])->withInput();
+        }
+    }
     public function upload(Request $request, Scholarship $scholarship)
     {
         $validator = Validator::make($request->all(), [

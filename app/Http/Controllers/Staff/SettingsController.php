@@ -115,6 +115,7 @@ class SettingsController extends Controller
                     'course' => $rowData['course'],
                     'campus' => $rowData['campus'],
                     'year_level' => $rowData['year_level'],
+                    'semester' => $rowData['semester'],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];

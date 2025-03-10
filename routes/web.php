@@ -123,6 +123,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 
     Route::post('/scholarships/{scholarship}/manual-upload', [ScholarController::class, 'manual'])->name('scholars.manual');
+
+    Route::post('/scholarships/{scholarship}/checking-upload', [ScholarController::class, 'checking'])->name('scholars.checking');
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');
     Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
 
