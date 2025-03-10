@@ -52,6 +52,24 @@ class RegisteredUserController extends Controller
             // Generate random password
             $password = Str::random(8);
 
+            $userExists = User::where('email', $studentEmail->email)->exists();
+
+            if ($userExists) {
+                return back()->withErrors([
+                    'existing' => 'You have already registered for the scholarship program. Please check your email for login credentials.',
+                ])->withInput();
+            }
+
+            // Create user account
+            User::create([
+                'name' => $studentEmail['first_name'] . ' ' . $studentEmail['last_name'],
+                'email' => $studentEmail['email'],
+                'first_name' => $studentEmail['first_name'],
+                'last_name' => $studentEmail['last_name'],
+                'campus' => $studentEmail['campus'],
+                'password' => Hash::make($password),
+            ]);
+
             $mailData = [
                 'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
                 'body' => "Dear " . $studentEmail['first_name'] . ",\n\n" .
@@ -80,6 +98,66 @@ class RegisteredUserController extends Controller
             // If email and campus don't match, return with error message
             return back()->withErrors([
                 'email' => 'The provided email and campus do not match our records.',
+            ])->withInput();
+        }
+    }
+
+    public function resend(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'campus' => 'required',
+        ]);
+
+        // Check if student exists with the provided email
+        $student = Student::where('email', $validated['email'])->first();
+
+        // Check if student exists and belongs to the selected campus
+        if ($student && $student->campus === $validated['campus']) {
+            // Generate random password
+            $password = Str::random(8);
+
+            // Find and update user account if it exists
+            $user = User::where('email', $validated['email'])->first();
+
+            if ($user) {
+                $user->update([
+                    'password' => Hash::make($password),
+                ]);
+            } else {
+                // Create new user if doesn't exist
+                User::create([
+                    'name' => $student->first_name . ' ' . $student->last_name,
+                    'email' => $student->email,
+                    'password' => Hash::make($password),
+                    // Add any other required fields
+                ]);
+            }
+
+            $mailData = [
+                'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                'body' => "Dear " . $student->first_name . ",\n\n" .
+                    "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
+                    "Here are your login credentials:\n\n" .
+                    "Email: " . $student->email . "\n" .
+                    "Password: " . $password . "\n\n" .
+                    "Next Steps:\n" .
+                    " - Log in to your account using the details above.\n" .
+                    " - Complete your application by submitting the required documents.\n" .
+                    " - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                    "Application Deadline: " . ($request->has('deadline') ? $request->deadline : 'Please check the website for details') . "\n\n" .
+                    "Click the following link to access your portal: " .
+                    "https://yourscholarshipportal.com/login\n\n"
+            ];
+
+            // Send email
+            Mail::to($student->email)->send(new SendEmail($mailData));
+
+            return back()->with('success', 'Registration email sent successfully!');
+        } else {
+            // If email and campus don't match, return with error message
+            return back()->withErrors([
+                'credentials' => 'The provided email and campus do not match our records.',
             ])->withInput();
         }
     }
