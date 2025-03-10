@@ -205,10 +205,9 @@ class ScholarController extends Controller
 
             if(!$duplicateStudents) {
                 return back()->withErrors([
-                    'student' => 'Pang ' . $request->semester . ' sem lang ito',
+                    'student' => 'Update mo naman ako lods',
                 ])->withInput();
             }
-
 
             foreach ($records as $record) {
                 $existingScholar = Scholar::where('scholarship_id', $scholarship->id)
