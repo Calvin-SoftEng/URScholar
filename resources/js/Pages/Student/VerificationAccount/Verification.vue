@@ -79,9 +79,10 @@
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
-                                            <Label for="email">First Name</Label>
+                                            <Label for="email"><span class="text-red-900 font-bold">*</span>First Name</Label>
                                             <Input id="email" type="text" placeholder="First Name"
                                                 v-model="form.first_name" class="w-full border border-gray-200" />
+                                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="mt-1" />
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
@@ -941,6 +942,11 @@ const df = new DateFormatter('en-US', {
 })
 
 const user = usePage().props.auth.user;
+
+const props = defineProps({
+    errors: Object,
+    flash: Object,
+});
 
 const form = ref({
     name: user.name,
