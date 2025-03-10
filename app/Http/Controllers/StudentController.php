@@ -52,8 +52,8 @@ class StudentController extends Controller
 
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
-            'education.elementary.years' => ['', 'numeric'],
-            'education.elementary.honors' => ['', 'string'],
+            'education.elementary.years' => ['required', 'numeric'],
+            'education.elementary.honors' => ['required', 'string'],
             'junior.name' => ['', 'string',],
             'junior.years' => ['', 'numeric'],
             'junior.honors' => ['', 'string'],
@@ -71,7 +71,7 @@ class StudentController extends Controller
             'postgrad.honors' => ['', 'string'],
 
             //Family Information
-            'mother.first_name' => ['', 'string'],
+            'mother.first_name' => ['required', 'string'],
             'mother.middle_name' => ['', 'string'],
             'mother.last_name' => ['', 'string'],
             'mother.age' => ['', 'string'],

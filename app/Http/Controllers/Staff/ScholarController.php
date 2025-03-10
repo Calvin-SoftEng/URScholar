@@ -203,28 +203,34 @@ class ScholarController extends Controller
                 }
             }
 
-            if($duplicateStudents) {
-                foreach ($records as $record) {
-                    $existingScholar = Scholar::where('scholarship_id', $scholarship->id)
-                        ->where('last_name', $record['LASTNAME'] ?? '')
-                        ->where('first_name', $record['FIRSTNAME'] ?? '')
-                        ->where('middle_name', $record['MIDDLENAME'] ?? '')
-                        ->first();
-    
-                    if ($existingScholar) {
-                        $duplicateScholars[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
-                    }
+            if(!$duplicateStudents) {
+                return back()->withErrors([
+                    'student' => 'Pang ' . $request->semester . ' sem lang ito',
+                ])->withInput();
+            }
+
+
+            foreach ($records as $record) {
+                $existingScholar = Scholar::where('scholarship_id', $scholarship->id)
+                    ->where('last_name', $record['LASTNAME'] ?? '')
+                    ->where('first_name', $record['FIRSTNAME'] ?? '')
+                    ->where('middle_name', $record['MIDDLENAME'] ?? '')
+                    ->where('year_level', $record['YEAR LEVEL'] ?? '')
+                    ->first();
+
+                if ($existingScholar) {
+                    $duplicateScholars[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
                 }
-    
-                // If duplicates found, return error message
-                if (count($duplicateScholars) > 0) {
-                    $duplicateList = implode(', ', array_slice($duplicateScholars, 0, 5));
-                    $remainingCount = count($duplicateScholars) > 5 ? ' and ' . (count($duplicateScholars) - 5) . ' more' : '';
-    
-                    return back()->withErrors([
-                        'student' => 'CSV contains scholars already in the system: ' . $duplicateList . $remainingCount . '. Please remove duplicate entries and try again.',
-                    ])->withInput();
-                }
+            }
+
+            // If duplicates found, return error message
+            if (count($duplicateScholars) > 0) {
+                $duplicateList = implode(', ', array_slice($duplicateScholars, 0, 5));
+                $remainingCount = count($duplicateScholars) > 5 ? ' and ' . (count($duplicateScholars) - 5) . ' more' : '';
+
+                return back()->withErrors([
+                    'student' => 'CSV contains scholars already in the system: ' . $duplicateList . $remainingCount . '. Please remove duplicate entries and try again.',
+                ])->withInput();
             }
 
             $batch = Batch::create([

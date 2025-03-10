@@ -29,7 +29,7 @@
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
                         <div v-if="students.length == 0" class="flex flex-col items-end">
-                            <button @click="openScholarship" disabled v-tooltip.left="'Import updated List'"
+                            <button disabled v-tooltip.left="'Import updated List'"
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins"
                                 title="You need to add students before importing scholars">
                                 <span><font-awesome-icon :icon="['fas', 'user-plus']"
@@ -37,7 +37,7 @@
                             </button>
                         </div>
                         <div v-else>
-                            <button @click="openScholarship" v-tooltip.left="'Import Updated List'"
+                            <button @click="openScholarship"
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins">
                                 <span><font-awesome-icon :icon="['fas', 'user-plus']"
                                         class="mr-2 text-sm dark:text-dtext" />Import Scholars</span>
