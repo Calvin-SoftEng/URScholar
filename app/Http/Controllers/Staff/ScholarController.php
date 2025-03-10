@@ -139,11 +139,19 @@ class ScholarController extends Controller
         $checkStudent = Student::where('semester', $request->semester)
             ->get();
 
-        if ($checkStudent) {
+        if (!$checkStudent) {
             return back()->withErrors([
                 'student' => 'Update the student information first before adding scholars.',
             ])->withInput();
         }
+        else {
+            return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
+                ->with('flash', [
+                    'type' => 'success',
+                    'message' => "Successfully imported"
+                ]);
+        }
+
     }
     public function upload(Request $request, Scholarship $scholarship)
     {
@@ -160,6 +168,15 @@ class ScholarController extends Controller
             ], 422);
         }
 
+        $checkStudent = Student::where('semester', $request->semester)
+            ->get();
+
+        if (!$checkStudent) {
+            return back()->withErrors([
+                'student' => 'Update the student information first before adding scholars.',
+            ])->withInput();
+        }
+        
         try {
             $file = $request->file('file');
             $csv = Reader::createFromPath($file->getPathname(), 'r');
@@ -167,15 +184,40 @@ class ScholarController extends Controller
 
             $firstRecord = $csv->fetchOne();
 
+            // Get all records
+            $records = iterator_to_array($csv->getRecords());
+
+            // Check for existing scholars in the system
+            $duplicateScholars = [];
+
+            foreach ($records as $record) {
+                $existingScholar = Scholar::where('scholarship_id', $scholarship->id)
+                    ->where('last_name', $record['LASTNAME'] ?? '')
+                    ->where('first_name', $record['FIRSTNAME'] ?? '')
+                    ->where('middle_name', $record['MIDDLENAME'] ?? '')
+                    ->first();
+
+                if ($existingScholar) {
+                    $duplicateScholars[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
+                }
+            }
+
+            // If duplicates found, return error message
+            if (count($duplicateScholars) > 0) {
+                $duplicateList = implode(', ', array_slice($duplicateScholars, 0, 5));
+                $remainingCount = count($duplicateScholars) > 5 ? ' and ' . (count($duplicateScholars) - 5) . ' more' : '';
+
+                return back()->withErrors([
+                    'student' => 'CSV contains scholars already in the system: ' . $duplicateList . $remainingCount . '. Please remove duplicate entries and try again.',
+                ])->withInput();
+            }
+
             $batch = Batch::create([
                 'scholarship_id' => $scholarship->id,
                 'batch_no' => $firstRecord['BATCH NO.'],
                 'school_year' => $request->schoolyear,
                 'semester' => $request->semester,
             ]);
-
-            // Get all records after creating the batch
-            $records = iterator_to_array($csv->getRecords());
 
             // Get the next available urscholar_id
             $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')
@@ -299,14 +341,14 @@ class ScholarController extends Controller
         ]);
 
         $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')
-                ->orderByRaw('CAST(SUBSTRING(urscholar_id, 5) AS UNSIGNED) DESC')
-                ->value('urscholar_id');
+            ->orderByRaw('CAST(SUBSTRING(urscholar_id, 5) AS UNSIGNED) DESC')
+            ->value('urscholar_id');
 
-            $nextId = 1; // Default starting number
-            if ($highestId) {
-                $currentNumber = (int) substr($highestId, 4);
-                $nextId = $currentNumber + 1;
-            }
+        $nextId = 1; // Default starting number
+        if ($highestId) {
+            $currentNumber = (int) substr($highestId, 4);
+            $nextId = $currentNumber + 1;
+        }
 
         $scholar = Scholar::create([
             'grant' => $request->grant,
@@ -330,10 +372,10 @@ class ScholarController extends Controller
         ]);
 
         dd($scholar);
-    
+
         // You might want to handle any relationships here
         // For example, attaching the scholar to the scholarship if needed
-    
+
         return redirect()->back()->with('success', 'Scholar added successfully!');
 
     }
