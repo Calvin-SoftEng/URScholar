@@ -74,12 +74,37 @@ class RegisteredUserController extends Controller
             // Update or create user account here if needed
             // You might want to save the hashed password to your users table
 
-            return redirect(route('dashboard', absolute: false))->with('success', 'Registration email sent successfully!');
+            //return redirect(route('dashboard', absolute: false))->with('success', 'Registration email sent successfully!');
+            return back()->withErrors([
+                'credentials' => 'The provided email and campus combination was not found in our system. Please verify your information or contact your campus administrator for assistance.',
+            ])->withInput();
         } else {
             // If email and campus don't match, return with error message
             return back()->withErrors([
                 'email' => 'The provided email and campus do not match our records.',
             ])->withInput();
         }
+    }
+
+    public function checkCredentials(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'campus' => 'required',
+        ]);
+
+        // Check if student exists with the provided email
+        $studentEmail = Student::where('email', $request->email)->first();
+
+        // Check if student exists and belongs to the selected campus
+        if (!$studentEmail || $studentEmail->campus !== $request->campus) {
+            // If email doesn't exist or campus doesn't match, return with error message
+            return back()->withErrors([
+                'credentials' => 'The provided email and campus combination was not found in our system. Please verify your information or contact your campus administrator for assistance.',
+            ])->withInput();
+        }
+
+        // If credentials are valid, proceed with the registration process
+        return redirect()->route('register.proceed', ['email' => $request->email, 'campus' => $request->campus]);
     }
 }

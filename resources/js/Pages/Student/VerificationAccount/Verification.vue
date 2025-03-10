@@ -145,7 +145,7 @@
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
                                             <Label for="email">Sex</Label>
-                                            <Select v-model="form.sex">
+                                            <Select v-model="form.gender">
                                                 <SelectTrigger class="w-full">
                                                     <SelectValue placeholder="Select Sex" />
                                                 </SelectTrigger>
@@ -954,7 +954,7 @@ const form = ref({
     birthdate: '',
     birthplace: '',
     age: '',
-    sex: '',
+    gender: '',
     civil_status: '',
     religion: '',
     guardian_name: '',

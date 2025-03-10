@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('bday')->nullable();
             $table->string('placebirth')->nullable();
             $table->integer('age')->nullable();
-            $table->string('sex')->nullable();
+            $table->string('gender')->nullable();
             $table->string('civil')->nullable();
             $table->string('religion')->nullable();
             $table->string('guardian')->nullable();

@@ -11,8 +11,8 @@ import { Input } from '@/Components/ui/input'
 
 const props = defineProps({
     campus: Array,
+    errors: Object,
 });
-
 
 const form = ref({
     email: '',
@@ -29,8 +29,6 @@ const submit = async () => {
         console.error('Error submitting form:', error);
     }
 };
-
-
 </script>
 
 <template>
@@ -50,14 +48,11 @@ const submit = async () => {
                     <p class="font-extrabold font-sora text-2xl">Register to URScholar</p>
                     <span class="max-w-[90%] text-sm">Enter the needed details in order to create your account </span>
                 </div>
-                <!-- <div>
-                    <InputLabel for="email" value="Full Name" class="font-poppins font-semibold text-md mb-2" />
-                    <Input type="text" placeholder="Enter Student ID" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
-                </div> -->
                 <div>
                     <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
                     <Input type="text" placeholder="Enter Email" v-model="form.email"
                         class="w-full h-[43px] bg-gray-50 border border-gray-300" />
+                    <InputError v-if="errors?.email" :message="errors.email" class="mt-1" />
                 </div>
                 <div>
                     <InputLabel for="email" value="Campus" class="font-poppins font-semibold text-md mb-2" />
@@ -71,15 +66,16 @@ const submit = async () => {
                             </SelectItem>
                         </SelectContent>
                     </Select>
+                    <InputError v-if="errors?.campus" :message="errors.campus" class="mt-1" />
                 </div>
-                <!-- <div>
-                    <InputLabel for="email" value="Year Level" class="font-poppins font-semibold text-md mb-2" />
-                    <Input type="text" placeholder="Enter Student ID" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
+
+                <!-- Error message for credentials mismatch -->
+                <div v-if="errors?.credentials" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p class="text-red-600 text-sm">{{ errors.credentials }}</p>
+                    <p class="text-gray-600 text-xs mt-1">If you believe this is an error, please contact your campus
+                        scholarship coordinator.</p>
                 </div>
-                <div>
-                    <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
-                    <Input type="text" placeholder="Enter Student ID" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
-                </div> -->
+
                 <button type="submit"
                     class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5"
                     :class="{ 'opacity-25': form.processing }" :disabled="form.processing">REGISTER</button>
