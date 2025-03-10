@@ -12,6 +12,7 @@ import { Input } from '@/Components/ui/input'
 const props = defineProps({
     campus: Array,
     errors: Object,
+    flash: Object,
 });
 
 const form = ref({
@@ -72,6 +73,11 @@ const submit = async () => {
                 <!-- Error message for credentials mismatch -->
                 <div v-if="errors?.credentials" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
                     <p class="text-red-600 text-sm">{{ errors.credentials }}</p>
+                    <p class="text-gray-600 text-xs mt-1">If you believe this is an error, please contact your campus
+                        scholarship coordinator.</p>
+                </div>
+                <div v-if="flash?.success" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p class="text-red-600 text-sm">{{ flash.success }}</p>
                     <p class="text-gray-600 text-xs mt-1">If you believe this is an error, please contact your campus
                         scholarship coordinator.</p>
                 </div>

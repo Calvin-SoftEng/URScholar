@@ -75,9 +75,7 @@ class RegisteredUserController extends Controller
             // You might want to save the hashed password to your users table
 
             //return redirect(route('dashboard', absolute: false))->with('success', 'Registration email sent successfully!');
-            return back()->withErrors([
-                'credentials' => 'The provided email and campus combination was not found in our system. Please verify your information or contact your campus administrator for assistance.',
-            ])->withInput();
+            return back()->with('success', 'Registration email sent successfully!');
         } else {
             // If email and campus don't match, return with error message
             return back()->withErrors([
