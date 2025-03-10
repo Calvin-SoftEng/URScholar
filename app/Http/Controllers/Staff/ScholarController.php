@@ -143,13 +143,12 @@ class ScholarController extends Controller
             return back()->withErrors([
                 'student' => 'Update the student information first before adding scholars.',
             ])->withInput();
-        }
-        else {
+        } else {
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
-                    'type' => 'success',
-                    'message' => "Successfully imported"
-                ]);
+                        'type' => 'success',
+                        'message' => "Successfully imported"
+                    ]);
         }
 
     }
@@ -176,7 +175,7 @@ class ScholarController extends Controller
                 'student' => 'Update the student information first before adding scholars.',
             ])->withInput();
         }
-        
+
         try {
             $file = $request->file('file');
             $csv = Reader::createFromPath($file->getPathname(), 'r');
@@ -190,26 +189,42 @@ class ScholarController extends Controller
             // Check for existing scholars in the system
             $duplicateScholars = [];
 
+            $duplicateStudents = [];
+
+
             foreach ($records as $record) {
-                $existingScholar = Scholar::where('scholarship_id', $scholarship->id)
-                    ->where('last_name', $record['LASTNAME'] ?? '')
+                $existingStudent = Student::where('last_name', $record['LASTNAME'] ?? '')
                     ->where('first_name', $record['FIRSTNAME'] ?? '')
-                    ->where('middle_name', $record['MIDDLENAME'] ?? '')
+                    ->where('year_level', $record['YEAR LEVEL'] ?? '')
                     ->first();
 
-                if ($existingScholar) {
-                    $duplicateScholars[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
+                if ($existingStudent) {
+                    $duplicateStudents[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
                 }
             }
 
-            // If duplicates found, return error message
-            if (count($duplicateScholars) > 0) {
-                $duplicateList = implode(', ', array_slice($duplicateScholars, 0, 5));
-                $remainingCount = count($duplicateScholars) > 5 ? ' and ' . (count($duplicateScholars) - 5) . ' more' : '';
-
-                return back()->withErrors([
-                    'student' => 'CSV contains scholars already in the system: ' . $duplicateList . $remainingCount . '. Please remove duplicate entries and try again.',
-                ])->withInput();
+            if($duplicateStudents) {
+                foreach ($records as $record) {
+                    $existingScholar = Scholar::where('scholarship_id', $scholarship->id)
+                        ->where('last_name', $record['LASTNAME'] ?? '')
+                        ->where('first_name', $record['FIRSTNAME'] ?? '')
+                        ->where('middle_name', $record['MIDDLENAME'] ?? '')
+                        ->first();
+    
+                    if ($existingScholar) {
+                        $duplicateScholars[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
+                    }
+                }
+    
+                // If duplicates found, return error message
+                if (count($duplicateScholars) > 0) {
+                    $duplicateList = implode(', ', array_slice($duplicateScholars, 0, 5));
+                    $remainingCount = count($duplicateScholars) > 5 ? ' and ' . (count($duplicateScholars) - 5) . ' more' : '';
+    
+                    return back()->withErrors([
+                        'student' => 'CSV contains scholars already in the system: ' . $duplicateList . $remainingCount . '. Please remove duplicate entries and try again.',
+                    ])->withInput();
+                }
             }
 
             $batch = Batch::create([
@@ -307,9 +322,9 @@ class ScholarController extends Controller
 
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
-                    'type' => 'success',
-                    'message' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
-                ]);
+                        'type' => 'success',
+                        'message' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
+                    ]);
 
         } catch (\Exception $e) {
             return response()->json([
