@@ -176,6 +176,12 @@ class ScholarController extends Controller
             ])->withInput();
         }
 
+        if ($checkStudent != $request->semester) {
+            return back()->withErrors([
+                'student' => 'pang gantong sem lang to ya',
+            ])->withInput();
+        }
+
         try {
             $file = $request->file('file');
             $csv = Reader::createFromPath($file->getPathname(), 'r');
