@@ -31,7 +31,7 @@
 
                 <div class="w-full h-full">
                     <Adding :scholarship="scholarship" :scholars="scholars" :schoolyear="schoolyear" :selectedSem="selectedSem" :batch="batch"
-                    :campuses="campuses" :course="course"/>
+                    :campuses="campuses" :course="course" :errors="errors"/>
                 </div>
                 
 
@@ -131,6 +131,7 @@ const props = defineProps({
     batch: Array,
     campuses: Array,
     course: Array,
+    errors: Object,
 });
 
 const formData = ref({
