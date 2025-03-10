@@ -51,7 +51,7 @@ class StudentController extends Controller
             'relationship' => ['required', 'string', 'max:255'],
 
             //Educaiton Information
-            'education.elementary.name' => ['', 'string'],
+            'education.elementary.name' => ['required', 'string'],
             'education.elementary.years' => ['', 'numeric'],
             'education.elementary.honors' => ['', 'string'],
             'junior.name' => ['', 'string',],

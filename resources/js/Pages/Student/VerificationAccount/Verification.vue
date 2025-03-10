@@ -79,20 +79,28 @@
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
-                                            <Label for="email"><span class="text-red-900 font-bold">*</span>First Name</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>First Name</Label> 
+                                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="items-center flex text-xs" />
+                                            </div>
                                             <Input id="email" type="text" placeholder="First Name"
                                                 v-model="form.first_name" class="w-full border border-gray-200" />
-                                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="mt-1" />
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
-                                            <Label for="email">Last Name</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Last Name</Label> 
+                                                <InputError v-if="errors?.last_name" :message="errors.last_name" class="items-center flex text-xs" />
+                                            </div>
                                             <Input id="email" type="text" placeholder="Last Name"
                                                 v-model="form.last_name" class="w-full border-gray-200" />
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Middle Name</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Middle Name</Label> 
+                                                <InputError v-if="errors?.middle_name" :message="errors.middle_name" class="items-center flex text-xs" />
+                                            </div>
                                             <Input id="email" type="text" placeholder="Middle Name"
                                                 v-model="form.middle_name" class="w-full border-gray-200" />
                                         </div>
@@ -120,7 +128,10 @@
                                         </div> -->
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="birthdate">Date of Birth</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Birthdate</Label> 
+                                                <InputError v-if="errors?.birthdate" :message="errors.birthdate" class="items-center flex text-xs" />
+                                            </div>
                                             <div class="relative max-w-sm">
                                             <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                                 <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -133,19 +144,28 @@
                                         
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Place of Birth</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Place of Birth</Label> 
+                                                <InputError v-if="errors?.birthplace" :message="errors.birthplace" class="items-center flex text-xs" />
+                                            </div>
                                             <Input id="email" type="text" placeholder="Place of Birth"
                                                 v-model="form.birthplace" class="w-full border-gray-200" />
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Age</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Age</Label> 
+                                                <InputError v-if="errors?.age" :message="errors.age" class="items-center flex text-xs" />
+                                            </div>
                                             <Input id="email" type="number" placeholder="Age" v-model="form.age"
                                                 class="w-full border-gray-200" />
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Sex</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Sex</Label> 
+                                                <InputError v-if="errors?.gender" :message="errors.gender" class="items-center flex text-xs" />
+                                            </div>
                                             <Select v-model="form.gender">
                                                 <SelectTrigger class="w-full">
                                                     <SelectValue placeholder="Select Sex" />
@@ -165,7 +185,10 @@
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Civil Status</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Civil Status</Label> 
+                                                <InputError v-if="errors?.civil_status" :message="errors.civil_status" class="items-center flex text-xs" />
+                                            </div>
                                             <Select v-model="form.civil_status">
                                                 <SelectTrigger class="w-full">
                                                     <SelectValue placeholder="Select Civil Status" />
@@ -191,7 +214,10 @@
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Guardian Name</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Guardian Name</Label> 
+                                                <InputError v-if="errors?.guardian_name" :message="errors.guardian_name" class="items-center flex text-xs" />
+                                            </div>
                                             <Input id="email" type="text" placeholder="Guardian Name"
                                                 v-model="form.guardian_name" class="w-full border-gray-200" />
                                         </div>
@@ -234,7 +260,8 @@
                                         </div>
 
                                         <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Name of School, College or University</Label>
+
+                                            <!-- <Label for="email">Name of School, College or University</Label> -->
                                             <Input id="email" type="text" placeholder="Elementary School"
                                                 v-model="form.education.elementary.name" class="w-full border-gray-200" />
                                         </div>
@@ -428,7 +455,10 @@
                                         </div>
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">First Name</Label>
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>First Name</Label> 
+                                                <InputError v-if="errors?.guardian_name" :message="errors.guardian_name" class="items-center flex text-xs" />
+                                            </div>
                                             <Input id="email" type="text" placeholder="First Name"
                                                 v-model="form.mother.first_name"
                                                 class="w-full border border-gray-200" />
@@ -859,14 +889,20 @@
                                                 <div class="w-[70%] flex flex-col gap-3">
                                                     <div class="grid grid-cols-2 gap-3">
                                                         <div class="flex flex-col gap-1.5">
-                                                            <Label for="first_name">First Name</Label>
+                                                            <div class="flex flex-row items-center gap-2">
+                                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>First Name</Label> 
+                                                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="items-center flex text-xs" />
+                                                            </div>
                                                             <Input id="first_name" type="text" placeholder="First Name"
                                                                 v-model="form.first_name"
                                                                 class="w-full border border-gray-200" />
                                                         </div>
 
                                                         <div class="flex flex-col gap-1.5">
-                                                            <Label for="last_name">Last Name</Label>
+                                                            <div class="flex flex-row items-center gap-2">
+                                                                <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Last Name</Label> 
+                                                                <InputError v-if="errors?.last_name" :message="errors.last_name" class="items-center flex text-xs" />
+                                                            </div>
                                                             <Input id="last_name" type="text" placeholder="Last Name"
                                                                 v-model="form.last_name"
                                                                 class="w-full border border-gray-200" />
@@ -874,20 +910,29 @@
                                                     </div>
 
                                                     <div class="flex flex-col gap-1.5">
-                                                        <Label for="email">Email</Label>
+                                                        <div class="flex flex-row items-center gap-2">
+                                                            <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Email</Label> 
+                                                            <InputError v-if="errors?.email" :message="errors.email" class="items-center flex text-xs" />
+                                                        </div>
                                                         <Input id="email" type="email" placeholder="Email"
                                                             v-model="form.email" readonly
                                                             class="w-full border border-gray-200" />
                                                     </div>
 
                                                     <div class="flex flex-col gap-1.5">
-                                                        <Label for="password">Password</Label>
+                                                        <div class="flex flex-row items-center gap-2">
+                                                            <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Password</Label> 
+                                                            <InputError v-if="errors?.password" :message="errors.password" class="items-center flex text-xs" />
+                                                        </div>
                                                         <Input id="password" type="text" placeholder="Password"
                                                             v-model="form.password" class="w-full border-gray-200" />
                                                     </div>
 
                                                     <div class="flex flex-col gap-1.5">
-                                                        <Label for="confirm_password">Confirm Password</Label>
+                                                        <div class="flex flex-row items-center gap-2">
+                                                            <Label for="email" class="items-center flex"><span class="text-red-900 font-bold mr-1">*</span>Confirm Password</Label> 
+                                                            <InputError v-if="errors?.confirm_password" :message="errors.confirm_password" class="items-center flex text-xs" />
+                                                        </div>
                                                         <Input id="confirm_password" type="text"
                                                             placeholder="Confirm Password"
                                                             v-model="form.confirm_password"
@@ -927,6 +972,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import { Calendar } from '@/Components/ui/calendar'
+import InputError from '@/Components/InputError.vue';
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover'
 import { cn } from '@/lib/utils'
