@@ -22,7 +22,7 @@
                             <label for="default-search"
                                 class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                             <div class="relative w-full">
-                                <input type="search" id="search-dropdown"
+                                <input type="search" id="search-dropdown" v-model="searchQuery"
                                     class="p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700  dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                                     placeholder="Search" required />
                                 <button type="submit"
@@ -122,7 +122,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <template v-for="student in students" :key="student.id">
+                                <template v-for="student in paginatedStudents" :key="student.id">
                                     <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
                                         <td class="px-6 py-4">
                                             {{ student.first_name }} {{ student.last_name }}
@@ -147,6 +147,32 @@
 
                             </tbody>
                         </table>
+                    </div>
+                    <!-- Pagination controls -->
+                    <div v-if="totalStudents > itemsPerPage" class="mt-5 flex justify-between items-center">
+                        <span class="text-sm text-gray-700 dark:text-gray-400">
+                        Showing
+                        <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
+                        to
+                        <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
+                        of
+                        <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span>
+                        Scholars
+                        </span>
+                        <div class="inline-flex">
+                        <button @click="prevPage" :disabled="currentPage === 1" :class="[
+                            'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                            currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+                        ]">
+                            Prev
+                        </button>
+                        <button @click="nextPage" :disabled="currentPage === totalPages" :class="[
+                            'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                            currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+                        ]">
+                            Next
+                        </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -214,7 +240,7 @@
 
 <script setup>
 import { useForm, Link, router } from '@inertiajs/vue3';
-import { ref, watchEffect } from 'vue';
+import { ref, watchEffect, computed, watch } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { usePage } from "@inertiajs/vue3";
@@ -223,7 +249,7 @@ import { DatePicker } from 'primevue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
 
-defineProps({
+const props = defineProps({
     sponsors: Array,
     students: Array,
 });
@@ -359,6 +385,63 @@ watchEffect(() => {
             toastVisible.value = false;
         }, 3000);
     }
+});
+
+// Pagination state
+const currentPage = ref(1);
+const itemsPerPage = 10;
+const searchQuery = ref('');
+
+// Computed property for filtering students
+const filteredStudents = computed(() => {
+  const allStudents = props.students || [];
+
+  const query = searchQuery.value.toLowerCase();
+  return allStudents.filter(student =>
+    student.first_name?.toLowerCase().includes(query) ||
+    student.last_name?.toLowerCase().includes(query) ||
+    student.middle_name?.toLowerCase().includes(query) ||
+    student.email?.toLowerCase().includes(query) ||
+    student.course?.toLowerCase().includes(query) ||
+    student.campus?.toLowerCase().includes(query) ||
+    student.grant?.toLowerCase().includes(query) ||
+    student.urscholar_id?.toLowerCase().includes(query)
+  );
+});
+
+// Computed properties for pagination
+const totalStudents = computed(() => filteredStudents.value.length);
+const totalPages = computed(() => Math.ceil(totalStudents.value / itemsPerPage));
+
+const paginatedStudents = computed(() => {
+  const startIdx = (currentPage.value - 1) * itemsPerPage;
+  return filteredStudents.value.slice(startIdx, startIdx + itemsPerPage);
+});
+
+const startIndex = computed(() =>
+  totalStudents.value === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1
+);
+
+const endIndex = computed(() =>
+  Math.min(currentPage.value * itemsPerPage, totalStudents.value)
+);
+
+// Pagination methods
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+  }
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+  }
+};
+
+// Reset pagination when search changes
+watch(searchQuery, () => {
+  currentPage.value = 1;
 });
 
 </script>
