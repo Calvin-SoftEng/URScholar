@@ -171,16 +171,16 @@ class ScholarController extends Controller
             ->get();
 
 
-        if (!$checkSemester) {
-            return back()->withErrors([
-                'student' => 'pang gantong ' . $request->semester .' sem lang to ya',
-            ])->withInput();
-        }
-        else {
-            return back()->withErrors([
-                'student' => $request->semester . ' sem yan no?',
-            ])->withInput();
-        }
+        // if (!$checkSemester) {
+        //     return back()->withErrors([
+        //         'student' => 'pang gantong ' . $request->semester .' sem lang to ya',
+        //     ])->withInput();
+        // }
+        // else {
+        //     return back()->withErrors([
+        //         'student' => $request->semester . ' sem yan no?',
+        //     ])->withInput();
+        // }
 
         try {
             $file = $request->file('file');
@@ -214,11 +214,11 @@ class ScholarController extends Controller
                     'student' => 'Update mo naman ako lods',
                 ])->withInput();
             }
-            else {
-                return back()->withErrors([
-                    'student' => 'pwede par',
-                ])->withInput();
-            }
+            // else {
+            //     return back()->withErrors([
+            //         'student' => 'pwede par',
+            //     ])->withInput();
+            // }
 
             foreach ($records as $record) {
                 $existingScholar = Scholar::where('scholarship_id', $scholarship->id)

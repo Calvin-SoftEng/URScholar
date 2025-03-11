@@ -43,7 +43,7 @@
                                 <!-- Requirements upload section -->
                                 <div class="grid grid-cols-2 gap-4">
                                     <div v-for="(requirement, index) in requirements" :key="requirement.id"
-                                        class="border rounded-md shadow p-4">
+                                        class="border rounded-md shadow p-4 bg-white">
                                         <div class="mb-2">
                                             <span class="font-medium text-gray-700">{{ requirement.requirements
                                                 }}</span>
@@ -53,7 +53,7 @@
                                             <input type="file"
                                                 @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
                                                 :id="'file_input_' + requirement.id"
-                                                class="block w-full text-sm text-blue-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                                class="block w-full text-sm text-blue-900 border border-gray-300 rounded-lg cursor-pointer bg-white 
                                             dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
 
                                             <!-- File preview -->
