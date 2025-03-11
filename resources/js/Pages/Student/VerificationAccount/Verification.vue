@@ -282,6 +282,7 @@
                                             </h3>
                                             <div
                                                 class="pl-2 w-full h-0.5 bg-gray-200 justify-center items-center rounded-lg">
+                                                {{ props.errors['education.elementary'] }}
                                             </div>
                                         </div>
 
@@ -298,8 +299,6 @@
                                             <Input id="email" type="text" placeholder="Ex. 2016-2020"
                                                 v-model="form.education.elementary.years"
                                                 class="w-full border-gray-200" />
-                                            <InputError v-if="errors?.education" :message="errors.education"
-                                                class="items-center flex text-xs" />
                                         </div>
 
                                         <div class=" max-w-sm items-center gap-1.5">
@@ -315,7 +314,9 @@
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
                                                 Junior High School
                                             </h3>
-                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg">
+                                                {{ props.errors['education.junior'] }}
+                                            </div>
                                         </div>
 
                                         <div class=" max-w-sm items-center gap-1.5">
@@ -495,8 +496,8 @@
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="email" class="items-center flex"><span
                                                         class="text-red-900 font-bold mr-1">*</span>First Name</Label>
-                                                        <InputError v-if="errors?.education" :message="errors.education"
-                                                        class="items-center flex text-xs" />
+                                                <InputError v-if="errors?.education" :message="errors.education"
+                                                    class="items-center flex text-xs" />
                                             </div>
                                             <Input id="email" type="text" placeholder="First Name"
                                                 v-model="form.mother.first_name"
@@ -706,6 +707,8 @@
                                                         class="border-b border-gray-400 outline-none w-32 px-2 text-sm" />
                                                 </div>
                                             </RadioGroup>
+                                            <InputError v-if="errors?.family_housing" :message="errors.family_housing"
+                                                class="items-center flex text-xs" />
                                         </div>
 
                                         <!-- siblings info -->

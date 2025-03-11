@@ -13,6 +13,7 @@ use App\Models\User;
 use App\Models\Scholar;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Support\Facades\Hash;
@@ -33,7 +34,14 @@ class StudentController extends Controller
 
     public function verifyingAccount(Request $request)
     {
-        $request->validate([
+        // $messages = [
+        //     'education.elementary.name.required' => 'The elementary school name field is required.',
+        //     'education.elementary.years.required' => 'The elementary school years field is required.',
+        //     'education.elementary.honors.required' => 'The elementary school honors field is required.',
+        //     // Add more custom messages as needed
+        // ];
+
+        $validator = Validator::make($request->all(),[
             //Personal Information
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['required', 'string', 'max:255'],
@@ -54,9 +62,9 @@ class StudentController extends Controller
             'education.elementary.name' => ['required', 'string'],
             'education.elementary.years' => ['required', 'numeric'],
             'education.elementary.honors' => ['required', 'string'],
-            'junior.name' => ['', 'string',],
-            'junior.years' => ['', 'numeric'],
-            'junior.honors' => ['', 'string'],
+            'education.junior.name' => ['required', 'string',],
+            'education.junior.years' => ['required', 'numeric'],
+            'education.junior.honors' => ['required', 'string'],
             'senior.name' => ['', 'string'],
             'senior.years' => ['', 'numeric'],
             'senior.honors' => ['', 'string'],
@@ -100,6 +108,49 @@ class StudentController extends Controller
             'imgName' => 'required|string',
         ]);
 
+
+        // Custom error message handling to combine related fields
+    if ($validator->fails()) {
+        $errors = $validator->errors();
+        
+        // Check if any elementary education fields failed validation
+        if ($errors->has('education.elementary.name') || 
+            $errors->has('education.elementary.years') || 
+            $errors->has('education.elementary.honors')) {
+            
+            // Create a single combined error message
+            $errorMessage = 'Please complete all elementary education information (school name, years attended, and honors received).';
+            
+            // Remove the individual error messages
+            $errors->forget('education.elementary.name');
+            $errors->forget('education.elementary.years');
+            $errors->forget('education.elementary.honors');
+            
+            // Add the combined error
+            $errors->add('education.elementary', $errorMessage);
+        }
+
+        //junior
+        if ($errors->has('education.junior.name') || 
+            $errors->has('education.junior.years') || 
+            $errors->has('education.junior.honors')) {
+            
+            // Create a single combined error message
+            $errorMessage = 'Please complete all junior education information (school name, years attended, and honors received).';
+            
+            // Remove the individual error messages
+            $errors->forget('education.junior.name');
+            $errors->forget('education.junior.years');
+            $errors->forget('education.junior.honors');
+            
+            // Add the combined error
+            $errors->add('education.junior', $errorMessage);
+        }
+        
+        // Return with the modified errors
+        return redirect()->back()->withErrors($errors)->withInput();
+    }
+    
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
 
