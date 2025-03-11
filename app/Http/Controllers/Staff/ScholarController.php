@@ -167,18 +167,18 @@ class ScholarController extends Controller
             ], 422);
         }
 
-        $checkStudent = Student::where('semester', $request->semester)
+        $checkSemester = Student::where('semester', $request->semester)
             ->get();
 
-        if (!$checkStudent) {
+
+        if (!$checkSemester) {
             return back()->withErrors([
-                'student' => 'Update the student information first before adding scholars.',
+                'student' => 'pang gantong ' . $request->semester .' sem lang to ya',
             ])->withInput();
         }
-
-        if ($checkStudent != $request->semester) {
+        else {
             return back()->withErrors([
-                'student' => 'pang gantong sem lang to ya',
+                'student' => $request->semester . ' sem yan no?',
             ])->withInput();
         }
 
@@ -212,6 +212,11 @@ class ScholarController extends Controller
             if(!$duplicateStudents) {
                 return back()->withErrors([
                     'student' => 'Update mo naman ako lods',
+                ])->withInput();
+            }
+            else {
+                return back()->withErrors([
+                    'student' => 'pwede par',
                 ])->withInput();
             }
 
