@@ -205,7 +205,7 @@ class ScholarController extends Controller
                     ->first();
 
                 if ($existingStudent) {
-                    $duplicateStudents[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
+                    $duplicateStudents[] = $existingStudent;
                 }
             }
 
@@ -229,18 +229,30 @@ class ScholarController extends Controller
                     ->first();
 
                 if ($existingScholar) {
-                    $duplicateScholars[] = ($record['FIRSTNAME'] ?? '') . ' ' . ($record['LASTNAME'] ?? '');
+                    $duplicateScholars[] = $existingScholar;
                 }
             }
 
-            // If duplicates found, return error message
-            if (count($duplicateScholars) > 0) {
-                $duplicateList = implode(', ', array_slice($duplicateScholars, 0, 5));
-                $remainingCount = count($duplicateScholars) > 5 ? ' and ' . (count($duplicateScholars) - 5) . ' more' : '';
+            // dd($duplicateStudents);
 
-                return back()->withErrors([
-                    'student' => 'CSV contains scholars already in the system: ' . $duplicateList . $remainingCount . '. Please remove duplicate entries and try again.',
-                ])->withInput();
+            //If duplicates found, return error message
+            if (count($duplicateScholars) > 0) {
+
+                // dd($duplicateScholars);
+                $insertData = [];
+                
+                foreach ($duplicateScholars as $scholar) {
+                    $insertData[] = [
+                        'scholarship_id' => $scholar->scholarship_id,
+                        'batch_id' => $scholar->batch_id,
+                        'scholar_id' => $scholar->id,
+                        'school_year' => $request->school_year,
+                        'semester' => $request->semester,
+                        'status' => 'Active',
+                    ];
+                }
+
+                dd($insertData);
             }
 
             $batch = Batch::create([

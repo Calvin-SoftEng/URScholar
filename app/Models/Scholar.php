@@ -63,4 +63,9 @@ class Scholar extends Model
     {
         return $this->hasMany(Payout::class);
     }
+
+    public function grantees()
+    {
+        return $this->hasMany(Grantees::class);
+    }
 }
