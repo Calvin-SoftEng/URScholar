@@ -22,6 +22,7 @@
             <div class="w-full h-full flex flex-col space-y-3">
                 <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
                     <!-- <Calendar /> -->
+                    <Messages />
                 </div>
                 <div class="bg-white rounded shadow-md h-[65%] dark:bg-dcontainer">
 
@@ -38,11 +39,13 @@ import { ref } from 'vue';
 import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
 import QuickPost from '../../../Components/Staff/Dashboard/QuickPost.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
+import Messages from '@/Components/Staff/Dashboard/Messages.vue';
 import ScholarshipActivities from '@/Components/Staff/Dashboard/ScholarshipActivities.vue';
 
 const components = {
     ActiveScholarship,
     QuickPost,
+    Messages,
     // Calendar,
 };
 

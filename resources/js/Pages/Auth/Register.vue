@@ -8,12 +8,17 @@ import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import { ref, onMounted, watchEffect, watch } from 'vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
 import { Input } from '@/Components/ui/input'
+import { Tooltip } from 'primevue';
 
 const props = defineProps({
     campus: Array,
     errors: Object,
     flash: Object,
 });
+
+const directives = {
+    Tooltip
+};
 
 const form = ref({
     email: '',
@@ -63,26 +68,28 @@ const resendEmail = async () => {
 <template>
     <RegisterLayout>
         <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center">
-            <!-- header login -->
-            <div class="relative flex items-center justify-center">
-                <div class="absolute z-10 w-[50%] h-[50%]">
-                    <img src="../../../assets/images/logo-hori-white_login.png" alt="">
-                </div>
-                <img src="../../../assets/images/login-bg.png" alt="" class="w-full h-[50px] object-cover">
-                <div class="absolute inset-0 bg-blue-950 opacity-65"></div>
+            <!-- Logo adjusted to the left -->
+            <div class="relative flex items-center justify-center w-full px-10 py-2">
+                <Link :href="(route('welcome'))">
+                    <div class="w-[150px] h-[50px] cursor-pointer" v-tooltip="'Back to Home Page'">
+                        <img src="../../../assets/images/logo_blue.png" alt="URScholar Logo" class="w-full h-full object-contain">
+                    </div>
+                </Link>
             </div>
-            <!-- form login -->
+
             <div class="w-full fit-content relative flex flex-col gap-1 px-10 py-9">
                 <div class="flex flex-col items-start justify-start mb-8">
                     <p class="font-extrabold font-sora text-2xl">Register to URScholar</p>
-                    <span class="max-w-[90%] text-sm">Enter the needed details in order to create your account </span>
+                    <span class="max-w-[90%] text-sm">Enter the needed details in order to create your account</span>
                 </div>
+
                 <div>
                     <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
                     <Input type="text" placeholder="Enter Email" v-model="form.email"
                         class="w-full h-[43px] bg-gray-50 border border-gray-300" />
                     <InputError v-if="errors?.email" :message="errors.email" class="mt-1" />
                 </div>
+
                 <div>
                     <InputLabel for="campus" value="Campus" class="font-poppins font-semibold text-md mb-2" />
                     <Select v-model="form.campus">
@@ -113,10 +120,8 @@ const resendEmail = async () => {
                         scholarship coordinator.</p>
                 </div>
 
-                <div v-if="flash?.success || resendSuccess"
-                    class="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
-                    <p class="text-green-600 text-sm">{{ flash?.success || 'Registration email sent successfully!' }}
-                    </p>
+                <div v-if="flash?.success || resendSuccess" class="mt-4 p-3 bg-green-50 border border-green-200 rounded-md">
+                    <p class="text-green-600 text-sm">{{ flash?.success || 'Registration email sent successfully!' }}</p>
                     <p class="text-gray-600 text-xs mt-1">Please check your email inbox for login credentials.</p>
                 </div>
 
@@ -126,9 +131,26 @@ const resendEmail = async () => {
                     REGISTER
                 </button>
             </div>
+
             <div class="mt-10 mb-3 font-poppins text-sm text-gray-500">
                 URScholar 2024. All rights reserved
             </div>
         </form>
+
     </RegisterLayout>
 </template>
+
+
+
+<style>
+:root {
+  /* Adjust this value to match your sidebar width */
+  --p-tooltip-background: #003366 !important;
+}
+
+.p-tooltip-text {
+  /* margin-left: 10px !important; */
+  font-size: 12px !important;
+}
+
+</style>

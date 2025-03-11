@@ -7,6 +7,11 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+import { Tooltip } from 'primevue';
+
+const directives = {
+    Tooltip
+};
 
 defineProps({
     canResetPassword: {
@@ -88,13 +93,29 @@ const unblockUser = () => {
 };
 </script>
 
+<style>
+:root {
+  /* Adjust this value to match your sidebar width */
+  --p-tooltip-background: white !important;
+}
+
+.p-tooltip-text {
+  /* margin-left: 10px !important; */
+  font-size: 12px !important;
+  color: #003366 !important;
+}
+
+</style>
+
 <template>
     <GuestLayout>
         <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center"> 
             <!-- Login Header -->
             <div class="relative flex items-center justify-center">
-                <div class="absolute z-10 w-[50%] h-full">
-                    <img src="../../../assets/images/logo-hori-white_login.png" alt="">
+                <div class="absolute z-10 w-[50%] h-full" v-tooltip="'Back to Home Page'">
+                    <Link :href="(route('welcome'))">
+                        <img src="../../../assets/images/logo-hori-white_login.png" alt="">
+                    </Link>
                 </div>
                 <img src="../../../assets/images/login-bg.png" alt="" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-blue-950 opacity-65"></div>
