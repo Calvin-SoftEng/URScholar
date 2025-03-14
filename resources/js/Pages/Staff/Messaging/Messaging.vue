@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, Link } from '@inertiajs/vue3';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
@@ -45,6 +45,7 @@ onMounted(() => {
     echo.private(`chat`) // Use private channel
         .listen('.message.sent', (e) => {
             fetchMessages(); // Fetch messages after receiving
+            scrollToBottom();
             messages.value.push(e.message); // Append new message
         });
 });
@@ -53,10 +54,21 @@ const scholarshipId = ref(props.selectedScholarship); // Or however you're getti
 
 const fetchMessages = async () => {
     const { data } = await router.get(route("messaging.show", { scholarship: props.selectedScholarship.id }));
-    
+
     messageData.value = data;
 };
 
+const scrollToBottom = () => {
+    const chatContainer = document.querySelector('.overflow-y-auto');
+    if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+};
+
+// Update scroll after new message
+watch(messageData, () => {
+    scrollToBottom();
+});
 </script>
 
 <template>
@@ -129,30 +141,60 @@ const fetchMessages = async () => {
                                 <div class="shadow-sm mb-4 p-4">
                                     <h3 class="text-lg font-bold text-primary">Conversation</h3>
                                 </div>
-                                <div class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm">
-                                    <div class="flex items-start justify-end gap-2.5" v-for="message in messageData"
-                                        :key="message.id">
-                                        <div class="flex flex-col gap-1 w-full justify-end max-w-[320px]">
-                                            <div class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
-                                                <span class="text-sm font-semibold text-gray-900 dark:text-white">{{
-                                                    message.user.first_name }}</span>
+                                <div
+                                    class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
+                                    <div v-for="(message, index) in messageData" :key="message.id" :class="{
+                                        'flex items-start justify-end gap-2.5': message.user.id === currentUser.id,
+                                        'flex items-start justify-start gap-2.5': message.user.id !== currentUser.id
+                                    }">
+
+                                        <!-- Other User's Message -->
+                                        <template v-if="message.user.id !== currentUser.id">
+                                            <img class="w-8 h-8 rounded-full mt-6 border"
+                                                src="/docs/images/people/profile-picture-3.jpg" alt="User image">
+                                            <div class="flex flex-col gap-1 w-full justify-start max-w-[320px]">
+                                                <div
+                                                    class="flex justify-start items-center space-x-2 rtl:space-x-reverse">
+                                                    <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                        {{ message.user.first_name }}
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    class="flex flex-col leading-1.5 p-4 bg-gray-100 text-gray-900 rounded-es-xl rounded-se-xl dark:bg-gray-700">
+                                                    <p class="text-sm font-normal">{{ message.content }}</p>
+                                                </div>
                                             </div>
-                                            <div
-                                                class="flex flex-col leading-1.5 p-4 border-gray-200 bg-gray-100 rounded-s-xl rounded-ee-xl dark:bg-gray-700">
-                                                <p class="text-sm font-normal text-gray-900 dark:text-white"> {{
-                                                    message.content }} </p>
+                                        </template>
+
+                                        <!-- Current User's Message -->
+                                        <template v-else>
+                                            <div class="flex flex-col gap-1 w-full justify-end max-w-[320px]">
+                                                <div
+                                                    class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
+                                                    <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                        {{ message.user.first_name }}
+                                                    </span>
+                                                </div>
+                                                <div
+                                                    class="flex flex-col leading-1.5 p-4 bg-primary text-white rounded-s-xl rounded-ee-xl dark:bg-gray-700">
+                                                    <p class="text-sm font-normal">{{ message.content }}</p>
+                                                </div>
+                                                <!-- Delivered message only for the latest message of the current user -->
+                                                <div v-if="index === 0"
+                                                    class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
+                                                    <span
+                                                        class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
+                                                </div>
                                             </div>
-                                            <div class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
-                                                <span
-                                                    class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
-                                                <!-- <span class="text-sm font-normal text-gray-500 dark:text-gray-400">{{
-                                                    formatDate(message.created_at) }}</span> -->
-                                            </div>
-                                        </div>
-                                        <img class="w-8 h-8 rounded-full mt-6 border"
-                                            src="/docs/images/people/profile-picture-3.jpg" alt="Jese image">
+                                            <img class="w-8 h-8 rounded-full mt-6 border"
+                                                src="/docs/images/people/profile-picture-1.jpg"
+                                                alt="Current user image">
+                                        </template>
+
                                     </div>
                                 </div>
+
+
                                 <div
                                     class="flex items-center box-border p-2 bg-white z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
                                     <button class="px-2" @click="sendMessage">
