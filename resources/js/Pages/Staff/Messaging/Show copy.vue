@@ -169,26 +169,20 @@ const formatLastSeen = (dateString) => {
                 </div>
 
                 <!-- Messages Area -->
-                <div ref="messagesContainer" class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm max-h-[calc(95vh-160px)]">
-                    <div v-for="message in messagesData" :key="message.id" class="flex items-start gap-2.5"
+                <div ref="messagesContainer" class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm max-h-[calc(100vh-160px)]">
+                    <div v-for="message in messages" :key="message.id" class="flex items-start gap-2.5"
                         :class="message.user_id === currentUser.id ? 'justify-end' : ''">
                         
                         <!-- Avatar for other users -->
-                        <!-- <img v-if="message.user_id !== currentUser.id" class="w-8 h-8 rounded-full mt-6 border"
-                            src="/docs/images/people/profile-picture-3.jpg" alt="User Image"> -->
-                        <div v-if="message.user_id !== currentUser.id" class="flex-shrink-0 mr-3">
-                            <div
-                                class="h-8 w-8 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 font-semibold text-sm">
-                                {{ message.user.name.charAt(0) }}
-                            </div>
-                        </div>
+                        <img v-if="message.user_id !== currentUser.id" class="w-8 h-8 rounded-full mt-6 border"
+                            src="/docs/images/people/profile-picture-3.jpg" alt="User Image">
 
                         <!-- Message Bubble -->
                         <div class="flex flex-col gap-1 w-full max-w-[320px]">
                             <div class="flex items-center space-x-2 rtl:space-x-reverse"
                                 :class="message.user_id === currentUser.id ? 'justify-end' : ''">
                                 <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                                    dada
+                                    {{ message.user.first_name }}
                                 </span>
                             </div>
                             
@@ -208,24 +202,21 @@ const formatLastSeen = (dateString) => {
 
                 <!-- Message Input -->
                 <div class="flex items-center p-2 bg-white shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
-                    <form @submit.prevent="sendMessage" class="flex">
-                        <button class="px-2" @click="sendMessage">
-                            <font-awesome-icon :icon="['fas', 'circle-plus']"
-                                class="w-6 h-6 text-primary hover:text-primary/80 hover:rotate-90 transition" />
-                        </button>
-                        <input type="text" placeholder="Type your message..."
-                            class="flex-1 bg-transparent text-primary-foreground p-2 focus:outline-none border-none"
-                            v-model="form.content" @keyup.enter="sendMessage" />
-                        <button class="px-2 transition duration-200 group" @click="sendMessage">
-                            <font-awesome-icon :icon="['far', 'paper-plane']"
-                                class="w-6 h-6 text-primary group-hover:hidden" />
-                            <font-awesome-icon :icon="['fas', 'paper-plane']"
-                                class="w-6 h-6 text-primary hidden group-hover:inline-block" />
-                        </button>
-                    </form>
+                    <button class="px-2" @click="sendMessage">
+                        <font-awesome-icon :icon="['fas', 'circle-plus']"
+                            class="w-6 h-6 text-primary hover:text-primary/80 hover:rotate-90 transition" />
+                    </button>
+                    <input type="text" placeholder="Type your message..."
+                        class="flex-1 bg-transparent text-primary-foreground p-2 focus:outline-none border-none"
+                        v-model="form.content" @keyup.enter="sendMessage" />
+                    <button class="px-2 transition duration-200 group" @click="sendMessage">
+                        <font-awesome-icon :icon="['far', 'paper-plane']"
+                            class="w-6 h-6 text-primary group-hover:hidden" />
+                        <font-awesome-icon :icon="['fas', 'paper-plane']"
+                            class="w-6 h-6 text-primary hidden group-hover:inline-block" />
+                    </button>
                 </div>
             </div>
-
 
             <!-- Members panel (right sidebar) -->
             <div v-if="showMembersList" class="w-64 bg-white border-l overflow-y-auto">
