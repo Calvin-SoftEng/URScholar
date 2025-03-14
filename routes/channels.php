@@ -14,8 +14,8 @@ Broadcast::channel('chat', function ($user) {
     return Auth::check(); // Ensure the user is authenticated
 });
 
-Broadcast::channel('scholarship.{scholarshipId}', function ($user, $scholarshipId) {
-    return Auth::check(); // Ensure the user is authenticated
+Broadcast::channel('chat.{scholarshipId}', function (User $user, int $scholarshipId) {
+    return Auth::check();
 });
 
 Broadcast::channel('scholarship.{scholarshipId}', function ($user, $scholarshipId) {

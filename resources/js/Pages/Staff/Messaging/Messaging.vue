@@ -42,7 +42,7 @@ onMounted(() => {
         authEndpoint: "/broadcasting/auth", // Required for private channels
     });
 
-    echo.private(`chat`) // Use private channel
+    echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
         .listen('.message.sent', (e) => {
             fetchMessages(); // Fetch messages after receiving
             scrollToBottom();
