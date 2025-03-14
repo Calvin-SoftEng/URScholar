@@ -101,23 +101,23 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //scholarship
-        // Scholarship::factory()->create([
-        //     'name' => 'TDP',
-        //     'sponsor_id' => 1,
-        //     'scholarshipType' => 'Need-based',
-        //     'status' => 'Active',
-        //     'date_start' => '2021-01-01',
-        //     'date_end' => '2021-12-31',
-        // ]);
+        Scholarship::factory()->create([
+            'name' => 'TDP',
+            'sponsor_id' => 1,
+            'scholarshipType' => 'Need-based',
+            'status' => 'Active',
+            'date_start' => '2021-01-01',
+            'date_end' => '2021-12-31',
+        ]);
 
-        // Scholarship::factory()->create([
-        //     'name' => 'DBP',
-        //     'sponsor_id' => 1,
-        //     'scholarshipType' => 'One-time Payment',
-        //     'status' => 'Active',
-        //     'date_start' => '2021-01-01',
-        //     'date_end' => '2021-12-31',
-        // ]);
+        Scholarship::factory()->create([
+            'name' => 'DBP',
+            'sponsor_id' => 1,
+            'scholarshipType' => 'One-time Payment',
+            'status' => 'Active',
+            'date_start' => '2021-01-01',
+            'date_end' => '2021-12-31',
+        ]);
         
         //school year
         SchoolYear::factory()->create([

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\Scholarship;
 use App\Events\NewMessage;
+use App\Events\MessageSent;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,24 +60,25 @@ class MessageController extends Controller
         return back();
     }
 
-    // public function oldstore(Request $request)
-    // {
+    public function oldstore(Request $request)
+    {
 
-    //     $request->validate([
-    //         'content' => 'required|string',
-    //     ]);
+        $request->validate([
+            'content' => 'required|string',
+        ]);
 
-    //     // dd($request);
-    //     $user = Auth::user()->id;
+        // dd($request);
+        $user = Auth::user()->id;
 
-    //     $message = Message::create([
-    //         'user_id' => $user,
-    //         'content' => $request->content,
-    //     ]);
+        $message = Message::create([
+            'user_id' => $user,
+            'scholarship_id' => 1,
+            'content' => $request->content,
+        ]);
 
-    //     // MessageSent::dispatch($message);
-    //     broadcast(new MessageSent($message))->toOthers();
+        // MessageSent::dispatch($message);
+        broadcast(new MessageSent($message))->toOthers();
 
-    //     return back();
-    // }
+        return back();
+    }
 }

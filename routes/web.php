@@ -133,8 +133,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 
     // Messaging
-    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
-    Route::post('/group-page/message', [MessageController::class, 'store'])->name('messaging.store');
+    Route::get('/group-pagee', [MessageController::class, 'index'])->name('messaging.index');
+    Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
 
     Route::get('/group-page', [GroupPageController::class, 'index'])->name('grouppage.index');
     Route::get('/group-page/{scholarship}', [GroupPageController::class, 'show'])->name('grouppage.show');
