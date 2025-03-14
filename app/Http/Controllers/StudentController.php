@@ -41,6 +41,11 @@ class StudentController extends Controller
         //     // Add more custom messages as needed
         // ];
 
+        $messages = [
+            'required' => 'This field is required.', // Generic for all required fields
+            'confirm_password.same' => 'Passwords must match.',
+        ];
+
         $validator = Validator::make($request->all(),[
             //Personal Information
             'first_name' => ['required', 'string', 'max:255'],
@@ -80,8 +85,8 @@ class StudentController extends Controller
 
             //Family Information
             'mother.first_name' => ['required', 'string'],
-            'mother.middle_name' => ['', 'string'],
-            'mother.last_name' => ['', 'string'],
+            'mother.middle_name' => ['required', 'string'],
+            'mother.last_name' => ['required', 'string'],
             'mother.age' => ['', 'string'],
             'mother.address' => ['', 'string'],
             'mother.citizenship' => ['', 'string'],
@@ -104,9 +109,10 @@ class StudentController extends Controller
             'other_income' => ['required', 'string'],
             'family_housing' => ['required', 'string'],
 
+
             'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'imgName' => 'required|string',
-        ]);
+        ], $messages);
 
 
         // Custom error message handling to combine related fields
@@ -119,7 +125,7 @@ class StudentController extends Controller
             $errors->has('education.elementary.honors')) {
             
             // Create a single combined error message
-            $errorMessage = 'Please complete all elementary education information (school name, years attended, and honors received).';
+            $errorMessage = 'Please complete all elementary education information.';
             
             // Remove the individual error messages
             $errors->forget('education.elementary.name');
@@ -136,7 +142,7 @@ class StudentController extends Controller
             $errors->has('education.junior.honors')) {
             
             // Create a single combined error message
-            $errorMessage = 'Please complete all junior education information (school name, years attended, and honors received).';
+            $errorMessage = 'Please complete all junior education information.';
             
             // Remove the individual error messages
             $errors->forget('education.junior.name');
@@ -146,7 +152,83 @@ class StudentController extends Controller
             // Add the combined error
             $errors->add('education.junior', $errorMessage);
         }
+
+        //senior
+        if ($errors->has('senior.name') || 
+            $errors->has('senior.years') || 
+            $errors->has('senior.honors')) {
+            
+            // Create a single combined error message
+            $errorMessage = 'Please complete all senior education information.';
+            
+            // Remove the individual error messages
+            $errors->forget('senior.name');
+            $errors->forget('senior.years');
+            $errors->forget('senior.honors');
+            
+            // Add the combined error
+            $errors->add('senior', $errorMessage);
+        }
+
+        //college
+        if ($errors->has('college.name') || 
+            $errors->has('college.years') || 
+            $errors->has('college.honors')) {
+            
+            // Create a single combined error message
+            $errorMessage = 'Please complete all college education information.';
+            
+            // Remove the individual error messages
+            $errors->forget('college.name');
+            $errors->forget('college.years');
+            $errors->forget('college.honors');
+            
+            // Add the combined error
+            $errors->add('college', $errorMessage);
+        }
+
+        //vocational
+        if ($errors->has('vocational.name') || 
+            $errors->has('vocational.years') || 
+            $errors->has('vocational.honors')) {
+            
+            // Create a single combined error message
+            $errorMessage = 'Please complete all vocational education information.';
+            
+            // Remove the individual error messages
+            $errors->forget('vocational.name');
+            $errors->forget('vocational.years');
+            $errors->forget('vocational.honors');
+            
+            // Add the combined error
+            $errors->add('vocational', $errorMessage);
+        }
+
+        //postgrad
+        if ($errors->has('postgrad.name') || 
+            $errors->has('postgrad.years') || 
+            $errors->has('postgrad.honors')) {
+            
+            // Create a single combined error message
+            $errorMessage = 'Please complete all post graduate education information.';
+            
+            // Remove the individual error messages
+            $errors->forget('postgrad.name');
+            $errors->forget('postgrad.years');
+            $errors->forget('postgrad.honors');
+            
+            // Add the combined error
+            $errors->add('postgrad', $errorMessage);
+        }
         
+            // Apply the generic required message to all fields dynamically
+            foreach ($errors->messages() as $field => $messages) {
+                if (in_array("The $field field is required.", $messages)) {
+                    $errors->forget($field);
+                    $errors->add($field, 'This field is required.');
+                }
+            }
+
         // Return with the modified errors
         return redirect()->back()->withErrors($errors)->withInput();
     }

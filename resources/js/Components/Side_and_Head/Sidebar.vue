@@ -426,7 +426,7 @@ onMounted(() => {
 })
 </script>
 
-<style>
+<style scoped>
 :root {
   --sidebar-width: 230px;
   /* Adjust this value to match your sidebar width */
@@ -444,6 +444,7 @@ onMounted(() => {
 .p-tooltip-text {
   /* margin-left: 10px !important; */
   font-size: 12px !important;
+  color: white !important;
 }
 
 #side-bar {

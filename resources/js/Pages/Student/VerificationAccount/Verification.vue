@@ -3,24 +3,31 @@
     <Head title="Verification" />
     <div class="w-full h-screen box-border bg-gray-100">
         <form @submit.prevent="submit">
-            <div class="w-full flex flex-row justify-between bg-white shadow-sm items-center px-10">
-                <h1 class="text-3xl font-bold font-soratext-left p-3 mx-10">Set up your Profile</h1>
+            <div class="w-full flex flex-row justify-between bg-white shadow-sm items-center px-10 sm:px-5">
+                <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3">Set up your Profile</h1>
                 <div class="flex flex-row gap-2">
                     <Link :href="route('logout')" method="post" as="button">
-                    <button class="bg-gray-400 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">
+                    <button class="bg-gray-400 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded 
+                    sm:py-1 sm:px-3 sm:text-xs">
                         Exit
                     </button>
                     </Link>
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded">
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded 
+                    sm:text-xs sm:py-1
+                    xl:px-5">
                         Set Up
                     </button>
                 </div>
             </div>
             <div class="py-3 h-full box-border bg-gray-100">
-                <div class="mx-auto h-full max-w-5xl sm:px-6 lg:px-8 ">
+                <div class="mx-auto h-full max-w-5xl sm:px-3 lg:px-8 ">
                     <div class="flex flex-col space-y-5">
-                        <div class="bg-primary text-white font-sans font-bold rounded-lg 
-                                    p-7 text-3xl sm:p-4 sm:text-sm sm:text-blue-500">
+                        <div class="bg-primary font-sans font-bold rounded-lg p-7 
+                                    2xl:text-3xl 2xl:text-white
+                                    xl:text-3xl xl:text-red-500
+                                    lg:p-6 lg:text-2xl lg:text-green-500
+                                    md:p-5 md:text-2xl md:text-blue-500
+                                    sm:p-4 sm:text-base sm:text-yellow-500">
                             Greetings! {{ user.name }}
                         </div>
 
@@ -40,7 +47,7 @@
 
                                 <!-- Step Circle with Icon -->
                                 <span
-                                    class="material-symbols-rounded text-2xl flex items-center justify-center w-10 h-10 rounded-full transition-all z-10"
+                                    class="material-symbols-rounded text-base xl:text-3xl flex items-center justify-center w-8 h-8 xl:w-10 xl:h-10 rounded-full transition-all z-10"
                                     :class="{
                                         'text-white bg-blue-900': activeStep === index,
                                         'text-yellow-600 bg-yellow-100': activeStep > index,
@@ -50,98 +57,110 @@
                                 </span>
 
                                 <!-- Step Label -->
-                                <div class="mt-2 text-sm font-medium"
+                                <div class="mt-2 text-xs xl:text-sm font-medium"
                                     :class="{ 'text-blue-900': activeStep >= index, 'text-gray-500': activeStep < index }">
                                     {{ step.label }}
                                 </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="box-border h-full mx-auto max-w-7xl sm:px-6 lg:px-8 overflow-auto">
-                    <div class="h-full flex flex-col space-y-5 mt-10">
+                <div class="box-border h-full mx-auto max-w-7xl sm:px-3 lg:px-8 overflow-auto">
+                    <div class="h-full flex flex-col space-y-5 mt-5 xl:mt-10">
 
                         <div class="stepper-container max-w-full">
                             <!-- Step Content -->
                             <div class="flex-grow">
                                 <div v-if="activeStep === 0">
-                                    <div class="bg-white grid grid-cols-3 gap-6 rounded-lg h-1/2 items-center justify-start p-10 
-                                        sm:px-6 lg:px-8 sm:grid-cols-1">
-                                        <div class="col-span-3">
-                                            <h3
-                                                class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
+                                    <div class="bg-white grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3
+                                        gap-6 rounded-lg h-1/2 items-center justify-start p-10 sm:p-5 xl:p-10 ">
+
+                                        <div class="sm:col-span-3 md:col-span-2 lg:col-span-3 xl:col-span-3">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4 sm:text-white">
                                                 Account Information</h3>
                                             <p
                                                 class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
                                                 Please fill-up missing required fields</p>
                                         </div>
-
-                                        <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
+                                        
+                                        <!-- <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>First Name</Label>
-                                                <InputError v-if="errors?.first_name" :message="errors.first_name"
-                                                    class="items-center flex text-xs" />
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>First Name
+                                                </Label>
+                                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="items-center flex text-xs mb-1" />
                                             </div>
-                                            <Input id="email" type="text" placeholder="First Name"
-                                                v-model="form.first_name" class="w-full border border-gray-200" />
-                                        </div>
-
-                                        <div class="grid w-full max-w-sm items-center gap-1.5 sm:col-span-1 col-span-1">
-                                            <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Last Name</Label>
-                                                <InputError v-if="errors?.last_name" :message="errors.last_name"
-                                                    class="items-center flex text-xs" />
-                                            </div>
-                                            <Input id="email" type="text" placeholder="Last Name"
-                                                v-model="form.last_name" class="w-full border-gray-200" />
-                                        </div>
-
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Middle Name</Label>
-                                                <InputError v-if="errors?.middle_name" :message="errors.middle_name"
-                                                    class="items-center flex text-xs" />
-                                            </div>
-                                            <Input id="email" type="text" placeholder="Middle Name"
-                                                v-model="form.middle_name" class="w-full border-gray-200" />
-                                        </div>
-
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Suffix Name</Label>
-                                            <Input id="email" type="text" placeholder="Suffix Name"
-                                                v-model="form.suffix" class="w-full border-gray-200" />
-                                        </div>
-
-                                        <!-- <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="birthdate">Date of Birth</Label>
-                                            <Popover>
-                                                <PopoverTrigger as-child>
-                                                    <Button variant="outline"
-                                                        class="w-full h-10 justify-start text-left font-normal">
-                                                        <CalendarIcon class="mr-2 h-4 w-4" />
-                                                        {{ formatDate(form.birthdate) }}
-                                                    </Button>
-                                                </PopoverTrigger>
-                                                <PopoverContent class="w-auto p-0">
-                                                    <Calendar v-model="form.birthdate" initial-focus />
-                                                </PopoverContent>
-                                            </Popover>
+                                            <Input id="first_name" type="text" placeholder="First Name" v-model="form.first_name" class="w-full border border-gray-200" />
                                         </div> -->
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Birthdate</Label>
-                                                <InputError v-if="errors?.birthdate" :message="errors.birthdate"
-                                                    class="items-center flex text-xs" />
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>First Name
+                                                </Label>
                                             </div>
+
+                                            <div class="relative w-full">
+                                                <Input id="first_name" type="text" placeholder="First Name" v-model="form.first_name" @focus="errors.first_name = null" class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
+                                        </div>
+
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="last_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Last Name
+                                                </Label>
+                                            </div>
+
+                                            <div class="relative w-full">
+                                                <Input id="last_name" type="text" placeholder="First Name" v-model="form.last_name" @focus="errors.last_name = null" class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.last_name" :message="errors.last_name" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
+                                        </div>
+
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="middle_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Middle Name
+                                                </Label>
+                                            </div>
+
+                                            <div class="relative w-full">
+                                                <Input id="middle_name" type="text" placeholder="Middle Name" v-model="form.middle_name" @focus="errors.middle_name = null" class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.middle_name" :message="errors.middle_name" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
+                                        </div>
+
+                                        <!-- <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <Label for="email" class="items-center flex mb-1">Suffix Name</Label>
+                                            <Input id="email" type="text" placeholder="Suffix Name"
+                                                v-model="form.suffix" class="w-full border-gray-200" />
+                                        </div> -->
+
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="suffix" class="items-center flex mb-1">
+                                                    Suffix
+                                                </Label>
+                                            </div>
+
+                                            <div class="relative w-full">
+                                                <Input id="suffix" type="text" placeholder="Suffix" v-model="form.suffix" class="w-full border border-gray-200 pr-10" />
+                                            </div>
+                                        </div>
+
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="birthdate" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Birthdate
+                                                </Label>
+                                            </div>
+
                                             <div class="relative max-w-sm">
-                                                <div
-                                                    class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
                                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                                         fill="currentColor" viewBox="0 0 20 20">
@@ -149,109 +168,145 @@
                                                             d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                     </svg>
                                                 </div>
-                                                <input v-model="form.birthdate" id="datepicker-autohide" datepicker
-                                                    datepicker-autohide type="text"
+                                                <input 
+                                                    v-model="form.birthdate" 
+                                                    id="datepicker-autohide" 
+                                                    datepicker 
+                                                    type="text" 
                                                     class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Select Birthdate">
+                                                    placeholder="Select Birthdate"
+                                                />
+                                                <InputError v-if="errors?.birthdate" :message="errors.birthdate" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
                                         </div>
 
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Place of
-                                                    Birth</Label>
-                                                <InputError v-if="errors?.birthplace" :message="errors.birthplace"
-                                                    class="items-center flex text-xs" />
+                                                <Label for="place_of_birth" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Place of
+                                                    Birth
+                                                </Label>
                                             </div>
-                                            <Input id="email" type="text" placeholder="Place of Birth"
-                                                v-model="form.birthplace" class="w-full border-gray-200" />
+
+                                            <div class="relative w-full">
+                                                <Input id="place_of_birth" type="text" placeholder="Place of Birth" v-model="form.birthplace" @focus="errors.birthplace = null" class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.birthplace" :message="errors.birthplace" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Age</Label>
-                                                <InputError v-if="errors?.age" :message="errors.age"
-                                                    class="items-center flex text-xs" />
+                                                <Label for="age" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Age
+                                                </Label>
                                             </div>
-                                            <Input id="email" type="number" placeholder="Age" v-model="form.age"
-                                                class="w-full border-gray-200" />
+
+                                            <div class="relative w-full">
+                                                <Input id="age" type="text" placeholder="Age" v-model="form.age" @focus="errors.age = null" class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.age" :message="errors.age" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <!-- <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Sex</Label>
-                                                <InputError v-if="errors?.gender" :message="errors.gender"
-                                                    class="items-center flex text-xs" />
+                                                <Label for="gender" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Sex
+                                                </Label>
                                             </div>
-                                            <Select v-model="form.gender">
-                                                <SelectTrigger class="w-full">
-                                                    <SelectValue placeholder="Select Sex" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                        <SelectItem value="Male">
-                                                            Male
-                                                        </SelectItem>
-                                                        <SelectItem value="Female">
-                                                            Female
-                                                        </SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
-                                        </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                            <div class="relative w-full">
+                                                <Input id="gender" type="text" placeholder="Age" v-model="form.gender" @focus="errors.gender = null" class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.gender" :message="errors.gender" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
+                                        </div> -->
+
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Civil Status</Label>
-                                                <InputError v-if="errors?.civil_status" :message="errors.civil_status"
-                                                    class="items-center flex text-xs" />
+                                                <Label for="gender" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Sex
+                                                </Label>
                                             </div>
-                                            <Select v-model="form.civil_status">
-                                                <SelectTrigger class="w-full">
-                                                    <SelectValue placeholder="Select Civil Status" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                                        <SelectItem value="Single">
-                                                            Single
-                                                        </SelectItem>
-                                                        <SelectItem value="widowed">
-                                                            Widowed
-                                                        </SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
-                                            </Select>
+
+                                            <div class="relative w-full">
+                                                <Select v-model="form.gender">
+                                                    <SelectTrigger 
+                                                        id="gender"
+                                                        class="w-full border pr-10"
+                                                        :class="{ 'border-gray-200': !errors?.gender }"
+                                                        @focus="errors.gender = null"
+                                                    >
+                                                        <SelectValue placeholder="Select Sex" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectItem value="Male">Male</SelectItem>
+                                                            <SelectItem value="Female">Female</SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+
+                                                <InputError v-if="errors?.gender" :message="errors.gender" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Religion</Label>
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="civil_status" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Civil Status
+                                                </Label>
+                                            </div>
+
+                                            <div class="relative w-full">
+                                                <Select v-model="form.civil_status">
+                                                    <SelectTrigger 
+                                                        id="civil_status"
+                                                        class="w-full border pr-10"
+                                                        :class="{ 'border-gray-200': !errors?.civil_status }"
+                                                        @focus="errors.civil_status = null"
+                                                    >
+                                                        <SelectValue placeholder="Select Civil Status" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectItem value="Single">
+                                                                Single
+                                                            </SelectItem>
+                                                            <SelectItem value="widowed">
+                                                                Widowed
+                                                            </SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
+                                                </Select>
+
+                                                <InputError v-if="errors?.civil_status" :message="errors.civil_status" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
+                                        </div>
+
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <Label for="email" class="items-center flex mb-1">Religion</Label>
                                             <Input id="email" type="text" placeholder="Religion" v-model="form.religion"
                                                 class="w-full border-gray-200" />
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>Guardian
-                                                    Name</Label>
-                                                <InputError v-if="errors?.guardian_name" :message="errors.guardian_name"
-                                                    class="items-center flex text-xs" />
+                                                <Label for="guardian_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Guardian
+                                                    Name
+                                                </Label>
                                             </div>
-                                            <Input id="email" type="text" placeholder="Guardian Name"
-                                                v-model="form.guardian_name" class="w-full border-gray-200" />
+
+                                            <div class="relative w-full">
+                                                <Input id="guardian_name" type="text" placeholder="Guardian Name" v-model="form.guardian_name" @focus="errors.guardian_name = null" class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.guardian_name" :message="errors.guardian_name" class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Relationship</Label>
-                                            <Input id="email" type="text" placeholder="Relationship"
-                                                v-model="form.relationship" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <Label for="relationship" class="items-center flex mb-1">Relationship</Label>
+                                            <Input id="relationship" type="text" placeholder="Relationship" v-model="form.relationship"
+                                                class="w-full border-gray-200" />
                                         </div>
 
                                         <div class="col-span-3 flex justify-end mt-4">
@@ -261,194 +316,267 @@
                                         </div>
                                     </div>
                                 </div>
+
                                 <div v-if="activeStep === 1" class="overflow-x-auto w-full max-w-full border-box">
-                                    <div
-                                        class="bg-white border-box overflow-x-auto grid grid-cols-3 gap-2 rounded-lg h-1/2 items-center justify-start p-10">
-                                        <div class="col-span-3">
-                                            <h3
-                                                class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
+                                    <div class="bg-white border-box overflow-x-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 
+                                        gap-6 rounded-lg h-1/2 items-center justify-start p-10 sm:p-5 xl:p-10">
+
+                                        <div class="sm:col-span-3 md:col-span-2 lg:col-span-3 xl:col-span-3">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4 sm:text-white">
                                                 Educational Background</h3>
                                             <p
-                                                class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white">
+                                                class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
                                                 Please fill-up missing required fields. Put N/A if not applicable</p>
                                         </div>
 
                                         <!-- elementary -->
-                                        <div
-                                            class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
-                                            <h3
-                                                class="font-semibold text-[12px] text-blue-900 dark:text-white text-center">
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center">
                                                 Elementary
                                             </h3>
-                                            <div
-                                                class="pl-2 w-full h-0.5 bg-gray-200 justify-center items-center rounded-lg">
-                                                {{ props.errors['education.elementary'] }}
+                                            <div class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
+                                                <span v-if="props.errors['education.elementary']" class="text-red-500 text-xs absolute bg-white px-1">
+                                                    {{ props.errors['education.elementary'] }}
+                                                </span>
                                             </div>
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
 
-                                            <!-- <Label for="email">Name of School, College or University</Label> -->
-                                            <Input id="email" type="text" placeholder="Elementary School"
-                                                v-model="form.education.elementary.name"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School, College or University
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Elementary School" v-model="form.education.elementary.name" class="w-full border border-gray-200" />
+                                        </div>
+                                        
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. 2016-2020" v-model="form.education.elementary.years" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Years Attended</Label>
-                                            <Input id="email" type="text" placeholder="Ex. 2016-2020"
-                                                v-model="form.education.elementary.years"
-                                                class="w-full border-gray-200" />
-                                        </div>
-
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Honors/Awards Recieved</Label>
-                                            <Input id="email" type="text" placeholder="Ex. Academic Awards"
-                                                v-model="form.education.elementary.honors"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    Honors/Awards Recieved
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. Academic Awards" v-model="form.education.elementary.honors" class="w-full border border-gray-200" />
                                         </div>
 
                                         <!-- junior -->
-                                        <div
-                                            class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
-                                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            <h3
+                                                class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
+                                                    sm:whitespace-normal md:whitespace-nowrap">
                                                 Junior High School
                                             </h3>
-                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg">
-                                                {{ props.errors['education.junior'] }}
+
+                                            <div class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
+                                                <span v-if="props.errors['education.junior']" class="text-red-500 text-xs absolute bg-white px-1">
+                                                    {{ props.errors['education.junior'] }}
+                                                </span>
                                             </div>
                                         </div>
-
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Name of School, College or University</Label>
-                                            <Input id="email" type="text" placeholder="Junior High School"
-                                                v-model="form.education.junior.name" class="w-full border-gray-200" />
+                                        
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School, College or University
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Junior High School" v-model="form.education.junior.name" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Years Attended</Label>
-                                            <Input id="email" type="text" placeholder="Ex. 2016-2020"
-                                                v-model="form.education.junior.years" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. 2016-2020" v-model="form.education.junior.years" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Honors/Awards Recieved</Label>
-                                            <Input id="email" type="text" placeholder="Ex. Academic Awards"
-                                                v-model="form.education.junior.honors" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    Honors/Awards Recieved
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. Academic Awards" v-model="form.education.junior.honors" class="w-full border border-gray-200" />
                                         </div>
 
                                         <!-- senior -->
-                                        <div
-                                            class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
-                                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            <h3
+                                                class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
+                                                    sm:whitespace-normal md:whitespace-nowrap">
                                                 Senior High School
                                             </h3>
-                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+
+                                            <div class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
+                                                <span v-if="props.errors['senior']" class="text-red-500 text-xs absolute bg-white px-1">
+                                                    {{ props.errors['senior'] }}
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Name of School, College or University</Label>
-                                            <Input id="email" type="text" placeholder="Senior High School"
-                                                v-model="form.education.senior.name" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School, College or University
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Senior High School" v-model="form.education.senior.name" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Years Attended</Label>
-                                            <Input id="email" type="text" placeholder="Ex. 2016-2020"
-                                                v-model="form.education.senior.years" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. 2016-2020" v-model="form.education.senior.years" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Honors/Awards Recieved</Label>
-                                            <Input id="email" type="text" placeholder="Ex. Academic Awards"
-                                                v-model="form.education.senior.honors" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    Honors/Awards Recieved
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. Academic Awards" v-model="form.education.senior.honors" class="w-full border border-gray-200" />
                                         </div>
 
                                         <!-- college -->
-                                        <div
-                                            class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
-                                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            <h3
+                                                class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
+                                                    sm:whitespace-normal md:whitespace-nowrap">
                                                 College
                                             </h3>
-                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+
+                                            <div class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
+                                                <span v-if="props.errors['college']" class="text-red-500 text-xs absolute bg-white px-1">
+                                                    {{ props.errors['college'] }}
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Name of School, College or University</Label>
-                                            <Input id="email" type="text" placeholder="University"
-                                                v-model="form.education.college.name" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School, College or University
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Senior High School" v-model="form.education.college.name" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Years Attended</Label>
-                                            <Input id="email" type="text" placeholder="Ex. 2016-2020"
-                                                v-model="form.education.college.years" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. 2016-2020" v-model="form.education.college.years" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Honors/Awards Recieved</Label>
-                                            <Input id="email" type="text" placeholder="Ex. Academic Awards"
-                                                v-model="form.education.college.honors"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    Honors/Awards Recieved
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. Academic Awards" v-model="form.education.college.honors" class="w-full border border-gray-200" />
                                         </div>
 
                                         <!-- vocational -->
-                                        <div
-                                            class="col-span-3 gap-2 relative flex items-center mt-4 mb-2 whitespace-nowrap">
-                                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            <h3
+                                                class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
+                                                    sm:whitespace-normal md:whitespace-nowrap">
                                                 Vocational
                                             </h3>
-                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+
+                                            <div class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
+                                                <span v-if="props.errors['vocational']" class="text-red-500 text-xs absolute bg-white px-1">
+                                                    {{ props.errors['vocational'] }}
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Name of School, College or University</Label>
-                                            <Input id="email" type="text" placeholder="School or College University"
-                                                v-model="form.education.vocational.name"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School, College or University
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Senior High School" v-model="form.education.vocational.name" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Years Attended</Label>
-                                            <Input id="email" type="text" placeholder="Ex. 2016-2020"
-                                                v-model="form.education.vocational.years"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. 2016-2020" v-model="form.education.vocational.years" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class=" max-w-sm items-center gap-1.5">
-                                            <Label for="email">Honors/Awards Recieved</Label>
-                                            <Input id="email" type="text" placeholder="Ex. Academic Awards"
-                                                v-model="form.education.vocational.honors"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    Honors/Awards Recieved
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. Academic Awards" v-model="form.education.vocational.honors" class="w-full border border-gray-200" />
                                         </div>
 
                                         <!-- post -->
-                                        <div
-                                            class="col-span-3 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
-                                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            <h3
+                                                class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
+                                                    sm:whitespace-normal md:whitespace-nowrap">
                                                 Post Graduate
                                             </h3>
-                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+
+                                            <div class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
+                                                <span v-if="props.errors['postgrad']" class="text-red-500 text-xs absolute bg-white px-1">
+                                                    {{ props.errors['postgrad'] }}
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Name of School, College or University</Label>
-                                            <Input id="email" type="text" placeholder="School or College University"
-                                                v-model="form.education.postgrad.name" class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School, College or University
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Senior High School" v-model="form.education.postgrad.name" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Years Attended</Label>
-                                            <Input id="email" type="text" placeholder="Ex. 2016-2020"
-                                                v-model="form.education.postgrad.years"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. 2016-2020" v-model="form.education.postgrad.years" class="w-full border border-gray-200" />
                                         </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Honors/Awards Recieved</Label>
-                                            <Input id="email" type="text" placeholder="Ex. Academic Awards"
-                                                v-model="form.education.postgrad.honors"
-                                                class="w-full border-gray-200" />
+                                        <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="first_name" class="items-center flex mb-1">
+                                                    Honors/Awards Recieved
+                                                </Label>
+                                            </div>
+                                            <Input id="first_name" type="text" placeholder="Ex. Academic Awards" v-model="form.education.postgrad.honors" class="w-full border border-gray-200" />
                                         </div>
 
                                         <div class="col-span-3 space-x-2 flex justify-end mt-4">
@@ -472,67 +600,100 @@
                                     </div>
                                 </div>
                                 <div v-if="activeStep === 2">
+                                    <div class="bg-white grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 
+                                            gap-6 rounded-lg h-1/2 items-center justify-start p-10 sm:p-5 xl:p-10">
+
+                                    <div class="sm:col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4 sm:text-white">
+                                            Family Background
+                                        </h3>
+                                        <p class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
+                                            Please fill-up missing required fields
+                                        </p>
+                                    </div>
+
+                                    <!-- Mother -->
                                     <div
-                                        class="bg-white grid grid-cols-4 gap-4 rounded-lg h-1/2 items-center justify-start p-10">
-                                        <div class="col-span-4">
-                                            <h3
-                                                class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
-                                                Family Background</h3>
-                                            <p
-                                                class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
-                                                Please fill-up missing required fields</p>
-                                        </div>
+                                        class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                        <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
+                                            MOTHER (Mark (+) if deceased)
+                                        </h3>
+                                        <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                    </div>
 
-                                        <!-- mother -->
-                                        <div
-                                            class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
-                                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                                MOTHER (Mark (+) if deceased)
-                                            </h3>
-                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                    <!-- Form Fields -->
+                                    <div class="w-full max-w-sm items-center gap-1.5 col-span-4 sm:col-span-1 md:col-span-1 lg:col-span-1">
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label class="items-center flex mb-1">
+                                                <span class="text-red-900 font-bold mr-1">*</span>First Name
+                                            </Label>
                                         </div>
+                                        <div class="relative w-full">
+                                            <Input type="text" placeholder="First Name" v-model="form.mother.first_name" 
+                                                @focus="errors.mother.first_name = null" class="w-full border border-gray-200 pr-10" />
+                                        </div>
+                                    </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <div class="flex flex-row items-center gap-2">
-                                                <Label for="email" class="items-center flex"><span
-                                                        class="text-red-900 font-bold mr-1">*</span>First Name</Label>
-                                                <InputError v-if="errors?.education" :message="errors.education"
-                                                    class="items-center flex text-xs" />
-                                            </div>
-                                            <Input id="email" type="text" placeholder="First Name"
-                                                v-model="form.mother.first_name"
-                                                class="w-full border border-gray-200" />
+                                    <div class="w-full max-w-sm items-center gap-1.5 col-span-4 sm:col-span-1 md:col-span-1 lg:col-span-1">
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label class="items-center flex mb-1">
+                                                <span class="text-red-900 font-bold mr-1">*</span>Last Name
+                                            </Label>
                                         </div>
+                                        <div class="relative w-full">
+                                            <Input type="text" placeholder="Last Name" v-model="form.mother.last_name" 
+                                                @focus="errors.mother.last_name = null" class="w-full border border-gray-200 pr-10" />
+                                        </div>
+                                    </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Last Name</Label>
-                                            <Input id="email" type="text" placeholder="Last Name"
-                                                v-model="form.mother.last_name" class="w-full border-gray-200" />
+                                    <div class="w-full max-w-sm items-center gap-1.5 col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1">
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label class="items-center flex mb-1">
+                                                <span class="text-red-900 font-bold mr-1">*</span>Middle Name
+                                            </Label>
                                         </div>
+                                        <div class="relative w-full">
+                                            <Input type="text" placeholder="Middle Name" v-model="form.mother.middle_name" 
+                                                @focus="errors.mother.middle_name = null" class="w-full border border-gray-200 pr-10" />
+                                        </div>
+                                    </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Middle Name</Label>
-                                            <Input id="email" type="text" placeholder="Middle Name"
-                                                v-model="form.mother.middle_name" class="w-full border-gray-200" />
+                                    <div class="w-full max-w-sm items-center gap-1.5 col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1">
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label class="items-center flex mb-1">
+                                                <span class="text-red-900 font-bold mr-1">*</span>Age
+                                            </Label>
                                         </div>
+                                        <div class="relative w-full">
+                                            <Input type="number" placeholder="Age" v-model="form.mother.age" 
+                                                @focus="errors.mother.age = null" class="w-full border border-gray-200 pr-10" />
+                                        </div>
+                                    </div>
 
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Age</Label>
-                                            <Input id="email" type="text" placeholder="Age" v-model="form.mother.age"
-                                                class="w-full border-gray-200" />
+                                    <!-- Address should take 3 columns on larger screens -->
+                                    <div class="w-full max-w-sm items-center gap-1.5 col-span-1 sm:col-span-1 md:col-span-2 lg:col-span-3 xl:col-span-3">
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label class="items-center flex mb-1">
+                                                <span class="text-red-900 font-bold mr-1">*</span>Address
+                                            </Label>
                                         </div>
+                                        <div class="relative w-full">
+                                            <Input type="text" placeholder="Permanent Address" v-model="form.mother.address" 
+                                                @focus="errors.mother.address = null" class="w-full border border-gray-200 pr-10" />
+                                        </div>
+                                    </div>
 
-                                        <div class="col-span-3 grid w-full items-center gap-1.5">
-                                            <Label for="email">Address</Label>
-                                            <Input id="email" type="text" placeholder="Permanent Address"
-                                                v-model="form.mother.address" class="w-full border-gray-200" />
+                                    <div class="w-full max-w-sm items-center gap-1.5 col-span-1 sm:col-span-1 md:col-span-1 lg:col-span-1">
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label class="items-center flex mb-1">
+                                                <span class="text-red-900 font-bold mr-1">*</span>Citizenship
+                                            </Label>
                                         </div>
-
-                                        <div class="grid w-full max-w-sm items-center gap-1.5">
-                                            <Label for="email">Citizenship</Label>
-                                            <Input id="email" type="text" placeholder="Ex. Filipino"
-                                                v-model="form.mother.citizenship" class="w-full border-gray-200" />
+                                        <div class="relative w-full">
+                                            <Input type="text" placeholder="Ex. Filipino" v-model="form.mother.citizenship" 
+                                                @focus="errors.mother.citizenship = null" class="w-full border border-gray-200 pr-10" />
                                         </div>
+                                    </div>
 
 
                                         <div class="grid w-full max-w-sm items-center gap-1.5">
@@ -1189,9 +1350,11 @@ onMounted(() => {
             form.value.birthdate = event.target.value;
         });
     }
-    restoreScrollPosition(); // Make sure to restore scroll position after initial load
+    restoreScrollPosition(); 
     initFlowbite();
 });
+
+
 
 const organizations = ref([
     { name: '', membership_dates: '', position: '' } // Initial entry
