@@ -66,11 +66,9 @@ const scrollToBottom = () => {
 };
 
 // Update scroll after new message
-// watch(messageData, () => {
-//     scrollToBottom();
-// });
-
-
+watch(messageData, () => {
+    scrollToBottom();
+});
 </script>
 
 <template>
