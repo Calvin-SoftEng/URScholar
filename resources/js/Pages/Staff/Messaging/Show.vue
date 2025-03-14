@@ -48,6 +48,7 @@ onMounted(() => {
     window.Echo.channel(`scholarship.${props.scholarship.id}`)
         .listen('NewMessage', (e) => {
             console.log('New message received:', e);
+            fetchMessages();
             // Add the new message to the messages array
             messagesData.value.push(e.message);
             nextTick(() => {
@@ -62,16 +63,16 @@ const sendMessage = () => {
     form.post(route('grouppage.store', props.scholarship.id), {
         preserveScroll: true,
         onSuccess: () => {
+            fetchMessages();
             // Don't need to fetchMessages - the broadcast will handle it
             form.reset();
         }
     });
 };
 
-
-const fetchMessages = async ($scholarship) => {
-    const { data } = await router.get(route("grouppage.show", { $scholarship: props.scholarship.id }));
-
+const fetchMessages = async () => {
+    const { data } = await router.get(route("grouppage.show", { scholarship: props.scholarship.id }));
+    
     messageData.value = data;
 };
 

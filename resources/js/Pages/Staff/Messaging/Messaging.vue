@@ -56,6 +56,7 @@ const fetchMessages = async () => {
     
     messageData.value = data;
 };
+
 </script>
 
 <template>
