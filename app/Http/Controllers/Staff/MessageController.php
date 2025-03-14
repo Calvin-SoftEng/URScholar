@@ -27,10 +27,21 @@ class MessageController extends Controller
         // Get all messages with the user who sent them (eager loading)
         $messages = Message::with('user')->latest()->get();
 
+        $scholarships = Scholarship::with([
+            'latestMessage.user',
+            'users' => function ($query) {
+                $query->select('users.id', 'users.name');
+            }
+        ])
+            ->withCount('users')
+            ->get();
+            
+
         // Return the chat page using Inertia, passing the messages and user data
         return Inertia::render('Staff/Messaging/Messaging', [
             'messages' => $messages,
             'currentUser' => Auth::user(),
+            'scholarships' => $scholarships,
         ]);
     }
 
