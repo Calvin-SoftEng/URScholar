@@ -3,9 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 
 class Scholarship extends Model
 {
+
+    use HasFactory, Notifiable;
     protected $fillable = ['name', 'sponsor_id', 'scholarshipType', 'status', 'date_start', 'date_end'];
 
     public function scholars()
@@ -50,5 +54,24 @@ class Scholarship extends Model
     public function grantees()
     {
         return $this->hasMany(Grantees::class);
+    }
+
+    //chat
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'scholarship_user')
+                    ->withTimestamps();
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+    
+    // Get the latest message for the scholarship group
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class)->latest();
     }
 }

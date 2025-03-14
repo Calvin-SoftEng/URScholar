@@ -41,6 +41,12 @@ class User extends Authenticatable
         return $this->belongsTo(Campus::class);
     }
 
+    public function scholarships()
+    {
+        return $this->belongsToMany(Scholarship::class, 'scholarship_user')
+                    ->withTimestamps();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

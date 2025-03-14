@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GroupPageController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CoordinatorController;
 use App\Http\Controllers\StudentController;
@@ -134,6 +135,10 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     // Messaging
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
     Route::post('/group-page/message', [MessageController::class, 'store'])->name('messaging.store');
+
+    Route::get('/group-page', [GroupPageController::class, 'index'])->name('grouppage.index');
+    Route::get('/group-page/{scholarship}', [GroupPageController::class, 'show'])->name('grouppage.show');
+    Route::post('/group-page/{scholarship}/messages', [MessageController::class, 'store'])->name('grouppage.store');
 
     //Applicants
     Route::get('/scholarships/{scholarship}/applicants', [ApplicationController::class, 'show'])->name('scholarships.applicants');

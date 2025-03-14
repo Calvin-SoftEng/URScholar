@@ -79,7 +79,7 @@
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Communication</div>
             
             
-            <Link :href="route('messaging.index')">
+            <Link :href="route('grouppage.index')">
               <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''" :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/group-page') }]">
                 <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
                     <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/group-page') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/group-page') }]">
@@ -252,7 +252,7 @@
 
           <!-- Messaging Link -->
           <div class="flex items-center cursor-pointer">
-            <Link :href="route('messaging.index')" class="flex items-center space-x-2 text-blue-900 font-quicksand font-semibold">
+            <Link :href="route('grouppage.index')" class="flex items-center space-x-2 text-blue-900 font-quicksand font-semibold">
               <span class="material-symbols-rounded text-[24px]" style="color: #0D47A1;" v-tooltip.right="'Messaging'">
                 forum
               </span>
