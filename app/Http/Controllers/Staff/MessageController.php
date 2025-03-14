@@ -44,6 +44,7 @@ class MessageController extends Controller
             'messages' => [],
             'currentUser' => $currentUser,
             'scholarships' => $scholarships,
+            'selectedScholarship' => [],
         ]);
     }
 
