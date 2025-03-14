@@ -23,9 +23,38 @@ class MessageController extends Controller
     // }
     public function index(User $user)
     {
+        // Get the authenticated user
+        $currentUser = Auth::user();
+
+        // Get scholarships with relationships that the current user has
+        $scholarships = Scholarship::with([
+            'latestMessage.user',
+            'users' => function ($query) {
+                $query->select('users.id', 'users.name');
+            }
+        ])
+            ->whereHas('users', function ($query) use ($currentUser) {
+                $query->where('users.id', $currentUser->id);
+            })
+            ->withCount('users')
+            ->get();
+
+        // Return the chat page using Inertia
+        return Inertia::render('Staff/Messaging/Messaging', [
+            'messages' => [],
+            'currentUser' => $currentUser,
+            'scholarships' => $scholarships,
+        ]);
+    }
+
+    public function show(Scholarship $scholarship)
+    {
 
         // Get all messages with the user who sent them (eager loading)
-        $messages = Message::with('user')->latest()->get();
+        $messages = Message::with(['user', 'scholarship'])
+            ->where('scholarship_id', $scholarship->id)
+            ->latest()
+            ->get();
 
         $scholarships = Scholarship::with([
             'latestMessage.user',
@@ -35,15 +64,19 @@ class MessageController extends Controller
         ])
             ->withCount('users')
             ->get();
-            
+
+        $selectedScholarship = $scholarship;
+
 
         // Return the chat page using Inertia, passing the messages and user data
         return Inertia::render('Staff/Messaging/Messaging', [
             'messages' => $messages,
             'currentUser' => Auth::user(),
             'scholarships' => $scholarships,
+            'selectedScholarship' => $selectedScholarship,
         ]);
     }
+
 
     public function store(Request $request, Scholarship $scholarship)
     {

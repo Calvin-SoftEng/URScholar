@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
@@ -9,6 +9,7 @@ const props = defineProps({
     messages: Array,
     currentUser: Object,
     scholarships: Array,
+    selectedScholarship: Object,
 });
 
 const messageData = ref(props.messages);
@@ -41,16 +42,18 @@ onMounted(() => {
         authEndpoint: "/broadcasting/auth", // Required for private channels
     });
 
-    echo.private('chat') // Use private channel
+    echo.private(`chat`) // Use private channel
         .listen('.message.sent', (e) => {
             fetchMessages(); // Fetch messages after receiving
             messages.value.push(e.message); // Append new message
         });
 });
 
-const fetchMessages = async () => {
-    const { data } = await router.get(route("messaging.index"));
+const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
 
+const fetchMessages = async () => {
+    const { data } = await router.get(route("messaging.show", { scholarship: props.selectedScholarship.id }));
+    
     messageData.value = data;
 };
 </script>
@@ -102,30 +105,24 @@ const fetchMessages = async () => {
                                     </div>
                                 </form>
                                 <!-- people gc, etc -->
-                                <ul v-for="scholarship in scholarships" :key="scholarship.id">
-                                    <li class="w-full flex items-center space-x-2 mb-2 hover:bg-gray-100 p-4">
-                                        <!-- Group avatar -->
-                                        <div
-                                            class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                            {{ scholarship.name.charAt(0) }}
-                                        </div>
-                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
-                                            scholarship.name }}</span>
-                                        <div class="flex-grow">
-                                            <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
-                                                {{ scholarship.latest_message.content }}
-                                            </p>
-                                            <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
-                                        </div>
-                                    </li>
-                                    <!-- <li class="w-full flex items-center space-x-2 mb-2 hover:bg-gray-100 p-4">
-                                        <img src="https://placehold.co/50" alt="Person" class="h-8 w-8 rounded-full" />
-                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">John
-                                            Doe
-                                            Dimacatacutan</span>
-                                    </li> -->
-                                </ul>
-
+                                <div class="divide-y">
+                                    <Link class="w-full flex items-center space-x-2 mb-2 hover:bg-gray-100 p-4"
+                                        v-for="scholarship in scholarships" :key="scholarship.id"
+                                        :href="route('messaging.show', scholarship.id)">
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                        {{ scholarship.name.charAt(0) }}
+                                    </div>
+                                    <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
+                                        scholarship.name }}</span>
+                                    <div class="flex-grow">
+                                        <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
+                                            {{ scholarship.latest_message.content }}
+                                        </p>
+                                        <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
+                                    </div>
+                                    </Link>
+                                </div>
                             </div>
                             <div class="w-[70%] h-full flex flex-col space-y-3">
                                 <div class="shadow-sm mb-4 p-4">

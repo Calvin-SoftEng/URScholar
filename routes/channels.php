@@ -10,9 +10,13 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 
-// Broadcast::channel('chat', function ($user) {
-//     return Auth::check(); // Ensure the user is authenticated
-// });
+Broadcast::channel('chat', function ($user) {
+    return Auth::check(); // Ensure the user is authenticated
+});
+
+Broadcast::channel('scholarship.{scholarshipId}', function ($user, $scholarshipId) {
+    return Auth::check(); // Ensure the user is authenticated
+});
 
 Broadcast::channel('scholarship.{scholarshipId}', function ($user, $scholarshipId) {
     return $user->scholarships->contains($scholarshipId) ? ['id' => $user->id, 'name' => $user->name] : false;

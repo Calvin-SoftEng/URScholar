@@ -68,6 +68,13 @@ const sendMessage = () => {
     });
 };
 
+
+const fetchMessages = async ($scholarship) => {
+    const { data } = await router.get(route("grouppage.show", { $scholarship: props.scholarship.id }));
+
+    messageData.value = data;
+};
+
 const formattedTime = (dateString) => {
     return new Date(dateString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 };

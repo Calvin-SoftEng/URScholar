@@ -133,12 +133,13 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 
     // Messaging
-    Route::get('/group-pagee', [MessageController::class, 'index'])->name('messaging.index');
+    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
     Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
+    Route::get('/group-page/{scholarship}', [MessageController::class, 'show'])->name('messaging.show');
 
-    Route::get('/group-page', [GroupPageController::class, 'index'])->name('grouppage.index');
-    Route::get('/group-page/{scholarship}', [GroupPageController::class, 'show'])->name('grouppage.show');
-    Route::post('/group-page/{scholarship}/messages', [MessageController::class, 'store'])->name('grouppage.store');
+    // Route::get('/group-page', [GroupPageController::class, 'index'])->name('grouppage.index');
+    // Route::get('/group-page/{scholarship}', [GroupPageController::class, 'show'])->name('grouppage.show');
+    // Route::post('/group-page/{scholarship}/messages', [MessageController::class, 'store'])->name('grouppage.store');
 
     //Applicants
     Route::get('/scholarships/{scholarship}/applicants', [ApplicationController::class, 'show'])->name('scholarships.applicants');
