@@ -8,9 +8,10 @@ import Pusher from 'pusher-js';
 const props = defineProps({
     messages: Array,
     currentUser: Object,
+    scholarships: Array,
 });
 
-const messages = ref(props.messages);
+const messageData = ref(props.messages);
 
 const form = ref({
     content: '',
@@ -50,7 +51,7 @@ onMounted(() => {
 const fetchMessages = async () => {
     const { data } = await router.get(route("messaging.index"));
 
-    messages.value = data;
+    messageData.value = data;
 };
 </script>
 
@@ -101,19 +102,28 @@ const fetchMessages = async () => {
                                     </div>
                                 </form>
                                 <!-- people gc, etc -->
-                                <ul>
+                                <ul v-for="scholarship in scholarships" :key="scholarship.id">
                                     <li class="w-full flex items-center space-x-2 mb-2 hover:bg-gray-100 p-4">
+                                        <!-- Group avatar -->
+                                        <div
+                                            class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                            {{ scholarship.name.charAt(0) }}
+                                        </div>
+                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
+                                            scholarship.name }}</span>
+                                        <div class="flex-grow">
+                                            <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
+                                                {{ scholarship.latest_message.content }}
+                                            </p>
+                                            <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
+                                        </div>
+                                    </li>
+                                    <!-- <li class="w-full flex items-center space-x-2 mb-2 hover:bg-gray-100 p-4">
                                         <img src="https://placehold.co/50" alt="Person" class="h-8 w-8 rounded-full" />
                                         <span class="text-primary-foreground font-quicksand font-semibold text-lg">John
                                             Doe
                                             Dimacatacutan</span>
-                                    </li>
-                                    <li class="w-full flex items-center space-x-2 mb-2 hover:bg-gray-100 p-4">
-                                        <img src="https://placehold.co/50" alt="Person" class="h-8 w-8 rounded-full" />
-                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">John
-                                            Doe
-                                            Dimacatacutan</span>
-                                    </li>
+                                    </li> -->
                                 </ul>
 
                             </div>
@@ -122,7 +132,7 @@ const fetchMessages = async () => {
                                     <h3 class="text-lg font-bold text-primary">Conversation</h3>
                                 </div>
                                 <div class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm">
-                                    <div class="flex items-start justify-end gap-2.5" v-for="message in messages"
+                                    <div class="flex items-start justify-end gap-2.5" v-for="message in messageData"
                                         :key="message.id">
                                         <div class="flex flex-col gap-1 w-full justify-end max-w-[320px]">
                                             <div class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
