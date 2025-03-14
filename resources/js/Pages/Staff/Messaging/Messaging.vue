@@ -14,6 +14,8 @@ const props = defineProps({
 
 const messageData = ref(props.messages);
 
+
+const selectedData = ref(props.selectedScholarship);
 const form = ref({
     content: '',
 });
@@ -70,7 +72,8 @@ const scrollToBottom = () => {
 //     scrollToBottom();
 // });
 
-
+// Add this near your other ref() declarations
+const showMemberList = ref(false);
 </script>
 
 <template>
@@ -119,11 +122,14 @@ const scrollToBottom = () => {
                                             placeholder="Search group chats and scholars" required />
                                     </div>
                                 </form>
-                                <!-- people gc, etc -->
+                                <!-- In the people/group list section -->
                                 <div class="divide-y">
-                                    <Link class="w-full flex items-center space-x-2 mb-2 hover:bg-gray-100 p-4"
+                                    <Link class="w-full flex items-center space-x-2 mb-2 p-4"
                                         v-for="scholarship in scholarships" :key="scholarship.id"
-                                        :href="route('messaging.show', scholarship.id)">
+                                        :href="route('messaging.show', scholarship.id)" :class="[
+                                            'hover:bg-gray-100',
+                                            selectedData && selectedData.id === scholarship.id ? 'bg-blue-50 border-l-4 border-primary' : ''
+                                        ]">
                                     <div
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
                                         {{ scholarship.name.charAt(0) }}
@@ -140,90 +146,159 @@ const scrollToBottom = () => {
                                 </div>
                             </div>
                             <div class="w-[70%] h-full flex flex-col space-y-3">
-                                <div class="shadow-sm mb-4 p-4">
+                                <div class="shadow-sm mb-4 p-4 flex justify-between items-center">
                                     <h3 class="text-lg font-bold text-primary">Conversation</h3>
+                                    <!-- Three dots menu aligned with conversation text -->
+                                    <button class="text-gray-600 hover:text-primary transition-colors"
+                                        @click="showMemberList = !showMemberList">
+                                        <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
+                                    </button>
                                 </div>
-                                <div
-                                    class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
-                                    <div v-if="!messageData.length"
-                                        class="flex items-center justify-center h-full text-gray-500">
-                                        <span class="text-lg font-semibold">Select a Group page</span>
+                                <!-- Main chat area -->
+                                <div class="flex flex-1">
+                                    <!-- Messages column -->
+                                    <div
+                                        class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
+                                        <!-- No group selected message -->
+                                        <div v-if="!selectedData || !selectedData.id"
+                                            class="flex items-center justify-center h-full text-gray-500">
+                                            <span class="text-lg font-semibold">Select a group</span>
+                                        </div>
+
+                                        <!-- Selected group but no messages -->
+                                        <div v-else-if="selectedData && selectedData.id && !messageData.length"
+                                            class="flex items-center justify-center h-full text-gray-500">
+                                            <span class="text-lg font-semibold">No messages available</span>
+                                        </div>
+
+                                        <!-- Message display when messages exist -->
+                                        <div v-else v-for="(message, index) in messageData" :key="message.id" :class="{
+                                            'flex items-start justify-end gap-2.5': message.user.id === currentUser.id,
+                                            'flex items-start justify-start gap-2.5': message.user.id !== currentUser.id
+                                        }">
+
+                                            <!-- Other User's Message -->
+                                            <template v-if="message.user.id !== currentUser.id">
+                                                <img class="w-8 h-8 rounded-full mt-6 border"
+                                                    src="/docs/images/people/profile-picture-3.jpg" alt="User image">
+                                                <div class="flex flex-col gap-1 w-full justify-start max-w-[320px]">
+                                                    <div
+                                                        class="flex justify-start items-center space-x-2 rtl:space-x-reverse">
+                                                        <span
+                                                            class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                            {{ message.user.first_name }}
+                                                        </span>
+                                                    </div>
+                                                    <div
+                                                        class="flex flex-col leading-1.5 p-4 bg-gray-100 text-gray-900 rounded-es-xl rounded-se-xl dark:bg-gray-700">
+                                                        <p class="text-sm font-normal">{{ message.content }}</p>
+                                                    </div>
+                                                </div>
+                                            </template>
+
+                                            <!-- Current User's Message -->
+                                            <template v-else>
+                                                <div class="flex flex-col gap-1 w-full justify-end max-w-[320px]">
+                                                    <div
+                                                        class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
+                                                        <span
+                                                            class="text-sm font-semibold text-gray-900 dark:text-white">
+                                                            {{ message.user.first_name }}
+                                                        </span>
+                                                    </div>
+                                                    <div
+                                                        class="flex flex-col leading-1.5 p-4 bg-primary text-white rounded-s-xl rounded-ee-xl dark:bg-gray-700">
+                                                        <p class="text-sm font-normal">{{ message.content }}</p>
+                                                    </div>
+                                                    <!-- Delivered message only for the latest message of the current user -->
+                                                    <div v-if="index === 0"
+                                                        class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
+                                                        <span
+                                                            class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
+                                                    </div>
+                                                </div>
+                                                <img class="w-8 h-8 rounded-full mt-6 border"
+                                                    src="/docs/images/people/profile-picture-1.jpg"
+                                                    alt="Current user image">
+                                            </template>
+
+                                        </div>
                                     </div>
 
-                                    <div v-for="(message, index) in messageData" :key="message.id" :class="{
-                                        'flex items-start justify-end gap-2.5': message.user.id === currentUser.id,
-                                        'flex items-start justify-start gap-2.5': message.user.id !== currentUser.id
-                                    }">
+                                    <!-- Member list sidebar - conditionally shown -->
+                                    <div v-if="showMemberList" class="w-64 border-l overflow-y-auto">
+                                        <div class="p-4">
+                                            <h4 class="font-bold text-primary mb-3">Members</h4>
 
-                                        <!-- Other User's Message -->
-                                        <template v-if="message.user.id !== currentUser.id">
-                                            <img class="w-8 h-8 rounded-full mt-6 border"
-                                                src="/docs/images/people/profile-picture-3.jpg" alt="User image">
-                                            <div class="flex flex-col gap-1 w-full justify-start max-w-[320px]">
+                                            <!-- Administrator section -->
+                                            <div class="mb-4">
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">
+                                                    Administrator</h5>
                                                 <div
-                                                    class="flex justify-start items-center space-x-2 rtl:space-x-reverse">
-                                                    <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                                                        {{ message.user.first_name }}
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="flex flex-col leading-1.5 p-4 bg-gray-100 text-gray-900 rounded-es-xl rounded-se-xl dark:bg-gray-700">
-                                                    <p class="text-sm font-normal">{{ message.content }}</p>
+                                                    class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
+                                                    <div
+                                                        class="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-500 font-semibold">
+                                                        A</div>
+                                                    <span class="text-sm font-medium">Admin Name</span>
                                                 </div>
                                             </div>
-                                        </template>
 
-                                        <!-- Current User's Message -->
-                                        <template v-else>
-                                            <div class="flex flex-col gap-1 w-full justify-end max-w-[320px]">
+                                            <!-- Coordinator section -->
+                                            <div class="mb-4">
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">
+                                                    Coordinator</h5>
                                                 <div
-                                                    class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
-                                                    <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                                                        {{ message.user.first_name }}
-                                                    </span>
-                                                </div>
-                                                <div
-                                                    class="flex flex-col leading-1.5 p-4 bg-primary text-white rounded-s-xl rounded-ee-xl dark:bg-gray-700">
-                                                    <p class="text-sm font-normal">{{ message.content }}</p>
-                                                </div>
-                                                <!-- Delivered message only for the latest message of the current user -->
-                                                <div v-if="index === 0"
-                                                    class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
-                                                    <span
-                                                        class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
+                                                    class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
+                                                    <div
+                                                        class="h-8 w-8 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-500 font-semibold">
+                                                        C</div>
+                                                    <span class="text-sm font-medium">Coordinator Name</span>
                                                 </div>
                                             </div>
-                                            <img class="w-8 h-8 rounded-full mt-6 border"
-                                                src="/docs/images/people/profile-picture-1.jpg"
-                                                alt="Current user image">
-                                        </template>
 
+                                            <!-- Scholars section -->
+                                            <div>
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">Scholars
+                                                </h5>
+                                                <div v-for="i in 5" :key="i"
+                                                    class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
+                                                    <div
+                                                        class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                                        S</div>
+                                                    <span class="text-sm font-medium">Scholar {{ i }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-
-
 
                                 <div
                                     class="flex items-center box-border p-2 bg-white z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
-                                    <button class="px-2" @click="sendMessage" :disabled="!selectedScholarship">
+                                    <!-- For the circle-plus button -->
+                                    <button class="px-2" @click="sendMessage"
+                                        :disabled="!selectedData || !selectedData.id">
                                         <font-awesome-icon :icon="['fas', 'circle-plus']" :class="[
                                             'w-6 h-6 transition',
-                                            selectedScholarship ? 'text-primary hover:text-primary/80' : 'text-gray-400 cursor-not-allowed'
+                                            selectedData && selectedData.id ? 'text-primary hover:text-primary/80' : 'text-gray-400 cursor-not-allowed'
                                         ]" />
                                     </button>
+
+                                    <!-- For the text input -->
                                     <input type="text" placeholder="Type your message..."
                                         class="flex-1 bg-transparent text-primary-foreground p-2 focus:outline-none focus:ring-0 border-none"
                                         v-model="form.content" @keyup.enter="sendMessage"
-                                        :disabled="!selectedScholarship" />
+                                        :disabled="!selectedData || !selectedData.id" />
+
+                                    <!-- For the paper-plane button -->
                                     <button class="px-2 transition duration-200 group" @click="sendMessage"
-                                        :disabled="!selectedScholarship">
+                                        :disabled="!selectedData || !selectedData.id">
                                         <font-awesome-icon :icon="['far', 'paper-plane']" :class="[
                                             'w-6 h-6',
-                                            selectedScholarship ? 'text-primary group-hover:hidden' : 'text-gray-400 cursor-not-allowed'
+                                            selectedData && selectedData.id ? 'text-primary group-hover:hidden' : 'text-gray-400 cursor-not-allowed'
                                         ]" />
                                         <font-awesome-icon :icon="['fas', 'paper-plane']" :class="[
                                             'w-6 h-6 hidden group-hover:inline-block',
-                                            selectedScholarship ? 'text-primary' : 'text-gray-400 cursor-not-allowed'
+                                            selectedData && selectedData.id ? 'text-primary' : 'text-gray-400 cursor-not-allowed'
                                         ]" />
                                     </button>
                                 </div>
