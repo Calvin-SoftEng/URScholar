@@ -179,8 +179,23 @@ const showMemberList = ref(false);
 
                                             <!-- Other User's Message -->
                                             <template v-if="message.user.id !== currentUser.id">
-                                                <img class="w-8 h-8 rounded-full mt-6 border"
-                                                    src="/docs/images/people/profile-picture-3.jpg" alt="User image">
+                                                <!-- <img class="w-8 h-8 rounded-full mt-6 border"
+                                                    src="/docs/images/people/profile-picture-3.jpg" alt="User image"> -->
+                                                <div v-if="$page.props.auth.user.picture">
+                                                    <img id="avatarButton" type="button"
+                                                        data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-8 h-8 rounded-full mt-6 border"
+                                                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                                        alt="picture">
+                                                </div>
+                                                <div v-else>
+                                                    <img id="avatarButton" type="button"
+                                                        data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-8 h-8 rounded-full mt-6 border"
+                                                        :src="`/storage/user/profile/male.png`" alt="picture">
+                                                </div>
                                                 <div class="flex flex-col gap-1 w-full justify-start max-w-[320px]">
                                                     <div
                                                         class="flex justify-start items-center space-x-2 rtl:space-x-reverse">
@@ -217,9 +232,24 @@ const showMemberList = ref(false);
                                                             class="text-sm font-normal text-gray-500 dark:text-gray-400">Delivered</span>
                                                     </div>
                                                 </div>
-                                                <img class="w-8 h-8 rounded-full mt-6 border"
+                                                <div v-if="$page.props.auth.user.picture">
+                                                    <img id="avatarButton" type="button"
+                                                        data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-8 h-8 rounded-full mt-6 border"
+                                                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                                        alt="picture">
+                                                </div>
+                                                <div v-else>
+                                                    <img id="avatarButton" type="button"
+                                                        data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-8 h-8 rounded-full mt-6 border"
+                                                        :src="`/storage/user/profile/male.png`" alt="picture">
+                                                </div>
+                                                <!-- <img class="w-8 h-8 rounded-full mt-6 border"
                                                     src="/docs/images/people/profile-picture-1.jpg"
-                                                    alt="Current user image">
+                                                    alt="Current user image"> -->
                                             </template>
 
                                         </div>
