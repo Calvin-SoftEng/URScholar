@@ -143,6 +143,11 @@ watch(messageData, () => {
                                 </div>
                                 <div
                                     class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
+                                    <div v-if="!messageData.length"
+                                        class="flex items-center justify-center h-full text-gray-500">
+                                        <span class="text-lg font-semibold">Select a Group page</span>
+                                    </div>
+
                                     <div v-for="(message, index) in messageData" :key="message.id" :class="{
                                         'flex items-start justify-end gap-2.5': message.user.id === currentUser.id,
                                         'flex items-start justify-start gap-2.5': message.user.id !== currentUser.id
@@ -195,23 +200,31 @@ watch(messageData, () => {
                                 </div>
 
 
+
                                 <div
                                     class="flex items-center box-border p-2 bg-white z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
-                                    <button class="px-2" @click="sendMessage">
-                                        <font-awesome-icon :icon="['fas', 'circle-plus']"
-                                            class="w-6 h-6 text-primary hover:text-primary/80 hover:[transform:rotate(95deg)] transition" />
+                                    <button class="px-2" @click="sendMessage" :disabled="!selectedScholarship">
+                                        <font-awesome-icon :icon="['fas', 'circle-plus']" :class="[
+                                            'w-6 h-6 transition',
+                                            selectedScholarship ? 'text-primary hover:text-primary/80' : 'text-gray-400 cursor-not-allowed'
+                                        ]" />
                                     </button>
                                     <input type="text" placeholder="Type your message..."
                                         class="flex-1 bg-transparent text-primary-foreground p-2 focus:outline-none focus:ring-0 border-none"
-                                        v-model="form.content" @keyup.enter="sendMessage" />
-                                    <button class="px-2 transition duration-200 group" @click="sendMessage">
-                                        <font-awesome-icon :icon="['far', 'paper-plane']"
-                                            class="w-6 h-6 text-primary group-hover:hidden" />
-                                        <font-awesome-icon :icon="['fas', 'paper-plane']"
-                                            class="w-6 h-6 text-primary hidden group-hover:inline-block" />
+                                        v-model="form.content" @keyup.enter="sendMessage"
+                                        :disabled="!selectedScholarship" />
+                                    <button class="px-2 transition duration-200 group" @click="sendMessage"
+                                        :disabled="!selectedScholarship">
+                                        <font-awesome-icon :icon="['far', 'paper-plane']" :class="[
+                                            'w-6 h-6',
+                                            selectedScholarship ? 'text-primary group-hover:hidden' : 'text-gray-400 cursor-not-allowed'
+                                        ]" />
+                                        <font-awesome-icon :icon="['fas', 'paper-plane']" :class="[
+                                            'w-6 h-6 hidden group-hover:inline-block',
+                                            selectedScholarship ? 'text-primary' : 'text-gray-400 cursor-not-allowed'
+                                        ]" />
                                     </button>
                                 </div>
-
                             </div>
                         </div>
                     </div>
