@@ -4,7 +4,7 @@ import { PaperAirplaneIcon } from "@heroicons/vue/24/solid";
 import { Head, useForm } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
 import ChatBubble from "@/Components/Chat/Bubble.vue";
-import ChatItem from "@/Components/Chat/Item.vue";
+// import ChatItem from "@/Components/Chat/Item.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";

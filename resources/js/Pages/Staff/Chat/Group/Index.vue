@@ -2,7 +2,7 @@
 import { ChatBubbleLeftRightIcon } from "@heroicons/vue/24/outline";
 import { Head, useForm } from "@inertiajs/vue3";
 import { onMounted, ref } from "vue";
-import GroupChatBubble from "@/Components/Chat/Group/Bubble.vue";
+// import GroupChatBubble from "@/Components/Chat/Group/Bubble.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import TextInput from "@/Components/TextInput.vue";
 import { PaperAirplaneIcon } from "@heroicons/vue/24/solid";

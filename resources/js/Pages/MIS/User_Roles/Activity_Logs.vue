@@ -8,42 +8,96 @@
                 <h1 class="text-2xl font-bold mb-5">Activity Logs</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
-                Here is the list of the system activities. Listed are logs of each users.
+                Here is the list of all the system activities. Listed are logs of each users.
             </p>
             <div class="w-full mt-5">
-                <div class="bg-white relative overflow-x-auto border border-gray-200 rounded-lg">
+                
+
+                <div class="inline-flex rounded-t-lg shadow-xs border-x border-gray-200 dark:border-gray-700">
+                    <a href="#" aria-current="page" class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border-r border-gray-200 rounded-t-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        All User Activities
+                    </a>
+                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-t-lg border-r border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        Admin
+                    </a>
+                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-t-lg border-r border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        Coordinators
+                    </a>
+                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-t-lg border-r border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        Cashiers
+                    </a>
+                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-t-lg border-r border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        Scholars
+                    </a>
+                    <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
+                        Guest
+                    </a>
+                </div>
+
+                <!-- Content Area -->
+                <div class="bg-white relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
                     <div class="flex items-center justify-between bg-white dark:bg-gray-900 m-5">
                         <h1 class="text-xl font-semibold font-quicksand text-primary">
-                            User Roles
+                            Activities
                         </h1>
-                        <button @click="toggleAddRole"
+                        <!-- <button @click="toggleAddRole"
                             class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
                             Add Role
-                        </button>
+                        </button> -->
                     </div>
-                    <div class="relative overflow-x-auto w-full p-3">
-                        <div class="justify-between items-center flex bg-dirtywhite p-4 rounded-lg">
-                            <div class="text-primary">
-                                Head Administrator
-                            </div>
-                            <div class="space-x-2">
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Edit Campus'">
-                                    <span
-                                        class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-blue-900 rounded-lg">
-                                        edit
-                                    </span>
-                                </button>
-                                <button
-                                    v-tooltip.right="'Archive'">
-                                    <span
-                                        class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-yellow-400 rounded-lg">
-                                        inventory_2
-                                    </span>
-                                </button>
-                            </div>
+                
+                    
+                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3">
+                                        Activity
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        User
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        Date
+                                    </th>
+                                    <th scope="col" class="px-6 py-3">
+                                        <span class="sr-only">Actions</span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Updated an Account
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        Ms. Maam
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        Kahapon
+                                    </td>
+                                    <td class="px-6 py-4 text-right">
+                                        <div class="space-x-2">
+                                            <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                                <span
+                                                    class="material-symbols-rounded p-2 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                                    remove
+                                                </span>
+                                            </button>
+                                            <!-- <button
+                                                v-tooltip.right="'Archive'">
+                                                <span
+                                                    class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-yellow-400 rounded-lg">
+                                                    inventory_2
+                                                </span>
+                                            </button> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                        </div>
-                    </div>
                 </div>
 
                 <!-- adding roles -->

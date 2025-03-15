@@ -8,7 +8,7 @@
             <!-- Content Area -->
             <div class="pl-96 bg-white flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
                 <!-- Sidebar --> 
-                <MIS_Sidebar class="lg:w-5/12 w-full  lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
+                <MIS_Sidebar class="lg:w-5/12 w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
                 />
 
                 <!-- Main Content -->

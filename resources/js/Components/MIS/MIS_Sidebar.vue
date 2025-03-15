@@ -1,6 +1,7 @@
 <template>
-    <div class="lg:max-h-screen flex flex-col border-r border-gray-200 dark:border-r dark:border-gray-600 transition-all duration-300" id="side-bar"
-    :class="{'side-bar-visible': dataOpenSideBar, 'side-bar-close': !dataOpenSideBar}">
+    <div class="lg:max-h-screen flex flex-col border-r border-gray-200 dark:border-gray-600 transition-all duration-300" id="side-bar"
+    :class="{'side-bar-visible': dataOpenSideBar}">
+
       <!-- desktop -->
       <div class="hidden py-5 lg:flex flex-col justify-between h-full dark:bg-dprimary">
         <div class="space-y-1" :class="[ dataOpenSideBar ? 'px-1' : 'px-1']">
@@ -37,14 +38,6 @@
                 </div>
               </div>
             </Link>
-
-            <!-- <Link :href="route('mis.roles_management')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/user-roles' }">
-                <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/user-settings/user-roles' }">User Roles Control</span>
-                </div>
-              </div>
-            </Link> -->
 
             <Link :href="route('sa.user_roles')">
               <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/user-roles' }">
@@ -267,7 +260,7 @@ const clickHamburger = (event) => {
     })
 </script>
 
-<style>
+<style scoped>
 :root {
   --sidebar-width: 230px; /* Adjust this value to match your sidebar width */
   --p-tooltip-background: #003366 !important;
