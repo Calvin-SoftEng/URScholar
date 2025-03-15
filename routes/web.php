@@ -17,6 +17,7 @@ use App\Http\Controllers\Staff\SettingsController;
 use App\Http\Controllers\Staff\SponsorController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\SuperAdminController;
+use App\Events\TestEvent;
 // use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\MIS\SystemAdminController;
 use Illuminate\Foundation\Application;

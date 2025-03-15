@@ -29,6 +29,12 @@ import Aura from '@primevue/themes/aura';
 
 import Papa from 'papaparse';
 
+window.Echo.channel('test-channel')
+    .listen('.TestEvent', (e) => {
+        console.log('Received event:', e.message);
+    });
+
+
 const appName = import.meta.env.VITE_APP_NAME || 'URScholar';
 
 createInertiaApp({
