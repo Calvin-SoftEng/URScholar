@@ -24,7 +24,7 @@
                     </ul>
                 </div>
 
-                    <div>
+                    <div v-if="!hasRequirements">
                         <div class="flex justify-between items-center mb-4">
                             <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                                 <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>Pending Scholars</span>
@@ -155,7 +155,7 @@
                         </div>
                     </div>
 
-                    <div v-if="needinotify">
+                    <div v-else>
                         <div class="flex justify-between items-center mb-4">
                             <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                                 <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>Notify Scholars</span>
@@ -235,7 +235,8 @@ import { Datepicker } from "flowbite";
 
 const props = defineProps({
     scholarship: Object,
-    scholars: Array
+    scholars: Array,
+    requirements: Array,
 });
 
 const directives = {
@@ -256,6 +257,11 @@ const form = ref({
     deadline: '',
 });
 
+
+// Computed property
+const hasRequirements = computed(() => {
+    return props.requirements && props.requirements.length > 0;
+});
 
 const formatDateTime = (date) => {
     if (!date) return '';

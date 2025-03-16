@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 class Requirements extends Model
 {
     protected $fillable = ['scholarship_id', 'requirements', 'date_start', 'date_end', 'subtotal_scholars', 'total_scholars'];
-    
+
     public function scholars()
     {
         return $this->hasMany(Scholar::class);
     }
     public function scholarship()
     {
-        return $this->hasMany(Scholarship::class);
+        return $this->belongsTo(Scholarship::class);
     }
 
     public function submittedRequirements()

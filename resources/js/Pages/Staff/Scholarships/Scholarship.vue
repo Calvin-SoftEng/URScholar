@@ -534,6 +534,7 @@ const props = defineProps({
     courses: Array,
     students: Array,
     total_scholars: Array,
+    requirements: Array,
 });
 
 const directives = {

@@ -20,6 +20,8 @@ return new class extends Migration
             $table->string('reasons_of_not_claimed')->nullable();
             $table->timestamp('claimed_at')->nullable();
             $table->foreignId('claimed_by')->nullable()->constrained('users')->onDelete('cascade');
+            $table->date('date_start');
+            $table->date('date_end');
             $table->timestamps();
         });
     }

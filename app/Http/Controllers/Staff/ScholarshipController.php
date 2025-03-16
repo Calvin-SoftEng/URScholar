@@ -36,7 +36,7 @@ class ScholarshipController extends Controller
         $scholarships = Scholarship::with('requirements')->get();
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
-        
+
 
         return inertia('Staff/Scholarships/ViewScholarships', [
             'sponsors' => $sponsors,
@@ -156,12 +156,16 @@ class ScholarshipController extends Controller
 
         $students = Student::all();
 
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $total_scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
+
+
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
             'total_scholars' => $total_scholars,
+            'requirements' => $requirements,
             'scholars' => $scholarship->scholars()
                 ->whereDoesntHave('submittedRequirements', function ($query) {
                     $query->where('status', '!=', 'approved');
@@ -243,9 +247,13 @@ class ScholarshipController extends Controller
     {
         $scholars = $scholarship->scholars;
 
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+
         return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
+            'requirements' => $requirements,
         ]);
     }
 

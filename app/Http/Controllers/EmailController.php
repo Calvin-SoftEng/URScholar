@@ -21,9 +21,13 @@ class EmailController extends Controller
     {
         $scholars = $scholarship->scholars;
 
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+
         return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
+            'requirements' => $requirements,
         ]);
     }
 

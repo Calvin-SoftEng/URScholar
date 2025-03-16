@@ -28,7 +28,7 @@ class Scholarship extends Model
 
     public function requirements()
     {
-        return $this->belongsTo(Requirements::class);
+        return $this->hasMany(Requirements::class);
     }
 
     public function criteria()
@@ -61,14 +61,14 @@ class Scholarship extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'scholarship_group')
-                    ->withTimestamps();
+            ->withTimestamps();
     }
 
     public function messages()
     {
         return $this->hasMany(Message::class);
     }
-    
+
     // Get the latest message for the scholarship group
     public function latestMessage()
     {
