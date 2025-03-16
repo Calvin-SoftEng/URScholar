@@ -49,16 +49,16 @@
                                 <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                 <p class="text-gray-500 text-sm">Submitted Requirements</p>
                             </div>
-                            <p class="text-4xl font-semibold font-kanit">{{ stats.submittedCount }}</p>
+                            <p class="text-4xl font-semibold font-kanit">{{ stats.submittedCount }} / {{ total_scholars }}</p>
                         </div>
 
-                        <div class="flex flex-col items-start py-4 px-10 border-gray-300">
+                        <!-- <div class="flex flex-col items-start py-4 px-10 border-gray-300">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
                                 <p class="text-gray-500 text-sm">Completed Scholars</p>
                             </div>
                             <p class="text-4xl font-semibold font-kanit">{{ stats.completedCount }}</p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 
@@ -141,6 +141,14 @@ const props = defineProps({
     scholars: Array,
     requirements: Array,
     payout: Array
+});
+
+const total_scholars = computed(() => {
+    return props.scholars.filter(scholar => {
+        // Add your conditions here, for example:
+        // return scholar.isActive === true;
+        return true; // Count all scholars by default
+    }).length;
 });
 
 // State management

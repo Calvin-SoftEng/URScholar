@@ -74,7 +74,7 @@
                                     <p class="text-gray-500 text-sm">Scholarship Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">55</p>
+                                    <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
                                     <button class="px-3 bg-blue-400 text-white rounded-full text-sm">2 new
                                         Batch</button>
                                 </div>
@@ -86,7 +86,7 @@
                                     <p class="text-gray-500 text-sm">Total Verified Scholars</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">55</p>
+                                    <p class="text-4xl font-semibold font-kanit">{{verified_scholars}}</p>
                                 </div>
                             </div>
 
@@ -95,7 +95,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Unverified Scholars</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">1</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
@@ -103,16 +103,16 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Submitted Requirements</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">2/{{ total_scholars }}</p>
                             </div>
 
-                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                            <!-- <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Completed Scholars</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">2</p>
-                            </div>
+                            </div> -->
                         </div>
 
                         <div class="w-full h-[1px] bg-gray-200"></div>
@@ -533,6 +533,7 @@ const props = defineProps({
     campuses: Array,
     courses: Array,
     students: Array,
+    total_scholars: Array,
 });
 
 const directives = {
@@ -548,6 +549,25 @@ const batchesWithScholars = ref([]);
 
 const selectedStart = ref(""); // Stores the selected start date
 const selectedEnd = ref("");   // Stores the selected end date
+
+// Count scholars with "Verified" status
+const verified_scholars = computed(() => {
+    return props.total_scholars.filter(scholar => scholar.status === "Verified").length;
+});
+
+// Count scholars with "Unverified" status
+const unverified_scholars = computed(() => {
+    return props.total_scholars.filter(scholar => scholar.status === "Unverified").length;
+});
+
+const total_scholars = computed(() => {
+    return props.total_scholars.filter(scholar => {
+        // Add your conditions here, for example:
+        // return scholar.isActive === true;
+        return true; // Count all scholars by default
+    }).length;
+});
+
 
 const toggleSendBatch = async () => {
     ForwardBatchList.value = true;

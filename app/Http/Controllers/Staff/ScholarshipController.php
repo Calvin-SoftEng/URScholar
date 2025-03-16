@@ -156,9 +156,12 @@ class ScholarshipController extends Controller
 
         $students = Student::all();
 
+        $total_scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
+            'total_scholars' => $total_scholars,
             'scholars' => $scholarship->scholars()
                 ->whereDoesntHave('submittedRequirements', function ($query) {
                     $query->where('status', '!=', 'approved');

@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('requirements');
             $table->date('date_start');
             $table->date('date_end');
+            $table->integer('subtotal_scholars')->nullable(); //1
+            $table->integer('total_scholars')->nullable(); //4
             $table->timestamps();
         });
 

@@ -49,6 +49,7 @@ class EmailController extends Controller
                 'requirements' => $requirement,
                 'date_start' => $request['application'],
                 'date_end' => $request['deadline'],
+                'total_scholars' => $scholars->count(),
             ];
 
         }
