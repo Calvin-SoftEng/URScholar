@@ -44,7 +44,14 @@ class User extends Authenticatable
     public function scholarships()
     {
         return $this->belongsToMany(Scholarship::class, 'scholarship_group')
-                    ->withTimestamps();
+            ->withTimestamps();
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class)
+            ->withPivot('read')
+            ->withTimestamps();
     }
 
     /**

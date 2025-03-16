@@ -127,7 +127,7 @@ class MessageController extends Controller
 
         $message = Message::create([
             'user_id' => $user,
-            'scholarship_id' => 1,
+            'scholarship_id' => $request->scholarship_id,
             'content' => $request->content,
         ]);
 
@@ -135,13 +135,28 @@ class MessageController extends Controller
         broadcast(new MessageSent($message))->toOthers();
 
         //Notifs
-        $user = Auth::user();
+        // $user = Auth::user();
+
+        // $notification = Notification::create([
+        //     'creator_id' => $user->id,
+        //     'title' => 'New Message',
+        //     'message' => 'May nag text ngani ' . now()->format('H:i:s'),
+        //     'type' => 'info',
+        // ]);
+
+        $scholarship = Scholarship::find($request->scholarship_id);
 
         $notification = Notification::create([
-            'title' => 'New Message',
-            'message' => 'May nag text ngani ' . now()->format('H:i:s'),
-            'type' => 'info',
+            'title' => 'New Group Chat Message!',
+            'message' => 'You have a new message in the group chat' . $scholarship->name,
+            'type' => 'group_chat',
         ]);
+
+        // Get the IDs of all users who should receive the notification
+        $userIds = User::pluck('id'); // Example: All users
+
+        // Attach the notification to the users
+        $notification->users()->attach($userIds);
 
         event(new NewNotification($notification));
 

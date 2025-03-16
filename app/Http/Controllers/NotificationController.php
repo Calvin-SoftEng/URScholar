@@ -14,11 +14,30 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $notifications = Notification::orderBy('created_at', 'desc')
-            ->get();
+        $user = Auth::user(); // Get the authenticated user
+
+        // Retrieve notifications with read status for the current user
+        $notifications = Notification::with([
+            'users' => function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            }
+        ])
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->map(function ($notification) {
+                return [
+                    'id' => $notification->id,
+                    'title' => $notification->title,
+                    'message' => $notification->message,
+                    'type' => $notification->type,
+                    'read' => optional($notification->users->first())->pivot->read ?? false,
+                    'created_at' => $notification->created_at,
+                ];
+            });
 
         return response()->json($notifications);
     }
+
 
     // public function index()
     // {
@@ -67,30 +86,52 @@ class NotificationController extends Controller
      */
     public function markAsRead($id)
     {
+        $user = Auth::user();
+
+        // Find the notification and check if it exists
         $notification = Notification::findOrFail($id);
 
-        // Make sure the notification belongs to the authenticated user
-        if ($notification->user_id !== Auth::id()) {
+        // Check if the authenticated user is associated with the notification
+        if (!$notification->users()->where('user_id', $user->id)->exists()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $notification->read = true;
-        $notification->save();
+        // Update the read status in the pivot table
+        $notification->users()->updateExistingPivot($user->id, ['read' => true]);
 
-        return response()->json($notification);
+        return response()->json(['message' => 'Notification marked as read', 'notification' => $notification]);
     }
+
 
     /**
      * Mark all notifications as read.
      */
-    public function markAllAsRead()
+    public function markAllAsRead(Request $request)
     {
-        Notification::where('user_id', Auth::id())
-            ->where('read', false)
-            ->update(['read' => true]);
+        $user = Auth::user();
+        $notificationIds = $request->input('notification_ids'); // Get the array of notification IDs
 
-        return response()->json(['message' => 'All notifications marked as read']);
+        // Check if there are IDs to update
+        if (empty($notificationIds)) {
+            return response()->json(['message' => 'No notifications to mark as read'], 400);
+        }
+
+        // Update notifications directly using the Notification model
+        Notification::whereIn('id', $notificationIds)
+            ->whereHas('users', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->get()
+            ->each(function ($notification) use ($user) {
+                $notification->users()->updateExistingPivot($user->id, ['read' => true]);
+            });
+
+        return response()->json(['message' => 'Selected notifications marked as read']);
     }
+
+
+
+
 
     /**
      * Delete a notification.

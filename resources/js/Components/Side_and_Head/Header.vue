@@ -189,7 +189,7 @@ const markAllAsRead = async () => {
       .map(n => n.id);
 
     if (notificationIds.length > 0) {
-      await axios.patch('/notifications/read-selected', { notification_ids: notificationIds });
+      await axios.patch('/notifications/read-all', { notification_ids: notificationIds });
       notifications.value = notifications.value.map(n => {
         if (notificationIds.includes(n.id)) {
           return { ...n, read: true };
