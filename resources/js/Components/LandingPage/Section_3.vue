@@ -1,5 +1,5 @@
 <template>
-    <section class="relative py-16 px-6 text-center h-screen bg-[#F8F8FA]">
+    <section class="relative py-16 px-6 text-center h-[50vh] bg-[#F8F8FA]">
         <!-- Background Image -->
         <div 
             class="absolute inset-0 bg-cover bg-center">

@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ScholarshipController;
 use App\Http\Controllers\Staff\ScholarController;
 use App\Http\Controllers\Staff\MessageController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\MISController;
 use App\Http\Controllers\Staff\SettingsController;
 use App\Http\Controllers\Staff\SponsorController;
@@ -140,7 +141,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');
     Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
 
-
+    // Calendar
+    Route::get('/calendar', [CalendarController::class, 'calendar'])->name('calendar.calendar');
 
 
     // Messaging

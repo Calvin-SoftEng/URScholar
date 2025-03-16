@@ -19,65 +19,65 @@
                 <input type="text" placeholder="Search..." class="w-full px-4 py-2 border-none focus:ring-0" />
             </div>
 
-
             <div class="w-full h-[1px] bg-gray-200"></div>
 
             <div class="w-full flex flex-col items-center space-y-4">
                 <!-- Check if scholarships exist -->
                 <template v-if="scholarships.length > 0">
                     <div v-for="scholarship in scholarships" :key="scholarship.id" 
-                        class="p-10 max-w-4l bg-white border border-gray-200 rounded-xl shadow-md">
+                        class="p-6 w-full min-w-xl bg-white border border-gray-200 rounded-xl shadow-md">
                         
-                        <div class="flex items-start gap-6">
+                        <div class="flex flex-row items-start gap-6 justify-between">
                             <!-- Scholarship Image -->
                             <img 
                                 :src="`/storage/sponsor/logo/${getSponsorDetails(scholarship.sponsor_id).logo}`" 
                                 alt="logo" 
-                                class="w-20 h-20 rounded-lg object-cover"
+                                class="w-40 h-40 rounded-lg object-cover"
                             >
 
                             <!-- Scholarship Details -->
-                            <div class="flex flex-col flex-grow space-y-2">
-                                <span class="font-semibold text-lg text-gray-800">{{ scholarship.name }}</span>
-                                <span class="text-sm text-gray-600">
-                                    Funded by <span class="font-medium">{{ getSponsorDetails(scholarship.sponsor_id).name }}</span> 
-                                    <span class="text-gray-500">Since {{ getSponsorDetails(scholarship.sponsor_id).since }}</span>
+                            <div class="flex flex-col flex-grow space-y-1 items-start">
+                                <span class="font-semibold text-2xl text-gray-800">{{ scholarship.name }}</span>
+                                <span class="text-sm text-gray-600 space-x-2">
+                                    Funded by <span class="font-medium text-gray-800">{{ getSponsorDetails(scholarship.sponsor_id).name }}</span> 
+                                    <span class="text-gray-500">Since <span class="font-medium text-gray-800">{{ getSponsorDetails(scholarship.sponsor_id).since }}</span></span>
                                 </span>
-                                <p class="text-sm text-gray-700 leading-relaxed">
+                                <p class="text-sm text-gray-700 leading-relaxed mt-2">
                                     {{ getSponsorDetails(scholarship.sponsor_id).description }}
                                 </p>
 
                                 <!-- Scholarship Info -->
-                                <div class="flex gap-6 mt-3">
-                                    <div class="flex flex-col">
+                                <div class="flex gap-6 mt-5">
+                                    <div class="flex flex-col items-start">
                                         <span class="text-gray-500 text-sm">Scholarship for</span>
                                         <span class="font-medium text-gray-800">All Courses</span>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col items-start">
                                         <span class="text-gray-500 text-sm">Application</span>
                                         <span class="font-medium text-green-600">Ongoing</span>
                                     </div>
-                                    <div class="flex flex-col">
+                                    <div class="flex flex-col items-start">
                                         <span class="text-gray-500 text-sm">Deadline</span>
                                         <span class="font-medium text-red-500">Bukas na</span>
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Vertical Divider (Thicker & More Visible) -->
+                            <div class="w-[10px] h-full bg-gray-400 mx-6"></div>
+
+                            <!-- Apply Button (Vertically Centered) -->
+                            <div class="flex h-full items-center justify-center">
+                                <Link :href="route('landing_page.scholarship_apply_details')">
+                                    <button 
+                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200"
+                                    >
+                                        Apply Now
+                                    </button>
+                                </Link>
+                            </div>
                         </div>
 
-                        <!-- Divider -->
-                        <div class="h-[1px] bg-gray-300 my-4"></div>
-
-                        <!-- Apply Button (Centered) -->
-                        <div class="flex justify-center">
-                            <Link :href="route('landing_page.scholarship_apply_details')">
-                                <button 
-                                    class="bg-primary text-white px-8 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200"
-                                >
-                                    Apply Now
-                                </button>
-                            </Link>
-                        </div>
                     </div>
                 </template>
 

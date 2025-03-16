@@ -3,7 +3,7 @@
         <div
             class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
-                <div class="breadcrumbs text-sm text-gray-400 mb-2">
+                <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
                         <li class="hover:text-gray-600">
                             Home
@@ -29,12 +29,18 @@
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
                         <div v-if="students.length == 0" class="flex flex-col items-end">
-                            <button disabled v-tooltip.left="'Import updated List'"
-                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins"
-                                title="You need to add students before importing scholars">
-                                <span><font-awesome-icon :icon="['fas', 'user-plus']"
-                                        class="mr-2 text-sm dark:text-dtext" />Import Scholars</span>
+                            <button 
+                                v-tooltip.left="'You need to add students before importing scholars'"
+                                disabled 
+                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                                    border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
+                                    font-poppins flex items-center gap-2"
+                            >
+                                <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
+                                <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
+                                <span>Import Scholars</span>
                             </button>
+
                         </div>
                         <div v-else>
                             <button @click="openScholarship"
@@ -1034,8 +1040,16 @@ watchEffect(() => {
 });
 </script>
 
-<style>
+<style scoped>
 /* override the prime vue componentss */
+:root {
+  --p-tooltip-background: #D97706 !important; /* Yellow warning color */
+}
+
+.p-tooltip-text {
+  font-size: 12px !important;
+  color: white !important;
+}
 
 .p-fileupload-choose-button {
     background-color: #003366 !important;
