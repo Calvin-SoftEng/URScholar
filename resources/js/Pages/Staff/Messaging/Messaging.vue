@@ -18,20 +18,22 @@ const messageData = ref(props.messages);
 const selectedData = ref(props.selectedScholarship);
 const form = ref({
     content: '',
+    scholarship_id: ''
 });
 
-
-// Send a message via Inertia
 const sendMessage = () => {
-    router.post('/group-page/message', { content: form.value.content }, {
+    // Get scholarship_id from selected scholarship
+    form.value.scholarship_id = selectedData.value?.id || '';
+
+    router.post('/group-page/message', form.value, {
         preserveScroll: true,
         onSuccess: () => {
             fetchMessages(); // Fetch messages after sending
             form.value.content = ''; // Clear input after sending
-
         },
     });
 };
+
 
 // Set up real-time messaging using Laravel Echo
 onMounted(() => {

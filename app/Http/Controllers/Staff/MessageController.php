@@ -119,6 +119,7 @@ class MessageController extends Controller
 
         $request->validate([
             'content' => 'required|string',
+            'scholarship_id' => 'required'
         ]);
 
         // dd($request);
@@ -137,8 +138,6 @@ class MessageController extends Controller
         $user = Auth::user();
 
         $notification = Notification::create([
-            'user_id' => $user->id,
-            'creator_id' => Auth::id(), 
             'title' => 'New Message',
             'message' => 'May nag text ngani ' . now()->format('H:i:s'),
             'type' => 'info',
