@@ -60,7 +60,7 @@ class Scholarship extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'scholarship_group')
+        return $this->belongsToMany(User::class, 'scholarship_groups')
             ->withTimestamps();
     }
 

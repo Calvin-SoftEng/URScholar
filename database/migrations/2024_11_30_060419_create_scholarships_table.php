@@ -49,7 +49,7 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('scholarship_group', function (Blueprint $table) {
+        Schema::create('scholarship_groups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
@@ -62,7 +62,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('scholarship_group');
+        Schema::dropIfExists('scholarship_groups');
         Schema::dropIfExists('criteria');
         Schema::dropIfExists('campus_recipients');
         Schema::dropIfExists('requirements');
