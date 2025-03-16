@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex items-center shadow-md bg-primary mx-[200px] sticky top-3 rounded-lg z-50 px-5">
+    <nav class="flex items-center shadow-md bg-[#003366] mx-[200px] sticky top-3 rounded-lg z-50 px-5">
         <!-- Logo (Left-Aligned) -->
         <div class="flex items-center p-2">
             <img src="../../../assets/images/logo-hori-white.png" alt="Logo" class="h-12" />

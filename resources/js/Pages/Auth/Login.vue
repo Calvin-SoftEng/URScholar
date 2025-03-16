@@ -93,7 +93,7 @@ const unblockUser = () => {
 };
 </script>
 
-<style>
+<style >
 :root {
   /* Adjust this value to match your sidebar width */
   --p-tooltip-background: white !important;
