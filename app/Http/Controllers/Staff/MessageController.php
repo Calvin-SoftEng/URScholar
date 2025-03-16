@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Message;
 use App\Models\Scholarship;
 use App\Events\NewMessage;
 use App\Events\MessageSent;
+use App\Models\Notification;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -130,6 +132,19 @@ class MessageController extends Controller
 
         // MessageSent::dispatch($message);
         broadcast(new MessageSent($message))->toOthers();
+
+        //Notifs
+        $user = Auth::user();
+
+        $notification = Notification::create([
+            'user_id' => $user->id,
+            'creator_id' => Auth::id(), 
+            'title' => 'New Message',
+            'message' => 'May nag text ngani ' . now()->format('H:i:s'),
+            'type' => 'info',
+        ]);
+
+        event(new NewNotification($notification));
 
         return back();
     }

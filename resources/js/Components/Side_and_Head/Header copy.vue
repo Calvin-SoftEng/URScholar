@@ -31,6 +31,7 @@
           </label>
         </div>
 
+
         <!-- notification -->
         <button id="dropdownNotificationButton" @click.stop="toggleDropdown"
           class="relative border border-gray-300 inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg"
@@ -41,7 +42,7 @@
               d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
           </svg>
           <!-- Notification Badge -->
-          <div v-if="filteredUnreadCount > 0"
+          <div
             class="absolute block w-3.5 h-3.5 bg-red-500 border-2 border-white rounded-full -top-0.5 start-7 dark:border-gray-900">
           </div>
         </button>
@@ -53,50 +54,111 @@
   <div v-show="isDropdownVisible" id="dropdownNotification"
     class="absolute right-2 mt-14 z-20 w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow-xl dark:bg-gray-800 dark:divide-gray-700">
     <div
-      class="flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
+      class="block px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
       Notifications
-      <button v-if="filteredNotifications.length > 0 && filteredUnreadCount > 0" @click="markAllAsRead"
-        class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
-        Mark all as read
-      </button>
     </div>
-    <div v-if="filteredNotifications.length === 0"
-      class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
-      No notifications
-    </div>
-    <div v-else
+    <div
       class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
-      <div v-for="notification in filteredNotifications" :key="notification.id"
-        class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
-        :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
-        <div class="w-full">
-          <div class="flex justify-between items-start mb-1.5">
-            <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
-            <button @click.stop="deleteNotification(notification.id)"
-              class="ml-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <div class="shrink-0">
+          <img class="rounded-full w-11 h-11 border border-gray-100" src="/docs/images/people/profile-picture-1.jpg"
+            alt="Jese image">
+          <!-- <div class="absolute flex items-center justify-center w-5 h-5 ms-6 -mt-5 bg-blue-600 border border-white rounded-full dark:border-gray-800">
+              <svg class="w-2 h-2 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                <path d="M1 18h16a1 1 0 0 0 1-1v-6h-4.439a.99.99 0 0 0-.908.6 3.978 3.978 0 0 1-7.306 0 .99.99 0 0 0-.908-.6H0v6a1 1 0 0 0 1 1Z"/>
+                <path d="M4.439 9a2.99 2.99 0 0 1 2.742 1.8 1.977 1.977 0 0 0 3.638 0A2.99 2.99 0 0 1 13.561 9H17.8L15.977.783A1 1 0 0 0 15 0H3a1 1 0 0 0-.977.783L.2 9h4.239Z"/>
               </svg>
-            </button>
-          </div>
-          <div class="flex justify-between items-center">
-            <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
-            <button v-if="!notification.read" @click="markAsRead(notification.id)"
-              class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
-              Mark as read
-            </button>
-          </div>
+            </div> -->
         </div>
-      </div>
+        <div class="w-full ps-3">
+          <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+            New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's
+            up? All set for the presentation?"
+          </div>
+          <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
+        </div>
+      </a>
+      <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <div class="shrink-0">
+          <img class="rounded-full w-11 h-11 border border-gray-100" src="/docs/images/people/profile-picture-1.jpg"
+            alt="Jese image">
+        </div>
+        <div class="w-full ps-3">
+          <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+            New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's
+            up? All set for the presentation?"
+          </div>
+          <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
+        </div>
+      </a>
+      <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <div class="shrink-0">
+          <img class="rounded-full w-11 h-11 border border-gray-100" src="/docs/images/people/profile-picture-1.jpg"
+            alt="Jese image">
+        </div>
+        <div class="w-full ps-3">
+          <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+            New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's
+            up? All set for the presentation?"
+          </div>
+          <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
+        </div>
+      </a>
+      <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <div class="shrink-0">
+          <img class="rounded-full w-11 h-11 border border-gray-100" src="/docs/images/people/profile-picture-1.jpg"
+            alt="Jese image">
+        </div>
+        <div class="w-full ps-3">
+          <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+            New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's
+            up? All set for the presentation?"
+          </div>
+          <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
+        </div>
+      </a>
+      <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <div class="shrink-0">
+          <img class="rounded-full w-11 h-11 border border-gray-100" src="/docs/images/people/profile-picture-1.jpg"
+            alt="Jese image">
+        </div>
+        <div class="w-full ps-3">
+          <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+            New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's
+            up? All set for the presentation?"
+          </div>
+          <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
+        </div>
+      </a>
+      <a href="#" class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+        <div class="shrink-0">
+          <img class="rounded-full w-11 h-11 border border-gray-100" src="/docs/images/people/profile-picture-1.jpg"
+            alt="Jese image">
+        </div>
+        <div class="w-full ps-3">
+          <div class="text-gray-500 text-sm mb-1.5 dark:text-gray-400">
+            New message from <span class="font-semibold text-gray-900 dark:text-white">Jese Leos</span>: "Hey, what's
+            up? All set for the presentation?"
+          </div>
+          <div class="text-xs text-blue-600 dark:text-blue-500">a few moments ago</div>
+        </div>
+      </a>
     </div>
+    <!-- <a href="#" class="block py-2 text-sm font-medium text-center text-gray-900 rounded-b-lg bg-gray-50 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-700 dark:text-white">
+        <div class="inline-flex items-center ">
+          <svg class="w-4 h-4 me-2 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 14">
+            <path d="M10 0C4.612 0 0 5.336 0 7c0 1.742 3.546 7 10 7 6.454 0 10-5.258 10-7 0-1.664-4.612-7-10-7Zm0 10a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z"/>
+          </svg>
+          View all
+        </div>
+      </a> -->
   </div>
+
 </template>
 
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { ref, onMounted, defineProps, onUnmounted, computed } from 'vue';
-import axios from 'axios';
+import { ref, onMounted, defineProps, onUnmounted } from 'vue';
 
 const props = defineProps({
   dataOpenSideBar: Boolean,
@@ -120,18 +182,7 @@ const items = ref([
   }
 ]);
 
-const isDark = ref(false);
-const notifications = ref([]);
-const isDropdownVisible = ref(false);
-const currentUserId = ref(null);
-
-const filteredNotifications = computed(() => {
-  return notifications.value.filter(n => n.user_id !== currentUserId.value);
-});
-
-const filteredUnreadCount = computed(() => {
-  return filteredNotifications.value.filter(n => !n.read).length;
-});
+const isDark = ref(false)
 
 const toggleTheme = () => {
   isDark.value = !isDark.value
@@ -142,91 +193,12 @@ const toggleTheme = () => {
     document.documentElement.classList.remove('dark')
     localStorage.setItem('theme', 'light')
   }
-};
+}
+
+const isDropdownVisible = ref(false);
 
 const toggleDropdown = () => {
   isDropdownVisible.value = !isDropdownVisible.value;
-  if (isDropdownVisible.value) {
-    fetchNotifications();
-  }
-};
-
-// Get current user ID
-const getCurrentUserId = () => {
-  const userIdMeta = document.querySelector('meta[name="user-id"]');
-  if (userIdMeta) {
-    currentUserId.value = userIdMeta.getAttribute('content');
-  }
-};
-
-// Notification API calls
-const fetchNotifications = async () => {
-  try {
-    const response = await axios.get('/notifications');
-    notifications.value = response.data;
-  } catch (error) {
-    console.error('Error fetching notifications:', error);
-  }
-};
-
-const markAsRead = async (id) => {
-  try {
-    await axios.patch(`/notifications/${id}/read`);
-    const index = notifications.value.findIndex(n => n.id === id);
-    if (index !== -1) {
-      notifications.value[index].read = true;
-    }
-  } catch (error) {
-    console.error('Error marking notification as read:', error);
-  }
-};
-
-const markAllAsRead = async () => {
-  try {
-    // Only mark notifications from others as read
-    const notificationIds = filteredNotifications.value
-      .filter(n => !n.read)
-      .map(n => n.id);
-
-    if (notificationIds.length > 0) {
-      await axios.patch('/notifications/read-selected', { notification_ids: notificationIds });
-      notifications.value = notifications.value.map(n => {
-        if (notificationIds.includes(n.id)) {
-          return { ...n, read: true };
-        }
-        return n;
-      });
-    }
-  } catch (error) {
-    console.error('Error marking all notifications as read:', error);
-  }
-};
-
-const deleteNotification = async (id) => {
-  try {
-    await axios.delete(`/notifications/${id}`);
-    notifications.value = notifications.value.filter(n => n.id !== id);
-  } catch (error) {
-    console.error('Error deleting notification:', error);
-  }
-};
-
-const formatTime = (dateString) => {
-  const date = new Date(dateString);
-  const now = new Date();
-  const diff = Math.floor((now - date) / 1000);
-
-  if (diff < 60) {
-    return 'Just now';
-  } else if (diff < 3600) {
-    const minutes = Math.floor(diff / 60);
-    return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-  } else if (diff < 86400) {
-    const hours = Math.floor(diff / 3600);
-    return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-  } else {
-    return date.toLocaleDateString();
-  }
 };
 
 // Close dropdown when clicking outside
@@ -236,44 +208,12 @@ const handleClickOutside = (event) => {
   }
 };
 
-// Set up Pusher to listen for real-time notifications
-const setupPusher = () => {
-  const userId = currentUserId.value;
-
-  if (userId && window.Echo) {
-    window.Echo.private(`notifications.${userId}`)
-      .listen('.new.notification', (data) => {
-        // Only add notifications from other users
-        if (data.user_id !== userId) {
-          const newNotification = {
-            id: data.id,
-            title: data.title,
-            message: data.message,
-            type: data.type,
-            read: false,
-            created_at: data.created_at,
-            user_id: data.user_id
-          };
-
-          notifications.value = [newNotification, ...notifications.value];
-        }
-      });
-  }
-};
-
 // Check theme preference on page load
 onMounted(() => {
-  if (window.initFlowbite) {
-    window.initFlowbite();
-  }
+  window.initFlowbite();
 
-  // Get user ID
-  getCurrentUserId();
-
-  // Set up notifications
+  // notifs
   document.addEventListener("click", handleClickOutside);
-  fetchNotifications();
-  setupPusher();
 
   // First check localStorage
   const savedTheme = localStorage.getItem('theme')
@@ -303,17 +243,14 @@ onMounted(() => {
       }
     }
   })
-});
+
+
+})
 
 onUnmounted(() => {
   document.removeEventListener("click", handleClickOutside);
-
-  // Clean up Pusher connection
-  const userId = currentUserId.value;
-  if (userId && window.Echo) {
-    window.Echo.leave(`notifications.${userId}`);
-  }
 });
+
 </script>
 
 <style scoped>

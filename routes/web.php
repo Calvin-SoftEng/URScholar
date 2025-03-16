@@ -17,6 +17,7 @@ use App\Http\Controllers\Staff\SettingsController;
 use App\Http\Controllers\Staff\SponsorController;
 use App\Http\Controllers\Staff\StaffController;
 use App\Http\Controllers\SuperAdminController;
+use App\Http\Controllers\NotificationController;
 use App\Events\TestEvent;
 // use App\Http\Controllers\SystemAdminController;
 use App\Http\Controllers\MIS\SystemAdminController;
@@ -43,6 +44,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Notification routes
+    Route::get('/notifications', [NotificationController::class, 'index']);
+    Route::post('/notifications', [NotificationController::class, 'store']);
+    Route::patch('/notifications/{id}/read', [NotificationController::class, 'markAsRead']);
+    Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead']);
+    Route::delete('/notifications/{id}', [NotificationController::class, 'destroy']);
+
+    Route::get('/notifications/test', [NotificationController::class, 'createTestNotification']);
 });
 
 // MASTER ADMIN -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,7 +113,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     //ScholarshipsTabs
     Route::get('/scholarships/{scholarship}/requirements', [ScholarshipController::class, 'requirementsTab'])->name('requirementsTab.requirements');
     Route::get('/scholarships/{scholarship}/send-access', [EmailController::class, 'index'])->name('requirements.index');
-    
+
     Route::post('/scholarship/forward-batches', [ScholarshipController::class, 'forward'])->name('scholars.forward');
 
     Route::get('/scholarships/scholar={id}', [ScholarController::class, 'scholar'])->name('scholarships.scholar_scholarship_details');
@@ -194,7 +204,7 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
 // Staff and Cashier Profile -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    Route::get('/account/profile', [ProfileController::class, 'view_profile'])->name('view.profile');
+Route::get('/account/profile', [ProfileController::class, 'view_profile'])->name('view.profile');
 
 
 // STUDENT -------------------------------------------------------------------------------------------------------------------------------------------------------

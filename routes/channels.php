@@ -22,3 +22,7 @@ Broadcast::channel('scholarship.{scholarshipId}', function ($user, $scholarshipI
     return $user->scholarships->contains($scholarshipId) ? ['id' => $user->id, 'name' => $user->name] : false;
 });
 
+Broadcast::channel('notifications.{id}', function ($user, $id) {
+    return (int) $user->id === (int) $id;
+});
+
