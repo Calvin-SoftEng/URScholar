@@ -104,7 +104,7 @@ class DatabaseSeeder extends Seeder
         Scholarship::factory()->create([
             'name' => 'TDP',
             'sponsor_id' => 1,
-            'scholarshipType' => 'Need-based',
+            'scholarshipType' => 'Need-Based',
             'status' => 'Active',
             'date_start' => '2021-01-01',
             'date_end' => '2021-12-31',
