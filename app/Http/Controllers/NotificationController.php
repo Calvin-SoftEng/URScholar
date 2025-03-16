@@ -138,17 +138,27 @@ class NotificationController extends Controller
      */
     public function destroy($id)
     {
+        $user = Auth::user();
+
+        // Find the notification directly using Notification::findOrFail
         $notification = Notification::findOrFail($id);
 
-        // Make sure the notification belongs to the authenticated user
-        if ($notification->user_id !== Auth::id()) {
+        // Check if the notification belongs to the authenticated user
+        if (!$notification->users()->where('user_id', $user->id)->exists()) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $notification->delete();
+        // Detach the notification from the authenticated user
+        $notification->users()->detach($user->id);
+
+        // Optionally delete the notification if it has no more users associated
+        if ($notification->users()->count() === 0) {
+            $notification->delete();
+        }
 
         return response()->json(['message' => 'Notification deleted']);
     }
+
 
     public function createTestNotification()
     {
