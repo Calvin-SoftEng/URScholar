@@ -15,7 +15,7 @@
                 <!-- Second Layer with Single Card -->
                 <div class="bg-white box-border rounded shadow-md h-[65%] dark:bg-dcontainer">
                     <!-- <ContentComponent /> -->
-                    <ScholarshipActivities />
+                    <ScholarshipActivities :sponsors="sponsors" :scholarships="scholarships" :scholars="scholars"/>
                 </div>
             </div>
             <!-- 25% Column -->
@@ -52,6 +52,7 @@ const components = {
 const props = defineProps({
     scholarships: Array,
     sponsors: Array,
+    scholars: Array,
 });
 
 </script>

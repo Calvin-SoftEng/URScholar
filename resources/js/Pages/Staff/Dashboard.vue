@@ -6,6 +6,7 @@ import ContentDashboard from '@/Pages/Staff/Dashboard/Content-Dashboard.vue';
 const props = defineProps({
     scholarships: Array,
     sponsors: Array,
+    scholars: Array,
 });
 
 </script>
