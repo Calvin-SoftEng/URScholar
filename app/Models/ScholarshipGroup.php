@@ -13,11 +13,11 @@ class ScholarshipGroup extends Model
 
     public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsToMany(User::class);
     }
 
     public function scholarship()
     {
-        return $this->hasMany(Scholarship::class);
+        return $this->belongsTo(Scholarship::class);
     }
 }

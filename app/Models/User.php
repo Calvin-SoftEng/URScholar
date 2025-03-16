@@ -47,6 +47,11 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function scholarshipGroups()
+    {
+        return $this->belongsToMany(ScholarshipGroup::class);
+    }
+
     public function notifications()
     {
         return $this->belongsToMany(Notification::class)
