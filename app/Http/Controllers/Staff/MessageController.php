@@ -9,6 +9,7 @@ use App\Models\Scholarship;
 use App\Events\NewMessage;
 use App\Events\MessageSent;
 use App\Models\Notification;
+use App\Models\ScholarshipGroup;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -152,11 +153,18 @@ class MessageController extends Controller
             'type' => 'group_chat',
         ]);
 
-        // Get the IDs of all users who should receive the notification
-        $userIds = User::pluck('id'); // Example: All users
+        $scholarshipId = $scholarship->id;
 
-        // Attach the notification to the users
-        $notification->users()->attach($userIds);
+        // Get users who belong to the specified scholarship group
+        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
+            $query->select('user_id')
+                ->from('scholarship_groups')
+                ->where('scholarship_id', $scholarshipId);
+        })->get();
+
+        // Attach users to the notification
+        $notification->users()->attach($users->pluck('id'));
+
 
         event(new NewNotification($notification));
 

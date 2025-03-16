@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\Scholarship;
+use App\Models\ScholarshipGroup;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
 use App\Models\User;
@@ -118,7 +119,7 @@ class DatabaseSeeder extends Seeder
             'date_start' => '2021-01-01',
             'date_end' => '2021-12-31',
         ]);
-        
+
         //school year
         SchoolYear::factory()->create([
             'year' => '2024-2025',
@@ -134,7 +135,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'Morong',
             'location' => 'Morong, Rizal',
         ]);
-        
+
         Campus::create([
             'name' => 'Binangonan',
             'location' => 'Binangonan, Rizal',
@@ -149,6 +150,17 @@ class DatabaseSeeder extends Seeder
         Course::create([
             'name' => 'BSBA',
             'campus_id' => 2,
+        ]);
+
+        //Group Chat
+        ScholarshipGroup::create([
+            'user_id' => 2,
+            'scholarship_id' => 1,
+        ]);
+
+        ScholarshipGroup::create([
+            'user_id' => 3,
+            'scholarship_id' => 1,
         ]);
 
         //sponsor 
