@@ -44,22 +44,27 @@
 
                     <!-- Stats Section -->
                     <div class="grid grid-cols-2 shadow-sm rounded-lg border">
+                        <!-- Completed Scholars -->
                         <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Submitted Requirements</p>
-                            </div>
-                            <p class="text-4xl font-semibold font-kanit">{{ stats.submittedCount }} / {{ total_scholars }}</p>
-                        </div>
-
-                        <!-- <div class="flex flex-col items-start py-4 px-10 border-gray-300">
-                            <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
+                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
                                 <p class="text-gray-500 text-sm">Completed Scholars</p>
                             </div>
-                            <p class="text-4xl font-semibold font-kanit">{{ stats.completedCount }}</p>
-                        </div> -->
+                            <p class="text-4xl font-semibold font-kanit text-green-600">{{ stats.completedCount }}</p>
+                        </div>
+                        
+                        <!-- Total Scholars -->
+                        <div class="flex flex-col items-start py-4 px-10">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Total Scholars</p>
+                            </div>
+                            <p class="text-4xl font-semibold font-kanit">{{ total_scholars }}</p>
+                        </div>
+
                     </div>
+
+
                 </div>
 
                 <div class="w-full h-[1px] bg-gray-200 my-4"></div>

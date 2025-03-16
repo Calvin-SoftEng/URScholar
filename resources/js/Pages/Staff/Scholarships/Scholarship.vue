@@ -77,18 +77,6 @@
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Scholarship Batches</p>
-                                </div>
-                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
-                                    <button class="px-3 bg-blue-400 text-white rounded-full text-sm">2 new
-                                        Batch</button>
-                                </div>
-                            </div>
-
-                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Total Verified Scholars</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
@@ -112,13 +100,25 @@
                                 <p class="text-4xl font-semibold font-kanit">2/{{ total_scholars }}</p>
                             </div>
 
-                            <!-- <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Scholarship Batches</p>
+                                </div>
+                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
+                                    <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
+                                    <button class="px-3 bg-blue-400 text-white rounded-full text-sm">2 new
+                                        Batch</button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Completed Scholars</p>
+                                    <p class="text-gray-500 text-sm">Completed Batches</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">2</p>
-                            </div> -->
+                            </div>
                         </div>
 
                         <div class="w-full h-[1px] bg-gray-200"></div>
@@ -135,22 +135,28 @@
 
 
                         <div v-for="batch in batches" :key="batch.id"
-                            class="bg-gradient-to-r from-white to-[#D2CFFE] w-full rounded-lg p-5 shadow-sm hover:bg-lightblue">
+                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                            
                             <div @click="() => openBatch(batch.id)"
-                                class="flex flex-row justify-between items-center cursor-pointer">
-                                <span>Batch {{ batch.batch_no }}</span>
-                                <div class="grid grid-cols-2">
-                                    <div class="flex flex-col">
-                                        <span>No of Scholars</span>
-                                        <span>200</span>
+                                class="flex justify-between items-center">
+                                
+                                <!-- Left: Batch Title -->
+                                <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+
+                                <!-- Right: Scholar Info -->
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">No. of Scholars</span>
+                                        <span class="text-xl font-bold text-blue-600">200</span>
                                     </div>
-                                    <div class="flex flex-col">
-                                        <span>No of Unverified Scholars</span>
-                                        <span>200</span>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
+                                        <span class="text-xl font-bold text-red-500">200</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
