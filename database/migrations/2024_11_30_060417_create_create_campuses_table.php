@@ -31,8 +31,9 @@ return new class extends Migration {
 
         Schema::create('courses', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->foreignId('campus_id')->constrained();
+            $table->string('name');
+            $table->string('abbreviation');
             $table->timestamps();
         });
 

@@ -67,6 +67,17 @@ class DatabaseSeeder extends Seeder
             'usertype' => 'coordinator'
         ]);
 
+        //sponsor
+        User::factory()->create([
+            'name' => 'sponsor1',
+            'email' => 'sponsor1@gmail.com',
+            'first_name' => 'Calvin',
+            'last_name' => 'Manalo',
+            'middle_name' => 'De Guzman',
+            'password' => bcrypt('password'),
+            'usertype' => 'sponsor'
+        ]);
+
         //cashier
         User::factory()->create([
             'name' => 'cashier1',
@@ -143,13 +154,15 @@ class DatabaseSeeder extends Seeder
 
         //Course
         Course::create([
-            'name' => 'BSIT',
             'campus_id' => 1,
+            'name' => 'Bachelor of Science in Information System',
+            'abbreviation' => 'BSIT',
         ]);
 
         Course::create([
-            'name' => 'BSBA',
             'campus_id' => 2,
+            'name' => 'Bachelor of Science in Business Administrator',
+            'abbreviation' => 'BSBA',
         ]);
 
         //Group Chat

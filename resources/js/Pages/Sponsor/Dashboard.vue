@@ -1,7 +1,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
-import ContentDashboard from '@/Pages/Staff/Dashboard/Content-Dashboard.vue';
+import ContentDashboard from '@/Pages/Sponsor/Dashboard/Content-Dashboard.vue';
 
 const props = defineProps({
     scholarships: Array,

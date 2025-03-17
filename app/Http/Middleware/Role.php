@@ -32,6 +32,8 @@ class Role
                     return redirect()->route('staff.dashboard');
                 case 'coordinator':
                     return redirect()->route('staff.dashboard');
+                case 'sponsor':
+                    return redirect()->route('sponsor.dashboard');
                 case 'cashier':
                     return redirect()->route('cashier.dashboard');
                 case 'student':

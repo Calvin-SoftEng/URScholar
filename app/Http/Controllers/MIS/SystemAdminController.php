@@ -11,20 +11,23 @@ use Illuminate\Http\Request;
 
 class SystemAdminController extends Controller
 {
-    public function dashboard() {
+    public function dashboard()
+    {
         return Inertia::render('MIS/Dashboard');
     }
 
 
     // system config ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public function portal_branding() {
+    public function portal_branding()
+    {
         return Inertia::render('MIS/System_Config/Portal_Branding');
     }
 
     // univ settings ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    public function courses() {
+    public function courses()
+    {
         $campuses = Campus::with('courses')->get();
-        
+
         return Inertia::render('MIS/Univ_Settings/Course', [
             'campuses' => $campuses,
         ]);
@@ -32,7 +35,8 @@ class SystemAdminController extends Controller
 
     // campus ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public function store_campus(Request $request) {
+    public function store_campus(Request $request)
+    {
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -48,7 +52,8 @@ class SystemAdminController extends Controller
         return redirect()->route('sa.campuses');
     }
 
-    public function assign_campus(Request $request, Campus $campus) {
+    public function assign_campus(Request $request, Campus $campus)
+    {
 
         $request->validate([
             'campus_id' => 'required|exists:campuses,id',
@@ -57,7 +62,7 @@ class SystemAdminController extends Controller
         ]);
 
         $campus = Campus::findOrFail($request['campus_id']);
-        
+
         $campus->update([
             'coordinator_id' => $request['coor_id'],
             'cashier_id' => $request['cashier_id']
@@ -67,10 +72,11 @@ class SystemAdminController extends Controller
             ->with('message', 'Focal persons assigned successfully');
     }
 
-    public function campuses() {
+    public function campuses()
+    {
 
         $campuses = Campus::all();
-        
+
         $coor = User::whereIn('usertype', ['coordinator'])
             ->select('id', 'name', 'usertype')
             ->orderBy('name')
@@ -81,7 +87,7 @@ class SystemAdminController extends Controller
             ->orderBy('name')
             ->get();
 
-            
+
         return Inertia::render('MIS/Univ_Settings/Campus', [
             'campuses' => Campus::with(['coordinator', 'cashier'])->get(),
             'coor' => $coor,
@@ -91,7 +97,8 @@ class SystemAdminController extends Controller
 
     // course ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public function course_config(Campus $campuses) {
+    public function course_config(Campus $campuses)
+    {
 
         $course = $campuses->courses;
 
@@ -101,22 +108,26 @@ class SystemAdminController extends Controller
         ]);
     }
 
-    public function store_course_config(Request $request) {
+    public function store_course_config(Request $request)
+    {
 
         $request->validate([
             'id' => 'required',
             'name' => 'required|string',
+            'abbreviation' => 'required|string',
         ]);
 
         Course::create([
             'campus_id' => $request->id,
             'name' => $request->name,
+            'abbreviation' => $request->abbreviation,
         ]);
 
-        return redirect()->route('sa.course_config');
+        return back();
     }
 
-    public function sy_and_term() {
+    public function sy_and_term()
+    {
         return Inertia::render('MIS/Univ_Settings/SY_Term');
     }
 
@@ -130,16 +141,26 @@ class SystemAdminController extends Controller
     //     return Inertia::render('MIS/User_Roles/Roles');
     // }
 
-    public function system_user_roles() {
+    public function system_user_roles()
+    {
         return Inertia::render('MIS/User_Roles/Roles');
     }
 
-    public function system_users() {
-        return Inertia::render('MIS/User_Roles/Users');
+    public function system_users()
+    {
+        $campuses = Campus::all();
+        $users = User::whereNotIn('usertype', ['student'])->get(); // Exclude students
+
+        return Inertia::render('MIS/User_Roles/Users', [
+            'campuses' => $campuses,
+            'users' => $users,
+        ]);
     }
 
-    public function activity_logs() {
+
+    public function activity_logs()
+    {
         return Inertia::render('MIS/User_Roles/Activity_Logs');
     }
-    
+
 }

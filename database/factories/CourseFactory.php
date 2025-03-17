@@ -19,8 +19,9 @@ class CourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
             'campus_id' => \App\Models\Campus::factory(),
+            'name' => $this->faker->name(),
+            'abbreviation' => $this->faker->name(),
         ];
     }
 }

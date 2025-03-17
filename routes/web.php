@@ -168,6 +168,13 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 });
 
+// SPONSOR -------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
+
+    Route::get('/sponsor/dashboard', [SponsorController::class, 'dashboard'])->name('sponsor.dashboard');
+});
+
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth', 'usertype:cashier'])->group(function () {
