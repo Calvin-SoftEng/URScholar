@@ -162,7 +162,7 @@ const showMemberList = ref(false);
                                 <div class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                                     <!-- Messages column -->
                                     <div
-                                        class="flex-1 px-2 py-1 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
+                                        class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
                                         <!-- No group selected message -->
                                         <div v-if="!selectedData || !selectedData.id"
                                             class="flex items-center justify-center h-full text-gray-500">

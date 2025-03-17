@@ -30,7 +30,7 @@ class SendEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('urscholar@ursbinangonan.com', 'Ethanol Hotshot'),
+            from: new Address('urscholar@ursbinangonan.com', 'URS Scholarship Unit'),
             subject: 'You have been selected as a scholar!',
         );
     }
