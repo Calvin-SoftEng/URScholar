@@ -147,8 +147,8 @@ const showMemberList = ref(false);
                                     </Link>
                                 </div>
                             </div>
-                            <div class="w-[70%] h-full flex flex-col space-y-3">
-                                <div class="shadow-sm mb-4 p-4 flex justify-between items-center">
+                            <div class="w-[70%] h-full flex flex-col">
+                                <div class="shadow-sm p-4 flex justify-between items-center">
                                     <h3 class="text-lg font-bold text-primary">Conversation</h3>
                                     <!-- Three dots menu aligned with conversation text -->
                                     <button class="text-gray-600 hover:text-primary transition-colors"
@@ -157,7 +157,7 @@ const showMemberList = ref(false);
                                     </button>
                                 </div>
                                 <!-- Main chat area -->
-                                <div class="flex flex-1">
+                                <div class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                                     <!-- Messages column -->
                                     <div
                                         class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
@@ -200,11 +200,15 @@ const showMemberList = ref(false);
                                                 </div>
                                                 <div class="flex flex-col gap-1 w-full justify-start max-w-[320px]">
                                                     <div
-                                                        class="flex justify-start items-center space-x-2 rtl:space-x-reverse">
+                                                        class="flex justify-start items-center space-x-1 rtl:space-x-reverse">
                                                         <span
                                                             class="text-sm font-semibold text-gray-900 dark:text-white">
                                                             {{ message.user.first_name }}
                                                         </span>
+                                                        <span
+                                                            class="text-sm font-semibold text-gray-400 dark:text-white">
+                                                            {{ message.user.usertype }}
+                                                        </span> 
                                                     </div>
                                                     <div
                                                         class="flex flex-col leading-1.5 p-4 bg-gray-100 text-gray-900 rounded-es-xl rounded-se-xl dark:bg-gray-700">

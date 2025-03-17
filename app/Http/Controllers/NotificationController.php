@@ -22,6 +22,7 @@ class NotificationController extends Controller
                 $query->where('user_id', $user->id);
             }
         ])
+        ->where('creator_id', !$user->id)
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($notification) {

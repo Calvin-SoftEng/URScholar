@@ -103,7 +103,7 @@ class DatabaseSeeder extends Seeder
 
         //scholarship
         Scholarship::factory()->create([
-            'name' => 'TDP',
+            'name' => 'Tulong Dunong Program',
             'sponsor_id' => 1,
             'scholarshipType' => 'Need-Based',
             'status' => 'Active',
@@ -112,7 +112,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Scholarship::factory()->create([
-            'name' => 'DBP',
+            'name' => 'DBP-Rise',
             'sponsor_id' => 1,
             'scholarshipType' => 'One-time Payment',
             'status' => 'Active',
