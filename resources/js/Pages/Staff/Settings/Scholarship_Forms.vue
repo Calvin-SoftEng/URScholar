@@ -22,7 +22,7 @@
                                         <span class="text-gray-600">Marital Status of Parents:</span>
                                         <div class="flex gap-3 mt-1">
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">Married</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -33,7 +33,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">Not Married</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -44,7 +44,18 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">Living Together</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Separated</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -66,7 +77,7 @@
                                         <span class="text-gray-600">Monthly Family Income:</span>
                                         <div class="flex gap-3 mt-1">
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">10,000 and below</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -77,7 +88,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">10,001 - 20,000</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -88,7 +99,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">20,001 - 30,000</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -98,6 +109,18 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">30,001 and above</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            
 
                                         </div>
                                     </div>
@@ -110,7 +133,7 @@
                                         <span class="text-gray-600">Family Type of Housing:</span>
                                         <div class="flex gap-3 mt-1">
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">Owned</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -121,7 +144,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">Settler</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
@@ -132,7 +155,7 @@
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bai</span>
+                                                <span class="text-gray-700">Rental</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>

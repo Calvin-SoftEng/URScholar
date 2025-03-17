@@ -63,7 +63,8 @@
                         :events="events"
                         :view-mode="type"
                         :weekdays="weekday"
-                    ></v-calendar>
+                    >
+                </v-calendar>
                     </v-sheet>
                 </div>
 
@@ -188,6 +189,20 @@ onMounted(() => {
 <style scoped>
 .test {
     z-index: 9999;
+}
+
+.custom-event {
+    background-color: #4caf50; /* Green background */
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.custom-day {
+    border: 1px solid #ddd;
+    text-align: center;
+    font-weight: bold;
 }
 
 
