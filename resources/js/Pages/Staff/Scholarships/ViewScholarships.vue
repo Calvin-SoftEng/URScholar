@@ -165,7 +165,7 @@
 
                 <div class=" bg-white dark:bg-dprimary flex justify-center items-center p-5 rounded-lg">
                     <div class="flex flex-col space-y-2 items-center">
-                        <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
+                        <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-center dark:text-dtext">
                             {{ selectedScholarship.name }}<span> Scholars</span>
                         </h1>
 

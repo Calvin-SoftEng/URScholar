@@ -9,7 +9,7 @@
                             Home
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold dark:text-gray-300">View Sponsors</span>
+                            <span class="text-blue-400 font-semibold dark:text-gray-300">URS Calendar</span>
                         </li>
                     </ul>
                 </div>

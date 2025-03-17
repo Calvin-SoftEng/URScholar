@@ -126,7 +126,7 @@ const showMemberList = ref(false);
                                 </form>
                                 <!-- In the people/group list section -->
                                 <div class="divide-y">
-                                    <Link class="w-full flex items-center space-x-2 mb-2 p-4"
+                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4"
                                         v-for="scholarship in scholarships" :key="scholarship.id"
                                         :href="route('messaging.show', scholarship.id)" :class="[
                                             'hover:bg-gray-100',
@@ -136,13 +136,15 @@ const showMemberList = ref(false);
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
                                         {{ scholarship.name.charAt(0) }}
                                     </div>
-                                    <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
-                                        scholarship.name }}</span>
-                                    <div class="flex-grow">
-                                        <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
-                                            {{ scholarship.latest_message.content }}
-                                        </p>
-                                        <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
+                                    <div class="flex flex-col space-y-1">
+                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
+                                            scholarship.name }}</span>
+                                        <div class="flex-grow">
+                                            <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
+                                                {{ scholarship.latest_message.content }}
+                                            </p>
+                                            <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
+                                        </div>
                                     </div>
                                     </Link>
                                 </div>
@@ -160,7 +162,7 @@ const showMemberList = ref(false);
                                 <div class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                                     <!-- Messages column -->
                                     <div
-                                        class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
+                                        class="flex-1 px-2 py-1 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
                                         <!-- No group selected message -->
                                         <div v-if="!selectedData || !selectedData.id"
                                             class="flex items-center justify-center h-full text-gray-500">
@@ -198,7 +200,7 @@ const showMemberList = ref(false);
                                                         class="w-8 h-8 rounded-full mt-6 border"
                                                         :src="`/storage/user/profile/male.png`" alt="picture">
                                                 </div>
-                                                <div class="flex flex-col gap-1 w-full justify-start max-w-[320px]">
+                                                <div class="flex flex-col gap-1 w-full justify-start max-w-[320px] mb-3">
                                                     <div
                                                         class="flex justify-start items-center space-x-1 rtl:space-x-reverse">
                                                         <span

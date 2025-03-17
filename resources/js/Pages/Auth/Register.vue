@@ -130,6 +130,11 @@ const resendEmail = async () => {
                     :class="{ 'opacity-25': isResending }" :disabled="isResending">
                     REGISTER
                 </button>
+
+                <div class="mt-4 text-sm">
+                    <span class="text-gray-600">Already have an account?</span>
+                    <Link :href="route('login')" class="text-blue-600 font-semibold no-underline hover:underline"> Login</Link>
+                </div>
             </div>
 
             <div class="mt-10 mb-3 font-poppins text-sm text-gray-500">

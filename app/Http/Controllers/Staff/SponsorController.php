@@ -14,12 +14,16 @@ class SponsorController extends Controller
     {
         $sponsors = Sponsor::with('scholarship')->get();
         
+        
         return inertia('Staff/Scholarships/Index', ['sponsors' => $sponsors]);
     }
 
     public function show(Sponsor $sponsor)
     {
         $scholarship = $sponsor->scholarship;
+
+        $campuses = Campus::all();
+        $courses = Course::all();
 
         return Inertia::render('Staff/Scholarships/CreateScholarships', [
             'sponsors' => $sponsor,

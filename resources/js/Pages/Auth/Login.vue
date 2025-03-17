@@ -109,15 +109,15 @@ const unblockUser = () => {
 
 <template>
     <GuestLayout>
-        <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center"> 
+        <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center">
             <!-- Login Header -->
             <div class="relative flex items-center justify-center">
                 <div class="absolute z-10 w-[50%] h-full" v-tooltip="'Back to Home Page'">
                     <Link :href="(route('welcome'))">
-                        <img src="../../../assets/images/logo-hori-white_login.png" alt="">
+                        <img src="../../../assets/images/logo-hori-white_login.png" alt="URScholar Logo">
                     </Link>
                 </div>
-                <img src="../../../assets/images/login-bg.png" alt="" class="w-full h-full object-cover">
+                <img src="../../../assets/images/login-bg.png" alt="Login Background" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-blue-950 opacity-65"></div>
             </div>
 
@@ -128,40 +128,72 @@ const unblockUser = () => {
                     <span class="max-w-[90%] text-sm">Enter the details sent by the Scholarship Office</span>
                 </div>
 
+                <!-- Email Input -->
                 <div>
                     <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
-                    <input placeholder="name@gmail.com" name="email" type="email" id="email" v-model="form.email" required autofocus autocomplete="username"
-                    class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-[myblack] focus:outline-none focus:border-blue-500">
+                    <input 
+                        placeholder="name@gmail.com" 
+                        name="email" 
+                        type="email" 
+                        id="email" 
+                        v-model="form.email" 
+                        required 
+                        autofocus 
+                        autocomplete="username"
+                        class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500"
+                    />
                 </div>
 
+                <!-- Password Input -->
                 <div>
                     <InputLabel for="password" value="Password" class="font-poppins font-semibold text-md mt-6 mb-2"/>
                     <div class="relative w-full">
-                        <input :type="showPassword ? 'text' : 'password'" placeholder="Password" name="password" id="password"
-                        v-model="form.password" required autocomplete="current-password"
-                        class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-[myblack] focus:outline-none focus:border-blue-500"/>
-
+                        <input 
+                            :type="showPassword ? 'text' : 'password'" 
+                            placeholder="Password" 
+                            name="password" 
+                            id="password"
+                            v-model="form.password" 
+                            required 
+                            autocomplete="current-password"
+                            class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500"
+                        />
                         <font-awesome-icon
-                        v-if="form.password"
-                        :icon="showPassword ? ['far', 'eye-slash'] : ['far', 'eye']"
-                        @click="togglePassword"
-                        class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue-900"/>
+                            v-if="form.password"
+                            :icon="showPassword ? ['far', 'eye-slash'] : ['far', 'eye']"
+                            @click="togglePassword"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue-900"
+                        />
                     </div>
                 </div>
 
-                <!-- Error Message (Persistent) -->
+                <!-- Error Message -->
                 <p v-if="errorMessage" class="text-red-600 text-sm mt-2">
                     {{ errorMessage }}
                 </p>
 
-                <button class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5"
-                :class="{ 'opacity-50 cursor-not-allowed': isBlocked || form.processing }"
-                :disabled="isBlocked || form.processing">LOGIN NOW</button>
+                <!-- Login Button -->
+                <button 
+                    class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5"
+                    :class="{ 'opacity-50 cursor-not-allowed': isBlocked || form.processing }"
+                    :disabled="isBlocked || form.processing"
+                >
+                    LOGIN NOW
+                </button>
+
+                <!-- Register Link -->
+                <div class="flex justify-center mt-4">
+                    <p class="text-sm text-gray-600">Don't have an account? 
+                        <Link :href="route('register')" class="text-blue-600 font-semibold hover:underline">Register</Link>
+                    </p>
+                </div>
             </div>
 
+            <!-- Footer -->
             <div class="mt-10 mb-3 font-poppins text-sm text-gray-500">
                 URScholar 2024. All rights reserved 
             </div>
         </form>
+
     </GuestLayout>
 </template>
