@@ -153,7 +153,7 @@
                 <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-10">
                     
                     <!-- Page 1: Basic Information -->
-                    <div v-if="currentPage === 1">
+                    <div>
                         <div class="flex flex-row gap-3">
                             <div class="w-full flex flex-col space-y-2">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Name</h3>
@@ -208,218 +208,6 @@
                         </div>
                     </div>
 
-                    <!-- Page 2: recipients -->
-                    <div v-if="currentPage === 2">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <!-- Left Side: Number of Recipients & Campus Selection -->
-                            <div class="space-y-4">
-                                <!-- Total Recipients Input -->
-                                <div class="flex flex-col">
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">Number of Recipients</h3>
-                                    <input 
-                                        id="totalRecipients" 
-                                        type="number" 
-                                        v-model="form.totalRecipients" 
-                                        min="1"
-                                        placeholder="Enter total recipients"
-                                        class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded-lg"
-                                        @input="distributeRecipients" 
-                                    />
-                                </div>
-
-                                <!-- Campus Selection & Recipient Distribution -->
-                                <div class="space-y-3">
-                                    <div class="flex flex-col">
-                                        <label class="text-sm font-medium">
-                                            Distribute Recipients per Selected Campus
-                                        </label>
-                                        <div class="flex justify-between text-sm">
-                                            <span>Allocated: {{ allocatedRecipients }} of {{ form.totalRecipients }}</span>
-                                            <span v-if="allocatedRecipients !== parseInt(form.totalRecipients)" class="text-red-500 font-medium">
-                                                *{{ parseInt(form.totalRecipients) - allocatedRecipients }} recipients still need to be allocated
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <!-- Campus Selection List (Expands Downward) -->
-                                    <div class="space-y-2">
-                                        <div 
-                                            v-for="campus in campusesData" 
-                                            :key="campus.id" 
-                                            class="flex items-center justify-between border p-2 rounded-md"
-                                        >
-                                            <!-- Checkbox -->
-                                            <input 
-                                                type="checkbox" 
-                                                :id="`campus-${campus.id}`" 
-                                                v-model="campus.selected" 
-                                                @change="distributeRecipients"
-                                                class="w-5 h-5 rounded border-gray-300 cursor-pointer"
-                                            />
-
-                                            <!-- Campus Name -->
-                                            <label 
-                                                :for="`campus-${campus.id}`" 
-                                                class="text-sm font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
-                                                {{ campus.name }}
-                                            </label>
-
-                                            <!-- Recipients Input -->
-                                            <input 
-                                                type="number" 
-                                                v-model="campus.recipients" 
-                                                :readonly="!campus.selected" 
-                                                class="w-16 px-2 py-1 border rounded-md text-center text-gray-700 disabled:bg-gray-100"
-                                                min="0" 
-                                                :max="form.totalRecipients"
-                                                @input="onRecipientManualChange(campus.id)"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Right Side: Scrollable Course Selection -->
-                            <div class="flex flex-col space-y-2 p-2 overflow-hidden">
-                                <div 
-                                    class="flex flex-col space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer"
-                                    style="max-height: min(100%, 50vh);" 
-                                >
-                                    <div 
-                                        v-for="campus in selectedCampuses" 
-                                        :key="campus.id" 
-                                        class="p-3 border rounded-lg bg-white shadow-sm"
-                                    >
-                                        <!-- Selected Campus Name -->
-                                        <div class="text-sm font-semibold text-gray-700 mb-2">
-                                            {{ campus.name }}
-                                        </div>
-
-                                        <!-- Courses (Grow naturally, scroll if too many) -->
-                                        <div class="space-y-1">
-                                            <div v-for="course in campus.courses" :key="course">
-                                                <input 
-                                                    type="checkbox" 
-                                                    :id="`course-${campus.id}-${course}`"
-                                                    v-model="selectedCoursesMap[course]" 
-                                                    class="rounded cursor-pointer"
-                                                />
-                                                <label 
-                                                    :for="`course-${campus.id}-${course}`" 
-                                                    class="text-sm ml-2 cursor-pointer">
-                                                    {{ course }}
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <!-- Page 3: Criteria -->
-                    <div v-if="currentPage === 3">
-                        <div class="w-full space-y-5">
-                            <div>
-                                <div>
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">Grade Criteria</h3>
-
-                                    <!-- Input Box for Grade Criteria -->
-                                    <input v-model="form.name" type="text" id="name" placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)" 
-                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-                                    <!-- <input 
-                                        type="text" 
-                                        v-model="gradeCriteria" 
-                                        placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)" 
-                                        class="w-full px-3 py-2 border rounded-md text-gray-700 
-                                            focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
-                                    /> -->
-                                </div>
-                            </div>
-
-                            <div>
-                                <h3 class="font-semibold text-gray-900 dark:text-white">List Criteria and Eligibility</h3>
-                                <!-- Campus Selection List -->
-                                <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mt-2">
-                                    <div class="flex items-center space-x-2">
-                                        <!-- Checkbox to accept terms and conditions -->
-                                        <input id="accept-terms" type="checkbox"
-                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                        <label for="accept-terms"
-                                            class="text-sm font-medium text-gray-700 cursor-pointer">
-                                            Dapat First Honor
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div v-if="currentPage === 4">
-                        <div class="w-full space-y-2">
-                            <h3 class="font-semibold text-gray-900 dark:text-white">List Requirements</h3>
-                            <!-- <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
-                                <div class="flex items-center mb-4 w-full">
-                                    <form @submit.prevent="addCriteria"
-                                        class="flex items-center w-full">
-                                        <input v-model="newCriteria" type="text"
-                                            placeholder="Enter an item"
-                                            class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
-                                        <button type="submit"
-                                            class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
-                                            Add
-                                        </button>
-                                    </form>
-                                </div>
-
-                                <form @submit.prevent="removeCriteria">
-                                    <div class="flex flex-col gap-2">
-                                        <div v-for="(criteria, index) in criteria" :key="index"
-                                            class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
-                                            <span>{{ criteria }}</span>
-                                            <button @click="removeItem(index)"
-                                                class="flex items-center text-red-500 hover:text-red-700">
-                                                <span class="material-symbols-rounded text-red-600">
-                                                    delete
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </ul> -->
-                            <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
-                                <div class="flex items-center mb-4 w-full">
-                                    <form @submit.prevent="addItem" class="flex items-center w-full">
-                                        <input v-model="newItem" type="text" placeholder="Enter an item"
-                                            class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
-                                        <button type="submit"
-                                            class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
-                                            Add
-                                        </button>
-                                    </form>
-                                </div>
-
-                                <form @submit.prevent="removeItem">
-                                    <div class="flex flex-col gap-2">
-                                        <div v-for="(item, index) in items" :key="index"
-                                            class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
-                                            <span>{{ item }}</span>
-                                            <button @click="removeItem(index)"
-                                                class="flex items-center text-red-500 hover:text-red-700">
-                                                <span class="material-symbols-rounded text-red-600">
-                                                    delete
-                                                </span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </ul>
-                        </div>
-                    </div>
-
                     <!-- Buttons -->
                     <div class="mt-2 flex justify-between gap-2">
                         <div class="flex items-center gap-2">
@@ -436,22 +224,11 @@
                                 Cancel
                             </button>
 
-                            <!-- Previous Button (Only Show from Page 2 Onwards) -->
-                            <button v-if="currentPage > 1" type="button" @click="prevPage"
-                                class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 shadow-sm rounded-lg text-sm px-5 py-2.5">
-                                Previous
-                            </button>
-
                             <!-- Next Button: Only Show if Scholarship Type is Selected & Not Grant-Based -->
-                            <template v-if="form.scholarshipType && form.scholarshipType !== 'Grant-Based'">
-                                <button v-if="currentPage < totalPages" type="button" @click="nextPage"
+                            <template v-if="form.scholarshipType && form.scholarshipType !== 'Grant-Based'" >
+                                <button v-if="currentPage < totalPages" type="submit"
                                     class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-7 py-2.5">
-                                    Next
-                                </button>
-
-                                <button v-if="currentPage === totalPages" type="submit"
-                                    class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
-                                    Create Scholarship
+                                    Proceed to Setup
                                 </button>
                             </template>
 
@@ -464,129 +241,12 @@
                     </div>
 
                 </form>
+
+
             </div>
         </div>
 
 
-
-
-
-
-
-
-        <!-- <div v-if="none"
-            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
-            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-9/12">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">
-                        Add New Scholarship
-                        </h2>
-                    </span>
-                    <button type="button" @click="closeModal"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                    </button>
-                </div>
-
-                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
-
-                    <div class="flex flex-row gap-3">
-                        <div class="w-full flex flex-col space-y-2">
-                            <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship
-                                Name</h3>
-                            <input v-model="form.name" type="text" id="name"
-                                placeholder="Enter Scholarship Name"
-                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-                        </div>
-                        <div class="w-full flex flex-col space-y-2">
-                            <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship
-                                Type</h3>
-                            <select v-model="form.scholarshipType" id="scholarshipType"
-                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
-                                <option value="" disabled>Select Scholarship Type</option>
-                                <option value="Grant-Based">Grant-Based</option>
-                                <option value="Academic Scholarship">Academic Scholarship</option>
-                                <option value="One-time Payment">One-time Payment</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="w-6/12 pr-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">Set Scholarship
-                            Timeline</h3>
-                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
-
-                            <div class="flex flex-col w-full">
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                        </svg>
-                                    </div>
-                                        <input v-model="selectedStart" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Submission Start Date">
-                                </div>
-                            </div>
-
-                            <span class="text-gray-500">to</span>
-
-
-                            <div class="flex flex-col w-full">
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-                                        </svg>
-                                    </div>
-                                        <input v-model="selectedEnd" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
-                                        placeholder="Submission Start Date">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div v-if="form.scholarshipType === 'Academic Scholarship' || form.scholarshipType === 'One-time Payment'">
-                        <div
-                            class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
-                            <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                Scholarship Setup
-                            </h3>
-                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
-                        </div>
-
-                        <div class="w-full flex flex-col space-y-2">
-                            <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship
-                                Blahblah</h3>
-                            <input v-model="form.name" type="text" id="name"
-                                placeholder="Enter Scholarship Name"
-                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-                        </div>
-                    </div>
-                    
-
-                    <div class="mt-2 flex items-center justify-end space-x-3">
-                        <button type="button" @click="closeModal"
-                            class="text-gray-700 font-sans w-auto bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:outline-none focus:ring-gray-400 shadow-sm font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                            Cancel
-                        </button>
-                        
-                        <button type="submit"
-                            class="text-white font-sans w-auto bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-16 py-2.5 text-center">
-                            Create Scholarship
-                        </button>
-                    </div>
-
-                </form>
-            </div>
-        </div> -->
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
