@@ -163,4 +163,15 @@ class SystemAdminController extends Controller
         return Inertia::render('MIS/User_Roles/Activity_Logs');
     }
 
+
+    // security and backup ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    public function backup_and_restore() {
+        return Inertia::render('MIS/Security&Backup/Backup_Restore');
+    }
+
+    // public function roles() {
+    //     return Inertia::render('MIS/User_Roles/Roles');
+    // }
+
 }

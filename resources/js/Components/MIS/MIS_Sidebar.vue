@@ -32,25 +32,25 @@
             <!-- Manage Admin and Users, Role-Based Access Controls, User Activity Logs -->
 
             <Link :href="route('sa.users')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/users' }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/users' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/user-settings/users' }">Manage Admin and Users</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/users' }">Manage Admin and Users</span>
                 </div>
               </div>
             </Link>
 
             <Link :href="route('sa.user_roles')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/user-roles' }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/user-roles' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/user-settings/user-roles' }">User Roles Control</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/user-roles' }">User Roles Control</span>
                 </div>
               </div>
             </Link>
 
             <Link :href="route('sa.activity_logs')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/activity-logs' }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/activity-logs' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/user-settings/activity-logs' }">User Activity Logs</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/activity-logs' }">User Activity Logs</span>
                 </div>
               </div>
             </Link>
@@ -61,25 +61,25 @@
             <!-- School Year and Term Management, Campus Management, Course and College Management -->
 
             <Link :href="route('sa.sy_term')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/univ-settings/schoolyear-term' }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/univ-settings/schoolyear-term' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/univ-settings/schoolyear-term' }">School Year</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/univ-settings/schoolyear-term' }">School Year</span>
                 </div>
               </div>
             </Link>
 
             <Link :href="route('sa.campuses')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/univ-settings/campuses' }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/univ-settings/campuses' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/univ-settings/campuses' }">Campus Management</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/univ-settings/campuses' }">Campus Management</span>
                 </div>
               </div>
             </Link>
 
             <Link :href="route('sa.courses')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/mis/univ-settings/course') }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/system_admin/univ-settings/course') }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url.startsWith('/mis/univ-settings/course') }">Course Management</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url.startsWith('/system_admin/univ-settings/course') }">Course Management</span>
                 </div>
               </div>
             </Link>
@@ -97,10 +97,10 @@
               </div>
             </Link>
 
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+            <Link :href="route('sa.archives')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/security-and-backup/archives' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">Data Backup and Restore</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url.startsWith('/system_admin/security-and-backup') }">Data Backup and Restore</span>
                 </div>
               </div>
             </Link>

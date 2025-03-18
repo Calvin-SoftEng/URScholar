@@ -12,8 +12,130 @@
             </p>
             <div class="w-full mt-5">
                 
+                <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                    <a v-for="item in menuItems" :key="item.key"
+                        href="#"
+                        @click.prevent="selectMenu(item.key)"
+                        :class="[
+                            'flex-1 text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
+                            selectedMenu === item.key
+                                ? 'text-blue-700 border-b-4 border-blue-700 dark:text-white dark:border-white'
+                                : 'text-gray-900 border-transparent hover:border-gray-200 hover:text-blue-700 dark:text-white dark:hover:bg-gray-700'
+                        ]"
+                    >
+                        {{ item.name }}
+                    </a>
+                </div>
 
-                <div class="inline-flex rounded-t-lg shadow-xs border-x border-gray-200 dark:border-gray-700">
+
+                <!-- Content Area -->
+                <div class="bg-white relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                    <div class="flex items-center justify-between bg-white dark:bg-gray-900 m-5">
+                        <h1 class="text-xl font-semibold font-quicksand text-primary">
+                            Activities
+                        </h1>
+                    </div>
+
+                    <div v-if="selectedMenu === 'all_users'" class="max-w-3xl mx-auto bg-white py-5">
+                        
+                        <div class="grid grid-cols-[20%_60%_20%] gap-4 items-center">
+                            <!-- Time Column -->
+                            <div class="flex flex-col text-gray-500 text-sm space-y-8">
+                                <span>09:45 AM</span>
+                                <span>10:30 AM</span>
+                                <span>11:15 AM</span>
+                                <span>01:00 PM</span>
+                            </div>
+
+                            <!-- Activity Column -->
+                            <div class="flex flex-col space-y-8">
+                                <p class="text-gray-700"><strong>John Doe</strong> deleted <span class="text-blue-500">what</span>.</p>
+                                <p class="text-gray-700"><strong>Jane Smith</strong> restored <span class="text-green-500">archive.zip</span>.</p>
+                                <p class="text-gray-700"><strong>Admin</strong> updated user roles.</p>
+                                <p class="text-gray-700"><strong>Alex</strong> uploaded <span class="text-purple-500">presentation.pptx</span>.</p>
+                            </div>
+
+                            <!-- Restore Button Column -->
+                            <div class="flex flex-col space-y-5">
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-if="selectedMenu === 'admin'" class="max-w-3xl mx-auto bg-white py-5">
+                        
+                        <div class="grid grid-cols-[20%_60%_20%] gap-4 items-center">
+                            <!-- Time Column -->
+                            <div class="flex flex-col text-gray-500 text-sm space-y-8">
+                                <span>09:45 AM</span>
+                                <span>10:30 AM</span>
+                                <span>11:15 AM</span>
+                                <span>01:00 PM</span>
+                            </div>
+
+                            <!-- Activity Column -->
+                            <div class="flex flex-col space-y-8">
+                                <p class="text-gray-700"><strong>John Doe</strong> deleted <span class="text-blue-500">report.pdf</span>.</p>
+                                <p class="text-gray-700"><strong>Jane Smith</strong> restored <span class="text-green-500">archive.zip</span>.</p>
+                                <p class="text-gray-700"><strong>Admin</strong> updated user roles.</p>
+                                <p class="text-gray-700"><strong>Alex</strong> uploaded <span class="text-purple-500">presentation.pptx</span>.</p>
+                            </div>
+
+                            <!-- Restore Button Column -->
+                            <div class="flex flex-col space-y-5">
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
+                                    <span
+                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                        remove
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="inline-flex rounded-t-lg shadow-xs border-x border-gray-200 dark:border-gray-700">
                     <a href="#" aria-current="page" class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border-r border-gray-200 rounded-t-lg hover:bg-gray-100 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                         All User Activities
                     </a>
@@ -32,73 +154,8 @@
                     <a href="#" class="px-4 py-2 text-sm font-medium text-gray-900 bg-white rounded-t-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-blue-500 dark:focus:text-white">
                         Guest
                     </a>
-                </div>
+                </div> -->
 
-                <!-- Content Area -->
-                <div class="bg-white relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
-                    <div class="flex items-center justify-between bg-white dark:bg-gray-900 m-5">
-                        <h1 class="text-xl font-semibold font-quicksand text-primary">
-                            Activities
-                        </h1>
-                        <!-- <button @click="toggleAddRole"
-                            class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
-                            Add Role
-                        </button> -->
-                    </div>
-                
-                    
-                    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
-                                    <th scope="col" class="px-6 py-3">
-                                        Activity
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        User
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Date
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        <span class="sr-only">Actions</span>
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Updated an Account
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Ms. Maam
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        Kahapon
-                                    </td>
-                                    <td class="px-6 py-4 text-right">
-                                        <div class="space-x-2">
-                                            <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                                <span
-                                                    class="material-symbols-rounded p-2 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                                    remove
-                                                </span>
-                                            </button>
-                                            <!-- <button
-                                                v-tooltip.right="'Archive'">
-                                                <span
-                                                    class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-yellow-400 rounded-lg">
-                                                    inventory_2
-                                                </span>
-                                            </button> -->
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                </div>
 
                 <!-- adding roles -->
                 <div v-if="isCreating || isEditing"
@@ -175,6 +232,25 @@ const toggleEditRole = () => {
     isEditing.value = true;
     isCreating.value = false;
     form.value = { ...scholarship };
+};
+
+
+const menuItems = [
+    { name: "All User Activities", key: "all_users" },
+    { name: "Admin", key: "admin" },
+    { name: "Coordinators", key: "coordinators" },
+    { name: "Sponsors", key: "sponsors" },
+    { name: "Cashier", key: "cashier" },
+    { name: "Scholars", key: "Scholars" },
+    { name: "Guest", key: "guest" },
+];
+
+// Track the selected menu
+const selectedMenu = ref("stakeholders");
+
+// Function to change the selected menu
+const selectMenu = (key) => {
+    selectedMenu.value = key;
 };
 
 const resetForm = () => {
