@@ -67,6 +67,7 @@ const submit = () => {
             }
         },
         onFinish: () => {
+            failedAttempts.value = 0
             form.reset('password');
         },
     });
@@ -119,7 +120,7 @@ const unblockUser = () => {
                         </Link>
                     </div> -->
                     <Link :href="(route('welcome'))">
-                        <div class="flex flex-row items-center justify-center gap-2 absolute z-10 w-[50%] h-full" v-tooltip="'Back to Home Page'"">
+                        <div class="flex flex-row items-center justify-center gap-2 absolute z-10 w-[50%] h-full" v-tooltip="'Back to Home Page'">
                             <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
 
                             <span class="font-poppins text-3xl font-bold text-white tracking-tight">URScholar</span>

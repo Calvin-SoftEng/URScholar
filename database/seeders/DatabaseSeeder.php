@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\Scholarship;
+use App\Models\ScholarshipForm;
+use App\Models\ScholarshipFormData;
 use App\Models\ScholarshipGroup;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
@@ -179,6 +181,16 @@ class DatabaseSeeder extends Seeder
             'scholarship_id' => 1,
         ]);
 
+
+        //Scholarship Forms
+        ScholarshipForm::create([
+            'name' => 'Marital Status of Parents',
+        ]);
+
+        ScholarshipFormData::create([
+            'name' => 'Married',
+            'scholarship_form_id' => 1
+        ]);
         //sponsor 
         // $this->call(UserTableSeeder::class);
     }

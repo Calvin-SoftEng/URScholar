@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Http\Controllers\Controller;
+use App\Models\Campus;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\Sponsor;
 use Inertia\Inertia;
@@ -14,8 +16,15 @@ class SponsorController extends Controller
     {
         $sponsors = Sponsor::with('scholarship')->get();
         
-        
-        return inertia('Staff/Scholarships/Index', ['sponsors' => $sponsors]);
+        $campuses = Campus::all();
+        $courses = Course::all();
+
+
+        return inertia('Staff/Scholarships/Index', [
+            'sponsors' => $sponsors,
+            'campuses' => $campuses,
+            'courses' => $courses,
+        ]);
     }
 
     public function show(Sponsor $sponsor)
@@ -28,6 +37,8 @@ class SponsorController extends Controller
         return Inertia::render('Staff/Scholarships/CreateScholarships', [
             'sponsors' => $sponsor,
             'scholarships' => $scholarship,
+            'campuses' => $campuses,
+            'courses' => $courses,
         ]);
     }
 
@@ -52,18 +63,18 @@ class SponsorController extends Controller
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
         ]);
-        
 
-        
+
+
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
         // $logoFileName = $request->imgName;
         $originalFileName = $logoFile->getClientOriginalName();
         Storage::disk('public')->putFileAs('sponsor/logo', $logoFile, $originalFileName);
-        
+
         // Store the MOA file
         $filePath = $request->file('file')->store('sponsor/moa', 'public');
-        
+
 
         // dd($originalFileName);
         // Save sponsor record in the database
