@@ -8,520 +8,268 @@
                 </h1>
 
                 <div class="w-full mt-5">
-                    <div class="relative overflow-x-auto  rounded-lg w-full p-5 bg-white">
-                        
-                        <!-- Family Information -->
+                    <div class="relative overflow-x-auto rounded-lg w-full p-5 bg-white">
+                        <!-- Scholarship Forms Section -->
                         <div class="mb-5">
                             <div class="flex flex-row justify-between border-b items-center pb-3">
                                 <h2 class="text-lg font-semibold text-gray-700">Scholarship Criteria</h2>
-                                <button @click="toggleNew" class="text-blue-600 text-sm hover:underline">Add New Category</button>
+                                <button @click="toggleNewForm" class="text-blue-600 text-sm hover:underline">Add New
+                                    Form</button>
                             </div>
                             <div class="mt-3 space-y-5">
-
-                            <!-- card -->
-
-                            <!-- Criteria -->
-                            <div 
+                                <!-- Loop through scholarship forms -->
+                                <div v-for="form in scholarship_form" :key="form.id"
                                     class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
-                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                    <div
+                                        class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                                         <div>
-                                            <img src="" alt="">
-                                            <span class="font-semibold font-quicksand text-lg">Scholarship Eligibility and Criteria</span>
+                                            <span class="font-semibold font-quicksand text-lg">{{ form.name }}</span>
                                         </div>
-                                        <button @click="toggleAdd"
-                                            class="text-blue-600 text-sm hover:underline">
-                                            Add Eligibility and Criteria
-                                        </button>
+                                        <div class="flex gap-2">
+                                            <button @click="toggleEditForm(form)"
+                                                class="text-blue-600 text-sm hover:underline">Edit Form</button>
+                                            <button @click="toggleAddCriteria(form.id)"
+                                                class="text-blue-600 text-sm hover:underline">Add Criteria</button>
+                                        </div>
                                     </div>
 
                                     <div>
                                         <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Dapat Filipino ka</span>
+                                            <!-- Loop through scholarship form data -->
+                                            <div v-for="data in getFormData(form.id)" :key="data.id"
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">{{ data.name }}</span>
                                                 <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    <button @click="toggleEditCriteria(data)"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="text-primary" />
                                                     </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    <button @click="deleteCriteria(data.id)"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']"
+                                                            class="text-primary" />
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Dapat matalas baba mo</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Dapat di ka racist</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Bisaya Required</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <!-- Marital Selection -->
-                                <div 
-                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
-                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
-                                        <div>
-                                            <img src="" alt="">
-                                            <span class="font-semibold font-quicksand text-lg">Marital Status of Parents</span>
-                                        </div>
-                                        <button @click="toggleAdd"
-                                            class="text-blue-600 text-sm hover:underline">
-                                            Add Marital Status
-                                        </button>
-                                    </div>
-
-                                    <div>
-                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Married</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Not Married</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Living Together</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Separated</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                
-
-                                <!-- Monthly Family Income Status -->
-                                <div 
-                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
-                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
-                                        <div>
-                                            <img src="" alt="">
-                                            <span class="font-semibold font-quicksand text-lg">Monthly Family Income</span>
-                                        </div>
-                                        <button @click="toggleAdd"
-                                            class="text-blue-600 text-sm hover:underline">
-                                            Add Monthly Family Income
-                                        </button>
-                                    </div>
-
-                                    <div>
-                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">10,000 and below</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">10,001 - 20,000</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">20,001 - 30,000</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">30,001 and above</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-                                
-
-                                <!-- Family Type of Housing Status -->
-                                <div 
-                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
-                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
-                                        <div>
-                                            <img src="" alt="">
-                                            <span class="font-semibold font-quicksand text-lg">Family Type of Housing</span>
-                                        </div>
-                                        <button @click="toggleAdd"
-                                            class="text-blue-600 text-sm hover:underline">
-                                            Add Housing Type
-                                        </button>
-                                    </div>
-
-                                    <div>
-                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Owned</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Settler</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Rental</span>
-                                                <div class="ml-2 flex gap-1">
-                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
-                                                    </button>
-                                                    <button class="p-1 rounded hover:bg-gray-200">
-                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
-                                                    </button>
-                                                </div>
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                </div>
-
-
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
         </div>
-        <!-- adding criteria --> 
-        <div v-if="isAdding || isEditing"
-            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+
+        <!-- Add/Edit Scholarship Form Modal -->
+        <div v-if="isAddingForm || isEditingForm"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
                         <h2 class="text-2xl font-bold">
-                        Add mo name nung iaadd mo
+                            {{ isEditingForm ? 'Edit' : 'Add New' }} Scholarship Form
                         </h2>
                     </span>
                     <button type="button" @click="closeModal"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal">
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                     </button>
                 </div>
 
-                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                <form @submit.prevent="submitFormData" class="p-4 flex flex-col gap-3">
                     <div class="w-full flex flex-col space-y-2">
                         <h3 class="font-semibold text-gray-900 dark:text-white">
-                        Add What    
+                            Form Name
                         </h3>
-                        <input v-model="form.name" type="text" id="name"
-                            placeholder="Enter what"
+                        <input v-model="formData.name" type="text" id="name" placeholder="Enter form name"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                     </div>
                     <div class="mt-2">
                         <button type="submit"
-                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            Add</button>
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            {{ isEditingForm ? 'Update' : 'Add' }} Form
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- adding category --> 
-        <div v-if="isAddingCategory"
-            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+        <!-- Add/Edit Criteria Modal -->
+        <div v-if="isAddingCriteria || isEditingCriteria"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
                         <h2 class="text-2xl font-bold">
-                        Adding New Category to Forms
+                            {{ isEditingCriteria ? 'Edit' : 'Add New' }} Criteria
                         </h2>
                     </span>
                     <button type="button" @click="closeModal"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal">
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                     </button>
                 </div>
 
-                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                <form @submit.prevent="submitCriteriaData" class="p-4 flex flex-col gap-3">
                     <div class="w-full flex flex-col space-y-2">
                         <h3 class="font-semibold text-gray-900 dark:text-white">
-                        Add What    
+                            Criteria Name
                         </h3>
-                        <input v-model="form.name" type="text" id="name"
-                            placeholder="Enter what"
+                        <input v-model="criteriaData.name" type="text" id="criteria-name"
+                            placeholder="Enter criteria name"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                     </div>
                     <div class="mt-2">
                         <button type="submit"
-                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            Add</button>
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            {{ isEditingCriteria ? 'Update' : 'Add' }} Criteria
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
     </SettingsLayout>
-
 </template>
 
 <script setup>
 import { useForm, Link, router } from '@inertiajs/vue3';
-import { ref, watchEffect } from 'vue';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { ref, computed, watch } from 'vue';
 import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { usePage } from "@inertiajs/vue3";
-import { Tooltip } from 'primevue';
-import { DatePicker } from 'primevue';
-import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
-
-defineProps({
-    sponsors: Array,
-    students: Array,
+const props = defineProps({
+    scholarship_form: Array,
+    scholarship_form_data: Array,
 });
 
-const directives = {
-    Tooltip,
-    DatePicker,
+// Function to filter form data based on form ID
+const getFormData = (formId) => {
+    return props.scholarship_form_data.filter(data => data.scholarship_form_id === formId);
 };
 
-const form = ref({
-    file: null,
-    fileName: null,
-    filePreview: null,
+// Scholarship Form modal state
+const isAddingForm = ref(false);
+const isEditingForm = ref(false);
+const formData = ref({
+    id: null,
+    name: '',
 });
 
-const scholarships = ref({
-    name: null,
-    scholarshipType: null,
-    school_year: null,
-    semester: null,
-    application: null,
-    deadline: null,
+// Criteria modal state
+const isAddingCriteria = ref(false);
+const isEditingCriteria = ref(false);
+const criteriaData = ref({
+    id: null,
+    scholarship_form_id: null,
+    name: '',
 });
 
-const isAdding = ref(false);
-const isEditing = ref(false);
-const isAddingCategory = ref(false);
-
-const toggleAdd = () => {
-    isAdding.value = !isAdding.value;
-    if (isAdding.value) {
-        resetForm();
-    }
+// Toggle functions for modals
+const toggleNewForm = () => {
+    formData.value = { id: null, name: '' };
+    isAddingForm.value = true;
+    isEditingForm.value = false;
 };
 
-const toggleNew = () => {
-    isAddingCategory.value = !isAddingCategory.value;
-    if (isAddingCategory.value) {
-        resetForm();
-    }
+const toggleEditForm = (form) => {
+    formData.value = { id: form.id, name: form.name };
+    isEditingForm.value = true;
+    isAddingForm.value = false;
+};
+
+const toggleAddCriteria = (formId) => {
+    criteriaData.value = { id: null, scholarship_form_id: formId, name: '' };
+    isAddingCriteria.value = true;
+    isEditingCriteria.value = false;
+};
+
+const toggleEditCriteria = (criteria) => {
+    criteriaData.value = {
+        id: criteria.id,
+        scholarship_form_id: criteria.scholarship_form_id,
+        name: criteria.name
+    };
+    isEditingCriteria.value = true;
+    isAddingCriteria.value = false;
 };
 
 const closeModal = () => {
-    isAdding.value = false;
-    isEditing.value = false;
-    isAddingCategory.value = false;
-    resetForm();
+    isAddingForm.value = false;
+    isEditingForm.value = false;
+    isAddingCriteria.value = false;
+    isEditingCriteria.value = false;
+    formData.value = { id: null, name: '' };
+    criteriaData.value = { id: null, scholarship_form_id: null, name: '' };
 };
 
-const toggleEdit = () => {
-    isEditing.value = !isEditing.value;
-};
-
-const resetForm = () => {
-    form.value = {
-        file: null,
-        fileName: null,
-        filePreview: null,
-    };
-};
-
-const isFileDragging = ref(false);
-
-const previewFile = (event) => {
-    const file = event.target.files[0];
-    handleFile(file);
-};
-
-const handleFileDragOver = () => {
-    isFileDragging.value = true;
-};
-const handleFileDragLeave = () => {
-    isFileDragging.value = false;
-};
-
-const handleFileDrop = (event) => {
-    isFileDragging.value = false;
-    const file = event.dataTransfer.files[0];
-    handleFile(file);
-};
-
-const handleFile = (file) => {
-    if (file) {
-        form.value.file = file;
-        form.value.fileName = file.name;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            form.value.filePreview = e.target.result;
-        };
-        reader.readAsDataURL(file);
-    }
-};
-
-
-const submitForm = async () => {
-    const formData = new FormData();
-    formData.append("file", form.value.file);
-
-    try {
-        // Send the request only when user confirms
-        router.post(`/settings/adding-students/store`, formData, {
+// Form submission functions
+const submitFormData = () => {
+    if (isEditingForm.value) {
+        router.put(`/settings/scholarship-forms${formData.value.id}`, formData.value, {
             preserveScroll: true,
             onSuccess: () => {
                 closeModal();
-                usePage().props.flash = { success: "Scholars added to the scholarship!" };
-                headers.value = [];
-                previewData.value = [];
-                error.value = "";
-                fileReadyToUpload.value = false;
-                document.getElementById("dropzone-file").value = null; // Clear file input
-
-
             },
         });
-    } catch (err) {
-        error.value = "An error occurred while uploading the file.";
-        console.error("Error during file upload:", err);
+    } else {
+        router.post('/settings/scholarship-forms', formData.value, {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeModal();
+            },
+        });
     }
 };
 
-const activeateForm = async () => {
-    try {
-        await useForm(scholarships.value).post(route('scholarships.store'));
-        closeModal();
-    } catch (error) {
-        console.error('Error submitting form:', error);
+const submitCriteriaData = () => {
+    if (isEditingCriteria.value) {
+        router.put(`/settings/scholarship-forms/data${criteriaData.value.id}`, criteriaData.value, {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeModal();
+            },
+        });
+    } else {
+        router.post('/settings/scholarship-forms/data', criteriaData.value, {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeModal();
+            },
+        });
     }
 };
 
+const deleteCriteria = (id) => {
+    if (confirm('Are you sure you want to delete this criteria?')) {
+        router.delete(`/settings/scholarship-forms${id}`, {
+            preserveScroll: true,
+        });
+    }
+};
 
-// radix vue testing
-
+// Toast notification handling
 const toastVisible = ref(false);
 const toastMessage = ref("");
 
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
+// Watch for flash messages
+// watch(() => usePage().props.flash?.success, (newMessage) => {
+//     if (newMessage) {
+//         toastMessage.value = newMessage;
+//         toastVisible.value = true;
 
-    if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
-        toastMessage.value = flashMessage;
-        toastVisible.value = true;
-
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
-});
-
+//         setTimeout(() => {
+//             toastVisible.value = false;
+//         }, 3000);
+//     }
+// });
 </script>

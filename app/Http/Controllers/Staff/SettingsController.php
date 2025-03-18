@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Staff;
 use App\Models\Student;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\ScholarshipForm;
+use App\Models\ScholarshipFormData;
 use App\Models\Sponsor;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -51,7 +53,7 @@ class SettingsController extends Controller
 
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
-        
+
         // $logoFileName = $request->imgName;
         $originalFileName = $logoFile->getClientOriginalName();
 
@@ -129,7 +131,7 @@ class SettingsController extends Controller
                 'activity' => 'Create',
                 'description' => 'Added ' . count($insertData) . ' students',
             ]);
-            
+
             return redirect()->back()->with('success', 'Scholars added to the scholarship!');
         } catch (\Exception $e) {
             \Log::error('Error during file upload: ' . $e->getMessage());
@@ -139,6 +141,91 @@ class SettingsController extends Controller
 
     public function scholarship_forms()
     {
-        return Inertia::render('Staff/Settings/Scholarship_Forms');
+
+        $scholarship_form = ScholarshipForm::all();
+        $scholarship_form_data = ScholarshipFormData::all();
+
+        return Inertia::render('Staff/Settings/Scholarship_Forms', [
+            'scholarship_form' => $scholarship_form,
+            'scholarship_form_data' => $scholarship_form_data,
+        ]);
+    }
+
+    /**
+     * Store a newly created scholarship form.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        ScholarshipForm::create($validated);
+
+        return redirect()->back()->with('success', 'Scholarship form created successfully.');
+    }
+
+    /**
+     * Update the specified scholarship form.
+     */
+    public function update(Request $request, ScholarshipForm $scholarshipForm)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $scholarshipForm->update($validated);
+
+        return redirect()->back()->with('success', 'Scholarship form updated successfully.');
+    }
+
+    /**
+     * Remove the specified scholarship form.
+     */
+    public function destroy(ScholarshipForm $scholarshipForm)
+    {
+        $scholarshipForm->delete();
+
+        return redirect()->back()->with('success', 'Scholarship form deleted successfully.');
+    }
+
+    /**
+     * Store a newly created scholarship form data.
+     */
+    public function storeData(Request $request)
+    {
+        $validated = $request->validate([
+            'scholarship_form_id' => 'required|exists:scholarship_forms,id',
+            'name' => 'required|string|max:255',
+        ]);
+
+        ScholarshipFormData::create($validated);
+
+        return redirect()->back()->with('success', 'Criteria added successfully.');
+    }
+
+    /**
+     * Update the specified scholarship form data.
+     */
+    public function updateData(Request $request, ScholarshipFormData $scholarshipFormData)
+    {
+        $validated = $request->validate([
+            'scholarship_form_id' => 'required|exists:scholarship_forms,id',
+            'name' => 'required|string|max:255',
+        ]);
+
+        $scholarshipFormData->update($validated);
+
+        return redirect()->back()->with('success', 'Criteria updated successfully.');
+    }
+
+    /**
+     * Remove the specified scholarship form data.
+     */
+    public function destroyData(ScholarshipFormData $scholarshipFormData)
+    {
+        $scholarshipFormData->delete();
+
+        return redirect()->back()->with('success', 'Criteria deleted successfully.');
     }
 }
