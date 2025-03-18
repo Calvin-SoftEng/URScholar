@@ -182,16 +182,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        //Scholarship Forms
-        ScholarshipForm::create([
-            'name' => 'Marital Status of Parents',
-        ]);
-
-        ScholarshipFormData::create([
-            'name' => 'Married',
-            'scholarship_form_id' => 1
-        ]);
         //sponsor 
-        // $this->call(UserTableSeeder::class);
+        $this->call(FormTableSeeder::class);
     }
 }
