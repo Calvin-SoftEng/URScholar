@@ -10,7 +10,6 @@
                 <div class="w-full mt-5">
                     <div class="relative overflow-x-auto  rounded-lg w-full p-5 bg-white">
                         
-
                         <!-- Family Information -->
                         <div class="mb-5">
                             <div class="flex flex-row justify-between border-b items-center pb-3">
@@ -19,8 +18,75 @@
                             </div>
                             <div class="mt-3 space-y-5">
 
-                                <!-- card -->
-                                 <!-- Marital Selection -->
+                            <!-- card -->
+
+                            <!-- Criteria -->
+                            <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <img src="" alt="">
+                                            <span class="font-semibold font-quicksand text-lg">Scholarship Eligibility and Criteria</span>
+                                        </div>
+                                        <button @click="toggleAdd"
+                                            class="text-blue-600 text-sm hover:underline">
+                                            Add Eligibility and Criteria
+                                        </button>
+                                    </div>
+
+                                    <div>
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Dapat Filipino ka</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Dapat matalas baba mo</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Dapat di ka racist</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Bisaya Required</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']" class="text-primary"/>
+                                                    </button>
+                                                    <button class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']" class="text-primary"/>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Marital Selection -->
                                 <div 
                                     class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                                     <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
@@ -205,6 +271,7 @@
                                         </div>
                                     </div>
                                 </div>
+
 
                             </div>
                         </div>
