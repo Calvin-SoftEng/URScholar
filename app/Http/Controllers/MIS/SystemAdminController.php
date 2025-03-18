@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\MIS;
 
 use App\Http\Controllers\Controller;
+use App\Models\ActivityLog;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\User;
@@ -237,7 +238,10 @@ class SystemAdminController extends Controller
 
     public function activity_logs()
     {
-        return Inertia::render('MIS/User_Roles/Activity_Logs');
+        $activity = ActivityLog::with('user')->get();
+        return Inertia::render('MIS/User_Roles/Activity_Logs',[
+            'activity' => $activity,
+        ]);
     }
 
 
