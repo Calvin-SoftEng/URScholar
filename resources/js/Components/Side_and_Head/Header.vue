@@ -3,10 +3,14 @@
     <!-- desktop -->
     <div class="hidden lg:flex justify-between items-center h-[50px] place-content-center">
       <div class="flex items-center space-x-4">
-        <div class="pl-1">
+        <div class="pl-3">
           <!-- <img src="../../../assets/images/logo-hori.png" alt="Light Mode Logo" class="w-[180px] h-[40px] dark:hidden"> -->
 
-          <span class="font-poppins text-3xl font-bold text-navy tracking-tight">URScholar</span>
+          <div class="flex flex-row  items-center justify-center gap-2">
+            <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+
+            <span class="font-poppins text-3xl font-bold text-navy tracking-tight">URScholar</span>
+          </div>
           <!-- Dark Mode Logo -->
           <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
             class="w-[180px] h-[40px] hidden dark:block">

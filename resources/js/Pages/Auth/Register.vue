@@ -70,11 +70,14 @@ const resendEmail = async () => {
         <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center">
             <!-- Logo adjusted to the left -->
             <div class="relative flex items-center justify-center w-full px-10 py-2">
-                <Link :href="(route('welcome'))">
-                    <div class="w-[150px] h-[50px] cursor-pointer" v-tooltip="'Back to Home Page'">
-                        <img src="../../../assets/images/logo_blue.png" alt="URScholar Logo" class="w-full h-full object-contain">
+                <!-- <Link :href="(route('welcome'))">
+                    <div class="flex flex-row items-center justify-center gap-2 p-2" v-tooltip="'Back to Home Page'"">
+                        <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+
+                        <span class="font-poppins text-3xl font-bold text-navy tracking-tight">URScholar</span>
                     </div>
-                </Link>
+                </Link> -->
+                
             </div>
 
             <div class="w-full fit-content relative flex flex-col gap-1 px-10 py-9">
