@@ -58,7 +58,10 @@ return new class extends Migration {
         Schema::create('criteria', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->string('forms');
+            $table->foreignId('scholarship_form_data_id')
+                ->constrained('scholarship_form_data') // Explicitly specify the correct table name
+                ->onDelete('cascade');
+            $table->decimal('grade');
             $table->timestamps();
         });
 
