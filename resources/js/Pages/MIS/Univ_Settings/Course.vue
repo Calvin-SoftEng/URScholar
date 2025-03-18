@@ -28,11 +28,9 @@
                         </Link>
                     </div>
 
-                    <div v-for="course in campus.courses" :key="course.id">
-                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                            <div class="font-instrument font-normal text-sm text-primary">
-                                {{ course.name }}
-                            </div>
+                    <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                        <div v-for="course in campus.courses" :key="course.id" class="font-instrument font-normal text-sm text-primary">
+                            {{ course.abbreviation }} - {{ course.name }}
                         </div>
                     </div>
 

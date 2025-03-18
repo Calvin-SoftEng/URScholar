@@ -210,109 +210,148 @@
 
                     <!-- Page 2: recipients -->
                     <div v-if="currentPage === 2">
-                        <div class="w-full space-y-2">
-                            <!-- Total Recipients Input -->
-                            <div class="flex w-6/12 pr-2 flex-col">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">Number of Recipients</h3>
-                                <input id="totalRecipients" type="number" v-model="form.totalRecipients" min="1"
-                                    placeholder="Enter total recipients"
-                                    class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded-lg"
-                                    @input="distributeRecipients" />
-                            </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Left Side: Number of Recipients & Campus Selection -->
+                            <div class="space-y-4">
+                                <!-- Total Recipients Input -->
+                                <div class="flex flex-col">
+                                    <h3 class="font-semibold text-gray-900 dark:text-white">Number of Recipients</h3>
+                                    <input 
+                                        id="totalRecipients" 
+                                        type="number" 
+                                        v-model="form.totalRecipients" 
+                                        min="1"
+                                        placeholder="Enter total recipients"
+                                        class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded-lg"
+                                        @input="distributeRecipients" 
+                                    />
+                                </div>
 
-                            <!-- Campus Selection & Recipient Distribution -->
-                            <div class="grid grid-cols-2 w-full gap-3">
-                                <!-- Left Side: Campus Selection & Recipient Distribution -->
-                                <div class="flex flex-col space-y-3">
-                                    <!-- Header with Label & Stats -->
-                                    <div class="flex flex-row justify-between items-center py-2">
-                                        <div class="flex flex-col space-y-2">
-                                            <label class="text-sm font-medium">Distribute Recipients per
-                                                Selected Campus</label>
-                                            <div class="flex flex-row text-sm gap-4">
-                                                <div>Allocated: {{ allocatedRecipients }} of {{
-                                                    form.totalRecipients
-                                                    }}</div>
-                                                <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
-                                                    class="text-red-500 font-medium">
-                                                    *{{ parseInt(form.totalRecipients) - allocatedRecipients }}
-                                                    recipients still need to be allocated
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="flex flex-col text-sm">
-                                            <!-- Stats & Reset Button -->
-                                            <div class="flex items-center text-sm text-gray-600 space-x-3">
-                                                <!-- Reset to Auto-Distribution Button -->
-                                                <button @click="distributeRecipients"
-                                                    class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600">
-                                                    <span
-                                                        class="material-symbols-rounded text-base">restart_alt</span>
-                                                    <span>Reset to Auto Distribution</span>
-                                                </button>
-                                            </div>
+                                <!-- Campus Selection & Recipient Distribution -->
+                                <div class="space-y-3">
+                                    <div class="flex flex-col">
+                                        <label class="text-sm font-medium">
+                                            Distribute Recipients per Selected Campus
+                                        </label>
+                                        <div class="flex justify-between text-sm">
+                                            <span>Allocated: {{ allocatedRecipients }} of {{ form.totalRecipients }}</span>
+                                            <span v-if="allocatedRecipients !== parseInt(form.totalRecipients)" class="text-red-500 font-medium">
+                                                *{{ parseInt(form.totalRecipients) - allocatedRecipients }} recipients still need to be allocated
+                                            </span>
                                         </div>
                                     </div>
 
-                                    <!-- Campus Selection List -->
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div v-for="campus in campusesData" :key="campus.id"
-                                            class="flex flex-row items-center space-x-2">
-                                            <!-- Checkbox to select campus -->
-                                            <input type="checkbox" :id="`campus-${campus.id}`"
-                                                v-model="campus.selected" @change="distributeRecipients"
-                                                class="rounded" />
-                                            <label :for="`campus-${campus.id}`"
-                                                class="text-sm font-medium leading-none cursor-pointer">
+                                    <!-- Campus Selection List (Expands Downward) -->
+                                    <div class="space-y-2">
+                                        <div 
+                                            v-for="campus in campusesData" 
+                                            :key="campus.id" 
+                                            class="flex items-center justify-between border p-2 rounded-md"
+                                        >
+                                            <!-- Checkbox -->
+                                            <input 
+                                                type="checkbox" 
+                                                :id="`campus-${campus.id}`" 
+                                                v-model="campus.selected" 
+                                                @change="distributeRecipients"
+                                                class="w-5 h-5 rounded border-gray-300 cursor-pointer"
+                                            />
+
+                                            <!-- Campus Name -->
+                                            <label 
+                                                :for="`campus-${campus.id}`" 
+                                                class="text-sm font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
                                                 {{ campus.name }}
                                             </label>
 
-                                            <!-- Recipients per campus input -->
-                                            <input type="number" v-model="campus.recipients"
-                                                :readonly="!campus.selected" :class="`w-20 px-2 py-1 border rounded-md text-center ${!campus.selected ? 'bg-gray-100 border-gray-300' : 'bg-white border-blue-300'
-                                                    }`" min="0" :max="form.totalRecipients"
-                                                @input="onRecipientManualChange(campus.id)" />
+                                            <!-- Recipients Input -->
+                                            <input 
+                                                type="number" 
+                                                v-model="campus.recipients" 
+                                                :readonly="!campus.selected" 
+                                                class="w-16 px-2 py-1 border rounded-md text-center text-gray-700 disabled:bg-gray-100"
+                                                min="0" 
+                                                :max="form.totalRecipients"
+                                                @input="onRecipientManualChange(campus.id)"
+                                            />
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Right Side: Course List Display Grouped by Campus -->
-                                <div class="flex flex-col space-y-4">
-                                    <div v-for="campus in selectedCampuses" :key="campus.id"
-                                        class="py-3 px-4 bg-gray-50 border rounded-md">
+                            <!-- Right Side: Scrollable Course Selection -->
+                            <div class="flex flex-col space-y-2 p-2 overflow-hidden">
+                                <div 
+                                    class="flex flex-col space-y-2 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer"
+                                    style="max-height: min(100%, 50vh);" 
+                                >
+                                    <div 
+                                        v-for="campus in selectedCampuses" 
+                                        :key="campus.id" 
+                                        class="p-3 border rounded-lg bg-white shadow-sm"
+                                    >
                                         <!-- Selected Campus Name -->
                                         <div class="text-sm font-semibold text-gray-700 mb-2">
                                             {{ campus.name }}
                                         </div>
 
-                                        <!-- Courses Offered for this Campus -->
-                                        <div v-for="course in campus.courses" :key="course" class="mt-1">
-                                            <input type="checkbox" :id="`course-${campus.id}-${course}`"
-                                                v-model="selectedCoursesMap[course]" class="rounded" />
-                                            <label :for="`course-${campus.id}-${course}`"
-                                                class="text-sm ml-2 cursor-pointer">{{ course }}</label>
+                                        <!-- Courses (Grow naturally, scroll if too many) -->
+                                        <div class="space-y-1">
+                                            <div v-for="course in campus.courses" :key="course">
+                                                <input 
+                                                    type="checkbox" 
+                                                    :id="`course-${campus.id}-${course}`"
+                                                    v-model="selectedCoursesMap[course]" 
+                                                    class="rounded cursor-pointer"
+                                                />
+                                                <label 
+                                                    :for="`course-${campus.id}-${course}`" 
+                                                    class="text-sm ml-2 cursor-pointer">
+                                                    {{ course }}
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
 
+
                     <!-- Page 3: Criteria -->
                     <div v-if="currentPage === 3">
-                        <div class="w-full space-y-2">
-                            <h3 class="font-semibold text-gray-900 dark:text-white">List Criteria and Eligibility</h3>
-                            <!-- Campus Selection List -->
-                            <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mt-2">
-                                <div class="flex items-center space-x-2">
-                                    <!-- Checkbox to accept terms and conditions -->
-                                    <input id="accept-terms" type="checkbox"
-                                        class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                    <label for="accept-terms"
-                                        class="text-sm font-medium text-gray-700 cursor-pointer">
-                                        First Condition
-                                    </label>
+                        <div class="w-full space-y-5">
+                            <div>
+                                <div>
+                                    <h3 class="font-semibold text-gray-900 dark:text-white">Grade Criteria</h3>
+
+                                    <!-- Input Box for Grade Criteria -->
+                                    <input v-model="form.name" type="text" id="name" placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)" 
+                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                                    <!-- <input 
+                                        type="text" 
+                                        v-model="gradeCriteria" 
+                                        placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)" 
+                                        class="w-full px-3 py-2 border rounded-md text-gray-700 
+                                            focus:ring-2 focus:ring-blue-300 focus:border-blue-500"
+                                    /> -->
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="font-semibold text-gray-900 dark:text-white">List Criteria and Eligibility</h3>
+                                <!-- Campus Selection List -->
+                                <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mt-2">
+                                    <div class="flex items-center space-x-2">
+                                        <!-- Checkbox to accept terms and conditions -->
+                                        <input id="accept-terms" type="checkbox"
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        <label for="accept-terms"
+                                            class="text-sm font-medium text-gray-700 cursor-pointer">
+                                            Dapat First Honor
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -358,11 +397,11 @@
                     <div class="mt-2 flex justify-between gap-2">
                         <div class="flex items-center gap-2">
                             <span v-for="index in totalPages" :key="index"
-                            class="h-2 rounded-full transition-all duration-300"
-                            :class="isActive(index).value ? 'bg-blue-500 w-7' : 'bg-gray-300 w-2'"
-                            ></span>
+                                class="h-2 rounded-full transition-all duration-300"
+                                :class="isActive(index).value ? 'bg-blue-500 w-7' : 'bg-gray-300 w-2'">
+                            </span>
                         </div>
-                        
+
                         <div class="flex justify-end gap-2">
                             <!-- Cancel Button (Always Visible) -->
                             <button type="button" @click="cancel"
@@ -376,19 +415,26 @@
                                 Previous
                             </button>
 
-                            <!-- Next or Submit Button -->
-                            <button v-if="currentPage < totalPages" type="button" @click="nextPage"
-                                class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-7 py-2.5">
-                                Next
-                            </button>
+                            <!-- Next Button: Only Show if Scholarship Type is Selected & Not Grant-Based -->
+                            <template v-if="form.scholarshipType && form.scholarshipType !== 'Grant-Based'">
+                                <button v-if="currentPage < totalPages" type="button" @click="nextPage"
+                                    class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-7 py-2.5">
+                                    Next
+                                </button>
 
-                            <button v-if="currentPage === totalPages" type="submit"
+                                <button v-if="currentPage === totalPages" type="submit"
+                                    class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
+                                    Create Scholarship
+                                </button>
+                            </template>
+
+                            <!-- Direct "Create Scholarship" Button if Grant-Based is Selected -->
+                            <button v-if="form.scholarshipType === 'Grant-Based'" type="submit"
                                 class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
                                 Create Scholarship
                             </button>
                         </div>
                     </div>
-
 
                 </form>
             </div>
