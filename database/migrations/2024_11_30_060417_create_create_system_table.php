@@ -43,6 +43,12 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('usertypes', function (Blueprint $table) {
+            $table->id();
+            $table->string('roles');
+            $table->timestamps();
+        });
+
         Schema::create('students', function (Blueprint $table) {
             $table->id();
             $table->string('first_name');
@@ -62,6 +68,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('students');
+        Schema::dropIfExists('usertypes');
         Schema::dropIfExists('school_years');
         Schema::dropIfExists('courses');
         Schema::dropIfExists('campuses');

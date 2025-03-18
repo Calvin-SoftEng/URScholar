@@ -19,6 +19,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        //Campus
+        Campus::create([
+            'name' => 'Morong',
+            'location' => 'Morong, Rizal',
+        ]);
+
+        Campus::create([
+            'name' => 'Binangonan',
+            'location' => 'Binangonan, Rizal',
+        ]);
+
         // User::factory(2)->create();
         //MIS
         User::factory()->create([
@@ -29,7 +40,7 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
             'usertype' => 'system_admin',
-            'campus' => 'Morong'
+            'campus_id' => '1'
         ]);
 
         //Super Admin
@@ -41,7 +52,7 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
             'usertype' => 'super_admin',
-            'campus' => 'Morong'
+            'campus_id' => '1'
         ]);
 
 
@@ -54,7 +65,7 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
-            'campus' => 'Binangonan'
+            'campus_id' => '2'
         ]);
 
         User::factory()->create([
@@ -64,7 +75,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'IDK',
             'middle_name' => 'Maribujoc',
             'password' => bcrypt('password'),
-            'usertype' => 'coordinator'
+            'usertype' => 'coordinator',
+            'campus_id' => '1'
         ]);
 
         //sponsor
@@ -75,7 +87,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'sponsor'
+            'usertype' => 'sponsor',
+            'campus_id' => '1'
         ]);
 
         //cashier
@@ -86,7 +99,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
-            'usertype' => 'cashier'
+            'usertype' => 'cashier',
+            'campus_id' => '1'
         ]);
 
         //student
@@ -97,7 +111,8 @@ class DatabaseSeeder extends Seeder
             'last_name' => 'Catahimican',
             'middle_name' => 'Soriano',
             'password' => bcrypt('password'),
-            'usertype' => 'student'
+            'usertype' => 'student',
+            'campus_id' => '1'
         ]);
 
 
@@ -138,18 +153,6 @@ class DatabaseSeeder extends Seeder
 
         SchoolYear::factory()->create([
             'year' => '2025-2026',
-        ]);
-
-
-        //Campus
-        Campus::create([
-            'name' => 'Morong',
-            'location' => 'Morong, Rizal',
-        ]);
-
-        Campus::create([
-            'name' => 'Binangonan',
-            'location' => 'Binangonan, Rizal',
         ]);
 
         //Course

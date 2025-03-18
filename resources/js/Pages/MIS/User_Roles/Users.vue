@@ -67,7 +67,7 @@
                                                 data-dropdown-placement="bottom-start"
                                                 class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
                                                 :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
-                                            alt="picture">
+                                                alt="picture">
                                         </div>
                                         <div v-else>
                                             <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
@@ -84,10 +84,10 @@
                                         {{ getRoleName(user.usertype) }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        {{ user.campus }}
+                                        {{ user.campus.name }}
                                     </td>
                                     <td class="px-6 py-4">
-                                        <button @click="toggleEditUser" class="" v-tooltip.right="'Edit Campus'">
+                                        <button @click="editUser(user)" class="" v-tooltip.right="'Edit User'">
                                             <span
                                                 class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-blue-900 rounded-lg">
                                                 edit
@@ -127,18 +127,18 @@
                     </button>
                 </div>
 
-                <form @submit.prevent="submitAssign" class="p-4 flex flex-col gap-3">
+                <form @submit.prevent="EditUser ? updateUser() : submitAssign()" class="p-4 flex flex-col gap-3">
                     <div class="w-full flex flex-row gap-2">
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">
                                 First Name</h3>
-                            <input v-model="form.firstname" type="text" id="firstname"
+                            <input v-model="form.first_name" type="text" id="firstname"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                         </div>
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">
                                 Last Name</h3>
-                            <input v-model="form.lastname" type="text" id="lastname"
+                            <input v-model="form.last_name" type="text" id="lastname"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                         </div>
                     </div>
@@ -157,6 +157,9 @@
                             <select v-model="form.role" id="roleSelect"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                                 <option value="" disabled>Select Role</option>
+                                <option
+                                    v-if="form.role === 'system_admin'"
+                                    value="system_admin">System Admin</option>
                                 <option value="super_admin">Head Administrator</option>
                                 <option value="coordinator">Coordinator</option>
                                 <option value="cashier">Cashier</option>
@@ -199,7 +202,7 @@ const cancel = () => {
 };
 
 const AddUser = ref(false);
-const EditUser = ref(false)
+const EditUser = ref(false);
 
 const campusid = ref(null);
 
@@ -220,18 +223,19 @@ const closeModal = () => {
 const resetForm = () => {
     form.value = {
         id: null,
-        firstname: '',
-        lastname: '',
+        first_name: '',
+        last_name: '',
         email: '',
         campus_id: '',
         role: ''
     };
 };
 
-// Updated form structure to match the new fields
+// Updated form structure with id field for editing
 const form = ref({
-    firstname: '',
-    lastname: '',
+    id: null,
+    first_name: '',
+    last_name: '',
     email: '',
     campus_id: '',
     role: ''
@@ -248,6 +252,29 @@ const getRoleName = (role) => {
     }
 };
 
+// Function to edit user
+const editUser = (user) => {
+    form.value = {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        campus_id: user.campus_id,
+        role: user.usertype
+    };
+    EditUser.value = true;
+};
+
+// Function to update user
+const updateUser = async () => {
+    try {
+        router.put(`/system_admin/user-settings/users/${form.value.id}/update`, form.value);
+        closeModal();
+    } catch (error) {
+        console.error("Error updating user:", error);
+    }
+};
+
 const submitForm = async () => {
     try {
         router.post("/mis/univ-settings/campuses/store", form.value);
@@ -259,7 +286,7 @@ const submitForm = async () => {
 
 const submitAssign = async () => {
     try {
-        router.post("/mis/stakeholders/store", form.value);
+        router.post("/system_admin/user-settings/users/create", form.value);
         closeModal();
     } catch (error) {
         console.error("Error submitting form:", error);
