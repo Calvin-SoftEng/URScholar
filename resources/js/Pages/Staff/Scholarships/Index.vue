@@ -361,7 +361,7 @@
                     <div v-if="currentPage === 4">
                         <div class="w-full space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">List Requirements</h3>
-                            <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
+                            <!-- <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                 <div class="flex items-center mb-4 w-full">
                                     <form @submit.prevent="addCriteria"
                                         class="flex items-center w-full">
@@ -380,6 +380,33 @@
                                         <div v-for="(criteria, index) in criteria" :key="index"
                                             class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
                                             <span>{{ criteria }}</span>
+                                            <button @click="removeItem(index)"
+                                                class="flex items-center text-red-500 hover:text-red-700">
+                                                <span class="material-symbols-rounded text-red-600">
+                                                    delete
+                                                </span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </ul> -->
+                            <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
+                                <div class="flex items-center mb-4 w-full">
+                                    <form @submit.prevent="addItem" class="flex items-center w-full">
+                                        <input v-model="newItem" type="text" placeholder="Enter an item"
+                                            class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
+                                        <button type="submit"
+                                            class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
+                                            Add
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <form @submit.prevent="removeItem">
+                                    <div class="flex flex-col gap-2">
+                                        <div v-for="(item, index) in items" :key="index"
+                                            class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
+                                            <span>{{ item }}</span>
                                             <button @click="removeItem(index)"
                                                 class="flex items-center text-red-500 hover:text-red-700">
                                                 <span class="material-symbols-rounded text-red-600">
@@ -851,32 +878,48 @@ const selectedCourses = computed(() => {
 const newReq = ref("");
 const reqs = ref([]);
 
-const newCriteria = ref("");
-const criteria = ref([]);
+// const newCriteria = ref("");
+// const criteria = ref([]);
 
-const addReq = () => {
-    if (newReq.value.trim() !== "") {
-        reqs.value.push(newReq.value.trim());
-        newReq.value = ""; // Clear input after adding
+// const addReq = () => {
+//     if (newReq.value.trim() !== "") {
+//         reqs.value.push(newReq.value.trim());
+//         newReq.value = ""; // Clear input after adding
+//     }
+// };
+
+// const addCriteria = () => {
+//     if (newCriteria.value.trim() !== "") {
+//         criteria.value.push(newCriteria.value.trim());
+//         newCriteria.value = ""; // Clear input after adding
+//     }
+// };
+
+// // Separate remove functions
+// const removeReq = (index) => {
+//     reqs.value.splice(index, 1);
+// };
+
+// const removeCriteria = (index) => {
+//     criteria.value.splice(index, 1);
+// };
+
+
+// dynamic requirements
+const newItem = ref('');
+const items = ref([]);
+
+const addItem = () => {
+    if (newItem.value.trim() !== '') {
+        items.value.push(newItem.value.trim());
+        form.value.requirements = items.value;
+        newItem.value = '';
     }
 };
 
-const addCriteria = () => {
-    if (newCriteria.value.trim() !== "") {
-        criteria.value.push(newCriteria.value.trim());
-        newCriteria.value = ""; // Clear input after adding
-    }
+const removeItem = (index) => {
+    items.value = items.value.filter((_, i) => i !== index);
 };
-
-// Separate remove functions
-const removeReq = (index) => {
-    reqs.value.splice(index, 1);
-};
-
-const removeCriteria = (index) => {
-    criteria.value.splice(index, 1);
-};
-
 
 
 
