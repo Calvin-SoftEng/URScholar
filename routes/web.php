@@ -171,6 +171,16 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/settings/scholarship-forms', [SettingsController::class, 'scholarship_forms'])->name('settings.scholarship_forms');
 
+        // Scholarship Forms
+        Route::post('/settings/scholarship-forms', [SettingsController::class, 'store'])->name('scholarship.forms.store');
+        Route::put('/settings/scholarship-forms{scholarshipForm}', [SettingsController::class, 'update'])->name('scholarship.forms.update');
+        Route::delete('/scholarship-forms/{scholarshipForm}', [SettingsController::class, 'destroy'])->name('scholarship.forms.destroy');
+        
+        // Scholarship Form Data/Criteria
+        Route::post('/settings/scholarship-forms/data', [SettingsController::class, 'storeData'])->name('scholarship.form.data.store');
+        Route::put('/settings/scholarship-forms/data{scholarshipFormData}', [SettingsController::class, 'updateData'])->name('scholarship.form.data.update');
+        Route::delete('/scholarship-form-data/{scholarshipFormData}', [SettingsController::class, 'destroyData'])->name('scholarship.form.data.destroy');
+
 });
 
 // SPONSOR -------------------------------------------------------------------------------------------------------------------------------------------------------
