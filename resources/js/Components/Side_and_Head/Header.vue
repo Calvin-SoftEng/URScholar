@@ -8,12 +8,13 @@
 
           <div class="flex flex-row  items-center justify-center gap-2">
             <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+            <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] hidden dark:block">
 
-            <span class="font-poppins text-3xl font-bold text-navy tracking-tight">URScholar</span>
+            <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
           </div>
           <!-- Dark Mode Logo -->
-          <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
-            class="w-[180px] h-[40px] hidden dark:block">
+          <!-- <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
+            class="w-[180px] h-[40px] hidden dark:block"> -->
         </div>
       </div>
 

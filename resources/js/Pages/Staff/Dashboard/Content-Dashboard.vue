@@ -4,16 +4,19 @@
             <!-- 75% Column -->
             <div class="col-span-3 h-full flex flex-col space-y-3">
                 <!-- First Layer with 2 Column Cards -->
-                <div class="grid grid-cols-2 gap-3 h-[35%]">
+                <div class="grid grid-cols-3 gap-3 h-[40%]">
                     <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
                         <QuickPost />
+                    </div>
+                    <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
+                        <ScholarsStatistics />
                     </div>
                     <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
                         <ActiveScholarship :sponsors="sponsors" :scholarships="scholarships" />
                     </div>
                 </div>
                 <!-- Second Layer with Single Card -->
-                <div class="bg-white box-border rounded shadow-md h-[65%] dark:bg-dcontainer">
+                <div class="bg-white box-border rounded shadow-md h-[60%] dark:bg-dcontainer">
                     <!-- <ContentComponent /> -->
                     <ScholarshipActivities :sponsors="sponsors" :scholarships="scholarships" :scholars="scholars"/>
                 </div>
@@ -38,6 +41,7 @@ import { ref } from 'vue';
 
 import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
 import QuickPost from '../../../Components/Staff/Dashboard/QuickPost.vue';
+import ScholarsStatistics from '@/Components/Staff/Dashboard/ScholarsStatistics.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
 import Messages from '@/Components/Staff/Dashboard/Messages.vue';
 import ScholarshipActivities from '@/Components/Staff/Dashboard/ScholarshipActivities.vue';
@@ -46,6 +50,7 @@ const components = {
     ActiveScholarship,
     QuickPost,
     Messages,
+    ScholarsStatistics,
     // Calendar,
 };
 

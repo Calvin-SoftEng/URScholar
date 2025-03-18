@@ -113,22 +113,19 @@ const unblockUser = () => {
         <form @submit.prevent="submit" class="fit-content flex flex-col items-center justify-center">
             <!-- Login Header -->
             
-                <div class="relative flex items-center justify-center">
-                    <!-- <div class="absolute z-10 w-[50%] h-full" v-tooltip="'Back to Home Page'">
-                        <Link :href="(route('welcome'))">
-                            <img src="../../../assets/images/logo-hori-white_login.png" alt="URScholar Logo">
-                        </Link>
-                    </div> -->
-                    <Link :href="(route('welcome'))">
-                        <div class="flex flex-row items-center justify-center gap-2 absolute z-10 w-[50%] h-full" v-tooltip="'Back to Home Page'">
-                            <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+            <div class="relative flex items-center justify-center">
+                <Link :href="(route('welcome'))" class="absolute z-10 flex justify-center items-center w-full h-full" >
+                    <!-- logo and branding -->
+                    <div class="flex flex-row gap-2 justify-center items-center px-2" v-tooltip="'Back to Home Page'">
+                        <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+                        <span class="font-poppins text-3xl font-bold text-white tracking-tight">URScholar</span>
+                    </div>
+                </Link>
+                <!-- background -->
+                <img src="../../../assets/images/login-bg.png" alt="Login Background" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-blue-950 opacity-65"></div>
+            </div>
 
-                            <span class="font-poppins text-3xl font-bold text-white tracking-tight">URScholar</span>
-                        </div>
-                    </Link>
-                    <img src="../../../assets/images/login-bg.png" alt="Login Background" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-blue-950 opacity-65"></div>
-                </div>
 
             <!-- Form -->
             <div class="w-full fit-content relative flex flex-col gap-1 px-10 py-9">
