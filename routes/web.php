@@ -68,6 +68,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     // user settings
     Route::get('/system_admin/user-settings/system-users_roles', [SystemAdminController::class, 'system_user_roles'])->name('sa.user_roles');
     Route::get('/system_admin/user-settings/users', [SystemAdminController::class, 'system_users'])->name('sa.users');
+    Route::post('/system_admin/user-settings/users/create', [SystemAdminController::class, 'create_users'])->name('sa.users_create');
     Route::get('/system_admin/user-settings/activity-logs', [SystemAdminController::class, 'activity_logs'])->name('sa.activity_logs');
 
     // univ settings
@@ -77,6 +78,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
     Route::get('/system_admin/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('sa.campuses');
     Route::post('/system_admin/univ-settings/campuses/store', [SystemAdminController::class, 'store_campus'])->name('sa.store_campus');
+    Route::post('/system_admin/univ-settings/campuses/update', [SystemAdminController::class, 'update_campus'])->name('sa.update_campus');
     Route::post('/system_admin/univ-settings/campuses/assign', [SystemAdminController::class, 'assign_campus'])->name('sa.assign_campus');
 
     Route::get('/system_admin/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_and_term'])->name('sa.sy_term');
