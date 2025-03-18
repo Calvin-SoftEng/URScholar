@@ -38,98 +38,64 @@
 
                     <div v-if="selectedMenu === 'all_users'" class="max-w-3xl mx-auto bg-white py-5">
                         
-                        <div class="grid grid-cols-[20%_60%_20%] gap-4 items-center">
-                            <!-- Time Column -->
-                            <div class="flex flex-col text-gray-500 text-sm space-y-8">
-                                <span>09:45 AM</span>
-                                <span>10:30 AM</span>
-                                <span>11:15 AM</span>
-                                <span>01:00 PM</span>
-                            </div>
+                        <div class="space-y-6">
+                            <div v-for="(log, index) in activityLogs" :key="index">
+                            <!-- Display Day Only Once -->
+                            <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 
-                            <!-- Activity Column -->
-                            <div class="flex flex-col space-y-8">
-                                <p class="text-gray-700"><strong>John Doe</strong> deleted <span class="text-blue-500">what</span>.</p>
-                                <p class="text-gray-700"><strong>Jane Smith</strong> restored <span class="text-green-500">archive.zip</span>.</p>
-                                <p class="text-gray-700"><strong>Admin</strong> updated user roles.</p>
-                                <p class="text-gray-700"><strong>Alex</strong> uploaded <span class="text-purple-500">presentation.pptx</span>.</p>
-                            </div>
+                            <div class="grid grid-cols-[15%_75%_10%] gap-4 items-center">
+                                <!-- Time & Activity Column -->
+                                <div class="flex flex-col space-y-4">
+                                <span v-for="(entry, idx) in log.entries" :key="idx" class="text-gray-500 text-sm">{{ entry.time }}</span>
+                                </div>
 
-                            <!-- Restore Button Column -->
-                            <div class="flex flex-col space-y-5">
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
+                                <div class="flex flex-col space-y-4">
+                                <p v-for="(entry, idx) in log.entries" :key="idx" class="text-gray-700">
+                                    <strong>{{ entry.user }}</strong> {{ entry.action }} <span :class="entry.color">{{ entry.item }}</span>.
+                                </p>
+                                </div>
+
+                                <!-- Restore Button Column -->
+                                <div class="flex flex-col space-y-4">
+                                <button v-for="(_, idx) in log.entries" :key="idx" @click="toggleEditRole" v-tooltip.right="'Remove'">
+                                    <span class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                    remove
                                     </span>
                                 </button>
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
-                                    </span>
-                                </button>
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
-                                    </span>
-                                </button>
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
-                                    </span>
-                                </button>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>
 
                     <div v-if="selectedMenu === 'admin'" class="max-w-3xl mx-auto bg-white py-5">
                         
-                        <div class="grid grid-cols-[20%_60%_20%] gap-4 items-center">
-                            <!-- Time Column -->
-                            <div class="flex flex-col text-gray-500 text-sm space-y-8">
-                                <span>09:45 AM</span>
-                                <span>10:30 AM</span>
-                                <span>11:15 AM</span>
-                                <span>01:00 PM</span>
-                            </div>
+                        <div class="space-y-6">
+                            <div v-for="(log, index) in activityLogs" :key="index">
+                            <!-- Display Day Only Once -->
+                            <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 
-                            <!-- Activity Column -->
-                            <div class="flex flex-col space-y-8">
-                                <p class="text-gray-700"><strong>John Doe</strong> deleted <span class="text-blue-500">report.pdf</span>.</p>
-                                <p class="text-gray-700"><strong>Jane Smith</strong> restored <span class="text-green-500">archive.zip</span>.</p>
-                                <p class="text-gray-700"><strong>Admin</strong> updated user roles.</p>
-                                <p class="text-gray-700"><strong>Alex</strong> uploaded <span class="text-purple-500">presentation.pptx</span>.</p>
-                            </div>
+                            <div class="grid grid-cols-[15%_75%_10%] gap-4 items-center">
+                                <!-- Time & Activity Column -->
+                                <div class="flex flex-col space-y-4">
+                                <span v-for="(entry, idx) in log.entries" :key="idx" class="text-gray-500 text-sm">{{ entry.time }}</span>
+                                </div>
 
-                            <!-- Restore Button Column -->
-                            <div class="flex flex-col space-y-5">
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
+                                <div class="flex flex-col space-y-4">
+                                <p v-for="(entry, idx) in log.entries" :key="idx" class="text-gray-700">
+                                    <strong>{{ entry.user }}</strong> {{ entry.action }} <span :class="entry.color">{{ entry.item }}</span>.
+                                </p>
+                                </div>
+
+                                <!-- Restore Button Column -->
+                                <div class="flex flex-col space-y-4">
+                                <button v-for="(_, idx) in log.entries" :key="idx" @click="toggleEditRole" v-tooltip.right="'Remove'">
+                                    <span class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
+                                    remove
                                     </span>
                                 </button>
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
-                                    </span>
-                                </button>
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
-                                    </span>
-                                </button>
-                                <button  @click="toggleEditRole" class="" v-tooltip.right="'Remove'">
-                                    <span
-                                        class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                        remove
-                                    </span>
-                                </button>
+                                </div>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -252,6 +218,23 @@ const selectedMenu = ref("stakeholders");
 const selectMenu = (key) => {
     selectedMenu.value = key;
 };
+
+const activityLogs = ref([
+  {
+    date: "Monday, Jan 1",
+    entries: [
+      { time: "09:45 AM", user: "John Doe", action: "deleted", item: "report.pdf", color: "text-blue-500" },
+      { time: "10:30 AM", user: "Jane Smith", action: "restored", item: "archive.zip", color: "text-green-500" }
+    ]
+  },
+  {
+    date: "Tuesday, Jan 2",
+    entries: [
+      { time: "11:15 AM", user: "Admin", action: "updated", item: "user roles", color: "text-gray-700" },
+      { time: "01:00 PM", user: "Alex", action: "uploaded", item: "presentation.pptx", color: "text-purple-500" }
+    ]
+  }
+]);
 
 const resetForm = () => {
     form.value = { id: null, name: '', description: '' };
