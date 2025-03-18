@@ -8,20 +8,35 @@
                 </h1>
 
                 <div class="w-full mt-5">
-                    <div class="relative overflow-x-auto border border-gray-200 rounded-lg w-full p-5 bg-white">
+                    <div class="relative overflow-x-auto  rounded-lg w-full p-5 bg-white">
                         
 
                         <!-- Family Information -->
                         <div class="mb-5">
-                            <h2 class="text-lg font-semibold text-gray-700 border-b pb-2">Scholarship Criteria</h2>
+                            <div class="flex flex-row justify-between border-b items-center pb-3">
+                                <h2 class="text-lg font-semibold text-gray-700">Scholarship Criteria</h2>
+                                <button @click="toggleNew" class="text-blue-600 text-sm hover:underline">Add New Category</button>
+                            </div>
                             <div class="mt-3 space-y-5">
-                                
-                                <!-- Marital Selection -->
-                                <div class="flex justify-between items-center">
+
+                                <!-- card -->
+                                 <!-- Marital Selection -->
+                                <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <img src="" alt="">
+                                            <span class="font-semibold font-quicksand text-lg">Marital Status of Parents</span>
+                                        </div>
+                                        <button @click="toggleAdd"
+                                            class="text-blue-600 text-sm hover:underline">
+                                            Add Marital Status
+                                        </button>
+                                    </div>
+
                                     <div>
-                                        <span class="text-gray-600">Marital Status of Parents:</span>
-                                        <div class="flex gap-3 mt-1">
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Married</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -32,7 +47,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Not Married</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -43,7 +58,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Living Together</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -54,7 +69,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Separated</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -68,15 +83,26 @@
 
                                         </div>
                                     </div>
-                                    <button @click="toggleAdd" class="text-blue-600 text-sm hover:underline">Add Marital Status</button>
                                 </div>
+                                
 
                                 <!-- Monthly Family Income Status -->
-                                <div class="flex justify-between items-center">
+                                <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <img src="" alt="">
+                                            <span class="font-semibold font-quicksand text-lg">Monthly Family Income</span>
+                                        </div>
+                                        <button @click="toggleAdd"
+                                            class="text-blue-600 text-sm hover:underline">
+                                            Add Monthly Family Income
+                                        </button>
+                                    </div>
+
                                     <div>
-                                        <span class="text-gray-600">Monthly Family Income:</span>
-                                        <div class="flex gap-3 mt-1">
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">10,000 and below</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -87,7 +113,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">10,001 - 20,000</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -98,7 +124,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">20,001 - 30,000</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -109,7 +135,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">30,001 and above</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -120,19 +146,29 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            
 
                                         </div>
                                     </div>
-                                    <button @click="toggleAdd" class="text-blue-600 text-sm hover:underline">Add Family Income</button>
                                 </div>
+                                
 
                                 <!-- Family Type of Housing Status -->
-                                <div class="flex justify-between items-center">
+                                <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <img src="" alt="">
+                                            <span class="font-semibold font-quicksand text-lg">Family Type of Housing</span>
+                                        </div>
+                                        <button @click="toggleAdd"
+                                            class="text-blue-600 text-sm hover:underline">
+                                            Add Housing Type
+                                        </button>
+                                    </div>
+
                                     <div>
-                                        <span class="text-gray-600">Family Type of Housing:</span>
-                                        <div class="flex gap-3 mt-1">
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Owned</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -143,7 +179,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Settler</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -154,7 +190,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <div class="flex items-center gap-2 border rounded-md px-2 py-1 hover:bg-gray-100">
+                                            <div class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">Rental</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEdit" class="p-1 rounded hover:bg-gray-200">
@@ -165,9 +201,9 @@
                                                     </button>
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
-                                    <button @click="toggleAdd" class="text-blue-600 text-sm hover:underline">Add Housing type</button>
                                 </div>
 
                             </div>
@@ -178,7 +214,7 @@
 
             </div>
         </div>
-        <!-- creating a sponsor --> 
+        <!-- adding criteria --> 
         <div v-if="isAdding || isEditing"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
@@ -186,6 +222,45 @@
                     <span class="text-xl font-semibold text-gray-900 dark:text-white">
                         <h2 class="text-2xl font-bold">
                         Add mo name nung iaadd mo
+                        </h2>
+                    </span>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                    <div class="w-full flex flex-col space-y-2">
+                        <h3 class="font-semibold text-gray-900 dark:text-white">
+                        Add What    
+                        </h3>
+                        <input v-model="form.name" type="text" id="name"
+                            placeholder="Enter what"
+                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                            Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- adding category --> 
+        <div v-if="isAddingCategory"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <span class="text-xl font-semibold text-gray-900 dark:text-white">
+                        <h2 class="text-2xl font-bold">
+                        Adding New Category to Forms
                         </h2>
                     </span>
                     <button type="button" @click="closeModal"
@@ -258,6 +333,7 @@ const scholarships = ref({
 
 const isAdding = ref(false);
 const isEditing = ref(false);
+const isAddingCategory = ref(false);
 
 const toggleAdd = () => {
     isAdding.value = !isAdding.value;
@@ -266,9 +342,17 @@ const toggleAdd = () => {
     }
 };
 
+const toggleNew = () => {
+    isAddingCategory.value = !isAddingCategory.value;
+    if (isAddingCategory.value) {
+        resetForm();
+    }
+};
+
 const closeModal = () => {
     isAdding.value = false;
     isEditing.value = false;
+    isAddingCategory.value = false;
     resetForm();
 };
 
