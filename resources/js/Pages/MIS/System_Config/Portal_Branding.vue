@@ -15,42 +15,79 @@
             <!-- Branding Configuration -->
             <div class="w-full mt-5">
                 <div class="bg-white relative overflow-x-auto border border-gray-200 rounded-lg p-6">
-                    <h1 class="text-xl font-semibold font-quicksand text-primary mb-4">
-                        Branding Settings
-                    </h1>
+                    <div class="flex flex-row justify-between w-full">
+                        <h1 class="text-xl font-semibold font-quicksand text-primary mb-4">
+                            Branding Settings
+                        </h1>
+                        <button @click="saveBranding" class="btn bg-primary text-white px-5 py-1 rounded-lg">
+                            Save Branding
+                        </button>
+                    </div>
 
-                    <!-- Logo Upload -->
-                    <div class="mb-5">
+                    <div>
+                        <!-- Light Mode Logo Upload -->
                         <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Portal Logo (Light Mode)</label>
-                        <input type="file" @change="uploadLogo('light')" accept="image/*" class="border rounded-lg p-2 w-full">
-                    </div>
+                        <div class="mb-5 flex items-center gap-4">
+                        <!-- Light Mode Preview Box -->
+                        <div class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                            <img v-if="logoLight" :src="logoLight" alt="Light Mode Logo" class="object-cover w-full h-full">
+                        </div>
 
-                    <div class="mb-5">
+                        <div class="w-full"> 
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="light_file_input">
+                            Upload Light Mode Logo
+                            </label>
+                            <input type="file" @change="uploadLogo('light')" accept="image/*"
+                            class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="light_file_input">
+                        </div>
+                        </div>
+
+                        <!-- Light Mode Full Preview -->
+                        <div v-if="logoLight" class="mb-5">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Light Mode Logo Preview</p>
+                        <div class="border rounded-lg overflow-hidden p-2 flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+                            <img :src="logoLight" alt="Full Light Logo Preview" class="object-contain w-64 h-40">
+                        </div>
+                        </div>
+
+                        <!-- Dark Mode Logo Upload -->
                         <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Portal Logo (Dark Mode)</label>
-                        <input type="file" @change="uploadLogo('dark')" accept="image/*" class="border rounded-lg p-2 w-full">
+                        <div class="mb-5 flex items-center gap-4">
+                        <!-- Dark Mode Preview Box -->
+                        <div class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                            <img v-if="logoDark" :src="logoDark" alt="Dark Mode Logo" class="object-cover w-full h-full">
+                        </div>
+
+                        <div class="w-full"> 
+                            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="dark_file_input">
+                            Upload Dark Mode Logo
+                            </label>
+                            <input type="file" @change="uploadLogo('dark')" accept="image/*"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                            id="dark_file_input">
+                        </div>
+                        </div>
+
+                        <!-- Dark Mode Full Preview -->
+                        <div v-if="logoDark" class="mb-5">
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Dark Mode Logo Preview</p>
+                        <div class="border rounded-lg overflow-hidden p-2 flex items-center justify-center bg-gray-50 dark:bg-gray-800">
+                            <img :src="logoDark" alt="Full Dark Logo Preview" class="object-contain w-64 h-40">
+                        </div>
+                        </div>
                     </div>
 
-                    <!-- Color Picker -->
-                    <div class="grid grid-cols-2 gap-4 mb-5">
-                        <div>
-                            <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Primary Color</label>
-                            <input type="color" v-model="primaryColor" class="w-full h-10 border rounded-lg">
-                        </div>
-                        <div>
-                            <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Secondary Color</label>
-                            <input type="color" v-model="secondaryColor" class="w-full h-10 border rounded-lg">
-                        </div>
-                    </div>
 
-                    <!-- Typography -->
+                   <!-- Portal Branding Name Input -->
                     <div class="mb-5">
-                        <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Typography</label>
-                        <select v-model="fontStyle" class="w-full border rounded-lg p-2">
-                            <option value="quicksand">Quicksand</option>
-                            <option value="poppins">Poppins</option>
-                            <option value="roboto">Roboto</option>
-                            <option value="lato">Lato</option>
-                        </select>
+                        <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Portal Branding Name</label>
+                        <input 
+                        type="text" 
+                        v-model="portalBrandingName" 
+                        placeholder="Enter branding name" 
+                        class="w-full h-10 border rounded-lg p-2 text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600"
+                        >
                     </div>
 
                     <!-- Favicon Upload -->
@@ -61,16 +98,16 @@
 
                     <!-- Preview Section -->
                     <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg mt-5">
-                        <h2 class="text-lg font-semibold text-primary mb-3">Preview</h2>
+                        <h2 class="text-lg font-semibold mb-3" :style="{ color: primaryColor }">Preview</h2>
                         <div class="flex items-center space-x-4">
-                            <div class="w-16 h-16 bg-gray-200 border rounded-lg flex items-center justify-center">
-                                <img v-if="logoLight" :src="logoLight" class="w-full h-full object-contain">
-                                <span v-else class="text-gray-500">No Logo</span>
-                            </div>
-                            <div>
-                                <p class="text-lg font-bold" :style="{ color: primaryColor, fontFamily: fontStyle }">Portal Name</p>
-                                <p class="text-sm text-gray-500">Your portal branding preview.</p>
-                            </div>
+                        <div class="w-16 h-16 bg-gray-200 border rounded-lg flex items-center justify-center">
+                            <img v-if="logoLight" :src="logoLight" class="w-full h-full object-contain">
+                            <span v-else class="text-gray-500">No Logo</span>
+                        </div>
+                        <div>
+                            <p class="text-lg font-bold" :style="{ color: primaryColor }">{{ portalBrandingName || "Portal Name" }}</p>
+                            <p class="text-sm text-gray-500">Your portal branding preview.</p>
+                        </div>
                         </div>
                     </div>
 
@@ -130,6 +167,8 @@ import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
 import { Tooltip } from 'primevue';
 import { User } from 'lucide-vue-next';
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
 
 defineProps({
     campuses: Array,
@@ -152,10 +191,40 @@ const closeModal = () => {
     resetForm();
 };
 
-const toggleEditRole = () => {
-    isEditing.value = true;
-    isCreating.value = false;
-    form.value = { ...scholarship };
+const logoLight = ref(null);
+const logoDark = ref(null);
+
+const uploadLogo = (mode) => (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    const newUrl = URL.createObjectURL(file);
+
+    if (mode === "light") {
+      if (logoLight.value) URL.revokeObjectURL(logoLight.value);
+      logoLight.value = newUrl;
+    } else if (mode === "dark") {
+      if (logoDark.value) URL.revokeObjectURL(logoDark.value);
+      logoDark.value = newUrl;
+    }
+  }
+};
+
+// Light and Dark Mode Logo Previews
+const lightLogoPreview = ref(null);
+const darkLogoPreview = ref(null);
+
+const uploadLightLogo = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    lightLogoPreview.value = URL.createObjectURL(file);
+  }
+};
+
+const uploadDarkLogo = (event) => {
+  const file = event.target.files[0];
+  if (file) {
+    darkLogoPreview.value = URL.createObjectURL(file);
+  }
 };
 
 const resetForm = () => {
