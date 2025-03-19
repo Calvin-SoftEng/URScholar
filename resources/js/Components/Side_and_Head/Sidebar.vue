@@ -11,7 +11,7 @@
           'min-h-[50px]'
         ]">
           <span v-if="dataOpenSideBar"
-            class="text-blue-900 opacity-90 font-poppins text-sm font-semibold dark:text-dtext">
+            class="text-blue-900 whitespace-nowrap opacity-90 font-poppins text-sm font-semibold dark:text-dtext">
             Main Menu
           </span>
 
@@ -59,22 +59,44 @@
         </div>
         </Link>
 
-        <Link :href="(route('scholarships.index'))">
-        <div v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''" :class="[
-          'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
-          { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/scholarships') }
-        ]">
+        <Link :href="route('scholarships.index')">
           <div
-            :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
-            <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/scholarships') }]"
-              :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/scholarships') }]">
-              checkbook
+            v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''"
+            :class="[
+              'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md relative flex justify-between items-center pr-4',
+              { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/scholarships') }
+            ]"
+          >
+            <div class="flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]">
+              <span
+                :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/scholarships') }]"
+                :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/scholarships') }]"
+              >
+                checkbook
+              </span>
+              <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/scholarships') }]">
+                Scholarships
+              </span>
+            </div>
+
+            <!-- Notification Badge -->
+            <span
+              v-if="dataOpenSideBar"
+              class="bg-red-600 whitespace-nowrap text-white text-xs font-bold px-2 py-0.5 rounded-full"
+            >
+              +1 New
             </span>
-            <span v-show="dataOpenSideBar"
-              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/scholarships') }]">Scholarships</span>
+
+            <!-- "1" Badge at Top-Right Corner -->
+            <span
+              v-else
+              class="absolute top-3 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full translate-x-1/2 -translate-y-1/2"
+            >
+              1
+            </span>
           </div>
-        </div>
         </Link>
+
 
         <Link :href="(route('scholars.show'))">
         <div v-tooltip.right="!dataOpenSideBar ? 'Scholars' : ''" :class="[
