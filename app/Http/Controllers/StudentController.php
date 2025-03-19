@@ -615,4 +615,10 @@ class StudentController extends Controller
             'scholar' => $scholar
         ]);
     }
+
+    public function scholarship_application()
+    {
+        return Inertia::render('Student/Application/Scholar_Application');
+    }
+
 }
