@@ -256,13 +256,13 @@ class ScholarshipController extends Controller
 
         // Create the requirements for the scholarship
         $req = [];
-        foreach ($request['requirements'] as $requirement) {
+        foreach ($validated['requirements'] as $requirement) {
 
             $req[] = [
                 'scholarship_id' => $scholarship->id,
                 'requirements' => $requirement,
-                'date_start' => $request['application'],
-                'date_end' => $request['deadline'],
+                'date_start' => $validated['application'],
+                'date_end' => $validated['deadline'],
                 'total_scholars' => $total_recipients,
             ];
         }
