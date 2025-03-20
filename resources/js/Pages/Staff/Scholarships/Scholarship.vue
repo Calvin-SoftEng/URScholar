@@ -30,26 +30,19 @@
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
                         <div v-if="students.length === 0" class="flex flex-row items-end gap-2">
                             <!-- Disabled Import Scholars Button -->
-                            <button 
-                                v-tooltip.left="'You need to add students before importing scholars'"
-                                disabled 
+                            <button v-tooltip.left="'You need to add students before importing scholars'" disabled
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                    font-poppins flex items-center gap-2"
-                            >
+                                    font-poppins flex items-center gap-2">
                                 <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
                                 <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
                                 <span>Import Scholars</span>
                             </button>
 
                             <!-- Disabled Send Email Button -->
-                            <button 
-                                v-tooltip.left="'You need to add students before sending emails'"
-                                disabled 
-                                class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                            <button v-tooltip.left="'You need to add students before sending emails'" disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                    font-poppins flex items-center gap-2"
-                            >
+                                    font-poppins flex items-center gap-2">
                                 <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
                                 <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
                                 <span>Send Email</span>
@@ -60,21 +53,19 @@
                             <!-- Active Import Scholars Button -->
                             <button @click="openScholarship"
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
-                                    border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2"
-                            >
+                                    border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
                                 <span>Import Scholars</span>
                             </button>
 
                             <!-- Active Send Email Button -->
                             <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-                                <button @click="importScholars"
-                                    class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
-                                        border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2"
-                                >
-                                    <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
-                                    <span>Send Email</span>
-                                </button>
+                            <button @click="importScholars"
+                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
+                                        border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
+                                <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
+                                <span>Send Email</span>
+                            </button>
                             </Link>
                         </div>
                     </div>
@@ -84,9 +75,11 @@
                 <!-- <Batches :scholarship="scholarship" :batches="batches" :schoolyear="schoolyear" :selectedSem="selectedSem" class="w-full h-full"/> -->
 
                 <div v-if="scholarship.scholarshipType == 'Need-Based'">
-                    <div v-if="!batches || batches.length === 0" class="flex flex-col w-full items-center justify-center mt-5">
+                    <div v-if="!batches || batches.length === 0"
+                        class="flex flex-col w-full items-center justify-center mt-5">
                         <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
-                            <font-awesome-icon :icon="['fas', 'user-graduate']" class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                            <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                             <p class="text-lg text-gray-700 dark:text-gray-300">
                                 No scholars added yet
                             </p>
@@ -104,7 +97,7 @@
                                     <p class="text-gray-500 text-sm">Total Verified Scholars</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">{{verified_scholars}}</p>
+                                    <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p>
                                 </div>
                             </div>
 
@@ -160,10 +153,9 @@
 
                         <div v-for="batch in batches" :key="batch.id"
                             class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
-                            
-                            <div @click="() => openBatch(batch.id)"
-                                class="flex justify-between items-center">
-                                
+
+                            <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
+
                                 <!-- Left: Batch Title -->
                                 <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
 
@@ -273,80 +265,69 @@
                                                 <label for="totalRecipients" class="text-sm font-medium text-gray-700">
                                                     Number of Recipients
                                                 </label>
-                                                <input id="totalRecipients" type="number" v-model="form.totalRecipients" min="1"
-                                                    placeholder="Enter total recipients"
+                                                <input id="totalRecipients" type="number" v-model="form.totalRecipients"
+                                                    min="1" placeholder="Enter total recipients"
                                                     class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded-lg"
                                                     @input="distributeRecipients" />
                                             </div>
 
-                                                <!-- Left Side: Campus Selection & Recipient Distribution -->
-                                                <div class="flex flex-col space-y-3">
-                                                    <!-- Header with Label & Stats -->
-                                                    <div class="flex flex-row justify-between items-center py-2">
-                                                        <div class="flex flex-col space-y-2">
-                                                            <label class="text-sm font-medium">Distribute Recipients per
-                                                                Selected Campus</label>
-                                                            <div class="flex flex-row text-sm gap-4">
-                                                                <div>Allocated: {{ allocatedRecipients }} of {{
-                                                                    form.totalRecipients
-                                                                    }}</div>
-                                                                <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
-                                                                    class="text-red-500 font-medium">
-                                                                    *{{ parseInt(form.totalRecipients) - allocatedRecipients }}
-                                                                    recipients still need to be allocated
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="flex flex-col text-sm">
-                                                            <!-- Stats & Reset Button -->
-                                                            <div class="flex items-center text-sm text-gray-600 space-x-3">
-                                                                <!-- Reset to Auto-Distribution Button -->
-                                                                <button @click="distributeRecipients"
-                                                                    class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600">
-                                                                    <span
-                                                                        class="material-symbols-rounded text-base">restart_alt</span>
-                                                                    <span>Reset to Auto Distribution</span>
-                                                                </button>
+                                            <!-- Left Side: Campus Selection & Recipient Distribution -->
+                                            <div class="flex flex-col space-y-3">
+                                                <!-- Header with Label & Stats -->
+                                                <div class="flex flex-row justify-between items-center py-2">
+                                                    <div class="flex flex-col space-y-2">
+                                                        <label class="text-sm font-medium">Distribute Recipients per
+                                                            Selected Campus</label>
+                                                        <div class="flex flex-row text-sm gap-4">
+                                                            <div>Allocated: {{ allocatedRecipients }} of {{
+                                                                form.totalRecipients
+                                                            }}</div>
+                                                            <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
+                                                                class="text-red-500 font-medium">
+                                                                *{{ parseInt(form.totalRecipients) - allocatedRecipients
+                                                                }}
+                                                                recipients still need to be allocated
                                                             </div>
                                                         </div>
                                                     </div>
-
-                                                    <!-- Campus Selection List -->
-                                                    <div class="space-y-2">
-                                                        <div 
-                                                            v-for="campus in campusesData" 
-                                                            :key="campus.id" 
-                                                            class="flex items-center justify-between border p-2 rounded-md"
-                                                        >
-
-                                                            <input 
-                                                                type="checkbox" 
-                                                                :id="`campus-${campus.id}`" 
-                                                                v-model="campus.selected" 
-                                                                @change="distributeRecipients"
-                                                                class="w-5 h-5 rounded border-gray-300 cursor-pointer"
-                                                            />
-
-
-                                                            <label 
-                                                                :for="`campus-${campus.id}`" 
-                                                                class="text-sm font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
-                                                                {{ campus.name }}
-                                                            </label>
-
-
-                                                            <input 
-                                                                type="number" 
-                                                                v-model="campus.recipients" 
-                                                                :readonly="!campus.selected" 
-                                                                class="w-16 px-2 py-1 border rounded-md text-center text-gray-700 disabled:bg-gray-100"
-                                                                min="0" 
-                                                                :max="form.totalRecipients"
-                                                                @input="onRecipientManualChange(campus.id)"
-                                                            />
+                                                    <div class="flex flex-col text-sm">
+                                                        <!-- Stats & Reset Button -->
+                                                        <div class="flex items-center text-sm text-gray-600 space-x-3">
+                                                            <!-- Reset to Auto-Distribution Button -->
+                                                            <button @click="distributeRecipients"
+                                                                class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600">
+                                                                <span
+                                                                    class="material-symbols-rounded text-base">restart_alt</span>
+                                                                <span>Reset to Auto Distribution</span>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- Campus Selection List -->
+                                                <div class="space-y-2">
+                                                    <div v-for="campus in campusesData" :key="campus.id"
+                                                        class="flex items-center justify-between border p-2 rounded-md">
+
+                                                        <input type="checkbox" :id="`campus-${campus.id}`"
+                                                            v-model="campus.selected" @change="distributeRecipients"
+                                                            class="w-5 h-5 rounded border-gray-300 cursor-pointer" />
+
+
+                                                        <label :for="`campus-${campus.id}`"
+                                                            class="text-sm font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
+                                                            {{ campus.name }}
+                                                        </label>
+
+
+                                                        <input type="number" v-model="campus.recipients"
+                                                            :readonly="!campus.selected"
+                                                            class="w-16 px-2 py-1 border rounded-md text-center text-gray-700 disabled:bg-gray-100"
+                                                            min="0" :max="form.totalRecipients"
+                                                            @input="onRecipientManualChange(campus.id)" />
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- Right Side: Course List Display Grouped by Campus -->
@@ -376,16 +357,19 @@
                                     <div class="flex flex-row space-x-2">
                                         <div class="w-full flex flex-col space-y-3">
                                             <div>
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Grade Criteria</h3>
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Grade Criteria
+                                                </h3>
 
 
-                                                <input v-model="form.name" type="text" id="name" placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)" 
-                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                                                <input v-model="form.name" type="text" id="name"
+                                                    placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
 
                                             </div>
 
                                             <div>
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">List Criteria and Eligibility</h3>
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">List Criteria
+                                                    and Eligibility</h3>
 
                                                 <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mt-2">
                                                     <div class="flex items-center space-x-2">
@@ -688,6 +672,8 @@ const form = ref({
     requirements: [],
     criteria: [],
     amount: 0,
+    appplication: '',
+    deadline: '',
 });
 
 
@@ -900,6 +886,8 @@ const submitForm = () => {
         total_recipients: form.value.totalRecipients,
         requirements: form.value.requirements,
         // criteria: form.value.criteria,
+        application: form.value.application,
+        deadline: form.value.deadline,
         amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
         campus_recipients: campusRecipients,
     };
@@ -1085,12 +1073,13 @@ watchEffect(() => {
 <style scoped>
 /* override the prime vue componentss */
 :root {
-  --p-tooltip-background: #D97706 !important; /* Yellow warning color */
+    --p-tooltip-background: #D97706 !important;
+    /* Yellow warning color */
 }
 
 .p-tooltip-text {
-  font-size: 12px !important;
-  color: white !important;
+    font-size: 12px !important;
+    color: white !important;
 }
 
 .p-fileupload-choose-button {

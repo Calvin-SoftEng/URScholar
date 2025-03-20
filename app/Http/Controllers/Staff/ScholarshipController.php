@@ -212,10 +212,12 @@ class ScholarshipController extends Controller
             'campus_recipients.*.slots' => 'required|integer|min:1',
             'campus_recipients.*.remaining_slots' => 'required|integer|min:0',
             'campus_recipients.*.selected_campus' => 'required|json',
+            'application' => 'required|date',
+            'deadline' => 'required|date',
             'requirements' => 'required|array',
         ]);
 
-        dd($validated);
+        // dd($validated);
         $total_recipients = $validated['total_recipients'];
         $campus_recipients = $validated['campus_recipients'];
 
@@ -225,9 +227,6 @@ class ScholarshipController extends Controller
         // Check if the total recipients don't match the sum of remaining slots
         if ($total_recipients != $total_remaining_slots) {
             dd('need to maximize slots');
-        }
-        else {
-            dd('slots are maximized');
         }
 
         foreach ($campus_recipients as $campusRecipient) {
@@ -254,6 +253,21 @@ class ScholarshipController extends Controller
                 ]);
             }
         }
+
+        // Create the requirements for the scholarship
+        $req = [];
+        foreach ($request['requirements'] as $requirement) {
+
+            $req[] = [
+                'scholarship_id' => $scholarship->id,
+                'requirements' => $requirement,
+                'date_start' => $request['application'],
+                'date_end' => $request['deadline'],
+                'total_scholars' => $total_recipients,
+            ];
+        }
+        
+        Requirements::insert($req);
 
         return response()->json(['message' => 'Allocation successful.']);
     }

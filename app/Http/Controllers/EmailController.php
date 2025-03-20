@@ -55,7 +55,6 @@ class EmailController extends Controller
                 'date_end' => $request['deadline'],
                 'total_scholars' => $scholars->count(),
             ];
-
         }
 
         Requirements::insert($req);
