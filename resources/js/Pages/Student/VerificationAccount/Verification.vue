@@ -186,10 +186,13 @@
                                                             d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                     </svg>
                                                 </div>
-                                                <input v-model="form.birthdate" id="datepicker-autohide" datepicker
-                                                    type="text"
-                                                    class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Select Birthdate" />
+                                                <input 
+            id="birthdate"
+            v-model="form.birthdate"
+            @input="formatDate"
+            type="text"
+            class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="YYYY-MM-DD" />
                                                 <InputError v-if="errors?.birthdate" :message="errors.birthdate"
                                                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
@@ -1575,9 +1578,6 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group'
 import { initFlowbite } from 'flowbite';
 
-const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
-})
 
 const user = usePage().props.auth.user;
 
@@ -1608,10 +1608,10 @@ const form = ref({
     religion: '',
     guardian_name: '',
     relationship: '',
-    grade: 0,
-    cog: null,
-    semester: props.batch_semester,
-    school_year: props.school_year.year,
+    grade: '',
+    cog: '',
+    semester: '',
+    school_year:  '',
     education: {
         elementary: { name: '', years: '', honors: '' },
         junior: { name: '', years: '', honors: '' },
@@ -1634,9 +1634,24 @@ const form = ref({
     imgPreview: null,
 });
 
-const formatDate = (date) => {
-    if (!date) return "Pick a date";
-    return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(date));
+const formatDate = (event) => {
+    let input = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+    let formattedDate = "";
+
+    if (input.length > 4) {
+        formattedDate = input.slice(0, 4) + "-";
+        if (input.length > 6) {
+            formattedDate += input.slice(4, 6) + "-";
+            formattedDate += input.slice(6, 8);
+        } else {
+            formattedDate += input.slice(4, 6);
+        }
+    } else {
+        formattedDate = input;
+    }
+
+    // Update Vue's reactive state correctly
+    form.value.birthdate = formattedDate;
 };
 
 const handleFile = (event) => {
@@ -1654,6 +1669,8 @@ const handleFile = (event) => {
 // };
 
 const submit = async () => {
+    form.semester.value = props.batch_semester;
+    form.school_year.value = props.school_year.year;
     try {
         router.post(`/verify-account/verifying`, form.value);
         //await useForm(form.value).post(`/sponsors/create-scholarship`);
