@@ -18,6 +18,11 @@ class Campus extends Model
         return $this->hasMany(User::class);
     }
 
+    public function student()
+    {
+        return $this->hasMany(Student::class);
+    }
+
     public function scholar()
     {
         return $this->hasMany(Scholar::class);

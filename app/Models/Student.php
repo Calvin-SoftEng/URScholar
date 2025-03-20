@@ -10,9 +10,19 @@ class Student extends Model
         'first_name',
         'last_name',
         'email',
-        'course',
-        'campus',
+        'campus_id',
+        'course_id',
         'year_level',
         'semester',
     ];
+
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
 }

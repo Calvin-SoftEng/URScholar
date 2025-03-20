@@ -128,10 +128,10 @@
                                             {{ student.first_name }} {{ student.last_name }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ student.course }}
+                                            {{ student.course.name }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ student.campus }}
+                                            {{ student.campus.name }}
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ student.year_level }}

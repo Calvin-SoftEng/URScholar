@@ -54,8 +54,8 @@ return new class extends Migration {
             $table->string('first_name');
             $table->string('last_name');
             $table->string('email');
-            $table->string('course');
-            $table->string('campus');
+            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('year_level');
             $table->string('semester');
             $table->timestamps();

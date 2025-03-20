@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Models\Campus;
+use App\Models\Course;
 use App\Models\Student;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -12,6 +14,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use League\Csv\Reader;
 
 class SettingsController extends Controller
 {
@@ -30,7 +33,7 @@ class SettingsController extends Controller
     public function adding()
     {
 
-        $students = Student::all();
+        $students = Student::with('campus', 'course')->get();
         return Inertia::render(
             'Staff/Settings/Adding_Students',
             ['students' => $students]
@@ -97,33 +100,139 @@ class SettingsController extends Controller
             return response()->json(['message' => 'No file uploaded'], 400);
         }
 
-        // Proceed with file processing
-        try {
-            $data = array_map('str_getcsv', file($file->getRealPath()));
-            $header = array_shift($data);
-            $requiredHeaders = ['first_name', 'last_name', 'email', 'course', 'campus', 'year_level'];
+        // Get all campuses for efficient lookup
+        $campuses = Campus::all()->mapWithKeys(function ($campus) {
+            return [strtolower($campus->name) => $campus->id];
+        })->toArray();
 
-            if (array_diff($requiredHeaders, $header)) {
-                return response()->json(['message' => 'Invalid CSV format'], 422);
+        // Get all courses with their names and abbreviations
+        $courses = Course::select('id', 'name', 'abbreviation')->get();
+
+        // Map to standardize course names for comparison
+        $standardizedCourseLookup = [];
+
+        foreach ($courses as $course) {
+            // Store the original course name
+            $standardizedCourseLookup[strtolower($course->name)] = $course->id;
+
+            // Store the abbreviation
+            if (!empty($course->abbreviation)) {
+                $standardizedCourseLookup[strtolower($course->abbreviation)] = $course->id;
             }
 
+            // Store without "Bachelor of Science in"
+            $withoutPrefix = str_replace(
+                ['bachelor of science in ', 'bachelor of arts in ', 'bachelor of '],
+                ['', '', ''],
+                strtolower($course->name)
+            );
+            $standardizedCourseLookup[$withoutPrefix] = $course->id;
+
+            // Store with BS/BA prefix
+            $withBsPrefix = 'bs in ' . $withoutPrefix;
+            $standardizedCourseLookup[$withBsPrefix] = $course->id;
+
+            $withBsPrefix2 = 'bs ' . $withoutPrefix;
+            $standardizedCourseLookup[$withBsPrefix2] = $course->id;
+
+            // Add more variations as needed
+        }
+
+        // Proceed with file processing
+        try {
+            // $data = array_map('str_getcsv', file($file->getRealPath()));
+            // $header = array_shift($data);
+            // $requiredHeaders = ['first_name', 'last_name', 'email', 'course', 'campus', 'year_level'];
+
+            $file = $request->file('file');
+            $csv = Reader::createFromPath($file->getPathname(), 'r');
+            $csv->setHeaderOffset(0);
+
+            $firstRecord = $csv->fetchOne();
+
+            // Get all records
+            $records = iterator_to_array($csv->getRecords());
+
+            // if (array_diff($requiredHeaders, $header)) {
+            //     return response()->json(['message' => 'Invalid CSV format'], 422);
+            // }
+
             $insertData = [];
-            foreach ($data as $row) {
-                $rowData = array_combine($header, $row);
+            foreach ($records as $record) {
+
+                // Determine campus_id from campus name
+                $campusName = strtolower($record['campus'] ?? null);
+                $campusId = null;
+
+
+                if ($campusName && isset($campuses[$campusName])) {
+                    $campusId = $campuses[$campusName];
+                }
+
+                // MULTIPLE APPROACH COURSE MATCHING
+                $csvCourseName = $record['course'] ?? null;
+                $courseId = null;
+
+                if ($csvCourseName) {
+                    // 1. Try direct match with standardized lookup
+                    $standardizedCsvName = strtolower(trim($csvCourseName));
+                    if (isset($standardizedCourseLookup[$standardizedCsvName])) {
+                        $courseId = $standardizedCourseLookup[$standardizedCsvName];
+                    } else {
+                        // 2. Try to find match with keywords (Information Technology)
+                        // This handles cases where "BS in Information Technology" needs to match 
+                        // "Bachelor of Science in Information Technology"
+                        $bestMatchScore = 0;
+                        $bestMatchId = null;
+
+                        foreach ($courses as $course) {
+                            // Extract the core subject part (e.g., "Information Technology")
+                            $coreSubject = preg_replace(
+                                '/^(bachelor of science in |bachelor of arts in |bs in |ba in |bs |ba )/',
+                                '',
+                                strtolower($course->name)
+                            );
+
+                            // Check if the core subject is in the CSV course name
+                            if (!empty($coreSubject) && stripos($standardizedCsvName, $coreSubject) !== false) {
+                                // Use a scoring system based on length of match
+                                $score = strlen($coreSubject);
+                                if ($score > $bestMatchScore) {
+                                    $bestMatchScore = $score;
+                                    $bestMatchId = $course->id;
+                                }
+                            }
+                        }
+
+                        if ($bestMatchId) {
+                            $courseId = $bestMatchId;
+                        }
+                    }
+
+                    // For debugging
+                    $matchedCourse = $courseId ? Course::find($courseId)->name : 'No match found';
+                    $courseMatching[$csvCourseName] = [
+                        'original' => $csvCourseName,
+                        'standardized' => $standardizedCsvName,
+                        'matched_to' => $matchedCourse,
+                        'course_id' => $courseId
+                    ];
+                }
+
+
                 $insertData[] = [
-                    'first_name' => $rowData['first_name'],
-                    'last_name' => $rowData['last_name'],
-                    'email' => $rowData['email'],
-                    'course' => $rowData['course'],
-                    'campus' => $rowData['campus'],
-                    'year_level' => $rowData['year_level'],
-                    'semester' => $rowData['semester'],
+                    'first_name' => $record['first_name'],
+                    'last_name' => $record['last_name'],
+                    'email' => $record['email'],
+                    'campus_id' => $campusId,
+                    'course_id' => $courseId,
+                    'year_level' => $record['year_level'],
+                    'semester' => $record['semester'],
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
             }
 
-            // dd($insertData);
             Student::insert($insertData);
 
             ActivityLog::create([
