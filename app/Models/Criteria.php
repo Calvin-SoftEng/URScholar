@@ -14,4 +14,9 @@ class Criteria extends Model
     {
         return $this->belongsTo(Scholarship::class);
     }
+
+    public function scholarshipFormData()
+    {
+        return $this->belongsTo(ScholarshipFormData::class);
+    }
 }

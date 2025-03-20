@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CampusRecipients;
+use App\Models\Criteria;
+use App\Models\Requirements;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\App;
 use Inertia\Inertia;
@@ -28,8 +31,28 @@ class LandingPageController extends Controller
             'schoolyears' => $schoolyear,
         ]);
     }
-    public function scholarship_apply_details()
+    public function scholarship_apply_details(Scholarship $scholarship): Response
     {
-        return Inertia::render('ScholarshipApplyDetails');
+
+        $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
+
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+        $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
+
+        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
+        $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
+
+        return Inertia::render('ScholarshipApplyDetails', [
+            'scholarship' => $scholarship,
+            'sponsor' => $sponsor,
+            'requirements' => $requirements,
+            'deadline' => $deadline,
+            'selectedCampus' => $selectedCampus,
+            'criterias' => $criteria,
+            'grade' => $grade,
+        ]);
     }
 }

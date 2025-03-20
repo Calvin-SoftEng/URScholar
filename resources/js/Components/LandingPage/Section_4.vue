@@ -68,7 +68,7 @@
 
                             <!-- Apply Button (Vertically Centered) -->
                             <div class="flex h-full items-center justify-center">
-                                <Link :href="route('landing_page.scholarship_apply_details')">
+                                <Link :href="`/applying-scholarship/${scholarship.id}`">
                                     <button 
                                         class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200"
                                     >
@@ -117,6 +117,21 @@ const props = defineProps({
 
 const getSponsorDetails = (sponsorId) => {
     return props.sponsors.find(s => s.id === sponsorId) || { name: 'Unknown Sponsor' };
+};
+
+const toggleSpecification = (Scholarship) => {
+    ScholarshipSpecification.value = !ScholarshipSpecification.value;
+
+    if (ScholarshipSpecification.value) {
+        selectedScholarship.value = Scholarship;
+    }
+};
+
+const openScholarship = () => {
+
+    router.visit(`/scholarships/${selectedScholarship.value.id}`, {
+        preserveState: true
+    });
 };
 
 </script>
