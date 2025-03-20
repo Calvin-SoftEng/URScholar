@@ -52,12 +52,12 @@ class StudentController extends Controller
 
         $school_year = SchoolYear::where('id', $batch_school_year)->first();
 
-        if (!$school_year){
-            $school_year = SchoolYear::where('id', $batch->school_year)->first();
-        }
-        else {
-            $school_year = null;
-        }
+        // if ($school_year){
+        //     $school_year = SchoolYear::where('id', $batch->school_year)->first();
+        // }
+        // else {
+        //     $school_year = 'N/A';
+        // }
 
         return Inertia::render('Student/VerificationAccount/Verification', [
             'user' => $user,
@@ -165,8 +165,7 @@ class StudentController extends Controller
             // Check if any elementary education fields failed validation
             if (
                 $errors->has('education.elementary.name') ||
-                $errors->has('education.elementary.years') ||
-                $errors->has('education.elementary.honors')
+                $errors->has('education.elementary.years')
             ) {
 
                 // Create a single combined error message
@@ -175,7 +174,6 @@ class StudentController extends Controller
                 // Remove the individual error messages
                 $errors->forget('education.elementary.name');
                 $errors->forget('education.elementary.years');
-                $errors->forget('education.elementary.honors');
 
                 // Add the combined error
                 $errors->add('education.elementary', $errorMessage);
@@ -184,8 +182,7 @@ class StudentController extends Controller
             //junior
             if (
                 $errors->has('education.junior.name') ||
-                $errors->has('education.junior.years') ||
-                $errors->has('education.junior.honors')
+                $errors->has('education.junior.years')
             ) {
 
                 // Create a single combined error message
@@ -194,7 +191,6 @@ class StudentController extends Controller
                 // Remove the individual error messages
                 $errors->forget('education.junior.name');
                 $errors->forget('education.junior.years');
-                $errors->forget('education.junior.honors');
 
                 // Add the combined error
                 $errors->add('education.junior', $errorMessage);
@@ -203,8 +199,7 @@ class StudentController extends Controller
             //senior
             if (
                 $errors->has('senior.name') ||
-                $errors->has('senior.years') ||
-                $errors->has('senior.honors')
+                $errors->has('senior.years')
             ) {
 
                 // Create a single combined error message
@@ -213,7 +208,6 @@ class StudentController extends Controller
                 // Remove the individual error messages
                 $errors->forget('senior.name');
                 $errors->forget('senior.years');
-                $errors->forget('senior.honors');
 
                 // Add the combined error
                 $errors->add('senior', $errorMessage);
@@ -222,8 +216,7 @@ class StudentController extends Controller
             //college
             if (
                 $errors->has('college.name') ||
-                $errors->has('college.years') ||
-                $errors->has('college.honors')
+                $errors->has('college.years')
             ) {
 
                 // Create a single combined error message
@@ -232,7 +225,6 @@ class StudentController extends Controller
                 // Remove the individual error messages
                 $errors->forget('college.name');
                 $errors->forget('college.years');
-                $errors->forget('college.honors');
 
                 // Add the combined error
                 $errors->add('college', $errorMessage);
@@ -241,8 +233,7 @@ class StudentController extends Controller
             //vocational
             if (
                 $errors->has('vocational.name') ||
-                $errors->has('vocational.years') ||
-                $errors->has('vocational.honors')
+                $errors->has('vocational.years')
             ) {
 
                 // Create a single combined error message
@@ -251,7 +242,6 @@ class StudentController extends Controller
                 // Remove the individual error messages
                 $errors->forget('vocational.name');
                 $errors->forget('vocational.years');
-                $errors->forget('vocational.honors');
 
                 // Add the combined error
                 $errors->add('vocational', $errorMessage);
@@ -260,8 +250,7 @@ class StudentController extends Controller
             //postgrad
             if (
                 $errors->has('postgrad.name') ||
-                $errors->has('postgrad.years') ||
-                $errors->has('postgrad.honors')
+                $errors->has('postgrad.years')
             ) {
 
                 // Create a single combined error message
@@ -270,7 +259,6 @@ class StudentController extends Controller
                 // Remove the individual error messages
                 $errors->forget('postgrad.name');
                 $errors->forget('postgrad.years');
-                $errors->forget('postgrad.honors');
 
                 // Add the combined error
                 $errors->add('postgrad', $errorMessage);
