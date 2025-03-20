@@ -329,6 +329,37 @@
                                                 Please fill-up missing required fields. Put N/A if not applicable</p>
                                         </div>
 
+                                        <!-- gwa -->
+                                        <div class="col-span-3 whitespace-nowrap gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            <h3 class="font-semibold whitespace-nowrap text-[12px] text-blue-900 dark:text-white text-center">
+                                                General Weighted Average
+                                            </h3>
+                                            <div class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
+                                                <span v-if="props.errors['education.elementary']" class="text-red-500 text-xs absolute bg-white px-1">
+                                                    {{ props.errors['education.elementary'] }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mb-2">
+                                            <!-- GWA Input Column -->
+                                            <div class="w-full sm:w-[70%] flex flex-col gap-3">
+                                                <div class="flex flex-col gap-1.5">
+                                                    <Label for="gwa">Enter General Weighted Average <span class="italic text-gray-500">*current semester</span></Label>
+                                                    <input id="gwa" type="text" placeholder="Enter your GWA (e.g., 2.0)" class="w-full border border-gray-300 p-2 rounded-lg" />
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- File Upload Column -->
+                                            <div class="w-full sm:w-[30%] flex flex-col items-left gap-1.5">
+                                                <Label for="file_upload">Upload Certificate of Grade</Label>
+                                                <input type="file"
+                                                class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                            </div>
+
+                                        </div>
+
                                         <!-- elementary -->
                                         <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center">

@@ -343,7 +343,7 @@
                                         </div>
 
                                         
-                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                        <div class="col-span-3 gap-2 relative flex flex-row justify-center items-center mb-2">
                                             <!-- File Upload Column -->
                                             <div class="w-full sm:w-[30%] flex flex-col items-left gap-1.5">
                                                 <Label for="file_upload">Upload File</Label>
@@ -354,7 +354,7 @@
                                             <!-- GWA Input Column -->
                                             <div class="w-full sm:w-[70%] flex flex-col gap-3">
                                                 <div class="flex flex-col gap-1.5">
-                                                    <Label for="gwa">GWA</Label>
+                                                    <Label for="gwa">Enter current GWA</Label>
                                                     <input id="gwa" type="text" placeholder="Enter your GWA" class="w-full border border-gray-300 p-2 rounded-lg" />
                                                 </div>
                                             </div>
