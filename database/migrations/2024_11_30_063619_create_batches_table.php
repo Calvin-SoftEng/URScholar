@@ -24,7 +24,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->string('hei_name');
-            $table->string('campus');
+            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
+            $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('grant');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->string('urscholar_id')->unique();
@@ -37,7 +38,6 @@ return new class extends Migration
             $table->string('middle_name');
             $table->string('sex');
             $table->date('birthdate');
-            $table->string('course');
             $table->integer('year_level');
             $table->string('total_units')->nullable();
             $table->string('street');

@@ -160,7 +160,7 @@ class DatabaseSeeder extends Seeder
         //Course
         Course::create([
             'campus_id' => 1,
-            'name' => 'Bachelor of Science in Information System',
+            'name' => 'Bachelor of Science in Information Technology',
             'abbreviation' => 'BSIT',
         ]);
 

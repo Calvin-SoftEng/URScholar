@@ -12,4 +12,9 @@ class Course extends Model
     {
         return $this->belongsTo(Campus::class);
     }
+
+    public function scholar()
+    {
+        return $this->hasMany(Scholar::class);
+    }
 }

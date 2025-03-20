@@ -47,13 +47,11 @@ class ScholarshipController extends Controller
 
     public function batch(Request $request, $scholarshipId, $batchId)
     {
-
-        //Checking if scholar's payment claimed
+        // Checking if scholar's payment claimed
         $payout = Payout::where('scholarship_id', $scholarshipId)
             ->where('batch_id', $batchId)
             ->where('status', 'claimed')
             ->get();
-
 
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
@@ -70,12 +68,11 @@ class ScholarshipController extends Controller
                 return $query->where('semester', $sem);
             })
             ->orderBy('batch_no', 'desc')
+            ->with(['scholars.campus', 'scholars.course']) // Eager load campus and course relationships
             ->first();
 
-        $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements, $scholarshipId) {
+        $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements) {
             // Get approved requirements for this scholar
-
-
             $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Approved')
                 ->count();
@@ -103,8 +100,8 @@ class ScholarshipController extends Controller
                 'first_name' => $scholar->first_name,
                 'last_name' => $scholar->last_name,
                 'middle_name' => $scholar->middle_name,
-                'campus' => $scholar->campus,
-                'course' => $scholar->course,
+                'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
                 'year_level' => $scholar->year_level,
                 'grant' => $scholar->grant,
                 'status' => $status,
@@ -126,6 +123,7 @@ class ScholarshipController extends Controller
             'selectedSem' => $request->input('selectedSem', ''),
         ]);
     }
+
 
 
     public function show(Request $request, Scholarship $scholarship)
@@ -212,11 +210,25 @@ class ScholarshipController extends Controller
             'campus_recipients' => 'required|array',
             'campus_recipients.*.campus_id' => 'required|exists:campuses,id',
             'campus_recipients.*.slots' => 'required|integer|min:1',
-            'campus_recipients.*.remaining_slots' => 'required|integer|min:1',
+            'campus_recipients.*.remaining_slots' => 'required|integer|min:0',
             'campus_recipients.*.selected_campus' => 'required|json',
+            'requirements' => 'required|array',
         ]);
 
+        dd($validated);
+        $total_recipients = $validated['total_recipients'];
         $campus_recipients = $validated['campus_recipients'];
+
+        // Calculate total remaining slots
+        $total_remaining_slots = array_sum(array_column($campus_recipients, 'remaining_slots'));
+
+        // Check if the total recipients don't match the sum of remaining slots
+        if ($total_recipients != $total_remaining_slots) {
+            dd('need to maximize slots');
+        }
+        else {
+            dd('slots are maximized');
+        }
 
         foreach ($campus_recipients as $campusRecipient) {
             // Check if record exists
@@ -229,7 +241,7 @@ class ScholarshipController extends Controller
                 $existingRecord->update([
                     'selected_campus' => $campusRecipient['selected_campus'],
                     'slots' => $campusRecipient['slots'],
-                    'remaining_slots' => $campusRecipient['remaining_slots'],
+                    'remaining_slots' => max(0, $campusRecipient['remaining_slots'] - $campusRecipient['slots']),
                 ]);
             } else {
                 // Insert new record
@@ -238,11 +250,14 @@ class ScholarshipController extends Controller
                     'campus_id' => $campusRecipient['campus_id'],
                     'selected_campus' => $campusRecipient['selected_campus'],
                     'slots' => $campusRecipient['slots'],
-                    'remaining_slots' => $campusRecipient['remaining_slots'],
+                    'remaining_slots' => max(0, $campusRecipient['remaining_slots'] - $campusRecipient['slots']),
                 ]);
             }
         }
+
+        return response()->json(['message' => 'Allocation successful.']);
     }
+
     public function send(Scholarship $scholarship)
     {
         $scholars = $scholarship->scholars;

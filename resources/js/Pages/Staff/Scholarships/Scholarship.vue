@@ -685,7 +685,7 @@ const form = ref({
     name: '',
     scholarshipType: '',
     totalRecipients: 0,
-    reqs: [],
+    requirements: [],
     criteria: [],
     amount: 0,
 });
@@ -898,7 +898,7 @@ const submitForm = () => {
         // name: form.value.name,
         // scholarship_type: form.value.scholarshipType,
         total_recipients: form.value.totalRecipients,
-        // requirements: form.value.reqs,
+        requirements: form.value.requirements,
         // criteria: form.value.criteria,
         amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
         campus_recipients: campusRecipients,

@@ -10,7 +10,8 @@ class Scholar extends Model
     protected $fillable = [
         'scholarship_id',
         'hei_name',
-        'campus',
+        'campus_id',
+        'course_id',
         'grant',
         'batch_id',
         'urscholar_id',
@@ -23,7 +24,6 @@ class Scholar extends Model
         'middle_name',
         'sex',
         'birthdate',
-        'course',
         'year_level',
         'total_units',
         'street',
@@ -43,7 +43,7 @@ class Scholar extends Model
             ->where('course', $course)
             ->where('year_level', $yearLevel);
     }
-    
+
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);
@@ -57,6 +57,15 @@ class Scholar extends Model
     public function batch()
     {
         return $this->belongsTo(Batch::class);
+    }
+
+    public function course()
+    {
+        return $this->belongsTo(Course::class);
+    }
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
     }
 
     public function payouts()

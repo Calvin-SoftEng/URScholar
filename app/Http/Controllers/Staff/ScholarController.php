@@ -146,9 +146,9 @@ class ScholarController extends Controller
         } else {
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
-                        'type' => 'success',
-                        'message' => "Successfully imported"
-                    ]);
+                    'type' => 'success',
+                    'message' => "Successfully imported"
+                ]);
         }
 
     }
@@ -167,21 +167,6 @@ class ScholarController extends Controller
             ], 422);
         }
 
-        $checkSemester = Student::where('semester', $request->semester)
-            ->get();
-
-
-        // if (!$checkSemester) {
-        //     return back()->withErrors([
-        //         'student' => 'pang gantong ' . $request->semester .' sem lang to ya',
-        //     ])->withInput();
-        // }
-        // else {
-        //     return back()->withErrors([
-        //         'student' => $request->semester . ' sem yan no?',
-        //     ])->withInput();
-        // }
-
         try {
             $file = $request->file('file');
             $csv = Reader::createFromPath($file->getPathname(), 'r');
@@ -194,10 +179,47 @@ class ScholarController extends Controller
 
             // Check for existing scholars in the system
             $duplicateScholars = [];
-
             $duplicateStudents = [];
 
+            // Get all campuses for efficient lookup
+            $campuses = Campus::all()->mapWithKeys(function ($campus) {
+                return [strtolower($campus->name) => $campus->id];
+            })->toArray();
 
+            // Get all courses with their names and abbreviations
+            $courses = Course::select('id', 'name', 'abbreviation')->get();
+
+            // Map to standardize course names for comparison
+            $standardizedCourseLookup = [];
+
+            foreach ($courses as $course) {
+                // Store the original course name
+                $standardizedCourseLookup[strtolower($course->name)] = $course->id;
+
+                // Store the abbreviation
+                if (!empty($course->abbreviation)) {
+                    $standardizedCourseLookup[strtolower($course->abbreviation)] = $course->id;
+                }
+
+                // Store without "Bachelor of Science in"
+                $withoutPrefix = str_replace(
+                    ['bachelor of science in ', 'bachelor of arts in ', 'bachelor of '],
+                    ['', '', ''],
+                    strtolower($course->name)
+                );
+                $standardizedCourseLookup[$withoutPrefix] = $course->id;
+
+                // Store with BS/BA prefix
+                $withBsPrefix = 'bs in ' . $withoutPrefix;
+                $standardizedCourseLookup[$withBsPrefix] = $course->id;
+
+                $withBsPrefix2 = 'bs ' . $withoutPrefix;
+                $standardizedCourseLookup[$withBsPrefix2] = $course->id;
+
+                // Add more variations as needed
+            }
+
+            // Rest of your duplicate checking code remains the same
             foreach ($records as $record) {
                 $existingStudent = Student::where('last_name', $record['LASTNAME'] ?? '')
                     ->where('first_name', $record['FIRSTNAME'] ?? '')
@@ -209,16 +231,11 @@ class ScholarController extends Controller
                 }
             }
 
-            if(!$duplicateStudents) {
+            if (!$duplicateStudents) {
                 return back()->withErrors([
                     'student' => 'Update mo naman ako lods',
                 ])->withInput();
             }
-            // else {
-            //     return back()->withErrors([
-            //         'student' => 'pwede par',
-            //     ])->withInput();
-            // }
 
             foreach ($records as $record) {
                 $existingScholar = Scholar::where('scholarship_id', $scholarship->id)
@@ -233,14 +250,10 @@ class ScholarController extends Controller
                 }
             }
 
-            // dd($duplicateStudents);
-
-            //If duplicates found, return error message
+            // If duplicates found, return error message
             if (count($duplicateScholars) > 0) {
-
-                // dd($duplicateScholars);
                 $insertData = [];
-                
+
                 foreach ($duplicateScholars as $scholar) {
                     $insertData[] = [
                         'scholarship_id' => $scholar->scholarship_id,
@@ -273,18 +286,80 @@ class ScholarController extends Controller
                 $nextId = $currentNumber + 1;
             }
 
+            // Add this for debugging - collect course mapping results
+            $courseMatching = [];
+
             $insertData = [];
             foreach ($records as $record) {
                 // Generate urscholar_id with leading zeros (URS-0001 format)
                 $urscholarId = 'URS-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
                 $nextId++;
 
+                // Determine campus_id from campus name
+                $campusName = strtolower($record['CAMPUS'] ?? null);
+                $campusId = null;
+
+                if ($campusName && isset($campuses[$campusName])) {
+                    $campusId = $campuses[$campusName];
+                }
+
+                // MULTIPLE APPROACH COURSE MATCHING
+                $csvCourseName = $record['COURSE/PROGRAM ENROLLED'] ?? null;
+                $courseId = null;
+
+                if ($csvCourseName) {
+                    // 1. Try direct match with standardized lookup
+                    $standardizedCsvName = strtolower(trim($csvCourseName));
+                    if (isset($standardizedCourseLookup[$standardizedCsvName])) {
+                        $courseId = $standardizedCourseLookup[$standardizedCsvName];
+                    } else {
+                        // 2. Try to find match with keywords (Information Technology)
+                        // This handles cases where "BS in Information Technology" needs to match 
+                        // "Bachelor of Science in Information Technology"
+                        $bestMatchScore = 0;
+                        $bestMatchId = null;
+
+                        foreach ($courses as $course) {
+                            // Extract the core subject part (e.g., "Information Technology")
+                            $coreSubject = preg_replace(
+                                '/^(bachelor of science in |bachelor of arts in |bs in |ba in |bs |ba )/',
+                                '',
+                                strtolower($course->name)
+                            );
+
+                            // Check if the core subject is in the CSV course name
+                            if (!empty($coreSubject) && stripos($standardizedCsvName, $coreSubject) !== false) {
+                                // Use a scoring system based on length of match
+                                $score = strlen($coreSubject);
+                                if ($score > $bestMatchScore) {
+                                    $bestMatchScore = $score;
+                                    $bestMatchId = $course->id;
+                                }
+                            }
+                        }
+
+                        if ($bestMatchId) {
+                            $courseId = $bestMatchId;
+                        }
+                    }
+
+                    // For debugging
+                    $matchedCourse = $courseId ? Course::find($courseId)->name : 'No match found';
+                    $courseMatching[$csvCourseName] = [
+                        'original' => $csvCourseName,
+                        'standardized' => $standardizedCsvName,
+                        'matched_to' => $matchedCourse,
+                        'course_id' => $courseId
+                    ];
+                }
+
                 $insertData[] = [
                     'scholarship_id' => $scholarship->id,
                     'batch_id' => $batch->id,
-                    'urscholar_id' => $urscholarId, // Add the new urscholar_id field
+                    'urscholar_id' => $urscholarId,
                     'hei_name' => $record['HEI NAME'] ?? null,
-                    'campus' => $record['CAMPUS'] ?? null,
+                    'campus_id' => $campusId,
+                    'course_id' => $courseId,
                     'grant' => $record['GRANT'] ?? null,
                     'app_no' => $record['APP NO'] ?? null,
                     'award_no' => $record['AWARD NO.'] ?? null,
@@ -294,7 +369,6 @@ class ScholarController extends Controller
                     'middle_name' => $record['MIDDLENAME'] ?? null,
                     'sex' => $record['SEX'] ?? null,
                     'birthdate' => $record['BIRTHDATE'] ? date('Y-m-d', strtotime($record['BIRTHDATE'])) : null,
-                    'course' => $record['COURSE/PROGRAM ENROLLED'] ?? null,
                     'year_level' => $record['YEAR LEVEL'] ?? null,
                     'total_units' => $record['TOTAL UNITS ENROLLED'] ?? null,
                     'street' => $record['STREET'] ?? null,
@@ -306,24 +380,36 @@ class ScholarController extends Controller
                 ];
             }
 
+            // Uncomment for debugging
+            // dd([
+            //     'course_matching_results' => $courseMatching,
+            //     'all_standardized_keys' => array_keys($standardizedCourseLookup),
+            //     'sample_data' => array_slice($insertData, 0, 3)
+            // ]);
+
             // Bulk insert scholars
             Scholar::insert($insertData);
 
-            // Get the newly inserted scholars for this batch
+            // Rest of your code remains the same
             $scholars = Scholar::where('batch_id', $batch->id)->get();
-
-            // Verify scholars against existing students
             $students = Student::all();
             $matchedCount = 0;
             $unmatchedCount = 0;
 
             foreach ($scholars as $scholar) {
-                $matched = $students->first(function ($student) use ($scholar) {
+                // For verification, get the campus name from the campus_id to match with student
+                $campusName = null;
+                if ($scholar->campus_id) {
+                    $campus = \App\Models\Campus::find($scholar->campus_id);
+                    $campusName = $campus ? $campus->name : null;
+                }
+
+                $matched = $students->first(function ($student) use ($scholar, $campusName) {
                     return $student->course === $scholar->course &&
                         $student->year_level == $scholar->year_level &&
                         $scholar->first_name == $student->first_name &&
                         $scholar->last_name == $student->last_name &&
-                        $scholar->campus == $student->campus;
+                        $campusName == $student->campus;
                 });
 
                 // Update status directly without collecting in arrays
@@ -350,9 +436,9 @@ class ScholarController extends Controller
 
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
-                        'type' => 'success',
-                        'message' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
-                    ]);
+                    'type' => 'success',
+                    'message' => "Successfully imported " . count($records) . " records. Matched students: {$matchedCount}. Unmatched students: {$unmatchedCount}."
+                ]);
 
         } catch (\Exception $e) {
             return response()->json([
