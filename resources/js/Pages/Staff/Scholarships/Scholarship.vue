@@ -800,19 +800,26 @@ onMounted(() => {
         startInput.value = selectedStart.value; // Keep the previous value
         startInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value);
-            form.value.application = date.toISOString().split("T")[0];
+            
+            // Correct for time zone issues
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+            form.value.application = date.toISOString().split("T")[0]; // Keeps the correct local date
             console.log("Application:", form.value.application);
             selectedStart.value = event.target.value;
         });
     }
-
 
     const endInput = document.getElementById("datepicker-range-end");
     if (endInput) {
         endInput.value = selectedEnd.value; // Keep the previous value
         endInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value);
-            form.value.deadline = date.toISOString().split("T")[0];
+            
+            // Correct for time zone issues
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+            form.value.deadline = date.toISOString().split("T")[0]; // Keeps the correct local date
             selectedEnd.value = event.target.value;
         });
     }
