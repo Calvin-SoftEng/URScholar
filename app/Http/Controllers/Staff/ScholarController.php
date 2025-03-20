@@ -396,20 +396,19 @@ class ScholarController extends Controller
             $matchedCount = 0;
             $unmatchedCount = 0;
 
-            foreach ($scholars as $scholar) {
-                // For verification, get the campus name from the campus_id to match with student
-                $campusName = null;
-                if ($scholar->campus_id) {
-                    $campus = \App\Models\Campus::find($scholar->campus_id);
-                    $campusName = $campus ? $campus->name : null;
-                }
+            // Rest of your code remains the same
+            $scholars = Scholar::where('batch_id', $batch->id)->get();
+            $students = Student::all();
+            $matchedCount = 0;
+            $unmatchedCount = 0;
 
-                $matched = $students->first(function ($student) use ($scholar, $campusName) {
-                    return $student->course === $scholar->course &&
-                        $student->year_level == $scholar->year_level &&
+            foreach ($scholars as $scholar) {
+                $matched = $students->first(function ($student) use ($scholar) {
+                    return $student->course_id === $scholar->course_id &&
+                        $student->campus_id === $scholar->campus_id &&
+                        $scholar->year_level == $student->year_level &&
                         $scholar->first_name == $student->first_name &&
-                        $scholar->last_name == $student->last_name &&
-                        $campusName == $student->campus;
+                        $scholar->last_name == $student->last_name;
                 });
 
                 // Update status directly without collecting in arrays
