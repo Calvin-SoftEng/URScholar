@@ -54,6 +54,11 @@ class Scholar extends Model
         return $this->hasMany(SubmittedRequirements::class);
     }
 
+    public function grades()
+    {
+        return $this->hasMany(Grade::class);
+    }
+
     public function batch()
     {
         return $this->belongsTo(Batch::class);

@@ -92,7 +92,7 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course }}</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -103,7 +103,7 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus }}, Campus</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name }}, Campus</span>
                             </div>
                         </div>
 
