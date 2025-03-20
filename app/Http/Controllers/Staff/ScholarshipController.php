@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Campus;
 use App\Models\CampusRecipients;
+use App\Models\Criteria;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
@@ -223,9 +224,10 @@ class ScholarshipController extends Controller
             'deadline' => 'required|date',
             'requirements' => 'required|array',
             'grade' => 'required|numeric|min:0|max:100',
+            'criteria' => 'required|array',
+            'criteria.*' => 'exists:scholarship_form_data,id',
         ]);
 
-        dd($validated);
         $total_recipients = $validated['total_recipients'];
         $campus_recipients = $validated['campus_recipients'];
 
@@ -262,22 +264,56 @@ class ScholarshipController extends Controller
             }
         }
 
-        // Create the requirements for the scholarship
-        $req = [];
+        // For requirements
         foreach ($validated['requirements'] as $requirement) {
+            // Check if record exists
+            $existingRequirement = Requirements::where('scholarship_id', $scholarship->id)
+                ->where('requirements', $requirement)
+                ->first();
 
-            $req[] = [
-                'scholarship_id' => $scholarship->id,
-                'requirements' => $requirement,
-                'date_start' => $validated['application'],
-                'date_end' => $validated['deadline'],
-                'total_scholars' => $total_recipients,
-            ];
+            if ($existingRequirement) {
+                // Update existing record
+                $existingRequirement->update([
+                    'date_start' => $validated['application'],
+                    'date_end' => $validated['deadline'],
+                    'total_scholars' => $total_recipients,
+                ]);
+            } else {
+                // Insert new record
+                Requirements::create([
+                    'scholarship_id' => $scholarship->id,
+                    'requirements' => $requirement,
+                    'date_start' => $validated['application'],
+                    'date_end' => $validated['deadline'],
+                    'total_scholars' => $total_recipients,
+                ]);
+            }
         }
 
-        Requirements::insert($req);
+        // For criteria
+        foreach ($validated['criteria'] as $scholarship_form_data_id) {
+            // Check if record exists
+            $existingCriteria = Criteria::where('scholarship_id', $scholarship->id)
+                ->where('scholarship_form_data_id', $scholarship_form_data_id)
+                ->first();
 
-        return response()->json(['message' => 'Allocation successful.']);
+            if ($existingCriteria) {
+                // Update existing record
+                $existingCriteria->update([
+                    'grade' => $request->grade,
+                ]);
+            } else {
+                // Create new record
+                Criteria::create([
+                    'scholarship_id' => $scholarship->id,
+                    'scholarship_form_data_id' => $scholarship_form_data_id,
+                    'grade' => $request->grade,
+                ]);
+            }
+        }
+
+
+        return back()->with('success', 'Scholarship recipients and requirements saved successfully');
     }
 
     public function send(Scholarship $scholarship)

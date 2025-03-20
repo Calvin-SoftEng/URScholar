@@ -55,13 +55,13 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        Schema::create('criteria', function (Blueprint $table) {
+        Schema::create('criterias', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->foreignId('scholarship_form_data_id')
-                ->constrained('scholarship_form_data') // Explicitly specify the correct table name
+            $table->foreignId('scholarship_form_data_id')->nullable()
+                ->constrained('scholarship_form_data')
                 ->onDelete('cascade');
-            $table->decimal('grade');
+            $table->decimal('grade')->nullable();
             $table->timestamps();
         });
 
@@ -79,7 +79,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('scholarship_groups');
-        Schema::dropIfExists('criteria');
+        Schema::dropIfExists('criterias');
         Schema::dropIfExists('campus_recipients');
         Schema::dropIfExists('scholarship_form_data');
         Schema::dropIfExists('scholarship_forms');

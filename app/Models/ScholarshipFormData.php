@@ -15,4 +15,9 @@ class ScholarshipFormData extends Model
     {
         return $this->belongsTo(ScholarshipForm::class);
     }
+
+    public function criterias()
+    {
+        return $this->hasMany(Criteria::class);
+    }
 }

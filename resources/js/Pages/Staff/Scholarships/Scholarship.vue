@@ -381,7 +381,9 @@
                                                         <div v-for="data in getFormData(form.id)" :key="data.id"
                                                             class="flex items-center space-x-2 mb-1">
                                                             <input id="accept-terms-{{ data.id }}" type="checkbox"
-                                                                class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                                                class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                                :checked="criteriaIncludes(data.id)"
+                                                                @change="toggleCriteria(data.id)">
                                                             <label :for="'accept-terms-' + data.id"
                                                                 class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
                                                                 {{ data.name }}
@@ -691,6 +693,45 @@ const form = ref({
     deadline: '',
 });
 
+const clearForm = () => {
+    form.value = {
+        name: '',
+        scholarshipType: '',
+        totalRecipients: 0,
+        requirements: [],
+        criteria: [],
+        grade: 0.0,
+        amount: 0,
+        appplication: '',
+        deadline: '',
+    };
+};
+
+
+
+// Safe check if criteria includes an ID
+const criteriaIncludes = (dataId) => {
+    return form.value && form.value.criteria && Array.isArray(form.value.criteria)
+        ? form.value.criteria.includes(dataId)
+        : false;
+};
+
+// Handle criteria selection
+const toggleCriteria = (dataId) => {
+    // Ensure criteria is initialized
+    if (!form.value.criteria) {
+        form.value.criteria = [];
+    }
+
+    const index = form.value.criteria.indexOf(dataId);
+    if (index === -1) {
+        // Add to criteria if not already present
+        form.value.criteria.push(dataId);
+    } else {
+        // Remove from criteria if already present
+        form.value.criteria.splice(index, 1);
+    }
+};
 
 const newReq = ref("");
 const reqs = ref([]);
@@ -717,6 +758,11 @@ const campusesData = ref([]);
 
 // Initialize campus data from props
 onMounted(() => {
+    // Make sure form.criteria is initialized
+    if (!form.value.criteria) {
+        form.value.criteria = [];
+    }
+
     // Transform props.campuses into the format we need
     if (props.campuses && props.campuses.length > 0) {
         campusesData.value = props.campuses.map(campus => ({
@@ -900,7 +946,7 @@ const submitForm = () => {
         // scholarship_type: form.value.scholarshipType,
         total_recipients: form.value.totalRecipients,
         requirements: form.value.requirements,
-        // criteria: form.value.criteria,
+        criteria: form.value.criteria,
         grade: form.value.grade,
         application: form.value.application,
         deadline: form.value.deadline,
@@ -912,6 +958,7 @@ const submitForm = () => {
     router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, payload, {
         onSuccess: () => {
             showToast('Success', 'Scholarship created successfully');
+            clearForm();
             setTimeout(() => {
                 router.visit('/scholarships');
             }, 1500);
