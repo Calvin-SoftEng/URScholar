@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\EducationRecord;
 use App\Models\FamilyRecord;
+use App\Models\Grade;
 use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\StudentRecord;
+use App\Models\Batch;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
 use App\Models\User;
 use App\Models\Scholar;
+use App\Models\SchoolYear;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -29,7 +32,40 @@ class StudentController extends Controller
     }
     public function verifyAccount()
     {
-        return Inertia::render('Student/VerificationAccount/Verification');
+        $user = User::where('email', Auth::user()->email)->first();
+        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $batch = Batch::where('scholarship_id', $scholar->scholarship_id)->first();
+
+        // Get the batch semester logic
+        $batch_semester = null;
+        $batch_school_year = null;
+    
+        if ($batch) {
+            if ($batch->semester == '2nd') {
+                $batch_semester = '1st';
+                $school_year = $batch->school_year; // Keep the same school year
+            } else if ($batch->semester == '1st') {
+                $batch_semester = '2nd';
+                $batch_school_year = $batch->school_year - 1; // Previous school year
+            }
+        }
+
+        $school_year = SchoolYear::where('id', $batch_school_year)->first();
+
+        if (!$school_year){
+            $school_year = SchoolYear::where('id', $batch->school_year)->first();
+        }
+        else {
+            $school_year = null;
+        }
+
+        return Inertia::render('Student/VerificationAccount/Verification', [
+            'user' => $user,
+            'scholar' => $scholar,
+            'batch' => $batch,
+            'batch_semester' => $batch_semester,
+            'school_year' => $school_year,
+        ]);
     }
 
     public function verifyingAccount(Request $request)
@@ -46,7 +82,7 @@ class StudentController extends Controller
             'confirm_password.same' => 'Passwords must match.',
         ];
 
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             //Personal Information
             'first_name' => ['required', 'string', 'max:255'],
             'middle_name' => ['required', 'string', 'max:255'],
@@ -63,25 +99,31 @@ class StudentController extends Controller
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
 
+            //Grade Information
+            'grade' => ['required'],
+            'cog' => ['required', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
+            'school_year' => ['required', 'string'],
+            'semester' => ['required', 'string'],
+
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
             'education.elementary.years' => ['required', 'numeric'],
-            'education.elementary.honors' => ['required', 'string'],
+            'education.elementary.honors' => ['string'],
             'education.junior.name' => ['required', 'string',],
             'education.junior.years' => ['required', 'numeric'],
-            'education.junior.honors' => ['required', 'string'],
+            'education.junior.honors' => ['string'],
             'senior.name' => ['', 'string'],
             'senior.years' => ['', 'numeric'],
-            'senior.honors' => ['', 'string'],
+            'senior.honors' => ['string'],
             'college.name' => ['', 'string'],
             'college.years' => ['', 'numeric'],
-            'college.honors' => ['', 'string'],
+            'college.honors' => ['string'],
             'vocational.name' => ['', 'string'],
             'vocational.years' => ['', 'numeric'],
-            'vocational.honors' => ['', 'string'],
+            'vocational.honors' => ['string'],
             'postgrad.name' => ['', 'string'],
             'postgrad.years' => ['', 'numeric'],
-            'postgrad.honors' => ['', 'string'],
+            'postgrad.honors' => ['string'],
 
             //Family Information
             'mother.first_name' => ['required', 'string'],
@@ -114,113 +156,126 @@ class StudentController extends Controller
             'imgName' => 'required|string',
         ], $messages);
 
+        //dd($request->all());
 
         // Custom error message handling to combine related fields
-    if ($validator->fails()) {
-        $errors = $validator->errors();
-        
-        // Check if any elementary education fields failed validation
-        if ($errors->has('education.elementary.name') || 
-            $errors->has('education.elementary.years') || 
-            $errors->has('education.elementary.honors')) {
-            
-            // Create a single combined error message
-            $errorMessage = 'Please complete all elementary education information.';
-            
-            // Remove the individual error messages
-            $errors->forget('education.elementary.name');
-            $errors->forget('education.elementary.years');
-            $errors->forget('education.elementary.honors');
-            
-            // Add the combined error
-            $errors->add('education.elementary', $errorMessage);
-        }
+        if ($validator->fails()) {
+            $errors = $validator->errors();
 
-        //junior
-        if ($errors->has('education.junior.name') || 
-            $errors->has('education.junior.years') || 
-            $errors->has('education.junior.honors')) {
-            
-            // Create a single combined error message
-            $errorMessage = 'Please complete all junior education information.';
-            
-            // Remove the individual error messages
-            $errors->forget('education.junior.name');
-            $errors->forget('education.junior.years');
-            $errors->forget('education.junior.honors');
-            
-            // Add the combined error
-            $errors->add('education.junior', $errorMessage);
-        }
+            // Check if any elementary education fields failed validation
+            if (
+                $errors->has('education.elementary.name') ||
+                $errors->has('education.elementary.years') ||
+                $errors->has('education.elementary.honors')
+            ) {
 
-        //senior
-        if ($errors->has('senior.name') || 
-            $errors->has('senior.years') || 
-            $errors->has('senior.honors')) {
-            
-            // Create a single combined error message
-            $errorMessage = 'Please complete all senior education information.';
-            
-            // Remove the individual error messages
-            $errors->forget('senior.name');
-            $errors->forget('senior.years');
-            $errors->forget('senior.honors');
-            
-            // Add the combined error
-            $errors->add('senior', $errorMessage);
-        }
+                // Create a single combined error message
+                $errorMessage = 'Please complete all elementary education information.';
 
-        //college
-        if ($errors->has('college.name') || 
-            $errors->has('college.years') || 
-            $errors->has('college.honors')) {
-            
-            // Create a single combined error message
-            $errorMessage = 'Please complete all college education information.';
-            
-            // Remove the individual error messages
-            $errors->forget('college.name');
-            $errors->forget('college.years');
-            $errors->forget('college.honors');
-            
-            // Add the combined error
-            $errors->add('college', $errorMessage);
-        }
+                // Remove the individual error messages
+                $errors->forget('education.elementary.name');
+                $errors->forget('education.elementary.years');
+                $errors->forget('education.elementary.honors');
 
-        //vocational
-        if ($errors->has('vocational.name') || 
-            $errors->has('vocational.years') || 
-            $errors->has('vocational.honors')) {
-            
-            // Create a single combined error message
-            $errorMessage = 'Please complete all vocational education information.';
-            
-            // Remove the individual error messages
-            $errors->forget('vocational.name');
-            $errors->forget('vocational.years');
-            $errors->forget('vocational.honors');
-            
-            // Add the combined error
-            $errors->add('vocational', $errorMessage);
-        }
+                // Add the combined error
+                $errors->add('education.elementary', $errorMessage);
+            }
 
-        //postgrad
-        if ($errors->has('postgrad.name') || 
-            $errors->has('postgrad.years') || 
-            $errors->has('postgrad.honors')) {
-            
-            // Create a single combined error message
-            $errorMessage = 'Please complete all post graduate education information.';
-            
-            // Remove the individual error messages
-            $errors->forget('postgrad.name');
-            $errors->forget('postgrad.years');
-            $errors->forget('postgrad.honors');
-            
-            // Add the combined error
-            $errors->add('postgrad', $errorMessage);
-        }
-        
+            //junior
+            if (
+                $errors->has('education.junior.name') ||
+                $errors->has('education.junior.years') ||
+                $errors->has('education.junior.honors')
+            ) {
+
+                // Create a single combined error message
+                $errorMessage = 'Please complete all junior education information.';
+
+                // Remove the individual error messages
+                $errors->forget('education.junior.name');
+                $errors->forget('education.junior.years');
+                $errors->forget('education.junior.honors');
+
+                // Add the combined error
+                $errors->add('education.junior', $errorMessage);
+            }
+
+            //senior
+            if (
+                $errors->has('senior.name') ||
+                $errors->has('senior.years') ||
+                $errors->has('senior.honors')
+            ) {
+
+                // Create a single combined error message
+                $errorMessage = 'Please complete all senior education information.';
+
+                // Remove the individual error messages
+                $errors->forget('senior.name');
+                $errors->forget('senior.years');
+                $errors->forget('senior.honors');
+
+                // Add the combined error
+                $errors->add('senior', $errorMessage);
+            }
+
+            //college
+            if (
+                $errors->has('college.name') ||
+                $errors->has('college.years') ||
+                $errors->has('college.honors')
+            ) {
+
+                // Create a single combined error message
+                $errorMessage = 'Please complete all college education information.';
+
+                // Remove the individual error messages
+                $errors->forget('college.name');
+                $errors->forget('college.years');
+                $errors->forget('college.honors');
+
+                // Add the combined error
+                $errors->add('college', $errorMessage);
+            }
+
+            //vocational
+            if (
+                $errors->has('vocational.name') ||
+                $errors->has('vocational.years') ||
+                $errors->has('vocational.honors')
+            ) {
+
+                // Create a single combined error message
+                $errorMessage = 'Please complete all vocational education information.';
+
+                // Remove the individual error messages
+                $errors->forget('vocational.name');
+                $errors->forget('vocational.years');
+                $errors->forget('vocational.honors');
+
+                // Add the combined error
+                $errors->add('vocational', $errorMessage);
+            }
+
+            //postgrad
+            if (
+                $errors->has('postgrad.name') ||
+                $errors->has('postgrad.years') ||
+                $errors->has('postgrad.honors')
+            ) {
+
+                // Create a single combined error message
+                $errorMessage = 'Please complete all post graduate education information.';
+
+                // Remove the individual error messages
+                $errors->forget('postgrad.name');
+                $errors->forget('postgrad.years');
+                $errors->forget('postgrad.honors');
+
+                // Add the combined error
+                $errors->add('postgrad', $errorMessage);
+            }
+
             // Apply the generic required message to all fields dynamically
             foreach ($errors->messages() as $field => $messages) {
                 if (in_array("The $field field is required.", $messages)) {
@@ -229,10 +284,29 @@ class StudentController extends Controller
                 }
             }
 
-        // Return with the modified errors
-        return redirect()->back()->withErrors($errors)->withInput();
-    }
-    
+            // Return with the modified errors
+            return redirect()->back()->withErrors($errors)->withInput();
+        }
+
+        $user = User::where('email', $request->email)->first();
+
+        $scholar = Scholar::where('email', $request->email)->first();
+
+        $originalFileName = $request->file('cog')->getClientOriginalName();
+        $extension = $request->file('cog')->getClientOriginalExtension();
+        $newFileName = $scholar->urscholar_id . $extension;
+
+        $filePath = $request->file('cog')->storeAs('scholar/grade', $newFileName, 'public');
+
+        $testing = Grade::create([
+            'scholar_id' => $scholar->id,
+            'grade' => $request->grade,
+            'cog' => $originalFileName,
+            'path' => $filePath,
+            'school_year' => $request->school_year,
+            'semester' => $request->semester,
+        ]);
+
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
 
@@ -301,8 +375,6 @@ class StudentController extends Controller
         ];
 
         $password = Hash::make($request->password);
-
-        $user = User::where('email', $request->email)->first();
 
         $user->update([
             'picture' => $originalFileName,
@@ -429,10 +501,11 @@ class StudentController extends Controller
     public function profile()
     {
 
+        
         $student = StudentRecord::where('user_id', Auth::user()->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
-        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $scholar = Scholar::where('email', Auth::user()->email)->with('course', 'campus')->first();
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,

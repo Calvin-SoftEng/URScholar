@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('suffix_name')->nullable();
-            $table->string('bday')->nullable();
+            $table->date('birthdate')->nullable();
             $table->string('placebirth')->nullable();
             $table->integer('age')->nullable();
             $table->string('gender')->nullable();
