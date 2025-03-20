@@ -38,10 +38,15 @@
                             class="w-full">
                             
                             <div 
-                                class="border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
+                                class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
                                 hover:shadow-md transition-all duration-300 p-5 flex flex-col md:flex-row 
                                 justify-between items-start md:items-center space-y-5 md:space-y-0">
                                 
+                                <!-- Notification Badge -->
+                                <span class="absolute top-[-13px] right-2 bg-primary text-white text-sm font-bold px-5 py-1 rounded-full">
+                                    New Scholarship
+                                </span>
+
                                 <!-- Scholarship Info -->
                                 <div class="space-y-4 items-start justify-start">
                                     <div class="badge badge-info text-xs badge-outline px-3 py-1">
@@ -79,6 +84,7 @@
                                 </div>
 
                             </div>
+
                         </button>
 
                         <!-- One-Time Payment Scholarships -->
@@ -94,38 +100,42 @@
                                 class="w-full">
                                 
                                 <div 
-                                    class="border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
+                                    class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
                                     hover:shadow-md transition-all duration-300 p-5 flex flex-col md:flex-row 
                                     justify-between items-start md:items-center space-y-5 md:space-y-0">
+                                    
+                                    <!-- Notification Badge -->
+                                    <span class="absolute top-[-13px] right-2 bg-primary text-white text-sm font-bold px-5 py-1 rounded-full flex items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'bell']" class="text-base" />
+                                        New Activities
+                                    </span>
 
-                                    <!-- Scholarship Info (Left-Aligned) -->
+
+                                    <!-- Scholarship Info -->
                                     <div class="space-y-4 items-start justify-start">
-                                        <!-- Sponsor Badge -->
                                         <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                             {{ getSponsorName(scholarship.sponsor_id) }}
                                         </div>
 
-                                        <!-- Scholarship Name -->
-                                        <h2 class="text-3xl md:text-3xl text-gray-800 font-sora font-semibold dark:text-dtext leading-tight">
+                                        <h2 class="w-full items-start text-3xl md:text-2xl font-semibold text-gray-900 dark:text-dtext">
                                             {{ scholarship.name }}
                                         </h2>
 
-                                        <!-- Created & Sponsoring Since -->
-                                        <div class="text-sm text-gray-500 space-y-1">
-                                            <span>Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
-                                            <span>Sponsoring Since: 
-                                                {{ new Date(scholarship.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}
-                                            </span>
-                                        </div>
+                                        <p class="text-sm text-gray-500 items-start">
+                                            <span class="items-start">Created on: {{ new Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
+                                            <span class="items-start font-medium">Sponsoring Since:</span> 
+                                            {{ new Date(scholarship.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}
+                                        </p>
 
-                                        <!-- Deadline (Prevent Overflow) -->
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-3"
-                                        style="display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; max-height: 4.5rem;">
-                                            <span class="font-medium">Requirements Deadline:</span> Deadline dito
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                            <span class="font-medium">Requirements Deadline:</span> 
+                                            {{ scholarship.requirements?.length > 0
+                                                ? new Date(scholarship.requirements[0].deadline).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                                                : 'No deadline set' }}
                                         </p>
                                     </div>
 
-                                    <!-- Additional Info (Right-Aligned) -->
+                                    <!-- Additional Info -->
                                     <div class="flex flex-row gap-6">
                                         <div class="flex flex-col items-center">
                                             <span class="text-gray-500 text-sm">Batches</span>
