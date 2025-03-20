@@ -14,6 +14,8 @@ use App\Models\CampusRecipients;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
+use App\Models\ScholarshipForm;
+use App\Models\ScholarshipFormData;
 use App\Models\SubmittedRequirements;
 use App\Models\Sponsor;
 use App\Models\Student;
@@ -157,6 +159,9 @@ class ScholarshipController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $total_scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
 
+        $scholarship_form = ScholarshipForm::all();
+        $scholarship_form_data = ScholarshipFormData::all();
+
 
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
@@ -175,6 +180,8 @@ class ScholarshipController extends Controller
             'campuses' => $campuses,
             'courses' => $courses,
             'students' => $students,
+            'scholarship_form' => $scholarship_form,
+            'scholarship_form_data' => $scholarship_form_data,
         ]);
     }
 
@@ -215,9 +222,10 @@ class ScholarshipController extends Controller
             'application' => 'required|date',
             'deadline' => 'required|date',
             'requirements' => 'required|array',
+            'grade' => 'required|numeric|min:0|max:100',
         ]);
 
-        // dd($validated);
+        dd($validated);
         $total_recipients = $validated['total_recipients'];
         $campus_recipients = $validated['campus_recipients'];
 
@@ -266,7 +274,7 @@ class ScholarshipController extends Controller
                 'total_scholars' => $total_recipients,
             ];
         }
-        
+
         Requirements::insert($req);
 
         return response()->json(['message' => 'Allocation successful.']);

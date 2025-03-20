@@ -281,7 +281,7 @@
                                                         <div class="flex flex-row text-sm gap-4">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -361,28 +361,36 @@
                                                 </h3>
 
 
-                                                <input v-model="form.name" type="text" id="name"
+                                                <input v-model="form.grade" type="text" id="name"
                                                     placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
 
                                             </div>
 
                                             <div>
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">List Criteria
-                                                    and Eligibility</h3>
+                                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">List
+                                                    Criteria and Eligibility</h3>
 
-                                                <div class="grid grid-cols-1 md:grid-cols-1 gap-3 mt-2">
-                                                    <div class="flex items-center space-x-2">
+                                                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                                                    <div v-for="form in scholarship_form" :key="form.id"
+                                                        class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                                                        <h4
+                                                            class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
+                                                            {{ form.name }}</h4>
 
-                                                        <input id="accept-terms" type="checkbox"
-                                                            class="rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                        <label for="accept-terms"
-                                                            class="text-sm font-medium text-gray-700 cursor-pointer">
-                                                            Dapat First Honor
-                                                        </label>
+                                                        <div v-for="data in getFormData(form.id)" :key="data.id"
+                                                            class="flex items-center space-x-2 mb-1">
+                                                            <input id="accept-terms-{{ data.id }}" type="checkbox"
+                                                                class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                                            <label :for="'accept-terms-' + data.id"
+                                                                class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                                {{ data.name }}
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
 
                                         <div class="w-full">
@@ -567,6 +575,8 @@ import { Tooltip } from 'primevue';
 
 // Define props to include scholars data
 const props = defineProps({
+    scholarship_form: Array,
+    scholarship_form_data: Array,
     batches: Array,
     scholarship: Object,
     schoolyear: Object,
@@ -581,6 +591,10 @@ const props = defineProps({
 
 const directives = {
     Tooltip,
+};
+
+const getFormData = (formId) => {
+    return props.scholarship_form_data.filter(data => data.scholarship_form_id === formId);
 };
 
 // Forward batch modal state
@@ -671,6 +685,7 @@ const form = ref({
     totalRecipients: 0,
     requirements: [],
     criteria: [],
+    grade: 0.0,
     amount: 0,
     appplication: '',
     deadline: '',
@@ -886,6 +901,7 @@ const submitForm = () => {
         total_recipients: form.value.totalRecipients,
         requirements: form.value.requirements,
         // criteria: form.value.criteria,
+        grade: form.value.grade,
         application: form.value.application,
         deadline: form.value.deadline,
         amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
