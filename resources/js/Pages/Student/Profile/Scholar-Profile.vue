@@ -111,6 +111,14 @@
                         <div
                             class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                             <h1 class="text-base">Education</h1>
+                            
+                            <div class="w-full flex flex-col space-y-1">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-900 text-lg font-semibold leading-tight">Current GWA:</span>
+                                    <span class="text-gray-800 text-base font-semibold">1.1</span>
+                                </div>
+                            </div>
+                            
                             <div>
                                 <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                     Elementary
