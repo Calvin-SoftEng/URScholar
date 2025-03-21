@@ -115,7 +115,7 @@
                             <div class="w-full flex flex-col space-y-1">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-900 text-lg font-semibold leading-tight">Current GWA:</span>
-                                    <span class="text-gray-800 text-base font-semibold">1.1</span>
+                                    <span class="text-gray-800 text-base font-semibold">{{ grade.grade }}</span>
                                 </div>
                             </div>
                             
@@ -318,6 +318,7 @@ const props = defineProps({
     education: Object,
     family: Object,
     scholar: Object,
+    grade: Object,
 });
 
 // QR Code state management
