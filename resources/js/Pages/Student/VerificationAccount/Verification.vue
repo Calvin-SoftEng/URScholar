@@ -186,8 +186,8 @@
                                                             d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                     </svg>
                                                 </div>
-                                                <input v-model="form.birthdate" id="datepicker-autohide"
-                                                    type="text" autocomplete="off"
+                                                <input v-model="form.birthdate" id="datepicker-autohide" type="text"
+                                                    autocomplete="off"
                                                     class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                     placeholder="Select Birthdate" />
 
@@ -376,11 +376,14 @@
                                         </div>
 
                                         <div class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
-                                            <span class="text-sm text-gray-500 italic">* You can set this up later</span>
+                                            <span class="text-sm text-gray-500 italic">* You can set this up
+                                                later</span>
 
-                                            <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
+                                            <div
+                                                class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
                                                 <!-- GWA Input -->
-                                                <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
+                                                <div
+                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
                                                     <Label for="gwa">Enter General Weighted Average
                                                         <!-- <span
                                                             class="italic text-gray-500">*must be {{
@@ -394,7 +397,8 @@
                                                 </div>
 
                                                 <!-- File Upload -->
-                                                <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
+                                                <div
+                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
                                                     <Label for="file_upload">Upload Certificate of Grade</Label>
                                                     <input id="file_upload" type="file" @change="handleFile"
                                                         class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
@@ -403,7 +407,7 @@
                                             </div>
                                         </div>
 
-                                        
+
 
                                         <!-- elementary -->
                                         <div
@@ -1743,13 +1747,11 @@ const formEntries = ref([
 ]);
 
 // Method to add a new entry
-const addEntry = () => {
-    saveScrollPosition(); // Save scroll position before adding entry
-
-    // Directly push into form.value.formEntries instead of reassigning
+const addEntry = (event) => {
+    event.preventDefault(); // Prevent form submission
+    saveScrollPosition();
     form.value.siblings.push({ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' });
-
-    restoreScrollPosition(); // Restore scroll position after DOM updates
+    restoreScrollPosition();
 };
 
 const removeEntry = (index) => {
@@ -1808,7 +1810,7 @@ onMounted(() => {
     //             const year = selectedDate.getFullYear();
     //             const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // Month is 0-based
     //             const day = String(selectedDate.getDate()).padStart(2, "0");
-                
+
     //             form.value.birthdate = `${year}-${month}-${day}`;
     //         }
     //     });
@@ -1824,7 +1826,8 @@ const organizations = ref([
 ]);
 
 // Add a new organization entry
-const addOrganization = () => {
+const addOrganization = (event) => {
+    event.preventDefault(); // Prevent form submission
     saveScrollPosition(); // Save scroll position before adding entry
 
     // Directly push into form.value.organizations instead of reassigning

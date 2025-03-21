@@ -158,7 +158,7 @@ class StudentController extends Controller
             // 'imgName' => 'required|string',
         ], $messages);
 
-        //dd($request['siblings']);
+        dd($request['siblings']);
 
         // Custom error message handling to combine related fields
         if ($validator->fails()) {
