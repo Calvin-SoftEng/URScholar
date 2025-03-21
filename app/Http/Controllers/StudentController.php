@@ -100,10 +100,10 @@ class StudentController extends Controller
             'relationship' => ['required', 'string', 'max:255'],
 
             //Grade Information
-            'grade' => ['decimal'],
-            'cog' => ['file', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
-            'school_year' => ['string'],
-            'semester' => ['string'],
+            // 'grade' => ['decimal'],
+            // 'cog' => ['file', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
+            // 'school_year' => ['string'],
+            // 'semester' => ['string'],
 
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],

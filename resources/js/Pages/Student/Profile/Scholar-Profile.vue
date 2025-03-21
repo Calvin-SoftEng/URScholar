@@ -29,7 +29,7 @@
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Date of Birth</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                        student.placebirth }}</span>
+                                        formattedDate }}</span>
                                 </div>
                             </div>
                             <div class="w-full flex flex-row gap-2 py-2">
@@ -422,6 +422,12 @@ const downloadQRCode = async () => {
     }
 };
 
+
+const formattedDate = new Date(props.student.birthdate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric"
+});
 
 // Initialize QR code URL on component mount
 onMounted(() => {
