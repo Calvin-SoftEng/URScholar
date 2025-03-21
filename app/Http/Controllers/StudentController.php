@@ -48,7 +48,12 @@ class StudentController extends Controller
                 $school_year = $batch->school_year; // Keep the same school year
             } else if ($batch->semester == '1st') {
                 $batch_semester = '2nd';
-                $batch_school_year = $batch->school_year - 1; // Previous school year
+
+                if ($batch->school_year == 1) {
+                    $batch_school_year = 1; // First school year
+                } else {
+                    $batch_school_year = $batch->school_year - 1; // Previous school year
+                }
             }
         }
 
@@ -429,7 +434,7 @@ class StudentController extends Controller
 
         $familyID = FamilyRecord::where('student_record_id', $studentrecordID)->get();
 
-        
+
         foreach ($request->siblings as $index => $sibling) {
             SiblingRecord::create([
                 'family_record_id' => $familyID->pluck('id')->first(),
