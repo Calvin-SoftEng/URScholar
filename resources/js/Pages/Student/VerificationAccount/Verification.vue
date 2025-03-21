@@ -1680,17 +1680,26 @@ const steps = ref([
 
 const goToStep = (index) => {
     activeStep.value = index;
+    nextTick(() => {
+        initDatepicker(); // Reinitialize datepicker after the step changes
+    });
 };
 
 const nextStep = () => {
     if (activeStep.value < steps.value.length - 1) {
         activeStep.value++;
+        nextTick(() => {
+            initDatepicker(); // Reinitialize datepicker after the step changes
+        });
     }
 };
 
 const prevStep = () => {
     if (activeStep.value > 0) {
         activeStep.value--;
+        nextTick(() => {
+            initDatepicker(); // Reinitialize datepicker after the step changes
+        });
     }
 };
 
@@ -1735,31 +1744,61 @@ const removeEntry = (index) => {
     nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
 };
 
-// This can be used to restore the scroll position when the page first loads
-onMounted(() => {
-    initFlowbite();
-
+const initDatepicker = () => {
     const datepickerEl = document.getElementById("datepicker-autohide");
 
     if (datepickerEl) {
-        const datepicker = new window.Datepicker(datepickerEl, {
-            autohide: true,
-            format: "yyyy-mm-dd", // Ensure YYYY-MM-DD format
-        });
+        if (!datepickerEl.dataset.initialized) {
+            const datepicker = new window.Datepicker(datepickerEl, {
+                autohide: true,
+                format: "yyyy-mm-dd",
+            });
 
-        datepickerEl.addEventListener("changeDate", (event) => {
+            datepickerEl.dataset.initialized = "true";
 
-            const selectedDate = datepicker.getDate();
-            if (selectedDate) {
+            // Store selected date when user types or selects a date
+            datepickerEl.addEventListener("input", () => {
+                form.value.birthdate = datepickerEl.value;
+            });
 
-                const year = selectedDate.getFullYear();
-                const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // Month is 0-based
-                const day = String(selectedDate.getDate()).padStart(2, "0");
-                
-                form.value.birthdate = `${year}-${month}-${day}`;
-            }
-        });
+            datepickerEl.addEventListener("blur", () => {
+                form.value.birthdate = datepickerEl.value;
+            });
+        }
+
+        // 🔥 Restore value manually when switching steps
+        if (form.value.birthdate) {
+            datepickerEl.value = form.value.birthdate;
+        }
     }
+};
+
+// This can be used to restore the scroll position when the page first loads
+onMounted(() => {
+    initFlowbite();
+    initDatepicker();
+
+    // const datepickerEl = document.getElementById("datepicker-autohide");
+
+    // if (datepickerEl) {
+    //     const datepicker = new window.Datepicker(datepickerEl, {
+    //         autohide: true,
+    //         format: "yyyy-mm-dd", // Ensure YYYY-MM-DD format
+    //     });
+
+    //     datepickerEl.addEventListener("changeDate", (event) => {
+
+    //         const selectedDate = datepicker.getDate();
+    //         if (selectedDate) {
+
+    //             const year = selectedDate.getFullYear();
+    //             const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // Month is 0-based
+    //             const day = String(selectedDate.getDate()).padStart(2, "0");
+                
+    //             form.value.birthdate = `${year}-${month}-${day}`;
+    //         }
+    //     });
+    // }
 
     restoreScrollPosition();
 });
