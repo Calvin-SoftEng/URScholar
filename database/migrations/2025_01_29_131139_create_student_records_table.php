@@ -53,7 +53,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('siblings_records', function (Blueprint $table) {
+        Schema::create('sibling_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('family_record_id')->constrained()->onDelete('cascade');
             $table->string('first_name')->nullable();
@@ -70,7 +70,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('siblings_records');
+        Schema::dropIfExists('sibling_records');
         Schema::dropIfExists('family_records');
         Schema::dropIfExists('education_records');
         Schema::dropIfExists('student_records');

@@ -7,6 +7,7 @@ use App\Models\FamilyRecord;
 use App\Models\Grade;
 use App\Models\Scholarship;
 use App\Models\Requirements;
+use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
 use App\Models\Batch;
 use App\Models\Student;
@@ -84,81 +85,81 @@ class StudentController extends Controller
 
         $validator = Validator::make($request->all(), [
             //Personal Information
-            // 'first_name' => ['required', 'string', 'max:255'],
-            // 'middle_name' => ['required', 'string', 'max:255'],
-            // 'last_name' => ['required', 'string', 'max:255'],
-            // 'suffix' => ['required', 'string', 'max:255'],
-            // 'password' => ['required'],
-            // 'confirm_password' => ['required', 'same:password'],
-            // 'birthdate' => ['required', 'date'],
-            // 'birthplace' => ['required', 'string', 'max:255'],
-            // 'age' => ['required', 'numeric'],
-            // 'gender' => ['required', 'string', 'max:255'],
-            // 'civil_status' => ['required', 'string', 'max:255'],
-            // 'religion' => ['required', 'string', 'max:255'],
-            // 'guardian_name' => ['required', 'string', 'max:255'],
-            // 'relationship' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'suffix' => ['required', 'string', 'max:255'],
+            'password' => ['required'],
+            'confirm_password' => ['required', 'same:password'],
+            'birthdate' => ['required', 'date'],
+            'birthplace' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'numeric'],
+            'gender' => ['required', 'string', 'max:255'],
+            'civil_status' => ['required', 'string', 'max:255'],
+            'religion' => ['required', 'string', 'max:255'],
+            'guardian_name' => ['required', 'string', 'max:255'],
+            'relationship' => ['required', 'string', 'max:255'],
 
             //Grade Information
-            // 'grade' => ['string'],
-            // 'cog' => [''],
-            // 'school_year' => ['string'],
-            // 'semester' => ['string'],
+            'grade' => ['string'],
+            'cog' => [''],
+            'school_year' => ['string'],
+            'semester' => ['string'],
 
             //Educaiton Information
-            // 'education.elementary.name' => ['required', 'string'],
-            // 'education.elementary.years' => ['required', 'numeric'],
-            // 'elementary.honors' => ['string'],
-            // 'education.junior.name' => ['required', 'string',],
-            // 'education.junior.years' => ['required', 'numeric'],
-            // 'junior.honors' => ['string'],
-            // 'senior.name' => ['', 'string'],
-            // 'senior.years' => ['', 'numeric'],
-            // 'senior.honors' => ['string'],
-            // 'college.name' => ['', 'string'],
-            // 'college.years' => ['', 'numeric'],
-            // 'college.honors' => ['string'],
-            // 'vocational.name' => ['', 'string'],
-            // 'vocational.years' => ['', 'numeric'],
-            // 'vocational.honors' => ['string'],
-            // 'postgrad.name' => ['', 'string'],
-            // 'postgrad.years' => ['', 'numeric'],
-            // 'postgrad.honors' => ['string'],
+            'education.elementary.name' => ['required', 'string'],
+            'education.elementary.years' => ['required', 'numeric'],
+            'elementary.honors' => ['string'],
+            'education.junior.name' => ['required', 'string',],
+            'education.junior.years' => ['required', 'numeric'],
+            'junior.honors' => ['string'],
+            'senior.name' => ['', 'string'],
+            'senior.years' => ['', 'numeric'],
+            'senior.honors' => ['string'],
+            'college.name' => ['', 'string'],
+            'college.years' => ['', 'numeric'],
+            'college.honors' => ['string'],
+            'vocational.name' => ['', 'string'],
+            'vocational.years' => ['', 'numeric'],
+            'vocational.honors' => ['string'],
+            'postgrad.name' => ['', 'string'],
+            'postgrad.years' => ['', 'numeric'],
+            'postgrad.honors' => ['string'],
 
             //Family Information
-            // 'mother.first_name' => ['required', 'string'],
-            // 'mother.middle_name' => ['required', 'string'],
-            // 'mother.last_name' => ['required', 'string'],
-            // 'mother.age' => ['', 'string'],
-            // 'mother.address' => ['', 'string'],
-            // 'mother.citizenship' => ['', 'string'],
-            // 'mother.occupation' => ['', 'string'],
-            // 'mother.education' => ['', 'string'],
-            // 'mother.batch' => ['string'],
+            'mother.first_name' => ['required', 'string'],
+            'mother.middle_name' => ['required', 'string'],
+            'mother.last_name' => ['required', 'string'],
+            'mother.age' => ['', 'string'],
+            'mother.address' => ['', 'string'],
+            'mother.citizenship' => ['', 'string'],
+            'mother.occupation' => ['', 'string'],
+            'mother.education' => ['', 'string'],
+            'mother.batch' => ['string'],
 
-            // 'father.first_name' => ['', 'string'],
-            // 'father.middle_name' => ['', 'string'],
-            // 'father.last_name' => ['', 'string'],
-            // 'father.age' => ['', 'string'],
-            // 'father.address' => ['', 'string'],
-            // 'father.citizenship' => ['', 'string'],
-            // 'father.occupation' => ['', 'string'],
-            // 'father.education' => ['', 'string'],
-            // 'father.batch' => ['string'],
+            'father.first_name' => ['', 'string'],
+            'father.middle_name' => ['', 'string'],
+            'father.last_name' => ['', 'string'],
+            'father.age' => ['', 'string'],
+            'father.address' => ['', 'string'],
+            'father.citizenship' => ['', 'string'],
+            'father.occupation' => ['', 'string'],
+            'father.education' => ['', 'string'],
+            'father.batch' => ['string'],
 
             'siblings' => ['array'],
+            'siblings.*' => ['required', 'array'],
 
-            // 'marital_status' => ['required', 'string'],
-            // 'monthly_income' => ['required', 'string'],
-            // 'other_income' => ['required', 'string'],
-            // 'family_housing' => ['required', 'string'],
+            'marital_status' => ['required', 'string'],
+            'monthly_income' => ['required', 'string'],
+            'other_income' => ['required', 'string'],
+            'family_housing' => ['required', 'string'],
 
 
-            // 'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            // 'imgName' => 'required|string',
+            'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'imgName' => 'required|string',
         ], $messages);
 
-        dd($request['siblings']);
 
         // Custom error message handling to combine related fields
         if ($validator->fails()) {
@@ -421,6 +422,20 @@ class StudentController extends Controller
             'other_income' => $request->other_income,
             'family_housing' => $request->family_housing,
         ]);
+
+        $familyID = FamilyRecord::where('student_record_id', $studentrecordID)->get();
+
+        
+        foreach ($request->siblings as $index => $sibling) {
+            SiblingRecord::create([
+                'family_record_id' => $familyID->pluck('id')->first(),
+                'first_name' => $sibling['first_name'],
+                'last_name' => $sibling['last_name'],
+                'middle_name' => $sibling['middle_name'],
+                'age' => $sibling['age'],
+                'occupation' => $sibling['occupation'],
+            ]);
+        }
 
         event(new Verified($user));
 
