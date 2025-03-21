@@ -440,6 +440,12 @@ class StudentController extends Controller
 
 
         foreach ($request->siblings as $index => $sibling) {
+            // Skip this iteration if all inputs are null
+            if (is_null($sibling['first_name']) && is_null($sibling['last_name']) && is_null($sibling['middle_name'])
+                && is_null($sibling['age']) && is_null($sibling['occupation'])) {
+                continue;
+            }
+
             SiblingRecord::create([
                 'family_record_id' => $familyID->pluck('id')->first(),
                 'first_name' => $sibling['first_name'],
@@ -591,11 +597,13 @@ class StudentController extends Controller
         $scholar->qr_code = $filename;
         $scholar->save();
 
-        return response()->json([
-            'message' => 'QR code generated successfully.',
-            'path' => asset('storage/' . $filename),
-            'filename' => $urscholar_id . '.png'
-        ]);
+        return back()->with('success', 'QR code generated successfully.');
+
+        // return response()->json([
+        //     'message' => 'QR code generated successfully.',
+        //     'path' => asset('storage/' . $filename),
+        //     'filename' => $urscholar_id . '.png'
+        // ]);
     }
 
     public function applicationReupload(Request $request)
