@@ -419,12 +419,27 @@
                                     General Weighted Average
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                    <span class="text-gray-700 text-base font-medium leading-tight">Year and Semester</span>
-                                    <div class="relative pl-1 w-6/12">
-                                    <input v-model="grade.grade" type="text" placeholder="Enter User ID" 
-                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                        <!-- Icon inside input -->
-                                        <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
+                                    <div class="flex flex-col space-y-2">
+                                        <span class="text-gray-700 text-base font-medium leading-tight">Update Grade and Certificate of Grade</span>
+                                        <span class="text-gray-600 text-base leading-tight">Last Update: Noon pa</span>
+                                    </div>
+                                    <div class="flex flex-col space-y-2">
+                                        <!-- gwa input -->
+                                        <div class="relative pl-1">
+                                        <input v-model="grade.grade" type="text" placeholder="Enter User ID" 
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
+                                        </div>
+
+                                        <!-- File Input -->
+                                        <div class="">
+                                        <input 
+                                            type="file" 
+                                            @change="handleFileUpload"
+                                            class="w-full border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        />
+                                        </div>
                                     </div>
                                 </div>
 
@@ -948,6 +963,13 @@ const form = ref({
 img: null,
 imgPreview: null
 });
+
+const selectedFile = ref(null);
+
+const handleFileUpload = (event) => {
+  selectedFile.value = event.target.files[0];
+  console.log("Selected file:", selectedFile.value);
+};
 
 const isDragging = ref(false);
 

@@ -736,4 +736,9 @@ class StudentController extends Controller
         return Inertia::render('Student/Application/Scholar_Application');
     }
 
+    public function scholarship_details()
+    {
+        return Inertia::render('Student/Scholarships/ScholarshipApplicationDetails');
+    }
+
 }

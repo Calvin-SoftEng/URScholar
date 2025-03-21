@@ -57,6 +57,9 @@
                                     <th scope="col" class="px-6 py-3">
                                         Date Created
                                     </th>
+                                    <th>
+                                        <span class="sr-only">Edit</span>
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,8 +80,15 @@
                                             {{ sponsor.moa_file }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ sponsor.created_at }}
+                                        {{ formatDate(sponsor.created_at) }}
                                         </td>
+                                        <td class="px-6 py-4">
+                                            <button @click="editSponsor(sponsor)"
+                                                class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
+                                                Update MOA
+                                            </button>
+                                        </td>
+
                                     </tr>
                                 </template>
 
@@ -242,7 +252,7 @@ import { DatePicker } from 'primevue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
 
-defineProps({
+const props = defineProps({
     sponsors: Array,
 });
 
@@ -403,6 +413,15 @@ const submitForm = async () => {
     } catch (error) {
         console.error("Error submitting form:", error);
     }
+};
+
+const formatDate = (dateString) => {
+  const date = new Date(dateString.replace(" ", "T")); // Ensure proper parsing
+  return date.toLocaleString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 };
 
 const activeateForm = async () => {

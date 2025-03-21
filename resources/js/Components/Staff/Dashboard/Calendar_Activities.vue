@@ -7,7 +7,7 @@
 
         <!-- Scrollable Messages List -->
         <div class="flex flex-col flex-grow mt-3 overflow-hidden">
-            <div class="h-24 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded">
+            <div class="h-fit overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded">
                     
                     <!-- People / Group Chats List -->
                     <ul class="w-full space-y-2 px-3">

@@ -29,11 +29,11 @@
                 </div>
                 </Link>
 
-                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" >
+                <!-- <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" >
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>Scholarship Categories</span>
                     </router-link>
-                </div>
+                </div> -->
 
                 <!-- <Link :href="route('messaging.index')"> -->
                 <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
