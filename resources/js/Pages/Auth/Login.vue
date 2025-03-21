@@ -67,8 +67,13 @@ const submit = () => {
             }
         },
         onFinish: () => {
-            failedAttempts.value = 0
             form.reset('password');
+        },
+        onSuccess: () => {
+            failedAttempts.value = 0;
+            localStorage.removeItem('failedAttempts');
+            localStorage.removeItem('blockEndTime');
+            localStorage.removeItem('errorMessage');
         },
     });
 };
