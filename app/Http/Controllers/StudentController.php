@@ -100,7 +100,7 @@ class StudentController extends Controller
             'relationship' => ['required', 'string', 'max:255'],
 
             //Grade Information
-            // 'grade' => ['decimal'],
+            // 'grade' => ['string'],
             // 'cog' => ['file', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
             // 'school_year' => ['string'],
             // 'semester' => ['string'],
@@ -108,10 +108,10 @@ class StudentController extends Controller
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
             'education.elementary.years' => ['required', 'numeric'],
-            'education.elementary.honors' => ['string'],
+            'elementary.honors' => ['string'],
             'education.junior.name' => ['required', 'string',],
             'education.junior.years' => ['required', 'numeric'],
-            'education.junior.honors' => ['string'],
+            'junior.honors' => ['string'],
             'senior.name' => ['', 'string'],
             'senior.years' => ['', 'numeric'],
             'senior.honors' => ['string'],
