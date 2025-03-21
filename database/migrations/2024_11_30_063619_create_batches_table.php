@@ -55,8 +55,8 @@ return new class extends Migration
             $table->decimal('grade')->nullable();
             $table->string('cog')->nullable();
             $table->string('path');
-            $table->string('school_year');
-            $table->string('semester');
+            $table->string('school_year')->nullable();
+            $table->string('semester')->nullable();
             $table->timestamps();
         });
 

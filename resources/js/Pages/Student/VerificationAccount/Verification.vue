@@ -186,13 +186,10 @@
                                                             d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                     </svg>
                                                 </div>
-                                                <input 
-            id="birthdate"
-            v-model="form.birthdate"
-            @input="formatDate"
-            type="text"
-            class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="YYYY-MM-DD" />
+                                                <input id="birthdate" v-model="form.birthdate" @input="formatDate"
+                                                    type="text"
+                                                    class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                    placeholder="YYYY-MM-DD" />
                                                 <InputError v-if="errors?.birthdate" :message="errors.birthdate"
                                                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
@@ -384,7 +381,9 @@
                                             <div class="w-full sm:w-[70%] flex flex-col gap-3">
                                                 <div class="flex flex-col gap-1.5">
                                                     <Label for="gwa">Enter General Weighted Average <span
-                                                            class="italic text-gray-500">*must be {{ props.batch_semester }} semester {{ school_year.year }}</span></Label>
+                                                            class="italic text-gray-500">*must be {{
+                                                            props.batch_semester }} semester {{ school_year.year
+                                                            }}</span></Label>
                                                     <input id="gwa" v-model="form.grade" type="text"
                                                         placeholder="Enter your GWA (e.g., 2.0)"
                                                         class="w-full border border-gray-300 p-2 rounded-lg" />
@@ -1611,7 +1610,7 @@ const form = ref({
     grade: '',
     cog: '',
     semester: '',
-    school_year:  '',
+    school_year: '',
     education: {
         elementary: { name: '', years: '', honors: '' },
         junior: { name: '', years: '', honors: '' },
@@ -1669,9 +1668,11 @@ const handleFile = (event) => {
 // };
 
 const submit = async () => {
-    form.semester.value = props.batch_semester;
-    form.school_year.value = props.school_year.year;
+
     try {
+        form.value.semester = props.batch_semester.semester;
+        form.value.school_year = props.school_year.year;
+
         router.post(`/verify-account/verifying`, form.value);
         //await useForm(form.value).post(`/sponsors/create-scholarship`);
         // await form.post(`/sponsors/${props.sponsor.id}/create`)

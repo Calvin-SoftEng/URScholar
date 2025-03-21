@@ -39,7 +39,7 @@ class StudentController extends Controller
         // Get the batch semester logic
         $batch_semester = null;
         $batch_school_year = null;
-    
+
         if ($batch) {
             if ($batch->semester == '2nd') {
                 $batch_semester = '1st';
@@ -100,10 +100,10 @@ class StudentController extends Controller
             'relationship' => ['required', 'string', 'max:255'],
 
             //Grade Information
-            'grade' => ['required'],
-            'cog' => ['required', 'file', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
-            'school_year' => ['required', 'string'],
-            'semester' => ['required', 'string'],
+            'grade' => ['decimal'],
+            'cog' => ['file', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
+            'school_year' => ['string'],
+            'semester' => ['string'],
 
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
@@ -280,20 +280,24 @@ class StudentController extends Controller
 
         $scholar = Scholar::where('email', $request->email)->first();
 
-        $originalFileName = $request->file('cog')->getClientOriginalName();
-        $extension = $request->file('cog')->getClientOriginalExtension();
-        $newFileName = $scholar->urscholar_id . $extension;
+        $file = $request->file('cog');
 
-        $filePath = $request->file('cog')->storeAs('scholar/grade', $newFileName, 'public');
+        if ($file) {
+            $originalFileName = $request->file('cog')->getClientOriginalName();
+            $extension = $request->file('cog')->getClientOriginalExtension();
+            $newFileName = $scholar->urscholar_id . $extension;
 
-        $testing = Grade::create([
-            'scholar_id' => $scholar->id,
-            'grade' => $request->grade,
-            'cog' => $originalFileName,
-            'path' => $filePath,
-            'school_year' => $request->school_year,
-            'semester' => $request->semester,
-        ]);
+            $filePath = $request->file('cog')->storeAs('scholar/grade', $newFileName, 'public');
+
+            $testing = Grade::create([
+                'scholar_id' => $scholar->id,
+                'grade' => $request->grade,
+                'cog' => $originalFileName,
+                'path' => $filePath,
+                'school_year' => $request->school_year,
+                'semester' => $request->semester,
+            ]);
+        }
 
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
@@ -489,7 +493,7 @@ class StudentController extends Controller
     public function profile()
     {
 
-        
+
         $student = StudentRecord::where('user_id', Auth::user()->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
