@@ -1207,7 +1207,7 @@
 
                                         <div class="col-span-4 grid w-full items-center gap-1.5 space-y-4">
                                             <div v-for="(entry, index) in form.formEntries" :key="index"
-                                                class="entry border border-gray-200 p-3 col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-center gap-3">
+                                                class="entry border border-gray-200 p-3 col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
 
                                                 <!-- First Name -->
                                                 <div class="grid w-full max-w-sm items-center gap-1.5">
@@ -1745,15 +1745,16 @@ const formEntries = ref([
 // Method to add a new entry
 const addEntry = () => {
     saveScrollPosition(); // Save scroll position before adding entry
-    form.value.formEntries = formEntries.value;
-    formEntries.value.push({ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' });
+
+    // Directly push into form.value.formEntries instead of reassigning
+    form.value.formEntries.push({ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' });
 
     nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
 };
 
 const removeEntry = (index) => {
     saveScrollPosition(); // Save scroll position before removing entry
-    formEntries.value.splice(index, 1);
+    form.value.formEntries.splice(index, 1);
     nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
 };
 
@@ -1825,17 +1826,20 @@ const organizations = ref([
 // Add a new organization entry
 const addOrganization = () => {
     saveScrollPosition(); // Save scroll position before adding entry
-    form.value.organizations = organizations.value;
-    organizations.value.push({ name: '', membership_dates: '', position: '' });
+
+    // Directly push into form.value.organizations instead of reassigning
+    form.value.organizations.push({ name: '', membership_dates: '', position: '' });
+
     nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
 };
 
 // Remove an organization entry smoothly
 const removeOrganization = (index) => {
-    if (organizations.value.length > 1) {
-        organizations.value.splice(index, 1);
+    if (form.value.organizations.length > 1) {
+        form.value.organizations.splice(index, 1);
     }
 };
+
 
 const isImgDragging = ref(false);
 const previewImg = (event) => {
