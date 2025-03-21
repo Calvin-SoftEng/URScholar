@@ -17,6 +17,45 @@
                                     Form</button>
                             </div>
                             <div class="mt-3 space-y-5">
+                                <!-- test criteria muna -->
+                                <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div
+                                        class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <span class="font-semibold font-quicksand text-lg">List of Scholarship Criterias</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button @click="toggleEditForm"
+                                                class="text-blue-600 text-sm hover:underline">Edit Form</button>
+                                            <button @click="toggleAddCriteria"
+                                                class="text-blue-600 text-sm hover:underline">Add Criteria</button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <!-- Loop through scholarship form data -->
+                                            <div
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Must be a Filipino</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEditCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                    <button @click="deleteCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!-- Loop through scholarship forms -->
                                 <div v-for="form in scholarship_form" :key="form.id"
                                     class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">

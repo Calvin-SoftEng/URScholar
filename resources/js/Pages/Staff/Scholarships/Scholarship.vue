@@ -355,21 +355,21 @@
 
 
                                     <div class="flex flex-row space-x-2">
-                                        <div class="w-full flex flex-col space-y-3">
-                                            <div>
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Grade Criteria
-                                                </h3>
+                                        <div class="w-full flex flex-col p-2">
 
-
-                                                <input v-model="form.grade" type="text" id="name"
-                                                    placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
-                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-
-                                            </div>
-
-                                            <div>
-                                                <h3 class="text-xl font-semibold text-gray-900 dark:text-white">List
+                                            <div class="space-y-3">
+                                                <h3 class="text-sm font-medium text-gray-700">List
                                                     Criteria and Eligibility</h3>
+
+                                                <div class="flex flex-row space-x-2 justify-center items-center">
+                                                    <span class="text-sm font-medium text-gray-700 whitespace-nowrap ">Grade Criteria
+                                                    </span>
+
+                                                    <input v-model="form.grade" type="text" id="name"
+                                                        placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
+                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+
+                                                </div>
 
                                                 <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
                                                     <div v-for="form in scholarship_form" :key="form.id"
