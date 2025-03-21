@@ -1647,6 +1647,16 @@ const handleFile = (event) => {
     }
 };
 
+// Re-attach the selected file when switching steps
+const restoreFileInput = () => {
+    const fileInput = document.getElementById("file_upload");
+    if (fileInput && form.value.cog) {
+        // Create a new FileList and assign it to the input
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(form.value.cog);
+        fileInput.files = dataTransfer.files;
+    }
+};
 
 // const submit = () => {
 //     form.post(route('student.verify-account.verifying'), {
@@ -1682,6 +1692,7 @@ const goToStep = (index) => {
     activeStep.value = index;
     nextTick(() => {
         initDatepicker(); // Reinitialize datepicker after the step changes
+        restoreFileInput();
     });
 };
 
@@ -1690,6 +1701,7 @@ const nextStep = () => {
         activeStep.value++;
         nextTick(() => {
             initDatepicker(); // Reinitialize datepicker after the step changes
+            restoreFileInput();
         });
     }
 };
@@ -1699,6 +1711,7 @@ const prevStep = () => {
         activeStep.value--;
         nextTick(() => {
             initDatepicker(); // Reinitialize datepicker after the step changes
+            restoreFileInput();
         });
     }
 };
