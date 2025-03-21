@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-            <div class="w-full mx-auto rounded-xl text-white">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+            <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
                         <li class="hover:text-gray-600">
@@ -16,7 +16,7 @@
                     </ul>
                 </div>
 
-                <div class="w-full h-full flex justify-center items-center bg-dirtywhite dark:text-dprimary relative">
+                <div class="w-full h-full flex justify-center items-center dark:text-dprimary relative">
                     <!-- Close Button -->
                     <button class="absolute top-4 right-10">
                         <span
@@ -27,50 +27,150 @@
 
             
                         <!-- 25% Column -->
-                        <div class=" h-full flex flex-col w-9/12">
-                            <div
-                                class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
-                                <div class="flex-1 flex flex-col space-y-5">
-                                    <div class="flex flex-col items-center justify-center p-2">
-
-                                        <span class="text-gray-400 text-albert">ID</span>
-                                    </div>
-
-                                    <div class="w-full h-0.5 bg-gray-100"></div>
-
-                                    <div class="flex flex-col p-2 space-y-2">
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <!-- <span class="text-base text-primary">{{ scholar.course }}</span> -->
-                                        </div>
-
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                            <!-- <span class="text-base text-primary">{{ scholar.campus }}</span> -->
-                                        </div>
-                                    </div>
-
-                                    <div class="w-full h-0.5 bg-gray-100"></div>
-
-                                    <div class="flex flex-col p-2 space-y-2">
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Contact
-                                                No.</span>
-                                            <span class="text-base text-primary">BSIT</span>
-                                        </div>
-
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Email
-                                                Address</span>
-                                            <!-- <span class="text-base text-primary">{{ scholar.email }}</span> -->
-                                        </div>
-                                    </div>
+                        <div class="h-full flex flex-col w-9/12">
+                            <div class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
+                            <div class="flex-1 flex flex-col space-y-5">
+                                
+                                <!-- Profile Image & Name -->
+                                <div class="flex flex-col items-center justify-center p-2">
+                                <div class="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xl">
+                                    JD
+                                </div>
+                                <span class="text-lg font-semibold mt-2">John Michael Doe</span>
+                                <span class="text-sm text-gray-400">Jr.</span>
                                 </div>
 
-                                <!-- Ensure button stays at the bottom -->
-                                <div class="mt-auto w-full flex justify-end">
-                                    <button class="w-full rounded-md py-1 bg-blue-600">More Details</button>
+                                <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                <!-- Personal Information -->
+                                <div class="flex flex-col p-2 space-y-2">
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Birthdate</span>
+                                    <span class="text-base text-primary">May 20, 2001</span>
                                 </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Birthplace</span>
+                                    <span class="text-base text-primary">Manila, Philippines</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Age</span>
+                                    <span class="text-base text-primary">23</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Gender</span>
+                                    <span class="text-base text-primary">Male</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Civil Status</span>
+                                    <span class="text-base text-primary">Single</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Religion</span>
+                                    <span class="text-base text-primary">Roman Catholic</span>
+                                </div>
+                                </div>
+
+                                <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                <!-- Education -->
+                                <div class="flex flex-col p-2 space-y-2">
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Current Grade</span>
+                                    <span class="text-base text-primary">12</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Current School Year</span>
+                                    <span class="text-base text-primary">2024-2025</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Semester</span>
+                                    <span class="text-base text-primary">1st Semester</span>
+                                </div>
+                                </div>
+
+                                <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                <!-- Contact Information -->
+                                <div class="flex flex-col p-2 space-y-2">
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Email Address</span>
+                                    <span class="text-base text-primary">johndoe@example.com</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Contact No.</span>
+                                    <span class="text-base text-primary">+63 912 345 6789</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Guardian Name</span>
+                                    <span class="text-base text-primary">Jane Doe (Mother)</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Relationship</span>
+                                    <span class="text-base text-primary">Mother</span>
+                                </div>
+                                </div>
+
+                                <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                <!-- Family Details -->
+                                <div class="flex flex-col p-2 space-y-2">
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Father</span>
+                                    <span class="text-base text-primary">Michael Doe - Engineer</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Mother</span>
+                                    <span class="text-base text-primary">Jane Doe - Teacher</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Monthly Income</span>
+                                    <span class="text-base text-primary">PHP 50,000</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Housing</span>
+                                    <span class="text-base text-primary">Owned House</span>
+                                </div>
+                                </div>
+
+                                <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                <!-- Education History -->
+                                <div class="flex flex-col p-2 space-y-2">
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Elementary</span>
+                                    <span class="text-base text-primary">Rizal Elementary School (2010-2016)</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Junior High School</span>
+                                    <span class="text-base text-primary">Rizal High School (2016-2020)</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Senior High School</span>
+                                    <span class="text-base text-primary">Rizal Senior High School (2020-2022)</span>
+                                </div>
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">College</span>
+                                    <span class="text-base text-primary">University of Rizal - BSIT (2022-Present)</span>
+                                </div>
+                                </div>
+
+                                <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                <!-- Extracurricular -->
+                                <div class="flex flex-col p-2 space-y-2">
+                                <div class="flex flex-col text-black">
+                                    <span class="font-semibold uppercase text-xs text-gray-500">Organizations</span>
+                                    <span class="text-base text-primary">Tech Club - President (2023-2024)</span>
+                                    <span class="text-base text-primary">Sports Club - Member (2022-2024)</span>
+                                </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Button -->
+                            <div class="mt-auto w-full flex justify-end">
+                                <button class="w-full rounded-md py-1 bg-blue-600 text-white">More Details</button>
+                            </div>
                             </div>
                         </div>
 

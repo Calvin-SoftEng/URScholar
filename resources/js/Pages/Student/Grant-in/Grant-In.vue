@@ -8,7 +8,7 @@
         </div>
         <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
             <div class="mx-auto w-10/12 sm:px-6 lg:px-8 ">
-                <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- greeting -->
                         <div class="bg-primary w-full text-white text-3xl font-sans font-bold p-7 rounded-lg">
@@ -20,19 +20,20 @@
                             <span>You have (0) feed updates</span>
                         </div>
                         <!-- gc -->
-                        <div class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3">
+                        <button @click="GroupChat = !GroupChat" 
+                        class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-start gap-2 p-3">
                              <!-- Single Chat Item -->
-                            <div class="w-full flex items-center gap-3 p-3  hover:bg-gray-100 cursor-pointer">
-                            <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                                <box-icon name="group" type="solid"></box-icon>
+                            <div class="w-full flex items-start gap-3 p-3  hover:bg-gray-100 cursor-pointer">
+                                <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
+                                    <box-icon name="group" type="solid"></box-icon>
+                                </div>
+                                <div class="flex-1 items-start justify-start">
+                                    <p class="font-semibold">Group Chat 1</p>
+                                    <p class="text-sm text-gray-500 truncate">Hey everyone! Let's meet at 5 PM...</p>
+                                </div>
+                                <p class="text-xs text-gray-400">10:30 AM</p>
                             </div>
-                            <div class="flex-1">
-                                <p class="font-semibold">Group Chat 1</p>
-                                <p class="text-sm text-gray-500 truncate">Hey everyone! Let's meet at 5 PM...</p>
-                            </div>
-                            <p class="text-xs text-gray-400">10:30 AM</p>
-                            </div>
-                        </div>
+                        </button>
                         <!-- qr code -->
                         <!-- <div class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3">
                             <img src="../../../../assets/images/qrcodesample.png" alt="" class="w-20 h-20">
@@ -72,8 +73,8 @@
                     </div>
 
                     <div v-if="GroupChat" 
-                    class="w-[70%] h-full flex flex-col">
-                        <div class="shadow-sm p-4 flex justify-between items-center">
+                    class="col-span-2 w-full h-full flex flex-col">
+                        <div class="bg-white shadow-sm border-b border-gray-100 p-4 flex justify-between items-center">
                             <h3 class="text-lg font-bold text-primary">Conversation</h3>
                             <!-- Three dots menu aligned with conversation text -->
                             <button class="text-gray-600 hover:text-primary transition-colors"
@@ -82,7 +83,7 @@
                             </button>
                         </div>
                         <!-- Main chat area -->
-                        <div class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+                        <div class="bg-white flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                             <!-- Messages column -->
                             <div
                                 class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
@@ -265,7 +266,7 @@
                         </div>
                     </div>
 
-                    <div v-if="!GroupChats"
+                    <div v-if="!GroupChat"
                         class="w-full h-full col-span-2 block bg-white shadow-md p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8 rounded-lg">
                         <div class="flex w-full h-1/12 justify-center items-center">
                             <span>Call mo yung scholarship here</span>
