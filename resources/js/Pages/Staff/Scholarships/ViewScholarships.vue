@@ -205,7 +205,7 @@
                                         <SelectValue placeholder="Select year" class="dark:text-dtext" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectGroup v-for="schoolyear in schoolyears" :key="schoolyear.id">
+                                        <SelectGroup v-for="schoolyear in [...schoolyears].reverse()" :key="schoolyear.id">
                                             <!-- <SelectLabel>Gender</SelectLabel> -->
                                             <SelectItem :value="schoolyear.id">
                                                 {{ schoolyear.year }}

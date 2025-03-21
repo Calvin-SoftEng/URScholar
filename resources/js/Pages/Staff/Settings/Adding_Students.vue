@@ -156,7 +156,7 @@
                         to
                         <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
                         of
-                        <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span>
+                        <span class="font-semibold text-gray-900 dark:text-white">{{ totalStudents }}</span>
                         Scholars
                         </span>
                         <div class="inline-flex">
