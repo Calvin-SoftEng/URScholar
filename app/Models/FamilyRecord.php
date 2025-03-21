@@ -20,9 +20,4 @@ class FamilyRecord extends Model
     {
         return $this->belongsTo(StudentRecord::class);
     }
-
-    public function siblings()
-    {
-        return $this->hasMany(SiblingRecord::class);
-    }
 }

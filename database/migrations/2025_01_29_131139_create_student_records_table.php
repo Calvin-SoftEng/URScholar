@@ -52,17 +52,6 @@ return new class extends Migration
             $table->string('family_housing')->nullable();
             $table->timestamps();
         });
-
-        Schema::create('siblings_records', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('family_record_id')->constrained()->onDelete('cascade');
-            $table->string('first_name')->nullable();
-            $table->string('last_name')->nullable();
-            $table->string('middle_name')->nullable();
-            $table->string('age')->nullable();
-            $table->string('occupation')->nullable();
-            $table->timestamps();
-        });
     }
 
     /**
@@ -70,7 +59,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('siblings_records');
         Schema::dropIfExists('family_records');
         Schema::dropIfExists('education_records');
         Schema::dropIfExists('student_records');
