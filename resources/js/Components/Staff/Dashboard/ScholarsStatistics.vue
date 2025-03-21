@@ -1,37 +1,55 @@
 <template>
     <!-- Content Container -->
-    <div class="bg-white w-full h-full p-5 space-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
-        <span class="font-poppins font-semibold text-xl dark:text-dtext">Total Scholars</span>
-        
-        <!-- Card -->
-        <div class="flex flex-col flex-grow gap-3">
-            <!-- Message Container (Expands to fill space) -->
-            <div class="flex-grow w-full">
-                <textarea class="w-full h-full resize-none p-2 bg-transparent border-none outline-none focus:ring-0" 
-                    placeholder="Write your announcement here..."></textarea>
-            </div>
+    <div class="bg-white w-full h-full space-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
+        <div class="flex flex-row justify-between">
+            <span class="font-poppins font-semibold text-xl dark:text-dtext px-5 pt-5">Total Scholars</span>
+            <!-- Chart Selection Buttons -->
+            <div class="flex space-x-2">
+                <!-- Line Chart Button -->
+                <button 
+                    @click="setChartType('line')" 
+                    class="p-2 rounded-md transition hover:bg-gray-200 dark:hover:bg-gray-700"
+                    :class="{ 'bg-gray-300 dark:bg-gray-600': chartType === 'line' }">
+                    <span class="material-symbols-rounded text-xl">show_chart</span>
+                </button>
 
+                <!-- Bar Chart Button -->
+                <button 
+                    @click="setChartType('bar')" 
+                    class="p-2 rounded-md transition hover:bg-gray-200 dark:hover:bg-gray-700"
+                    :class="{ 'bg-gray-300 dark:bg-gray-600': chartType === 'bar' }">
+                    <font-awesome-icon :icon="['fas', 'chart-simple']" class="text-xl" />
+                </button>
 
-
-            <!-- Buttons Container (Stays at the Bottom) -->
-            <div class="w-full flex flex-row justify-between items-center">
-                <div class="flex gap-2">
-                    <button type="button" class="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-xs px-3 py-1 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55">
-                        <span class="material-symbols-rounded text-[18px] me-2">school</span>
-                        Share to University
-                    </button>
-                    
-                    <button type="button" class="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-xs px-3 py-1 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55">
-                        <span class="material-symbols-rounded text-[18px] me-2">groups</span>
-                        Share to Group
-                    </button>
-                </div>
-
-                <button class="text-white font-sans bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Share a Post
+                <!-- Pie Chart Button -->
+                <button 
+                    @click="setChartType('pie')" 
+                    class="p-2 rounded-md transition hover:bg-gray-200 dark:hover:bg-gray-700"
+                    :class="{ 'bg-gray-300 dark:bg-gray-600': chartType === 'pie' }">
+                    <font-awesome-icon :icon="['fas', 'chart-pie']" class="text-xl" />
                 </button>
             </div>
+
+
         </div>
+       
+        
+        <div class="px-2">
+            <VueApexCharts
+            :type="chartType"
+            :series="lineSeries"
+            :options="lineOptions"
+            />
+        </div>
+<!-- 
+        <div>
+            <VueApexCharts
+            type="bar"
+            :series="lineSeries"
+            :options="lineOptions"
+            />
+        </div> -->
+
     </div>
 
 </template>
@@ -39,6 +57,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import VueApexCharts from 'vue3-apexcharts';
 
 const props = defineProps({
     sponsors: {
@@ -49,5 +68,23 @@ const props = defineProps({
         type: Array,
         required: true
     }
+});
+
+const chartType = ref("line");
+
+// Function to change the chart type
+const setChartType = (type) => {
+  chartType.value = type;
+};
+
+const lineSeries = ref([{
+    name: "Scholars",
+    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+}]);
+
+const lineOptions = ref({
+    xaxis: {
+    categories: [1991,1992,1993,1994,1995,1996,1997,1998,1999]
+  },
 });
 </script>

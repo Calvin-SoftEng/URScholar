@@ -1,12 +1,12 @@
 <template>
     <!-- Messages Container -->
-    <div class="bg-white w-full min-h-full p-5 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
+    <div class="bg-white w-full min-h-full p-1 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
         
         <!-- Messages Title -->
-        <span class="font-poppins font-semibold text-xl dark:text-dtext">Messages</span>
+        <span class="font-poppins font-semibold text-xl dark:text-dtext pt-4 px-4">Messages</span>
 
         <!-- Search Bar (Fixed at the Top) -->
-        <form class="w-full mt-3">
+        <form class="w-full mt-3 px-2">
             <label for="chat-search" class="sr-only">Search</label>
             <div class="relative">
                 <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none">

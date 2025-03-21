@@ -8,12 +8,18 @@ import { Head } from '@inertiajs/vue3';
 
     <AuthenticatedLayout>
         <div class="w-full bg-white shadow-sm ">
-            <h1 class="text-3xl font-bold font-sora text-left p-3 mx-10">My Feed</h1>
+            <h1 class="font-bold font-sora text-left p-3 mx-10
+            2xl:text-3xl xl:text-3xl lg:text-2xl md:text-base sm:text-base">My Feed</h1>
         </div>
         <div class="pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
             <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 ">
                 <div class="rounded-lg mb-10">
-                    <div class="bg-primary text-white text-3xl font-sans font-bold p-7 rounded-lg">
+                    <div class="bg-primary font-sans font-bold rounded-lg p-7 
+                                    2xl:text-3xl 2xl:text-white
+                                    xl:text-3xl xl:text-red-500
+                                    lg:p-6 lg:text-2xl lg:text-green-500
+                                    md:p-5 md:text-2xl md:text-blue-500
+                                    sm:p-4 sm:text-base sm:text-yellow-500">
                         Greetings! {{$page.props.auth.user.name}}
                     </div>
                     <div class="h-full space-y-3 flex flex-col items-center justify-start pt-2 pb-10">

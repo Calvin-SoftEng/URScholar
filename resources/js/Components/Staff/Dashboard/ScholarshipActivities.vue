@@ -1,6 +1,5 @@
 <template>
-    <div
-        class="bg-white w-full min-h-full p-5 space-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
+    <div class="bg-white w-full flex-grow min-h-0 p-5 gap-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col overflow-hidden">
 
         <!-- Header with Filter -->
         <div class="flex justify-between items-center">

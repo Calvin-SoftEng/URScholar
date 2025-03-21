@@ -129,14 +129,37 @@ const resendEmail = async () => {
                 </div>
 
                 <button type="submit"
-                    class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5"
-                    :class="{ 'opacity-25': isResending }" :disabled="isResending">
+                    class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5 transition 
+                        hover:bg-white hover:bg-none hover:text-blue-900 hover:border-2 hover:border-blue-900"
+                    :class="{ 'opacity-25 cursor-not-allowed': isResending }" 
+                    :disabled="isResending">
                     REGISTER
                 </button>
 
-                <div class="mt-4 text-sm">
-                    <span class="text-gray-600">Already have an account?</span>
-                    <Link :href="route('login')" class="text-blue-600 font-semibold no-underline hover:underline"> Login</Link>
+                <!-- Divider -->
+                <div class="flex items-center w-full my-2">
+                    <hr class="flex-grow border-gray-300">
+                    <span class="px-4 text-gray-400 text-xs font-normal">Already have an account?</span>
+                    <hr class="flex-grow border-gray-300">
+                </div>
+
+                <!-- Register Button -->
+                <Link :href="route('login')">
+                    <button 
+                        class="bg-transparent text-blue-900 text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer border-2 border-blue-900 transition 
+                            hover:bg-gradient-to-b hover:from-blue-800 hover:to-blue-950 hover:text-white"
+                        :class="{ 'opacity-50 cursor-not-allowed': isBlocked || form.processing }"
+                        :disabled="isBlocked || form.processing"
+                    >
+                        LOGIN
+                    </button>
+                </Link>
+
+                <!-- Register Link -->
+                <div class="flex flex-col justify-center mt-4">
+                    <p class="text-sm text-gray-600">Quit Register? 
+                        <Link :href="route('welcome')" class="text-primary font-semibold hover:underline">Return to Home</Link>
+                    </p>
                 </div>
             </div>
 

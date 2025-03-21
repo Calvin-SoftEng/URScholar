@@ -185,17 +185,38 @@ const unblockUser = () => {
 
                 <!-- Login Button -->
                 <button 
-                    class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5"
+                    class="bg-gradient-to-b from-blue-800 to-blue-900 text-white text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer mt-5 transition 
+                        hover:bg-gray-100 hover:bg-none hover:text-blue-900 hover:border-2 hover:border-blue-900"
                     :class="{ 'opacity-50 cursor-not-allowed': isBlocked || form.processing }"
                     :disabled="isBlocked || form.processing"
                 >
                     LOGIN NOW
                 </button>
 
+
+                <!-- Divider -->
+                <div class="flex items-center w-full my-2">
+                    <hr class="flex-grow border-gray-300">
+                    <span class="px-4 text-gray-400 text-xs font-normal">Don't have an account?</span>
+                    <hr class="flex-grow border-gray-300">
+                </div>
+
+                <!-- Register Button -->
+                <Link :href="route('register')">
+                    <button 
+                        class="bg-transparent text-blue-900 text-sm font-semibold w-full h-12 flex items-center justify-center rounded-md drop-shadow-sm cursor-pointer border-2 border-blue-900 transition 
+                            hover:bg-gradient-to-b hover:from-blue-800 hover:to-blue-950 hover:text-white"
+                        :class="{ 'opacity-50 cursor-not-allowed': isBlocked || form.processing }"
+                        :disabled="isBlocked || form.processing"
+                    >
+                        REGISTER NOW
+                    </button>
+                </Link>
+
                 <!-- Register Link -->
-                <div class="flex justify-center mt-4">
-                    <p class="text-sm text-gray-600">Don't have an account? 
-                        <Link :href="route('register')" class="text-blue-600 font-semibold hover:underline">Register</Link>
+                <div class="flex flex-col justify-center mt-4">
+                    <p class="text-sm text-gray-600">Quit Login? 
+                        <Link :href="route('welcome')" class="text-primary font-semibold hover:underline">Return to Home</Link>
                     </p>
                 </div>
             </div>
