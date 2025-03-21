@@ -13,7 +13,8 @@
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- pic -->
                         <div class="border w-80 h-80 rounded-lg overflow-hidden">
-                            <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="Profile Picture" class="w-full h-full object-cover">
+                            <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="Profile Picture"
+                                class="w-full h-full object-cover">
                         </div>
 
                         <!-- info -->
@@ -24,7 +25,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Age</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Date of Birth</span>
@@ -36,7 +37,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Civil Status</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -50,7 +51,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Gender</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Religion</span>
@@ -63,7 +64,7 @@
                         <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                             <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
                             <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
-                                }}</span>
+                            }}</span>
                         </div>
                         <!-- qr -->
                         <div
@@ -83,8 +84,8 @@
                     <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                         <div class="w-full h-1/12">
                             <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                                }},
-                                    {{ student.first_name }}</span>
+                            }},
+                                {{ student.first_name }}</span>
                         </div>
 
                         <div
@@ -92,7 +93,8 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name }}</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
+                                    }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -103,7 +105,8 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name }}, Campus</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
+                                    }}, Campus</span>
                             </div>
                         </div>
 
@@ -111,23 +114,24 @@
                         <div
                             class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                             <h1 class="text-base">Education</h1>
-                            
+
                             <div class="w-full flex flex-col space-y-1">
                                 <div class="flex justify-between items-center">
                                     <span class="text-gray-900 text-lg font-semibold leading-tight">Current GWA:</span>
-                                    <span class="text-gray-800 text-base font-semibold">{{ grade.grade }}</span>
+                                    <span class="text-gray-800 text-base font-semibold">{{ grade ? grade.grade : 'N/A'
+                                        }}</span>
                                 </div>
                             </div>
-                            
+
                             <div>
                                 <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                     Elementary
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
-                                        }}</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -136,9 +140,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -147,9 +151,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -158,9 +162,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -169,9 +173,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                             <div>
@@ -180,9 +184,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
                         </div>

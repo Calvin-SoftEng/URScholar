@@ -107,10 +107,10 @@ class StudentController extends Controller
             'relationship' => ['required', 'string', 'max:255'],
 
             //Grade Information
-            'grade' => ['string'],
+            'grade' => [''],
             'cog' => [''],
-            'school_year' => ['string'],
-            'semester' => ['string'],
+            'school_year' => [''],
+            'semester' => [''],
 
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
@@ -141,7 +141,7 @@ class StudentController extends Controller
             'mother.citizenship' => ['', 'string'],
             'mother.occupation' => ['', 'string'],
             'mother.education' => ['', 'string'],
-            'mother.batch' => ['string'],
+            'mother.batch' => [''],
 
             'father.first_name' => ['', 'string'],
             'father.middle_name' => ['', 'string'],
@@ -151,24 +151,26 @@ class StudentController extends Controller
             'father.citizenship' => ['', 'string'],
             'father.occupation' => ['', 'string'],
             'father.education' => ['', 'string'],
-            'father.batch' => ['string'],
+            'father.batch' => [''],
 
-            'siblings' => ['array'],
-            'siblings.*' => ['required', 'array'],
+            'siblings' => [''],
+            'siblings.*' => [''],
 
             'marital_status' => ['required', 'string'],
             'monthly_income' => ['required', 'string'],
-            'other_income' => ['required', 'string'],
+            'other_income' => [''],
             'family_housing' => ['required', 'string'],
 
-            'organizations' => ['array'],
-            'organizations.*' => ['required', 'array'],
+            'organizations' => [''],
+            'organizations.*' => [''],
 
 
             'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'imgName' => 'required|string',
         ], $messages);
 
+
+        // dd($request->all());
 
         // Custom error message handling to combine related fields
         if ($validator->fails()) {
@@ -312,6 +314,8 @@ class StudentController extends Controller
                 'school_year' => $request->school_year,
                 'semester' => $request->semester,
             ]);
+        } else {
+
         }
 
         // Store the logo file in the local directory with a known path
@@ -450,7 +454,7 @@ class StudentController extends Controller
             OrgRecord::create([
                 'student_record_id' => $studentrecordID,
                 'name' => $org['name'],
-                'year' => $org['year'],
+                'year' => $org['membership_dates'],
                 'position' => $org['position'],
             ]);
         }
@@ -530,8 +534,6 @@ class StudentController extends Controller
 
     public function profile()
     {
-
-
         $student = StudentRecord::where('user_id', Auth::user()->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();

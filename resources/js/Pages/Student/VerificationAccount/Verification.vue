@@ -915,13 +915,13 @@
                                             class="w-full items-center gap-1.5 col-span-4 sm:col-span-4 md:col-span-1 lg:col-span-1 xl:col-span-2 ">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Batch (If Alumna
+                                                    Batch (If Alumna
                                                     of this High School/University)
                                                 </Label>
                                             </div>
                                             <div class="relative w-full">
-                                                <Input type="text" placeholder="Type N/A if none"
-                                                    v-model="form.mother.batch" @focus="errors.mother.batch = null"
+                                                <Input type="text" placeholder="Leave blank if none"
+                                                    v-model="form.mother.batch"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
                                         </div>
@@ -1078,13 +1078,13 @@
                                             class="w-full items-center gap-1.5 col-span-4 sm:col-span-4 md:col-span-1 lg:col-span-1 xl:col-span-2 ">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Batch (If Alumna
+                                                    Batch (If Alumna
                                                     of this High School/University)
                                                 </Label>
                                             </div>
                                             <div class="relative w-full">
-                                                <Input type="text" placeholder="Type N/A if none"
-                                                    v-model="form.father.batch" @focus="errors.father.batch = null"
+                                                <Input type="text" placeholder="Leave blank if none"
+                                                    v-model="form.father.batch"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
                                         </div>
@@ -1604,7 +1604,7 @@ const form = ref({
     name: user.name,
     email: user.email,
     first_name: user.first_name,
-    middle_name: user.middle_name,
+    middle_name: user.middle_name ?? '',
     last_name: user.last_name,
     password: '',
     confirm_password: '',
@@ -1622,18 +1622,18 @@ const form = ref({
     semester: '',
     school_year: '',
     education: {
-        elementary: { name: '', years: '', honors: '' },
-        junior: { name: '', years: '', honors: '' },
-        senior: { name: '', years: '', honors: '' },
-        college: { name: '', years: '', honors: '' },
-        vocational: { name: '', years: '', honors: '' },
-        postgrad: { name: '', years: '', honors: '' },
+        elementary: { name: '', years: '', honors: 'N/A' },
+        junior: { name: '', years: '', honors: 'N/A' },
+        senior: { name: '', years: '', honors: 'N/A' },
+        college: { name: '', years: '', honors: 'N/A' },
+        vocational: { name: '', years: '', honors: 'N/A' },
+        postgrad: { name: '', years: '', honors: 'N/A' },
     },
-    mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '' },
-    father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '' },
+    mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
+    father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
     marital_status: '',
     monthly_income: '',
-    other_income: '',
+    other_income: 'N/A',
     family_housing: '',
     otherText: '',
     siblings: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
