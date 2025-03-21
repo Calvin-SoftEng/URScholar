@@ -1206,7 +1206,7 @@
                                         </div>
 
                                         <div class="col-span-4 grid w-full items-center gap-1.5 space-y-4">
-                                            <div v-for="(entry, index) in form.formEntries" :key="index"
+                                            <div v-for="(entry, index) in form.siblings" :key="index"
                                                 class="entry border border-gray-200 p-3 col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
 
                                                 <!-- First Name -->
@@ -1249,7 +1249,7 @@
                                                 </div>
 
                                                 <!-- Remove Button -->
-                                                <button v-if="form.formEntries.length > 1" @click="removeEntry(index)"
+                                                <button v-if="form.siblings.length > 1" @click="removeEntry(index)"
                                                     class="bg-red-900 text-white px-3 py-1 rounded h-10 flex items-center space-x-5">
                                                     <span class="material-symbols-rounded mr-2">remove</span> Remove
                                                 </button>
@@ -1632,7 +1632,7 @@ const form = ref({
     other_income: '',
     family_housing: '',
     otherText: '',
-    formEntries: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
+    siblings: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
     organizations: [{ name: '', membership_dates: '', position: '' }],
     img: null,
     imgName: null,
@@ -1747,14 +1747,14 @@ const addEntry = () => {
     saveScrollPosition(); // Save scroll position before adding entry
 
     // Directly push into form.value.formEntries instead of reassigning
-    form.value.formEntries.push({ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' });
+    form.value.siblings.push({ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' });
 
-    nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
+    restoreScrollPosition(); // Restore scroll position after DOM updates
 };
 
 const removeEntry = (index) => {
     saveScrollPosition(); // Save scroll position before removing entry
-    form.value.formEntries.splice(index, 1);
+    form.value.siblings.splice(index, 1);
     nextTick(() => restoreScrollPosition()); // Restore scroll position after DOM updates
 };
 
