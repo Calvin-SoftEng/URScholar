@@ -186,10 +186,11 @@
                                                             d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                     </svg>
                                                 </div>
-                                                <input id="birthdate" v-model="form.birthdate" @input="formatDate"
-                                                    type="text"
+                                                <input v-model="form.birthdate" id="datepicker-autohide"
+                                                    type="text" autocomplete="off"
                                                     class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="YYYY-MM-DD" />
+                                                    placeholder="Select Birthdate" />
+
                                                 <InputError v-if="errors?.birthdate" :message="errors.birthdate"
                                                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
@@ -360,7 +361,7 @@
 
                                         <!-- gwa -->
                                         <div
-                                            class="col-span-3 whitespace-nowrap gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            class="col-span-3 whitespace-nowrap gap-2 relative flex flex-row justify-center items-center mb-2">
                                             <h3
                                                 class="font-semibold whitespace-nowrap text-[12px] text-blue-900 dark:text-white text-center">
                                                 General Weighted Average
@@ -374,30 +375,35 @@
                                             </div>
                                         </div>
 
+                                        <div class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
+                                            <span class="text-sm text-gray-500 italic">* You can set this up later</span>
 
-                                        <div
-                                            class="col-span-3 gap-2 relative flex flex-row justify-center items-center mb-2">
-                                            <!-- GWA Input Column -->
-                                            <div class="w-full sm:w-[70%] flex flex-col gap-3">
-                                                <div class="flex flex-col gap-1.5">
-                                                    <Label for="gwa">Enter General Weighted Average <span
+                                            <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
+                                                <!-- GWA Input -->
+                                                <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
+                                                    <Label for="gwa">Enter General Weighted Average
+                                                        <!-- <span
                                                             class="italic text-gray-500">*must be {{
                                                             props.batch_semester }} semester {{ school_year.year
-                                                            }}</span></Label>
+                                                            }}
+                                                        </span> -->
+                                                    </Label>
                                                     <input id="gwa" v-model="form.grade" type="text"
                                                         placeholder="Enter your GWA (e.g., 2.0)"
-                                                        class="w-full border border-gray-300 p-2 rounded-lg" />
+                                                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
+                                                </div>
+
+                                                <!-- File Upload -->
+                                                <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
+                                                    <Label for="file_upload">Upload Certificate of Grade</Label>
+                                                    <input id="file_upload" type="file" @change="handleFile"
+                                                        class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                                        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                                                 </div>
                                             </div>
-
-                                            <!-- File Upload Column -->
-                                            <div class="w-full sm:w-[30%] flex flex-col items-left gap-1.5">
-                                                <Label for="file_upload">Upload Certificate of Grade</Label>
-                                                <input id="file_upload" type="file" @change="handleFile"
-                                                    class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                            </div>
-
                                         </div>
+
+                                        
 
                                         <!-- elementary -->
                                         <div
@@ -1633,25 +1639,6 @@ const form = ref({
     imgPreview: null,
 });
 
-const formatDate = (event) => {
-    let input = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-    let formattedDate = "";
-
-    if (input.length > 4) {
-        formattedDate = input.slice(0, 4) + "-";
-        if (input.length > 6) {
-            formattedDate += input.slice(4, 6) + "-";
-            formattedDate += input.slice(6, 8);
-        } else {
-            formattedDate += input.slice(4, 6);
-        }
-    } else {
-        formattedDate = input;
-    }
-
-    // Update Vue's reactive state correctly
-    form.value.birthdate = formattedDate;
-};
 
 const handleFile = (event) => {
     const file = event.target.files[0];
@@ -1750,14 +1737,31 @@ const removeEntry = (index) => {
 
 // This can be used to restore the scroll position when the page first loads
 onMounted(() => {
-    const dateInput = document.getElementById('datepicker-autohide');
-    if (dateInput) {
-        dateInput.addEventListener('changeDate', (event) => {
-            form.value.birthdate = event.target.value;
+    initFlowbite();
+
+    const datepickerEl = document.getElementById("datepicker-autohide");
+
+    if (datepickerEl) {
+        const datepicker = new window.Datepicker(datepickerEl, {
+            autohide: true,
+            format: "yyyy-mm-dd", // Ensure YYYY-MM-DD format
+        });
+
+        datepickerEl.addEventListener("changeDate", (event) => {
+
+            const selectedDate = datepicker.getDate();
+            if (selectedDate) {
+
+                const year = selectedDate.getFullYear();
+                const month = String(selectedDate.getMonth() + 1).padStart(2, "0"); // Month is 0-based
+                const day = String(selectedDate.getDate()).padStart(2, "0");
+                
+                form.value.birthdate = `${year}-${month}-${day}`;
+            }
         });
     }
+
     restoreScrollPosition();
-    initFlowbite();
 });
 
 
