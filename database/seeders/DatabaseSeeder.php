@@ -135,8 +135,8 @@ class DatabaseSeeder extends Seeder
             'sponsor_id' => 1,
             'scholarshipType' => 'Need-Based',
             'status' => 'Active',
-            'date_start' => '2021-01-01',
-            'date_end' => '2021-12-31',
+            'date_start' => '2025-03-15',
+            'date_end' => '2025-03-25',
         ]);
 
         Scholarship::factory()->create([
@@ -144,8 +144,8 @@ class DatabaseSeeder extends Seeder
             'sponsor_id' => 1,
             'scholarshipType' => 'One-time Payment',
             'status' => 'Active',
-            'date_start' => '2021-01-01',
-            'date_end' => '2021-12-31',
+            'date_start' => '2025-03-15',
+            'date_end' => '2025-03-25',
         ]);
 
         //school year
