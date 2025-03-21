@@ -32,6 +32,11 @@ class StudentRecord extends Model
 
     public function familyrecord()
     {
-        return $this->hasOne(FamilyRecord::class);
+        return $this->hasMany(FamilyRecord::class);
+    }
+
+    public function orgrecord()
+    {
+        return $this->hasMany(OrgRecord::class);
     }
 }

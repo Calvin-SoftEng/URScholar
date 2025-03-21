@@ -63,6 +63,15 @@ return new class extends Migration
             $table->string('occupation')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('org_records', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_record_id')->constrained()->onDelete('cascade');
+            $table->string('name')->nullable();
+            $table->string('year')->nullable();
+            $table->string('position')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -70,6 +79,7 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('org_records');
         Schema::dropIfExists('sibling_records');
         Schema::dropIfExists('family_records');
         Schema::dropIfExists('education_records');

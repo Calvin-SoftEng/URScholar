@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\EducationRecord;
 use App\Models\FamilyRecord;
 use App\Models\Grade;
+use App\Models\OrgRecord;
 use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\SiblingRecord;
@@ -154,6 +155,9 @@ class StudentController extends Controller
             'monthly_income' => ['required', 'string'],
             'other_income' => ['required', 'string'],
             'family_housing' => ['required', 'string'],
+
+            'organizations' => ['array'],
+            'organizations.*' => ['required', 'array'],
 
 
             'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
@@ -434,6 +438,15 @@ class StudentController extends Controller
                 'middle_name' => $sibling['middle_name'],
                 'age' => $sibling['age'],
                 'occupation' => $sibling['occupation'],
+            ]);
+        }
+
+        foreach ($request->organizations as $index => $org) {
+            OrgRecord::create([
+                'student_record_id' => $studentrecordID,
+                'name' => $org['name'],
+                'year' => $org['year'],
+                'position' => $org['position'],
             ]);
         }
 
