@@ -100,10 +100,10 @@ class StudentController extends Controller
             'relationship' => ['required', 'string', 'max:255'],
 
             //Grade Information
-            // 'grade' => ['string'],
-            // 'cog' => ['file', 'mimes:pdf,doc,docx,jpg,jpeg,png'],
-            // 'school_year' => ['string'],
-            // 'semester' => ['string'],
+            'grade' => ['string'],
+            'cog' => [''],
+            'school_year' => ['string'],
+            'semester' => ['string'],
 
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
@@ -281,6 +281,9 @@ class StudentController extends Controller
         $scholar = Scholar::where('email', $request->email)->first();
 
         $file = $request->file('cog');
+
+        // dd($file);
+        // dd($request['grade']);
 
         if ($file) {
             $originalFileName = $request->file('cog')->getClientOriginalName();
@@ -498,12 +501,14 @@ class StudentController extends Controller
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
         $scholar = Scholar::where('email', Auth::user()->email)->with('course', 'campus')->first();
+        $grade = Grade::where('scholar_id', $scholar->id)->first();
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
             'education' => $education,
             'family' => $family,
-            'scholar' => $scholar
+            'scholar' => $scholar,
+            'grade' => $grade
         ]);
     }
 

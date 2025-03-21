@@ -1667,7 +1667,7 @@ const restoreFileInput = () => {
 const submit = async () => {
 
     try {
-        form.value.semester = props.batch_semester.semester;
+        form.value.semester = props.batch_semester;
         form.value.school_year = props.school_year.year;
 
         router.post(`/verify-account/verifying`, form.value);
