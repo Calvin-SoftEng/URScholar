@@ -39,28 +39,37 @@ class StudentController extends Controller
     {
         $user = User::where('email', Auth::user()->email)->first();
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $batch = Batch::where('scholarship_id', $scholar->scholarship_id)->first();
 
-        // Get the batch semester logic
-        $batch_semester = null;
-        $batch_school_year = null;
+        if ($scholar) {
+            $batch = Batch::where('scholarship_id', $scholar->scholarship_id)->first();
 
-        if ($batch) {
-            if ($batch->semester == '2nd') {
-                $batch_semester = '1st';
-                $school_year = $batch->school_year; // Keep the same school year
-            } else if ($batch->semester == '1st') {
-                $batch_semester = '2nd';
+            // Get the batch semester logic
+            $batch_semester = null;
+            $batch_school_year = null;
 
-                if ($batch->school_year == 1) {
-                    $batch_school_year = 1; // First school year
-                } else {
-                    $batch_school_year = $batch->school_year - 1; // Previous school year
+            if ($batch) {
+                if ($batch->semester == '2nd') {
+                    $batch_semester = '1st';
+                    $school_year = $batch->school_year; // Keep the same school year
+                } else if ($batch->semester == '1st') {
+                    $batch_semester = '2nd';
+
+                    if ($batch->school_year == 1) {
+                        $batch_school_year = 1; // First school year
+                    } else {
+                        $batch_school_year = $batch->school_year - 1; // Previous school year
+                    }
                 }
             }
+
+            $school_year = SchoolYear::where('id', $batch_school_year)->first();
+        }
+        else {
+            $batch = null;
+            $batch_semester = null;
+            $school_year = null;
         }
 
-        $school_year = SchoolYear::where('id', $batch_school_year)->first();
 
         // if ($school_year){
         //     $school_year = SchoolYear::where('id', $batch->school_year)->first();
@@ -806,39 +815,40 @@ class StudentController extends Controller
     public function submitApplication(Request $request)
     {
         $request->validate([
+            'scholarship_id' => 'required|exists:scholarships,id',
             'essay' => 'required|string',
             'files.*' => 'required|file|',
             'req' => 'array'
         ]);
 
-        dd($request->all());
+        $scholar = Scholar::where('email', Auth::user()->email)->first();
 
-        // Create the scholarship application
-        // $application = ScholarshipApplication::create([
-        //     'user_id' => auth()->id(),
-        //     'scholarship_id' => $validated['scholarship_id'],
-        //     'essay' => $validated['essay'],
-        //     'status' => 'pending',
-        // ]);
+        $scholarship = Scholarship::where('id', $request['scholarship_id'])->first();
 
-        // Process each requirement submission
-        // if (isset($validated['requirements'])) {
-        //     foreach ($validated['requirements'] as $req) {
-        //         $file = $req['file'];
-        //         $path = $file->store('requirement-submissions/' . $application->id, 'public');
+        $requirements = Requirements::where('id', $scholarship->id)->get();
 
-        //         RequirementSubmission::create([
-        //             'application_id' => $application->id,
-        //             'requirement_id' => $req['requirement_id'],
-        //             'file_path' => $path,
-        //             'original_filename' => $file->getClientOriginalName(),
-        //             'file_size' => $file->getSize(),
-        //             'mime_type' => $file->getMimeType(),
-        //         ]);
-        //     }
-        // }
+        $reqID = $requirements->pluck('id')->first();
 
-        return redirect()->route('scholarships.my-applications')
+
+
+        $uploadedFiles = [];
+
+
+        foreach ($request->file('files') as $index => $file) {
+
+            $path = $file->store('requirements/' . $scholar->id, 'public');
+
+            $uploadedFile = SubmittedRequirements::create([
+                'scholar_id' => $scholar->id,
+                'requirement_id' => $reqID,
+                'submitted_requirements' => $file->getClientOriginalName(),
+                'path' => $path
+            ]);
+
+            $uploadedFiles[] = $uploadedFile;
+        }
+
+        return back()
             ->with('success', 'Your scholarship application has been submitted successfully!');
     }
 }

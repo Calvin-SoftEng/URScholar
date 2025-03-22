@@ -159,8 +159,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     // Route::get('/group-pagee/{scholarship}', [GroupPageController::class, 'show'])->name('grouppage.show');
     // Route::post('/group-pagee/{scholarship}/messages', [MessageController::class, 'store'])->name('grouppage.store');
 
-    //Applicants
-    Route::get('/scholarships/{scholarship}/applicants', [ApplicationController::class, 'show'])->name('scholarships.applicants');
+    //One-time Payment Applicants
+    Route::get('/scholarships/one-time/applicants', [ScholarshipController::class, 'onetime_list'])->name('scholarship.onetime_list');
 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');

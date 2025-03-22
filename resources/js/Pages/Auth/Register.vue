@@ -45,7 +45,7 @@ const resendEmail = async () => {
     try {
         isResending.value = true;
 
-        await router.post(`/register/resend`, {
+        await router.post(`/register/checking`, {
             email: form.value.email,
             campus: form.value.campus
         }, {
@@ -100,7 +100,7 @@ const resendEmail = async () => {
                             <SelectValue placeholder="Select Campus" class="text-black" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem v-for="campus in campus" :key="campus.id" :value="campus.name">
+                            <SelectItem v-for="campus in campus" :key="campus.id" :value="campus">
                                 {{ campus.name }}
                             </SelectItem>
                         </SelectContent>
