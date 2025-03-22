@@ -189,7 +189,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
 
-    Route::get('/sponsor/dashboard', [SponsorController::class, 'dashboard'])->name('sponsor.dashboard');
+    Route::get('/sponsor/dashboard', [SponsorController::class, 'sponsor_dashboard'])->name('sponsor.dashboard');
 });
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -275,6 +275,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     // Application
     Route::get('/student/applying-scholarship/{scholarship}/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
+    Route::post('/student/applying-scholarship/application/upload', [StudentController::class, 'submitApplication'])->name('scholarship.submit_application');
 });
 
 Route::middleware(['auth'])->group(function () {

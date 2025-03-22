@@ -3,12 +3,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ContentDashboard from '@/Pages/Sponsor/Dashboard/Content-Dashboard.vue';
 
-const props = defineProps({
-    scholarships: Array,
-    sponsors: Array,
-    scholars: Array,
-});
-
 </script>
 
 <template>
@@ -17,7 +11,7 @@ const props = defineProps({
     <AuthenticatedLayout>
         <template #default>
             <!-- Your dashboard content goes here -->
-            <ContentDashboard class="w-full h-full dark:bg-dprimary" :scholarships="scholarships" :sponsors="sponsors"/>
+            <ContentDashboard class="w-full h-full dark:bg-dprimary"/>
         </template>
     </AuthenticatedLayout>
 </template>
