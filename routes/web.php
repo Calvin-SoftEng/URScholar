@@ -181,6 +181,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
         Route::put('/settings/scholarship-forms/data{scholarshipFormData}', [SettingsController::class, 'updateData'])->name('scholarship.form.data.update');
         Route::delete('/scholarship-form-data/{scholarshipFormData}', [SettingsController::class, 'destroyData'])->name('scholarship.form.data.destroy');
 
+    Route::get('/settings/verification-forms', [SettingsController::class, 'verification_forms'])->name('settings.verification_forms');
+
 });
 
 // SPONSOR -------------------------------------------------------------------------------------------------------------------------------------------------------

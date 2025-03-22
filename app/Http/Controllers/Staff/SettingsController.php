@@ -260,6 +260,18 @@ class SettingsController extends Controller
         ]);
     }
 
+    public function verification_forms()
+    {
+
+        $scholarship_form = ScholarshipForm::all();
+        $scholarship_form_data = ScholarshipFormData::all();
+
+        return Inertia::render('Staff/Settings/Scholarship_Forms', [
+            'scholarship_form' => $scholarship_form,
+            'scholarship_form_data' => $scholarship_form_data,
+        ]);
+    }
+
     /**
      * Store a newly created scholarship form.
      */
