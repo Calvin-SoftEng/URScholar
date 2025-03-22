@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Criteria;
 use App\Models\EducationRecord;
 use App\Models\FamilyRecord;
 use App\Models\Grade;
@@ -10,10 +9,8 @@ use App\Models\OrgRecord;
 use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\SiblingRecord;
-use App\Models\Sponsor;
 use App\Models\StudentRecord;
 use App\Models\Batch;
-use App\Models\CampusRecipients;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
 use App\Models\User;
@@ -477,12 +474,12 @@ class StudentController extends Controller
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
         if (!$scholar) {
-            return redirect()->route('scholarship.scholarships');
+            return redirect()->route('student.confirmation');
         }
 
         $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
         if (!$scholarship) {
-            return redirect()->route('scholarship.scholarships');
+            return redirect()->route('student.confirmation');
         }
 
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
@@ -515,19 +512,6 @@ class StudentController extends Controller
             'scholarship' => $scholarship,
             'scholar' => $scholar,
             'submitReq' => $returnedRequirements,
-        ]);
-    }
-
-    public function scholarships()
-    {
-        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
-        $sponsors = Sponsor::all();
-        $schoolyear = SchoolYear::all();
-
-        return Inertia::render('Student/Scholarships/Scholarships', [
-            'scholarships' => $scholarships,
-            'sponsors' => $sponsors,
-            'schoolyears' => $schoolyear,
         ]);
     }
 
@@ -752,28 +736,9 @@ class StudentController extends Controller
     //     return Inertia::render('Student/Application/Scholar_Application');
     // }
 
-    public function scholarship_details(Scholarship $scholarship)
+    public function scholarship_details()
     {
-        $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
-
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-        $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
-
-        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
-
-        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
-        $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
-
-        return Inertia::render('Student/Scholarships/ScholarshipDetails', [
-            'scholarship' => $scholarship,
-            'sponsor' => $sponsor,
-            'requirements' => $requirements,
-            'deadline' => $deadline,
-            'selectedCampus' => $selectedCampus,
-            'criterias' => $criteria,
-            'grade' => $grade,
-        ]);
+        return Inertia::render('Student/Scholarships/ScholarshipApplicationDetails');
     }
 
     public function scholarship_application()
