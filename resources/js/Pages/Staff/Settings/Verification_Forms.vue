@@ -4,7 +4,7 @@
             class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <h1 class="text-2xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Eligibility Standards
+                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Scholarship Verification Information
                 </h1>
 
                 <div class="w-full mt-5">
@@ -12,7 +12,7 @@
                         <!-- Scholarship Forms Section -->
                         <div class="mb-5 space-y-5">
                             <div class="flex flex-row justify-between border-b items-center pb-3">
-                                <h2 class="text-lg font-semibold text-gray-700">Scholarship Standards</h2>
+                                <h2 class="text-lg font-semibold text-gray-700">List of Scholarship Forms</h2>
                                 <!-- <button @click="toggleNewForm" class="text-blue-600 text-sm hover:underline">Add New
                                     Form</button> -->
                             </div>

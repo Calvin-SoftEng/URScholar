@@ -266,7 +266,7 @@ class SettingsController extends Controller
         $scholarship_form = ScholarshipForm::all();
         $scholarship_form_data = ScholarshipFormData::all();
 
-        return Inertia::render('Staff/Settings/Scholarship_Forms', [
+        return Inertia::render('Staff/Settings/Verification_Forms', [
             'scholarship_form' => $scholarship_form,
             'scholarship_form_data' => $scholarship_form_data,
         ]);

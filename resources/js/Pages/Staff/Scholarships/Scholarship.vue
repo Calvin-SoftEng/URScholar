@@ -181,7 +181,7 @@
                     <form @submit.prevent="submitForm">
                         <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
                             <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
-                            <div class="w-full block bg-white p-5 flex-col items-center mx-auto sm:px-6 lg:px-8">
+                            <div class="w-full block bg-white px-12 py-6 flex-col items-center mx-auto sm:px-6 lg:px-8">
                                 <span>
                                     Set up One-Time Payment Scholarship Details
                                 </span>
@@ -225,7 +225,7 @@
                                                         </svg>
                                                     </div>
                                                     <input id="datepicker-range-start" name="start" type="text"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select start date">
                                                 </div>
                                             </div>
@@ -248,7 +248,7 @@
                                                         </svg>
                                                     </div>
                                                     <input id="datepicker-range-end" name="end" type="text"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select end date">
                                                 </div>
                                             </div>
@@ -315,7 +315,7 @@
 
 
                                                         <label :for="`campus-${campus.id}`"
-                                                            class="text-sm font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
+                                                            class="text-base font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
                                                             {{ campus.name }}
                                                         </label>
 
@@ -353,48 +353,105 @@
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
-
-                                    <div class="flex flex-row space-x-2">
+                                    <h3 class="text-base font-medium text-black">List
+                                        Criteria and Eligibility</h3>
+                                    <div class="grid grid-cols-2 space-x-2">
                                         <div class="w-full flex flex-col p-2">
 
-                                            <div class="space-y-3">
-                                                <h3 class="text-sm font-medium text-gray-700">List
-                                                    Criteria and Eligibility</h3>
-
-                                                <div class="flex flex-row space-x-2 justify-center items-center">
-                                                    <span class="text-sm font-medium text-gray-700 whitespace-nowrap ">Grade Criteria
+                                            <div class="space-y-4">
+                                                <div class="flex flex-col justify-center items-start">
+                                                    <span class="text-sm font-medium text-black whitespace-nowrap mb-2">General Weighted Average must be:
                                                     </span>
 
                                                     <input v-model="form.grade" type="text" id="name"
                                                         placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
 
                                                 </div>
 
-                                                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                                                    <div v-for="form in scholarship_form" :key="form.id"
-                                                        class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                                                        <h4
-                                                            class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
-                                                            {{ form.name }}</h4>
+                                                <div class="flex flex-col space-y-2 justify-center items-start">
+                                                    <span class="text-sm font-medium text-black whitespace-nowrap">
+                                                        Must be enrolled in: 
+                                                    </span>
 
-                                                        <div v-for="data in getFormData(form.id)" :key="data.id"
-                                                            class="flex items-center space-x-2 mb-1">
-                                                            <input id="accept-terms-{{ data.id }}" type="checkbox"
-                                                                class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                                :checked="criteriaIncludes(data.id)"
-                                                                @change="toggleCriteria(data.id)">
-                                                            <label :for="'accept-terms-' + data.id"
-                                                                class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                                {{ data.name }}
-                                                            </label>
-                                                        </div>
+                                                    <textarea v-model="selectedCoursesText" id="name" rows="3"
+                                                        placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
+                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
+                                                        readonly>
+                                                    </textarea>
+                                                </div>
+
+                                                <div class="flex flex-col justify-center space-y-2 items-start">
+                                                    <span class="text-sm font-medium text-black whitespace-nowrap ">
+                                                        Financial Need-Based Criteria must be:
+                                                    </span>
+                                                    <div 
+                                                        class="flex items-center space-x-2 mb-1">
+                                                        <input type="checkbox"
+                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                            >
+                                                        <label
+                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                            Nakacategory na yan
+                                                        </label>
+                                                    </div>
+
+                                                    <!-- hiwalay na loop to ata -->
+                                                    <div 
+                                                        class="flex items-center space-x-2 mb-1">
+                                                        <input type="checkbox"
+                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                            >
+                                                        <label
+                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                            Annual Income range to 10,000 - 20,000
+                                                        </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="flex flex-col justify-center space-y-2 items-start">
+                                                    <span class="text-sm font-medium text-black whitespace-nowrap ">
+                                                        Residency & Citizenship Criteria
+                                                    </span>
+                                                    <div 
+                                                        class="flex items-center space-x-2 mb-1">
+                                                        <input type="checkbox"
+                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                            >
+                                                        <label
+                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                            Bisaya ka dapat
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
-
                                         </div>
 
+                                        <!-- <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                                            <div v-for="form in scholarship_form" :key="form.id"
+                                                class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                                                <h4
+                                                    class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
+                                                    {{ form.name }}</h4>
+
+                                                <div v-for="data in getFormData(form.id)" :key="data.id"
+                                                    class="flex items-center space-x-2 mb-1">
+                                                    <input id="accept-terms-{{ data.id }}" type="checkbox"
+                                                        class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                        :checked="criteriaIncludes(data.id)"
+                                                        @change="toggleCriteria(data.id)">
+                                                    <label :for="'accept-terms-' + data.id"
+                                                        class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                        {{ data.name }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+
+                                    <div class="w-full border-t border-gray-200 my-4"></div>
+
+                                    <div class="w-6/12">
                                         <div class="w-full">
                                             <label for="totalRecipients" class="text-sm font-medium text-gray-700">
                                                 List Requirements
@@ -926,6 +983,13 @@ const selectedCourses = computed(() => {
     }, {});
 
     return courses;
+});
+
+// Compute selected courses dynamically based on checked checkboxes
+const selectedCoursesText = computed(() => {
+    return Object.keys(selectedCoursesMap.value)
+        .filter(course => selectedCoursesMap.value[course]) // Get only checked courses
+        .join(", "); // Convert to a comma-separated string
 });
 
 // Update selected courses whenever a campus is checked/unchecked
