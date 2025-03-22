@@ -444,8 +444,10 @@ class StudentController extends Controller
 
         foreach ($request->siblings as $index => $sibling) {
             // Skip this iteration if all inputs are null
-            if (is_null($sibling['first_name']) && is_null($sibling['last_name']) && is_null($sibling['middle_name'])
-                && is_null($sibling['age']) && is_null($sibling['occupation'])) {
+            if (
+                is_null($sibling['first_name']) && is_null($sibling['last_name']) && is_null($sibling['middle_name'])
+                && is_null($sibling['age']) && is_null($sibling['occupation'])
+            ) {
                 continue;
             }
 
@@ -787,6 +789,7 @@ class StudentController extends Controller
         $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
 
         $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
+
         $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
 
         return Inertia::render('Student/Scholarships/ScholarshipApplication', [
@@ -800,5 +803,42 @@ class StudentController extends Controller
         ]);
     }
 
+    public function submitApplication(Request $request)
+    {
+        $request->validate([
+            'essay' => 'required|string',
+            'files.*' => 'required|file|',
+            'req' => 'array'
+        ]);
 
+        dd($request->all());
+
+        // Create the scholarship application
+        // $application = ScholarshipApplication::create([
+        //     'user_id' => auth()->id(),
+        //     'scholarship_id' => $validated['scholarship_id'],
+        //     'essay' => $validated['essay'],
+        //     'status' => 'pending',
+        // ]);
+
+        // Process each requirement submission
+        // if (isset($validated['requirements'])) {
+        //     foreach ($validated['requirements'] as $req) {
+        //         $file = $req['file'];
+        //         $path = $file->store('requirement-submissions/' . $application->id, 'public');
+
+        //         RequirementSubmission::create([
+        //             'application_id' => $application->id,
+        //             'requirement_id' => $req['requirement_id'],
+        //             'file_path' => $path,
+        //             'original_filename' => $file->getClientOriginalName(),
+        //             'file_size' => $file->getSize(),
+        //             'mime_type' => $file->getMimeType(),
+        //         ]);
+        //     }
+        // }
+
+        return redirect()->route('scholarships.my-applications')
+            ->with('success', 'Your scholarship application has been submitted successfully!');
+    }
 }

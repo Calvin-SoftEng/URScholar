@@ -7,7 +7,7 @@ use Inertia\Inertia;
 
 class SponsorController extends Controller
 {
-    public function dashboard()
+    public function sponsor_dashboard()
     {
         return Inertia::render('Sponsor/Dashboard');
     }
