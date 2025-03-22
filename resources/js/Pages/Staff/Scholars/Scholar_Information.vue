@@ -18,7 +18,7 @@
 
                 <div class="w-full h-full flex justify-center items-center dark:text-dprimary relative">
                     <!-- Close Button -->
-                    <button class="absolute top-4 right-10">
+                    <button class="absolute top-4 right-20">
                         <span
                             class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition">
                             arrow_back
@@ -32,15 +32,102 @@
                             <div class="flex-1 flex flex-col space-y-5">
                                 
                                 <!-- Profile Image & Name -->
-                                <div class="flex flex-col items-center justify-center p-2">
-                                <div class="w-20 h-20 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 text-xl">
-                                    JD
-                                </div>
-                                <span class="text-lg font-semibold mt-2">John Michael Doe</span>
-                                <span class="text-sm text-gray-400">Jr.</span>
+                                <div class="flex flex-row items-center justify-center p-2">
+                                    <div class="w-20 h-20 flex items-center justify-center text-gray-500 text-xl">
+                                        <img src="../../../../assets/images/no_userpic.png" alt="" class="rounded-full">
+                                    </div>
+                                    <div class="flex flex-col items-center justify-center p-2">
+                                    
+                                    <span class="text-lg font-semibold mt-2">John Michael Doe</span>
+                                    <div>
+                                        
+                                    </div>
+                                    </div>
                                 </div>
 
                                 <div class="w-full h-0.5 bg-gray-100"></div>
+
+                                <div class="space-y-2">
+                                    <div v-for="(section, index) in sections" :key="index" class="border-b border-gray-300">
+                                        <button
+                                            class="w-full text-left p-4 bg-gray-100 hover:bg-gray-200 flex justify-between items-center"
+                                            @click="toggleSection(index)"
+                                        >
+                                            <span class="font-semibold">{{ section.title }}</span>
+                                            <span>{{ section.isOpen ? '▲' : '▼' }}</span>
+                                        </button>
+
+                                        <!-- Personal Information -->
+                                        <div v-if="section.isOpen && section.title === 'Personal Information'" class="p-4 bg-white border-t border-gray-200">
+                                            <div class="flex flex-col p-2 space-y-2">
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Birthdate</span>
+                                                <span class="text-base text-primary">May 20, 2001</span>
+                                            </div>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Birthplace</span>
+                                                <span class="text-base text-primary">Manila, Philippines</span>
+                                            </div>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Age</span>
+                                                <span class="text-base text-primary">23</span>
+                                            </div>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Gender</span>
+                                                <span class="text-base text-primary">Male</span>
+                                            </div>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Civil Status</span>
+                                                <span class="text-base text-primary">Single</span>
+                                            </div>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Religion</span>
+                                                <span class="text-base text-primary">Roman Catholic</span>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Education -->
+                                        <div v-if="section.isOpen && section.title === 'Education'" class="p-4 bg-white border-t border-gray-200">
+                                            <!-- Education -->
+                                            <div class="flex flex-col p-2 space-y-2">
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Current Grade</span>
+                                                <span class="text-base text-primary">12</span>
+                                            </div>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Current School Year</span>
+                                                <span class="text-base text-primary">2024-2025</span>
+                                            </div>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Semester</span>
+                                                <span class="text-base text-primary">1st Semester</span>
+                                            </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Contact Information -->
+                                        <div v-if="section.isOpen && section.title === 'Contact Information'" class="p-4 bg-white border-t border-gray-200">
+                                            <p>Phone number, email, and address go here.</p>
+                                        </div>
+
+                                        <!-- Family Details -->
+                                        <div v-if="section.isOpen && section.title === 'Family Details'" class="p-4 bg-white border-t border-gray-200">
+                                            <p>Details about family members.</p>
+                                        </div>
+
+                                        <!-- Education History -->
+                                        <div v-if="section.isOpen && section.title === 'Education History'" class="p-4 bg-white border-t border-gray-200">
+                                            <p>A timeline of your education background.</p>
+                                        </div>
+
+                                        <!-- Extracurricular -->
+                                        <div v-if="section.isOpen && section.title === 'Extracurricular'" class="p-4 bg-white border-t border-gray-200">
+                                            <p>Sports, clubs, and activities.</p>
+                                        </div>
+
+                                        </div>
+                                </div>
 
                                 <!-- Personal Information -->
                                 <div class="flex flex-col p-2 space-y-2">
@@ -72,21 +159,7 @@
 
                                 <div class="w-full h-0.5 bg-gray-100"></div>
 
-                                <!-- Education -->
-                                <div class="flex flex-col p-2 space-y-2">
-                                <div class="flex flex-col text-black">
-                                    <span class="font-semibold uppercase text-xs text-gray-500">Current Grade</span>
-                                    <span class="text-base text-primary">12</span>
-                                </div>
-                                <div class="flex flex-col text-black">
-                                    <span class="font-semibold uppercase text-xs text-gray-500">Current School Year</span>
-                                    <span class="text-base text-primary">2024-2025</span>
-                                </div>
-                                <div class="flex flex-col text-black">
-                                    <span class="font-semibold uppercase text-xs text-gray-500">Semester</span>
-                                    <span class="text-base text-primary">1st Semester</span>
-                                </div>
-                                </div>
+                                
 
                                 <div class="w-full h-0.5 bg-gray-100"></div>
 
@@ -264,37 +337,18 @@ const components = {
 };
 
 
-const Checking = ref(false);
+const sections = ref([
+  { title: 'Personal Information', isOpen: false },
+  { title: 'Education', isOpen: false },
+  { title: 'Contact Information', isOpen: false },
+  { title: 'Family Details', isOpen: false },
+  { title: 'Education History', isOpen: false },
+  { title: 'Extracurricular', isOpen: false }
+]);
 
-const toggleCheck = () => {
-    Checking.value = !Checking.value;
+const toggleSection = (index) => {
+  sections.value[index].isOpen = !sections.value[index].isOpen;
 };
-
-const closeModal = () => {
-    Checking.value = false;
-    resetForm();
-};
-
-
-
-const toastVisible = ref(false);
-const toastMessage = ref("");
-
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
-
-    if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
-        toastMessage.value = flashMessage;
-        toastVisible.value = true;
-
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
-});
-
 </script>
 
 <style>

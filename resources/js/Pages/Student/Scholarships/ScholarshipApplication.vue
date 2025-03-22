@@ -5,7 +5,7 @@
     <AuthenticatedLayout class="shadow-md z-10">
         <div class="w-full bg-white shadow-sm ">
             <h1 class="font-bold font-sora text-left p-3 mx-10
-            2xl:text-3xl xl:text-3xl lg:text-2xl md:text-base sm:text-base">Scholarships Details</h1>
+            2xl:text-3xl xl:text-3xl lg:text-2xl md:text-base sm:text-base">Application</h1>
         </div>
         <div class="w-full h-full flex flex-col bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="flex w-full mt-10 my-auto max-w-8xl mx-auto gap-3">
@@ -71,10 +71,8 @@
                 </div>
                 <div class="w-1/4 bg-white flex flex-col gap-4 rounded-lg shadow-md h-fit p-4 border border-gray-50">
                     <!-- 25% width -->
-                    <!-- <Link :href="route('scholarship.application')"> -->
-                        <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Apply
-                            Now</button>
-                    <!-- </Link> -->
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Apply
+                        Now</button>
                     <div class="flex flex-col">
                         <span class="text-gray-500 text-sm">Application Deadline</span>
                         <!-- <span class="font-medium text-xl">{{ formattedDate }}</span> -->

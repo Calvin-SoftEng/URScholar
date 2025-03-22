@@ -747,10 +747,10 @@ class StudentController extends Controller
         ]);
     }
 
-    public function scholarship_application()
-    {
-        return Inertia::render('Student/Application/Scholar_Application');
-    }
+    // public function scholarship_application()
+    // {
+    //     return Inertia::render('Student/Application/Scholar_Application');
+    // }
 
     public function scholarship_details(Scholarship $scholarship)
     {
@@ -775,5 +775,11 @@ class StudentController extends Controller
             'grade' => $grade,
         ]);
     }
+
+    public function scholarship_application()
+    {
+        return Inertia::render('Student/Scholarships/ScholarshipApplication');
+    }
+
 
 }

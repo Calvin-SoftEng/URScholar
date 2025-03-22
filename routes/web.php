@@ -263,13 +263,16 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/available-scholarships', [ApplicationController::class, 'index'])->name('available.index');
     Route::post('/applications', [ApplicationController::class, 'store'])->name('application.store');
 
-    // Application
-    Route::get('/account-application', [StudentController::class, 'scholarship_application'])->name('application.index');
-
     //Non -Scholars Scholarship Application
+    
+    //Listing
+    Route::get('/available-scholarships', [StudentController::class, 'scholarships'])->name('scholarship.scholarships');
+
+    //Details
     Route::get('/student/applying-scholarship/{scholarship}', [StudentController::class, 'scholarship_details'])->name('scholarship.details');
 
-    Route::get('/available-scholarships', [StudentController::class, 'scholarships'])->name('scholarship.scholarships');
+    // Application
+    Route::get('/student/applying-scholarship/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
 });
 
 Route::middleware(['auth'])->group(function () {
