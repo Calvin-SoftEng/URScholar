@@ -2,6 +2,34 @@
 
     <Head title="Verification" />
     <div class="w-full h-screen box-border bg-gray-100">
+
+        <!-- Reminder Dialog -->
+        <div v-if="showDialog" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+            <div class="bg-primary p-6 rounded-lg shadow-xl max-w-md w-full animate-fade-in">
+                
+                <!-- Branding inside dialog -->
+                <div class="w-full flex items-center justify-center gap-2 mb-4">
+                    <img src="../../../../assets/images/main_logo_white.png" alt="URScholar Logo" class="w-12 h-12 dark:hidden">
+                    <span class="font-poppins text-3xl font-bold text-white tracking-tight">URScholar</span>
+                </div>
+
+                <h2 class="text-lg font-semibold text-white mb-3">Student Reminders</h2>
+                <ul class="text-white list-disc list-inside space-y-3">
+                    <li v-for="(reminder, index) in reminders" :key="index">{{ reminder }}</li>
+                </ul>
+
+                <div class="mt-5 flex flex-col gap-2">
+                    <button @click="closeDialog" class="w-full bg-white text-primary font-semibold py-2 rounded-lg hover:bg-gray-200 transition">
+                        Got it!
+                    </button>
+                    <button @click="dontShowAgain" class="w-full text-white text-sm underline">
+                        Don't show again
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
         <form @submit.prevent="submit">
             <div class="w-full flex flex-row justify-between bg-white shadow-sm items-center px-10 sm:px-5">
                 <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3">Set up your Profile
@@ -82,9 +110,9 @@
                                             <h3
                                                 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4 sm:text-white">
                                                 Account Information</h3>
-                                            <p
+                                                <p
                                                 class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
-                                                Please fill-up missing required fields</p>
+                                                Please fill-up missing required fields. Leave N/A if not applicable</p>
                                         </div>
 
                                         <!-- <div class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
@@ -164,6 +192,8 @@
 
                                             <div class="relative w-full">
                                                 <Input id="suffix" type="text" placeholder="Suffix"
+                                                @focus="clearMainField('suffix')"
+                                                @blur="restoreMainField('suffix')"
                                                     v-model="form.suffix" class="w-full border border-gray-200 pr-10" />
                                             </div>
                                         </div>
@@ -356,7 +386,7 @@
                                                 Educational Background</h3>
                                             <p
                                                 class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
-                                                Please fill-up missing required fields. Put N/A if not applicable</p>
+                                                Please fill-up missing required fields. Leave N/A if not applicable</p>
                                         </div>
 
                                         <!-- gwa -->
@@ -459,6 +489,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. Academic Awards"
+                                                @focus="clearDefault('education', 'elementary', 'honors')"
+                                                @blur="restoreDefault('education', 'elementary', 'honors')"
                                                 v-model="form.education.elementary.honors"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -513,6 +545,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. Academic Awards"
+                                                @focus="clearDefault('education', 'junior', 'honors')"
+                                                @blur="restoreDefault('education', 'junior', 'honors')"
                                                 v-model="form.education.junior.honors"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -567,6 +601,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. Academic Awards"
+                                                @focus="clearDefault('education', 'senior', 'honors')"
+                                                @blur="restoreDefault('education', 'senior', 'honors')"
                                                 v-model="form.education.senior.honors"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -621,6 +657,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. Academic Awards"
+                                                @focus="clearDefault('education', 'college', 'honors')"
+                                                @blur="restoreDefault('education', 'college', 'honors')"
                                                 v-model="form.education.college.honors"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -651,6 +689,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Senior High School"
+                                                @focus="clearDefault('education', 'vocational', 'name')"
+                                                @blur="restoreDefault('education', 'vocational', 'name')"
                                                 v-model="form.education.vocational.name"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -663,6 +703,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. 2016-2020"
+                                            @focus="clearDefault('education', 'vocational', 'years')"
+                                                @blur="restoreDefault('education', 'vocational', 'years')"
                                                 v-model="form.education.vocational.years"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -675,6 +717,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. Academic Awards"
+                                                @focus="clearDefault('education', 'vocational', 'honors')"
+                                                @blur="restoreDefault('education', 'vocational', 'honors')"
                                                 v-model="form.education.vocational.honors"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -705,6 +749,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Senior High School"
+                                                 @focus="clearDefault('education', 'postgrad', 'name')"
+                                                @blur="restoreDefault('education', 'postgrad', 'name')"
                                                 v-model="form.education.postgrad.name"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -717,6 +763,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. 2016-2020"
+                                            @focus="clearDefault('education', 'postgrad', 'years')"
+                                                @blur="restoreDefault('education', 'postgrad', 'years')"
                                                 v-model="form.education.postgrad.years"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -729,6 +777,8 @@
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. Academic Awards"
+                                                @focus="clearDefault('education', 'postgrad', 'honors')"
+                                                @blur="restoreDefault('education', 'postgrad', 'honors')"
                                                 v-model="form.education.postgrad.honors"
                                                 class="w-full border border-gray-200" />
                                         </div>
@@ -764,15 +814,14 @@
                                             </h3>
                                             <p
                                                 class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
-                                                Please fill-up missing required fields
-                                            </p>
+                                                Please fill-up missing required fields. Leave N/A if not applicable</p>
                                         </div>
 
                                         <!-- Mother -->
                                         <div
                                             class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                                MOTHER (Mark (+) if deceased)
+                                                MOTHER (Leave blank if deceased)
                                             </h3>
                                             <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                         </div>
@@ -921,6 +970,8 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Leave blank if none"
+                                                    @focus="clearSubField('mother', 'batch')"
+                                                    @blur="restoreSubField('mother', 'batch')"
                                                     v-model="form.mother.batch"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -936,7 +987,7 @@
                                         <div
                                             class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                                FATHER (Mark (+) if deceased)
+                                                FATHER (Leave blank if deceased)
                                             </h3>
                                             <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                         </div>
@@ -1084,6 +1135,8 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Leave blank if none"
+                                                 @focus="clearSubField('father', 'batch')"
+                                                    @blur="restoreSubField('father', 'batch')"
                                                     v-model="form.father.batch"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1159,8 +1212,10 @@
                                                 </Label>
                                             </div>
                                             <div class="relative w-full">
-                                                <Input type="text" placeholder="Type N/A if none"
-                                                    v-model="form.other_income" @focus="errors.other_income = null"
+                                                <Input type="text" placeholder="e.g. Sari-sari Store"
+                                                @focus="clearMainField('other_income')"
+                                                @blur="restoreMainField('other_income')"
+                                                    v-model="form.other_income"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
                                         </div>
@@ -1608,7 +1663,7 @@ const form = ref({
     last_name: user.last_name,
     password: '',
     confirm_password: '',
-    suffix: '',
+    suffix: 'N/A',
     birthdate: '',
     birthplace: '',
     age: '',
@@ -1626,8 +1681,8 @@ const form = ref({
         junior: { name: '', years: '', honors: 'N/A' },
         senior: { name: '', years: '', honors: 'N/A' },
         college: { name: '', years: '', honors: 'N/A' },
-        vocational: { name: '', years: '', honors: 'N/A' },
-        postgrad: { name: '', years: '', honors: 'N/A' },
+        vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
+        postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
     },
     mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
     father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
@@ -1642,6 +1697,54 @@ const form = ref({
     imgName: null,
     imgPreview: null,
 });
+
+// Remove "N/A" when input is focused
+const clearDefault = (mainField, subField, field) => {
+    if (form.value[mainField][subField][field] === "N/A") {
+        form.value[mainField][subField][field] = "";
+    }
+};
+
+// Restore "N/A" if input is empty
+const restoreDefault = (mainField, subField, field) => {
+    if (form.value[mainField][subField][field].trim() === "") {
+        form.value[mainField][subField][field] = "N/A";
+    }
+};
+
+const clearSubField = (mainField, subField) => {
+    if (form.value[mainField][subField] === "N/A") {
+        form.value[mainField][subField] = "";
+    }
+};
+
+const restoreSubField = (mainField, subField) => {
+    if (form.value[mainField][subField].trim() === "") {
+        form.value[mainField][subField] = "N/A";
+    }
+};
+
+// Remove "N/A" when input is focused
+const clearMainField = () => {
+    if (form.value.suffix === "N/A") {
+        form.value.suffix = "";
+    }
+
+    if (form.value.other_income === "N/A") {
+        form.value.other_income = "";
+    }
+};
+
+// Restore "N/A" if input is empty
+const restoreMainField = () => {
+    if (form.value.suffix.trim() === "") {
+        form.value.suffix = "N/A";
+    }
+
+    if (form.value.other_income.trim() === "") {
+        form.value.other_income = "N/A";
+    }
+};
 
 
 const handleFile = (event) => {
@@ -1662,6 +1765,26 @@ const restoreFileInput = () => {
     }
 };
 
+
+// Dialog state
+const showDialog = ref(false);
+const reminders = [
+    "Complete your profile information.",
+    "Check for new scholarship postings regularly.",
+    "Ensure your documents are updated before applying.",
+    "Monitor your application status on your dashboard."
+];
+
+// Close dialog
+const closeDialog = () => {
+    showDialog.value = false;
+};
+
+// Set "Don't Show Again" and save preference
+const dontShowAgain = () => {
+    localStorage.setItem('seenReminderDialog', 'true');
+    closeDialog();
+};
 // const submit = () => {
 //     form.post(route('student.verify-account.verifying'), {
 //         onFinish: () => form.reset(),
@@ -1793,6 +1916,9 @@ const initDatepicker = () => {
 onMounted(() => {
     initFlowbite();
     initDatepicker();
+    if (!localStorage.getItem('seenReminderDialog')) {
+        showDialog.value = true;
+    }
 
     // const datepickerEl = document.getElementById("datepicker-autohide");
 

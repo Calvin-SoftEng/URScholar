@@ -19,47 +19,48 @@
                     <div class="bg-white relative overflow-x-auto border border-gray-200 rounded-lg p-6">
                     <div class="flex flex-row justify-between w-full">
                         <h1 class="text-xl font-semibold font-quicksand text-primary mb-4">Branding Settings</h1>
-                        <button @click="applyBranding" class="btn bg-primary text-white px-5 py-1 rounded-lg">
-                        Apply Changes
+                        <button @click="saveChanges" 
+                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            Apply Changes
                         </button>
                     </div>
 
                     <div>
                         <!-- Light Mode Logo Upload -->
                         <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Portal Logo (Light Mode)</label>
-                        <div class="mb-5 flex items-center gap-4">
-                        <div class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                            <img v-if="tempLogoLight" :src="tempLogoLight" alt="Light Mode Logo" class="object-cover w-full h-full">
-                        </div>
-                        <div class="w-full"> 
-                            <input type="file" @change="previewLogo('light', $event)" accept="image/*"
-                            class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                        </div>
+                            <div class="mb-5 flex items-center gap-4">
+                            <div class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                                <img v-if="tempLogoLight" :src="tempLogoLight" alt="Light Mode Logo" class="object-cover w-full h-full">
+                            </div>
+                            <div class="w-full"> 
+                                <input type="file" @change="previewLogo('light', $event)" accept="image/*"
+                                class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                            </div>
                         </div>
 
                         <!-- Dark Mode Logo Upload -->
                         <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Portal Logo (Dark Mode)</label>
-                        <div class="mb-5 flex items-center gap-4">
-                        <div class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-                            <img v-if="tempLogoDark" :src="tempLogoDark" alt="Dark Mode Logo" class="object-cover w-full h-full">
-                        </div>
-                        <div class="w-full"> 
-                            <input type="file" @change="previewLogo('dark', $event)" accept="image/*"
-                            class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                        </div>
+                            <div class="mb-5 flex items-center gap-4">
+                            <div class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                                <img v-if="tempLogoDark" :src="tempLogoDark" alt="Dark Mode Logo" class="object-cover w-full h-full">
+                            </div>
+                            <div class="w-full"> 
+                                <input type="file" @change="previewLogo('dark', $event)" accept="image/*"
+                                class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                            </div>
                         </div>
 
                         <!-- Portal Branding Name Input -->
                         <div class="mb-5">
-                        <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Portal Branding Name</label>
-                        <input type="text" v-model="tempBrandingName" placeholder="Enter branding name"
-                            class="w-full h-10 border rounded-lg p-2 text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600">
+                            <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Portal Branding Name</label>
+                            <input type="text" v-model="tempBrandingName" placeholder="Enter branding name"
+                                class="w-full h-10 border rounded-lg p-2 text-gray-900 dark:text-white dark:bg-gray-700 dark:border-gray-600">
                         </div>
 
                         <!-- Favicon Upload -->
                         <div class="mb-5">
                             <label class="block font-medium text-gray-700 dark:text-gray-300 mb-2">Favicon</label>
-                            <input type="file" @change="uploadFavicon" accept="image/*" class="border rounded-lg p-2 w-full">
+                            <input type="file" @change="uploadFavicon" accept="image/*" class="border rounded-lg w-full">
                         </div>
 
                         <!-- Preview Section -->
@@ -76,56 +77,12 @@
                             </div>
                         </div>
                         </div>
-
-                        <!-- Apply Changes Button -->
-                        <div class="flex justify-end mt-5">
-                        <button @click="applyBranding" class="btn bg-primary text-white px-5 py-2 rounded-lg">
-                            Apply Changes
-                        </button>
-                        </div>
                     </div>
                     </div>
                 </div>
             </form>
         </div>
 
-        <!-- adding roles -->
-        <div v-if="isCreating || isEditing"
-            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
-            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
-                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">
-                            {{ isEditing ? 'Edit Role' : 'Add New Role'}}
-                        </h2>
-                    </span>
-                    <button type="button" @click="closeModal"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                    </button>
-                </div>
-
-                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
-                    <div class="w-full flex flex-col space-y-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">
-                            Role Name</h3>
-                        <input v-model="form.name" type="text" id="name"
-                            placeholder="Enter Scholarship Name"
-                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-                    </div>
-                    <div class="mt-2">
-                        <button type="submit"
-                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            {{ isEditing ? 'Update Role' : 'Add Role' }}</button>
-                    </div>
-                </form>
-            </div>
-        </div>
     </AuthenticatedLayout>
 </template>
 
@@ -144,49 +101,48 @@ defineProps({
     cashier: Array,
 });
 
-
-const isCreating = ref(false);
-const isEditing = ref(false);
-
-
-const toggleAddRole = () => {
-    isCreating.value = !isCreating.value;
-};
-
-const closeModal = () => {
-    isCreating.value = false;
-    isEditing.value = false;
-    resetForm();
-};
-
-// Temporary state for previews
+// States for both editing and display
 const tempLogoLight = ref(null);
-const tempLogoDark = ref(null);
-const tempBrandingName = ref("");
+const tempBrandingName = ref('');
+const finalLogoLight = ref(null);
+const finalBrandingName = ref('');
 
-// Saved branding state (Only updates when "Apply Branding" is clicked)
-const savedLogoLight = ref(null);
-const savedLogoDark = ref(null);
-const savedBrandingName = ref("");
-
-// Function to preview logo before saving
-const previewLogo = (type, event) => {
+// Function to handle logo preview
+const previewLogo = (mode, event) => {
   const file = event.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (type === "light") tempLogoLight.value = reader.result;
-      if (type === "dark") tempLogoDark.value = reader.result;
-    };
-    reader.readAsDataURL(file);
+  if (!file) return;
+  
+  // Validate file type
+  if (!file.type.match('image.*')) {
+    alert('Please select an image file');
+    return;
   }
+  
+  // Create a URL for the image
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    if (mode === 'light') {
+      tempLogoLight.value = e.target.result;
+    }
+  };
+  reader.readAsDataURL(file);
 };
 
-// Apply branding updates
-const applyBranding = () => {
-  savedLogoLight.value = tempLogoLight.value;
-  savedLogoDark.value = tempLogoDark.value;
-  savedBrandingName.value = tempBrandingName.value;
+// Function to save changes (and keep the preview)
+const saveChanges = () => {
+  // Update the final values to match the temporary ones
+  finalLogoLight.value = tempLogoLight.value;
+  finalBrandingName.value = tempBrandingName.value;
+  
+  // Important: Do NOT reset the temp values here
+  // This ensures the preview remains visible
+};
+
+// Function to reset changes
+const resetChanges = () => {
+  // Reset the temporary values to match the saved final values
+  tempLogoLight.value = finalLogoLight.value;
+  tempBrandingName.value = finalBrandingName.value;
 };
 
 const resetForm = () => {

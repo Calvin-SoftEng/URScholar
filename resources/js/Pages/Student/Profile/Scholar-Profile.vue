@@ -126,8 +126,13 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">Year and Semester</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ grade ? grade.grade : 'N/A'
-                                        }}</span>
+                                    <div class="flex flex-col items-end">
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ grade ? grade.grade : 'N/A'
+                                            }}</span>
+                                        <button class="text-sm">
+                                            View Certificate of Grade
+                                        </button>
+                                    </div>
                                 </div>
 
                                 <hr class="border-gray-300 my-4">

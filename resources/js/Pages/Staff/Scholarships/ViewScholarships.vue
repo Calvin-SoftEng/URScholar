@@ -66,12 +66,12 @@
                                         }) }}
                                     </p>
 
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                    <!-- <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                         <span class="font-medium">Requirements Deadline:</span>
                                         {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
                                             year: 'numeric', month: 'long', day: 'numeric'
                                         }) }}
-                                    </p>
+                                    </p> -->
                                 </div>
 
                                 <!-- Additional Info -->
@@ -133,7 +133,7 @@
                                             }) }}
                                         </p>
 
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                        <!-- <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                             <span class="font-medium">Requirements Deadline:</span>
                                             <span
                                                 v-if="scholarship.requirements.length && scholarship.requirements[0].date_end">
@@ -144,7 +144,7 @@
                                             <span v-else>
                                                 No deadline set
                                             </span>
-                                        </p>
+                                        </p> -->
                                     </div>
 
                                     <!-- Additional Info -->
