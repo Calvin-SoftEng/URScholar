@@ -15,8 +15,8 @@ use App\Http\Controllers\Staff\MessageController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\MISController;
 use App\Http\Controllers\Staff\SettingsController;
-use App\Http\Controllers\Staff\SponsorController;
 use App\Http\Controllers\Staff\StaffController;
+use App\Http\Controllers\Sponsor\SponsorController;
 use App\Http\Controllers\SuperAdminController;
 use App\Http\Controllers\NotificationController;
 use App\Events\TestEvent;
@@ -171,6 +171,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/settings/scholarship-forms', [SettingsController::class, 'scholarship_forms'])->name('settings.scholarship_forms');
 
+    Route::get('/settings/verification-forms', [SettingsController::class, 'verification_forms'])->name('settings.verification_forms');
+
         // Scholarship Forms
         Route::post('/settings/scholarship-forms', [SettingsController::class, 'store'])->name('scholarship.forms.store');
         Route::put('/settings/scholarship-forms{scholarshipForm}', [SettingsController::class, 'update'])->name('scholarship.forms.update');
@@ -180,8 +182,6 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
         Route::post('/settings/scholarship-forms/data', [SettingsController::class, 'storeData'])->name('scholarship.form.data.store');
         Route::put('/settings/scholarship-forms/data{scholarshipFormData}', [SettingsController::class, 'updateData'])->name('scholarship.form.data.update');
         Route::delete('/scholarship-form-data/{scholarshipFormData}', [SettingsController::class, 'destroyData'])->name('scholarship.form.data.destroy');
-
-    Route::get('/settings/verification-forms', [SettingsController::class, 'verification_forms'])->name('settings.verification_forms');
 
 });
 
@@ -274,8 +274,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/student/applying-scholarship/{scholarship}', [StudentController::class, 'scholarship_details'])->name('scholarship.details');
 
     // Application
-    Route::get('/student/applying-scholarship/{scholarship}/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
-    Route::post('/student/applying-scholarship/application/upload', [StudentController::class, 'submitApplication'])->name('scholarship.submit_application');
+    Route::get('/student/applying-scholarship/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
 });
 
 Route::middleware(['auth'])->group(function () {
