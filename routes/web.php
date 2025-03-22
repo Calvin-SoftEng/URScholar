@@ -264,7 +264,6 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::post('/applications', [ApplicationController::class, 'store'])->name('application.store');
 
     //Non -Scholars Scholarship Application
-<<<<<<< HEAD
     
     //Listing
     Route::get('/available-scholarships', [StudentController::class, 'scholarships'])->name('scholarship.scholarships');
@@ -273,12 +272,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/student/applying-scholarship/{scholarship}', [StudentController::class, 'scholarship_details'])->name('scholarship.details');
 
     // Application
-    Route::get('/student/applying-scholarship/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
-=======
-    Route::get('/student/scholarship/scholarship-details', [StudentController::class, 'scholarship_details'])->name('scholarship.details');
-
-    ;
->>>>>>> parent of 6112118 (v4 okay na)
+    Route::get('/student/applying-scholarship/{scholarship}/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
 });
 
 Route::middleware(['auth'])->group(function () {

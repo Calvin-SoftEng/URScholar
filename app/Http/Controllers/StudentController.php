@@ -10,12 +10,15 @@ use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
+use App\Models\Criteria;
+use App\Models\CampusRecipients;
 use App\Models\Batch;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
 use App\Models\User;
 use App\Models\Scholar;
 use App\Models\SchoolYear;
+use App\Models\Sponsor;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -474,12 +477,12 @@ class StudentController extends Controller
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
         if (!$scholar) {
-            return redirect()->route('student.confirmation');
+            return redirect()->route('scholarship.scholarships');
         }
 
         $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
         if (!$scholarship) {
-            return redirect()->route('student.confirmation');
+            return redirect()->route('scholarship.scholarships');
         }
 
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
@@ -536,6 +539,19 @@ class StudentController extends Controller
             'requirements' => $requirements,
         ]);
 
+    }
+
+    public function scholarships()
+    {
+        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
+        $sponsors = Sponsor::all();
+        $schoolyear = SchoolYear::all();
+
+        return Inertia::render('Student/Scholarships/Scholarships', [
+            'scholarships' => $scholarships,
+            'sponsors' => $sponsors,
+            'schoolyears' => $schoolyear,
+        ]);
     }
 
     public function profile()
@@ -736,14 +752,52 @@ class StudentController extends Controller
     //     return Inertia::render('Student/Application/Scholar_Application');
     // }
 
-    public function scholarship_details()
+    public function scholarship_details(Scholarship $scholarship)
     {
-        return Inertia::render('Student/Scholarships/ScholarshipApplicationDetails');
+        $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
+
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+        $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
+
+        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
+        $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
+
+        return Inertia::render('Student/Scholarships/ScholarshipDetails', [
+            'scholarship' => $scholarship,
+            'sponsor' => $sponsor,
+            'requirements' => $requirements,
+            'deadline' => $deadline,
+            'selectedCampus' => $selectedCampus,
+            'criterias' => $criteria,
+            'grade' => $grade,
+        ]);
     }
 
-    public function scholarship_application()
+    public function scholarship_application(Scholarship $scholarship)
     {
-        return Inertia::render('Student/Scholarships/ScholarshipApplication');
+        $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
+
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+        $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
+
+        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
+        $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
+
+        return Inertia::render('Student/Scholarships/ScholarshipApplication', [
+            'scholarship' => $scholarship,
+            'sponsor' => $sponsor,
+            'requirements' => $requirements,
+            'deadline' => $deadline,
+            'selectedCampus' => $selectedCampus,
+            'criterias' => $criteria,
+            'grade' => $grade,
+        ]);
     }
 
 
