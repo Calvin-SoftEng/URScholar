@@ -167,9 +167,9 @@ const fallbackCourseDisplay = computed(() => {
     return 'Course information unavailable';
 });
 
-// const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-US", {
-//     year: "numeric",
-//     month: "long",
-//     day: "numeric"
-// });
+    const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
 </script>
