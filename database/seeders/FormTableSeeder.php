@@ -69,7 +69,7 @@ class FormTableSeeder extends Seeder
 
         //Scholarship Forms -- Family Type of Housing
         ScholarshipForm::create([
-            'name' => 'Monthly Family Income',
+            'name' => 'Family Type of Housing',
         ]);
 
         ScholarshipFormData::create([
