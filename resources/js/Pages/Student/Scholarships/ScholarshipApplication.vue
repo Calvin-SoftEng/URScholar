@@ -76,7 +76,7 @@
                                                         class="flex items-center space-x-2">
                                                         <span class="text-blue-600 font-medium">✔</span>
                                                         <span class="text-gray-700 dark:text-gray-300">{{ criterion
-                                                            }}</span>
+                                                        }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -91,7 +91,7 @@
                                                         class="flex items-center space-x-2">
                                                         <span class="text-green-600">✅</span>
                                                         <span class="text-gray-700 dark:text-gray-300">{{ detail
-                                                            }}</span>
+                                                        }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -170,10 +170,11 @@
                                                 <div class="flex justify-between items-center gap-5">
                                                     <div class="flex items-center space-x-2">
                                                         <span
-                                                            class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">A</span>
+                                                            class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">{{
+                                                            String.fromCharCode(65 + index) }}</span>
                                                         <span class="font-semibold text-gray-800">{{
                                                             requirement.requirements
-                                                            }}</span>
+                                                        }}</span>
                                                     </div>
                                                     <label
                                                         class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
@@ -274,7 +275,8 @@ const props = defineProps({
 const form = useForm({
     essay: "",
     files: {},
-    requirements: []
+    requirements: [],
+    scholarship_id: props.scholarship.id,
 });
 
 
@@ -314,8 +316,12 @@ const submitRequirements = async () => {
         // Append essay data
         formData.append('essay', form.essay);
 
-        // Append requirements data
-        formData.append('requirements', JSON.stringify(form.requirements));
+        formData.append('scholarship_id', form.scholarship_id);
+
+        // Add req array from requirements
+        form.requirements.forEach((requirement, index) => {
+            formData.append(`req[${index}]`, requirement.id);
+        });
 
         form.post('/student/applying-scholarship/application/upload', {
             forceFormData: true,
@@ -331,7 +337,6 @@ const submitRequirements = async () => {
         console.error('Error submitting form:', error);
     }
 };
-
 
 
 const activeStep = ref(0);

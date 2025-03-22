@@ -37,6 +37,42 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
+
+    public function checkCredentials(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'campus' => 'required',
+        ]);
+
+        $campus = Campus::where('id', $request['campus'])->first();
+
+        // Check if student exists with the provided email
+        $studentEmail = Student::where('email', $request->email)->first();
+
+        // Check if the campus exists
+        if (!$campus) {
+            return back()->withErrors([
+                'campus' => 'The selected campus was not found.',
+            ])->withInput();
+        }
+
+        // Check if student exists and belongs to the selected campus
+        if (!$studentEmail || $studentEmail->campus_id !== $campus->id) {
+
+            // If email doesn't exist or campus doesn't match, return with error message
+            return back()->withErrors([
+                'credentials' => 'The provided email and campus combination was not found in our system. Please verify your information or contact your campus administrator for assistance.',
+            ])->withInput();
+        }
+
+        // If credentials are valid, proceed with the registration process
+        return redirect()->route('register.proceed', [
+            'email' => $request->email,
+            'campus' => $campus
+        ]);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -44,11 +80,13 @@ class RegisteredUserController extends Controller
             'campus' => 'required',
         ]);
 
+        $campus = Campus::where('id', $request['campus'])->first();
+
         // Check if student exists with the provided email
         $studentEmail = Student::where('email', $request->email)->first();
 
         // Check if student exists and belongs to the selected campus
-        if ($studentEmail && $studentEmail->campus === $request->campus) {
+        if ($studentEmail || $studentEmail->campus_id !== $campus->id) {
             // Generate random password
             $password = Str::random(8);
 
@@ -66,7 +104,7 @@ class RegisteredUserController extends Controller
                 'email' => $studentEmail['email'],
                 'first_name' => $studentEmail['first_name'],
                 'last_name' => $studentEmail['last_name'],
-                'campus' => $studentEmail['campus'],
+                'campus' => $campus->id,
                 'password' => Hash::make($password),
             ]);
 
@@ -108,6 +146,8 @@ class RegisteredUserController extends Controller
             'email' => 'required|email',
             'campus' => 'required',
         ]);
+
+        dd($validated);
 
         // Check if student exists with the provided email
         $student = Student::where('email', $validated['email'])->first();
@@ -160,27 +200,5 @@ class RegisteredUserController extends Controller
                 'credentials' => 'The provided email and campus do not match our records.',
             ])->withInput();
         }
-    }
-
-    public function checkCredentials(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'campus' => 'required',
-        ]);
-
-        // Check if student exists with the provided email
-        $studentEmail = Student::where('email', $request->email)->first();
-
-        // Check if student exists and belongs to the selected campus
-        if (!$studentEmail || $studentEmail->campus !== $request->campus) {
-            // If email doesn't exist or campus doesn't match, return with error message
-            return back()->withErrors([
-                'credentials' => 'The provided email and campus combination was not found in our system. Please verify your information or contact your campus administrator for assistance.',
-            ])->withInput();
-        }
-
-        // If credentials are valid, proceed with the registration process
-        return redirect()->route('register.proceed', ['email' => $request->email, 'campus' => $request->campus]);
     }
 }
