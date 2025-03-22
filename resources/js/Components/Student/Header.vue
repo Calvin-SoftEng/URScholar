@@ -69,12 +69,12 @@
 
         <!-- avatar -->
         <div v-if="$page.props.auth.user.picture">
-          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"@click.stop="toggleUserDropdown"
             data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
             :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
         </div>
         <div v-else>
-          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
             data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
             :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
         </div>
@@ -128,7 +128,7 @@
     
     <!-- avatar dropdown -->
         <!-- Dropdown menu -->
-        <div id="userDropdown"
+        <div id="userDropdown" v-show="isDropdownOpen"
           class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
           <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
             <div>{{ $page.props.auth.user.name }}</div>
@@ -237,6 +237,7 @@
 <script setup>
 import { ref, defineProps, onMounted, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import { initFlowbite } from 'flowbite';
 
 // Props
 defineProps({
@@ -263,37 +264,41 @@ const items = ref([
   }
 ]);
 
-const isOpen = ref(false);
+// State to track dropdown visibility
+const isDropdownOpen = ref(false);
 
-// Toggle menu visibility
-const toggleMenu = () => {
-  isOpen.value = !isOpen.value;
+// Toggle dropdown visibility
+const toggleUserDropdown = () => {
+  isDropdownOpen.value = !isDropdownOpen.value;
+};
+
+// Close dropdown when clicking outside
+const closeDropdown = (event) => {
+  const dropdown = document.getElementById('userDropdown');
+  const avatar = document.getElementById('avatarButton');
   
-  // Prevent body scrolling when menu is open
-  if (isOpen.value) {
-    document.body.style.overflow = 'hidden';
-  } else {
-    document.body.style.overflow = '';
+  if (isDropdownOpen.value && 
+      dropdown && 
+      avatar && 
+      !dropdown.contains(event.target) && 
+      !avatar.contains(event.target)) {
+    isDropdownOpen.value = false;
   }
 };
 
-// Close menu when pressing escape key
-const handleEscKey = (event) => {
-  if (event.key === 'Escape' && isOpen.value) {
-    toggleMenu();
-  }
-};
-
-// Attach event listeners
+// Add click listener to document to close dropdown when clicking outside
 onMounted(() => {
-  document.addEventListener('keydown', handleEscKey);
+  initFlowbite();
+  document.addEventListener('click', closeDropdown);
 });
 
+// Clean up event listener when component is unmounted
 onUnmounted(() => {
-  document.removeEventListener('keydown', handleEscKey);
-  // Ensure body scroll is restored when component is unmounted
-  document.body.style.overflow = '';
+  initFlowbite();
+  document.removeEventListener('click', closeDropdown);
 });
+
+
 </script>
 
 
