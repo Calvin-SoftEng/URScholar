@@ -267,9 +267,9 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/account-application', [StudentController::class, 'scholarship_application'])->name('application.index');
 
     //Non -Scholars Scholarship Application
-    Route::get('/student/scholarship/scholarship-details', [StudentController::class, 'scholarship_details'])->name('scholarship.details');
+    Route::get('/student/applying-scholarship/{scholarship}', [StudentController::class, 'scholarship_details'])->name('scholarship.details');
 
-    ;
+    Route::get('/available-scholarships', [StudentController::class, 'scholarships'])->name('scholarship.scholarships');
 });
 
 Route::middleware(['auth'])->group(function () {
