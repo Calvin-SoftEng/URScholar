@@ -131,6 +131,12 @@ class ScholarshipController extends Controller
 
     public function show(Request $request, Scholarship $scholarship)
     {
+        // If it's a one-time payment scholarship, redirect to the appropriate list
+        if ($scholarship->scholarshipType == 'One-time Payment') {
+            // Pass the scholarship ID as a named parameter to match the route definition
+            return redirect()->route('scholarship.onetime_list', ['scholarship' => $scholarship->id]);
+        }
+
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with([
                 'scholars' => function ($query) {
@@ -154,16 +160,11 @@ class ScholarshipController extends Controller
 
         $campuses = Campus::all();
         $courses = Course::all();
-
         $students = Student::all();
-
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $total_scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
-
         $scholarship_form = ScholarshipForm::all();
         $scholarship_form_data = ScholarshipFormData::all();
-
-
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
@@ -188,78 +189,78 @@ class ScholarshipController extends Controller
 
     public function onetime_list(Request $request, Scholarship $scholarship)
     {
-        // $scholarshipId = $scholarship->id;
+        // Now we've changed the parameter to use Laravel's model binding
+        $scholarshipId = $scholarship->id;
 
-        // // Checking if scholar's payment claimed
-        // $payout = Payout::where('scholarship_id', $scholarshipId)
-        //     ->where('status', 'claimed')
-        //     ->get();
 
-        // $scholarship = Scholarship::findOrFail($scholarshipId);
+        // Checking if scholar's payment claimed
+        $payout = Payout::where('scholarship_id', $scholarshipId)
+            ->where('status', 'claimed')
+            ->get();
 
-        // // Get all requirements for this scholarship
-        // $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
-        // $totalRequirements = $requirements->count();
+        // Get all requirements for this scholarship
+        $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
+        $totalRequirements = $requirements->count();
 
-        // // Get scholars directly without batch relationship
-        // $scholars = Scholar::where('scholarship_id', $scholarshipId)
-        //     ->when($request->input('selectedYear'), function ($query, $year) {
-        //         return $query->where('school_year', $year);
-        //     })
-        //     ->when($request->input('selectedSem'), function ($query, $sem) {
-        //         return $query->where('semester', $sem);
-        //     })
-        //     ->with(['campus', 'course']) // Eager load campus and course relationships
-        //     ->get()
-        //     ->map(function ($scholar) use ($totalRequirements) {
-        //         // Get approved requirements for this scholar
-        //         $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
-        //             ->where('status', 'Approved')
-        //             ->count();
+        // Get scholars directly without batch relationship
+        $scholars = Scholar::where('scholarship_id', $scholarshipId)
+            ->when($request->input('selectedYear'), function ($query, $year) {
+                return $query->where('school_year', $year);
+            })
+            ->when($request->input('selectedSem'), function ($query, $sem) {
+                return $query->where('semester', $sem);
+            })
+            ->with(['campus', 'course']) // Eager load campus and course relationships
+            ->get()
+            ->map(function ($scholar) use ($totalRequirements) {
+                // Get approved requirements for this scholar
+                $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Approved')
+                    ->count();
 
-        //         // Determine status
-        //         $status = 'No submission';
-        //         if ($totalRequirements > 0) {
-        //             if ($approvedRequirements === 0) {
-        //                 $status = 'No submission';
-        //             } elseif ($approvedRequirements === $totalRequirements) {
-        //                 $status = 'Complete';
-        //             } else {
-        //                 $status = 'Incomplete';
-        //             }
-        //         }
+                // Determine status
+                $status = 'No submission';
+                if ($totalRequirements > 0) {
+                    if ($approvedRequirements === 0) {
+                        $status = 'No submission';
+                    } elseif ($approvedRequirements === $totalRequirements) {
+                        $status = 'Complete';
+                    } else {
+                        $status = 'Incomplete';
+                    }
+                }
 
-        //         // Calculate progress percentage
-        //         $progress = $totalRequirements > 0
-        //             ? ($approvedRequirements / $totalRequirements) * 100
-        //             : 0;
+                // Calculate progress percentage
+                $progress = $totalRequirements > 0
+                    ? ($approvedRequirements / $totalRequirements) * 100
+                    : 0;
 
-        //         return [
-        //             'id' => $scholar->id,
-        //             'urscholar_id' => $scholar->urscholar_id,
-        //             'first_name' => $scholar->first_name,
-        //             'last_name' => $scholar->last_name,
-        //             'middle_name' => $scholar->middle_name,
-        //             'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
-        //             'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
-        //             'year_level' => $scholar->year_level,
-        //             'grant' => $scholar->grant,
-        //             'status' => $status,
-        //             'submittedRequirements' => $approvedRequirements,
-        //             'totalRequirements' => $totalRequirements,
-        //             'progress' => $progress,
-        //         ];
-        //     });
+                return [
+                    'id' => $scholar->id,
+                    'urscholar_id' => $scholar->urscholar_id,
+                    'first_name' => $scholar->first_name,
+                    'last_name' => $scholar->last_name,
+                    'middle_name' => $scholar->middle_name,
+                    'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                    'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
+                    'year_level' => $scholar->year_level,
+                    'grant' => $scholar->grant,
+                    'status' => $status,
+                    'submittedRequirements' => $approvedRequirements,
+                    'totalRequirements' => $totalRequirements,
+                    'progress' => $progress,
+                ];
+            });
 
         return Inertia::render('Staff/Scholarships/OneTime_Applicants', [
-            // 'scholarship' => $scholarship,
-            // 'scholars' => $scholars,
-            // 'payout' => $payout,
-            // 'requirements' => $requirements,
-            // 'schoolyear' => $request->input('selectedYear')
-            //     ? SchoolYear::find($request->input('selectedYear'))
-            //     : null,
-            // 'selectedSem' => $request->input('selectedSem', ''),
+            'scholarship' => $scholarship,
+            'scholars' => $scholars,
+            'payout' => $payout,
+            'requirements' => $requirements,
+            'schoolyear' => $request->input('selectedYear')
+                ? SchoolYear::find($request->input('selectedYear'))
+                : null,
+            'selectedSem' => $request->input('selectedSem', ''),
         ]);
     }
 
