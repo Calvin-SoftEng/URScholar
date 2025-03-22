@@ -134,7 +134,12 @@ class ScholarshipController extends Controller
         // If it's a one-time payment scholarship, redirect to the appropriate list
         if ($scholarship->scholarshipType == 'One-time Payment') {
             // Pass the scholarship ID as a named parameter to match the route definition
-            return redirect()->route('scholarship.onetime_list', ['scholarship' => $scholarship->id]);
+            return redirect()->route('scholarship.onetime_list', [
+                'scholarshipId' => $scholarship->id,
+            ])->with([
+                        'selectedYear' => $request->input('selectedYear'),
+                        'selectedSem' => $request->input('selectedSem')
+                    ]);
         }
 
         $batches = Batch::where('scholarship_id', $scholarship->id)
@@ -187,10 +192,11 @@ class ScholarshipController extends Controller
         ]);
     }
 
-    public function onetime_list(Request $request, Scholarship $scholarship)
+    public function onetime_list(Request $request, $scholarshipId)
     {
+        // dd($scholarshipId);
         // Now we've changed the parameter to use Laravel's model binding
-        $scholarshipId = $scholarship->id;
+        $scholarship = Scholarship::where('id', $scholarshipId)->first();
 
 
         // Checking if scholar's payment claimed
