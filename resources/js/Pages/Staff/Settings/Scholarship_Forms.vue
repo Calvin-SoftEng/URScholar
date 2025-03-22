@@ -4,26 +4,26 @@
             class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <h1 class="text-2xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Scholarship Forms
+                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Eligibility Standards
                 </h1>
 
                 <div class="w-full mt-5">
                     <div class="relative overflow-x-auto rounded-lg w-full p-5 bg-white">
                         <!-- Scholarship Forms Section -->
-                        <div class="mb-5">
+                        <div class="mb-5 space-y-5">
                             <div class="flex flex-row justify-between border-b items-center pb-3">
-                                <h2 class="text-lg font-semibold text-gray-700">Scholarship Criteria</h2>
-                                <button @click="toggleNewForm" class="text-blue-600 text-sm hover:underline">Add New
-                                    Form</button>
+                                <h2 class="text-lg font-semibold text-gray-700">Scholarship Standards</h2>
+                                <!-- <button @click="toggleNewForm" class="text-blue-600 text-sm hover:underline">Add New
+                                    Form</button> -->
                             </div>
-                            <div class="mt-3 space-y-5">
+                            
                                 <!-- test criteria muna -->
                                 <div 
                                     class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                                     <div
                                         class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                                         <div>
-                                            <span class="font-semibold font-quicksand text-lg">List of Scholarship Criterias</span>
+                                            <span class="font-semibold font-quicksand text-lg">Financial Need-Based Criteria</span>
                                         </div>
                                         <div class="flex gap-2">
                                             <button @click="toggleEditForm"
@@ -38,7 +38,7 @@
                                             <!-- Loop through scholarship form data -->
                                             <div
                                                 class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">Must be a Filipino</span>
+                                                <span class="text-gray-700">Must belong to a low-income household (based on government records)</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEditCriteria"
                                                         class="p-1 rounded hover:bg-gray-200">
@@ -56,8 +56,158 @@
                                     </div>
                                 </div>
 
+                                <!-- test criteria muna -->
+                                <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div
+                                        class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <span class="font-semibold font-quicksand text-lg">Community Involvement & Leadership Criteria</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button @click="toggleEditForm"
+                                                class="text-blue-600 text-sm hover:underline">Edit Form</button>
+                                            <button @click="toggleAddCriteria"
+                                                class="text-blue-600 text-sm hover:underline">Add Criteria</button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <!-- Loop through scholarship form data -->
+                                            <div
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Must hold an officer position in a student organization</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEditCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                    <button @click="deleteCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- test criteria muna -->
+                                <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div
+                                        class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <span class="font-semibold font-quicksand text-lg">Residency & Citizenship Criteria</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button @click="toggleEditForm"
+                                                class="text-blue-600 text-sm hover:underline">Edit Form</button>
+                                            <button @click="toggleAddCriteria"
+                                                class="text-blue-600 text-sm hover:underline">Add Criteria</button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <!-- Loop through scholarship form data -->
+                                            <div
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Must be a Filipino Citizen</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEditCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                    <button @click="deleteCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Must have lived in the community for at least 3 years</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEditCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                    <button @click="deleteCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                 <!-- test criteria muna -->
+                                 <div 
+                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    <div
+                                        class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
+                                        <div>
+                                            <span class="font-semibold font-quicksand text-lg">Special Group Scholarships</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button @click="toggleEditForm"
+                                                class="text-blue-600 text-sm hover:underline">Edit Form</button>
+                                            <button @click="toggleAddCriteria"
+                                                class="text-blue-600 text-sm hover:underline">Add Criteria</button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                                            <!-- Loop through scholarship form data -->
+                                            <div
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">Open only to students with disabilities</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEditCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                    <button @click="deleteCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
+                                                <span class="text-gray-700">For single parents or children of single parents</span>
+                                                <div class="ml-2 flex gap-1">
+                                                    <button @click="toggleEditCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                    <button @click="deleteCriteria"
+                                                        class="p-1 rounded hover:bg-gray-200">
+                                                        <font-awesome-icon :icon="['fas', 'box-archive']"
+                                                            class="text-primary" />
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
+
                                 <!-- Loop through scholarship forms -->
-                                <div v-for="form in scholarship_form" :key="form.id"
+                                <!-- <div v-for="form in scholarship_form" :key="form.id"
                                     class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                                     <div
                                         class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
@@ -74,7 +224,7 @@
 
                                     <div>
                                         <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                                            <!-- Loop through scholarship form data -->
+                                            
                                             <div v-for="data in getFormData(form.id)" :key="data.id"
                                                 class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
                                                 <span class="text-gray-700">{{ data.name }}</span>
@@ -93,8 +243,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                </div> -->
+                            
                         </div>
                     </div>
                 </div>
