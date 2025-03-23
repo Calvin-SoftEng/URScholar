@@ -138,7 +138,7 @@ import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/Components/ui/select';
-import ApplicantList from '../../../Components/Staff/OneTimeScholars/ApplicantList.vue';
+import ApplicantList from '../../../../Components/Staff/OneTimeScholars/ApplicantList.vue';
 import PayrollTable from '@/Components/Staff/ScholarsTabs/PayrollTable.vue';
 import { cloneDeep, isEqual } from 'lodash';
 

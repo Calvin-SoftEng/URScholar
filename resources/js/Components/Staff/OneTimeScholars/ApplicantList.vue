@@ -2,11 +2,14 @@
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
+        <Link :href="(route('scholarship.onetime_scholars'))">
         <button
           class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
           @click="generateReport">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Publish Applicant List
         </button>
+        </Link>
+
       </div>
       <!-- <form class="w-3/12">
         <label for="default-search"
@@ -98,10 +101,11 @@
                     </td>
                     <td>
                       <Link :href="`/scholarships/scholar=${scholar.id}`">
-                        <button class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
-                          aria-label="View Details">
-                          <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
-                        </button>
+                      <button
+                        class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
+                        aria-label="View Details">
+                        <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
+                      </button>
                       </Link>
                     </td>
                   </tr>
@@ -141,7 +145,8 @@
                     <td>{{ scholar.campus }}</td>
                     <td>{{ scholar.date_applied }}</td>
                     <td>
-                      <span class="text-sm text-gray-700">{{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}</span>
+                      <span class="text-sm text-gray-700">{{ scholar.submittedRequirements }}/{{
+                        scholar.totalRequirements }}</span>
                     </td>
                     <td>
                       <span class="font-bold text-gray-800">{{ scholar.gwa.toFixed(2) }}</span>
@@ -157,10 +162,11 @@
                     </td>
                     <td>
                       <Link :href="`/scholarships/scholar=${scholar.id}`">
-                        <button class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
-                          aria-label="View Details">
-                          <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
-                        </button>
+                      <button
+                        class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
+                        aria-label="View Details">
+                        <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
+                      </button>
                       </Link>
                     </td>
                   </tr>
@@ -198,15 +204,15 @@
       </div>
     </div>
   </div>
-   <!-- Toast notifications -->
-   <ToastProvider>
-      <ToastRoot v-if="toast.visible"
-        class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-        <ToastTitle class="font-semibold dark:text-dtext">{{ toast.title }}</ToastTitle>
-        <ToastDescription class="text-gray-100 dark:text-dtext">{{ toast.message }}</ToastDescription>
-      </ToastRoot>
-      <ToastViewport class="fixed bottom-4 right-4" />
-    </ToastProvider>
+  <!-- Toast notifications -->
+  <ToastProvider>
+    <ToastRoot v-if="toast.visible"
+      class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+      <ToastTitle class="font-semibold dark:text-dtext">{{ toast.title }}</ToastTitle>
+      <ToastDescription class="text-gray-100 dark:text-dtext">{{ toast.message }}</ToastDescription>
+    </ToastRoot>
+    <ToastViewport class="fixed bottom-4 right-4" />
+  </ToastProvider>
 </template>
 
 <script setup>

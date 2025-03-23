@@ -136,15 +136,15 @@ class ScholarshipController extends Controller
     public function show(Request $request, Scholarship $scholarship)
     {
         // If it's a one-time payment scholarship, redirect to the appropriate list
-        // if ($scholarship->scholarshipType == 'One-time Payment') {
-        //     // Pass the scholarship ID as a named parameter to match the route definition
-        //     return redirect()->route('scholarship.onetime_list', [
-        //         'scholarshipId' => $scholarship->id,
-        //     ])->with([
-        //                 'selectedYear' => $request->input('selectedYear'),
-        //                 'selectedSem' => $request->input('selectedSem')
-        //             ]);
-        // }
+        if ($scholarship->scholarshipType == 'One-time Payment') {
+            // Pass the scholarship ID as a named parameter to match the route definition
+            return redirect()->route('scholarship.onetime_list', [
+                'scholarshipId' => $scholarship->id,
+            ])->with([
+                        'selectedYear' => $request->input('selectedYear'),
+                        'selectedSem' => $request->input('selectedSem')
+                    ]);
+        }
 
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with([
@@ -293,7 +293,7 @@ class ScholarshipController extends Controller
                 ];
             });
 
-        return Inertia::render('Staff/Scholarships/OneTime_Applicants', [
+        return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
             'payout' => $payout,
@@ -433,6 +433,20 @@ class ScholarshipController extends Controller
 
 
         return back()->with('success', 'Scholarship recipients and requirements saved successfully');
+    }
+
+    public function onetime_scholars()
+    {
+        // $scholars = $scholarship->scholars;
+
+        // $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+
+        return Inertia::render('Staff/Scholarships/One-Time/One-TimeScholars', [
+            // 'scholarship' => $scholarship,
+            // 'scholars' => $scholars,
+            // 'requirements' => $requirements,
+        ]);
     }
 
     public function send(Scholarship $scholarship)
