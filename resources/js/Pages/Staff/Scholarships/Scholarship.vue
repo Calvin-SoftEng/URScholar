@@ -555,8 +555,10 @@
                     <div class="mb-4">
                         <label for="batchSelection"
                             class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                            Select a Batch to Forward:
+                            Select a Date:
                         </label>
+                        <InputError v-if="errors?.family_housing" :message="'tite'"
+                                                class="items-center flex text-xs" />
                         <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
                             <!-- Application Start Date -->
                             <div class="flex flex-col w-full">
@@ -624,10 +626,16 @@
                     </div>
 
                     <!-- Forward Button -->
-                    <div class="mt-4">
+                    <div v-if="completedBatches === batches.length" class="mt-4">
                         <button :disabled="isSubmitting || selectedBatches.length === 0" @click="forwardBatches"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                        </button>
+                    </div>
+                    <div v-else>
+                        <button v-tooltip.left="'Must Complete all Batches or Due date lang beh'" disabled
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Forward
                         </button>
                     </div>
                 </div>
@@ -658,6 +666,7 @@ import { Checkbox } from '@/Components/ui/checkbox'
 import { Input } from '@/Components/ui/input'
 import { initFlowbite } from 'flowbite';
 import { Tooltip } from 'primevue';
+import InputError from '@/Components/InputError.vue';
 
 
 // Define props to include scholars data
