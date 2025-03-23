@@ -17,6 +17,7 @@ use App\Models\SubmittedRequirements;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use League\Csv\Reader;
 
 class ScholarController extends Controller
@@ -152,6 +153,32 @@ class ScholarController extends Controller
         }
 
     }
+
+    public function downloadFile(Request $request)
+    {
+        // Validate the request
+        $validated = $request->validate([
+            'filePath' => 'required|string',
+            'fileName' => 'required|string',
+        ]);
+
+        $filePath = $validated['filePath'];
+        $fileName = $validated['fileName'];
+
+        // Check if file exists
+        if (!Storage::exists($filePath)) {
+            return response()->json(['error' => 'File not found'], 404);
+        }
+
+        // Determine the MIME type
+        $mimeType = Storage::mimeType($filePath);
+
+        // Return file as a download
+        return Storage::download($filePath, $fileName, [
+            'Content-Type' => $mimeType,
+        ]);
+    }
+
     public function upload(Request $request, Scholarship $scholarship)
     {
         $validator = Validator::make($request->all(), [

@@ -33,8 +33,8 @@ return new class extends Migration
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->string('urscholar_id')->unique();
             $table->string('qr_code')->nullable();
-            $table->string('app_no');
-            $table->string('award_no');
+            $table->string('app_no')->nullable();;
+            $table->string('award_no')->nullable();;
             $table->string('last_name');
             $table->string('first_name');
             $table->string('extname')->nullable();

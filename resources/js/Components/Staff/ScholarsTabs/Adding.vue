@@ -232,6 +232,10 @@
         </div>
 
         <div v-if="BulkAdding" class="mx-auto w-full justify-center items-center flex flex-col gap-4 ">
+            <button @click="downloadFile" class="download-btn" :disabled="isLoading">
+                <span v-if="isLoading">Downloading...</span>
+                <span v-else>{{ buttonText }}</span>
+            </button>
             <form @submit.prevent="submitForm" class="w-6/12 flex flex-col gap-4">
                 <div v-if="errors?.student" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
                     <p class="text-red-600 text-sm">{{ errors.student }}</p>
@@ -318,6 +322,81 @@ const formatDate = (date) => {
     return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(date));
 };
 
+//File download
+const props = defineProps({
+    scholarship: Object,
+    scholars: Array,
+    schoolyear: Object,
+    selectedSem: Object,
+    batch: Array,
+    campuses: Array,
+    course: Array,
+    errors: Object,
+    filePath: {
+        type: String,
+        required: true
+    },
+    fileName: {
+        type: String,
+        required: true
+    },
+    buttonText: {
+        type: String,
+        default: 'Download File'
+    }
+});
+
+const isLoading = ref(false);
+
+/**
+ * Downloads a file from Laravel storage via controller
+ */
+const downloadFile = async () => {
+    try {
+        isLoading.value = true;
+
+        // Create form data to send to the controller
+        const formData = new FormData();
+        formData.append('filePath', props.filePath);
+        formData.append('fileName', props.fileName);
+
+        // Start file download
+        const response = await fetch('/api/download-file', {
+            method: 'POST',
+            body: formData,
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to download file');
+        }
+
+        // Get the blob data from the response
+        const blob = await response.blob();
+
+        // Create a URL for the blob data
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a temporary anchor element to trigger the download
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', props.fileName);
+        document.body.appendChild(link);
+
+        // Trigger the download
+        link.click();
+
+        // Clean up
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(link);
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        alert('Failed to download file. Please try again.');
+    } finally {
+        isLoading.value = false;
+    }
+};
+
+
 
 
 const ManualAdding = ref(true);
@@ -350,17 +429,6 @@ const closePanel = () => {
     addingPanel.value = false;
     entries.value = false;
 };
-
-const props = defineProps({
-    scholarship: Object,
-    scholars: Array,
-    schoolyear: Object,
-    selectedSem: Object,
-    batch: Array,
-    campuses: Array,
-    course: Array,
-    errors: Object,
-});
 
 
 const manual = ref({
