@@ -207,6 +207,8 @@ class ScholarshipController extends Controller
             })
             ->count();
 
+
+
         // Then add $completedBatches to your data array in the return statement
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
@@ -449,12 +451,17 @@ class ScholarshipController extends Controller
 
     public function forward(Request $request)
     {
+
+        dd($request->all());
         $validated = $request->validate([
             'scholarship_id' => 'required|integer',
             'scholars' => 'required|array', // Array of scholar IDs
             'batch_ids' => 'required|array', // Array of batch IDs
             'batch_ids.*' => 'integer',
+            'date_start' => 'date',
+            'date_end' => 'date'
         ]);
+
 
 
         $scholarshipId = $validated['scholarship_id'];
