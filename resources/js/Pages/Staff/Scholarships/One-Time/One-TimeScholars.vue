@@ -12,7 +12,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">{{ scholarship.name }} </span>
+                            <span class="text-blue-400 font-semibold">dbp RISE</span>
                         </li>
                     </ul>
                 </div>
@@ -23,14 +23,14 @@
                          <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
-                            <span>{{ scholarship?.name }}</span>
-                            <span>{{ scholarship?.type }}</span>
+                            <!-- <span>{{ scholarship?.name }}</span>
+                            <span>{{ scholarship?.type }}</span> -->
                         </h1>
-                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span>
+                        <!-- <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span> -->
                     </div>
                     <!--Condition for scholarship type-->
                     <div class="flex gap-2">
-                        <div v-if="students.length === 0" class="flex flex-row items-end gap-2">
+                        <div class="flex flex-row items-end gap-2">
                             <!-- Disabled Import Scholars Button -->
                             <button v-tooltip.left="'You need to add students before importing scholars'" disabled
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
@@ -51,7 +51,7 @@
                             </button>
                         </div>
 
-                        <div v-else class="flex flex-row items-end gap-2">
+                        <div class="flex flex-row items-end gap-2">
                             <!-- Active Import Scholars Button -->
                             <button @click="openScholarship"
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
@@ -61,7 +61,7 @@
                             </button>
 
                             <!-- Active Send Email Button -->
-                            <div v-if="batches.length === 0" class="flex flex-row items-end gap-2">
+                            <div class="flex flex-row items-end gap-2">
                                 <button v-tooltip.left="'You need to add scholars before sending emails'" disabled
                                     class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
@@ -71,15 +71,15 @@
                                     <span>Send Email</span>
                                 </button>
                             </div>
-                            <div v-else>
-                                <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
+                            <div>
+                                <!-- <Link :href="`/scholarships/${props.scholarship.id}/send-access`"> -->
                                 <button @click="importScholars"
                                     class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
                                         border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
                                     <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
                                     <span>Send Email</span>
                                 </button>
-                                </Link>
+                                <!-- </Link> -->
                             </div>
 
                         </div>
@@ -102,14 +102,14 @@
                         <!-- Stats Section -->
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
-                        <div class="grid grid-cols-5">
+                        <div class="grid grid-cols-4">
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Total Verified Scholars</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p>
+                                    <!-- <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p> -->
                                 </div>
                             </div>
 
@@ -118,26 +118,17 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Unverified Scholars</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p>
-                            </div>
-
-                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Scholars with All Requirements Approved</p>
-                                </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ scholars.length }}/{{
-                                    total_scholars }}</p>
+                                <!-- <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p> -->
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Scholarship Batches</p>
+                                    <p class="text-gray-500 text-sm">Scholarships</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
-                                    <template
+                                    <!-- <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p> -->
+                                    <!-- <template
                                         v-if="props.batches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
                                         <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
                                             {{props.batches.filter(batch => batch.read === 0 || batch.read ===
@@ -145,16 +136,16 @@
                                             {{props.batches.filter(batch => batch.read === 0 || batch.read ===
                                                 false).length === 1 ? 'Batch' : 'Batches'}}
                                         </button>
-                                    </template>
+                                    </template> -->
                                 </div>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Completed Batches</p>
+                                    <p class="text-gray-500 text-sm">Completed Payouts</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ completedBatches ?? 0 }}</p>
+                                <!-- <p class="text-4xl font-semibold font-kanit">{{ completedBatches ?? 0 }}</p> -->
                             </div>
                         </div>
 
@@ -171,7 +162,7 @@
                                     <option value="one-time">One-Time Payment</option>
                                 </select>
 
-                                <button @click="toggleSendBatch"
+                                <button
                                     class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                     <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                     <span class="font-normal">Forward Completed Scholars</span>
@@ -180,7 +171,28 @@
                         </div>
 
 
-                        
+                        <div 
+                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+
+                            <div class="flex justify-between items-center">
+
+                                <div class="flex flex-col">
+                                    <span class="text-lg font-semibold text-gray-800">DBP Rise</span>
+                                    <span class="text-gray-500">SY 2024 - Semester 1</span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">No. of Scholars</span>
+                                        <span class="text-xl font-bold text-blue-600">200</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
+                                        <span class="text-xl font-bold text-red-500">200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>
@@ -636,7 +648,7 @@ watch(() => EndPayout.value, (newVal) => {
 });
 
 
-watch(ForwardBatchList, (newValue) => {
+watch(ForwardScholarsList, (newValue) => {
     if (newValue) {
         setTimeout(() => {
             initFlowbite(); // Initialize the modal components
