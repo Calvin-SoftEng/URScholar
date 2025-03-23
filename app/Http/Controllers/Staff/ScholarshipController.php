@@ -136,15 +136,15 @@ class ScholarshipController extends Controller
     public function show(Request $request, Scholarship $scholarship)
     {
         // If it's a one-time payment scholarship, redirect to the appropriate list
-        if ($scholarship->scholarshipType == 'One-time Payment') {
-            // Pass the scholarship ID as a named parameter to match the route definition
-            return redirect()->route('scholarship.onetime_list', [
-                'scholarshipId' => $scholarship->id,
-            ])->with([
-                        'selectedYear' => $request->input('selectedYear'),
-                        'selectedSem' => $request->input('selectedSem')
-                    ]);
-        }
+        // if ($scholarship->scholarshipType == 'One-time Payment') {
+        //     // Pass the scholarship ID as a named parameter to match the route definition
+        //     return redirect()->route('scholarship.onetime_list', [
+        //         'scholarshipId' => $scholarship->id,
+        //     ])->with([
+        //                 'selectedYear' => $request->input('selectedYear'),
+        //                 'selectedSem' => $request->input('selectedSem')
+        //             ]);
+        // }
 
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with([
@@ -185,14 +185,14 @@ class ScholarshipController extends Controller
             })
             ->get();
 
-        // Batch::where('scholarship_id', $scholarship->id)
-        //     ->when($request->input('selectedYear'), function ($query, $year) {
-        //         return $query->where('school_year', $year);
-        //     })
-        //     ->when($request->input('selectedSem'), function ($query, $sem) {
-        //         return $query->where('semester', $sem);
-        //     })
-        //     ->update(['sub_total' => $scholarsWithAllApproved->count()]);
+        Batch::where('scholarship_id', $scholarship->id)
+            ->when($request->input('selectedYear'), function ($query, $year) {
+                return $query->where('school_year', $year);
+            })
+            ->when($request->input('selectedSem'), function ($query, $sem) {
+                return $query->where('semester', $sem);
+            })
+            ->update(['sub_total' => $scholarsWithAllApproved->count()]);
 
 
 
@@ -456,7 +456,6 @@ class ScholarshipController extends Controller
             'batch_ids.*' => 'integer',
         ]);
 
-        dd($validated);
 
         $scholarshipId = $validated['scholarship_id'];
         $scholars = $validated['scholars']; // Array of scholar IDs
