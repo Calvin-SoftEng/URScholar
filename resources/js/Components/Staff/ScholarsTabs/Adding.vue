@@ -232,15 +232,20 @@
         </div>
 
         <div v-if="BulkAdding" class="mx-auto w-full justify-center items-center flex flex-col gap-4 ">
-            <button @click="downloadFile" class="download-btn" :disabled="isLoading">
-                <span v-if="isLoading">Downloading...</span>
-                <span v-else>{{ buttonText }}</span>
-            </button>
+
             <form @submit.prevent="submitForm" class="w-6/12 flex flex-col gap-4">
                 <div v-if="errors?.student" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
                     <p class="text-red-600 text-sm">{{ errors.student }}</p>
                 </div>
                 <div class="flex flex-col w-full gap-4 mt-5">
+
+                    <button @click="downloadFile" 
+                            class="px-4 py-2 bg-white border border-blue-700 text-primary rounded-lg hover:bg-blue-700 hover:text-white transition-all"
+                            :disabled="isLoading">
+                        <span v-if="isLoading">Downloading...</span>
+                        <span v-else>Download Scholar CSV File Template</span>
+                    </button>
+
                     <!-- File Drop Zone -->
                     <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Import CSV
                         File of Scholars</label>
@@ -351,16 +356,14 @@ const isLoading = ref(false);
 /**
  * Downloads a file from Laravel storage via controller
  */
-const downloadFile = async () => {
+ const downloadFile = async () => {
     try {
         isLoading.value = true;
 
-        // Create form data to send to the controller
         const formData = new FormData();
         formData.append('filePath', props.filePath);
         formData.append('fileName', props.fileName);
 
-        // Start file download
         const response = await fetch('/api/download-file', {
             method: 'POST',
             body: formData,
@@ -370,22 +373,13 @@ const downloadFile = async () => {
             throw new Error('Failed to download file');
         }
 
-        // Get the blob data from the response
         const blob = await response.blob();
-
-        // Create a URL for the blob data
         const url = window.URL.createObjectURL(blob);
-
-        // Create a temporary anchor element to trigger the download
         const link = document.createElement('a');
         link.href = url;
         link.setAttribute('download', props.fileName);
         document.body.appendChild(link);
-
-        // Trigger the download
         link.click();
-
-        // Clean up
         window.URL.revokeObjectURL(url);
         document.body.removeChild(link);
     } catch (error) {

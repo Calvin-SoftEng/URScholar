@@ -35,7 +35,7 @@
 import { ref } from 'vue';
 
 import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
-import QuickPost from '../../../Components/Staff/Dashboard/QuickPost.vue';
+import QuickPost from '../../../Components/Staff/Dashboard/Statistics.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
 
 const components = {
