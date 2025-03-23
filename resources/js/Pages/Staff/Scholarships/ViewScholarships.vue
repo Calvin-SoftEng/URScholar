@@ -144,8 +144,6 @@
 
                                         <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                             <span class="font-medium">Requirements Deadline:</span>
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                                            <span class="font-medium">Requirements Deadline:</span>
                                             <span
                                                 v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
                                                 {{ new
@@ -156,7 +154,6 @@
                                             <span v-else>
                                                 No Deadline
                                             </span>
-                                        </p>
                                         </p>
                                     </div>
 

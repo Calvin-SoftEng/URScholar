@@ -29,7 +29,7 @@
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
-                    <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
+                    <div class="flex gap-2">
                         <div v-if="students.length === 0" class="flex flex-row items-end gap-2">
                             <!-- Disabled Import Scholars Button -->
                             <button v-tooltip.left="'You need to add students before importing scholars'" disabled
@@ -86,11 +86,8 @@
                     </div>
                 </div>
 
-                <!-- <ScholarList :scholarship="scholarship" :batches="batches" /> -->
-                <!-- <Batches :scholarship="scholarship" :batches="batches" :schoolyear="schoolyear" :selectedSem="selectedSem" class="w-full h-full"/> -->
-
-                <div v-if="scholarship.scholarshipType == 'Need-Based'">
-                    <div v-if="!batches || batches.length === 0"
+                <div >
+                    <div
                         class="flex flex-col w-full items-center justify-center mt-5">
                         <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
                             <font-awesome-icon :icon="['fas', 'user-graduate']"
@@ -101,7 +98,7 @@
                         </div>
                     </div>
 
-                    <div v-else class="w-full mt-5 rounded-xl space-y-5">
+                    <div class="w-full mt-5 rounded-xl space-y-5">
                         <!-- Stats Section -->
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
@@ -127,22 +124,10 @@
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Approved Requirements</p>
+                                    <p class="text-gray-500 text-sm">Scholars with All Requirements Approved</p>
                                 </div>
-                                <div class="grid grid-cols-3 items-center gap-3">
-                                <!-- Scholars Length -->
-                                <p class="text-4xl font-semibold font-kanit text-center">
-                                    {{ scholars.length }}
-                                </p>
-
-                                <!-- Divider -->
-                                <div class="h-5 w-[2px] bg-gray-400 mx-auto"></div>
-
-                                <!-- Total Scholars -->
-                                <p class="text-4xl font-semibold font-kanit text-center">
-                                    {{ total_scholars }}
-                                </p>
-                                </div>
+                                <p class="text-4xl font-semibold font-kanit">{{ scholars.length }}/{{
+                                    total_scholars }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
@@ -180,7 +165,6 @@
 
                             <div class="flex flex-row space-x-3 items-center">
                                 <!-- Campus Filter -->
-                                <span class="font-poppins text-sm">Filter Campus</span>
                                 <select
                                     class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
                                     <option value="Need-Based">Need-Based</option>
@@ -196,356 +180,20 @@
                         </div>
 
 
-                        <div v-for="batch in batches" :key="batch.id"
-                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        
 
-                            <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
-
-                                <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
-
-                                <div class="grid grid-cols-2 gap-6">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">No. of Scholars</span>
-                                        <span class="text-xl font-bold text-blue-600">200</span>
-                                    </div>
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                        <span class="text-xl font-bold text-red-500">200</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-                </div>
-
-                <!--ONE TIME PAYMENT PROCESS-->
-                <div v-else>
-                    <form @submit.prevent="submitForm">
-                        <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
-                            <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
-                            <div class="w-full block bg-white px-12 py-6 flex-col items-center mx-auto sm:px-6 lg:px-8">
-                                <span>
-                                    Set up One-Time Payment Scholarship Details
-                                </span>
-                                <div class="mt-5 font-inter text-lg space-y-3">
-                                    <div class="flex flex-row w-full gap-3">
-                                        <div class="flex flex-col space-y-2 w-full">
-                                            <label for="suffixName"
-                                                class="text-sm font-medium text-gray-700">Scholarship Name</label>
-                                            <input id="suffixName" :value="scholarship.name" readonly type="text"
-                                                placeholder="Scholarship Name"
-                                                class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
-                                        </div>
-
-                                        <div class="flex flex-col space-y-2 w-full">
-                                            <label for="suffixName"
-                                                class="text-sm font-medium text-gray-700">Scholarship Type</label>
-                                            <input id="suffixName" :value="scholarship.scholarshipType" readonly
-                                                type="text" placeholder="Scholarship Type"
-                                                class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
-                                        </div>
-                                    </div>
-
-                                    <div class="w-full border-t border-gray-200 my-4"></div>
-
-                                    <div class="flex flex-row w-6/12 gap-3 pr-2">
-                                        <div id="date-range-picker" date-rangepicker
-                                            class="flex items-center gap-4 w-full">
-                                            <!-- Application Start Date -->
-                                            <div class="flex flex-col w-full">
-                                                <label for="datepicker-range-start"
-                                                    class="text-sm font-medium text-gray-700 mb-1">Application
-                                                    Start</label>
-                                                <div class="relative">
-                                                    <div
-                                                        class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            fill="currentColor" viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                                        </svg>
-                                                    </div>
-                                                    <input id="datepicker-range-start" name="start" type="text"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                        placeholder="Select start date">
-                                                </div>
-                                            </div>
-
-                                            <span class="text-gray-500">to</span>
-
-                                            <!-- Application Deadline -->
-                                            <div class="flex flex-col w-full">
-                                                <label for="datepicker-range-end"
-                                                    class="text-sm font-medium text-gray-700 mb-1">Application
-                                                    Deadline</label>
-                                                <div class="relative">
-                                                    <div
-                                                        class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                            fill="currentColor" viewBox="0 0 20 20">
-                                                            <path
-                                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                                        </svg>
-                                                    </div>
-                                                    <input id="datepicker-range-end" name="end" type="text"
-                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                        placeholder="Select end date">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                    <div class="w-full border-t border-gray-200 my-4"></div>
-
-                                    <div class="grid grid-cols-2 md:grid-cols-2 gap-3">
-                                        <div>
-                                            <!-- Total Recipients Input -->
-                                            <div class="flex w-6/12 pr-2 flex-col">
-                                                <label for="totalRecipients" class="text-sm font-medium text-gray-700">
-                                                    Number of Recipients
-                                                </label>
-                                                <input id="totalRecipients" type="number" v-model="form.totalRecipients"
-                                                    min="1" placeholder="Enter total recipients"
-                                                    class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded-lg"
-                                                    @input="distributeRecipients" />
-                                            </div>
-
-                                            <!-- Left Side: Campus Selection & Recipient Distribution -->
-                                            <div class="flex flex-col space-y-3">
-                                                <!-- Header with Label & Stats -->
-                                                <div class="flex flex-row justify-between items-center py-2">
-                                                    <div class="flex flex-col space-y-2">
-                                                        <label class="text-sm font-medium">Distribute Recipients per
-                                                            Selected Campus</label>
-                                                        <div class="flex flex-row text-sm gap-4">
-                                                            <div>Allocated: {{ allocatedRecipients }} of {{
-                                                                form.totalRecipients
-                                                                }}</div>
-                                                            <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
-                                                                class="text-red-500 font-medium">
-                                                                *{{ parseInt(form.totalRecipients) - allocatedRecipients
-                                                                }}
-                                                                recipients still need to be allocated
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="flex flex-col text-sm">
-                                                        <!-- Stats & Reset Button -->
-                                                        <div class="flex items-center text-sm text-gray-600 space-x-3">
-                                                            <!-- Reset to Auto-Distribution Button -->
-                                                            <button @click="distributeRecipients"
-                                                                class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600">
-                                                                <span
-                                                                    class="material-symbols-rounded text-base">restart_alt</span>
-                                                                <span>Reset to Auto Distribution</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!-- Campus Selection List -->
-                                                <div class="space-y-2">
-                                                    <div v-for="campus in campusesData" :key="campus.id"
-                                                        class="flex items-center justify-between border p-2 rounded-md">
-
-                                                        <input type="checkbox" :id="`campus-${campus.id}`"
-                                                            v-model="campus.selected" @change="distributeRecipients"
-                                                            class="w-5 h-5 rounded border-gray-300 cursor-pointer" />
-
-
-                                                        <label :for="`campus-${campus.id}`"
-                                                            class="text-base font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
-                                                            {{ campus.name }}
-                                                        </label>
-
-
-                                                        <input type="number" v-model="campus.recipients"
-                                                            :readonly="!campus.selected"
-                                                            class="w-16 px-2 py-1 border rounded-md text-center text-gray-700 disabled:bg-gray-100"
-                                                            min="0" :max="form.totalRecipients"
-                                                            @input="onRecipientManualChange(campus.id)" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Right Side: Course List Display Grouped by Campus -->
-                                        <div class="flex flex-col space-y-4">
-                                            <div v-for="campus in selectedCampuses" :key="campus.id"
-                                                class="py-3 px-4 bg-gray-50 border rounded-md">
-                                                <!-- Selected Campus Name -->
-                                                <div class="text-sm font-semibold text-gray-700 mb-2">
-                                                    {{ campus.name }}
-                                                </div>
-
-                                                <!-- Courses Offered for this Campus -->
-                                                <div v-for="course in campus.courses" :key="course" class="mt-1">
-                                                    <input type="checkbox" :id="`course-${campus.id}-${course}`"
-                                                        v-model="selectedCoursesMap[course]" class="rounded" />
-                                                    <label :for="`course-${campus.id}-${course}`"
-                                                        class="text-sm ml-2 cursor-pointer">{{
-                                                            course }}</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-
-                                    <div class="w-full border-t border-gray-200 my-4"></div>
-
-                                    <h3 class="text-base font-medium text-black">List
-                                        Criteria and Eligibility</h3>
-                                    <div class="grid grid-cols-2 space-x-2">
-                                        <div class="w-full flex flex-col p-2">
-
-                                            <div class="space-y-4">
-                                                <div class="flex flex-col justify-center items-start">
-                                                    <span
-                                                        class="text-sm font-medium text-black whitespace-nowrap mb-2">General
-                                                        Weighted Average must be:
-                                                    </span>
-
-                                                    <input v-model="form.grade" type="text" id="name"
-                                                        placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-
-                                                </div>
-
-                                                <div class="flex flex-col space-y-2 justify-center items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap">
-                                                        Must be enrolled in:
-                                                    </span>
-
-                                                    <textarea v-model="selectedCoursesText" id="name" rows="3"
-                                                        placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
-                                                        readonly>
-                                    </textarea>
-                                                </div>
-
-                                                <div class="flex flex-col justify-center space-y-2 items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap ">
-                                                        Financial Need-Based Criteria must be:
-                                                    </span>
-                                                    <div class="flex items-center space-x-2 mb-1">
-                                                        <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                        <label
-                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                            Nakacategory na yan
-                                                        </label>
-                                                    </div>
-
-                                                    <!-- hiwalay na loop to ata -->
-                                                    <div class="flex items-center space-x-2 mb-1">
-                                                        <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                        <label
-                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                            Annual Income range to 10,000 - 20,000
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="flex flex-col justify-center space-y-2 items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap ">
-                                                        Residency & Citizenship Criteria
-                                                    </span>
-                                                    <div class="flex items-center space-x-2 mb-1">
-                                                        <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                        <label
-                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                            Bisaya ka dapat
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                                            <div v-for="form in scholarship_form" :key="form.id"
-                                                class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                                                <h4
-                                                    class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
-                                                    {{ form.name }}</h4>
-
-                                                <div v-for="data in getFormData(form.id)" :key="data.id"
-                                                    class="flex items-center space-x-2 mb-1">
-                                                    <input id="accept-terms-{{ data.id }}" type="checkbox"
-                                                        class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                        :checked="criteriaIncludes(data.id)"
-                                                        @change="toggleCriteria(data.id)">
-                                                    <label :for="'accept-terms-' + data.id"
-                                                        class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                        {{ data.name }}
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div> -->
-                                    </div>
-
-                                    <div class="w-full border-t border-gray-200 my-4"></div>
-
-                                    <div class="w-6/12">
-                                        <div class="w-full">
-                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700">
-                                                List Requirements
-                                            </label>
-                                            <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
-                                                <div class="flex items-center mb-4 w-full">
-                                                    <form @submit.prevent="addItem" class="flex items-center w-full">
-                                                        <input v-model="newItem" type="text" placeholder="Enter an item"
-                                                            class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
-                                                        <button type="submit"
-                                                            class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
-                                                            Add
-                                                        </button>
-                                                    </form>
-                                                </div>
-
-                                                <form @submit.prevent="removeItem">
-                                                    <div class="flex flex-col gap-2">
-                                                        <div v-for="(item, index) in items" :key="index"
-                                                            class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
-                                                            <span>{{ item }}</span>
-                                                            <button @click="removeItem(index)"
-                                                                class="flex items-center text-red-500 hover:text-red-700">
-                                                                <span class="material-symbols-rounded text-red-600">
-                                                                    delete
-                                                                </span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- </div> -->
-                        </div>
-                        <div class="flex justify-end mt-8">
-                            <button type="submit" @click="submitForm"
-                                class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                                {{ isSubmitting ? 'Creating...' : 'Create Scholarship' }}
-                            </button>
-                        </div>
-                    </form>
                 </div>
 
             </div>
         </div>
 
         <!-- Simplified forwarding batch list modal -->
-        <div v-if="ForwardBatchList"
+        <div v-if="ForwardScholarList"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Forwarding Batch List</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Forwarding Scholars List</h2>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal">
@@ -695,7 +343,7 @@ const getFormData = (formId) => {
 };
 
 // Forward batch modal state
-const ForwardBatchList = ref(false);
+const ForwardScholarsList = ref(false);
 const selectedBatches = ref([]);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
@@ -727,7 +375,7 @@ const total_scholars = computed(() => {
 
 
 const toggleSendBatch = async () => {
-    ForwardBatchList.value = true;
+    ForwardScholarsList.value = true;
 
     // Load batches with scholar counts
     await loadBatchesData();
@@ -924,7 +572,7 @@ onMounted(() => {
         });
     }
 
-    watch(ForwardBatchList, (newValue) => {
+    watch(ForwardScholarsList, (newValue) => {
         if (newValue) {
             setTimeout(() => {
                 initFlowbite(); // Initialize Flowbite when modal is accessed
