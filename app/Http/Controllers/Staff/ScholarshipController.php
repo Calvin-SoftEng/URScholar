@@ -470,22 +470,26 @@ class ScholarshipController extends Controller
 
     public function forward(Request $request)
     {
+        $messages = [
+            'required' => 'This field is required.', // Generic for all required fields
+        ];
 
-        dd($request->all());
-        $validated = $request->validate([
+        $validated = Validator::make($request->all(),[
             'scholarship_id' => 'required|integer',
             'scholars' => 'required|array', // Array of scholar IDs
             'batch_ids' => 'required|array', // Array of batch IDs
             'batch_ids.*' => 'integer',
-            'date_start' => 'date',
-            'date_end' => 'date'
-        ]);
+            'date_start' => 'required|date',
+            'date_end' => 'required|date'
+        ],$messages);
+
+        // dd($validated);
 
 
 
-        $scholarshipId = $validated['scholarship_id'];
-        $scholars = $validated['scholars']; // Array of scholar IDs
-        $batchIds = $validated['batch_ids']; // Array of batch IDs
+        $scholarshipId = $request['scholarship_id'];
+        $scholars = $request['scholars']; // Array of scholar IDs
+        $batchIds = $request['batch_ids']; // Array of batch IDs
 
         $dataToInsert = [];
 
@@ -513,10 +517,10 @@ class ScholarshipController extends Controller
             'description' => 'Scholars forwarded to cashiers',
         ]);
 
-        return response()->json([
-            'message' => 'Scholars successfully assigned to batches!',
-            'inserted_count' => count($dataToInsert),
-        ], 201);
+        // return response()->json([
+        //     'message' => 'Scholars successfully assigned to batches!',
+        //     'inserted_count' => count($dataToInsert),
+        // ], 201);
     }
 
 

@@ -20,13 +20,14 @@
                 <div class="flex justify-between">
                     <div class="text-3xl font-semibold text-gray-700">
                         <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
-                         <h1
+                        <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
                         </h1>
-                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span>
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
@@ -130,18 +131,18 @@
                                     <p class="text-gray-500 text-sm">Approved Requirements</p>
                                 </div>
                                 <div class="grid grid-cols-3 items-center gap-3">
-                                <!-- Scholars Length -->
-                                <p class="text-4xl font-semibold font-kanit text-center">
-                                    {{ scholars.length }}
-                                </p>
+                                    <!-- Scholars Length -->
+                                    <p class="text-4xl font-semibold font-kanit text-center">
+                                        {{ scholars.length }}
+                                    </p>
 
-                                <!-- Divider -->
-                                <div class="h-5 w-[2px] bg-gray-400 mx-auto"></div>
+                                    <!-- Divider -->
+                                    <div class="h-5 w-[2px] bg-gray-400 mx-auto"></div>
 
-                                <!-- Total Scholars -->
-                                <p class="text-4xl font-semibold font-kanit text-center">
-                                    {{ total_scholars }}
-                                </p>
+                                    <!-- Total Scholars -->
+                                    <p class="text-4xl font-semibold font-kanit text-center">
+                                        {{ total_scholars }}
+                                    </p>
                                 </div>
                             </div>
 
@@ -323,7 +324,7 @@
                                                         <div class="flex flex-row text-sm gap-4">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                                }}</div>
+                                                            }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -565,17 +566,25 @@
                                 class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
                                 Select a Date:
                             </label>
+
                             <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
                                 <!-- Application Start Date -->
                                 <div class="flex flex-col w-full">
                                     <div class="relative">
-                                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
-                                            <input v-model="StartPayout" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <InputError v-if="errors.date_start" :message="errors.date_start"
+                                            class="mt-1" />
+                                        <input v-model="StartPayout" id="datepicker-range-start" name="start"
+                                            type="text" autocomplete="off" lang="en"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Submission Start Date">
                                     </div>
                                 </div>
@@ -585,20 +594,26 @@
                                 <!-- Application Deadline -->
                                 <div class="flex flex-col w-full">
                                     <div class="relative">
-                                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
-                                            <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                        <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text"
+                                            autocomplete="off" lang="en"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Submission Start Date">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                        <label for="batchSelection"
+                            class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
                             Select a Batch to Forward:
                         </label>
 
@@ -616,7 +631,8 @@
                                 <span class="text-gray-900 dark:text-white">Send All Batch List</span>
                             </label>
 
-                            <label v-for="batch in batchesWithScholars" :key="batch.id" class="flex items-center space-x-2">
+                            <label v-for="batch in batchesWithScholars" :key="batch.id"
+                                class="flex items-center space-x-2">
                                 <input type="checkbox" :value="batch.id" v-model="selectedBatches"
                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
                                 <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
@@ -684,6 +700,7 @@ const props = defineProps({
     total_scholars: Array,
     requirements: Array,
     completedBatches: Array,
+    errors: Object,
 });
 
 const directives = {
@@ -928,15 +945,15 @@ onMounted(() => {
         if (newValue) {
             setTimeout(() => {
                 initFlowbite(); // Initialize Flowbite when modal is accessed
-                
+
                 const startInput = document.getElementById("datepicker-range-start");
                 if (startInput) {
                     startInput.value = StartPayout.value; // Keep the previous value
                     startInput.addEventListener("changeDate", (event) => {
                         const date = new Date(event.target.value); // ✅ Get selected date
-                        form.value.payoutStartInput = date.toISOString().split("T")[0]; 
+                        form.value.payoutStartInput = date.toISOString().split("T")[0];
                         console.log("Application:", form.value.payoutStartInput);
-                        StartPayout.value = event.target.value; 
+                        StartPayout.value = event.target.value;
                     });
                 } else {
                     console.warn("Start datepicker not found.");
@@ -947,8 +964,8 @@ onMounted(() => {
                     endInput.value = EndPayout.value; // Keep the previous value
                     endInput.addEventListener("changeDate", (event) => {
                         const date = new Date(event.target.value); // ✅ Get selected date
-                        form.value.payoutEndInput = date.toISOString().split("T")[0]; 
-                        EndPayout.value = event.target.value; 
+                        form.value.payoutEndInput = date.toISOString().split("T")[0];
+                        EndPayout.value = event.target.value;
                     });
                 } else {
                     console.warn("End datepicker not found.");
@@ -1175,33 +1192,28 @@ const forwardBatches = async () => {
             batch_ids: batchesToForward,
             date_start: form.value.payoutStartInput,
             date_end: form.value.payoutEndInput,
-            
         };
 
-        await router.post(`/scholarship/forward-batches`, payload);
+        // Send the request and wait for response
+        const response = await router.post(`/scholarship/forward-batches`, payload);
 
-        // In a real implementation, you would submit to the backend
-        setTimeout(() => {
-            // Simulate successful submission
-            const totalScholars = batchesToForward.reduce((total, batchId) => {
-                const batch = batchesWithScholars.value.find(b => b.id === batchId);
-                return total + (batch ? batch.scholar_count : 0);
-            }, 0);
+        // Only proceed if request was successful
+        const totalScholars = batchesToForward.reduce((total, batchId) => {
+            const batch = batchesWithScholars.value.find(b => b.id === batchId);
+            return total + (batch ? batch.scholar_count : 0);
+        }, 0);
 
-            toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
-            toastVisible.value = true;
+        toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
+        toastVisible.value = true;
 
-            // Close the modal and reset form
-            closeModal();
+        // Close the modal only on success
+        // closeModal();
 
-            isSubmitting.value = false;
-        }, 1000);
-
-        // In a real implementation, you would use fetch or Inertia.js
     } catch (error) {
         console.error('Error forwarding batches:', error);
         toastMessage.value = error.message || 'Failed to forward batches';
         toastVisible.value = true;
+    } finally {
         isSubmitting.value = false;
     }
 };
