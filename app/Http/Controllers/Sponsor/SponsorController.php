@@ -20,7 +20,10 @@ class SponsorController extends Controller
     public function index()
     {
         $sponsors = Sponsor::with('scholarship')->get();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         $campuses = Campus::all();
         $courses = Course::all();
 
@@ -94,4 +97,8 @@ class SponsorController extends Controller
 
         return redirect()->route('sponsor.index')->with('success', 'Sponsor added successfully!');
     }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

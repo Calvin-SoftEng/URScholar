@@ -126,7 +126,132 @@
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+<<<<<<< Updated upstream
                                     <p class="text-gray-500 text-sm">Scholars with All Requirements Approved</p>
+=======
+                                    <p class="text-gray-500 text-sm">Approved Requirements</p>
+
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit">{{ scholars.length }}/{{
+                                    total_scholars }}</p>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Scholarship Batches</p>
+                                </div>
+                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
+                                    <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
+                                    <template
+                                        v-if="props.batches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
+                                        <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
+                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length}} new
+                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length === 1 ? 'Batch' : 'Batches'}}
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Completed Batches</p>
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit">{{ completedBatches ?? 0 }}</p>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-[1px] bg-gray-200"></div>
+
+                        <div class="flex flex-row justify-between items-center">
+                            <span>List of Batches</span>
+
+                            <div class="flex flex-row space-x-3 items-center">
+                                <!-- Campus Filter -->
+                                <select
+                                    class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+                                    <option value="Need-Based">Need-Based</option>
+                                    <option value="one-time">One-Time Payment</option>
+                                </select>
+
+                                <button @click="toggleSendBatch"
+                                    class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                    <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                    <span class="font-normal">Forward Completed Scholars</span>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div v-for="batch in batches" :key="batch.id"
+                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+
+                            <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
+
+                                <!-- Left: Batch Title -->
+                                <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+
+                                <!-- Right: Scholar Info -->
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">No. of Scholars</span>
+                                        <span class="text-xl font-bold text-blue-600">200</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
+                                        <span class="text-xl font-bold text-red-500">200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div v-else-if="scholarship.scholarshipType == 'fefef'">
+                    <div v-if="!batches || batches.length === 0"
+                        class="flex flex-col w-full items-center justify-center mt-5">
+                        <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                            <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                No scholars added yet
+                            </p>
+                        </div>
+                    </div>
+
+                    <div v-else class="w-full mt-5 rounded-xl space-y-5">
+                        <!-- Stats Section -->
+                        <div class="w-full h-[1px] bg-gray-200"></div>
+
+                        <div class="grid grid-cols-5">
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Total Verified Scholars</p>
+                                </div>
+                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
+                                    <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Unverified Scholars</p>
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Submitted Requirements</p>
+
+>>>>>>> Stashed changes
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">{{ scholars.length }}/{{
                                     total_scholars }}</p>
@@ -551,11 +676,7 @@
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
-                    <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">
-                            Forwarding Batch List
-                        </h2>
-                    </span>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Forwarding Batch List</h2>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal">
@@ -567,95 +688,82 @@
                     </button>
                 </div>
 
-                <!-- body -->
-                <div class="py-4 px-8 flex flex-col gap-3">
-                    <div class="mb-4">
-                        <label for="batchSelection"
-                            class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                            Select a Date:
-                        </label>
-                        <InputError v-if="errors?.family_housing" :message="'tite'"
-                                                class="items-center flex text-xs" />
-                        <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
-                            <!-- Application Start Date -->
-                            <div class="flex flex-col w-full">
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                        </svg>
+                <!-- Form -->
+                <form @submit.prevent="forwardBatches">
+                    <div class="py-4 px-8 flex flex-col gap-3">
+                        <div class="mb-4">
+                            <label for="batchSelection"
+                                class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                                Select a Date:
+                            </label>
+                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                                <!-- Application Start Date -->
+                                <div class="flex flex-col w-full">
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                            </svg>
+                                        </div>
+                                            <input v-model="StartPayout" id="datepicker-range-start" name="start" type="text" autocomplete="off" lang="en"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            placeholder="Submission Start Date">
                                     </div>
-                                    <input :value="selectedStart" @input="selectedStart = $event.target.value"
-                                        id="datepicker-range-start" name="start" type="text" autocomplete="off"
-                                        lang="en"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Submission Start Date">
                                 </div>
-                            </div>
 
-                            <span class="text-gray-500">to</span>
+                                <span class="text-gray-500">to</span>
 
-                            <!-- Application Deadline -->
-                            <div class="flex flex-col w-full">
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                            <path
-                                                d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                        </svg>
+                                <!-- Application Deadline -->
+                                <div class="flex flex-col w-full">
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                            </svg>
+                                        </div>
+                                            <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" 
+                                            placeholder="Submission Start Date">
                                     </div>
-                                    <input :value="selectedEnd" @input="selectedEnd = $event.target.value"
-                                        id="datepicker-range-end" name="end" type="text" autocomplete="off" lang="en"
-                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Submission Deadline">
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                        Select a Batch to Forward:
-                    </label>
-
-                    <!-- Loading indicator -->
-                    <div v-if="isLoading" class="flex justify-center items-center py-4">
-                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-                        <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
-                    </div>
-
-                    <!-- Checkbox List -->
-                    <div v-if="!isLoading" class="flex flex-col gap-2">
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                            <span class="text-gray-900 dark:text-white">Send All Batch List</span>
+                        <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                            Select a Batch to Forward:
                         </label>
 
-                        <label v-for="batch in batchesWithScholars" :key="batch.id" class="flex items-center space-x-2">
-                            <input type="checkbox" :value="batch.id" v-model="selectedBatches"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                            <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
-                            <span class="text-sm text-gray-500">({{ batch.scholar_count }} scholars)</span>
-                        </label>
-                    </div>
+                        <!-- Loading indicator -->
+                        <div v-if="isLoading" class="flex justify-center items-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                        </div>
 
-                    <!-- Forward Button -->
-                    <div v-if="completedBatches === batches.length" class="mt-4">
-                        <button :disabled="isSubmitting || selectedBatches.length === 0" @click="forwardBatches"
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                            {{ isSubmitting ? 'Processing...' : 'Forward' }}
-                        </button>
+                        <!-- Checkbox List -->
+                        <div v-if="!isLoading" class="flex flex-col gap-2">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-gray-900 dark:text-white">Send All Batch List</span>
+                            </label>
+
+                            <label v-for="batch in batchesWithScholars" :key="batch.id" class="flex items-center space-x-2">
+                                <input type="checkbox" :value="batch.id" v-model="selectedBatches"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
+                                <span class="text-sm text-gray-500">({{ batch.scholar_count }} scholars)</span>
+                            </label>
+                        </div>
+
+                        <!-- Forward Button -->
+                        <div v-if="completedBatches === batches.length" class="mt-4">
+                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                            </button>
+                        </div>
                     </div>
-                    <div v-else>
-                        <button v-tooltip.left="'Must Complete all Batches or Due date lang beh'" disabled
-                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                            Forward
-                        </button>
-                    </div>
-                </div>
+                </form>
             </div>
         </div>
 
@@ -720,6 +828,9 @@ const batchesWithScholars = ref([]);
 
 const selectedStart = ref(""); // Stores the selected start date
 const selectedEnd = ref("");   // Stores the selected end date
+
+const StartPayout = ref(""); // Stores the selected start date
+const EndPayout = ref("");   // Stores the selected end date
 
 // Count scholars with "Verified" status
 const verified_scholars = computed(() => {
@@ -803,6 +914,8 @@ const form = ref({
     amount: 0,
     appplication: '',
     deadline: '',
+    payoutStartInput: '',
+    payoutEndInput: '',
 });
 
 const clearForm = () => {
@@ -916,7 +1029,7 @@ onMounted(() => {
             // Correct for time zone issues
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
 
-            form.value.application = date.toISOString().split("T")[0]; // Keeps the correct local date
+            form.value.appplication = date.toISOString().split("T")[0]; // Keeps the correct local date
             console.log("Application:", form.value.application);
             selectedStart.value = event.target.value;
         });
@@ -936,13 +1049,50 @@ onMounted(() => {
         });
     }
 
+    watch(ForwardBatchList, (newValue) => {
+        if (newValue) {
+            setTimeout(() => {
+                initFlowbite(); // Initialize Flowbite when modal is accessed
+                
+                const startInput = document.getElementById("datepicker-range-start");
+                if (startInput) {
+                    startInput.value = StartPayout.value; // Keep the previous value
+                    startInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.payoutStartInput = date.toISOString().split("T")[0]; 
+                        console.log("Application:", form.value.payoutStartInput);
+                        StartPayout.value = event.target.value; 
+                    });
+                } else {
+                    console.warn("Start datepicker not found.");
+                }
+
+                const endInput = document.getElementById("datepicker-range-end");
+                if (endInput) {
+                    endInput.value = EndPayout.value; // Keep the previous value
+                    endInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.payoutEndInput = date.toISOString().split("T")[0]; 
+                        EndPayout.value = event.target.value; 
+                    });
+                } else {
+                    console.warn("End datepicker not found.");
+                }
+
+                // Initial distribution
+                distributeRecipients();
+
+            }, 200); // Small delay to ensure modal is in the DOM
+        }
+    });
+
+
     // Initial distribution
     distributeRecipients();
     initFlowbite();
 });
 
 
-// Ensure selected values persist
 watch(selectedStart, (newVal) => {
     document.getElementById("datepicker-range-start").value = newVal;
 });
@@ -950,6 +1100,18 @@ watch(selectedStart, (newVal) => {
 watch(selectedEnd, (newVal) => {
     document.getElementById("datepicker-range-end").value = newVal;
 });
+
+// 🎯 Sync Input Values
+watch(() => StartPayout.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-start");
+    if (input) input.value = newVal;
+});
+
+watch(() => EndPayout.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-end");
+    if (input) input.value = newVal;
+});
+
 
 watch(ForwardBatchList, (newValue) => {
     if (newValue) {

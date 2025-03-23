@@ -68,6 +68,7 @@
                                     </p>
 
                                     <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+<<<<<<< Updated upstream
                                         <span class="font-medium">Requirements Deadline:</span>
                                         <span
                                             v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
@@ -79,6 +80,12 @@
                                         <span v-else>
                                             No Deadline
                                         </span>
+=======
+                                        <!-- <span class="font-medium">Requirements Deadline:</span>
+                                        {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                            year: 'numeric', month: 'long', day: 'numeric'
+                                        }) }} -->
+>>>>>>> Stashed changes
                                     </p>
                                 </div>
 
@@ -143,6 +150,7 @@
                                         </p>
 
                                         <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+<<<<<<< Updated upstream
                                             <span class="font-medium">Requirements Deadline:</span>
                                         <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                             <span class="font-medium">Requirements Deadline:</span>
@@ -157,6 +165,12 @@
                                                 No Deadline
                                             </span>
                                         </p>
+=======
+                                            <!-- <span class="font-medium">Requirements Deadline:</span>
+                                            {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                                year: 'numeric', month: 'long', day: 'numeric'
+                                            }) }} -->
+>>>>>>> Stashed changes
                                         </p>
                                     </div>
 
