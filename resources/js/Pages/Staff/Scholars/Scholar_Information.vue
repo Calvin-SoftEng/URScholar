@@ -197,32 +197,102 @@
 
                                         <!-- Contact Information -->
                                         <div v-if="section.isOpen && section.title === 'Contact Information'" class="p-4 bg-white border-t border-gray-200">
-                                            <p>Phone number, email, and address go here.</p>
+                                            <div class="flex flex-col p-2 space-y-2">
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Email</span>
+                                                    <span class="text-base text-primary">Dummy@gmail,.com</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Phone Number</span>
+                                                    <span class="text-base text-primary">09123456789</span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- Family Details -->
                                         <div v-if="section.isOpen && section.title === 'Family Details'" class="p-4 bg-white border-t border-gray-200">
-                                            <p>Details about family members.</p>
-                                        </div>
-
-                                        <!-- Education History -->
-                                        <div v-if="section.isOpen && section.title === 'Education History'" class="p-4 bg-white border-t border-gray-200">
-                                            <p>A timeline of your education background.</p>
+                                            <div class="flex flex-col p-2 space-y-2">
+                                                <h3 class="font-bold text-lg">Mother</h3>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">First Name</span>
+                                                    <span class="text-base text-primary">Maria</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Last Name</span>
+                                                    <span class="text-base text-primary">Dela Cruz</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Middle Name</span>
+                                                    <span class="text-base text-primary">Santos</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Age</span>
+                                                    <span class="text-base text-primary">45</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Citizenship</span>
+                                                    <span class="text-base text-primary">Filipino</span>
+                                                </div>
+                                                <h3 class="font-bold text-lg">Father</h3>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">First Name</span>
+                                                    <span class="text-base text-primary">Juan</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Last Name</span>
+                                                    <span class="text-base text-primary">Dela Cruz</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Middle Name</span>
+                                                    <span class="text-base text-primary">Santos</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Age</span>
+                                                    <span class="text-base text-primary">50</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Citizenship</span>
+                                                    <span class="text-base text-primary">Filipino</span>
+                                                </div>
+                                                <h3 class="font-bold text-lg">Siblings</h3>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Name</span>
+                                                    <span class="text-base text-primary">Jose Dela Cruz</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Age</span>
+                                                    <span class="text-base text-primary">18</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
+                                                    <span class="text-base text-primary">Student</span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <!-- Extracurricular -->
                                         <div v-if="section.isOpen && section.title === 'Extracurricular'" class="p-4 bg-white border-t border-gray-200">
-                                            <p>Sports, clubs, and activities.</p>
+                                            <div class="flex flex-col p-2 space-y-2">
+                                                <h3 class="font-bold text-lg">Organizational Membership</h3>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Name of Organization</span>
+                                                    <span class="text-base text-primary">Ex. USSG</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Inclusive Dates of Membership</span>
+                                                    <span class="text-base text-primary">Ex. 2022 - Present</span>
+                                                </div>
+                                                <div class="flex flex-col text-black">
+                                                    <span class="font-semibold uppercase text-xs text-gray-500">Position Held</span>
+                                                    <span class="text-base text-primary">N/A</span>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         </div>
                                 </div>
                             </div>
 
-                            <!-- Button -->
-                            <div class="mt-auto w-full flex justify-end">
-                                <button class="w-full rounded-md py-1 bg-blue-600 text-white">More Details</button>
-                            </div>
                             </div>
                         </div>
 
