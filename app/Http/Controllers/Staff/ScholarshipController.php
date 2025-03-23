@@ -118,6 +118,11 @@ class ScholarshipController extends Controller
             ];
         });
 
+        //Update the total scholars in the batch
+        $batch->update([
+            'read' => 1
+        ]);
+
         return Inertia::render('Staff/Scholarships/Scholarship_Batch', [
             'scholarship' => $scholarship,
             'batches' => $batch,
