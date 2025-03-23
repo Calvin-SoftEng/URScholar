@@ -46,19 +46,19 @@
     <div v-if="$page.props.auth.user.usertype == 'sponsor'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
-        <headerTop class="w-full h-[50px]" />
+        <HeaderNav class="w-full h-[50px]" />
 
             <!-- Content Area -->
             <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
                 <!-- Sidebar -->
-                <sidebar 
+                <!-- <sidebar 
                 :dataOpenSideBar="openSidebar" 
                 :clickHamburger="toggleSidebar" 
-                class="lg:w-[250px] w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
-                />
+                class="lg:w-[250px] w-full lg:h-full h-auto bg-white"
+                /> -->
 
                 <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
+                <div class="flex-1 lg:h-full h-auto lg:ml-0 bg-gray-100">
                 <slot></slot>
                 </div>
             </div>
