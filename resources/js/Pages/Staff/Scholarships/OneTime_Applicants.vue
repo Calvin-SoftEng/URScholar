@@ -43,26 +43,35 @@
                     </div>
 
                     <!-- Stats Section -->
-                    <div class="grid grid-cols-2 shadow-sm rounded-lg border">
-                        <!-- Completed Scholars -->
-                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                    <div class="grid grid-cols-3 shadow-sm rounded-lg border">
+                        <!-- Deadline -->
+                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300 space-y-2">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
-                                <p class="text-gray-500 text-sm">Completed Scholars</p>
+                                <font-awesome-icon :icon="['fas', 'calendar-alt']" class="text-red-600 text-base" />
+                                <p class="text-gray-500 text-sm">Application Deadline</p>
                             </div>
-                            <p class="text-4xl font-semibold font-kanit text-green-600">{{ stats.completedCount }}</p>
-                        </div>
-                        
-                        <!-- Total Scholars -->
-                        <div class="flex flex-col items-start py-4 px-10">
-                            <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Total Scholars</p>
-                            </div>
-                            <p class="text-4xl font-semibold font-kanit">{{ total_scholars }}</p>
+                            <p class="text-3xl font-semibold font-poppins text-red-600">Sep 30, 2023</p>
                         </div>
 
+                        <!-- Approved Applicants -->
+                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300 space-y-2">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
+                                <p class="text-gray-500 text-sm">Approved Applicants</p>
+                            </div>
+                            <p class="text-3xl font-semibold font-poppins text-green-600">{{ stats.completedCount }}</p>
+                        </div>
+
+                        <!-- Total Scholars -->
+                        <div class="flex flex-col items-start py-4 px-10 space-y-2">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Number of Applicants</p>
+                            </div>
+                            <p class="text-3xl font-semibold font-poppins">{{ total_scholars }}</p>
+                        </div>
                     </div>
+
 
                 </div>
 
@@ -71,7 +80,7 @@
                 <!-- Actions bar -->
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex gap-2">
-                        <Select v-model="selectedBatchId" @update:modelValue="changeBatch">
+                        <!-- <Select v-model="selectedBatchId" @update:modelValue="changeBatch">
                             <SelectTrigger class="w-[200px]">
                                 <SelectValue :placeholder="`Batch ${currentBatch?.batch_no || '1'}`" />
                             </SelectTrigger>
@@ -83,7 +92,7 @@
                                     </SelectItem>
                                 </SelectGroup>
                             </SelectContent>
-                        </Select>
+                        </Select> -->
 
                         <!-- Refresh button that only appears when data has changed -->
                         <Button v-if="dataChanged" variant="outline" @click="refreshData"
@@ -93,10 +102,10 @@
                         </Button>
                     </div>
 
-                    <Button variant="default" @click="openScholarship" class="bg-primary text-white">
+                    <!-- <Button variant="default" @click="openScholarship" class="bg-primary text-white">
                         <font-awesome-icon :icon="['fas', 'plus']" class="mr-2" />
                         Add Scholars
-                    </Button>
+                    </Button> -->
                 </div>
 
                 <div>

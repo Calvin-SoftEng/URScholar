@@ -36,7 +36,7 @@
                             @click="toggleSpecification(scholarship)" class="w-full">
 
                             <div class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
-                                hover:shadow-md transition-all duration-300 p-5 flex flex-col md:flex-row 
+                                hover:shadow-md transition-all duration-300 py-5 px-10 flex flex-col md:flex-row 
                                 justify-between items-start md:items-center space-y-5 md:space-y-0">
 
                                 <!-- Notification Badge -->
@@ -46,7 +46,7 @@
                                 </span>
 
                                 <!-- Scholarship Info -->
-                                <div class="space-y-4 items-start justify-start">
+                                <div class="space-y-4 flex flex-col items-start justify-start">
                                     <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                         {{ getSponsorName(scholarship.sponsor_id) }}
                                     </div>
@@ -56,22 +56,23 @@
                                         {{ scholarship.name }}
                                     </h2>
 
-                                    <p class="text-sm text-gray-500 items-start">
+                                    <p class="flex flex-col text-sm text-gray-500 items-start space-y-1">
                                         <span class="items-start">Created on: {{ new
-                                            Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
-                                        <span class="items-start font-medium">Sponsoring Since:</span>
+                                            Date(scholarship.created_at).toLocaleDateString() }}</span>
+                                        <span class="items-start">Sponsoring Since:
                                         {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
                                             year:
                                                 'numeric', month: 'long', day: 'numeric'
                                         }) }}
+                                        </span>
                                     </p>
 
-                                    <!-- <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                    <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                         <span class="font-medium">Requirements Deadline:</span>
                                         {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
                                             year: 'numeric', month: 'long', day: 'numeric'
                                         }) }}
-                                    </p> -->
+                                    </p>
                                 </div>
 
                                 <!-- Additional Info -->
@@ -101,7 +102,7 @@
                                 @click="toggleSpecification(scholarship)" class="w-full">
 
                                 <div class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
-                                    hover:shadow-md transition-all duration-300 p-5 flex flex-col md:flex-row 
+                                    hover:shadow-md transition-all duration-300 py-5 px-10 flex flex-col md:flex-row 
                                     justify-between items-start md:items-center space-y-5 md:space-y-0">
 
                                     <!-- Notification Badge -->
@@ -113,7 +114,7 @@
 
 
                                     <!-- Scholarship Info -->
-                                    <div class="space-y-4 items-start justify-start">
+                                    <div class="space-y-4 flex flex-col items-start justify-start">
                                         <div class="badge badge-info text-xs badge-outline px-3 py-1">
                                             {{ getSponsorName(scholarship.sponsor_id) }}
                                         </div>
@@ -123,28 +124,23 @@
                                             {{ scholarship.name }}
                                         </h2>
 
-                                        <p class="text-sm text-gray-500 items-start">
+                                        <p class="flex flex-col text-sm text-gray-500 items-start space-y-1">
                                             <span class="items-start">Created on: {{ new
-                                                Date(scholarship.created_at).toLocaleDateString() }}</span> <br>
-                                            <span class="items-start font-medium">Sponsoring Since:</span>
+                                                Date(scholarship.created_at).toLocaleDateString() }}</span>
+                                            <span class="items-start">Sponsoring Since:
                                             {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
                                                 year:
                                                     'numeric', month: 'long', day: 'numeric'
                                             }) }}
+                                            </span>
                                         </p>
 
-                                        <!-- <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                             <span class="font-medium">Requirements Deadline:</span>
-                                            <span
-                                                v-if="scholarship.requirements.length && scholarship.requirements[0].date_end">
-                                                {{ new
-                                                    Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
-                                                year: 'numeric', month: 'long', day: 'numeric' }) }}
-                                            </span>
-                                            <span v-else>
-                                                No deadline set
-                                            </span>
-                                        </p> -->
+                                            {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                                year: 'numeric', month: 'long', day: 'numeric'
+                                            }) }}
+                                        </p>
                                     </div>
 
                                     <!-- Additional Info -->
