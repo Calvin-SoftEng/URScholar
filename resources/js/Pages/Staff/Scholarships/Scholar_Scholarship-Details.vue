@@ -32,98 +32,104 @@
                         </span>
                     </button>
 
-                    <div class="h-full grid grid-cols-4 gap-3 py-3 w-9/12">
+                    <div class="h-full grid grid-cols-2 gap-3 py-3 w-9/12">
                         <!-- 25% Column -->
-                        <div class="w-full h-full flex flex-col">
+                        <div class="col-span-2 w-full h-full flex flex-col">
                             <div
-                                class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
-                                <div class="flex-1 flex flex-col space-y-5">
-                                    <div class="bg-black rounded-lg w-full aspect-square">
+                                class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col">
+                                <div class="flex flex-row gap-3">
+                                    <div class="bg-black rounded-lg w-3/12 h-full aspect-square">
 
                                     </div>
-                                    <div class="flex flex-col items-center justify-center p-2">
-                                        <span class="text-black text-xl font-albert text-center">{{ scholar.last_name
-                                        }},
-                                            {{ scholar.first_name }}
-                                            {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
-                                                word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
-                                        </span>
-                                        <span class="text-gray-400 text-albert">ID</span>
-                                    </div>
+                                    <div class="w-full">
+                                        <div class="flex flex-col p-2 space-y-3">
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Scholar Name</span>
+                                                <span class="text-xl font-sora text-primary">
+                                                    {{ scholar.last_name}},
+                                                {{ scholar.first_name }}
+                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                                    word.charAt(0).toUpperCase()).join('.') + '.' : ''}}</span>
+                                            </div>
 
-                                    <div class="w-full h-0.5 bg-gray-100"></div>
-
-                                    <div class="flex flex-col p-2 space-y-2">
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <span class="text-base text-primary">{{ scholar.course }}</span>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
+                                                <span class="text-base text-primary">{{ scholar.campus }}</span>
+                                            </div>
                                         </div>
 
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                            <span class="text-base text-primary">{{ scholar.campus }}</span>
-                                        </div>
-                                    </div>
+                                        <div class="flex flex-col p-2 space-y-2">
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
+                                                <span class="text-base text-primary">{{ scholar.course }}</span>
+                                            </div>
 
-                                    <div class="w-full h-0.5 bg-gray-100"></div>
-
-                                    <div class="flex flex-col p-2 space-y-2">
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Contact
-                                                No.</span>
-                                            <span class="text-base text-primary">BSIT</span>
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
+                                                <span class="text-base text-primary">{{ scholar.campus }}</span>
+                                            </div>
                                         </div>
 
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Email
-                                                Address</span>
-                                            <span class="text-base text-primary">{{ scholar.email }}</span>
+                                        <div class="flex flex-col p-2 space-y-2">
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Contact
+                                                    No.</span>
+                                                <span class="text-base text-primary">BSIT</span>
+                                            </div>
+
+                                            <div class="flex flex-col text-black">
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Email
+                                                    Address</span>
+                                                <span class="text-base text-primary">{{ scholar.email }}</span>
+                                            </div>
+                                        </div>
+                                        <!-- Ensure button stays at the bottom -->
+                                        <div class="mt-auto w-full flex justify-end">
+                                            <button class="w-full rounded-md py-1 bg-primary text-white">View more Details</button>
                                         </div>
                                     </div>
                                 </div>
 
-                                <!-- Ensure button stays at the bottom -->
-                                <div class="mt-auto w-full flex justify-end">
-                                    <button class="w-full rounded-md py-1 bg-blue-600">More Details</button>
-                                </div>
+                                
                             </div>
                         </div>
 
                         <!-- 75% Column -->
-                        <div class="col-span-3 h-full flex flex-col space-y-3">
+                        <div class="col-span-2 h-full flex flex-col space-y-3">
                             <!-- Second Layer with Single Card -->
                             <div
-                                class="bg-white p-8 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
+                                class="bg-white p-6 box-border rounded shadow-md h-[50%] dark:bg-dcontainer flex flex-col space-y-3">
                                 <h1 class="text-black font-normal text-xl font-poppins">Requirements Checking</h1>
                                 <div
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
-                                    <!-- Requirement Item -->
-                                    <div v-for="req in submittedRequirements" :key="req.id"
-                                        class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
-                                        <div class="flex flex-col">
-                                            <span class="font-bold">{{ req.requirement }}</span>
-                                            <span>{{ req.submitted_requirements }}</span>
-                                        </div>
-
-
-                                        <div class="flex flex-row gap-5 items-center justify-center">
-                                            <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                                <span
-                                                    class="material-symbols-rounded text-lg">assignment_turned_in</span>
-                                                <span class="font-medium">Jan 1, 2023</span>
+                                    <!-- Requirement List -->
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                        <!-- Requirement Item -->
+                                        <div v-for="req in submittedRequirements" :key="req.id"
+                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
+                                            <div class="flex flex-col">
+                                                <span class="font-bold">{{ req.requirement }}</span>
+                                                <span>{{ req.submitted_requirements }}</span>
                                             </div>
-                                            <div>
-                                                <span :class="statusClass(req.status)"
-                                                    class="text-sm font-medium px-2.5 py-0.5 rounded border">
-                                                    {{ req.status }}
-                                                </span>
+
+                                            <div class="flex flex-row gap-5 items-center justify-center">
+                                                <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                                                    <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
+                                                    <span class="font-medium">Jan 1, 2023</span>
+                                                </div>
+                                                <div>
+                                                    <span :class="statusClass(req.status)"
+                                                        class="text-sm font-medium px-2.5 py-0.5 rounded border">
+                                                        {{ req.status }}
+                                                    </span>
+                                                </div>
+                                                <button @click="toggleCheck(req)"
+                                                    class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
+                                                    <span class="material-symbols-rounded text-base">open_in_full</span>
+                                                    <span class="font-medium text-sm">View</span>
+                                                </button>
                                             </div>
-                                            <button @click="toggleCheck(req)"
-                                                class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                <span class="font-medium text-sm">View</span>
-                                            </button>
                                         </div>
                                     </div>
 
@@ -131,7 +137,7 @@
                             </div>
 
                             <div
-                                class="bg-white p-8 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
+                                class="bg-white p-6 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
                                 <h1 class="text-black font-normal text-lg font-poppins">Monitoring</h1>
                                 <div
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
