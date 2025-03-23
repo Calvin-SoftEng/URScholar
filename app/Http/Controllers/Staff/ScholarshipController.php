@@ -526,6 +526,8 @@ class ScholarshipController extends Controller
     {
         $messages = [
             'required' => 'This field is required.', // Generic for all required fields
+            'date_start.required' => 'Start date is required.', // Specific message
+            'date_end.required' => 'End date is required.',
         ];
 
         $validated = Validator::make($request->all(), [
