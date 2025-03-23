@@ -60,18 +60,25 @@
                                         <span class="items-start">Created on: {{ new
                                             Date(scholarship.created_at).toLocaleDateString() }}</span>
                                         <span class="items-start">Sponsoring Since:
-                                        {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                            year:
-                                                'numeric', month: 'long', day: 'numeric'
-                                        }) }}
+                                            {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                year:
+                                                    'numeric', month: 'long', day: 'numeric'
+                                            }) }}
                                         </span>
                                     </p>
 
                                     <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                         <span class="font-medium">Requirements Deadline:</span>
-                                        {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
-                                            year: 'numeric', month: 'long', day: 'numeric'
-                                        }) }}
+                                        <span
+                                            v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
+                                            {{ new
+                                                Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                                    year: 'numeric', month: 'long', day: 'numeric'
+                                                }) }}
+                                        </span>
+                                        <span v-else>
+                                            No Deadline
+                                        </span>
                                     </p>
                                 </div>
 
@@ -128,18 +135,28 @@
                                             <span class="items-start">Created on: {{ new
                                                 Date(scholarship.created_at).toLocaleDateString() }}</span>
                                             <span class="items-start">Sponsoring Since:
-                                            {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                year:
-                                                    'numeric', month: 'long', day: 'numeric'
-                                            }) }}
+                                                {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                                    year:
+                                                        'numeric', month: 'long', day: 'numeric'
+                                                }) }}
                                             </span>
                                         </p>
 
                                         <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
                                             <span class="font-medium">Requirements Deadline:</span>
-                                            {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                        <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
+                                            <span class="font-medium">Requirements Deadline:</span>
+                                            <span
+                                                v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
+                                                {{ new
+                                                    Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
                                                 year: 'numeric', month: 'long', day: 'numeric'
-                                            }) }}
+                                                }) }}
+                                            </span>
+                                            <span v-else>
+                                                No Deadline
+                                            </span>
+                                        </p>
                                         </p>
                                     </div>
 
@@ -201,7 +218,8 @@
                                         <SelectValue placeholder="Select year" class="dark:text-dtext" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectGroup v-for="schoolyear in [...schoolyears].reverse()" :key="schoolyear.id">
+                                        <SelectGroup v-for="schoolyear in [...schoolyears].reverse()"
+                                            :key="schoolyear.id">
                                             <!-- <SelectLabel>Gender</SelectLabel> -->
                                             <SelectItem :value="schoolyear.id">
                                                 {{ schoolyear.year }}

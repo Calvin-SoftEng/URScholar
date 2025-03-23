@@ -33,13 +33,17 @@ class EmailController extends Controller
 
     public function send(Scholarship $scholarship, Request $request)
     {
-        $request->validate([
+        $messages = [
+            'required' => 'This field is required.', // Generic for all required fields
+        ];
+
+        $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:255',
             'content' => 'required|string',
             'requirements' => 'required|array',
             'application' => 'required|date',
             'deadline' => 'required|date'
-        ]);
+        ], $messages);
 
         // dd($request->all());
         $scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
