@@ -27,7 +27,7 @@
                             <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
@@ -152,16 +152,29 @@
                                     <p class="text-gray-500 text-sm">Scholarship Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
-                                    <template
-                                        v-if="props.batches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
-                                        <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
-                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length}} new
-                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length === 1 ? 'Batch' : 'Batches'}}
-                                        </button>
-                                    </template>
+                                    <div v-if="$page.props.auth.user.usertype == 'super_admin'">
+                                        <p class="text-4xl font-semibold font-kanit">{{ props.allBatches.length }}</p>
+                                        <template
+                                            v-if="props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
+                                            <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
+                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
+                                                    false).length}} new
+                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
+                                                    false).length === 1 ? 'Batch' : 'Batches'}}
+                                            </button>
+                                        </template>
+                                    </div>
+                                    <div v-else>
+                                        <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
+                                        <template v-if="filteredUnreadBatches.length > 0">
+                                            <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
+                                                {{ filteredUnreadBatches.length }} new
+                                                {{ filteredUnreadBatches.length === 1 ? 'Batch' : 'Batches' }}
+                                            </button>
+                                        </template>
+                                    </div>
+
+
                                 </div>
                             </div>
 
@@ -180,13 +193,26 @@
                             <span>List of Batches</span>
 
                             <div class="flex flex-row space-x-3 items-center">
-                                <!-- Campus Filter -->
-                                <span class="font-poppins text-sm">Filter Campus</span>
-                                <select
-                                    class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
-                                    <option value="Need-Based">Need-Based</option>
-                                    <option value="one-time">One-Time Payment</option>
-                                </select>
+                                <!-- Campus Filter - Only shown for super_admin or if coordinator has multiple campuses -->
+                                <template
+                                    v-if="$page.props.auth.user.usertype === 'super_admin' || campuses.length > 1">
+                                    <span class="font-poppins text-sm">Filter Campus</span>
+                                    <select v-model="selectedCampus" @change="filterByCampus"
+                                        class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+                                        <option v-if="$page.props.auth.user.usertype === 'super_admin'" value="">All
+                                            Campuses</option>
+                                        <option v-for="campus in campuses" :key="campus.id" :value="campus.id">
+                                            {{ campus.name }}
+                                        </option>
+                                    </select>
+                                </template>
+
+                                <!-- Campus display for coordinators with single campus -->
+                                <template
+                                    v-else-if="$page.props.auth.user.usertype === 'coordinator' && campuses.length === 1">
+                                    <span class="font-poppins text-sm">Campus:</span>
+                                    <span class="font-poppins text-sm font-semibold">{{ campuses[0].name }}</span>
+                                </template>
 
                                 <button @click="toggleSendBatch"
                                     class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
@@ -201,17 +227,18 @@
                             class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
 
                             <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
-
                                 <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
 
                                 <div class="grid grid-cols-2 gap-6">
                                     <div class="flex flex-col items-center">
                                         <span class="text-sm text-gray-600">No. of Scholars</span>
-                                        <span class="text-xl font-bold text-blue-600">200</span>
+                                        <span class="text-xl font-bold text-blue-600">{{ batch.scholars.length }}</span>
                                     </div>
                                     <div class="flex flex-col items-center">
                                         <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                        <span class="text-xl font-bold text-red-500">200</span>
+                                        <span class="text-xl font-bold text-red-500">
+                                            {{batch.scholars.filter(scholar => !scholar.is_verified).length}}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -324,7 +351,7 @@
                                                         <div class="flex flex-row text-sm gap-4">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -692,7 +719,9 @@ const props = defineProps({
     batches: Array,
     scholarship: Object,
     schoolyear: Object,
+    selectedYear: String,
     selectedSem: String,
+    selectedCampus: String,
     scholars: Array, // Add scholars prop
     campuses: Array,
     courses: Array,
@@ -701,7 +730,42 @@ const props = defineProps({
     requirements: Array,
     completedBatches: Array,
     errors: Object,
+    userType: String,
+    userCampusId: Number,
+    allBatches: Array // New prop for all batches regardless of filters
 });
+
+// Initialize selectedCampus with the value from props
+const selectedCampus = ref(props.selectedCampus || '');
+
+// Computed property for unread batches count - using allBatches instead of filtered batches
+const filteredUnreadBatches = computed(() => {
+    // Start with all unread batches from the complete batches list
+    let unreadBatches = props.allBatches.filter(batch => batch.read === 0 || batch.read === false);
+
+    // If user is coordinator, only count batches from their campus
+    if (props.userType === 'coordinator') {
+        unreadBatches = unreadBatches.filter(batch => {
+            // Check if any scholars in this batch belong to the coordinator's campus
+            return batch.scholars.some(scholar => scholar.campus_id === props.userCampusId);
+        });
+    }
+
+    return unreadBatches;
+});
+
+// Function to filter batches by campus
+function filterByCampus() {
+    router.get(route('scholarship.show', props.scholarship.id), {
+        selectedYear: props.schoolyear.id,
+        selectedSem: props.selectedSem,
+        selectedCampus: selectedCampus.value
+    }, {
+        preserveState: true,
+        replace: true
+    });
+}
+
 
 const directives = {
     Tooltip,
