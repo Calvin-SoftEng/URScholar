@@ -1,33 +1,33 @@
 <template>
    <!-- Content Container -->
-<div class="bg-white w-full h-full p-5 space-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
+<div class="w-full h-full justify-center items-center flex flex-col">
     
     <!-- Card -->
-    <div class="flex flex-col flex-grow gap-3">
+    <div class="flex flex-col flex-grow">
         
         <!-- Statistics Grid (2x2) - Full Space Usage -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full flex-grow">
+        <div class="flex flex-wrap gap-3 w-full flex-grow">
 
             <!-- Box 1 -->
-            <div class="bg-gray-100 dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
+            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
                 <p class="text-2xl font-bold text-primary">120</p>
                 <p class="text-gray-600 dark:text-gray-300">University Students</p>
             </div>
 
             <!-- Box 2 -->
-            <div class="bg-gray-100 dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
+            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
                 <p class="text-2xl font-bold text-primary">45</p>
                 <p class="text-gray-600 dark:text-gray-300">Total Scholars</p>
             </div>
 
             <!-- Box 3 -->
-            <div class="bg-gray-100 dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
+            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
                 <p class="text-2xl font-bold text-primary">75</p>
                 <p class="text-gray-600 dark:text-gray-300">Scholarship Sponsors</p>
             </div>
 
             <!-- Box 4 -->
-            <div class="bg-gray-100 dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
+            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
                 <p class="text-2xl font-bold text-primary">15</p>
                 <p class="text-gray-600 dark:text-gray-300">URScholar Users</p>
             </div>

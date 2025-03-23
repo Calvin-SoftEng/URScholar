@@ -5,7 +5,7 @@
             <div class="col-span-4 h-full flex flex-col space-y-3 gap-3">
                 <!-- Top Layer: 3 Cards -->
                 <div class="grid grid-cols-3 gap-3 flex-none h-[40%]">
-                    <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer p-1 flex flex-col">
+                    <div class="h-full flex flex-col">
                         <QuickPost />
                     </div>
                     <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer p-1 flex flex-col">
