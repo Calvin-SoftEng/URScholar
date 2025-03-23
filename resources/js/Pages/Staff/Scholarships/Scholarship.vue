@@ -20,12 +20,13 @@
                 <div class="flex justify-between">
                     <div class="text-3xl font-semibold text-gray-700">
                         <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
-                        <h1
+                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{
-                                scholarship.name }}</span> <span>{{ scholarship.scholarshipType }} </span>
-                            <span>{{ props.selectedSem }} {{ schoolyear.year }}</span>
+                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
+                            <span>{{ scholarship?.name }}</span>
+                            <span>{{ scholarship?.type }}</span>
                         </h1>
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
@@ -89,6 +90,155 @@
                 <!-- <Batches :scholarship="scholarship" :batches="batches" :schoolyear="schoolyear" :selectedSem="selectedSem" class="w-full h-full"/> -->
 
                 <div v-if="scholarship.scholarshipType == 'Need-Based'">
+                    <div v-if="!batches || batches.length === 0"
+                        class="flex flex-col w-full items-center justify-center mt-5">
+                        <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                            <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                No scholars added yet
+                            </p>
+                        </div>
+                    </div>
+
+                    <div v-else class="w-full mt-5 rounded-xl space-y-5">
+                        <!-- Stats Section -->
+                        <div class="w-full h-[1px] bg-gray-200"></div>
+
+                        <div class="grid grid-cols-5">
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Total Verified Scholars</p>
+                                </div>
+                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
+                                    <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Unverified Scholars</p>
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Approved Requirements</p>
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-3">
+                                <!-- Scholars Length -->
+                                <p class="text-4xl font-semibold font-kanit text-center">
+                                    {{ scholars.length }}
+                                </p>
+
+                                <!-- Divider -->
+                                <div class="h-5 w-[2px] bg-gray-400 mx-auto"></div>
+
+                                <!-- Total Scholars -->
+                                <p class="text-4xl font-semibold font-kanit text-center">
+                                    {{ total_scholars }}
+                                </p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Scholarship Batches</p>
+                                </div>
+                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
+                                    <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
+                                    <template
+                                        v-if="props.batches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
+                                        <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
+                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length}} new
+                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length === 1 ? 'Batch' : 'Batches'}}
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Completed Batches</p>
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit">{{ completedBatches ?? 0 }}</p>
+                            </div>
+                        </div>
+
+                        <div class="w-full h-[1px] bg-gray-200"></div>
+
+                        <div class="flex flex-row justify-between items-center">
+                            <span>List of Batches</span>
+
+                            <div class="flex flex-row space-x-3 items-center">
+                                <!-- Campus Filter -->
+                                <span class="font-poppins text-sm">Filter Campus</span>
+                                <select
+                                    class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+                                    <option value="Need-Based">Need-Based</option>
+                                    <option value="one-time">One-Time Payment</option>
+                                </select>
+
+                                <button @click="toggleSendBatch"
+                                    class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                    <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                    <span class="font-normal">Forward Completed Scholars</span>
+                                </button>
+                            </div>
+                        </div>
+
+
+                        <div v-for="batch in batches" :key="batch.id"
+                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+
+                            <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
+
+                                <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">No. of Scholars</span>
+                                        <span class="text-xl font-bold text-blue-600">200</span>
+                                    </div>
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
+                                        <span class="text-xl font-bold text-red-500">200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div
+                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+
+                            <div class="flex justify-between items-center">
+
+                                <div class="flex flex-col">
+                                    <span class="text-lg font-semibold text-gray-800">DBP Rise Scholarship</span>
+                                    <span class="text-lg font-semibold text-gray-800">School Year: 2023 Semester 1</span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-6">
+                                    <div class="flex flex-col items-center">
+                                        <span class="text-sm text-gray-600">No. of Scholars</span>
+                                        <span class="text-xl font-bold text-blue-600">200</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                    </div>
+                </div>
+
+                <div v-else-if="scholarship.scholarshipType == 'fefff'">
                     <div v-if="!batches || batches.length === 0"
                         class="flex flex-col w-full items-center justify-center mt-5">
                         <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
@@ -202,7 +352,7 @@
                             </div>
                         </div> -->
 
-                        <div
+                        <!-- <div
                             class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
 
                             <div class="flex justify-between items-center">
@@ -219,7 +369,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                 </div>

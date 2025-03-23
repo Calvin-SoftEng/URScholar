@@ -38,8 +38,7 @@
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
                         </h1>
-                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ selectedSem?.name || 'Semester'
-                        }}</span>
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span>
                     </div>
 
                     <!-- Stats Section -->
@@ -63,7 +62,6 @@
                         </div>
 
                     </div>
-
 
                 </div>
 
