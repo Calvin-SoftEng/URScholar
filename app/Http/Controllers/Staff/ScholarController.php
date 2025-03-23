@@ -396,6 +396,12 @@ class ScholarController extends Controller
             $matchedCount = 0;
             $unmatchedCount = 0;
 
+
+            //Update the total scholars in the batch
+            $batch->update([
+                'total_scholars' => count($scholars)
+            ]);
+
             // Rest of your code remains the same
             $scholars = Scholar::where('batch_id', $batch->id)->get();
             $students = Student::all();

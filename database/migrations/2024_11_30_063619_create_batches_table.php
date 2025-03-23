@@ -17,6 +17,9 @@ return new class extends Migration
             $table->integer('batch_no');
             $table->string('school_year');
             $table->string('semester');
+            $table->string('total_scholars')->nullable();
+            $table->string('sub_total')->nullable();
+            $table->boolean('read')->default(false);
             $table->timestamps();
         });
 

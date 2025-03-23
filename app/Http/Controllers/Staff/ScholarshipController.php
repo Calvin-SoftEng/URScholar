@@ -74,7 +74,10 @@ class ScholarshipController extends Controller
             ->with(['scholars.campus', 'scholars.course']) // Eager load campus and course relationships
             ->first();
 
-        $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements) {
+        // Count scholars with complete submissions
+        $completeSubmissionsCount = 0;
+
+        $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements, &$completeSubmissionsCount) {
             // Get approved requirements for this scholar
             $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Approved')
@@ -87,6 +90,7 @@ class ScholarshipController extends Controller
                     $status = 'No submission';
                 } elseif ($approvedRequirements === $totalRequirements) {
                     $status = 'Complete';
+                    $completeSubmissionsCount++; // Increment counter for complete submissions
                 } else {
                     $status = 'Incomplete';
                 }
@@ -171,17 +175,46 @@ class ScholarshipController extends Controller
         $scholarship_form = ScholarshipForm::all();
         $scholarship_form_data = ScholarshipFormData::all();
 
+        // Get all scholars with all requirements approved
+        $scholarsWithAllApproved = Scholar::where('scholarship_id', $scholarship->id)
+            ->whereHas('submittedRequirements', function ($query) {
+                $query->where('status', 'Approved');
+            })
+            ->whereDoesntHave('submittedRequirements', function ($query) {
+                $query->whereIn('status', ['Pending', 'Returned']);
+            })
+            ->get();
+
+        // Batch::where('scholarship_id', $scholarship->id)
+        //     ->when($request->input('selectedYear'), function ($query, $year) {
+        //         return $query->where('school_year', $year);
+        //     })
+        //     ->when($request->input('selectedSem'), function ($query, $sem) {
+        //         return $query->where('semester', $sem);
+        //     })
+        //     ->update(['sub_total' => $scholarsWithAllApproved->count()]);
+
+
+
+        // Add this to your controller's show method, before the return statement
+        $completedBatches = Batch::where('scholarship_id', $scholarship->id)
+            ->whereRaw('total_scholars = sub_total')
+            ->when($request->input('selectedYear'), function ($query, $year) {
+                return $query->where('school_year', $year);
+            })
+            ->when($request->input('selectedSem'), function ($query, $sem) {
+                return $query->where('semester', $sem);
+            })
+            ->count();
+
+        // Then add $completedBatches to your data array in the return statement
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
             'total_scholars' => $total_scholars,
             'requirements' => $requirements,
-            'scholars' => $scholarship->scholars()
-                ->whereDoesntHave('submittedRequirements', function ($query) {
-                    $query->where('status', '!=', 'approved');
-                })
-                ->whereHas('submittedRequirements')
-                ->get(),
+            'scholars' => $scholarsWithAllApproved,
+            'completedBatches' => $completedBatches, // Add this line
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
             'campuses' => $campuses,
@@ -422,6 +455,8 @@ class ScholarshipController extends Controller
             'batch_ids' => 'required|array', // Array of batch IDs
             'batch_ids.*' => 'integer',
         ]);
+
+        dd($validated);
 
         $scholarshipId = $validated['scholarship_id'];
         $scholars = $validated['scholars']; // Array of scholar IDs

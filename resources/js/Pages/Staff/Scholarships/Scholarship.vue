@@ -23,7 +23,8 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{
-                                scholarship.name }}</span> <span>{{ scholarship.scholarshipType }}</span>
+                                scholarship.name }}</span> <span>{{ scholarship.scholarshipType }} </span>
+                            <span>{{ props.selectedSem }} {{ schoolyear.year }}</span>
                         </h1>
                     </div>
                     <!--Condition for scholarship type-->
@@ -40,7 +41,7 @@
                             </button>
 
                             <!-- Disabled Send Email Button -->
-                            <button v-tooltip.left="'You need to add students before sending emails'" disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                            <button v-tooltip.left="'You need to add scholars before sending emails'" disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
                                     font-poppins flex items-center gap-2">
                                 <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
@@ -59,14 +60,27 @@
                             </button>
 
                             <!-- Active Send Email Button -->
-                            <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-                            <button @click="importScholars"
-                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
+                            <div v-if="batches.length === 0" class="flex flex-row items-end gap-2">
+                                <button v-tooltip.left="'You need to add scholars before sending emails'" disabled
+                                    class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                                    border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
+                                    font-poppins flex items-center gap-2">
+                                    <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
+                                    <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
+                                    <span>Send Email</span>
+                                </button>
+                            </div>
+                            <div v-else>
+                                <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
+                                <button @click="importScholars"
+                                    class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
                                         border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
-                                <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
-                                <span>Send Email</span>
-                            </button>
-                            </Link>
+                                    <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
+                                    <span>Send Email</span>
+                                </button>
+                                </Link>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -112,9 +126,10 @@
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Submitted Requirements</p>
+                                    <p class="text-gray-500 text-sm">Scholars with All Requirements Approved</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2/{{ total_scholars }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ scholars.length }}/{{
+                                    total_scholars }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
@@ -124,8 +139,15 @@
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
                                     <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
-                                    <button class="px-3 bg-blue-400 text-white rounded-full text-sm">2 new
-                                        Batch</button>
+                                    <template
+                                        v-if="props.batches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
+                                        <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
+                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length}} new
+                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length === 1 ? 'Batch' : 'Batches'}}
+                                        </button>
+                                    </template>
                                 </div>
                             </div>
 
@@ -134,18 +156,18 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Completed Batches</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ completedBatches ?? 0 }}</p>
                             </div>
                         </div>
 
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
                         <div class="flex flex-row justify-between items-center">
-                            <span>List of Batches {{ props.selectedSem }} {{ schoolyear.year }}</span>
+                            <span>List of Batches</span>
 
                             <div class="flex flex-row space-x-3 items-center">
                                 <!-- Campus Filter -->
-                                <select 
+                                <select
                                     class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
                                     <option value="Need-Based">Need-Based</option>
                                     <option value="one-time">One-Time Payment</option>
@@ -353,7 +375,8 @@
                                                     <input type="checkbox" :id="`course-${campus.id}-${course}`"
                                                         v-model="selectedCoursesMap[course]" class="rounded" />
                                                     <label :for="`course-${campus.id}-${course}`"
-                                                        class="text-sm ml-2 cursor-pointer">{{ course }}</label>
+                                                        class="text-sm ml-2 cursor-pointer">{{
+                                                            course }}</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -369,7 +392,9 @@
 
                                             <div class="space-y-4">
                                                 <div class="flex flex-col justify-center items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap mb-2">General Weighted Average must be:
+                                                    <span
+                                                        class="text-sm font-medium text-black whitespace-nowrap mb-2">General
+                                                        Weighted Average must be:
                                                     </span>
 
                                                     <input v-model="form.grade" type="text" id="name"
@@ -380,25 +405,23 @@
 
                                                 <div class="flex flex-col space-y-2 justify-center items-start">
                                                     <span class="text-sm font-medium text-black whitespace-nowrap">
-                                                        Must be enrolled in: 
+                                                        Must be enrolled in:
                                                     </span>
 
                                                     <textarea v-model="selectedCoursesText" id="name" rows="3"
                                                         placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
                                                         class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
                                                         readonly>
-                                                    </textarea>
+                                    </textarea>
                                                 </div>
 
                                                 <div class="flex flex-col justify-center space-y-2 items-start">
                                                     <span class="text-sm font-medium text-black whitespace-nowrap ">
                                                         Financial Need-Based Criteria must be:
                                                     </span>
-                                                    <div 
-                                                        class="flex items-center space-x-2 mb-1">
+                                                    <div class="flex items-center space-x-2 mb-1">
                                                         <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                            >
+                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                                         <label
                                                             class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
                                                             Nakacategory na yan
@@ -406,11 +429,9 @@
                                                     </div>
 
                                                     <!-- hiwalay na loop to ata -->
-                                                    <div 
-                                                        class="flex items-center space-x-2 mb-1">
+                                                    <div class="flex items-center space-x-2 mb-1">
                                                         <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                            >
+                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                                         <label
                                                             class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
                                                             Annual Income range to 10,000 - 20,000
@@ -422,11 +443,9 @@
                                                     <span class="text-sm font-medium text-black whitespace-nowrap ">
                                                         Residency & Citizenship Criteria
                                                     </span>
-                                                    <div 
-                                                        class="flex items-center space-x-2 mb-1">
+                                                    <div class="flex items-center space-x-2 mb-1">
                                                         <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                            >
+                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
                                                         <label
                                                             class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
                                                             Bisaya ka dapat
@@ -655,6 +674,7 @@ const props = defineProps({
     students: Array,
     total_scholars: Array,
     requirements: Array,
+    completedBatches: Array,
 });
 
 const directives = {
@@ -866,7 +886,7 @@ onMounted(() => {
         startInput.value = selectedStart.value; // Keep the previous value
         startInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value);
-            
+
             // Correct for time zone issues
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
 
@@ -881,7 +901,7 @@ onMounted(() => {
         endInput.value = selectedEnd.value; // Keep the previous value
         endInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value);
-            
+
             // Correct for time zone issues
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
 
