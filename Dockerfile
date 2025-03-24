@@ -50,7 +50,8 @@ COPY . .
 RUN composer install --optimize-autoloader --no-dev
 
 # Generate Laravel key if it doesn't exist
-RUN php artisan key:generate --force
+RUN php artisan key:generate --show --force
+
 
 # Set correct environment for artisan commands
 ENV APP_ENV=production
