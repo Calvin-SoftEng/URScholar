@@ -25,8 +25,8 @@ WORKDIR /var/www/html
 # Copy existing application directory contents
 COPY . .
 
-# Update Apache's DocumentRoot to point to the public folder
-RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
+# Install Laravel dependencies
+RUN composer install --optimize-autoloader --no-dev
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
