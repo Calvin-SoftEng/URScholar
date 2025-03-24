@@ -31,9 +31,9 @@ COPY . .
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
-RUN npm install
-RUN npm run dev
-RUN php artisans serve
+# RUN npm install
+# RUN npm run dev
+# RUN php artisans serve
 
 # Generate Laravel key
 RUN php artisan key:generate
