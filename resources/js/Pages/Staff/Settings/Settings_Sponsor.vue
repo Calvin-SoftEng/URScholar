@@ -115,9 +115,9 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2 px-5 py-2">
+                            <div class="flex flex-col gap-2 px-5 py-2 h-full">
                                 <div class="col-span-1">
-                                    <div class="flex flex-col w-full gap-2">
+                                    <div class="flex flex-col w-full gap-2 h-full">
                                         <div class="w-full">
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor</h3>
                                             <input v-model="form.name" type="text" id="name"
@@ -125,7 +125,7 @@
                                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                         </div>
                                         <div class="w-full grid grid-cols-2 gap-4">
-                                            <div class="w-full space-y-3">
+                                            <div class="w-full space-y-5">
                                                 <div class="w-full">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                     </h3>
@@ -148,7 +148,7 @@
                                                         class="textarea textarea-bordered h-64 bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
                                                 </div>
                                             </div>
-                                            <div class="space-y-2">
+                                            <div class="space-y-5">
                                                 <div class="w-full flex flex-col">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Attach
                                                         Memorandum of Agreement</h3>
@@ -174,8 +174,12 @@
                                                                 JPG, DOCX (MAX. 2MB-4MB)</p>
                                                         </div>
                                                         <div v-else class="flex flex-col items-center justify-center">
-                                                            <img :src="form.filePreview" alt="Uploaded Preview"
-                                                                class="h-32 mb-2 rounded-lg" />
+                                                            <template v-if="form.filePreview && !form.fileName.endsWith('.docx,.doc,.pdf')">
+                                                                <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
+                                                            </template>
+                                                            <template v-else>
+                                                                <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-32 mb-2" />
+                                                            </template>
                                                             <p class="text-sm text-gray-500">{{ form.fileName }}</p>
                                                         </div>
                                                         <input id="dropzone-file" type="file" class="hidden"
@@ -220,13 +224,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
-                                    </div>
-                                </div>
-                                <div class="col-span-1">
-                                    <div class="flex flex-col w-full gap-2">
-
 
 
                                     </div>

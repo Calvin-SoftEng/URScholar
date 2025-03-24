@@ -3,14 +3,14 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row px-10">
+        <div class="w-full bg-[#e8f0f9] shadow-sm justify-between flex flex-row px-10">
             <h1 class="text-3xl font-bold font-sora text-left p-3">My Profile</h1>
              <!-- Toggle Button -->
-            <button @click="EditProfile = !EditProfile" class="text-sm font-semibold text-black">
+            <button @click="EditProfile = !EditProfile" class="text-sm font-normal text-primary">
             {{ EditProfile ? 'Save Updates' : 'Edit Profile' }}
             </button>
         </div>
-        <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2">
+        <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
             <div class="mx-auto w-7/12 sm:px-6 lg:px-8 ">
                 
                 <div v-if="!EditProfile"

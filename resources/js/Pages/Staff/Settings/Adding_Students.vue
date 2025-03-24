@@ -182,11 +182,20 @@
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">
-                            Add Students
-                        </h2>
-                    </span>
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Adding University Students
+                            </h2>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Import student information from a CSV file.
+                            </span>
+                        </div>
+                    </div>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal">
@@ -219,7 +228,12 @@
                                 <p class="text-xs text-gray-500 dark:text-gray-400">CSV</p>
                             </div>
                             <div v-else class="flex flex-col items-center justify-center">
-                                <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
+                                <template v-if="form.filePreview && !form.fileName.endsWith('.csv')">
+                                    <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
+                                </template>
+                                <template v-else>
+                                    <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-32 mb-2" />
+                                </template>
                                 <p class="text-sm text-gray-500">{{ form.fileName }}</p>
                             </div>
                             <input id="dropzone-file" type="file" class="hidden" accept=".csv"

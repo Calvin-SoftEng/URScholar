@@ -3,11 +3,11 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <div class="w-full bg-dirtywhite shadow-sm ">
-            <h1 class="text-3xl font-bold font-sora text-left p-3 mx-10">My Scholarship</h1>
+        <div class="w-full bg-[#e8f0f9] shadow-sm ">
+            <h1 class="text-3xl text-primary font-bold font-sora text-left p-3 mx-10">My Scholarship</h1>
         </div>
-        <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
-            <div class="mx-auto w-10/12 sm:px-6 lg:px-8 ">
+        <div class="pt-3 pb-16 overflow-auto h-full scroll-py-4 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
+            <div class="mx-auto w-10/12 sm:px-6 lg:px-8 h-full ">
                 <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- greeting -->
