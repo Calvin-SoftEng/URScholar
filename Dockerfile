@@ -31,6 +31,12 @@ COPY . .
 
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
+RUN npm install
+RUN npm run dev
+RUN php artisans serve
+
+# Generate Laravel key
+RUN php artisan key:generate
 
 # Set permissions for Laravel storage and bootstrap cache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
