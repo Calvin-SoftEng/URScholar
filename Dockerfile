@@ -25,6 +25,9 @@ WORKDIR /var/www/html
 # Copy existing application directory contents
 COPY . .
 
+# Copy the secret .env file from the Render secret directory
+COPY /etc/secrets/.env /var/www/html/.env
+
 # Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
 
