@@ -41,7 +41,7 @@
                                 </div>
 
                                 <!-- Requirements upload section -->
-                                <div class="grid grid-cols-2 gap-4">
+                                <!-- <div class="grid grid-cols-2 gap-4">
                                     <div v-for="(requirement, index) in requirements" :key="requirement.id"
                                         class="border rounded-md shadow p-4 bg-white">
                                         <div class="mb-2">
@@ -56,7 +56,6 @@
                                                 class="block w-full text-sm text-blue-900 border border-gray-300 rounded-lg cursor-pointer bg-white 
                                             dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
 
-                                            <!-- File preview -->
                                             <div v-if="form.files[requirement.id]" class="text-sm text-gray-600">
                                                 Selected file: {{ form.files[requirement.id].name }}
                                                 <button type="button" @click="removeFile(requirement.id)"
@@ -71,7 +70,57 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div> -->
+
+                                <div class="col-span-1 flex flex-col space-y-3">
+                                    <div v-for="(requirement, index) in requirements" :key="requirement.id"
+                                        class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
+                                        <!-- Header -->
+                                        <div class="flex justify-between items-center gap-5">
+                                            <div class="flex items-center space-x-2">
+                                                <span
+                                                    class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">{{
+                                                    String.fromCharCode(65 + index) }}</span>
+                                                <span class="font-semibold text-gray-800">{{
+                                                    requirement.requirements
+                                                }}</span>
+                                            </div>
+                                            <label
+                                                class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                                                Add File
+                                                <input type="file" class="hidden"
+                                                @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
+                                                :id="'file_input_' + requirement.id" />
+                                            </label>
+                                        </div>
+
+                                        <!-- Uploaded File Preview -->
+                                        <div v-if="form.files[requirement.id]"
+                                            class="border border-dashed border-purple-400 rounded-lg p-2 mt-2 flex items-center justify-between">
+                                            <div class="flex items-center space-x-2">
+                                                <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
+                                                    class="w-6 h-6" alt="PDF Icon">
+                                                <div>
+                                                    <p class="text-sm font-medium">{{
+                                                        form.files[requirement.id].name }}</p>
+                                                    <p class="text-xs text-gray-500">{{
+                                                        form.files[requirement.id].size }}</p>
+                                                </div>
+                                            </div>
+                                            <button type="button" @click="removeFile(requirement.id)"
+                                                class="ml-2 text-red-600 hover:text-red-800">
+                                                Remove
+                                            </button>
+
+                                            <div v-if="form.errors[`files.${requirement.id}`]"
+                                                class="text-red-500 text-sm">
+                                                {{ form.errors[`files.${requirement.id}`] }}
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
+
 
                                 <div class="items-right flex w-full justify-end mt-4">
                                     <button type="submit" :disabled="form.processing || !isFormValid" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none

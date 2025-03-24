@@ -59,29 +59,32 @@
                                     </span>
                                 </div>
 
-                                <div class="relative">
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">
-                                        Subject</h3>
-                                    <textarea v-model="form.subject" id="subject" rows="2"
-                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Write Title to the message"></textarea>
-                                    <InputError v-if="errors.subject" :message="errors.subject" class="mt-1" />
-                                </div>
+                                
 
                                 <div class="flex flex-col gap-2">
-                                    <div class="h-full w-full flex flex-row gap-3">
-                                        <div class="w-full">
-                                            <div class="mb-3">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Add Messages
-                                                </h3>
-                                                <textarea v-model="form.content" id="content" rows="15"
+                                    <div class="h-full w-full grid grid-cols-2 gap-3">
+                                        <div class="flex flex-col space-y-2">
+                                            <div class="relative">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                                    Subject</h3>
+                                                <textarea v-model="form.subject" id="subject" rows="2"
                                                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Write additional informations here..."></textarea>
-                                                <InputError v-if="errors.content" :message="errors.content"
-                                                    class="mt-1" />
+                                                    placeholder="Write Title to the message"></textarea>
+                                                <InputError v-if="errors.subject" :message="errors.subject" class="mt-1" />
+                                            </div>
+                                            <div class="w-full">
+                                                <div class="mb-3">
+                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Add Messages
+                                                    </h3>
+                                                    <textarea v-model="form.content" id="content" rows="15"
+                                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                        placeholder="Write additional informations here..."></textarea>
+                                                    <InputError v-if="errors.content" :message="errors.content"
+                                                        class="mt-1" />
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="w-full flex flex-col space-y-5">
+                                        <div class="w-full flex flex-col space-y-7">
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Set Submission
                                                     Timeline</h3>

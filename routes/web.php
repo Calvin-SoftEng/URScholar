@@ -12,6 +12,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ScholarshipController;
 use App\Http\Controllers\Staff\ScholarController;
 use App\Http\Controllers\Staff\MessageController;
+use App\Http\Controllers\Staff\PayoutsController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\MISController;
 use App\Http\Controllers\Staff\SettingsController;
@@ -186,6 +187,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
         Route::put('/settings/scholarship-forms/data{scholarshipFormData}', [SettingsController::class, 'updateData'])->name('scholarship.form.data.update');
         Route::delete('/scholarship-form-data/{scholarshipFormData}', [SettingsController::class, 'destroyData'])->name('scholarship.form.data.destroy');
 
+    Route::get('/payouts', [PayoutsController::class, 'payouts_index'])->name('payouts_index.payouts');
+    Route::get('/payouts/list', [PayoutsController::class, 'payouts_list'])->name('payouts_list.payouts');
 });
 
 // SPONSOR -------------------------------------------------------------------------------------------------------------------------------------------------------

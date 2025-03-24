@@ -162,15 +162,20 @@
         <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full"
           :class="{ 'opacity-0': !dataOpenSideBar }">Docs</div>
 
-        <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''"
-          class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-          <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-            <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
-              price_check
-            </span>
-            <span v-show="dataOpenSideBar" class="pl-2">Payouts</span>
-          </router-link>
-        </div>
+        <Link :href="route('payouts_index.payouts')">
+          <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''"
+          :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/payouts') }]">
+            <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+              <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/payouts') }]"
+              :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/payouts') }]">
+                price_check
+              </span>
+              <span v-show="dataOpenSideBar" 
+              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/payouts') }]">Payouts</span>
+            </router-link>
+          </div>
+        </Link>
+
         <div v-tooltip.right="!dataOpenSideBar ? 'Reports' : ''"
           class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
           <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
