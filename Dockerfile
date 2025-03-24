@@ -49,9 +49,6 @@ COPY . .
 # Complete Composer installation
 RUN composer install --optimize-autoloader --no-dev
 
-# Build Vue.js assets
-RUN npm run build
-
 # Generate Laravel key if it doesn't exist
 RUN php artisan key:generate --force
 
