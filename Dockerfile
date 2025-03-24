@@ -1,25 +1,33 @@
-FROM php:8.1-apache
+# Use an official PHP image as the base image
+FROM php:8.2-fpm
 
 # Set working directory
 WORKDIR /var/www/html
 
-# Copy the application files
-COPY . .
-
 # Install dependencies
 RUN apt-get update && apt-get install -y \
-    libzip-dev \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    zip \
     unzip \
-    && docker-php-ext-install zip pdo pdo_mysql
+    git \
+    curl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install pdo pdo_mysql gd
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Run Composer install
+# Copy application files
+COPY . .
+
+# Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
 
-# Expose port 80
-EXPOSE 80
+# Set permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-# Run the Laravel migration and start Apache
-CMD php artisan migrate --force && apache2-foreground
+# Expose port 9000 and start the PHP-FPM server
+EXPOSE 9000
+CMD ["php-fpm"]
