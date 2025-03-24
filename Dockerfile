@@ -25,8 +25,9 @@ WORKDIR /var/www/html
 # Copy existing application directory contents
 COPY . .
 
-# Copy the secret .env file from the Render secret directory
-COPY /etc/secrets/.env /var/www/html/.env
+# Copy the startup script
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # Install Laravel dependencies
 RUN composer install --optimize-autoloader --no-dev
@@ -37,5 +38,5 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port 80
 EXPOSE 80
 
-# Start Apache server
-CMD ["apache2-foreground"]
+# Use the startup script as the entry point
+ENTRYPOINT ["/usr/local/bin/start.sh"]
