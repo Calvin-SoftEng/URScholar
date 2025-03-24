@@ -25,12 +25,8 @@ WORKDIR /var/www/html
 # Copy existing application directory contents
 COPY . .
 
-# Copy the startup script
-COPY start.sh /usr/local/bin/start.sh
-RUN chmod +x /usr/local/bin/start.sh
-
-# Install Laravel dependencies
-RUN composer install --optimize-autoloader --no-dev
+# Update Apache's DocumentRoot to point to the public folder
+RUN sed -i 's#/var/www/html#/var/www/html/public#g' /etc/apache2/sites-available/000-default.conf
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
@@ -38,5 +34,5 @@ RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cac
 # Expose port 80
 EXPOSE 80
 
-# Use the startup script as the entry point
-ENTRYPOINT ["/usr/local/bin/start.sh"]
+# Start Apache server
+CMD ["apache2-foreground"]
