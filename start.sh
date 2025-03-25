@@ -19,8 +19,8 @@ php -v
 composer --version
 
 # Laravel preparations
-php artisan config:clear
-php artisan cache:clear
+# php artisan config:clear
+# php artisan cache:clear
 
 # Detailed database connection check
 php artisan tinker --execute="
