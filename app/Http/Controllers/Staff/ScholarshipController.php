@@ -528,13 +528,8 @@ class ScholarshipController extends Controller
 
     public function forward(Request $request)
     {
-        $messages = [
-            'required' => 'This field is required.', // Generic for all required fields
-            'date_start.required' => 'Start date is required.', // Specific message
-            'date_end.required' => 'End date is required.',
-        ];
 
-        $validated = $request->validate([
+        $request->validate([
             'scholarship_id' => 'required|integer',
             'scholars' => 'required|array', // Array of scholar IDs
             'batch_ids' => 'required|array', // Array of batch IDs
@@ -546,7 +541,7 @@ class ScholarshipController extends Controller
             'date_end.required' => 'Set a Date start',
         ]);
 
-        // dd($validated);
+        //dd($request);
 
 
 
@@ -562,6 +557,8 @@ class ScholarshipController extends Controller
                 'batch_id' => $scholarId['batch_id'],
                 'scholar_id' => $scholarId['id'],
                 'status' => 'pending', // Default status
+                'date_start' => $request['date_start'],
+                'date_end' => $request['date_end'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
