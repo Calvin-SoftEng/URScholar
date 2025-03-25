@@ -30,6 +30,8 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
 
+# Install dependencies
+RUN composer install --no-dev --optimize-autoloader
 
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
