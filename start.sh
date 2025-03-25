@@ -2,12 +2,6 @@
 # Add more verbose logging
 set -e  # Exit immediately if a command exits with a non-zero status
 
-# Removed network diagnostic commands that require root/privileged access
-echo "Checking database connectivity..."
-# Use a method that doesn't require special permissions
-echo "Attempting to resolve database host..."
-url postgresql://postgres.wwecpxfveikhrbnsfuwf:nFMbX1OYdOwOHAMB@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
-
 echo "Starting Laravel application..."
 php -v
 composer --version
@@ -19,25 +13,28 @@ php artisan cache:clear
 php artisan route:clear
 php artisan view:clear
 
-# More verbose migration with additional error handling
-php artisan migrate --force --verbose || (
-    echo "Migration failed. Checking database connection..." &&
-    php artisan tinker --execute="
-        try {
-            DB::connection()->getPdo();
-            echo 'Database connection successful';
-        } catch (Exception \$e) {
-            echo 'Database connection failed: ' . \$e->getMessage();
-        }
-    "
-)
+# Generate application key if not set
+php artisan key:generate
 
-# Output any potential routing or configuration issues
+# Check database connection with verbose output
+echo "Checking database connection..."
+php artisan tinker --execute="
+    try {
+        \$connection = DB::connection();
+        \$pdo = \$connection->getPdo();
+        echo 'Database connection successful!' . PHP_EOL;
+        echo 'Database: ' . \$connection->getDatabaseName() . PHP_EOL;
+    } catch (Exception \$e) {
+        echo 'Database connection failed: ' . \$e->getMessage() . PHP_EOL;
+        exit(1);
+    }
+"
+
+# Run migrations with verbose output
+php artisan migrate --force --verbose
+
+# Output routing information
 php artisan route:list
-php artisan config:show
-
-# Verify application key
-php artisan key:generate --show
 
 # Start PHP-FPM in the background with more logging
 php-fpm -R &
