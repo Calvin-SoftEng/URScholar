@@ -21,22 +21,27 @@ WORKDIR /var/www
 # Install Composer
 COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 
-# Copy application code **before installing dependencies**
+# Copy application code
 COPY . .
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
-RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
-
-# Install dependencies **after the application files exist**
+# Install dependencies
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
+# Set permissions more comprehensively
+RUN chown -R www-data:www-data /var/www \
+    && chmod -R 755 /var/www \
+    && chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Copy nginx configuration
+# Copy nginx and php-fpm configurations
 COPY nginx.conf /etc/nginx/nginx.conf
+COPY php-fpm.conf /etc/php-fpm.d/www.conf
+
+# Prepare startup script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
 # Expose port for Render
 EXPOSE 10000
 
-# Start PHP-FPM and nginx
-CMD ["sh", "-c", "php artisan migrate --force && php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php-fpm -D && nginx -g 'daemon off;'"]
+# Use the startup script
+CMD ["/start.sh"]
