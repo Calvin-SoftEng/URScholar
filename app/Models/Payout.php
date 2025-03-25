@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payout extends Model
 {
-    protected $fillable = ['scholarship_id', 'batch_id', 'scholar_id', 'status'];
+    protected $fillable = ['scholarship_id', 'batch_id', 'scholar_id', 'status', 'date_start', 'date_end'];
 
     public function scholar()
     {
