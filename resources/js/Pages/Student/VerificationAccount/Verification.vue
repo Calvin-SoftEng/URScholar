@@ -418,11 +418,11 @@
                                             </h3>
                                             <div
                                                 class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
-                                                
+
                                             </div>
                                         </div>
 
-                                        <div class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
+                                        <div v-if="scholar" class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
                                             <span class="text-sm text-gray-500 italic">* You can set this up
                                                 later</span>
 
@@ -432,11 +432,10 @@
                                                 <div
                                                     class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
                                                     <Label for="gwa">Enter General Weighted Average
-                                                        <!-- <span
-                                                            class="italic text-gray-500">*must be {{
+                                                        <span class="italic text-gray-500">*must be {{
                                                             props.batch_semester }} semester {{ school_year.year
                                                             }}
-                                                        </span> -->
+                                                        </span>
                                                     </Label>
                                                     <input id="gwa" v-model="form.grade" type="text"
                                                         placeholder="Enter your GWA (e.g., 2.0)"
@@ -448,6 +447,33 @@
                                                     class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
                                                     <Label for="file_upload">Upload Certificate of Grade</Label>
                                                     <input id="file_upload" type="file" @change="handleFile"
+                                                        class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                                        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div v-else class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
+                                            <span class="text-sm text-red-500 italic">Setup mo na lang ya pag may
+                                                scholarship ka na</span>
+
+                                            <div
+                                                class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
+                                                <!-- GWA Input -->
+                                                <div
+                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
+                                                    <Label for="gwa">Enter General Weighted Average
+                                                    </Label>
+                                                    <input id="gwa" v-model="form.grade" type="text" disabled
+                                                        placeholder="Enter your GWA (e.g., 2.0)"
+                                                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
+                                                </div>
+
+                                                <!-- File Upload -->
+                                                <div
+                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
+                                                    <Label for="file_upload">Upload Certificate of Grade</Label>
+                                                    <input id="file_upload" type="file" disabled
                                                         class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
                                                         dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                                                 </div>
@@ -1461,8 +1487,7 @@
                                                 <!-- Image Upload Column -->
                                                 <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
                                                     <Label for="pic">Insert Profile Picture</Label>
-                                                    <InputError v-if="errors?.img"
-                                                        :message="errors.img"
+                                                    <InputError v-if="errors?.img" :message="errors.img"
                                                         class="items-center flex text-xs" />
                                                     <label for="dropzone-img"
                                                         class="flex flex-col items-center justify-center w-64 h-64 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -1803,8 +1828,10 @@ const dontShowAgain = () => {
 const submit = async () => {
 
     try {
-        form.value.semester = props.batch_semester;
-        form.value.school_year = props.school_year.year;
+        if (props.scholar != null) {
+            form.value.semester = props.batch_semester;
+            form.value.school_year = props.school_year.year;
+        }
 
         router.post(`/verify-account/verifying`, form.value);
         //await useForm(form.value).post(`/sponsors/create-scholarship`);
