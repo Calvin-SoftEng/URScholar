@@ -1,25 +1,30 @@
 #!/bin/sh
+# Add more verbose logging
+set -e  # Exit immediately if a command exits with a non-zero status
 
-# Print environment and configuration info
 echo "Starting Laravel application..."
 php -v
 composer --version
 nginx -v
 
-# Run Laravel specific preparations
+# Detailed Laravel preparation
 php artisan config:clear
 php artisan cache:clear
 php artisan route:clear
 php artisan view:clear
 
-# Run migrations
-php artisan migrate --force
+# More verbose migration
+php artisan migrate --force --verbose
 
-# Check for any Laravel-specific errors
+# Output any potential routing or configuration issues
 php artisan route:list
+php artisan config:show
 
-# Start PHP-FPM in the background
-php-fpm &
+# Check for any specific Laravel errors
+php artisan tinker --execute="dd(config('app.key'));"
+
+# Start PHP-FPM in the background with more logging
+php-fpm -R &
 
 # Start Nginx in the foreground
 nginx -g 'daemon off;'
