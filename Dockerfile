@@ -34,7 +34,7 @@ RUN chown -R www-data:www-data /var/www \
 
 # Copy nginx and php-fpm configurations
 COPY nginx.conf /etc/nginx/nginx.conf
-COPY php-fpm.conf /etc/php-fpm.d/www.conf
+COPY www.conf /etc/php-fpm.d/www.conf
 
 # Prepare startup script
 COPY start.sh /start.sh
