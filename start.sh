@@ -6,7 +6,7 @@ set -e  # Exit immediately if a command exits with a non-zero status
 echo "Checking database connectivity..."
 # Use a method that doesn't require special permissions
 echo "Attempting to resolve database host..."
-host db.wwecpxfveikhrbnsfuwf.supabase.co
+url postgresql://postgres.wwecpxfveikhrbnsfuwf:nFMbX1OYdOwOHAMB@aws-0-ap-southeast-1.pooler.supabase.com:5432/postgres
 
 echo "Starting Laravel application..."
 php -v
