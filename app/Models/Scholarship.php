@@ -10,7 +10,7 @@ class Scholarship extends Model
 {
 
     use HasFactory, Notifiable;
-    protected $fillable = ['name', 'sponsor_id', 'scholarshipType', 'status', 'date_start', 'date_end'];
+    protected $fillable = ['name', 'sponsor_id', 'scholarshipType', 'status', 'date_start', 'date_end', 'read'];
 
     public function scholars()
     {

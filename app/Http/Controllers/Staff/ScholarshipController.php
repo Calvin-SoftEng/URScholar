@@ -264,6 +264,10 @@ class ScholarshipController extends Controller
             ])
             ->orderBy('batch_no', 'desc')
             ->get();
+            
+        $scholarship->update([
+            'read' => 1
+        ]);
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,

@@ -40,7 +40,7 @@
                                 justify-between items-start md:items-center space-y-5 md:space-y-0">
 
                                 <!-- Notification Badge -->
-                                <span
+                                <span v-if="scholarship.read !== 1"
                                     class="absolute top-[-13px] right-2 bg-primary text-white text-sm font-bold px-5 py-1 rounded-full">
                                     New Scholarship
                                 </span>

@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->date('date_start');
             $table->date('date_end');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->boolean('read')->default(false);
             $table->timestamps();
         });
 

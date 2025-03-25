@@ -136,8 +136,6 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
 
-    Route::post('/download-file', [ScholarController::class, 'downloadFile']);
-
 
 
     Route::get('/scholarships/{scholarshipId}/batch/{batchId}', [ScholarshipController::class, 'batch'])->name('scholarship.batch');
@@ -177,15 +175,15 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/settings/verification-forms', [SettingsController::class, 'verification_forms'])->name('settings.verification_forms');
 
-        // Scholarship Forms
-        Route::post('/settings/scholarship-forms', [SettingsController::class, 'store'])->name('scholarship.forms.store');
-        Route::put('/settings/scholarship-forms{scholarshipForm}', [SettingsController::class, 'update'])->name('scholarship.forms.update');
-        Route::delete('/scholarship-forms/{scholarshipForm}', [SettingsController::class, 'destroy'])->name('scholarship.forms.destroy');
-        
-        // Scholarship Form Data/Criteria
-        Route::post('/settings/scholarship-forms/data', [SettingsController::class, 'storeData'])->name('scholarship.form.data.store');
-        Route::put('/settings/scholarship-forms/data{scholarshipFormData}', [SettingsController::class, 'updateData'])->name('scholarship.form.data.update');
-        Route::delete('/scholarship-form-data/{scholarshipFormData}', [SettingsController::class, 'destroyData'])->name('scholarship.form.data.destroy');
+    // Scholarship Forms
+    Route::post('/settings/scholarship-forms', [SettingsController::class, 'store'])->name('scholarship.forms.store');
+    Route::put('/settings/scholarship-forms{scholarshipForm}', [SettingsController::class, 'update'])->name('scholarship.forms.update');
+    Route::delete('/scholarship-forms/{scholarshipForm}', [SettingsController::class, 'destroy'])->name('scholarship.forms.destroy');
+
+    // Scholarship Form Data/Criteria
+    Route::post('/settings/scholarship-forms/data', [SettingsController::class, 'storeData'])->name('scholarship.form.data.store');
+    Route::put('/settings/scholarship-forms/data{scholarshipFormData}', [SettingsController::class, 'updateData'])->name('scholarship.form.data.update');
+    Route::delete('/scholarship-form-data/{scholarshipFormData}', [SettingsController::class, 'destroyData'])->name('scholarship.form.data.destroy');
 
     Route::get('/payouts', [PayoutsController::class, 'payouts_index'])->name('payouts_index.payouts');
     Route::get('/payouts/list', [PayoutsController::class, 'payouts_list'])->name('payouts_list.payouts');
@@ -272,7 +270,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::post('/applications', [ApplicationController::class, 'store'])->name('application.store');
 
     //Non -Scholars Scholarship Application
-    
+
     //Listing
     Route::get('/available-scholarships', [StudentController::class, 'scholarships'])->name('scholarship.scholarships');
 
