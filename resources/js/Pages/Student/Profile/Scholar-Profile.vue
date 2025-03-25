@@ -129,7 +129,7 @@
                                     <div class="flex flex-col items-end">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ grade ? grade.grade : 'N/A'
                                             }}</span>
-                                        <button class="text-sm">
+                                        <button class="text-sm" @click="toggleCheck">
                                             View Certificate of Grade
                                         </button>
                                     </div>
@@ -842,6 +842,31 @@
                 </div>
             </div>
         </div>
+
+        <div v-if="View_Grades" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 dark:bg-primary dark:bg-opacity-50 z-50">
+            <!-- Modal Container -->
+            <div class="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 overflow-hidden">
+                <!-- Close Button (Positioned at Top Right) -->
+                <button 
+                    @click="closeModal"
+                    class="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-full p-2 transition-all"
+                >
+                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                </button>
+
+                <!-- Modal Header -->
+                <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-4">Viewing Document</h2>
+
+                <!-- Document Viewer -->
+                <div class="w-full h-[80vh]">
+                    <iframe :src="documentUrl" class="w-full h-full border-0"></iframe>
+                </div>
+            </div>
+        </div>
+
     </AuthenticatedLayout>
 </template>
 
@@ -968,6 +993,20 @@ const form = ref({
 img: null,
 imgPreview: null
 });
+
+const View_Grades = ref(false);
+
+const toggleCheck = () => {
+    View_Grades.value = !View_Grades.value;
+    if (View_Grades.value) {
+        resetForm();
+    }
+};
+
+const closeModal = () => {
+    View_Grades.value = false;
+    resetForm();
+};
 
 const selectedFile = ref(null);
 

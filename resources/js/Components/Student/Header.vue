@@ -17,14 +17,14 @@
               class="w-[180px] h-[40px] hidden dark:block"> -->
           </div>
         <ul class="flex pl-10 space-x-10 font-inter font-semibold text-navy">
-          <li>
+          <!-- <li>
             <Link :href="(route('student.dashboard'))">
             <p class="text-primary-foreground hover:text-primary-foreground transition">Feed</p>
             </Link>
-          </li>
+          </li> -->
           <li>
             <Link :href="(route('student.scholarship'))">
-            <p class="text-primary-foreground hover:text-primary-foreground transition">Scholarship</p>
+            <p class="text-primary-foreground hover:text-primary-foreground transition">Scholarship Dashboard</p>
             </Link>
           </li>
         </ul>

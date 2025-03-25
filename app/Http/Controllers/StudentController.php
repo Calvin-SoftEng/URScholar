@@ -33,7 +33,7 @@ class StudentController extends Controller
 {
     public function dashboard()
     {
-        return Inertia::render('Student/Dashboard/Feed');
+        return Inertia::render('Student/Dashboard/Dashboard');
     }
     public function verifyAccount()
     {
