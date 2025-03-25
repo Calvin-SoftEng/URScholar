@@ -276,8 +276,12 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400">Only CSV files are allowed</p>
                         </div>
                         <div v-else class="flex flex-col items-center justify-center">
-                            <img :src="form.filePreview" alt="Uploaded Preview"
-                                class="max-h-24 mb-2 rounded-lg text-gray-500" />
+                            <template v-if="form.filePreview && !form.fileName.endsWith('.csv')">
+                                <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
+                            </template>
+                            <template v-else>
+                                <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-48 mb-2" />
+                            </template>
                             <p class="text-sm text-gray-500">{{ form.fileName }}</p>
                         </div>
                         <input id="dropzone-file" type="file" class="hidden" accept=".csv"

@@ -2,21 +2,27 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout class="shadow-md z-10">
-        <div class="w-full bg-dirtywhite shadow-sm ">
-            <h1 class="text-3xl font-bold font-sora text-left p-3 mx-10">Confirmation</h1>
+    <AuthenticatedLayout class="shadow-md z-10 min-h-screen overflow-auto">
+        <div class="w-full bg-dirtywhite shadow-sm">
+            <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3">
+                Confirmation
+            </h1>
         </div>
-        <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
-            <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
-            <div class="w-full block bg-white shadow-md p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
+        <div class="pt-3 pb-24 sm:overflow-auto sm:max-h-[90vh] sm:scroll-py-2">
+            <div class="w-full bg-white shadow-md p-10 sm:p-5 flex flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
+
+
                 <!-- Image Container (Centered) -->
-                <div class="w-44 h-44 flex items-center justify-center mx-auto">
-                    <img src="../../../../assets/images/qualifiedvector.png" alt="Congrats">
+                <div class="w-44 h-44 sm:w-20 sm:h-20 md:w-32 md:h-44 lg:w-44 lg:h-34 flex justify-center mx-auto">
+                    <img 
+                        src="../../../../assets/images/qualifiedvector.png" 
+                        alt="Congrats" 
+                    >
                 </div>
                 <h1 class="font-bold text-2xl font-albert text-center mt-4">
                     Congratulations! You are qualified for the {{ scholarship.name }} Scholarship!
                 </h1>
-                <div class="p-24 font-inter text-lg">
+                <div class="p-24 sm:p-3 sm:mt-10 font-inter text-lg">
                     <p>Dear, {{ scholar.first_name + ' ' + scholar.last_name }}</p>
                     <br>
                     <p class="leading-loose indent-6">We are thrilled to inform you that you have been officially

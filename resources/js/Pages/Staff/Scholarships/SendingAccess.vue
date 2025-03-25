@@ -89,25 +89,20 @@
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Set Submission
                                                     Timeline</h3>
                                                 <div id="date-range-picker" date-rangepicker
-                                                    class="flex items-center gap-4 w-full">
+                                                    class="flex items-center gap-3 w-full">
                                                     <!-- Application Start Date -->
                                                     <div class="flex flex-col w-full">
                                                         <div class="relative">
-                                                            <div
-                                                                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                                    aria-hidden="true"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    fill="currentColor" viewBox="0 0 20 20">
-                                                                    <path
-                                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                                                 </svg>
                                                             </div>
                                                             <input :value="selectedStart"
                                                                 @input="selectedStart = $event.target.value"
                                                                 id="datepicker-range-start" name="start" type="text"
-                                                                autocomplete="off" lang="en"
-                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                autocomplete="off" 
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                                 placeholder="Submission Start Date">
                                                         </div>
                                                         <InputError v-if="errors.application"
@@ -119,20 +114,15 @@
                                                     <!-- Application Deadline -->
                                                     <div class="flex flex-col w-full">
                                                         <div class="relative">
-                                                            <div
-                                                                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                                    aria-hidden="true"
-                                                                    xmlns="http://www.w3.org/2000/svg"
-                                                                    fill="currentColor" viewBox="0 0 20 20">
-                                                                    <path
-                                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                                                 </svg>
                                                             </div>
                                                             <input :value="selectedEnd"
                                                                 @input="selectedEnd = $event.target.value"
                                                                 id="datepicker-range-end" name="end" type="text"
-                                                                autocomplete="off" lang="en"
+                                                                autocomplete="off" 
                                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                                 placeholder="Submission Deadline">
                                                         </div>
@@ -357,14 +347,20 @@ onMounted(() => {
     }
 
     initFlowbite(); // Initialize Flowbite first
+
+    fetchEmailPreview();
+
     // 🎯 Start Date Picker
     const startInput = document.getElementById("datepicker-range-start");
     if (startInput) {
         startInput.value = selectedStart.value; // Keep the previous value
         startInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value); // ✅ Get selected date
-            form.value.application = date.toISOString().split("T")[0];
-            console.log("Application:", form.value.application);
+            const offset = date.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
+            const localDate = new Date(date.getTime() - offset); // Adjust to local time
+
+            form.value.application = localDate.toISOString().split("T")[0]; // Still outputs YYYY-MM-DD correctly
+            // console.log("Application:", form.value.application);
             selectedStart.value = event.target.value;
         });
     }
@@ -375,7 +371,10 @@ onMounted(() => {
         endInput.value = selectedEnd.value; // Keep the previous value
         endInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value); // ✅ Get selected date
-            form.value.deadline = date.toISOString().split("T")[0];
+            const offset = date.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
+            const localDate = new Date(date.getTime() - offset); // Adjust to local time
+
+            form.value.deadline = localDate.toISOString().split("T")[0]; // Still outputs YYYY-MM-DD correctly
             selectedEnd.value = event.target.value;
         });
     }
@@ -421,6 +420,34 @@ const validateForm = () => {
 
     return isValid;
 };
+
+const fetchEmailPreview = async () => {
+    try {
+        const response = await fetch("/scholarships/1/send-access", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                scholar: {
+                    first_name: "John",
+                    email: "john.doe@example.com"
+                },
+                password: "12345678",
+                deadline: "March 31, 2025"
+            })
+        });
+
+        if (!response.ok) throw new Error("Failed to fetch email preview");
+
+        const data = await response.json();
+        form.value.subject = data.subject;
+        form.value.content = data.content;
+    } catch (error) {
+        console.error("Error fetching email preview:", error);
+    }
+};
+
 
 const submitForm = async () => {
     // Client-side validation before submitting

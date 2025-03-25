@@ -190,20 +190,46 @@
             id="menu-content"
             class="fixed inset-0 bg-primary bg-opacity-95 z-50 flex flex-col items-center justify-center overflow-hidden"
           >
-            <!-- Close Button -->
-            <button 
-              @click="toggleMenu" 
-              class="absolute top-4 right-4 text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
-              aria-label="Close menu"
-            >
-              <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
 
-            <div class="flex flex-row  items-center justify-center mb-5">
-              <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[60px] h-[60px]">
+            <div class="absolute top-0 flex items-center justify-between w-full px-2 py-2">
+              <!-- Avatar (Left) -->
+              <div class="flex items-center gap-3 pl-3">
+                <img 
+                  src="../../../assets/images/main_logo_white.png"
+                  alt="User Avatar" 
+                  class="w-10 h-10 "
+                >
+              </div>
+
+              <!-- Close Button (Right) -->
+              <button 
+                @click="toggleMenu" 
+                class="text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
+                aria-label="Close menu"
+              >
+                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
+
+            <div v-if="$page.props.auth.user.picture" class="flex justify-center mb-5 px-4">
+              <div class="bg-white shadow-lg rounded-xl px-10 py-5 w-full max-w-xs text-center">
+                <!-- Avatar -->
+                <img 
+                  :src="`/storage/user/profile/${$page.props.auth.user.picture}`" 
+                  alt="User Avatar" 
+                  class="w-20 h-20 rounded-full border border-gray-300 dark:border-gray-600 mx-auto"
+                >
+                
+                <!-- Name & Scholar ID -->
+                <div class="mt-3">
+                  <span class="block font-semibold text-gray-900 dark:text-gray-100">Name</span>
+                  <span class="block text-gray-600 dark:text-gray-400">URScholar ID</span>
+                </div>
+              </div>
+            </div>
+
             <!-- Menu Links with animation -->
             <ul class="text-white text-2xl font-medium space-y-8 text-center font-poppins">
               <li class="transform transition-transform duration-300 hover:scale-110">
@@ -216,7 +242,9 @@
                 <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</a>
               </li>
               <li class="transform transition-transform duration-300 hover:scale-110">
+                <Link :href="route('logout')" method="post" as="button">
                 <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Logout</a>
+                </Link>
               </li>
             </ul>
           </div>
