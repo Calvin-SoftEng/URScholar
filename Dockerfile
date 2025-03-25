@@ -8,7 +8,8 @@ RUN apt-get update && apt-get install -y \
     iputils-ping \
     net-tools \
     dnsutils \
-    postgresql-client \
+    wget \
+    curl \
     nginx \
     libpng-dev \
     libjpeg-dev \
@@ -18,7 +19,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libpq-dev \
-    postgresql-client \
     && docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Set working directory

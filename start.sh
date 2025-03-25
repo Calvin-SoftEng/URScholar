@@ -1,23 +1,28 @@
 #!/bin/sh
-# Add more verbose logging
-set -e  # Exit immediately if a command exits with a non-zero status
+set -e
+
+echo "Network and DNS Debugging..."
+echo "Resolving database host..."
+host db.wwecpxfveikhrbnsfuwf.supabase.co || true
+
+echo "Checking internet connectivity..."
+curl -v https://www.google.com || true
+
+echo "Attempting to resolve database host IP..."
+dig db.wwecpxfveikhrbnsfuwf.supabase.co || true
+
+echo "Checking potential connection issues..."
+nc -zv db.wwecpxfveikhrbnsfuwf.supabase.co 5432 || true
 
 echo "Starting Laravel application..."
 php -v
 composer --version
-nginx -v
 
-# Detailed Laravel preparation
+# Laravel preparations
 php artisan config:clear
 php artisan cache:clear
-php artisan route:clear
-php artisan view:clear
 
-# Generate application key if not set
-php artisan key:generate
-
-# Check database connection with verbose output
-echo "Checking database connection..."
+# Detailed database connection check
 php artisan tinker --execute="
     try {
         \$connection = DB::connection();
@@ -25,19 +30,15 @@ php artisan tinker --execute="
         echo 'Database connection successful!' . PHP_EOL;
         echo 'Database: ' . \$connection->getDatabaseName() . PHP_EOL;
     } catch (Exception \$e) {
-        echo 'Database connection failed: ' . \$e->getMessage() . PHP_EOL;
+        echo 'Database connection FAILED: ' . \$e->getMessage() . PHP_EOL;
+        echo 'Connection Details:' . PHP_EOL;
+        echo 'Host: ' . config('database.connections.pgsql.host') . PHP_EOL;
+        echo 'Port: ' . config('database.connections.pgsql.port') . PHP_EOL;
+        echo 'Database: ' . config('database.connections.pgsql.database') . PHP_EOL;
         exit(1);
     }
 "
 
-# Run migrations with verbose output
-php artisan migrate --force --verbose
-
-# Output routing information
-php artisan route:list
-
-# Start PHP-FPM in the background with more logging
+# Start services
 php-fpm -R &
-
-# Start Nginx in the foreground
 nginx -g 'daemon off;'
