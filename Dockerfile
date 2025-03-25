@@ -38,7 +38,7 @@ RUN chown -R www-data:www-data /var/www \
 
 # Add these lines to help diagnose
 RUN php artisan config:clear
-RUN php artisan cache:clear
+# RUN php artisan cache:clear
 RUN php artisan key:generate
 
 # Copy nginx and php-fpm configurations
