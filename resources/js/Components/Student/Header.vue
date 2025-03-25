@@ -154,17 +154,12 @@
         <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[50px] p-2">
           <div class="flex items-center space-x-4">
             <div class="pl-3">
-              <!-- <img src="../../../assets/images/logo-hori.png" alt="Light Mode Logo" class="w-[180px] h-[40px] dark:hidden"> -->
-
               <div class="flex flex-row  items-center justify-center gap-2">
                 <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
                 <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] hidden dark:block">
 
                 <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
               </div>
-              <!-- Dark Mode Logo -->
-              <!-- <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
-                class="w-[180px] h-[40px] hidden dark:block"> -->
             </div>
           </div>
 
@@ -183,7 +178,6 @@
           </button>
         </div>
 
-        <!-- Full-Screen Mobile Menu with transition -->
         <transition 
           enter-active-class="transition-opacity duration-300 ease-out" 
           enter-from-class="opacity-0" 
@@ -298,6 +292,12 @@ onUnmounted(() => {
   document.removeEventListener('click', closeDropdown);
 });
 
+
+const isOpen = ref(false);
+
+const toggleMenu = () => {
+  isOpen.value = !isOpen.value;
+};
 
 </script>
 
