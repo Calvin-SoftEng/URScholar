@@ -534,14 +534,17 @@ class ScholarshipController extends Controller
             'date_end.required' => 'End date is required.',
         ];
 
-        $validated = Validator::make($request->all(), [
+        $validated = $request->validate([
             'scholarship_id' => 'required|integer',
             'scholars' => 'required|array', // Array of scholar IDs
             'batch_ids' => 'required|array', // Array of batch IDs
             'batch_ids.*' => 'integer',
             'date_start' => 'required|date',
             'date_end' => 'required|date'
-        ], $messages);
+        ], [
+            'date_start.required' => 'Set a Date start',
+            'date_end.required' => 'Set a Date start',
+        ]);
 
         // dd($validated);
 

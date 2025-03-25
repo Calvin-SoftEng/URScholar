@@ -237,6 +237,9 @@
                 <div v-if="errors?.student" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
                     <p class="text-red-600 text-sm">{{ errors.student }}</p>
                 </div>
+                <div v-else-if="errors?.nofile" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p class="text-red-600 text-sm">{{ errors.nofile }}</p>
+                </div>
                 <div class="flex flex-col w-full gap-4 mt-5">
 
                     <!-- <button @click="downloadFile" 

@@ -154,32 +154,6 @@ class ScholarController extends Controller
 
     }
 
-    public function downloadFile(Request $request)
-    {
-        dd('tite');
-        // Validate the request
-        $validated = $request->validate([
-            'filePath' => 'required|string',
-            'fileName' => 'required|string',
-        ]);
-
-        $filePath = $validated['filePath'];
-        $fileName = $validated['fileName'];
-
-        // Check if file exists
-        if (!Storage::exists($filePath)) {
-            return response()->json(['error' => 'File not found'], 404);
-        }
-
-        // Determine the MIME type
-        $mimeType = Storage::mimeType($filePath);
-
-        // Return file as a download
-        return Storage::download($filePath, $fileName, [
-            'Content-Type' => $mimeType,
-        ]);
-    }
-
     public function upload(Request $request, Scholarship $scholarship)
     {
         $validator = Validator::make($request->all(), [
@@ -188,12 +162,13 @@ class ScholarController extends Controller
             'schoolyear' => 'required',
         ]);
 
+
         if ($validator->fails()) {
-            return response()->json([
-                'message' => 'Invalid file format',
-                'errors' => $validator->errors()
-            ], 422);
+            return back()->withErrors([
+                'nofile' => 'Wrong file ya',
+            ])->withInput();
         }
+
 
         try {
             $file = $request->file('file');

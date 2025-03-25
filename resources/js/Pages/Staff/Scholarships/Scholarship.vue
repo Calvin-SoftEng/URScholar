@@ -27,7 +27,7 @@
                             <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
@@ -351,7 +351,7 @@
                                                         <div class="flex flex-row text-sm gap-4">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                                }}</div>
+                                                            }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -607,6 +607,8 @@
                                                     d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
+                                        <InputError v-if="errors?.date_start" :message="errors.date_start"
+                                            class=" text-red-500" />
                                         <input v-model="StartPayout" id="datepicker-range-start" name="start"
                                             type="text" autocomplete="off" lang="en"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -628,8 +630,9 @@
                                                     d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
-                                        <InputError v-if="errors.date_end" :message="errors.date_end[0]" class="mt-1" />
-                                        <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text" required
+                                        <InputError v-if="errors?.date_end" :message="errors.date_end"
+                                            class=" text-red-500" />
+                                        <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text"
                                             autocomplete="off" lang="en"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Submission Start Date">
@@ -1265,20 +1268,37 @@ const forwardBatches = async () => {
         };
 
         // Send the request and wait for response
-        const response = await router.post(`/scholarship/forward-batches`, payload);
+        // const response = await router.post(`/scholarship/forward-batches`, payload);
 
-        // Only proceed if request was successful
-        const totalScholars = batchesToForward.reduce((total, batchId) => {
-            const batch = batchesWithScholars.value.find(b => b.id === batchId);
-            return total + (batch ? batch.scholar_count : 0);
-        }, 0);
+        // // Only proceed if request was successful
+        // const totalScholars = batchesToForward.reduce((total, batchId) => {
+        //     const batch = batchesWithScholars.value.find(b => b.id === batchId);
+        //     return total + (batch ? batch.scholar_count : 0);
+        // }, 0);
 
-        toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
-        toastVisible.value = true;
+        // toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
+        // toastVisible.value = true;
 
         // Close the modal only on success
         // closeModal();
 
+        // Send the request only when user confirms
+        router.post(`/scholarship/forward-batches`, payload, {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeModal();
+                // Only proceed if request was successful
+                const totalScholars = batchesToForward.reduce((total, batchId) => {
+                    const batch = batchesWithScholars.value.find(b => b.id === batchId);
+                    return total + (batch ? batch.scholar_count : 0);
+                }, 0);
+
+                toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
+                toastVisible.value = true;
+
+
+            },
+        });
     } catch (error) {
         if (error.response && error.response.status === 422) {
             // Store the validation errors returned from the backend

@@ -126,23 +126,22 @@ class StudentController extends Controller
 
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
-            'education.elementary.years' => ['required', 'numeric'],
+            'education.elementary.years' => ['required', 'string'],
             'elementary.honors' => ['string'],
             'education.junior.name' => ['required', 'string',],
-            'education.junior.years' => ['required', 'numeric'],
-            'junior.honors' => ['string'],
-            'senior.name' => ['', 'string'],
-            'senior.years' => ['', 'numeric'],
-            'senior.honors' => ['string'],
-            'college.name' => ['', 'string'],
-            'college.years' => ['', 'numeric'],
-            'college.honors' => ['string'],
-            'vocational.name' => ['', 'string'],
-            'vocational.years' => ['', 'numeric'],
-            'vocational.honors' => ['string'],
-            'postgrad.name' => ['', 'string'],
-            'postgrad.years' => ['', 'numeric'],
-            'postgrad.honors' => ['string'],
+            'education.junior.years' => ['required', 'string'],
+            'education.senior.name' => ['', 'string'],
+            'education.senior.years' => ['', 'string'],
+            'education.senior.honors' => ['string'],
+            'education.college.name' => ['', 'string'],
+            'education.college.years' => ['', 'string'],
+            'education.college.honors' => ['string'],
+            'education.vocational.name' => ['string'],
+            'education.vocational.years' => ['string'],
+            'education.vocational.honors' => ['string'],
+            'education.postgrad.name' => ['string'],
+            'education.postgrad.years' => ['string'],
+            'education.postgrad.honors' => ['string'],
 
             //Family Information
             'mother.first_name' => ['required', 'string'],
@@ -224,70 +223,36 @@ class StudentController extends Controller
 
             //senior
             if (
-                $errors->has('senior.name') ||
-                $errors->has('senior.years')
+                $errors->has('education.senior.name') ||
+                $errors->has('education.senior.years')
             ) {
 
                 // Create a single combined error message
                 $errorMessage = 'Please complete all senior education information.';
 
                 // Remove the individual error messages
-                $errors->forget('senior.name');
-                $errors->forget('senior.years');
+                $errors->forget('education.senior.name');
+                $errors->forget('education.senior.years');
 
                 // Add the combined error
-                $errors->add('senior', $errorMessage);
+                $errors->add('education.senior', $errorMessage);
             }
 
             //college
             if (
-                $errors->has('college.name') ||
-                $errors->has('college.years')
+                $errors->has('education.college.name') ||
+                $errors->has('education.college.years')
             ) {
 
                 // Create a single combined error message
                 $errorMessage = 'Please complete all college education information.';
 
                 // Remove the individual error messages
-                $errors->forget('college.name');
+                $errors->forget('education.college.name');
                 $errors->forget('college.years');
 
                 // Add the combined error
-                $errors->add('college', $errorMessage);
-            }
-
-            //vocational
-            if (
-                $errors->has('vocational.name') ||
-                $errors->has('vocational.years')
-            ) {
-
-                // Create a single combined error message
-                $errorMessage = 'Please complete all vocational education information.';
-
-                // Remove the individual error messages
-                $errors->forget('vocational.name');
-                $errors->forget('vocational.years');
-
-                // Add the combined error
-                $errors->add('vocational', $errorMessage);
-            }
-
-            //postgrad
-            if (
-                $errors->has('postgrad.name') ||
-                $errors->has('postgrad.years')
-            ) {
-
-                // Create a single combined error message
-                $errorMessage = 'Please complete all post graduate education information.';
-
-                // Remove the individual error messages
-                $errors->forget('postgrad.name');
-                $errors->forget('postgrad.years');
-
-                // Add the combined error
-                $errors->add('postgrad', $errorMessage);
+                $errors->add('education.college', $errorMessage);
             }
 
             // Apply the generic required message to all fields dynamically

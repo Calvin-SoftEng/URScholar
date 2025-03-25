@@ -6,10 +6,11 @@
         <!-- Reminder Dialog -->
         <div v-if="showDialog" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
             <div class="bg-primary p-6 rounded-lg shadow-xl max-w-md w-full animate-fade-in">
-                
+
                 <!-- Branding inside dialog -->
                 <div class="w-full flex items-center justify-center gap-2 mb-4">
-                    <img src="../../../../assets/images/main_logo_white.png" alt="URScholar Logo" class="w-12 h-12 dark:hidden">
+                    <img src="../../../../assets/images/main_logo_white.png" alt="URScholar Logo"
+                        class="w-12 h-12 dark:hidden">
                     <span class="font-poppins text-3xl font-bold text-white tracking-tight">URScholar</span>
                 </div>
 
@@ -19,7 +20,8 @@
                 </ul>
 
                 <div class="mt-5 flex flex-col gap-2">
-                    <button @click="closeDialog" class="w-full bg-white text-primary font-semibold py-2 rounded-lg hover:bg-gray-200 transition">
+                    <button @click="closeDialog"
+                        class="w-full bg-white text-primary font-semibold py-2 rounded-lg hover:bg-gray-200 transition">
                         Got it!
                     </button>
                     <button @click="dontShowAgain" class="w-full text-white text-sm underline">
@@ -110,7 +112,7 @@
                                             <h3
                                                 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4 sm:text-white">
                                                 Account Information</h3>
-                                                <p
+                                            <p
                                                 class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
                                                 Please fill-up missing required fields. Leave N/A if not applicable</p>
                                         </div>
@@ -192,8 +194,7 @@
 
                                             <div class="relative w-full">
                                                 <Input id="suffix" type="text" placeholder="Suffix"
-                                                @focus="clearMainField('suffix')"
-                                                @blur="restoreMainField('suffix')"
+                                                    @focus="clearMainField('suffix')" @blur="restoreMainField('suffix')"
                                                     v-model="form.suffix" class="w-full border border-gray-200 pr-10" />
                                             </div>
                                         </div>
@@ -336,10 +337,20 @@
                                         </div>
 
                                         <div
-                                            class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
-                                            <Label for="email" class="items-center flex mb-1">Religion</Label>
-                                            <Input id="email" type="text" placeholder="Religion" v-model="form.religion"
-                                                class="w-full border-gray-200" />
+                                            class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="guardian_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Religion
+                                                </Label>
+                                            </div>
+
+                                            <div class="relative w-full">
+                                                <Input id="Religion" type="text" placeholder="Religion"
+                                                    v-model="form.religion" @focus="errors.religion = null"
+                                                    class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.religion" :message="errors.religion"
+                                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
                                         <div
@@ -361,11 +372,20 @@
                                         </div>
 
                                         <div
-                                            class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
-                                            <Label for="relationship"
-                                                class="items-center flex mb-1">Relationship</Label>
-                                            <Input id="relationship" type="text" placeholder="Relationship"
-                                                v-model="form.relationship" class="w-full border-gray-200" />
+                                            class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="guardian_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Relationship
+                                                </Label>
+                                            </div>
+
+                                            <div class="relative w-full">
+                                                <Input id="guardian_name" type="text" placeholder="Guardian Name"
+                                                    v-model="form.relationship" @focus="errors.relationship = null"
+                                                    class="w-full border border-gray-200 pr-10" />
+                                                <InputError v-if="errors?.relationship" :message="errors.relationship"
+                                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
                                         <div class="col-span-3 flex justify-end mt-4">
@@ -398,10 +418,7 @@
                                             </h3>
                                             <div
                                                 class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
-                                                <span v-if="props.errors['education.elementary']"
-                                                    class="text-red-500 text-xs absolute bg-white px-1">
-                                                    {{ props.errors['education.elementary'] }}
-                                                </span>
+                                                
                                             </div>
                                         </div>
 
@@ -561,9 +578,9 @@
 
                                             <div
                                                 class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
-                                                <span v-if="props.errors['senior']"
+                                                <span v-if="props.errors['education.senior']"
                                                     class="text-red-500 text-xs absolute bg-white px-1">
-                                                    {{ props.errors['senior'] }}
+                                                    {{ props.errors['education.senior'] }}
                                                 </span>
                                             </div>
                                         </div>
@@ -617,9 +634,9 @@
 
                                             <div
                                                 class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
-                                                <span v-if="props.errors['college']"
+                                                <span v-if="props.errors['education.college']"
                                                     class="text-red-500 text-xs absolute bg-white px-1">
-                                                    {{ props.errors['college'] }}
+                                                    {{ props.errors['education.college'] }}
                                                 </span>
                                             </div>
                                         </div>
@@ -684,7 +701,7 @@
                                             class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="first_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School,
+                                                    Name of School,
                                                     College or University
                                                 </Label>
                                             </div>
@@ -699,11 +716,11 @@
                                             class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="first_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                    Years Attended
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. 2016-2020"
-                                            @focus="clearDefault('education', 'vocational', 'years')"
+                                                @focus="clearDefault('education', 'vocational', 'years')"
                                                 @blur="restoreDefault('education', 'vocational', 'years')"
                                                 v-model="form.education.vocational.years"
                                                 class="w-full border border-gray-200" />
@@ -744,12 +761,12 @@
                                             class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="first_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Name of School,
+                                                    Name of School,
                                                     College or University
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Senior High School"
-                                                 @focus="clearDefault('education', 'postgrad', 'name')"
+                                                @focus="clearDefault('education', 'postgrad', 'name')"
                                                 @blur="restoreDefault('education', 'postgrad', 'name')"
                                                 v-model="form.education.postgrad.name"
                                                 class="w-full border border-gray-200" />
@@ -759,11 +776,11 @@
                                             class=" w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="first_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Years Attended
+                                                    Years Attended
                                                 </Label>
                                             </div>
                                             <Input id="first_name" type="text" placeholder="Ex. 2016-2020"
-                                            @focus="clearDefault('education', 'postgrad', 'years')"
+                                                @focus="clearDefault('education', 'postgrad', 'years')"
                                                 @blur="restoreDefault('education', 'postgrad', 'years')"
                                                 v-model="form.education.postgrad.years"
                                                 class="w-full border border-gray-200" />
@@ -932,12 +949,6 @@
                                         </div>
 
 
-                                        <!-- <div class="w-full max-w-sm items-center gap-1.5 col-span-4 sm:col-span-4 md:col-span-1 lg:col-span-1">
-                                            <Label for="email">Occupation</Label>
-                                            <Input id="email" type="text" placeholder="Occupation"
-                                                v-model="form.mother.occupation" class="w-full border-gray-200" />
-                                        </div> -->
-
                                         <div
                                             class="w-full max-w-sm items-center gap-1.5 col-span-4 sm:col-span-4 md:col-span-1 lg:col-span-1">
                                             <div class="flex flex-row items-center gap-2">
@@ -954,11 +965,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- <div class="w-full max-w-sm items-center gap-1.5 col-span-4 sm:col-span-4 md:col-span-1 lg:col-span-1">
-                                            <Label for="email">Educational Attainment</Label>
-                                            <Input id="email" type="text" placeholder="Ex. College Graudate"
-                                                v-model="form.mother.education" class="w-full border-gray-200" />
-                                        </div> -->
 
                                         <div
                                             class="w-full items-center gap-1.5 col-span-4 sm:col-span-4 md:col-span-1 lg:col-span-1 xl:col-span-2 ">
@@ -977,11 +983,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- <div class="col-span-2 grid w-full items-center gap-1.5">
-                                            <Label for="email">Batch (If Alumna of this High School/University)</Label>
-                                            <Input id="email" type="text" placeholder="Type N/A if none"
-                                                v-model="form.mother.batch" class="w-full border-gray-200" />
-                                        </div> -->
 
                                         <!-- father -->
                                         <div
@@ -1135,7 +1136,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Leave blank if none"
-                                                 @focus="clearSubField('father', 'batch')"
+                                                    @focus="clearSubField('father', 'batch')"
                                                     @blur="restoreSubField('father', 'batch')"
                                                     v-model="form.father.batch"
                                                     class="w-full border border-gray-200 pr-10" />
@@ -1175,6 +1176,8 @@
                                                     <Label for="m4">Separated</Label>
                                                 </div>
                                             </RadioGroup>
+                                            <InputError v-if="errors?.marital_status" :message="errors.marital_status"
+                                                class="items-center flex text-xs" />
                                         </div>
 
                                         <div
@@ -1201,6 +1204,8 @@
                                                     <Label for="i4">30,001 and above</Label>
                                                 </div>
                                             </RadioGroup>
+                                            <InputError v-if="errors?.monthly_income" :message="errors.monthly_income"
+                                                class="items-center flex text-xs" />
                                         </div>
 
                                         <div
@@ -1213,11 +1218,12 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="e.g. Sari-sari Store"
-                                                @focus="clearMainField('other_income')"
-                                                @blur="restoreMainField('other_income')"
-                                                    v-model="form.other_income"
+                                                    @focus="clearMainField('other_income')"
+                                                    @blur="restoreMainField('other_income')" v-model="form.other_income"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
+                                            <InputError v-if="errors?.other_income" :message="errors.other_income"
+                                                class="items-center flex text-xs" />
                                         </div>
 
 
@@ -1455,6 +1461,9 @@
                                                 <!-- Image Upload Column -->
                                                 <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
                                                     <Label for="pic">Insert Profile Picture</Label>
+                                                    <InputError v-if="errors?.img"
+                                                        :message="errors.img"
+                                                        class="items-center flex text-xs" />
                                                     <label for="dropzone-img"
                                                         class="flex flex-col items-center justify-center w-64 h-64 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                                         :class="{ 'border-blue-500 bg-blue-50': isDragging }"
@@ -1684,8 +1693,8 @@ const form = ref({
         vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
         postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
     },
-    mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
-    father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
+    mother: { first_name: 'N/A', last_name: 'N/A', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
+    father: { first_name: 'N/A', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: 'N/A' },
     marital_status: '',
     monthly_income: '',
     other_income: 'N/A',
