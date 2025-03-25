@@ -31,6 +31,7 @@ RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 # Install dependencies **after the application files exist**
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress
 
+
 # Copy nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
@@ -38,4 +39,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 10000
 
 # Start PHP-FPM and nginx
-CMD ["sh", "-c", "php-fpm -D && nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "php artisan migrate --force && php artisan config:clear && php artisan cache:clear && php artisan route:clear && php artisan view:clear && php-fpm -D && nginx -g 'daemon off;'"]
