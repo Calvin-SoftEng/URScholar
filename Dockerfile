@@ -25,10 +25,8 @@ COPY --from=composer:2.6 /usr/bin/composer /usr/bin/composer
 COPY . .
 
 # Set permissions
-RUN chown -R www-data:www-data 
-RUN chown -R 775 /var/www/storage
-RUN chown /var/www/bootstrap/cache
-# RUN chmod -R 775 /var/www/storage
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
+RUN chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
 # Install dependencies
 RUN composer install --no-dev --optimize-autoloader
