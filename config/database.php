@@ -88,7 +88,7 @@ return [
             'port' => env('DB_PORT', 5432),
             'database' => env('DB_DATABASE', 'postgres'),
             'username' => env('DB_USERNAME', 'postgres'),
-            'password' => env('DB_PASSWORD', 'JaczM840OhZ5wUrN'),
+            'password' => env('DB_PASSWORD', 'nFMbX1OYdOwOHAMB'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
