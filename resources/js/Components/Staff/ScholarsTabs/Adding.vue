@@ -239,12 +239,19 @@
                 </div>
                 <div class="flex flex-col w-full gap-4 mt-5">
 
-                    <button @click="downloadFile" 
+                    <!-- <button @click="downloadFile" 
                             class="px-4 py-2 bg-white border border-blue-700 text-primary rounded-lg hover:bg-blue-700 hover:text-white transition-all"
                             :disabled="isLoading">
                         <span v-if="isLoading">Downloading...</span>
                         <span v-else>Download Scholar CSV File Template</span>
-                    </button>
+                    </button> -->
+
+                    <a @click="downloadFile"
+                        class="px-4 py-2 bg-white border border-blue-700 text-primary rounded-lg hover:bg-blue-700 hover:text-white transition-all"
+                        :disabled="isLoading">
+                        <span v-if="isLoading">Downloading...</span>
+                        <span v-else>Download Scholar CSV File Template</span>
+                    </a>
 
                     <!-- File Drop Zone -->
                     <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Import CSV
@@ -356,31 +363,16 @@ const isLoading = ref(false);
 /**
  * Downloads a file from Laravel storage via controller
  */
- const downloadFile = async () => {
+const downloadFile = async () => {
     try {
         isLoading.value = true;
 
-        const formData = new FormData();
-        formData.append('filePath', props.filePath);
-        formData.append('fileName', props.fileName);
-
-        const response = await fetch('/api/download-file', {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (!response.ok) {
-            throw new Error('Failed to download file');
-        }
-
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
+        // Option 1: Use direct download link
         const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', props.fileName);
+        link.href = '/storage/system_files/URSCHOLAR-SCHOLAR_FORMAT.csv';
+        link.download = 'URSCHOLAR-SCHOLAR_FORMAT.csv';
         document.body.appendChild(link);
         link.click();
-        window.URL.revokeObjectURL(url);
         document.body.removeChild(link);
     } catch (error) {
         console.error('Error downloading file:', error);

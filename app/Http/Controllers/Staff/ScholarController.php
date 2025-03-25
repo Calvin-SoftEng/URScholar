@@ -156,6 +156,7 @@ class ScholarController extends Controller
 
     public function downloadFile(Request $request)
     {
+        dd('tite');
         // Validate the request
         $validated = $request->validate([
             'filePath' => 'required|string',

@@ -151,27 +151,27 @@
                     <!-- Pagination controls -->
                     <div v-if="totalStudents > itemsPerPage" class="mt-5 flex justify-between items-center">
                         <span class="text-sm text-gray-700 dark:text-gray-400">
-                        Showing
-                        <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
-                        to
-                        <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
-                        of
-                        <span class="font-semibold text-gray-900 dark:text-white">{{ totalStudents }}</span>
-                        Scholars
+                            Showing
+                            <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
+                            to
+                            <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
+                            of
+                            <span class="font-semibold text-gray-900 dark:text-white">{{ totalStudents }}</span>
+                            Scholars
                         </span>
                         <div class="inline-flex">
-                        <button @click="prevPage" :disabled="currentPage === 1" :class="[
-                            'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                            currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
-                        ]">
-                            Prev
-                        </button>
-                        <button @click="nextPage" :disabled="currentPage === totalPages" :class="[
-                            'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                            currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
-                        ]">
-                            Next
-                        </button>
+                            <button @click="prevPage" :disabled="currentPage === 1" :class="[
+                                'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                                currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+                            ]">
+                                Prev
+                            </button>
+                            <button @click="nextPage" :disabled="currentPage === totalPages" :class="[
+                                'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                                currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+                            ]">
+                                Next
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -184,7 +184,8 @@
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <div class="flex items-center gap-3">
                         <!-- Icon -->
-                        <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
 
                         <!-- Title and Description -->
                         <div class="flex flex-col">
@@ -210,6 +211,8 @@
                 <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
                     <div class="w-full flex flex-col">
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-1">University Students current year
+                            <InputError v-if="errors?.file" :message="errors.file"
+                                class=" text-red-500" />
                         </h3>
                         <label for="dropzone-file"
                             class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -232,7 +235,8 @@
                                     <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
                                 </template>
                                 <template v-else>
-                                    <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-32 mb-2" />
+                                    <img src="../../../../assets/images/previewdocs.png" alt="Document Icon"
+                                        class="h-32 mb-2" />
                                 </template>
                                 <p class="text-sm text-gray-500">{{ form.fileName }}</p>
                             </div>
@@ -260,12 +264,14 @@ import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { usePage } from "@inertiajs/vue3";
 import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
+import InputError from '@/Components/InputError.vue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
 
 const props = defineProps({
     sponsors: Array,
     students: Array,
+    errors: Object,
 });
 
 const directives = {
@@ -408,19 +414,19 @@ const searchQuery = ref('');
 
 // Computed property for filtering students
 const filteredStudents = computed(() => {
-  const allStudents = props.students || [];
+    const allStudents = props.students || [];
 
-  const query = searchQuery.value.toLowerCase();
-  return allStudents.filter(student =>
-    student.first_name?.toLowerCase().includes(query) ||
-    student.last_name?.toLowerCase().includes(query) ||
-    student.middle_name?.toLowerCase().includes(query) ||
-    student.email?.toLowerCase().includes(query) ||
-    student.course?.toLowerCase().includes(query) ||
-    student.campus?.toLowerCase().includes(query) ||
-    student.grant?.toLowerCase().includes(query) ||
-    student.urscholar_id?.toLowerCase().includes(query)
-  );
+    const query = searchQuery.value.toLowerCase();
+    return allStudents.filter(student =>
+        student.first_name?.toLowerCase().includes(query) ||
+        student.last_name?.toLowerCase().includes(query) ||
+        student.middle_name?.toLowerCase().includes(query) ||
+        student.email?.toLowerCase().includes(query) ||
+        student.course?.toLowerCase().includes(query) ||
+        student.campus?.toLowerCase().includes(query) ||
+        student.grant?.toLowerCase().includes(query) ||
+        student.urscholar_id?.toLowerCase().includes(query)
+    );
 });
 
 // Computed properties for pagination
@@ -428,34 +434,34 @@ const totalStudents = computed(() => filteredStudents.value.length);
 const totalPages = computed(() => Math.ceil(totalStudents.value / itemsPerPage));
 
 const paginatedStudents = computed(() => {
-  const startIdx = (currentPage.value - 1) * itemsPerPage;
-  return filteredStudents.value.slice(startIdx, startIdx + itemsPerPage);
+    const startIdx = (currentPage.value - 1) * itemsPerPage;
+    return filteredStudents.value.slice(startIdx, startIdx + itemsPerPage);
 });
 
 const startIndex = computed(() =>
-  totalStudents.value === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1
+    totalStudents.value === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1
 );
 
 const endIndex = computed(() =>
-  Math.min(currentPage.value * itemsPerPage, totalStudents.value)
+    Math.min(currentPage.value * itemsPerPage, totalStudents.value)
 );
 
 // Pagination methods
 const nextPage = () => {
-  if (currentPage.value < totalPages.value) {
-    currentPage.value++;
-  }
+    if (currentPage.value < totalPages.value) {
+        currentPage.value++;
+    }
 };
 
 const prevPage = () => {
-  if (currentPage.value > 1) {
-    currentPage.value--;
-  }
+    if (currentPage.value > 1) {
+        currentPage.value--;
+    }
 };
 
 // Reset pagination when search changes
 watch(searchQuery, () => {
-  currentPage.value = 1;
+    currentPage.value = 1;
 });
 
 </script>
