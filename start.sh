@@ -2,6 +2,16 @@
 # Add more verbose logging
 set -e  # Exit immediately if a command exits with a non-zero status
 
+# Network and database connection debugging
+echo "Checking network connectivity..."
+ping -c 4 db.wwecpxfveikhrbnsfuwf.supabase.co
+nslookup db.wwecpxfveikhrbnsfuwf.supabase.co
+netstat -rn
+ip addr
+
+# Test PostgreSQL connection
+PGPASSWORD=JaczM840OhZ5wUrN psql -h db.wwecpxfveikhrbnsfuwf.supabase.co -U postgres -d postgres -p 5432 -c "SELECT 1;"
+
 echo "Starting Laravel application..."
 php -v
 composer --version

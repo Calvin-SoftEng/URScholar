@@ -3,6 +3,10 @@ FROM php:8.2-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    iputils-ping \
+    net-tools \
+    dnsutils \
+    postgresql-client \
     nginx \
     libpng-dev \
     libjpeg-dev \
