@@ -37,11 +37,22 @@
                 <div class="bg-white shadow-lg rounded-2xl p-6 text-left h-full flex flex-col">
                     <h2 class="text-2xl font-bold mb-4">Pending Payouts</h2>
                     <div class="space-y-4">
-                        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
-                        <p class="text-lg font-semibold text-red-500">2023-2022</p>
-                        <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
+                        <div class="relative block">
+                            <div class="bg-gray-100 p-4 rounded-lg shadow-md relative">
+                                <!-- Notification Badge -->
+                                <span
+                                    class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                                    <!-- <font-awesome-icon :icon="['fas', 'bell']" class="text-sm" /> -->
+                                    Pending
+                                </span>
+                                
+                                <!-- Payout Details -->
+                                <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
+                                <p class="text-lg font-semibold text-red-500">2023-2022</p>
+                                <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
+                            </div>
                         </div>
+    
                     </div>
                 </div>
                 
@@ -49,13 +60,22 @@
                 <div class="bg-white shadow-lg rounded-2xl p-6 text-left h-full flex flex-col">
                     <h2 class="text-2xl font-bold mb-4">Payout Histories</h2>
                     <div class="space-y-4">
-                        <Link :href="route('payouts_list.payouts')">
-                            <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                            <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
-                            <p class="text-lg font-semibold text-red-500">2023-2022</p>
-                            <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
+                        <Link :href="route('payouts_list.payouts')" class="relative block">
+                            <div class="bg-gray-100 p-4 rounded-lg shadow-md relative">
+                                <!-- Notification Badge -->
+                                <span
+                                    class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                                    <font-awesome-icon :icon="['fas', 'bell']" class="text-sm" />
+                                    Recently Added
+                                </span>
+                                
+                                <!-- Payout Details -->
+                                <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
+                                <p class="text-lg font-semibold text-red-500">2023-2022</p>
+                                <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
                             </div>
                         </Link>
+
 
                         <div class="bg-gray-100 p-4 rounded-lg shadow-md">
                         <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
