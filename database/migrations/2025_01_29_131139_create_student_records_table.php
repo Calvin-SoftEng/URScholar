@@ -41,6 +41,18 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('grades', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
+            $table->decimal('grade')->nullable();
+            $table->string('cog')->nullable();
+            $table->string('path');
+            $table->string('school_year')->nullable();
+            $table->string('semester')->nullable();
+            $table->timestamps();
+        });
+
+
         Schema::create('family_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_record_id')->constrained()->onDelete('cascade');
@@ -82,6 +94,7 @@ return new class extends Migration
         Schema::dropIfExists('org_records');
         Schema::dropIfExists('sibling_records');
         Schema::dropIfExists('family_records');
+        Schema::dropIfExists('grades');
         Schema::dropIfExists('education_records');
         Schema::dropIfExists('student_records');
     }

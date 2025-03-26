@@ -52,17 +52,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('grades', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
-            $table->decimal('grade')->nullable();
-            $table->string('cog')->nullable();
-            $table->string('path');
-            $table->string('school_year')->nullable();
-            $table->string('semester')->nullable();
-            $table->timestamps();
-        });
-
         Schema::create('grantees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
@@ -93,7 +82,6 @@ return new class extends Migration
     {
         Schema::dropIfExists('submitted_requirements');
         Schema::dropIfExists('grantees');
-        Schema::dropIfExists('grades');
         Schema::dropIfExists('scholars');
         Schema::dropIfExists('batches');
     }
