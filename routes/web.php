@@ -245,7 +245,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
         ->name('student.dashboard');
 
     // scholarship
-    Route::get('/student/scholarship', [StudentController::class, 'scholarship'])->name('student.scholarship');
+    Route::get('/student/scholarship/{scholarship}', [StudentController::class, 'scholarship_apply_details'])->name('student.scholarship');
     Route::post('/student/application/re-upload', [StudentController::class, 'applicationReupload'])->name('student.application.reupload');
 
     Route::get('/student/scholarship/confirmation', [StudentController::class, 'confirmation'])->name('student.confirmation');

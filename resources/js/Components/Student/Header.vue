@@ -23,7 +23,7 @@
             </Link>
           </li> -->
           <li>
-            <Link :href="(route('student.scholarship'))">
+            <Link :href="(route('student.dashboard'))">
             <p class="text-primary-foreground hover:text-primary-foreground transition">Scholarship Dashboard</p>
             </Link>
           </li>
