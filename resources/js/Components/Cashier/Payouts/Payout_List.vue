@@ -109,73 +109,67 @@
               </button>
             </div>
 
-              <!-- QR Code Scanner -->
-              <div class="p-4 flex flex-col space-y-4">
-                <!-- QR Code Scanner Stream with Animation -->
+            <!-- QR Code Scanner -->
+            <div class="p-4 flex flex-col space-y-4">
+              <!-- QR Code Scanner Stream with Animation -->
+              <div v-if="isScanning"
+                class="relative w-full h-96 bg-gray-200 mt-4 flex items-center justify-center custom-corners">
+                <!-- Scanning Line Animation (across the full camera view) -->
                 <div
-                  v-if="isScanning"
-                  class="relative w-full h-96 bg-gray-200 mt-4 flex items-center justify-center custom-corners"
-                >
-                  <!-- Scanning Line Animation (across the full camera view) -->
-                  <div
-                    class="absolute top-0 z-20 left-0 w-full h-full border-t-4 border-dashed border-blue-500 animate-scan-line"
-                    v-if="isScanning"
-                  ></div>
+                  class="absolute top-0 z-20 left-0 w-full h-full border-t-4 border-dashed border-blue-500 animate-scan-line"
+                  v-if="isScanning"></div>
 
-                  <!-- QR Code Stream -->
-                  <QrcodeStream @detect="onDetect" class="border p-2 relative z-10" />
-                </div>
+                <!-- QR Code Stream -->
+                <QrcodeStream @detect="onDetect" class="border p-2 relative z-10" />
+              </div>
 
-                <!-- Result Section (Success/Failure Message) -->
-                <div v-if="scannedResult" class="mt-4">
-                  <div v-if="successMessage" class="text-green-500 font-medium">
-                    <div class="max-w-xl mx-auto flex flex-row gap-2 p-6 justify-center">
-                      <!-- Profile Image -->
-                      <div class="flex justify-center">
-                        <img 
-                          src="https://via.placeholder.com/150" 
-                          alt="Profile Image" 
-                          class="w-32 h-32 rounded-full border-4 border-primary"
-                        />
+              <!-- Result Section (Success/Failure Message) -->
+              <div v-if="scannedResult" class="mt-4">
+                <div class="text-green-500 font-medium">
+                  <div class="max-w-xl mx-auto flex flex-row gap-2 p-6 justify-center">
+                    <!-- Profile Image -->
+                    <div class="flex justify-center">
+                      <img src="https://via.placeholder.com/150" alt="Profile Image"
+                        class="w-32 h-32 rounded-full border-4 border-primary" />
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                      <!-- Name -->
+                      <div class="text-left mb-5">
+                        <h2 class="text-2xl font-semibold text-gray-800">John Doe</h2>
+                        <p class="text-sm text-gray-500">DBP-Rise 2020</p>
                       </div>
-                      
-                     <div class="flex flex-col justify-center">
-                         <!-- Name -->
-                        <div class="text-left mb-5">
-                          <h2 class="text-2xl font-semibold text-gray-800">John Doe</h2>
-                          <p class="text-sm text-gray-500">DBP-Rise 2020</p>
-                        </div>
-                        
-                        <!-- Scholar Data -->
-                        <div class="space-y-1">
-                          <div class="flex ">
-                            <span class="text-gray-600 font-medium">Course:</span>
-                            <span class="text-gray-800">Bachelor of Science in Information Technology</span>
-                          </div>
-                          <div class="flex">
-                            <span class="text-gray-600 font-medium">Year:</span>
-                            <span class="text-gray-800">2023-2024</span>
-                          </div>
-                          <div class="flex ">
-                            <span class="text-gray-600 font-medium">Time Recieved:</span>
-                            <span class="text-gray-800">2:30 PM</span>
-                          </div>
-                        </div>
 
-                     </div>
+                      <!-- Scholar Data -->
+                      <div class="space-y-1">
+                        <div class="flex ">
+                          <span class="text-gray-600 font-medium">Course:</span>
+                          <span class="text-gray-800">Bachelor of Science in Information Technology</span>
+                        </div>
+                        <div class="flex">
+                          <span class="text-gray-600 font-medium">Year:</span>
+                          <span class="text-gray-800">2023-2024</span>
+                        </div>
+                        <div class="flex ">
+                          <span class="text-gray-600 font-medium">Time Recieved:</span>
+                          <span class="text-gray-800">2:30 PM</span>
+                        </div>
+                      </div>
+
                     </div>
                   </div>
-                  <div v-if="errorMessage" class="text-red-500 font-medium">
-                    
+                </div>
+                <div v-if="errorMessage" class="text-red-500 font-medium">
 
-                  </div>
-                  <div class="mt-4 flex justify-center">
-                    <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                      Scan Again
-                    </button>
-                  </div>
+
+                </div>
+                <div class="mt-4 flex justify-center">
+                  <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                    Scan Again
+                  </button>
                 </div>
               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -375,9 +369,12 @@ onMounted(() => {
   0% {
     transform: translateY(0);
   }
+
   50% {
-    transform: translateY(100%); /* Move the line down the whole camera view */
+    transform: translateY(100%);
+    /* Move the line down the whole camera view */
   }
+
   100% {
     transform: translateY(0);
   }
