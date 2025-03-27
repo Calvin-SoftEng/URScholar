@@ -518,7 +518,14 @@ class StudentController extends Controller
 
         event(new Verified($user));
 
-        return redirect()->route('student.dashboard');
+
+        if ($scholar) {
+            return redirect()->route('student.confirmation');
+        }
+        else {
+            return redirect()->route('student.dashboard');
+        }
+        
     }
 
     public function scholarship()
@@ -569,7 +576,6 @@ class StudentController extends Controller
 
     public function confirmation()
     {
-
         $scholar = Scholar::where('email', Auth::user()->email)->first();
 
         $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();

@@ -248,7 +248,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/student/scholarship/{scholarship}', [StudentController::class, 'scholarship_apply_details'])->name('student.scholarship');
     Route::post('/student/application/re-upload', [StudentController::class, 'applicationReupload'])->name('student.application.reupload');
 
-    Route::get('/student/scholarship/confirmation', [StudentController::class, 'confirmation'])->name('student.confirmation');
+    Route::get('/student/confirmation', [StudentController::class, 'confirmation'])->name('student.confirmation');
     Route::post('/student/application/upload', [StudentController::class, 'applicationUpload'])->name('student.application.upload');
 
     //profile
