@@ -23,7 +23,7 @@
                 <!-- Scholarship Type Filter -->
                 <select v-model="selectedScholarshipType"
                     class="p-2 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
-                    <option value="Need-Based">Need-Based</option>
+                    <option value="Grant-Based">Grant-Based</option>
                     <option value="one-time">One-Time Payment</option>
                 </select>
             </div>
@@ -151,7 +151,7 @@ const props = defineProps({
 
 // Filters
 const selectedDateFilter = ref('day');
-const selectedScholarshipType = ref('Need-Based');
+const selectedScholarshipType = ref('Grant-Based');
 
 // Get latest submissions from props or page data
 const page = usePage();
@@ -166,9 +166,9 @@ const latestSubmissions = computed(() => {
     const dateFiltered = filterByDate(scholars.value);
 
     // Apply scholarship type filter
-    return selectedScholarshipType.value === "Need-Based"
-        ? dateFiltered.filter(scholar => scholar.scholarshipType === "Need-Based")
-        : dateFiltered.filter(scholar => scholar.scholarshipType === "one-time");
+    return selectedScholarshipType.value === "Grant-Based"
+        ? dateFiltered.filter(scholar => scholar.scholarshipType === "Grant-Based")
+        : dateFiltered.filter(scholar => scholar.scholarshipType === "One-time Payment");
 });
 
 // Function to filter scholars by date
