@@ -15,18 +15,17 @@
                             Greetings! {{ $page.props.auth.user.name }}
                         </div>
                         <!-- scholarships -->
-                        <div
+                        <div v-if="!scholar"
                             class="w-full bg-white shadow-lg rounded-lg flex items-center gap-3 py-4 px-6 transition-all duration-300 hover:shadow-xl hover:bg-gray-100 cursor-pointer">
                             <box-icon name="bell-ring" type="solid" class="w-6 h-6 text-primary"></box-icon>
                             <span class="text-lg font-semibold text-gray-800">View Available Scholarships</span>
                         </div>
 
                         <!-- gc -->
-                        <div v-if="scholar">
-                            <button @click="GroupChat = !GroupChat"
+                            <button v-if="scholar" @click="GroupChat = !GroupChat" 
                                 class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-start gap-2 p-3">
 
-                                <div class="w-full flex items-start gap-3 p-3  hover:bg-gray-100 cursor-pointer">
+                                <div class="w-full flex items-start gap-3 p-3 text-start hover:bg-gray-100 cursor-pointer">
                                     <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
                                         <box-icon name="group" type="solid"></box-icon>
                                     </div>
@@ -38,7 +37,6 @@
                                     <p class="text-xs text-gray-400">10:30 AM</p>
                                 </div>
                             </button>
-                        </div>
 
 
                         <!-- qr code -->
