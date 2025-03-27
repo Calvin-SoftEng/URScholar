@@ -25,10 +25,12 @@ class CashierController extends Controller
     {
         $scholarships = Scholarship::all();
         $sponsors = Sponsor::all();
+        $payouts = Payout::with('batch')->get();
 
         return Inertia::render('Cashier/Scholarships/Active_Scholarships', [
             'scholarships' => $scholarships,
-            'sponsors' => $sponsors
+            'sponsors' => $sponsors,
+            'payouts' => $payouts
         ]);
     }
 
@@ -72,10 +74,16 @@ class CashierController extends Controller
             ])
             ->get();
 
+            $claimedPayoutsCount = Payout::where('scholarship_id', $scholarshipId)
+            ->where('batch_id', $batchId)
+            ->where('status', 'Claimed')
+            ->count();
+
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
-            'payouts' => $payouts
+            'payouts' => $payouts,
+            'claimedPayoutsCount' => $claimedPayoutsCount,
         ]);
     }
 

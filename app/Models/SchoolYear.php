@@ -10,5 +10,8 @@ class SchoolYear extends Model
     use HasFactory;
     protected $fillable = ['year'];
 
-    
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
 }

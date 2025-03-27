@@ -26,9 +26,9 @@
                         
                         <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <!-- <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span> <span>scholarship type</span> -->
-                             Isko Name here
+                            {{ scholarship.name }}
                         </h1>
-                        <span class="text-xl">SY 2024 - Semester</span>
+                        <span class="text-xl">SY {{ batch.school_year }} - {{ batch.semester }} Semester</span>
                     </div>
                     <div class="flex gap-2">
 
@@ -42,7 +42,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ payouts.length }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
@@ -50,7 +50,7 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ claimedPayoutsCount }}</p>
                             </div>
                         </div>
                     </div>
@@ -133,9 +133,11 @@ const props = defineProps({
     scholarship: Object,
     batch: Object,
     payouts: Array,
+    claimedPayoutsCount: Object,
 });
 
-
+const scannedScholar = ref(null);
+const scannedPayout = ref(null);
 
 const selectedSem = ref("");
 

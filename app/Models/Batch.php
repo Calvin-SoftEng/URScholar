@@ -27,4 +27,9 @@ class Batch extends Model
     {
         return $this->hasMany(Grantees::class);
     }
+
+    public function school_year()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
 }
