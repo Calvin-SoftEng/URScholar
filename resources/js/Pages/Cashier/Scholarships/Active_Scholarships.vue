@@ -50,7 +50,7 @@
 
                                         <!-- Active Payouts -->
                                         <div class="flex flex-col flex-grow mt-4 justify-end">
-                                            <p class="text-sm text-gray-400 mb-2">Payouts:</p>
+                                            <p class="text-sm text-gray-400 mb-2 text-start">Payouts:</p>
 
                                             <div class="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer flex flex-col gap-2">
                                                 <!-- No Scholarships Available -->
