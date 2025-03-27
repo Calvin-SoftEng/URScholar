@@ -782,7 +782,7 @@ class StudentController extends Controller
             $uploadedFiles[] = $uploadedFile;
         }
 
-        return redirect()->route('student.scholarship');
+        return redirect()->route('student.dashboard');
     }
 
     public function register()
