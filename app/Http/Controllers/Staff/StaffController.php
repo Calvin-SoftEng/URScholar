@@ -46,7 +46,8 @@ class StaffController extends Controller
                     'urscholar_id' => $scholar->urscholar_id,
                     'first_name' => $scholar->first_name,
                     'last_name' => $scholar->last_name,
-                    'campus' => $scholar->campus,
+                    'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                    'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
                     'scholarship_id' => $scholarship->id,
                     'scholarship_name' => $scholarship->name,
                     'scholarshipType' => $scholarship->scholarshipType, // 'one-time' or 'need-based'
