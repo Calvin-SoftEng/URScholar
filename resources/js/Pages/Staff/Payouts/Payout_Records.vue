@@ -26,99 +26,70 @@
 
             <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
                 <a
-                v-for="item in menuItems"
-                :key="item.key"
-                href="#"
-                @click.prevent="selectMenu(item.key)"
-                :ref="`menu-${item.key}`"
-                :class="[
-                    'relative inline-block text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
-                    selectedMenu === item.key
-                    ? 'text-blue-700 dark:text-white'
-                    : 'text-gray-900 dark:text-white hover:text-blue-700 dark:hover:bg-gray-700'
-                ]"
+                    v-for="item in menuItems"
+                    :key="item.key"
+                    href="#"
+                    @click.prevent="selectMenu(item.key)"
+                    :ref="`menu-${item.key}`"
+                    :class="[
+                        'relative inline-block text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
+                        selectedMenu === item.key
+                        ? 'text-blue-700 dark:text-white'
+                        : 'text-gray-900 dark:text-white hover:text-blue-700 dark:hover:bg-gray-700'
+                    ]"
                 >
-                {{ item.name }}
-                <!-- Active underline for selected item -->
-                <span
-                    v-if="selectedMenu === item.key"
-                    class="absolute left-0 bottom-0 w-full h-1 bg-blue-700 dark:bg-white"
-                    :style="{ width: `${$refs[`menu-${item.key}`]?.offsetWidth}px` }"
-                ></span>
+                    {{ item.name }}
+                    <!-- Active underline for selected item -->
+                    <span
+                        v-if="selectedMenu === item.key"
+                        class="absolute left-0 bottom-0 w-full h-1 bg-blue-700 dark:bg-white"
+                        :style="{ width: `${$refs[`menu-${item.key}`]?.offsetWidth}px` }"
+                    ></span>
                 </a>
             </div>
 
-
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 h-full">
-                <!-- Column 3: Pending Payouts -->
-                <div class="h-full flex flex-col">
-                <div class="grid grid-rows-4 gap-4 flex-grow">
-                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-center">Payout 1</div>
-                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-center">Payout 2</div>
-                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-center">Payout 3</div>
-                    <div class="bg-white p-6 rounded-lg shadow-md flex items-center justify-center">Payout 4</div>
-                </div>
+            <!-- Recent Section (Visible if 'recent' is selected) -->
+            <div v-show="selectedMenu === 'recent'" 
+                class="grid grid-cols-[15%_85%] md:grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">
+                <!-- Left Column (15%) -->
+                <div class="w-full">
+                    <span class="text-gray-700 font-medium">Date</span>
                 </div>
                 
-                <div class="bg-white shadow-lg rounded-2xl p-6 text-left h-full flex flex-col">
-                    <h2 class="text-2xl font-bold mb-4">Pending Payouts</h2>
-                    <div class="space-y-4">
-                        <div class="relative block">
-                            <div class="bg-gray-100 p-4 rounded-lg shadow-md relative">
-                                <!-- Notification Badge -->
-                                <span
-                                    class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                                    <!-- <font-awesome-icon :icon="['fas', 'bell']" class="text-sm" /> -->
-                                    Pending
-                                </span>
-                                
-                                <!-- Payout Details -->
-                                <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
-                                <p class="text-lg font-semibold text-red-500">2023-2022</p>
-                                <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
-                            </div>
-                        </div>
-    
-                    </div>
-                </div>
-                
-                <!-- Column 2: Next Expected Payout -->
-                <div class="bg-white shadow-lg rounded-2xl p-6 text-left h-full flex flex-col">
-                    <h2 class="text-2xl font-bold mb-4">Payout Histories</h2>
-                    <div class="space-y-4">
-                        <Link :href="route('payouts_list.payouts')" class="relative block">
-                            <div class="bg-gray-100 p-4 rounded-lg shadow-md relative">
-                                <!-- Notification Badge -->
-                                <span
-                                    class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                                    <font-awesome-icon :icon="['fas', 'bell']" class="text-sm" />
-                                    Recently Added
-                                </span>
-                                
-                                <!-- Payout Details -->
-                                <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
-                                <p class="text-lg font-semibold text-red-500">2023-2022</p>
-                                <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
-                            </div>
-                        </Link>
-
-
-                        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
+                <!-- Right Column (85%) -->
+                <div class="relative block">
+                    <div class="bg-white p-5 rounded-lg shadow-md relative">
+                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                            Pending
+                        </span>
                         <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
                         <p class="text-lg font-semibold text-red-500">2023-2022</p>
                         <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
-                        </div>
-
-                        <div class="bg-gray-100 p-4 rounded-lg shadow-md">
-                        <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
-                        <p class="text-lg font-semibold text-red-500">2023-2022</p>
-                        <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
-                        </div>
                     </div>
                 </div>
-                
             </div>
+
+            <!-- History Section (Visible if 'history' is selected) -->
+            <div v-show="selectedMenu === 'history'" 
+                class="grid grid-cols-[15%_85%] md:grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">
+                <!-- Left Column (15%) -->
+                <div class="w-full">
+                    <span class="text-gray-700 font-medium">Date</span>
+                </div>
+                
+                <!-- Right Column (85%) -->
+                <div class="relative block">
+                    <div class="bg-white p-5 rounded-lg shadow-md relative">
+                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                            Accomplished
+                        </span>
+                        <p class="text-lg font-semibold text-red-500">Lala</p>
+                        <p class="text-lg font-semibold text-red-500">2023-2022</p>
+                        <p class="text-sm text-gray-600">01/01/2023</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <ToastProvider>
@@ -185,7 +156,7 @@ const menuItems = [
 ];
 
 // Track the selected menu
-const selectedMenu = ref("recent");
+const selectedMenu = ref();
 
 // Function to change the selected menu
 const selectMenu = (key) => {
