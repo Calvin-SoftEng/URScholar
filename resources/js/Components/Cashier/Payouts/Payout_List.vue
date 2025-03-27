@@ -109,20 +109,34 @@
               </button>
             </div>
 
-            <!-- QR Code Scanner -->
-            <div class="p-4 flex flex-col space-y-4">
-              <QrcodeStream @detect="onDetect" v-if="isScanning" class="border p-2" />
+              <!-- QR Code Scanner -->
+              <div class="p-4 flex flex-col space-y-4">
+                <!-- QR Code Scanner Stream with Animation -->
+                <div
+                  v-if="isScanning"
+                  class="relative w-full h-96 bg-gray-200 mt-4 flex items-center justify-center"
+                >
+                  <!-- Scanning Line Animation (across the full camera view) -->
+                  <div
+                    class="absolute top-30 left-0 w-full h-full border-t-4 border-dashed border-green-500 animate-scan-line"
+                    v-if="isScanning"
+                  ></div>
 
-              <div v-if="scannedResult" class="mt-4">
-                <p v-if="successMessage" class="text-green-500 font-medium">{{ successMessage }}</p>
-                <p v-if="errorMessage" class="text-red-500 font-medium">{{ errorMessage }}</p>
-                <div class="mt-4 flex justify-center">
-                  <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    Scan Again
-                  </button>
+                  <!-- QR Code Stream -->
+                  <QrcodeStream @detect="onDetect" class="border p-2" />
+                </div>
+
+                <!-- Result Section (Success/Failure Message) -->
+                <div v-if="scannedResult" class="mt-4">
+                  <p v-if="successMessage" class="text-green-500 font-medium">{{ successMessage }}</p>
+                  <p v-if="errorMessage" class="text-red-500 font-medium">{{ errorMessage }}</p>
+                  <div class="mt-4 flex justify-center">
+                    <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                      Scan Again
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
           </div>
         </div>
       </div>
@@ -317,6 +331,22 @@ onMounted(() => {
   border-radius: 5px;
 }
 
+/* In your global styles (e.g., styles.css or a <style> block) */
+@keyframes scanLine {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(100%); /* Move the line down the whole camera view */
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-scan-line {
+  animation: scanLine 2s infinite ease-in-out;
+}
 
 /* override the prime vue componentss */
 

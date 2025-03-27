@@ -131,6 +131,12 @@ module.exports = {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		keyframes: {
+			scanningAnimation: {
+				'0%': { transform: 'translateY(0)' },
+				'50%': { transform: 'translateY(-5px)' }, // Move up
+				'100%': { transform: 'translateY(0)' },    // Return to original position
+			  },
+
 			fadeIn: {
 				'0%': { opacity: 0 },
 				'100%': { opacity: 1 },
@@ -174,7 +180,8 @@ module.exports = {
   			'accordion-down': 'accordion-down 0.2s ease-out',
   			'accordion-up': 'accordion-up 0.2s ease-out',
   			'collapsible-down': 'collapsible-down 0.2s ease-in-out',
-  			'collapsible-up': 'collapsible-up 0.2s ease-in-out'
+  			'collapsible-up': 'collapsible-up 0.2s ease-in-out',
+			scanning: 'scanningAnimation 1s infinite ease-in-out',
   		},
   		screens: {
   			sm: '360px',

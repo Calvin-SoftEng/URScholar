@@ -46,7 +46,7 @@
     <div v-if="$page.props.auth.user.usertype == 'sponsor'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
-        <HeaderNav class="w-full h-[50px]" />
+        <SponsorHeaderNav class="w-full h-[50px]" />
 
             <!-- Content Area -->
             <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
@@ -115,7 +115,7 @@
     <div v-if="$page.props.auth.user.usertype == 'student'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
-        <HeaderNav class="w-full h-[50px]" />
+        <ScholarHeaderNav class="w-full h-[50px]" />
 
             <!-- Content Area -->
             <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
@@ -143,7 +143,8 @@ import sidebar from '../Components/Side_and_Head/Sidebar.vue'
 import coor_sidebar from '../Components/Side_and_Head/Coor_Sidebar.vue'
 import Cashier_Sidebar from '@/Components/Cashier/Cashier_Sidebar.vue'
 
-import HeaderNav from '../Components/Student/Header.vue'
+import ScholarHeaderNav from '../Components/Student/Header.vue'
+import SponsorHeaderNav from '../Components/Sponsor/Header.vue'
 
 import MIS_Sidebar from '@/Components/MIS/MIS_Sidebar.vue';
 import MIS_Header from '@/Components/MIS/MIS_Header.vue';

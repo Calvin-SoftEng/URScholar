@@ -12,6 +12,7 @@
                         </li>
                         <li class="hover:text-gray-600"> 
                             <!-- <span>{{ scholarship.name  }}</span> -->
+                             Same here
                         </li>
                         <li>
                             <span class="text-blue-400 font-semibold"> Batch 1</span>
@@ -25,6 +26,7 @@
                         
                         <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <!-- <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span> <span>scholarship type</span> -->
+                             Isko Name here
                         </h1>
                         <span class="text-xl">SY 2024 - Semester</span>
                     </div>
@@ -55,13 +57,7 @@
                 </div>
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
-                <!-- <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-                    <div class="w-full mx-auto p-3 rounded-xl text-white"
 
-                            <ScholarList :scholarship="scholarship" :batches="batches" />
-                            
-                    </div>
-                </div> -->
                 <Payout_List :scholarship="scholarship" :batch="batch" :payouts="payouts"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>

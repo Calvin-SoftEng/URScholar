@@ -78,9 +78,7 @@
                 <label class="block text-primary font-medium mb-1">Address</label>
                 <textarea placeholder="Enter Address" class="w-full h-[80px] bg-gray-50 border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
             </div>
-
         </div>   
-
     </div>
 </template>
 

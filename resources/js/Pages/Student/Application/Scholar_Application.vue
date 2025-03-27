@@ -330,7 +330,7 @@
                                         </div>
 
 <!-- eto bago----------------------------------------------------------------------------------- -->
-                                        <!-- elementary -->
+                                        <!-- gwa -->
                                         <div class="col-span-3 whitespace-nowrap gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold whitespace-nowrap text-[12px] text-blue-900 dark:text-white text-center">
                                                 General Weighted Average
@@ -354,7 +354,7 @@
                                             <!-- GWA Input Column -->
                                             <div class="w-full sm:w-[70%] flex flex-col gap-3">
                                                 <div class="flex flex-col gap-1.5">
-                                                    <Label for="gwa">Enter current GWA</Label>
+                                                    <Label for="gwa">Enter current GWA </Label>
                                                     <input id="gwa" type="text" placeholder="Enter your GWA" class="w-full border border-gray-300 p-2 rounded-lg" />
                                                 </div>
                                             </div>
