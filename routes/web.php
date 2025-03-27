@@ -214,22 +214,6 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
     Route::post('/cashier/verify-qr', [CashierController::class, 'verify_qr'])->name('cashier.verify_qr');
 
-
-    // univ settings
-    Route::get('/mis/univ-settings/course', [SystemAdminController::class, 'course'])->name('mis.course');
-    Route::get('/mis/univ-settings/course/config/{campuses}', [SystemAdminController::class, 'course_config'])->name('mis.course_config');
-    Route::post('/mis/univ-settings/course/config/{campuses}/store', [SystemAdminController::class, 'store_course_config'])->name('mis.course_config');
-
-    Route::get('/mis/univ-settings/campuses', [SystemAdminController::class, 'campuses'])->name('mis.campuses');
-    Route::post('/mis/univ-settings/campuses/store', [SystemAdminController::class, 'store_campus'])->name('mis.store_campus');
-    Route::post('/mis/univ-settings/campuses/assign', [SystemAdminController::class, 'assign_campus'])->name('mis.assign_campus');
-
-    Route::get('/mis/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_term'])->name('mis.sy_term');
-
-    // user settings
-    Route::get('/mis/user-settings/user-roles', [SystemAdminController::class, 'roles'])->name('mis.roles');
-    Route::get('/mis/user-settings/users', [SystemAdminController::class, 'users'])->name('mis.users');
-
 });
 
 // Staff and Cashier Profile -------------------------------------------------------------------------------------------------------------------------------------------------------

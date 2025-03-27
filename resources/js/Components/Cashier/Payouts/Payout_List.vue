@@ -126,41 +126,10 @@
               <!-- Result Section (Success/Failure Message) -->
               <div v-if="scannedResult" class="mt-4">
                 <div class="text-green-500 font-medium">
-                  <div class="max-w-xl mx-auto flex flex-row gap-2 p-6 justify-center">
-                    <!-- Profile Image -->
-                    <div class="flex justify-center">
-                      <img src="https://via.placeholder.com/150" alt="Profile Image"
-                        class="w-32 h-32 rounded-full border-4 border-primary" />
-                    </div>
-
-                    <div class="flex flex-col justify-center">
-                      <!-- Name -->
-                      <div class="text-left mb-5">
-                        <h2 class="text-2xl font-semibold text-gray-800">John Doe</h2>
-                        <p class="text-sm text-gray-500">DBP-Rise 2020</p>
-                      </div>
-
-                      <!-- Scholar Data -->
-                      <div class="space-y-1">
-                        <div class="flex ">
-                          <span class="text-gray-600 font-medium">Course:</span>
-                          <span class="text-gray-800">Bachelor of Science in Information Technology</span>
-                        </div>
-                        <div class="flex">
-                          <span class="text-gray-600 font-medium">Year:</span>
-                          <span class="text-gray-800">2023-2024</span>
-                        </div>
-                        <div class="flex ">
-                          <span class="text-gray-600 font-medium">Time Recieved:</span>
-                          <span class="text-gray-800">2:30 PM</span>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
+                  <InputError v-if="errors?.message" :message="errors.message" class=" text-red-500" />
+                  <QrcodeStream @detect="onDetect" class="border p-2 relative z-10" />
                 </div>
                 <div v-if="errorMessage" class="text-red-500 font-medium">
-
 
                 </div>
                 <div class="mt-4 flex justify-center">
@@ -196,11 +165,13 @@ import Button from 'primevue/button';
 import FileUpload from 'primevue/fileupload';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 import { QrcodeStream } from "vue-qrcode-reader";
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
   scholarship: Object,
   batch: Object,
   payouts: Array,
+  errors: Object,
 });
 
 const components = {
@@ -257,12 +228,12 @@ const onDetect = async (detectedCodes) => {
     // Send scanned QR code data to Laravel
     router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
       onSuccess: (page) => {
-        const flashMessage = page.props.flash.message;
-        successMessage.value = flashMessage;
-        errorMessage.value = null;
+        // const flashMessage = page.props.flash.message;
+        // successMessage.value = flashMessage;
+        // errorMessage.value = null;
 
         // Show toast notification
-        showToast('Success', flashMessage);
+        // showToast('Success', flashMessage);
 
         // If successful, refresh the payouts list
         if (page.props.flash.type === 'success') {
@@ -318,12 +289,19 @@ const getYearSuffix = (year) => {
   return "th";
 };
 
-// Check for flash messages on component mount
-onMounted(() => {
-  const { flash } = usePage().props;
-  if (flash && flash.message) {
-    showToast(flash.type === 'success' ? 'Success' : 'Error', flash.message);
-  }
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
 });
 
 </script>

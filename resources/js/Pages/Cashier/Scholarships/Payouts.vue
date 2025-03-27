@@ -58,7 +58,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payout_List :scholarship="scholarship" :batch="batch" :payouts="payouts"/>
+                <Payout_List :scholarship="scholarship" :batch="batch" :payouts="payouts" :scholar="scholar" :errors="errors"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -134,6 +134,8 @@ const props = defineProps({
     batch: Object,
     payouts: Array,
     claimedPayoutsCount: Object,
+    scholar: Object,
+    errors: Object,
 });
 
 const scannedScholar = ref(null);

@@ -74,7 +74,7 @@ class CashierController extends Controller
             ])
             ->get();
 
-            $claimedPayoutsCount = Payout::where('scholarship_id', $scholarshipId)
+        $claimedPayoutsCount = Payout::where('scholarship_id', $scholarshipId)
             ->where('batch_id', $batchId)
             ->where('status', 'Claimed')
             ->count();
@@ -152,10 +152,8 @@ class CashierController extends Controller
             $payout->claimed_by = Auth::user()->id; // Assuming the cashier is logged in
             $payout->save();
 
-            return back()->with('flash', [
-                'type' => 'success',
-                'message' => 'Grant successfully claimed for Scholar: ' . $scholar->first_name . ' ' . $scholar->last_name
-            ]);
+            // return back()->with('scholar', $scholar);
+            return back()->with('success', 'Grant successfully claimed for Scholar: ' . $scholar->first_name . ' ' . $scholar->last_name);
 
         } catch (\Exception $e) {
             logger()->error('QR verification error: ' . $e->getMessage());

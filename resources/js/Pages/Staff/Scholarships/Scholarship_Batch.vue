@@ -98,15 +98,8 @@
                     </Button>
                 </div>
 
-                <div v-if="hasPayrollData">
-                    <!-- Payroll Table -->
-                    <PayrollTable :payout="payout" :scholars="scholars" />
-                </div>
-                <div v-else>
-                    <!-- Scholar List -->
-                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
                         :requirements="requirements" @update:stats="updateStats" />
-                </div>
 
             </div>
         </div>
