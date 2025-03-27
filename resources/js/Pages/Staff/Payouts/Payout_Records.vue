@@ -23,6 +23,33 @@
                 </div>
 
             </div>
+
+            <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                <a
+                v-for="item in menuItems"
+                :key="item.key"
+                href="#"
+                @click.prevent="selectMenu(item.key)"
+                :ref="`menu-${item.key}`"
+                :class="[
+                    'relative inline-block text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
+                    selectedMenu === item.key
+                    ? 'text-blue-700 dark:text-white'
+                    : 'text-gray-900 dark:text-white hover:text-blue-700 dark:hover:bg-gray-700'
+                ]"
+                >
+                {{ item.name }}
+                <!-- Active underline for selected item -->
+                <span
+                    v-if="selectedMenu === item.key"
+                    class="absolute left-0 bottom-0 w-full h-1 bg-blue-700 dark:bg-white"
+                    :style="{ width: `${$refs[`menu-${item.key}`]?.offsetWidth}px` }"
+                ></span>
+                </a>
+            </div>
+
+
+
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 p-6 h-full">
                 <!-- Column 3: Pending Payouts -->
                 <div class="h-full flex flex-col">
@@ -150,6 +177,20 @@ const pendingPayouts = [
   { id: 2, amount: '₱3,000', date: 'April 15, 2025' },
   { id: 3, amount: '₱7,000', date: 'April 25, 2025' }
 ];
+
+// Updated menu items to match user types
+const menuItems = [
+    { name: "Recent Payouts", key: "recent" },
+    { name: "Payout History", key: "history" },
+];
+
+// Track the selected menu
+const selectedMenu = ref("recent");
+
+// Function to change the selected menu
+const selectMenu = (key) => {
+    selectedMenu.value = key;
+};
 
 
 onMounted(() => {

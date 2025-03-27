@@ -74,7 +74,7 @@
                                                                 Tulong Dudong
                                                             </span>
                                                             <span class="font-normal text-sm">
-                                                                Grant
+                                                                # of Batches na finorward mo
                                                             </span>
                                                         </div>
                                                         <div class="flex items-center gap-2">
