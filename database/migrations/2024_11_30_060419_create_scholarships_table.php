@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
-            $table->string('scholarshipType');
+            $table->enum('scholarshipType', ['Grant-Based', 'One-time Payment'])->default('Grant-Based');
             $table->date('date_start');
             $table->date('date_end');
-            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
             $table->boolean('read')->default(false);
             $table->timestamps();
         });

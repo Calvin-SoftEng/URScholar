@@ -133,8 +133,8 @@ class DatabaseSeeder extends Seeder
         Scholarship::factory()->create([
             'name' => 'Tulong Dunong Program',
             'sponsor_id' => 1,
-            'scholarshipType' => 'Need-Based',
-            'status' => 'Active',
+            'scholarshipType' => 'Grant-Based',
+            'status' => 'Pending',
             'date_start' => '2025-03-15',
             'date_end' => '2025-03-25',
         ]);
@@ -143,7 +143,7 @@ class DatabaseSeeder extends Seeder
             'name' => 'DBP-Rise',
             'sponsor_id' => 1,
             'scholarshipType' => 'One-time Payment',
-            'status' => 'Active',
+            'status' => 'Pending',
             'date_start' => '2025-03-15',
             'date_end' => '2025-03-25',
         ]);

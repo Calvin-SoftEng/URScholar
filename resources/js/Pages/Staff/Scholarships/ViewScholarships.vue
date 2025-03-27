@@ -29,10 +29,10 @@
                         <!-- Need-Based Scholarships -->
                         <h2
                             class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
-                            Need-Based Scholarships
+                            Grant-Based Scholarships
                         </h2>
 
-                        <button v-for="scholarship in needBasedScholarships" :key="scholarship.id"
+                        <button v-for="scholarship in grantBasedScholarships" :key="scholarship.id"
                             @click="toggleSpecification(scholarship)" class="w-full">
 
                             <div class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
@@ -295,8 +295,8 @@ const directives = {
     Tooltip,
 };
 
-const needBasedScholarships = computed(() =>
-    props.scholarships.filter(scholarship => scholarship.scholarshipType === 'Need-Based')
+const grantBasedScholarships = computed(() =>
+    props.scholarships.filter(scholarship => scholarship.scholarshipType === 'Grant-Based')
 );
 
 const oneTimeScholarships = computed(() =>

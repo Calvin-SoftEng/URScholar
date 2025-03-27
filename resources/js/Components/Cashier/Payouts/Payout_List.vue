@@ -61,11 +61,12 @@
                       </div>
                       <div>
                         <div class="font-normal">
-                          {{ payout.scholar.last_name }}, {{ payout.scholar.first_name }} {{ payout.scholar.middle_name }}
+                          {{ payout.scholar.last_name }}, {{ payout.scholar.first_name }} {{ payout.scholar.middle_name
+                          }}
                         </div>
                         <div class="text-sm opacity-50">
                           {{ payout.scholar.year_level }}{{ getYearSuffix(payout.scholar.year_level) }} year, {{
-                          payout.scholar.course }}
+                            payout.scholar.course.name }}
                         </div>
                       </div>
                     </div>
@@ -74,7 +75,7 @@
                     {{ payout.scholar.grant }}
                   </td>
                   <td>
-                    {{ payout.scholar.campus }}
+                    {{ payout.scholar.campus.name }}
                   </td>
                   <td>
                     <span :class="{
@@ -180,11 +181,11 @@ const filteredPayouts = computed(() => {
     payout.scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     payout.scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     payout.scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
+    payout.scholar.course?.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    payout.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    payout.scholar.campus?.name?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
-
 // Toggle camera visibility
 const toggleCamera = () => {
   OpenCamera.value = !OpenCamera.value;

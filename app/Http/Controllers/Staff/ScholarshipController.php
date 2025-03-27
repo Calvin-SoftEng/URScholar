@@ -216,6 +216,7 @@ class ScholarshipController extends Controller
         $total_scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
         $scholarship_form = ScholarshipForm::all();
         $scholarship_form_data = ScholarshipFormData::all();
+        $payouts = Payout::where('scholarship_id', $scholarship->id)->first();
 
         // Get all scholars with all requirements approved
         $scholarsWithAllApproved = Scholar::where('scholarship_id', $scholarship->id)
@@ -287,6 +288,7 @@ class ScholarshipController extends Controller
             'userType' => $userType, // Pass user type to frontend
             'userCampusId' => $userType == 'coordinator' ? $user->campus_id : null,
             'allBatches' => $allBatches,
+            'payouts' => $payouts,
         ]);
     }
 

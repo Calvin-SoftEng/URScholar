@@ -5,16 +5,15 @@
     <AuthenticatedLayout class="shadow-md z-10">
         <div class="w-full bg-[#e8f0f9] shadow-sm justify-between flex flex-row px-10">
             <h1 class="text-3xl font-bold font-sora text-left p-3">My Profile</h1>
-             <!-- Toggle Button -->
+            <!-- Toggle Button -->
             <button @click="EditProfile = !EditProfile" class="text-sm font-normal text-primary">
-            {{ EditProfile ? 'Save Updates' : 'Edit Profile' }}
+                {{ EditProfile ? 'Save Updates' : 'Edit Profile' }}
             </button>
         </div>
         <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
             <div class="mx-auto w-7/12 sm:px-6 lg:px-8 ">
-                
-                <div v-if="!EditProfile"
-                class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
+
+                <div v-if="!EditProfile" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- pic -->
                         <div class="border w-80 h-80 rounded-lg overflow-hidden">
@@ -72,7 +71,7 @@
                             }}</span>
                         </div>
                         <!-- qr -->
-                        <div v-if="!EditProfile"  
+                        <div v-if="!EditProfile"
                             class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
                             <div v-if="scholar.qr_code" class="w-20 h-20">
                                 <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code" class="w-full h-full">
@@ -119,16 +118,18 @@
                         <div
                             class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
                             <h1 class="text-base">Education</h1>
-                            
+
                             <div>
                                 <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                     General Weighted Average
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                    <span class="text-gray-700 text-base font-medium leading-tight">Year and Semester</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">Year and
+                                        Semester</span>
                                     <div class="flex flex-col items-end">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ grade ? grade.grade : 'N/A'
-                                            }}</span>
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ grade ?
+                                            grade.grade : 'N/A'
+                                        }}</span>
                                         <button class="text-sm" @click="toggleCheck">
                                             View Certificate of Grade
                                         </button>
@@ -188,8 +189,10 @@
                                     Vocational
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name }}</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name
+                                    }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years
+                                    }}</span>
                                 </div>
                             </div>
 
@@ -199,8 +202,10 @@
                                     Post Graduate
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name }}</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
+                                    }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years
+                                    }}</span>
                                 </div>
                             </div>
 
@@ -278,37 +283,40 @@
                 </div>
 
 
-                <div v-if="EditProfile"  
-                class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div v-if="EditProfile" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- Upload & Preview Section -->
                         <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
-                        <label for="dropzone-img"
-                            class="flex flex-col items-center justify-center w-80 h-80 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100"
-                            :class="{ 'border-blue-500 bg-blue-50': isDragging }"
-                            @dragover.prevent="handleImgDragOver"
-                            @dragleave="handleImgDragLeave"
-                            @drop.prevent="handleImgDrop">
-                            
-                            <!-- Show Current or New Preview -->
-                            <div v-if="!form.imgPreview" class="flex flex-col items-center justify-center pt-5 pb-6">
-                            <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                            </svg>
-                            <p class="mb-2 text-sm text-gray-500">
-                                <span class="font-semibold">Click to upload</span> or drag and drop
-                            </p>
-                            <p class="text-xs text-gray-500">PNG, JPG (MAX. 2MB-4MB)</p>
-                            </div>
+                            <label for="dropzone-img"
+                                class="flex flex-col items-center justify-center w-80 h-80 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100"
+                                :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+                                @dragover.prevent="handleImgDragOver" @dragleave="handleImgDragLeave"
+                                @drop.prevent="handleImgDrop">
 
-                            <!-- Show New Uploaded Image -->
-                            <div v-else class="flex flex-col items-center justify-center">
-                            <img :src="form.imgPreview" alt="Uploaded Preview" class="max-h-56 mb-2 rounded-lg" />
-                            </div>
+                                <!-- Show Current or New Preview -->
+                                <div v-if="!form.imgPreview"
+                                    class="flex flex-col items-center justify-center pt-5 pb-6">
+                                    <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                    </svg>
+                                    <p class="mb-2 text-sm text-gray-500">
+                                        <span class="font-semibold">Click to upload</span> or drag and drop
+                                    </p>
+                                    <p class="text-xs text-gray-500">PNG, JPG (MAX. 2MB-4MB)</p>
+                                </div>
 
-                            <input id="dropzone-img" type="file" class="hidden" accept=".png, .jpg, .jpeg" @change="handleImgChange" />
-                        </label>
+                                <!-- Show New Uploaded Image -->
+                                <div v-else class="flex flex-col items-center justify-center">
+                                    <img :src="form.imgPreview" alt="Uploaded Preview"
+                                        class="max-h-56 mb-2 rounded-lg" />
+                                </div>
+
+                                <input id="dropzone-img" type="file" class="hidden" accept=".png, .jpg, .jpeg"
+                                    @change="handleImgChange" />
+                            </label>
                         </div>
 
                         <!-- info -->
@@ -319,10 +327,11 @@
                                 <div class="w-full flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Age</span>
                                     <div class="relative w-full">
-                                    <input v-model="student.age" type="text" placeholder="Enter Email" 
-                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                                        <input v-model="student.age" type="text" placeholder="Enter Email"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
-                                        <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
                                     </div>
                                     <!-- <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
                                     }}</span> -->
@@ -365,12 +374,13 @@
                             <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
                             <!-- <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
                                 }}</span> -->
-                                <div class="relative w-full">
-                                <input  type="text" placeholder="Enter Email" 
-                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                    <!-- Icon inside input -->
-                                    <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                </div>
+                            <div class="relative w-full">
+                                <input type="text" placeholder="Enter Email"
+                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                <!-- Icon inside input -->
+                                <font-awesome-icon :icon="['fas', 'pen']"
+                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                            </div>
                         </div>
                         <!-- qr -->
                         <div
@@ -381,7 +391,7 @@
                             <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
                                 <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
                             </div>
-                            <button @click="openQRModal"
+                            <button @click="openQRModal()"
                                 class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition">
                                 View & Download QR Code
                             </button>
@@ -391,7 +401,7 @@
                         <div class="w-full h-1/12">
                             <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
                                 }},
-                                    {{ student.first_name }}</span>
+                                {{ student.first_name }}</span>
                         </div>
 
                         <div
@@ -399,7 +409,8 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name }}</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
+                                }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -410,7 +421,8 @@
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name }}, Campus</span>
+                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
+                                }}, Campus</span>
                             </div>
                         </div>
 
@@ -418,39 +430,38 @@
                         <div
                             class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
                             <h1 class="text-base">Education</h1>
-                            
+
                             <div>
                                 <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                     General Weighted Average
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <div class="flex flex-col space-y-2">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">Update Grade and Certificate of Grade</span>
+                                        <span class="text-gray-700 text-base font-medium leading-tight">Update Grade and
+                                            Certificate of Grade</span>
                                         <span class="text-gray-600 text-base leading-tight">Last Update: Noon pa</span>
                                     </div>
                                     <div class="flex flex-col space-y-2">
                                         <!-- gwa input -->
                                         <div class="relative pl-1">
-                                        <input v-model="grade.grade" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+                                            <input v-model="grade.grade" type="text" placeholder="Enter User ID"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
                                         </div>
 
                                         <!-- File Input -->
                                         <div class="">
-                                        <input 
-                                            type="file" 
-                                            @change="handleFileUpload"
-                                            class="w-full border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                        />
+                                            <input type="file" @change="handleFileUpload"
+                                                class="w-full border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <hr class="border-gray-300 my-4">
                             </div>
-                            
+
                             <div>
                                 <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                     Elementary
@@ -458,20 +469,22 @@
                                 <div class="w-full flex flex-row justify-between items-center gap-3">
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="elementary.name" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="elementary.name" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="elementary.years" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="elementary.years" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                 </div>
                             </div>
                             <div>
@@ -481,20 +494,22 @@
                                 <div class="w-full flex flex-row justify-between items-center gap-3">
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="junior.name" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="junior.name" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="junior.years" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="junior.years" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                 </div>
                             </div>
                             <div>
@@ -504,20 +519,22 @@
                                 <div class="w-full flex flex-row justify-between items-center gap-3">
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="senior.name" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="senior.name" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="senior.years" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="senior.years" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                 </div>
                             </div>
                             <div>
@@ -527,20 +544,22 @@
                                 <div class="w-full flex flex-row justify-between items-center gap-3">
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="college.name" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="college.name" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="college.years" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="college.years" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                 </div>
                             </div>
                             <!-- Vocational Section -->
@@ -551,20 +570,22 @@
                                 <div class="w-full flex flex-row justify-between items-center gap-3">
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="vocational.name" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="vocational.name" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="vocational.years" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="vocational.years" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                 </div>
                             </div>
 
@@ -576,20 +597,22 @@
                                 <div class="w-full flex flex-row justify-between items-center gap-3">
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="postgrad.name" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="postgrad.name" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
-                                        <div class="relative w-full">
-                                        <input v-model="postgrad.years" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2"/>
-                                        </div>
+                                    <div class="relative w-full">
+                                        <input v-model="postgrad.years" type="text" placeholder="Enter User ID"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
                                 </div>
                             </div>
 
@@ -605,34 +628,36 @@
                                         <font-awesome-icon :icon="['fas', 'person-dress']"
                                             class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                         <div class="w-full flex flex-col items-left gap-1 px-2 ">
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Mothers Name</span>
+                                            <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                <!-- Label (30%) -->
+                                                <span class="text-gray-700">Mothers Name</span>
 
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="mother.first_name" type="text" placeholder="Enter User ID" 
-                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                                        
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']" 
-                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"/>
-                                                    </div>
-                                                </div>
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Occupation</span>
+                                                <!-- Input Container (70%) -->
+                                                <div class="relative w-full">
+                                                    <input v-model="mother.first_name" type="text"
+                                                        placeholder="Enter User ID"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="mother.occupation" type="text" placeholder="Enter User ID" 
-                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                                        
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']" 
-                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"/>
-                                                    </div>
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                                                 </div>
+                                            </div>
+                                            <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                <!-- Label (30%) -->
+                                                <span class="text-gray-700">Occupation</span>
+
+                                                <!-- Input Container (70%) -->
+                                                <div class="relative w-full">
+                                                    <input v-model="mother.occupation" type="text"
+                                                        placeholder="Enter User ID"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -642,34 +667,36 @@
                                         <font-awesome-icon :icon="['fas', 'person']"
                                             class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                         <div class="w-full flex flex-col items-left gap-1 px-2 ">
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Fathers Name</span>
+                                            <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                <!-- Label (30%) -->
+                                                <span class="text-gray-700">Fathers Name</span>
 
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="father.first_name" type="text" placeholder="Enter User ID" 
-                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                                        
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']" 
-                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"/>
-                                                    </div>
-                                                </div>
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Occupation</span>
+                                                <!-- Input Container (70%) -->
+                                                <div class="relative w-full">
+                                                    <input v-model="father.first_name" type="text"
+                                                        placeholder="Enter User ID"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="father.occupation" type="text" placeholder="Enter User ID" 
-                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                                        
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']" 
-                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"/>
-                                                    </div>
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                                                 </div>
+                                            </div>
+                                            <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                <!-- Label (30%) -->
+                                                <span class="text-gray-700">Occupation</span>
+
+                                                <!-- Input Container (70%) -->
+                                                <div class="relative w-full">
+                                                    <input v-model="father.occupation" type="text"
+                                                        placeholder="Enter User ID"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -679,43 +706,46 @@
                                         <font-awesome-icon :icon="['fas', 'people-roof']"
                                             class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                         <div class="w-full flex flex-col items-left gap-1 px-2 ">
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Siblings</span>
+                                            <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                <!-- Label (30%) -->
+                                                <span class="text-gray-700">Siblings</span>
 
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="father.first_name" type="text" placeholder="Enter User ID" 
-                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                                        
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']" 
-                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"/>
-                                                    </div>
-                                                </div>
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Occupation</span>
+                                                <!-- Input Container (70%) -->
+                                                <div class="relative w-full">
+                                                    <input v-model="father.first_name" type="text"
+                                                        placeholder="Enter User ID"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="father.occupation" type="text" placeholder="Enter User ID" 
-                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                                        
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']" 
-                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"/>
-                                                    </div>
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                                                 </div>
+                                            </div>
+                                            <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                <!-- Label (30%) -->
+                                                <span class="text-gray-700">Occupation</span>
+
+                                                <!-- Input Container (70%) -->
+                                                <div class="relative w-full">
+                                                    <input v-model="father.occupation" type="text"
+                                                        placeholder="Enter User ID"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div>
                                     <div class="w-full flex flex-col items-left ">
-                                        <span class="text-gray-500 text-sm font-semibold leading-tight mb-2">Monthly Family
+                                        <span class="text-gray-500 text-sm font-semibold leading-tight mb-2">Monthly
+                                            Family
                                             Income</span>
-                                            <div
+                                        <div
                                             class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
                                             <RadioGroup default-value="comfortable"
                                                 class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
@@ -744,7 +774,7 @@
                                     <div class="w-full flex flex-col items-left gap-1 py-1">
                                         <span class="text-gray-500 text-sm font-semibold leading-tight mb-2">Family
                                             Housing Type</span>
-                                            <div
+                                        <div
                                             class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
                                             <RadioGroup default-value="comfortable"
                                                 class="flex sm:flex-col md:flex-row gap-2"
@@ -780,12 +810,12 @@
                                             of Income</span>
                                         <!-- Input Container (70%) -->
                                         <div class="relative w-full">
-                                            <input v-model="family.other_income" type="text" placeholder="Enter User ID" 
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-                                            
+                                            <input v-model="family.other_income" type="text" placeholder="Enter User ID"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
                                             <!-- Icon inside input -->
-                                            <font-awesome-icon :icon="['fas', 'pen']" 
-                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm"/>
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                                         </div>
                                     </div>
                                 </div>
@@ -835,23 +865,23 @@
                         class="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 disabled:opacity-50">
                         {{ loading ? 'Generating...' : 'Regenerate' }}
                     </button> -->
-                    <button @click="downloadQRCode" :disabled="!qrCodeUrl || loading"
+                    <a @click="downloadQRCode" :disabled="!qrCodeUrl || loading"
                         class="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80 disabled:opacity-50">
                         Download
-                    </button>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div v-if="View_Grades" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 dark:bg-primary dark:bg-opacity-50 z-50">
+        <div v-if="View_Grades"
+            class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 dark:bg-primary dark:bg-opacity-50 z-50">
             <!-- Modal Container -->
             <div class="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 overflow-hidden">
                 <!-- Close Button (Positioned at Top Right) -->
-                <button 
-                    @click="closeModal"
-                    class="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-full p-2 transition-all"
-                >
-                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                <button @click="closeModal"
+                    class="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-full p-2 transition-all">
+                    <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                     </svg>
@@ -947,51 +977,29 @@ const generateQRCode = () => {
 };
 
 const downloadQRCode = async () => {
-    if (!qrCodeUrl.value) {
-        error.value = 'No QR code available to download.';
-        return;
-    }
-
     try {
         loading.value = true;
 
-        // Fetch the QR code image as a Blob
-        const response = await fetch(qrCodeUrl.value);
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch QR code.');
-        }
-
-        const blob = await response.blob();
-
-        // Ensure it's a valid image
-        if (blob.type !== 'image/png') {
-            throw new Error('Invalid QR code file format.');
-        }
-
-        // Create a temporary download link
+        // Option 1: Use direct download link
         const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `${props.scholar.urscholar_id}.png`;
-
-        // Append, click, and remove the link
+        link.href = `/storage/qr_codes/${qrCodeUrl.value}`;
+        link.download = qrCodeUrl.value;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
 
-        error.value = null; // Clear any errors
-
-    } catch (err) {
-        console.error("Download failed:", err);
-        error.value = 'Failed to download QR code.';
+        
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        alert('Failed to download file. Please try again.');
     } finally {
         loading.value = false;
     }
 };
 
 const form = ref({
-img: null,
-imgPreview: null
+    img: null,
+    imgPreview: null
 });
 
 const View_Grades = ref(false);
@@ -1011,8 +1019,8 @@ const closeModal = () => {
 const selectedFile = ref(null);
 
 const handleFileUpload = (event) => {
-  selectedFile.value = event.target.files[0];
-  console.log("Selected file:", selectedFile.value);
+    selectedFile.value = event.target.files[0];
+    console.log("Selected file:", selectedFile.value);
 };
 
 const isDragging = ref(false);
@@ -1023,39 +1031,39 @@ const handleImgDragLeave = () => isDragging.value = false;
 
 // Handle File Upload
 const handleImgChange = (event) => {
-const file = event.target.files[0];
-if (file) {
-    form.value.img = file;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-    form.value.imgPreview = e.target.result; // Show preview before saving
-    };
-    reader.readAsDataURL(file);
-}
+    const file = event.target.files[0];
+    if (file) {
+        form.value.img = file;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            form.value.imgPreview = e.target.result; // Show preview before saving
+        };
+        reader.readAsDataURL(file);
+    }
 };
 
 // Handle Profile Picture Update
 const updateProfilePicture = () => {
-if (!form.value.img) {
-    alert("Please upload an image first.");
-    return;
-}
+    if (!form.value.img) {
+        alert("Please upload an image first.");
+        return;
+    }
 
-const formData = new FormData();
-formData.append('profile_picture', form.value.img);
+    const formData = new FormData();
+    formData.append('profile_picture', form.value.img);
 
-// Send FormData to backend (Example using fetch API)
-fetch('/api/update-profile-picture', {
-    method: 'POST',
-    body: formData
-})
-.then(response => response.json())
-.then(data => {
-    alert('Profile updated successfully!');
-})
-.catch(error => {
-    console.error('Error updating profile picture:', error);
-});
+    // Send FormData to backend (Example using fetch API)
+    fetch('/api/update-profile-picture', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            alert('Profile updated successfully!');
+        })
+        .catch(error => {
+            console.error('Error updating profile picture:', error);
+        });
 };
 
 

@@ -30,7 +30,7 @@
                             }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
-                    <div v-if="scholarship.scholarshipType == 'Need-Based'" class="flex gap-2">
+                    <div v-if="scholarship.scholarshipType == 'Grant-Based'" class="flex gap-2">
                         <div v-if="students.length === 0" class="flex flex-row items-end gap-2">
                             <!-- Disabled Import Scholars Button -->
                             <button v-tooltip.left="'You need to add students before importing scholars'" disabled
@@ -90,7 +90,7 @@
                 <!-- <ScholarList :scholarship="scholarship" :batches="batches" /> -->
                 <!-- <Batches :scholarship="scholarship" :batches="batches" :schoolyear="schoolyear" :selectedSem="selectedSem" class="w-full h-full"/> -->
 
-                <div v-if="scholarship.scholarshipType == 'Need-Based'">
+                <div v-if="scholarship.scholarshipType == 'Grant-Based'">
                     <div v-if="!batches || batches.length === 0"
                         class="flex flex-col w-full items-center justify-center mt-5">
                         <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
@@ -214,11 +214,21 @@
                                     <span class="font-poppins text-sm font-semibold">{{ campuses[0].name }}</span>
                                 </template>
 
-                                <button @click="toggleSendBatch"
-                                    class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                                    <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                    <span class="font-normal">Forward Completed Scholars</span>
-                                </button>
+                                <div v-if="!payouts">
+                                    <button @click="toggleSendBatch"
+                                        class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                        <span class="font-normal">Forward Completed Scholars</span>
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <button v-tooltip.left="'Scholars already submitted to Casher'" disabled
+                                        class="flex items-center gap-2 dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                                    border border-yellow-300 dark:border-yellow-500  hover:bg-yellow-200 px-4 py-2 rounded-lg  transition duration-200">
+                                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                        <span class="font-normal">Forward Completed Scholars</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
 
@@ -734,7 +744,8 @@ const props = defineProps({
     errors: Object,
     userType: String,
     userCampusId: Number,
-    allBatches: Array // New prop for all batches regardless of filters
+    allBatches: Array, // New prop for all batches regardless of filters
+    payouts: Object,
 });
 
 // Initialize selectedCampus with the value from props

@@ -405,6 +405,11 @@ class ScholarController extends Controller
                 'total_scholars' => count($scholars)
             ]);
 
+            //Update Scholarship Status
+            $scholarship->update([
+                'status' => 'Active'
+            ]);
+
             // Rest of your code remains the same
             $scholars = Scholar::where('batch_id', $batch->id)->get();
             $students = Student::all();

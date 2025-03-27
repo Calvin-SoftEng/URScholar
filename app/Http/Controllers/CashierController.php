@@ -59,12 +59,18 @@ class CashierController extends Controller
             ->orderBy('batch_no', 'desc')
             ->first();
 
-        // Fetch payouts using the Payout model
+        // Fetch payouts using the Payout model with related student, course, and campus
         $payouts = Payout::where('scholarship_id', $scholarshipId)
             ->where('batch_id', $batchId)
-            ->with(['scholar']) // Assuming you have these relationships defined
+            ->with([
+                'scholar' => function ($query) {
+                    $query->with([
+                        'course',
+                        'campus'
+                    ]);
+                }
+            ])
             ->get();
-
 
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
