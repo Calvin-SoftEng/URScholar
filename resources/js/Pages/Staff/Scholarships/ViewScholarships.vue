@@ -148,8 +148,8 @@
                                                 v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
                                                 {{ new
                                                     Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
-                                                year: 'numeric', month: 'long', day: 'numeric'
-                                                }) }}
+                                                        year: 'numeric', month: 'long', day: 'numeric'
+                                                    }) }}
                                             </span>
                                             <span v-else>
                                                 No Deadline
@@ -270,6 +270,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted, computed } from 'vue';
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { useRouter, useRoute } from 'vue-router'
+import Echo from 'laravel-echo';
 
 import { Tooltip } from 'primevue';
 
@@ -291,6 +292,47 @@ const props = defineProps({
         required: true
     },
 });
+
+onMounted(() => {
+    const echo = new Echo({
+        broadcaster: 'pusher',
+        key: import.meta.env.VITE_PUSHER_APP_KEY,
+        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+        forceTLS: true,
+        authEndpoint: "/broadcasting/auth", // Required for private channels
+    });
+
+    // Listen for general notifications
+    echo.channel('general-notifications')
+        .listen('GeneralNotification', (event) => {
+            // Check if this is a scholarship read notification
+            if (event.type === 'scholarship_read' &&
+                event.data.scholarship_id === scholarship.value.id) {
+                scholarship.value.read = event.data.read
+            }
+        })
+})
+
+// Set up real-time messaging using Laravel Echo
+// onMounted(() => {
+
+//     const echo = new Echo({
+//         broadcaster: 'pusher',
+//         key: import.meta.env.VITE_PUSHER_APP_KEY,
+//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//         forceTLS: true,
+//         authEndpoint: "/broadcasting/auth", // Required for private channels
+//     });
+
+//     echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
+//         .listen('.message.sent', (e) => {
+//             fetchMessages(); // Fetch messages after receiving
+//             scrollToBottom();
+//             messages.value.push(e.message); // Append new message
+//         });
+// });
+
+
 const directives = {
     Tooltip,
 };

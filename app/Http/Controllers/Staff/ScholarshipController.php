@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Events\GeneralNotification;
 use App\Events\NewNotification;
 use App\Models\Course;
 use Inertia\Inertia;
@@ -270,6 +271,16 @@ class ScholarshipController extends Controller
         $scholarship->update([
             'read' => 1
         ]);
+
+        // Broadcast a general notification about the scholarship being read
+        event(new GeneralNotification(
+            'Scholarship marked as read',
+            'scholarship_read',
+            [
+                'scholarship_id' => $scholarship->id,
+                'read' => true
+            ]
+        ));
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,

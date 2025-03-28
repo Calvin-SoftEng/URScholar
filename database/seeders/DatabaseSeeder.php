@@ -102,7 +102,7 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
-            'campus_id' => '1'
+            'campus_id' => '2'
         ]);
 
         //student
