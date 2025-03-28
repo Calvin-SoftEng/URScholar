@@ -58,13 +58,13 @@
                 
                 <!-- Right Column (85%) -->
                 <div class="relative block">
-                    <div class="bg-white p-5 rounded-lg shadow-md relative">
+                    <div v-for="scholarship in scholarships" :key="scholarship.id" class="bg-white p-5 rounded-lg shadow-md relative">
                         <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
                             Pending
                         </span>
-                        <p class="text-lg font-semibold text-red-500">DBP-Rise</p>
+                        <p class="text-lg font-semibold text-red-500">{{ scholarship.name }}</p>
                         <p class="text-lg font-semibold text-red-500">2023-2022</p>
-                        <p class="text-sm text-gray-600">Expected on: 01/01/2023</p>
+                        <p class="text-sm text-gray-600">Expected on: {{ scholarship.payouts.date_end }}</p>
                     </div>
                 </div>
             </div>
@@ -156,7 +156,7 @@ const menuItems = [
 ];
 
 // Track the selected menu
-const selectedMenu = ref();
+const selectedMenu = ref('recent');
 
 // Function to change the selected menu
 const selectMenu = (key) => {
