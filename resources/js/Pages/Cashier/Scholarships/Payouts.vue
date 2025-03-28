@@ -42,7 +42,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ payouts.length }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ disbursements.length }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
@@ -50,7 +50,7 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ claimedPayoutsCount }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ payout.sub_total }}/{{ payout.total_scholars }}</p>
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payout_List :scholarship="scholarship" :batch="batch" :payouts="payouts" :scholar="scholar" :errors="errors" :flash="flash"/>
+                <Payout_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -132,8 +132,8 @@ const toggleMonitoring = () => {
 const props = defineProps({
     scholarship: Object,
     batch: Object,
-    payouts: Array,
-    claimedPayoutsCount: Object,
+    disbursements: Array,
+    payout: Object,
     scholar: Object,
     errors: Object,
     flash: Object,

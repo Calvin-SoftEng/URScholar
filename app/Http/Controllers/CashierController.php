@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Disbursement;
 use App\Models\Payout;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -26,7 +27,7 @@ class CashierController extends Controller
     {
         $scholarships = Scholarship::all();
         $sponsors = Sponsor::all();
-        $payouts = Payout::with('batch')->get();
+        $payouts = Payout::all();
 
         return Inertia::render('Cashier/Scholarships/Active_Scholarships', [
             'scholarships' => $scholarships,
@@ -57,34 +58,29 @@ class CashierController extends Controller
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
+        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
             ->orderBy('batch_no', 'desc')
-            ->first();
+            ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
 
-        // Fetch payouts using the Payout model with related student, course, and campus
-        $payouts = Payout::where('scholarship_id', $scholarshipId)
+        // Optimize query to reduce N+1 problem
+        $disbursements = Disbursement::where('payout_id', $payout->id)
             ->where('batch_id', $batchId)
             ->with([
-                'scholar' => function ($query) {
-                    $query->with([
-                        'course',
-                        'campus'
-                    ]);
+                'scholar' => function ($subQuery) {
+                    $subQuery->with(['course', 'campus']);
                 }
             ])
             ->get();
 
-        $claimedPayoutsCount = Payout::where('scholarship_id', $scholarshipId)
-            ->where('batch_id', $batchId)
-            ->where('status', 'Claimed')
-            ->count();
 
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
-            'payouts' => $payouts,
-            'claimedPayoutsCount' => $claimedPayoutsCount,
+            'disbursements' => $disbursements,
+            'payout' => $payout,
         ]);
     }
 
@@ -142,12 +138,27 @@ class CashierController extends Controller
             }
 
             // QR is valid, now check if the scholar has a pending payout
-            $payout = Payout::where('scholar_id', $scholar->id)
+            $disbursement = Disbursement::where('scholar_id', $scholar->id)
                 ->where('status', 'Pending')
                 ->first();
 
-            if (!$payout) {
+            if (!$disbursement) {
                 return back()->withErrors(['message' => 'No pending payout found for this scholar']);
+            } else {
+                $payout = Payout::where('id', $disbursement->payout_id)->first();
+            
+
+                $disbursement->update([
+                    'status' => 'Claimed',
+                ]);
+
+                $total_claimed = Disbursement::where('payout_id', $payout->id)
+                    ->where('status', 'Claimed')->count();
+
+                $payout->update([
+                    'sub_total' => $total_claimed,
+                ]);
+
             }
 
             // Return the scholar with their picture

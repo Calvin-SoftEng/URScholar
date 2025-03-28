@@ -50,8 +50,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="payout in filteredPayouts" :key="payout.id" class="text-sm">
-                  <td>{{ payout.scholar.urscholar_id }}</td>
+                <tr v-for="disbursement in filteredDisbursements" :key="disbursement.id" class="text-sm">
+                  <td>{{ disbursement.scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
@@ -61,28 +61,30 @@
                       </div>
                       <div>
                         <div class="font-normal">
-                          {{ payout.scholar.last_name }}, {{ payout.scholar.first_name }} {{ payout.scholar.middle_name
+                          {{ disbursement.scholar.last_name }}, {{ disbursement.scholar.first_name }} {{
+                            disbursement.scholar.middle_name
                           }}
                         </div>
                         <div class="text-sm opacity-50">
-                          {{ payout.scholar.year_level }}{{ getYearSuffix(payout.scholar.year_level) }} year, {{
-                            payout.scholar.course.name }}
+                          {{ disbursement.scholar.year_level }}{{ getYearSuffix(disbursement.scholar.year_level) }}
+                          year, {{
+                            disbursement.scholar.course.name }}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    {{ payout.scholar.grant }}
+                    {{ disbursement.scholar.grant }}
                   </td>
                   <td>
-                    {{ payout.scholar.campus.name }}
+                    {{ disbursement.scholar.campus.name }}
                   </td>
                   <td>
                     <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': payout.status === 'Claimed',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400': payout.status === 'Pending'
+                      'bg-green-100 text-green-800 border border-green-400': disbursement.status === 'Claimed',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ payout.status }}
+                      {{ disbursement.status }}
                     </span>
                   </td>
                 </tr>
@@ -124,29 +126,27 @@
               </div>
 
               <!-- Result Section (Success/Failure Message) -->
-              <div v-if="scannedResult" class="mt-4">
+              <div v-if="scannedResult && scholar" class="mt-4">
                 <div class="text-green-500 font-medium">
                   <InputError v-if="errors?.message" :message="errors.message" class=" text-red-500" />
-                  <!-- pic -->
                   <div class="border w-80 h-80 rounded-lg overflow-hidden">
-                    <img :src="`/storage/qr_codes/${flash.success.qr_code}`" alt="Profile Picture"
+                    <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="Profile Picture"
                       class="w-full h-full object-cover">
                   </div>
                   <div class="w-full h-1/12">
-                    <span class="font-italic font-sora text-3xl font-bold uppercase">{{ flash.success.last_name
-                      }},
-                      {{ flash.success.first_name }}</span>
+                    <span class="font-italic font-sora text-3xl font-bold uppercase">{{ scholar.last_name
+                    }},
+                      {{ scholar.first_name }}</span>
                   </div>
                   <div class="w-full flex flex-row items-center gap-2">
                     <font-awesome-icon :icon="['fas', 'school']" class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ flash.success.campus.name
-                    }}, Campus</span>
+                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
+                      }}, Campus</span>
                   </div>
-                  <!-- gmail -->
                   <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                     <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
-                    <span class="pl-2 text-gray-900 text-base font-bold">{{ flash.success.email
-                    }}</span>
+                    <span class="pl-2 text-gray-900 text-base font-bold">{{ scholar.email
+                      }}</span>
                   </div>
                 </div>
                 <div v-if="errorMessage" class="text-red-500 font-medium">
@@ -190,9 +190,10 @@ import InputError from '@/Components/InputError.vue';
 const props = defineProps({
   scholarship: Object,
   batch: Object,
-  payouts: Array,
+  disbursements: Array,
   errors: Object,
   flash: Object,
+  scholar: Object,
 });
 
 const components = {
@@ -208,22 +209,22 @@ const OpenCamera = ref(false);
 const scannedResult = ref(null);
 const scannedScholar = ref(null);
 const errorMessage = ref(null);
-// const successMessage = ref(null);
+const successMessage = ref(null);
 const isScanning = ref(true);
-// const toastVisible = ref(false);
-// const toastTitle = ref('');
-// const toastMessage = ref('');
+const toastVisible = ref(false);
+const toastTitle = ref('');
+const toastMessage = ref('');
 
 // Filtered payouts based on search query
-const filteredPayouts = computed(() => {
-  return props.payouts.filter(payout =>
-    payout.scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.course?.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.campus?.name?.toLowerCase().includes(searchQuery.value.toLowerCase())
+const filteredDisbursements = computed(() => {
+  return props.disbursements.filter(disbursements =>
+    disbursements.scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.course?.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.campus?.name?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 // Toggle camera visibility
@@ -311,19 +312,20 @@ const getYearSuffix = (year) => {
   return "th";
 };
 
-// watchEffect(() => {
-//     const flashMessage = usePage().props.flash?.success;
+watchEffect(() => {
+  const flashMessage = usePage().props.flash?.success;
 
-//     if (flashMessage) {
-//         console.log("Showing toast with message:", flashMessage);
-//         toastMessage.value = flashMessage.first_name;  // This sets the toast message to "Carl Vincent"
-//         toastVisible.value = true;
-//         // setTimeout(() => {
-//         //     console.log("Hiding toast...");
-//         //     toastVisible.value = false;
-//         // }, 3000);
-//     }
-// });
+  if (flashMessage) {
+    console.log("Showing toast with message:", flashMessage);
+    usePage().props.scholar = flashMessage;
+    toastMessage.value = flashMessage.first_name;  // This sets the toast message to "Carl Vincent"
+    toastVisible.value = true;
+    setTimeout(() => {
+      console.log("Hiding toast...");
+      toastVisible.value = false;
+    }, 3000);
+  }
+});
 
 </script>
 

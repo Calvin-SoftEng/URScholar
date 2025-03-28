@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('payouts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->string('total_scholars')->nullable();
-            $table->string('sub_total')->nullable();
+            $table->integer('total_scholars')->nullable();
+            $table->integer('sub_total')->nullable();
             $table->date('date_start');
             $table->date('date_end');
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');

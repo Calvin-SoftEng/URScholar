@@ -12,6 +12,7 @@ use App\Models\ActivityLog;
 use App\Models\Campus;
 use App\Models\CampusRecipients;
 use App\Models\Criteria;
+use App\Models\Disbursement;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
@@ -51,10 +52,7 @@ class ScholarshipController extends Controller
     public function batch(Request $request, $scholarshipId, $batchId)
     {
         // Checking if scholar's payment claimed
-        $payout = Payout::where('scholarship_id', $scholarshipId)
-            ->where('batch_id', $batchId)
-            ->where('status', 'claimed')
-            ->get();
+        $payout = 0;
 
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
@@ -265,7 +263,7 @@ class ScholarshipController extends Controller
             ])
             ->orderBy('batch_no', 'desc')
             ->get();
-            
+
         $scholarship->update([
             'read' => 1
         ]);
@@ -530,7 +528,6 @@ class ScholarshipController extends Controller
 
     public function forward(Request $request)
     {
-
         $request->validate([
             'scholarship_id' => 'required|integer',
             'scholars' => 'required|array', // Array of scholar IDs
@@ -540,38 +537,42 @@ class ScholarshipController extends Controller
             'date_end' => 'required|date'
         ], [
             'date_start.required' => 'Set a Date start',
-            'date_end.required' => 'Set a Date start',
+            'date_end.required' => 'Set a Date end',
         ]);
 
-        //dd($request);
+        $scholarshipId = $request->input('scholarship_id');
+        $scholars = $request->input('scholars'); // Array of scholar IDs
+        $batchIds = $request->input('batch_ids'); // Array of batch IDs
 
+        // Create payout first and get its ID
+        $payout = Payout::create([
+            'scholarship_id' => $scholarshipId,
+            'date_start' => $request->input('date_start'),
+            'date_end' => $request->input('date_end'),
+            'status' => 'Pending', // Note: Matches the enum in your schema
+        ]);
 
-
-        $scholarshipId = $request['scholarship_id'];
-        $scholars = $request['scholars']; // Array of scholar IDs
-        $batchIds = $request['batch_ids']; // Array of batch IDs
-
+        // Prepare disbursement data
         $dataToInsert = [];
-
-        foreach ($scholars as $scholarId) {
+        foreach ($scholars as $scholar) {
             $dataToInsert[] = [
-                'scholarship_id' => $scholarshipId,
-                'batch_id' => $scholarId['batch_id'],
-                'scholar_id' => $scholarId['id'],
-                'status' => 'pending', // Default status
-                'date_start' => $request['date_start'],
-                'date_end' => $request['date_end'],
+                'payout_id' => $payout->id, // Use the ID of the just created payout
+                'batch_id' => $scholar['batch_id'],
+                'scholar_id' => $scholar['id'],
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
-
-            //dd($dataToInsert);
-            // Check if the scholar already has a payout record for this scholarship
-
         }
 
-        // Insert all records at once
-        Payout::insert($dataToInsert);
+        // Bulk insert disbursements
+        Disbursement::insert($dataToInsert);
+
+        $total_disbursement = Disbursement::where('payout_id', $payout->id)->count();
+
+
+        $payout->update([
+            'total_scholars' => $total_disbursement
+        ]);
 
         ActivityLog::create([
             'user_id' => Auth::user()->id,
