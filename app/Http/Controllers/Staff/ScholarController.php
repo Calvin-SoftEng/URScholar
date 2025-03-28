@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Events\NewNotification;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -12,6 +13,7 @@ use App\Models\Campus;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Batch;
+use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\ScholarshipGroup;
 use App\Models\SubmittedRequirements;
@@ -74,14 +76,39 @@ class ScholarController extends Controller
 
         $requirement->save();
 
+        $scholar = Scholar::where('id', $requirement->scholar_id)->first();
+
+
+        // Notify the specific user if the status is 'Returned'
+        if ($request->status === 'Returned') {
+            $userToNotify =  $scholar->user_id; // Assuming 'user' is the relationship to fetch the user_id
+
+            // dd($userToNotify);
+            $notification = Notification::create([
+                'title' => 'Requirement Returned',
+                'message' => 'Your submitted requirement has been returned.',
+                'type' => 'requirement_returned',
+            ]);
+
+            // Attach the user to the notification
+            $notification->users()->attach($userToNotify);
+
+            // Broadcast the notification
+            broadcast(new NewNotification($notification))->toOthers();
+
+            // Trigger event for new notification
+            event(new NewNotification($notification));
+        }
+
+
         // Define status-specific messages for the response
         $statusMessage = $request->status === 'Approved'
             ? 'Requirement approved successfully!'
             : 'Requirement returned successfully!';
 
         return back()->with('success', $statusMessage);
-
     }
+
 
     public function show(Scholarship $scholarship)
     {
