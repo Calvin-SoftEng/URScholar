@@ -15,10 +15,12 @@ class PayoutsController extends Controller
 
         $scholarships = Scholarship::with('payouts')->get();
         $payouts = Payout::all();
+        $batches = Batch::all();
 
         return Inertia::render('Staff/Payouts/Payout_Records', [
             'scholarships' => $scholarships,
             'payouts' => $payouts,
+            'batches' => $batches,
         ]);
     }
 
