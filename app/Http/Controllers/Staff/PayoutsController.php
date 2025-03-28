@@ -13,7 +13,7 @@ class PayoutsController extends Controller
     public function payouts_index()
     {
 
-        $scholarships = Scholarship::with('payouts')->get();
+        $scholarships = Scholarship::all();
         $payouts = Payout::all();
         $batches = Batch::all();
 
