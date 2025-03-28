@@ -25,62 +25,65 @@
             </div>
 
             <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
-                <a
-                    v-for="item in menuItems"
-                    :key="item.key"
-                    href="#"
-                    @click.prevent="selectMenu(item.key)"
-                    :ref="`menu-${item.key}`"
-                    :class="[
+                <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)"
+                    :ref="`menu-${item.key}`" :class="[
                         'relative inline-block text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
                         selectedMenu === item.key
-                        ? 'text-blue-700 dark:text-white'
-                        : 'text-gray-900 dark:text-white hover:text-blue-700 dark:hover:bg-gray-700'
-                    ]"
-                >
+                            ? 'text-blue-700 dark:text-white'
+                            : 'text-gray-900 dark:text-white hover:text-blue-700 dark:hover:bg-gray-700'
+                    ]">
                     {{ item.name }}
                     <!-- Active underline for selected item -->
-                    <span
-                        v-if="selectedMenu === item.key"
+                    <span v-if="selectedMenu === item.key"
                         class="absolute left-0 bottom-0 w-full h-1 bg-blue-700 dark:bg-white"
-                        :style="{ width: `${$refs[`menu-${item.key}`]?.offsetWidth}px` }"
-                    ></span>
+                        :style="{ width: `${$refs[`menu-${item.key}`]?.offsetWidth}px` }"></span>
                 </a>
             </div>
 
             <!-- Recent Section (Visible if 'recent' is selected) -->
-            <div v-show="selectedMenu === 'recent'" 
+            <div v-show="selectedMenu === 'recent'"
                 class="grid grid-cols-[15%_85%] md:grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">
                 <!-- Left Column (15%) -->
                 <div class="w-full">
                     <span class="text-gray-700 font-medium">Date</span>
                 </div>
-                
+
                 <!-- Right Column (85%) -->
                 <div class="relative block">
-                    <div v-for="scholarship in scholarships" :key="scholarship.id" class="bg-white p-5 rounded-lg shadow-md relative">
-                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                    <div v-for="payout in payouts" :key="payout.id" class="bg-white p-5 rounded-lg shadow-md relative">
+                        <span
+                            class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
                             Pending
                         </span>
-                        <p class="text-lg font-semibold text-red-500">{{ scholarship.name }}</p>
+                        <p class="text-lg font-semibold text-red-500">{{ payout.scholarship_id }}</p>
                         <p class="text-lg font-semibold text-red-500">2023-2022</p>
-                        <p class="text-sm text-gray-600">Expected on: {{ scholarship.payouts.date_end }}</p>
+                        <p class="text-sm text-gray-600">Expected on: <span v-if="payout.date_end">
+                                {{ new
+                                    Date(payout.date_end).toLocaleDateString('en-US', {
+                                        year: 'numeric', month: 'long', day: 'numeric'
+                                    }) }}
+                            </span>
+                            <span v-else>
+                                No Deadline
+                            </span>
+                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- History Section (Visible if 'history' is selected) -->
-            <div v-show="selectedMenu === 'history'" 
+            <div v-show="selectedMenu === 'history'"
                 class="grid grid-cols-[15%_85%] md:grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">
                 <!-- Left Column (15%) -->
                 <div class="w-full">
                     <span class="text-gray-700 font-medium">Date</span>
                 </div>
-                
+
                 <!-- Right Column (85%) -->
                 <div class="relative block">
                     <div class="bg-white p-5 rounded-lg shadow-md relative">
-                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                        <span
+                            class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
                             Accomplished
                         </span>
                         <p class="text-lg font-semibold text-red-500">Lala</p>
@@ -136,6 +139,7 @@ import { useDate } from 'vuetify';
 
 const props = defineProps({
     scholarships: Array,
+    payouts: Array,
 });
 
 const directives = {
@@ -144,9 +148,9 @@ const directives = {
 };
 
 const pendingPayouts = [
-  { id: 1, amount: '₱5,000', date: 'April 5, 2025' },
-  { id: 2, amount: '₱3,000', date: 'April 15, 2025' },
-  { id: 3, amount: '₱7,000', date: 'April 25, 2025' }
+    { id: 1, amount: '₱5,000', date: 'April 5, 2025' },
+    { id: 2, amount: '₱3,000', date: 'April 15, 2025' },
+    { id: 3, amount: '₱7,000', date: 'April 25, 2025' }
 ];
 
 // Updated menu items to match user types
