@@ -45,13 +45,11 @@ class EmailController extends Controller
             'deadline' => 'required|date'
         ], $messages);
 
-        // dd($request->all());
         $scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
 
         // Create the requirements for the scholarship
         $req = [];
         foreach ($request['requirements'] as $requirement) {
-
             $req[] = [
                 'scholarship_id' => $scholarship->id,
                 'requirements' => $requirement,
@@ -63,23 +61,30 @@ class EmailController extends Controller
 
         Requirements::insert($req);
 
-
         // Create the same requirement for all scholars
         foreach ($scholars as $scholar) {
-
             if ($scholar->email) {
-
-                $userExists = User::where('email', $scholar->email)->exists();
+                $userExists = User::where('email', $scholar->email)->first();
 
                 $password = Str::random(8);
 
                 if (!$userExists) {
-                    User::create([
+                    $user = User::create([
                         'name' => $scholar['first_name'] . ' ' . $scholar['last_name'],
                         'email' => $scholar['email'],
                         'first_name' => $scholar['first_name'],
                         'last_name' => $scholar['last_name'],
                         'password' => bcrypt($password),
+                    ]);
+
+                    // Update scholar's user_id
+                    $scholar->update([
+                        'user_id' => $user->id
+                    ]);
+                } else {
+                    // If user already exists, update the scholar with existing user's ID
+                    $scholar->update([
+                        'user_id' => $userExists->id
                     ]);
                 }
 
@@ -100,11 +105,8 @@ class EmailController extends Controller
                         "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
                 ];
 
-
                 Mail::to($scholar->email)->send(new SendEmail($mailData));
-
             }
-
         }
 
         ActivityLog::create([
@@ -114,8 +116,8 @@ class EmailController extends Controller
         ]);
 
         return back()->with('flash', [
-                'type' => 'success',
-                'message' => "Successfully sent email to all scholars",
-            ]);
+            'type' => 'success',
+            'message' => "Successfully sent email to all scholars",
+        ]);
     }
 }

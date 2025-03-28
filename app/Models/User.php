@@ -33,6 +33,11 @@ class User extends Authenticatable
         return $this->hasMany(StudentRecord::class);
     }
 
+    public function scholar()
+    {
+        return $this->hasMany(Scholar::class);
+    }
+
     public function message()
     {
         return $this->hasMany(Message::class);

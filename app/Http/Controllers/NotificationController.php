@@ -16,13 +16,15 @@ class NotificationController extends Controller
     {
         $user = Auth::user(); // Get the authenticated user
 
-        // Retrieve notifications with read status for the current user
+        // Retrieve notifications with user relationship
         $notifications = Notification::with([
             'users' => function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             }
         ])
-        ->where('creator_id', !$user->id)
+            ->whereHas('users', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
             ->orderBy('created_at', 'desc')
             ->get()
             ->map(function ($notification) {

@@ -9,6 +9,7 @@ class Scholar extends Model
 {
     protected $fillable = [
         'scholarship_id',
+        'user_id',
         'hei_name',
         'campus_id',
         'course_id',
@@ -47,6 +48,11 @@ class Scholar extends Model
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function submittedRequirements()

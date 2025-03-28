@@ -156,11 +156,13 @@ class MessageController extends Controller
         $scholarshipId = $scholarship->id;
 
         // Get users who belong to the specified scholarship group
-        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
+        $users = User::whereIn('id', function ($query) use ($scholarshipId) { 
             $query->select('user_id')
-                ->from('scholarship_groups')
-                ->where('scholarship_id', $scholarshipId);
-        })->get();
+                ->from('scholarship_groups') 
+                ->where('scholarship_id', $scholarshipId); 
+        })
+        ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
+        ->get();
 
         // Attach users to the notification
         $notification->users()->attach($users->pluck('id'));

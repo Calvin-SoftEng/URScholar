@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Events\NewNotification;
 use App\Models\Course;
 use Inertia\Inertia;
 use App\Models\Scholarship;
@@ -13,6 +14,7 @@ use App\Models\Campus;
 use App\Models\CampusRecipients;
 use App\Models\Criteria;
 use App\Models\Disbursement;
+use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
@@ -21,6 +23,7 @@ use App\Models\ScholarshipFormData;
 use App\Models\SubmittedRequirements;
 use App\Models\Sponsor;
 use App\Models\Student;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -530,8 +533,8 @@ class ScholarshipController extends Controller
     {
         $request->validate([
             'scholarship_id' => 'required|integer',
-            'scholars' => 'required|array', // Array of scholar IDs
-            'batch_ids' => 'required|array', // Array of batch IDs
+            'scholars' => 'required|array',
+            'batch_ids' => 'required|array',
             'batch_ids.*' => 'integer',
             'date_start' => 'required|date',
             'date_end' => 'required|date'
@@ -541,22 +544,23 @@ class ScholarshipController extends Controller
         ]);
 
         $scholarshipId = $request->input('scholarship_id');
-        $scholars = $request->input('scholars'); // Array of scholar IDs
-        $batchIds = $request->input('batch_ids'); // Array of batch IDs
+        $scholars = $request->input('scholars');
+        $batchIds = $request->input('batch_ids');
+        $user = Auth::user();
 
         // Create payout first and get its ID
         $payout = Payout::create([
             'scholarship_id' => $scholarshipId,
             'date_start' => $request->input('date_start'),
             'date_end' => $request->input('date_end'),
-            'status' => 'Pending', // Note: Matches the enum in your schema
+            'status' => 'Pending',
         ]);
 
         // Prepare disbursement data
         $dataToInsert = [];
         foreach ($scholars as $scholar) {
             $dataToInsert[] = [
-                'payout_id' => $payout->id, // Use the ID of the just created payout
+                'payout_id' => $payout->id,
                 'batch_id' => $scholar['batch_id'],
                 'scholar_id' => $scholar['id'],
                 'created_at' => now(),
@@ -569,16 +573,44 @@ class ScholarshipController extends Controller
 
         $total_disbursement = Disbursement::where('payout_id', $payout->id)->count();
 
-
         $payout->update([
             'total_scholars' => $total_disbursement
         ]);
 
-        ActivityLog::create([
-            'user_id' => Auth::user()->id,
+        // Create Activity Log
+        $activityLog = ActivityLog::create([
+            'user_id' => $user->id,
             'activity' => 'Forward',
             'description' => 'Scholars forwarded to cashiers',
         ]);
+
+        // Get scholar IDs from the disbursements
+        $scholarIds = collect($dataToInsert)->pluck('scholar_id');
+
+        // Find users associated with these scholars
+        $users = User::whereIn('id', function ($query) use ($scholarIds) {
+            $query->select('user_id')
+                ->from('scholars')
+                ->whereIn('id', $scholarIds);
+        })
+            ->where('id', '!=', $user->id) // Exclude the current user
+            ->get();
+
+        // Create Notification
+        $notification = Notification::create([
+            'title' => 'New Payout Forwarded',
+            'message' => 'Scholars forwarded to cashiers by ' . $user->name,
+            'type' => 'payout_forward',
+        ]);
+
+        // Attach users to the notification
+        $notification->users()->attach($users->pluck('id'));
+
+        // Broadcast the notification
+        broadcast(new NewNotification($notification))->toOthers();
+
+        // Trigger event for new notification
+        event(new NewNotification($notification));
 
         // return response()->json([
         //     'message' => 'Scholars successfully assigned to batches!',
