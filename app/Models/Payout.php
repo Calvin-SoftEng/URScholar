@@ -6,20 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payout extends Model
 {
-    protected $fillable = ['scholarship_id', 'batch_id', 'scholar_id', 'status', 'date_start', 'date_end'];
-
-    public function scholar()
-    {
-        return $this->belongsTo(Scholar::class);
-    }
+    protected $fillable = ['scholarship_id','total_payouts', 'sub_total', 'date_start', 'date_end', 'status'];
 
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);
-    }
-
-    public function batch()
-    {
-        return $this->belongsTo(Batch::class);
     }
 }

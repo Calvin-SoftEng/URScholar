@@ -58,7 +58,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payout_List :scholarship="scholarship" :batch="batch" :payouts="payouts" :scholar="scholar" :errors="errors"/>
+                <Payout_List :scholarship="scholarship" :batch="batch" :payouts="payouts" :scholar="scholar" :errors="errors" :flash="flash"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -136,6 +136,7 @@ const props = defineProps({
     claimedPayoutsCount: Object,
     scholar: Object,
     errors: Object,
+    flash: Object,
 });
 
 const scannedScholar = ref(null);
@@ -166,20 +167,20 @@ const updateFile = (file) => {
 const toastVisible = ref(false);
 const toastMessage = ref("");
 
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
+// watchEffect(() => {
+//     const flashMessage = usePage().props.flash?.success;
 
-    if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
-        toastMessage.value = flashMessage;
-        toastVisible.value = true;
+//     if (flashMessage) {
+//         console.log("Showing toast with message:", flashMessage);
+//         toastMessage.value = flashMessage;
+//         toastVisible.value = true;
 
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
-});
+//         setTimeout(() => {
+//             console.log("Hiding toast...");
+//             toastVisible.value = false;
+//         }, 3000);
+//     }
+// });
 
 </script>
 

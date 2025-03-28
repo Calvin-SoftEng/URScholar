@@ -17,7 +17,7 @@
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- pic -->
                         <div class="border w-80 h-80 rounded-lg overflow-hidden">
-                            <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="Profile Picture"
+                            <img :src="`/storage/qr_codes/${flash.success.qr_code}`" alt="Profile Picture"
                                 class="w-full h-full object-cover">
                         </div>
 

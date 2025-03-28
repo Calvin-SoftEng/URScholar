@@ -9,6 +9,7 @@ use App\Models\Scholarship;
 use App\Models\Batch;
 use App\Models\Scholar;
 use App\Models\Sponsor;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -111,11 +112,14 @@ class CashierController extends Controller
             }
 
             // Find the scholar using the ID from the scanned QR
-            $scholar = Scholar::where('urscholar_id', $scannedData['id'])->first();
+            $scholar = Scholar::where('urscholar_id', $scannedData['id'])->with('campus')->first();
 
             if (!$scholar) {
                 return back()->withErrors(['message' => 'Scholar not found']);
             }
+
+            // Retrieve the scholar's picture
+            $scholarPicture = User::where('email', $scholar->email)->first()->profile_picture ?? null;
 
             // Check if the QR code filename matches the expected format
             $expectedQrFilename = $scholar->urscholar_id . '.png';
@@ -146,14 +150,11 @@ class CashierController extends Controller
                 return back()->withErrors(['message' => 'No pending payout found for this scholar']);
             }
 
-            // Update the payout status
-            $payout->status = 'Claimed';
-            $payout->claimed_at = now();
-            $payout->claimed_by = Auth::user()->id; // Assuming the cashier is logged in
-            $payout->save();
-
-            // return back()->with('scholar', $scholar);
-            return back()->with('success', 'Grant successfully claimed for Scholar: ' . $scholar->first_name . ' ' . $scholar->last_name);
+            // Return the scholar with their picture
+            return back()->with([
+                'success' => $scholar,
+                'scholarPicture' => $scholarPicture
+            ]);
 
         } catch (\Exception $e) {
             logger()->error('QR verification error: ' . $e->getMessage());

@@ -127,7 +127,27 @@
               <div v-if="scannedResult" class="mt-4">
                 <div class="text-green-500 font-medium">
                   <InputError v-if="errors?.message" :message="errors.message" class=" text-red-500" />
-                  <QrcodeStream @detect="onDetect" class="border p-2 relative z-10" />
+                  <!-- pic -->
+                  <div class="border w-80 h-80 rounded-lg overflow-hidden">
+                    <img :src="`/storage/qr_codes/${flash.success.qr_code}`" alt="Profile Picture"
+                      class="w-full h-full object-cover">
+                  </div>
+                  <div class="w-full h-1/12">
+                    <span class="font-italic font-sora text-3xl font-bold uppercase">{{ flash.success.last_name
+                      }},
+                      {{ flash.success.first_name }}</span>
+                  </div>
+                  <div class="w-full flex flex-row items-center gap-2">
+                    <font-awesome-icon :icon="['fas', 'school']" class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ flash.success.campus.name
+                    }}, Campus</span>
+                  </div>
+                  <!-- gmail -->
+                  <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
+                    <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
+                    <span class="pl-2 text-gray-900 text-base font-bold">{{ flash.success.email
+                    }}</span>
+                  </div>
                 </div>
                 <div v-if="errorMessage" class="text-red-500 font-medium">
 
@@ -172,6 +192,7 @@ const props = defineProps({
   batch: Object,
   payouts: Array,
   errors: Object,
+  flash: Object,
 });
 
 const components = {
@@ -185,12 +206,13 @@ const searchQuery = ref('');
 const showRequirements = ref(false);
 const OpenCamera = ref(false);
 const scannedResult = ref(null);
+const scannedScholar = ref(null);
 const errorMessage = ref(null);
-const successMessage = ref(null);
+// const successMessage = ref(null);
 const isScanning = ref(true);
-const toastVisible = ref(false);
-const toastTitle = ref('');
-const toastMessage = ref('');
+// const toastVisible = ref(false);
+// const toastTitle = ref('');
+// const toastMessage = ref('');
 
 // Filtered payouts based on search query
 const filteredPayouts = computed(() => {
@@ -236,9 +258,9 @@ const onDetect = async (detectedCodes) => {
         // showToast('Success', flashMessage);
 
         // If successful, refresh the payouts list
-        if (page.props.flash.type === 'success') {
-          router.reload();
-        }
+        // if (page.props.flash.type === 'success') {
+        //   router.reload();
+        // }
       },
       onError: (errors) => {
         errorMessage.value = errors.message || 'An error occurred';
@@ -270,16 +292,16 @@ const openReport = () => {
 };
 
 // Show toast notification
-const showToast = (title, message) => {
-  toastTitle.value = title;
-  toastMessage.value = message;
-  toastVisible.value = true;
+// const showToast = (title, message) => {
+//   toastTitle.value = title;
+//   toastMessage.value = message;
+//   toastVisible.value = true;
 
-  // Hide toast after 3 seconds
-  setTimeout(() => {
-    toastVisible.value = false;
-  }, 3000);
-};
+//   // Hide toast after 3 seconds
+//   setTimeout(() => {
+//     toastVisible.value = false;
+//   }, 3000);
+// };
 
 // Helper function for year level suffix
 const getYearSuffix = (year) => {
@@ -289,20 +311,19 @@ const getYearSuffix = (year) => {
   return "th";
 };
 
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
+// watchEffect(() => {
+//     const flashMessage = usePage().props.flash?.success;
 
-    if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
-        toastMessage.value = flashMessage;
-        toastVisible.value = true;
-
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
-});
+//     if (flashMessage) {
+//         console.log("Showing toast with message:", flashMessage);
+//         toastMessage.value = flashMessage.first_name;  // This sets the toast message to "Carl Vincent"
+//         toastVisible.value = true;
+//         // setTimeout(() => {
+//         //     console.log("Hiding toast...");
+//         //     toastVisible.value = false;
+//         // }, 3000);
+//     }
+// });
 
 </script>
 
