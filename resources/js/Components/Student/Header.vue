@@ -423,9 +423,7 @@ const handleClickOutside = (event) => {
 
 // Check theme preference on page load
 onMounted(() => {
-  if (window.initFlowbite) {
-    window.initFlowbite();
-  }
+  initFlowbite();
 
   // Get user ID
   getCurrentUserId();
@@ -478,13 +476,15 @@ onUnmounted(() => {
 
 // Add click listener to document to close dropdown when clicking outside
 onMounted(() => {
-  initFlowbite();
+  fetchNotifications();
+  setupPusher();
   document.addEventListener('click', closeDropdown);
 });
 
 // Clean up event listener when component is unmounted
 onUnmounted(() => {
-  initFlowbite();
+  fetchNotifications();
+  setupPusher();
   document.removeEventListener('click', closeDropdown);
 });
 

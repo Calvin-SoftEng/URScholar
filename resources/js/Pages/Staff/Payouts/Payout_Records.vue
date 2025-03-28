@@ -12,12 +12,44 @@
                     </ul>
                 </div>
 
-                <div class="flex justify-between items-center mb-4">
-                    <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Payout Records
-                    </h1>
+                <!-- Header Section -->
+                <div class="flex flex-col md:flex-row justify-between gap-4">
+                    <div class="text-3xl font-semibold text-gray-700 flex flex-col gap-2">
+                        <h1
+                            class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
+                            <!-- <span>{{ scholarship?.name }}</span> -->
+                            <!-- <span>{{ scholarship?.type }}</span> -->
+                        </h1>
+                        <!-- <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span> -->
+                    </div>
+
+                    <!-- Stats Section -->
+                    <div class="grid grid-cols-2 shadow-sm rounded-lg border">
+                        <!-- Completed Scholars -->
+                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
+                                <p class="text-gray-500 text-sm">Completed Scholars</p>
+                            </div>
+                            <p class="text-4xl font-semibold font-kanit text-green-600">feafaefe</p>
+                        </div>
+                        
+                        <!-- Total Scholars -->
+                        <div class="flex flex-col items-start py-4 px-10">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Total Scholars</p>
+                            </div>
+                            <p class="text-4xl font-semibold font-kanit">feafeafea</p>
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
+
+            
 
             <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
                 <button v-for="item in menuItems" :key="item.key" @click="selectMenu(item.key)" :class="[
