@@ -10,6 +10,7 @@ use App\Models\Scholar;
 use Inertia\Inertia;
 use App\Mail\SendEmail;
 use App\Models\ActivityLog;
+use App\Models\ScholarshipGroup;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -80,6 +81,11 @@ class EmailController extends Controller
                     // Update scholar's user_id
                     $scholar->update([
                         'user_id' => $user->id
+                    ]);
+
+                    ScholarshipGroup::create([
+                        'user_id' => $user->id,
+                        'scholarship_id' => $scholarship->id, // Assuming you have the scholarship
                     ]);
                 } else {
                     // If user already exists, update the scholar with existing user's ID

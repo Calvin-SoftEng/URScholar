@@ -599,19 +599,27 @@ class ScholarshipController extends Controller
         $scholarIds = collect($dataToInsert)->pluck('scholar_id');
 
         // Find users associated with these scholars
-        $users = User::whereIn('id', function ($query) use ($scholarIds) {
+        // $users = User::whereIn('id', function ($query) use ($scholarIds) {
+        //     $query->select('user_id')
+        //         ->from('scholars')
+        //         ->whereIn('id', $scholarIds);
+        // })
+        //     ->where('id', '!=', $user->id) // Exclude the current user
+        //     ->get();
+
+        $users = User::whereIn('id', function ($query) use ($scholarshipId) { 
             $query->select('user_id')
-                ->from('scholars')
-                ->whereIn('id', $scholarIds);
+                ->from('scholarship_groups') 
+                ->where('scholarship_id', $scholarshipId); 
         })
-            ->where('id', '!=', $user->id) // Exclude the current user
-            ->get();
+        ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
+        ->get();
 
         // Create Notification
         $notification = Notification::create([
             'title' => 'New Payout Forwarded',
             'message' => 'Scholars forwarded to cashiers by ' . $user->name,
-            'type' => 'payout_forward',
+            'type' => 'payout_forward', 
         ]);
 
         // Attach users to the notification

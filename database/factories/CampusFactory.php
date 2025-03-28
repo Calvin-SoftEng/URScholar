@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +20,10 @@ class CampusFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => $this->faker->name(),
-            'location' => $this->faker->word(),
+            'name' => $this->faker->company(), // Using company name instead of a person's name
+            'location' => $this->faker->city(), // More realistic location
+            'coordinator_id' => User::inRandomOrder()->value('id'), // Select random user ID
+            'cashier_id' => User::inRandomOrder()->value('id'), // Select random user ID
         ];
     }
 }

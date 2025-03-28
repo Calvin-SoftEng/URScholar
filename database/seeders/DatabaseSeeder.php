@@ -21,16 +21,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //Campus
-        Campus::create([
-            'name' => 'Morong',
-            'location' => 'Morong, Rizal',
-        ]);
-
-        Campus::create([
-            'name' => 'Binangonan',
-            'location' => 'Binangonan, Rizal',
-        ]);
 
         // User::factory(2)->create();
         //MIS
@@ -104,6 +94,17 @@ class DatabaseSeeder extends Seeder
             'usertype' => 'cashier',
             'campus_id' => '2'
         ]);
+        
+        User::factory()->create([
+            'name' => 'cashier2',
+            'email' => 'cashier2@gmail.com',
+            'first_name' => 'Johnsdwada Paul',
+            'last_name' => 'Manalodawdaw',
+            'middle_name' => 'De Guzman',
+            'password' => bcrypt('password'),
+            'usertype' => 'cashier',
+            'campus_id' => '1'
+        ]);
 
         //student
         User::factory()->create([
@@ -115,6 +116,21 @@ class DatabaseSeeder extends Seeder
             'password' => bcrypt('password'),
             'usertype' => 'student',
             'campus_id' => '1'
+        ]);
+
+        //Campus
+        Campus::create([
+            'name' => 'Morong',
+            'location' => 'Morong, Rizal',
+            'coordinator_id' => '4',
+            'cashier_id' => '7',
+        ]);
+
+        Campus::create([
+            'name' => 'Binangonan',
+            'location' => 'Binangonan, Rizal',
+            'coordinator_id' => '3',
+            'cashier_id' => '6',
         ]);
 
 
@@ -179,15 +195,15 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //Group Chat
-        ScholarshipGroup::create([
-            'user_id' => 2,
-            'scholarship_id' => 1,
-        ]);
+        // ScholarshipGroup::create([
+        //     'user_id' => 2,
+        //     'scholarship_id' => 1,
+        // ]);
 
-        ScholarshipGroup::create([
-            'user_id' => 3,
-            'scholarship_id' => 1,
-        ]);
+        // ScholarshipGroup::create([
+        //     'user_id' => 3,
+        //     'scholarship_id' => 1,
+        // ]);
 
 
         //sponsor 

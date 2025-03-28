@@ -13,7 +13,9 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\Batch;
 use App\Models\Requirements;
+use App\Models\ScholarshipGroup;
 use App\Models\SubmittedRequirements;
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
@@ -393,8 +395,47 @@ class ScholarController extends Controller
             // Bulk insert scholars
             Scholar::insert($insertData);
 
+
             // Rest of your code remains the same
             $scholars = Scholar::where('batch_id', $batch->id)->get();
+            $campuses = $scholars->pluck('campus')->unique();
+
+            ScholarshipGroup::create([
+                'user_id' => Auth::id(),
+                'scholarship_id' => $scholarship->id, // Assuming you have the scholarship
+            ]);
+
+            foreach ($campuses as $campus) {
+                // Find coordinator
+                $coordinator = User::find($campus->coordinator_id);
+
+                // Find cashier
+                $cashier = User::find($campus->cashier_id);
+
+                // dd($coordinator);
+
+                // Insert messages for coordinator
+                if ($coordinator) {
+                    ScholarshipGroup::create([
+                        'user_id' => $coordinator->id,
+                        'scholarship_id' => $scholarship->id, // Assuming you have the scholarship
+                    ]);
+                }
+
+                // Insert messages for cashier
+                if ($cashier) {
+                    ScholarshipGroup::create([
+                        'user_id' => $cashier->id,
+                        'scholarship_id' => $scholarship->id, // Assuming you have the scholarship
+                    ]);
+                }
+            }
+
+
+
+
+
+
             $students = Student::all();
             $matchedCount = 0;
             $unmatchedCount = 0;
