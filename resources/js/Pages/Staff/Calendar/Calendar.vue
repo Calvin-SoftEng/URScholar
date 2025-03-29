@@ -23,15 +23,6 @@
                         Calendar
                     </h1>
 
-                    <!-- <div id='app'>
-                        <ejs-schedule :selectedDate='selectedDate' :eventSettings='eventSettings'></ejs-schedule>
-                    </div> -->
-                    <!-- <ScheduleComponent 
-                        :selectedDate="selectedDate" 
-                        :eventSettings="eventSettings" 
-                        :views="schedulePlugins"
-                    /> -->
-
                 </div>
 
                 <div>
@@ -191,12 +182,13 @@ watch(() => props.scholarships, () => {
 }
 
 .custom-event {
-    background-color: #4caf50;
+    background-color: #003366 ;
     /* Green background */
     color: white;
     padding: 5px;
     border-radius: 5px;
     font-size: 14px;
+    margin-bottom: 2px;
 }
 
 .custom-day {

@@ -3,7 +3,7 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <div class="w-full bg-[#e8f0f9] shadow-sm justify-between flex flex-row px-10">
+        <div class="w-full bg-[#e8f0f9] shadow-sm justify-between flex flex-row px-24">
             <h1 class="text-3xl font-bold font-sora text-left p-3">My Profile</h1>
             <!-- Toggle Button -->
             <button @click="EditProfile = !EditProfile" class="text-sm font-normal text-primary">

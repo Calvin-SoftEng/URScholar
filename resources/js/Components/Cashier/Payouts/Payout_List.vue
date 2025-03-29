@@ -97,9 +97,23 @@
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
           <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-              <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                <h2 class="text-2xl font-bold">Scan QR here</h2>
-              </span>
+              
+              <div class="flex items-center gap-3">
+                  <!-- Icon -->
+                  <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                  <!-- Title and Description -->
+                  <div class="flex flex-col">
+                      <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                          Scan your QR Code here
+                      </h2>
+                      <span class="text-sm text-gray-600 dark:text-gray-400">
+                          
+                      </span>
+                  </div>
+              </div>
+
+
               <button type="button" @click="closeCamera"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                 data-modal-hide="default-modal">
@@ -126,36 +140,40 @@
               </div>
 
               <!-- Result Section (Success/Failure Message) -->
-              <div v-if="scannedResult && scholar" class="mt-4">
-                <div class="text-green-500 font-medium">
-                  <InputError v-if="errors?.message" :message="errors.message" class=" text-red-500" />
-                  <div class="border w-80 h-80 rounded-lg overflow-hidden">
-                    <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="Profile Picture"
-                      class="w-full h-full object-cover">
-                  </div>
-                  <div class="w-full h-1/12">
-                    <span class="font-italic font-sora text-3xl font-bold uppercase">{{ scholar.last_name
-                    }},
-                      {{ scholar.first_name }}</span>
-                  </div>
-                  <div class="w-full flex flex-row items-center gap-2">
-                    <font-awesome-icon :icon="['fas', 'school']" class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
-                      }}, Campus</span>
-                  </div>
-                  <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
-                    <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
-                    <span class="pl-2 text-gray-900 text-base font-bold">{{ scholar.email
-                      }}</span>
-                  </div>
-                </div>
-                <div v-if="errorMessage" class="text-red-500 font-medium">
+              <div v-if="scannedResult && scholar" class="mt-4 flex justify-center items-center">
+                <div class="w-full max-w-lg text-center p-6">
+                  <div class="text-center text-green-500 font-medium">
+                    <InputError v-if="errors?.message" :message="errors.message" class="text-red-500" />
+                    
+                    <div class="flex justify-center items-center mb-6 overflow-hidden">
+                      <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="Profile Picture"
+                          class="w-40 h-40 object-cover rounded-full border-2 border-primary">
+                    </div>
 
-                </div>
-                <div class="mt-4 flex justify-center">
-                  <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    Scan Again
-                  </button>
+                    <div class="mb-4">
+                      <span class="font-italic font-sora text-2xl font-bold uppercase">{{ scholar.last_name }}, {{ scholar.first_name }}</span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                      <font-awesome-icon :icon="['fas', 'school']" class="p-2 w-5 h-5 bg-primary rounded-md text-white" />
+                      <span class="text-gray-900 text-lg font-semibold">{{ scholar.campus.name }}, Campus</span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-2 mb-6 border-b-2 pb-4">
+                      <span class="px-2 py-1 bg-primary rounded-md text-xl text-white font-albert font-bold">@</span>
+                      <span class="pl-2 text-gray-900 text-lg font-bold">{{ scholar.email }}</span>
+                    </div>
+                  </div>
+
+                  <div v-if="errorMessage" class="text-red-500 font-medium mb-4">
+                    <!-- Display error message if exists -->
+                  </div>
+
+                  <div class="flex justify-center">
+                    <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">
+                      Scan Again
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
