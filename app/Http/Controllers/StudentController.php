@@ -77,10 +77,31 @@ class StudentController extends Controller
             ];
         });
 
+        //Messaging
+        // Get the authenticated user
+        $currentUser = Auth::user();
+
+        // Get scholarships with relationships that the current user has
+        $scholarship_group = Scholarship::with([
+            'latestMessage.user',
+            'users' => function ($query) {
+                $query->select('users.id', 'users.name');
+            }
+        ])
+            ->whereHas('users', function ($query) use ($currentUser) {
+                $query->where('users.id', $currentUser->id);
+            })
+            ->withCount('users')
+            ->get();
+
         return Inertia::render('Student/Dashboard/Dashboard', [
             'scholarship' => $scholarship,
             'scholar' => $scholar,
             'submitReq' => $returnedRequirements,
+            'scholarship_group' => $scholarship_group,
+            'messages' => [],
+            'currentUser' => $currentUser,
+            'selectedScholarship' => [],
         ]);
     }
 
@@ -521,11 +542,10 @@ class StudentController extends Controller
 
         if ($scholar) {
             return redirect()->route('student.confirmation');
-        }
-        else {
+        } else {
             return redirect()->route('student.dashboard');
         }
-        
+
     }
 
     public function scholarship()

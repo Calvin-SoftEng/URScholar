@@ -3,9 +3,6 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <!-- <div class="w-full bg-[#e8f0f9] shadow-sm ">
-            <h1 class="text-3xl text-primary font-bold font-sora text-left p-3 mx-10">My Scholarship</h1>
-        </div> -->
         <div class="pt-3 pb-3 overflow-auto h-full scroll-py-4 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
             <div class="mx-auto w-10/12 sm:px-6 lg:px-8 h-full ">
                 <div class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
@@ -21,41 +18,32 @@
                             <span class="text-lg font-semibold text-gray-800">View Available Scholarships</span>
                         </div>
 
-                        <!-- gc -->
-                            <button v-show="scholar" @click="GroupChat = !GroupChat" 
-                                class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-start gap-2 p-3">
+                        <!-- REVISED: Group Chat Section -->
+                        <div v-show="scholar" class="w-full h-1/12 bg-white shadow-lg rounded-lg">
+                            <div class="font-semibold px-4 pt-3 pb-2">Group Chats</div>
 
-                                <div class="w-full flex items-start gap-3 p-3 text-start hover:bg-gray-100 cursor-pointer">
-                                    <div class="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center">
-                                        <box-icon name="group" type="solid"></box-icon>
-                                    </div>
-                                    <div class="flex-1 items-start justify-start">
-                                        <p class="font-semibold">Group Chat 1</p>
-                                        <p class="text-sm text-gray-500 truncate">Hey everyone! Let's meet at 5 PM...
-                                        </p>
-                                    </div>
-                                    <p class="text-xs text-gray-400">10:30 AM</p>
+                            <div v-for="scholarship in scholarship_group" :key="scholarship.id"
+                                @click="selectChat(scholarship)"
+                                class="w-full flex items-center space-x-3 p-4 cursor-pointer transition-all" :class="[
+                                    'hover:bg-gray-100',
+                                    selectedData && selectedData.id === scholarship.id ? 'bg-blue-50 border-l-4 border-primary' : ''
+                                ]">
+                                <div
+                                    class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                    {{ scholarship.name.charAt(0) }}
                                 </div>
-                            </button>
-
-
-                        <!-- qr code -->
-                        <!-- <div class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3">
-                            <img src="../../../../assets/images/qrcodesample.png" alt="" class="w-20 h-20">
-                            <span class="pl-2">Download your QR Code</span>
-                        </div> -->
-
-                        <!-- <a href="{{ route('download.qr') }}" download="QRCode.png"
-                            class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3 cursor-pointer hover:bg-gray-100">
-                            <img src="../../../../assets/images/qrcodesample.png" alt="QR Code" class="w-20 h-20">
-                            <span class="pl-2">Download your QR Code</span>
-                        </a> -->
-
-                        <!-- <button @click="isQrCodeVisible = true"
-                            class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3 cursor-pointer hover:bg-gray-100">
-                            <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code" class="w-20 h-20">
-                            <span class="pl-2">Download your QR Code</span>
-                        </button> -->
+                                <div class="flex flex-col space-y-1">
+                                    <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
+                                        scholarship.name }}</span>
+                                    <div class="flex-grow">
+                                        <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
+                                            {{ scholarship.latest_message.content }}
+                                        </p>
+                                        <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="w-full h-1/12 space-y-3 bg-white shadow-lg rounded-lg items-center p-3">
                             <span class="pl-2">Recent Activities</span>
@@ -78,10 +66,12 @@
 
                     <!-- group chat to -->
                     <div v-if="scholar" class="col-span-2">
-                        
-                        <div v-show="GroupChat" class="col-span-2 w-full h-full flex flex-col">
-                            <div class="bg-white shadow-sm border-b border-gray-100 p-4 flex justify-between items-center">
-                                <h3 class="text-lg font-bold text-primary">Conversation</h3>
+
+                        <div v-show="selectedData" class="col-span-2 w-full h-full flex flex-col">
+                            <div
+                                class="bg-white shadow-sm border-b border-gray-100 p-4 flex justify-between items-center">
+                                <h3 class="text-lg font-bold text-primary">{{ selectedData ? selectedData.name :
+                                    'Conversation' }}</h3>
                                 <!-- Three dots menu aligned with conversation text -->
                                 <button class="text-gray-600 hover:text-primary transition-colors"
                                     @click="showMemberList = !showMemberList">
@@ -90,7 +80,7 @@
                             </div>
                             <!-- Main chat area -->
                             <div
-                                class="bg-white flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+                                class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                                 <!-- Messages column -->
                                 <div
                                     class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
@@ -114,8 +104,6 @@
 
                                         <!-- Other User's Message -->
                                         <template v-if="message.user.id !== currentUser.id">
-                                            <!-- <img class="w-8 h-8 rounded-full mt-6 border"
-                                                src="/docs/images/people/profile-picture-3.jpg" alt="User image"> -->
                                             <div v-if="$page.props.auth.user.picture">
                                                 <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
                                                     data-dropdown-placement="bottom-start"
@@ -130,7 +118,8 @@
                                                     :src="`/storage/user/profile/male.png`" alt="picture">
                                             </div>
                                             <div class="flex flex-col gap-1 w-full justify-start max-w-[320px] mb-3">
-                                                <div class="flex justify-start items-center space-x-1 rtl:space-x-reverse">
+                                                <div
+                                                    class="flex justify-start items-center space-x-1 rtl:space-x-reverse">
                                                     <span class="text-sm font-semibold text-gray-900 dark:text-white">
                                                         {{ message.user.first_name }}
                                                     </span>
@@ -148,7 +137,8 @@
                                         <!-- Current User's Message -->
                                         <template v-else>
                                             <div class="flex flex-col gap-1 w-full justify-end max-w-[320px]">
-                                                <div class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
+                                                <div
+                                                    class="flex justify-end items-center space-x-2 rtl:space-x-reverse">
                                                     <span class="text-sm font-semibold text-gray-900 dark:text-white">
                                                         {{ message.user.first_name }}
                                                     </span>
@@ -177,9 +167,6 @@
                                                     class="w-8 h-8 rounded-full mt-6 border"
                                                     :src="`/storage/user/profile/male.png`" alt="picture">
                                             </div>
-                                            <!-- <img class="w-8 h-8 rounded-full mt-6 border"
-                                                src="/docs/images/people/profile-picture-1.jpg"
-                                                alt="Current user image"> -->
                                         </template>
 
                                     </div>
@@ -260,22 +247,21 @@
                                 </button>
                             </div>
                         </div>
-                    
 
-                    <!-- kapag may scholarship -->
-                        <div v-show="!GroupChat"
+
+                        <!-- Show ScholarGrant when no chat is selected -->
+                        <div v-show="!selectedData"
                             class="w-full h-full col-span-2 block bg-white shadow-md p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8 rounded-lg">
                             <ScholarGrant :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" />
                         </div>
                     </div>
-                    
+
 
                     <!-- kapag wala pang scholarship -->
                     <div v-else
                         class="w-full h-full col-span-2 block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
-                        <Scholarships :sponsors="sponsors" :scholarships="scholarships"
-                            :schoolyears="schoolyears" />
+                        <Scholarships :sponsors="sponsors" :scholarships="scholarships" :schoolyears="schoolyears" />
                     </div>
                 </div>
             </div>
@@ -318,10 +304,11 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
-import { computed, ref } from 'vue';
+import { Head, useForm, router } from '@inertiajs/vue3';
+import { computed, ref, onMounted } from 'vue';
 import ScholarGrant from './Scholar/ScholarGrant.vue';
 import Scholarships from './Non_Scholar/Scholarships.vue';
+import Echo from 'laravel-echo';
 
 const props = defineProps({
     //For scholars only
@@ -341,94 +328,93 @@ const props = defineProps({
     schoolyears: {
         type: Array,
         required: true
-    }
+    },
+
+    //Message
+    messages: Array,
+    currentUser: Object,
+    scholarship_group: Array,
+    selectedScholarship: Object,
 });
 
-const getSponsorDetails = (sponsorId) => {
-    return props.sponsors.find(s => s.id === sponsorId) || { name: 'Unknown Sponsor' };
-};
+const messageData = ref(props.messages || []);
+const selectedData = ref(null);
+const showMemberList = ref(false);
 
-// List of returned requirements
-const returnedRequirements = computed(() => props.submitReq || []);
-
-// Form state
 const form = useForm({
-    files: {},
-    requirements: []
+    content: '',
+    scholarship_id: ''
 });
 
-const GroupChat = ref(false); // Change to true to show group chat
-
-// Track selected files
-const selectedFiles = ref({});
-
-const handleFile = (event, reqId, requirementName) => {
-    const file = event.target.files[0];
-    if (file) {
-        // Store file
-        form.files[reqId] = file;
-        selectedFiles.value[reqId] = file.name;
-
-        // Add requirement if not exists
-        const existingIndex = form.requirements.findIndex(r => r.id === reqId);
-        if (existingIndex === -1) {
-            form.requirements.push({
-                id: reqId,
-                requirement: requirementName
-            });
-        }
-    }
+// Function to select a chat group
+const selectChat = async (scholarship) => {
+    selectedData.value = scholarship;
+    form.scholarship_id = scholarship.id;
+    await fetchMessages();
+    scrollToBottom();
 };
 
-const removeFile = (reqId) => {
-    // Remove file
-    delete form.files[reqId];
-    delete selectedFiles.value[reqId];
-
-    // Remove requirement from array
-    form.requirements = form.requirements.filter(r => r.id !== reqId);
-
-    // Reset file input
-    const fileInput = document.getElementById(`file_${reqId}`);
-    if (fileInput) {
-        fileInput.value = '';
-    }
-};
-
-const isQrCodeVisible = ref(false);
-
-const qrCodeImage = ref(new URL("@/assets/images/qrcodesample.png", import.meta.url).href);
-
-
-const closeModal = () => {
-    isCreating.value = false;
-    isEditing.value = false;
-    resetForm();
-};
-
-const submitRequirements = () => {
-    if (Object.keys(form.files).length === 0) {
-        alert('Please select at least one file before submitting.');
+const sendMessage = () => {
+    if (!selectedData.value || !selectedData.value.id || !form.content) {
         return;
     }
 
-    if (!confirm('Are you sure you want to resubmit these requirements?')) {
-        return;
-    }
+    form.scholarship_id = selectedData.value.id;
 
-    form.post('/student/application/re-upload', {
-        forceFormData: true,
+    router.post('/group-page/message', form, {
         preserveScroll: true,
         onSuccess: () => {
-            alert('Requirements resubmitted successfully!');
-            form.reset();
-            selectedFiles.value = {};
-            window.location.reload();
+            fetchMessages();
+            form.content = '';
         },
-        onError: (errors) => {
-            console.error('Upload errors:', errors);
-            alert('There was an issue with the upload. Please try again.');
-        }
     });
 };
+
+// Set up real-time messaging using Laravel Echo
+onMounted(() => {
+    if (props.selectedScholarship) {
+        selectedData.value = props.selectedScholarship;
+    }
+
+    const echo = new Echo({
+        broadcaster: 'pusher',
+        key: import.meta.env.VITE_PUSHER_APP_KEY,
+        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+        forceTLS: true,
+        authEndpoint: "/broadcasting/auth", // Required for private channels
+    });
+
+    // Listen for new messages
+    if (selectedData.value && selectedData.value.id) {
+        echo.private(`chat.${selectedData.value.id}`)
+            .listen('.message.sent', (e) => {
+                fetchMessages();
+                scrollToBottom();
+            });
+    }
+});
+
+const fetchMessages = async () => {
+    if (!selectedData.value || !selectedData.value.id) return;
+
+    try {
+        const response = await axios.get(route("messaging.show", { scholarship: selectedData.value.id }));
+        messageData.value = response.data;
+    } catch (error) {
+        console.error("Error fetching messages:", error);
+    }
+};
+
+const scrollToBottom = () => {
+    setTimeout(() => {
+        const chatContainer = document.querySelector('.overflow-y-auto');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }, 100);
+};
+
+// For QR code modal
+const isQrCodeVisible = ref(false);
+const qrCodeImage = ref(new URL("@/assets/images/qrcodesample.png", import.meta.url).href);
 </script>
