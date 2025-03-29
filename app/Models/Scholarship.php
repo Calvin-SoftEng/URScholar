@@ -31,6 +31,11 @@ class Scholarship extends Model
         return $this->hasMany(Criteria::class);
     }
 
+    public function eligibility()
+    {
+        return $this->hasMany(Eligibility::class);
+    }
+
     public function batches()
     {
         return $this->hasMany(Batch::class);

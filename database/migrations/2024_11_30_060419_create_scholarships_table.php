@@ -66,6 +66,20 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('eligibilities', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->timestamps();
+        });
+
+        Schema::create('conditions', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('eligibility_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->timestamps();
+        });
+
         Schema::create('scholarship_groups', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
@@ -80,6 +94,8 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('scholarship_groups');
+        Schema::dropIfExists('conditions');
+        Schema::dropIfExists('eligibilities');
         Schema::dropIfExists('criterias');
         Schema::dropIfExists('campus_recipients');
         Schema::dropIfExists('scholarship_form_data');
