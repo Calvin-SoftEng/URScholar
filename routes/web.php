@@ -239,10 +239,10 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
     Route::get('/myProfile/generate/{urscholar_id}', [StudentController::class, 'generate'])->name('qrcode.generate');
 
-    // Route::get('/student/scholarship', [StudentController::class, 'scholarship'])->name('student.scholarships');
-
-    // application
-    // Route::get('/student/application', [StudentController::class, 'application'])->name('student.application');
+    // Messaging
+    Route::get('/group-chat', [StudentController::class, 'messaging'])->name('student.messaging');
+    Route::post('/group-chat/message', [StudentController::class, 'oldstore'])->name('student.messaging.store');
+    Route::get('/group-chat/{scholarship}', [StudentController::class, 'show'])->name('student.messaging.show');
 
 
     //VerifyAccount

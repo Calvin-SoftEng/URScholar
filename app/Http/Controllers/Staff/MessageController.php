@@ -88,33 +88,6 @@ class MessageController extends Controller
         ]);
     }
 
-
-    public function store(Request $request, Scholarship $scholarship)
-    {
-        // Check if user is part of this scholarship
-        if (!Auth::user()->scholarships->contains($scholarship->id)) {
-            return Redirect::back()->with('error', 'Unauthorized');
-        }
-
-        $validated = $request->validate([
-            'content' => 'required|string|max:1000',
-        ]);
-
-        $message = Message::create([
-            'user_id' => Auth::id(),
-            'scholarship_id' => $scholarship->id,
-            'content' => $validated['content'],
-        ]);
-
-        // Load the user relation
-        $message->load('user');
-
-        // Broadcast the new message to all users in this scholarship
-        broadcast(new NewMessage($message))->toOthers();
-
-        return back();
-    }
-
     public function oldstore(Request $request)
     {
 
