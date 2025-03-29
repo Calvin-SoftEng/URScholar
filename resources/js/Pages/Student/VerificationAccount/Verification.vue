@@ -346,9 +346,9 @@
 
                                             <div class="relative w-full">
                                                 <Input id="first_name" type="text" placeholder="First Name"
-                                                    v-model="form.first_name" @focus="errors.first_name = null"
+                                                    v-model="form.street" @focus="errors.street = null"
                                                     class="w-full border border-gray-200 pr-10" />
-                                                <InputError v-if="errors?.first_name" :message="errors.first_name"
+                                                <InputError v-if="errors?.street" :message="errors.street"
                                                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
                                         </div>
@@ -363,9 +363,9 @@
 
                                             <div class="relative w-full">
                                                 <Input id="last_name" type="text" placeholder="First Name"
-                                                    v-model="form.last_name" @focus="errors.last_name = null"
+                                                    v-model="form.municipality" @focus="errors.municipality = null"
                                                     class="w-full border border-gray-200 pr-10" />
-                                                <InputError v-if="errors?.last_name" :message="errors.last_name"
+                                                <InputError v-if="errors?.municipality" :message="errors.municipality"
                                                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
                                         </div>
@@ -380,9 +380,9 @@
 
                                             <div class="relative w-full">
                                                 <Input id="middle_name" type="text" placeholder="Middle Name"
-                                                    v-model="form.middle_name" @focus="errors.middle_name = null"
+                                                    v-model="form.province" @focus="errors.province = null"
                                                     class="w-full border border-gray-200 pr-10" />
-                                                <InputError v-if="errors?.middle_name" :message="errors.middle_name"
+                                                <InputError v-if="errors?.province" :message="errors.province"
                                                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
                                         </div>
@@ -1764,16 +1764,19 @@ const form = ref({
     name: user.name,
     email: user.email,
     first_name: user.first_name,
-    middle_name: user.middle_name ?? '',
+    middle_name: usePage().props.scholar?.middle_name ?? '',
     last_name: user.last_name,
     password: '',
     confirm_password: '',
     suffix: 'N/A',
-    birthdate: '',
+    birthdate: usePage().props.scholar?.birthdate ?? '',
     birthplace: '',
     age: '',
-    gender: '',
+    gender: usePage().props.scholar?.sex ?? '',
     civil_status: '',
+    street: usePage().props.scholar?.street ?? '',
+    municipality: usePage().props.scholar?.municipality ?? '',
+    province: usePage().props.scholar?.province ?? '',
     religion: '',
     guardian_name: '',
     relationship: '',

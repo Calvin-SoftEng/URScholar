@@ -38,53 +38,53 @@ class StudentController extends Controller
     public function dashboard()
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        if (!$scholar) {
-            $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
-            $sponsors = Sponsor::all();
-            $schoolyear = SchoolYear::all();
+        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+
+        if ($scholarship) {
+            $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->first();
+            if (!$submittedRequirements) {
+                return redirect()->route('student.confirmation');
+            }
+
+            $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+            if ($requirements) {
+                $requirementIds = $requirements->pluck('id')->toArray();
+
+                // Fetch only returned submitted requirements related to the scholarship
+                $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Returned')
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
+
+                // Map submitted requirements with their corresponding requirement details
+                $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
+                    $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
+                    return [
+                        'id' => $submitted->id,  // Submitted Requirement ID
+                        'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
+                        'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
+                        'status' => $submitted->status,
+                    ];
+                });
+            }
 
             return Inertia::render('Student/Dashboard/Dashboard', [
-                'scholarships' => $scholarships,
-                'sponsors' => $sponsors,
-                'schoolyears' => $schoolyear,
+                'scholarship' => $scholarship,
+                'scholar' => $scholar,
+                'submitReq' => $returnedRequirements,
             ]);
         }
 
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
-        if (!$scholarship) {
-            return redirect()->route('scholarship.dashboard');
-        }
-
-        $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->first();
-        if (!$submittedRequirements) {
-            return redirect()->route('student.confirmation');
-        }
-
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-        $requirementIds = $requirements->pluck('id')->toArray();
-
-        // Fetch only returned submitted requirements related to the scholarship
-        $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->where('status', 'Returned')
-            ->whereIn('requirement_id', $requirementIds)
-            ->get();
-
-        // Map submitted requirements with their corresponding requirement details
-        $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
-            $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
-            return [
-                'id' => $submitted->id,  // Submitted Requirement ID
-                'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
-                'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
-                'status' => $submitted->status,
-            ];
-        });
+        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
+        $sponsors = Sponsor::all();
+        $schoolyear = SchoolYear::all();
 
         return Inertia::render('Student/Dashboard/Dashboard', [
-            'scholarship' => $scholarship,
-            'scholar' => $scholar,
-            'submitReq' => $returnedRequirements,
+            'scholarships' => $scholarships,
+            'sponsors' => $sponsors,
+            'schoolyears' => $schoolyear,
         ]);
     }
 
@@ -189,7 +189,9 @@ class StudentController extends Controller
             'birthplace' => ['required', 'string', 'max:255'],
             'age' => ['required', 'numeric'],
             'gender' => ['required', 'string', 'max:255'],
-            'civil_status' => ['required', 'string', 'max:255'],
+            'street' => ['required', 'string', 'max:255'],
+            'municipality' => ['required', 'string', 'max:255'],
+            'province' => ['required', 'string', 'max:255'],
             'religion' => ['required', 'string', 'max:255'],
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
@@ -377,6 +379,49 @@ class StudentController extends Controller
         // $logoFileName = $request->imgName;
         $originalFileName = $logoFile->getClientOriginalName();
 
+        //Scholar creation
+
+        if (!$scholar) {
+
+            $student = Student::where('email', $user->email)->first();
+
+            // Get the next available urscholar_id
+            $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')
+                ->orderByRaw('CAST(SUBSTRING(urscholar_id, 5) AS UNSIGNED) DESC')
+                ->value('urscholar_id');
+
+            $nextId = 1; // Default starting number
+            if ($highestId) {
+                $currentNumber = (int) substr($highestId, 4);
+                $nextId = $currentNumber + 1;
+            }
+
+            // Generate urscholar_id with leading zeros (URS-0001 format)
+            $urscholarId = 'URS-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
+            $nextId++;
+
+
+            Scholar::create([
+                'user_id' => $user->id,
+                'hei_name' => 'University of Rizal System',
+                'campus_id' => $student->campus_id,
+                'course_id' => $student->course_id,
+                'urscholar_id' => $urscholarId,
+                'last_name' => $request->last_name,
+                'first_name' => $request->first_name,
+                'middle_name' => $request->middle_name,
+                'sex' => $request->gender,
+                'birthdate' => $request->birthdate,
+                'year_level' => $student->year_level,
+                'street' => $request->street,
+                'municipality' => $request->municipality,
+                'province' => $request->province,
+                'email' => $request->email,
+                'status' => 'Verified',
+            ]);
+        }
+
+
 
         Storage::disk('public')->putFileAs('user/profile', $logoFile, $originalFileName);
 
@@ -522,14 +567,12 @@ class StudentController extends Controller
 
         event(new Verified($user));
 
-
         if ($scholar) {
             return redirect()->route('student.confirmation');
-        }
-        else {
+        } else {
             return redirect()->route('student.dashboard');
         }
-        
+
     }
 
     public function scholarship()
@@ -621,13 +664,12 @@ class StudentController extends Controller
 
         if ($scholar) {
             $grade = Grade::where('scholar_id', $scholar->id)->first();
-        }
-        else {
+        } else {
             $grade = null;
             $scholar = null;
         }
-    
-        
+
+
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
@@ -1013,13 +1055,13 @@ class StudentController extends Controller
         $scholarshipId = $scholarship->id;
 
         // Get users who belong to the specified scholarship group
-        $users = User::whereIn('id', function ($query) use ($scholarshipId) { 
+        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
             $query->select('user_id')
-                ->from('scholarship_groups') 
-                ->where('scholarship_id', $scholarshipId); 
+                ->from('scholarship_groups')
+                ->where('scholarship_id', $scholarshipId);
         })
-        ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
-        ->get();
+            ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
+            ->get();
 
         // Attach users to the notification
         $notification->users()->attach($users->pluck('id'));
