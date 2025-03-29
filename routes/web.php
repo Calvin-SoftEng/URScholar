@@ -171,7 +171,15 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
     Route::post('/settings/adding-students/store', [SettingsController::class, 'store_student'])->name('settings.store');
 
-    Route::get('/settings/scholarship-forms', [SettingsController::class, 'scholarship_forms'])->name('settings.scholarship_forms');
+    // Eligibility & Conditions Routes
+    Route::get('/settings/eligibilities-forms', [SettingsController::class, 'eligibilities_forms'])->name('settings.eligibilities_forms');
+    Route::post('/settings/eligibilities', [SettingsController::class, 'eligibilities_store']);
+    Route::put('/settings/eligibilities/{eligibility}', [SettingsController::class, 'eligibilities_update']);
+    Route::delete('/settings/eligibilities/{eligibility}', [SettingsController::class, 'eligibilities_destroy']);
+
+    Route::post('/settings/conditions', [SettingsController::class, 'conditions_store']);
+    Route::put('/settings/conditions/{condition}', [SettingsController::class, 'conditions_update']);
+    Route::delete('/settings/conditions/{condition}', [SettingsController::class, 'conditions_destroy']);
 
     Route::get('/settings/verification-forms', [SettingsController::class, 'verification_forms'])->name('settings.verification_forms');
 

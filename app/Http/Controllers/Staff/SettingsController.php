@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Models\Campus;
+use App\Models\Condition;
 use App\Models\Course;
+use App\Models\Eligibility;
 use App\Models\Student;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -97,49 +99,49 @@ class SettingsController extends Controller
             'file.required' => 'Please upload a CSV file.',
             'file.mimes' => 'The file must be a CSV file.'
         ]);
-    
+
         // Check if file exists in the request
         $file = $request->file('file');
-    
+
         // Log the initial file upload
         \Log::info('Attempting to import students from file', ['filename' => $file->getClientOriginalName()]);
-    
+
         try {
             // Get all campuses for efficient lookup
             $campuses = Campus::all()->mapWithKeys(function ($campus) {
                 return [strtolower($campus->name) => $campus->id];
             })->toArray();
-    
+
             // Get all courses with their names and abbreviations
             $courses = Course::select('id', 'name', 'abbreviation')->get();
-    
+
             // Prepare course lookup (similar to your existing code)
             $standardizedCourseLookup = $this->prepareCourseStandardizedLookup($courses);
-    
+
             // Read CSV file
             $csv = Reader::createFromPath($file->getPathname(), 'r');
             $csv->setHeaderOffset(0);
-    
+
             // Validate CSV headers
             $requiredHeaders = ['first_name', 'last_name', 'email', 'course', 'campus', 'year_level', 'semester'];
             $headers = $csv->getHeader();
             $missingHeaders = array_diff($requiredHeaders, $headers);
-    
+
             if (!empty($missingHeaders)) {
                 return redirect()->back()->with('error', 'Missing required columns: ' . implode(', ', $missingHeaders));
             }
-    
+
             // Prepare insert data and tracking
             $insertData = [];
             $importErrors = [];
             $successCount = 0;
             $skipCount = 0;
-    
+
             // Process each record
             foreach ($csv->getRecords() as $index => $record) {
                 // Validate required fields
                 $validationErrors = $this->validateStudentRecord($record);
-                
+
                 if (!empty($validationErrors)) {
                     $importErrors[] = [
                         'row' => $index + 2, // +2 because of header and 1-based indexing
@@ -148,11 +150,11 @@ class SettingsController extends Controller
                     $skipCount++;
                     continue;
                 }
-    
+
                 // Determine campus
                 $campusName = strtolower(trim($record['campus'] ?? ''));
                 $campusId = $campuses[$campusName] ?? null;
-    
+
                 if (!$campusId) {
                     $importErrors[] = [
                         'row' => $index + 2,
@@ -161,10 +163,10 @@ class SettingsController extends Controller
                     $skipCount++;
                     continue;
                 }
-    
+
                 // Course matching logic (similar to your existing code)
                 $courseId = $this->matchCourse($record['course'], $standardizedCourseLookup, $courses);
-    
+
                 if (!$courseId) {
                     $importErrors[] = [
                         'row' => $index + 2,
@@ -173,7 +175,7 @@ class SettingsController extends Controller
                     $skipCount++;
                     continue;
                 }
-    
+
                 // Prepare student data
                 $insertData[] = [
                     'first_name' => $record['first_name'],
@@ -186,54 +188,54 @@ class SettingsController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-    
+
                 $successCount++;
             }
-    
+
             // Bulk insert students
             if (!empty($insertData)) {
                 Student::insert($insertData);
             }
-    
+
             // Log the import activity
             ActivityLog::create([
                 'user_id' => Auth::user()->id,
                 'activity' => 'Create',
                 'description' => "Imported {$successCount} students (Skipped {$skipCount})",
             ]);
-    
+
             // Prepare flash message
             $flashMessage = "Successfully imported {$successCount} students";
             if ($skipCount > 0) {
                 $flashMessage .= " (Skipped {$skipCount} rows with errors)";
             }
-    
+
             // Prepare redirect with detailed information
             $redirect = redirect()->back()->with('success', $flashMessage);
-            
+
             // Attach import errors if any
             if (!empty($importErrors)) {
                 $redirect->with('importErrors', $importErrors);
             }
-    
+
             return $redirect;
-    
+
         } catch (\Exception $e) {
             // Log the full error for debugging
             \Log::error('Student import error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-    
+
             // Return a user-friendly error message
             return redirect()->back()->with('error', 'An unexpected error occurred during import. Please try again.');
         }
     }
-    
+
     // Helper methods (to be added to the controller or a trait)
     private function validateStudentRecord($record)
     {
         $errors = [];
-    
+
         // Basic validation
         if (empty(trim($record['first_name']))) {
             $errors[] = 'First name is required';
@@ -245,43 +247,43 @@ class SettingsController extends Controller
             $errors[] = 'Invalid email address';
         }
         // Add more validations as needed
-    
+
         return $errors;
     }
-    
+
     private function prepareCourseStandardizedLookup($courses)
     {
         $standardizedCourseLookup = [];
-    
+
         foreach ($courses as $course) {
             // Similar to your existing implementation
             $standardizedCourseLookup[strtolower($course->name)] = $course->id;
-    
+
             if (!empty($course->abbreviation)) {
                 $standardizedCourseLookup[strtolower($course->abbreviation)] = $course->id;
             }
-    
+
             // Add more standardization logic
             // ...
         }
-    
+
         return $standardizedCourseLookup;
     }
-    
+
     private function matchCourse($csvCourseName, $standardizedCourseLookup, $courses)
     {
         // Similar to your existing course matching logic
         $standardizedCsvName = strtolower(trim($csvCourseName));
-    
+
         // Direct match first
         if (isset($standardizedCourseLookup[$standardizedCsvName])) {
             return $standardizedCourseLookup[$standardizedCsvName];
         }
-    
+
         // Fuzzy matching logic
         $bestMatchScore = 0;
         $bestMatchId = null;
-    
+
         foreach ($courses as $course) {
             // Extract core subject and match
             $coreSubject = preg_replace(
@@ -289,7 +291,7 @@ class SettingsController extends Controller
                 '',
                 strtolower($course->name)
             );
-    
+
             if (!empty($coreSubject) && stripos($standardizedCsvName, $coreSubject) !== false) {
                 $score = strlen($coreSubject);
                 if ($score > $bestMatchScore) {
@@ -298,20 +300,100 @@ class SettingsController extends Controller
                 }
             }
         }
-    
+
         return $bestMatchId;
     }
 
-    public function scholarship_forms()
+    public function eligibilities_forms()
     {
 
-        $scholarship_form = ScholarshipForm::all();
-        $scholarship_form_data = ScholarshipFormData::all();
+        $eligibility = Eligibility::all();
+        $condition = Condition::all();
 
-        return Inertia::render('Staff/Settings/Scholarship_Forms', [
-            'scholarship_form' => $scholarship_form,
-            'scholarship_form_data' => $scholarship_form_data,
+        return Inertia::render('Staff/Settings/Eligibilities_Forms', [
+            'eligibility' => $eligibility,
+            'condition' => $condition,
         ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function eligibilities_store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'scholarship_id' => 'required|exists:scholarships,id',
+        ]);
+
+        Eligibility::create($validated);
+
+        return redirect()->back()->with('success', 'Eligibility category created successfully');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function eligibilities_update(Request $request, Eligibility $eligibility)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'scholarship_id' => 'required|exists:scholarships,id',
+        ]);
+
+        $eligibility->update($validated);
+
+        return redirect()->back()->with('success', 'Eligibility category updated successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function eligibilities_destroy(Eligibility $eligibility)
+    {
+        $eligibility->delete();
+
+        return redirect()->back()->with('success', 'Eligibility category deleted successfully');
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function conditions_store(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'eligibility_id' => 'required|exists:eligibilities,id',
+        ]);
+
+        Condition::create($validated);
+
+        return redirect()->back()->with('success', 'Condition created successfully');
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function conditions_update(Request $request, Condition $condition)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'eligibility_id' => 'required|exists:eligibilities,id',
+        ]);
+
+        $condition->update($validated);
+
+        return redirect()->back()->with('success', 'Condition updated successfully');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function conditions_destroy(Condition $condition)
+    {
+        $condition->delete();
+
+        return redirect()->back()->with('success', 'Condition deleted successfully');
     }
 
     public function verification_forms()
