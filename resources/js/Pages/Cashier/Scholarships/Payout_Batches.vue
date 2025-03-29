@@ -74,11 +74,18 @@
                     <span>List of Batches </span>
                     <!-- {{ props.selectedSem }} {{ schoolyear.year }} -->
 
-                    <button @click="toggleSendBatch"
-                        class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                        <span class="font-normal">Forward Completed Scholars</span>
-                    </button>
+                    <div class="flex flex-row space-x-3 items-center">
+                        <button @click="toggleSendBatch"
+                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                            <span class="font-normal">Forward Completed Scholars</span>
+                        </button>
+                        <button @click="toggleSendBatch"
+                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                            <span class="font-normal">Forward Completed Scholars</span>
+                        </button>
+                    </div>
                 </div>
 
 
