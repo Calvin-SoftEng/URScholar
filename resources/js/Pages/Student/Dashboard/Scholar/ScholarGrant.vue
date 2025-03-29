@@ -17,7 +17,7 @@
         <div class="w-16 h-1 bg-primary relative -top-4"></div>
 
         <!-- Step 2 -->
-        <div v-if="submitPending !=0"
+        <div v-if="submitReq !=0 || submitPending !=0"
         class="relative flex flex-col items-center">
             <div
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
@@ -35,11 +35,11 @@
         </div>
 
         <!-- Line -->
-        <div v-if="submitPending !=0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+        <div v-if="submitReq !=0 || submitPending !=0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
         <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
 
         <!-- Step 3 -->
-        <div v-if="submitPending !=0"
+        <div v-if="submitReq !=0 || submitPending !=0"
         class="relative flex flex-col items-center">
             <div
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
