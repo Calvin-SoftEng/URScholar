@@ -49,31 +49,41 @@ class StudentController extends Controller
 
             $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
-            if ($requirements) {
-                $requirementIds = $requirements->pluck('id')->toArray();
+            $requirementIds = $requirements->pluck('id')->toArray();
 
-                // Fetch only returned submitted requirements related to the scholarship
-                $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
-                    ->where('status', 'Returned')
-                    ->whereIn('requirement_id', $requirementIds)
-                    ->get();
+            // Fetch only returned submitted requirements related to the scholarship
+            $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->where('status', 'Returned')
+                ->whereIn('requirement_id', $requirementIds)
+                ->get();
 
-                // Map submitted requirements with their corresponding requirement details
-                $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
-                    $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
-                    return [
-                        'id' => $submitted->id,  // Submitted Requirement ID
-                        'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
-                        'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
-                        'status' => $submitted->status,
-                    ];
-                });
-            }
+            // Map submitted requirements with their corresponding requirement details
+            $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
+                $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
+                return [
+                    'id' => $submitted->id,  // Submitted Requirement ID
+                    'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
+                    'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
+                    'status' => $submitted->status,
+                ];
+            });
+
+            $submitPending = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->where('status', 'Pending')
+            ->whereIn('requirement_id', $requirementIds)
+            ->get();
+
+            $submitApproved = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->where('status', 'Approved')
+            ->whereIn('requirement_id', $requirementIds)
+            ->get();
 
             return Inertia::render('Student/Dashboard/Dashboard', [
                 'scholarship' => $scholarship,
                 'scholar' => $scholar,
                 'submitReq' => $returnedRequirements,
+                'submitPending' => $submitPending,
+                'submitApproved' => $submitApproved,
             ]);
         }
 
@@ -794,10 +804,7 @@ class StudentController extends Controller
             ], 422);
         }
 
-        return response()->json([
-            'message' => 'Files uploaded successfully',
-            'files' => $uploadedFiles
-        ]);
+        return back();
     }
 
 

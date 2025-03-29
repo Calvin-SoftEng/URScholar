@@ -65,7 +65,7 @@
                         <div
                             class="w-full h-full col-span-2 block bg-white shadow-md p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8 rounded-lg">
                             <ScholarGrant :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
-                                :submitReq="submitReq" />
+                                :submitReq="submitReq" :submitPending="submitPending" :submitApproved="submitApproved"/>
                         </div>
                     </div>
                     
@@ -127,6 +127,8 @@ const props = defineProps({
     scholar: Object,
     scholarship: Object,
     submitReq: Array,
+    submitPending: Array,
+    submitApproved: Array,
 
     //For non-scholars only
     sponsors: {
