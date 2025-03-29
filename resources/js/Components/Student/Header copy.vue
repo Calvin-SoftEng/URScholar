@@ -3,19 +3,20 @@
     <!-- desktop -->
     <div class="hidden lg:flex justify-between items-center h-[50px] place-content-center px-10">
       <div class="flex items-center space-x-4">
-          <div class="pl-3">
-            <!-- <img src="../../../assets/images/logo-hori.png" alt="Light Mode Logo" class="w-[180px] h-[40px] dark:hidden"> -->
+        <div class="pl-3">
+          <!-- <img src="../../../assets/images/logo-hori.png" alt="Light Mode Logo" class="w-[180px] h-[40px] dark:hidden"> -->
 
-            <div class="flex flex-row  items-center justify-center gap-2">
-              <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
-              <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] hidden dark:block">
+          <div class="flex flex-row  items-center justify-center gap-2">
+            <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+            <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo"
+              class="w-[40px] h-[40px] hidden dark:block">
 
-              <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
-            </div>
-            <!-- Dark Mode Logo -->
-            <!-- <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
-              class="w-[180px] h-[40px] hidden dark:block"> -->
+            <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
           </div>
+          <!-- Dark Mode Logo -->
+          <!-- <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
+              class="w-[180px] h-[40px] hidden dark:block"> -->
+        </div>
         <ul class="flex pl-10 space-x-10 font-inter font-semibold text-navy">
           <!-- <li>
             <Link :href="(route('student.dashboard'))">
@@ -24,7 +25,7 @@
           </li> -->
           <li>
             <Link :href="(route('student.dashboard'))">
-            <p class="text-primary-foreground hover:text-primary-foreground transition">My Scholarships</p>
+            <p class="text-primary-foreground hover:text-primary-foreground transition">Scholarship Dashboard</p>
             </Link>
           </li>
         </ul>
@@ -53,7 +54,7 @@
         </div>
 
         <!-- notification -->
-        <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification"
+        <button id="dropdownNotificationButton" @click.stop="toggleDropdown"
           class="relative border border-gray-300 inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg"
           type="button">
           <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -61,7 +62,6 @@
             <path
               d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
           </svg>
-
           <!-- Notification Badge -->
           <div v-if="filteredUnreadCount > 0"
             class="absolute block w-3.5 h-3.5 bg-red-500 border-2 border-white rounded-full -top-0.5 start-7 dark:border-gray-900">
@@ -82,9 +82,8 @@
 
 
         <!-- Notifs Dropdown menu -->
-        <div id="dropdownNotification"
-          class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"
-          aria-labelledby="dropdownNotificationButton">
+        <div v-show="isDropdownVisibleNotif" id="dropdownNotification"
+          class="absolute right-2 mt-14 z-20 w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow-xl dark:bg-gray-800 dark:divide-gray-700">
           <div
             class="flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
             Notifications
@@ -126,139 +125,121 @@
         </div>
       </div>
     </div>
-    
+
     <!-- avatar dropdown -->
-        <!-- Dropdown menu -->
-        <div id="userDropdown" v-show="isDropdownOpen"
-          class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-          <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div>{{ $page.props.auth.user.name }}</div>
-            <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
+    <!-- Dropdown menu -->
+    <div id="userDropdown" v-show="isDropdownOpen"
+      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+      <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+        <div>{{ $page.props.auth.user.name }}</div>
+        <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
+      </div>
+      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+        <li>
+          <Link :href="(route('student.profile'))"
+            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+        </li>
+      </ul>
+      <div class="py-1 text-left">
+        <Link :href="route('logout')" method="post" as="button"
+          class="w-full px-4 items-start justify-start py-2 text-sm text-gray-700 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+        Sign out
+        </Link>
+      </div>
+    </div>
+
+
+    <!-- Mobile Navbar -->
+    <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[50px] p-2">
+        <div class="flex items-center space-x-4">
+          <div class="pl-3">
+            <div class="flex flex-row  items-center justify-center gap-2">
+              <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo"
+                class="w-[40px] h-[40px] dark:hidden">
+              <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo"
+                class="w-[40px] h-[40px] hidden dark:block">
+
+              <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
+            </div>
           </div>
-          <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-            <li>
-              <Link :href="(route('student.profile'))"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+        </div>
+
+        <!-- Hamburger Button -->
+        <button id="menu-button" @click="toggleMenu" aria-expanded="isOpen" aria-label="Toggle navigation menu"
+          class="inline-flex items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+          <span class="sr-only">Toggle menu</span>
+          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
+      </div>
+
+      <transition enter-active-class="transition-opacity duration-300 ease-out" enter-from-class="opacity-0"
+        enter-to-class="opacity-100" leave-active-class="transition-opacity duration-200 ease-in"
+        leave-from-class="opacity-100" leave-to-class="opacity-0">
+        <div v-if="isOpen" id="menu-content"
+          class="fixed inset-0 bg-primary bg-opacity-95 z-50 flex flex-col items-center justify-center overflow-hidden">
+
+          <div class="absolute top-0 flex items-center justify-between w-full px-2 py-2">
+            <!-- Avatar (Left) -->
+            <div class="flex items-center gap-3 pl-3">
+              <img src="../../../assets/images/main_logo_white.png" alt="User Avatar" class="w-10 h-10 ">
+            </div>
+
+            <!-- Close Button (Right) -->
+            <button @click="toggleMenu" class="text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
+              aria-label="Close menu">
+              <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div v-if="$page.props.auth.user.picture" class="flex justify-center mb-5 px-4">
+            <div class="bg-white shadow-lg rounded-xl px-10 py-5 w-full max-w-xs text-center">
+              <!-- Avatar -->
+              <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="User Avatar"
+                class="w-20 h-20 rounded-full border border-gray-300 dark:border-gray-600 mx-auto">
+
+              <!-- Name & Scholar ID -->
+              <div class="mt-3">
+                <span class="block font-semibold text-gray-900 dark:text-gray-100">Name</span>
+                <span class="block text-gray-600 dark:text-gray-400">URScholar ID</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Menu Links with animation -->
+          <ul class="text-white text-2xl font-medium space-y-8 text-center font-poppins">
+            <li class="transform transition-transform duration-300 hover:scale-110">
+              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Feed</a>
+            </li>
+            <li class="transform transition-transform duration-300 hover:scale-110">
+              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Scholarship</a>
+            </li>
+            <li class="transform transition-transform duration-300 hover:scale-110">
+              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</a>
+            </li>
+            <li class="transform transition-transform duration-300 hover:scale-110">
+              <Link :href="route('logout')" method="post" as="button">
+              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Logout</a>
+              </Link>
             </li>
           </ul>
-          <div class="py-1 text-left">
-            <Link :href="route('logout')" method="post" as="button"
-              class="w-full px-4 items-start justify-start py-2 text-sm text-gray-700 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
-            Sign out
-            </Link>
-          </div>
         </div>
-
-    
-      <!-- Mobile Navbar -->
-      <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-        <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[50px] p-2">
-          <div class="flex items-center space-x-4">
-            <div class="pl-3">
-              <div class="flex flex-row  items-center justify-center gap-2">
-                <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
-                <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] hidden dark:block">
-
-                <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Hamburger Button -->
-          <button 
-            id="menu-button" 
-            @click="toggleMenu"
-            aria-expanded="isOpen"
-            aria-label="Toggle navigation menu"
-            class="inline-flex items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          >
-            <span class="sr-only">Toggle menu</span>
-            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-            </svg>
-          </button>
-        </div>
-
-        <transition 
-          enter-active-class="transition-opacity duration-300 ease-out" 
-          enter-from-class="opacity-0" 
-          enter-to-class="opacity-100"
-          leave-active-class="transition-opacity duration-200 ease-in" 
-          leave-from-class="opacity-100" 
-          leave-to-class="opacity-0"
-        >
-          <div v-if="isOpen" 
-            id="menu-content"
-            class="fixed inset-0 bg-primary bg-opacity-95 z-50 flex flex-col items-center justify-center overflow-hidden"
-          >
-
-            <div class="absolute top-0 flex items-center justify-between w-full px-2 py-2">
-              <!-- Avatar (Left) -->
-              <div class="flex items-center gap-3 pl-3">
-                <img 
-                  src="../../../assets/images/main_logo_white.png"
-                  alt="User Avatar" 
-                  class="w-10 h-10 "
-                >
-              </div>
-
-              <!-- Close Button (Right) -->
-              <button 
-                @click="toggleMenu" 
-                class="text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
-                aria-label="Close menu"
-              >
-                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-
-            <div v-if="$page.props.auth.user.picture" class="flex justify-center mb-5 px-4">
-              <div class="bg-white shadow-lg rounded-xl px-10 py-5 w-full max-w-xs text-center">
-                <!-- Avatar -->
-                <img 
-                  :src="`/storage/user/profile/${$page.props.auth.user.picture}`" 
-                  alt="User Avatar" 
-                  class="w-20 h-20 rounded-full border border-gray-300 dark:border-gray-600 mx-auto"
-                >
-                
-                <!-- Name & Scholar ID -->
-                <div class="mt-3">
-                  <span class="block font-semibold text-gray-900 dark:text-gray-100">Name</span>
-                  <span class="block text-gray-600 dark:text-gray-400">URScholar ID</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Menu Links with animation -->
-            <ul class="text-white text-2xl font-medium space-y-8 text-center font-poppins">
-              <li class="transform transition-transform duration-300 hover:scale-110">
-                <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Feed</a>
-              </li>
-              <li class="transform transition-transform duration-300 hover:scale-110">
-                <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Scholarship</a>
-              </li>
-              <li class="transform transition-transform duration-300 hover:scale-110">
-                <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</a>
-              </li>
-              <li class="transform transition-transform duration-300 hover:scale-110">
-                <Link :href="route('logout')" method="post" as="button">
-                <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Logout</a>
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </transition>
-      </nav>
+      </transition>
+    </nav>
 
 
-    
+
   </div>
 </template>
 
 <script setup>
-import { ref, defineProps, onMounted, onUnmounted, computed } from 'vue';
+import { ref, onMounted, defineProps, onUnmounted, computed } from 'vue';
+import axios from 'axios';
 import { Link } from '@inertiajs/vue3';
 import { initFlowbite } from 'flowbite';
 
@@ -287,7 +268,8 @@ const items = ref([
   }
 ]);
 
-
+// State to track dropdown visibility
+const isDark = ref(false);
 const notifications = ref([]);
 const isDropdownVisible = ref(false);
 const isDropdownVisibleNotif = ref(false);
@@ -300,6 +282,32 @@ const filteredNotifications = computed(() => {
 const filteredUnreadCount = computed(() => {
   return filteredNotifications.value.filter(n => !n.read).length;
 });
+
+// Toggle dropdown visibility
+const toggleUserDropdown = () => {
+  isDropdownVisibleNotif.value = !isDropdownVisibleNotif.value;
+};
+
+// Close dropdown when clicking outside
+const closeDropdown = (event) => {
+  const dropdown = document.getElementById('userDropdown');
+  const avatar = document.getElementById('avatarButton');
+
+  if (isDropdownOpen.value &&
+    dropdown &&
+    avatar &&
+    !dropdown.contains(event.target) &&
+    !avatar.contains(event.target)) {
+    isDropdownOpen.value = false;
+  }
+};
+
+const toggleDropdown = () => {
+  isDropdownVisible.value = !isDropdownVisible.value;
+  if (isDropdownVisible.value) {
+    fetchNotifications();
+  }
+};
 
 // Get current user ID
 const getCurrentUserId = () => {
@@ -405,53 +413,78 @@ const setupPusher = () => {
   }
 };
 
-
-// State to track dropdown visibility
-const isDropdownOpen = ref(false);
-
-// Toggle dropdown visibility
-const toggleUserDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
-
 // Close dropdown when clicking outside
-const closeDropdown = (event) => {
-  const dropdown = document.getElementById('userDropdown');
-  const avatar = document.getElementById('avatarButton');
-  
-  if (isDropdownOpen.value && 
-      dropdown && 
-      avatar && 
-      !dropdown.contains(event.target) && 
-      !avatar.contains(event.target)) {
-    isDropdownOpen.value = false;
+const handleClickOutside = (event) => {
+  if (!event.target.closest("#dropdownNotificationButton") && !event.target.closest("#dropdownNotification")) {
+    isDropdownVisible.value = false;
   }
 };
 
-// Add click listener to document to close dropdown when clicking outside
+
+// Check theme preference on page load
 onMounted(() => {
   initFlowbite();
 
   // Get user ID
   getCurrentUserId();
 
+  // Set up notifications
+  document.addEventListener("click", handleClickOutside);
   fetchNotifications();
-
   setupPusher();
 
-  document.addEventListener('click', closeDropdown);
+  // First check localStorage
+  const savedTheme = localStorage.getItem('theme')
+
+  if (savedTheme) {
+    // If user has a saved preference, use that
+    isDark.value = savedTheme === 'dark'
+  } else {
+    // If no saved preference, check system preference
+    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+
+  // Apply the theme
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+  }
+
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // Only update if user hasn't set a preference
+    if (!localStorage.getItem('theme')) {
+      isDark.value = e.matches
+      if (e.matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+  })
 });
 
-// Clean up event listener when component is unmounted
 onUnmounted(() => {
-  initFlowbite();
+  document.removeEventListener("click", handleClickOutside);
 
   // Clean up Pusher connection
   const userId = currentUserId.value;
   if (userId && window.Echo) {
     window.Echo.leave(`notifications.${userId}`);
   }
+});
 
+
+// Add click listener to document to close dropdown when clicking outside
+onMounted(() => {
+  fetchNotifications();
+  setupPusher();
+  document.addEventListener('click', closeDropdown);
+});
+
+// Clean up event listener when component is unmounted
+onUnmounted(() => {
+  fetchNotifications();
+  setupPusher();
   document.removeEventListener('click', closeDropdown);
 });
 
