@@ -3,7 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Campus;
+use App\Models\Condition;
 use App\Models\Course;
+use App\Models\Eligibility;
 use App\Models\Scholarship;
 use App\Models\ScholarshipForm;
 use App\Models\ScholarshipFormData;
@@ -194,6 +196,17 @@ class DatabaseSeeder extends Seeder
             'abbreviation' => 'BSBA',
         ]);
 
+        //Eligibilities
+
+        Eligibility::create([
+            'scholarship_id' => 2,
+            'name' => 'Financial Need-Based Criteria',
+        ]);
+
+        Condition::create([
+            'eligibility_id' => 1,
+            'name' => 'Must belong to a low-income household (based on government records)',
+        ]);
         //Group Chat
         // ScholarshipGroup::create([
         //     'user_id' => 2,
