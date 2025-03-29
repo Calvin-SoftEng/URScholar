@@ -17,21 +17,42 @@
         <div class="w-16 h-1 bg-primary relative -top-4"></div>
 
         <!-- Step 2 -->
-        <div class="relative flex flex-col items-center">
+        <div v-if="submitPending !=0"
+        class="relative flex flex-col items-center">
             <div
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
                 2</div>
             <span class="mt-2 text-sm text-gray-700">Under Review</span>
         </div>
 
+        <div v-if="submitApproved != 0"
+        class="relative flex flex-col items-center">
+            <div
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+            </div>
+            <span class="mt-2 text-sm text-gray-700">Under Review</span>
+        </div>
+
         <!-- Line -->
-        <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+        <div v-if="submitPending !=0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+        <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
 
         <!-- Step 3 -->
-        <div class="relative flex flex-col items-center">
+        <div v-if="submitPending !=0"
+        class="relative flex flex-col items-center">
             <div
                 class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
                 3</div>
+            <span class="mt-2 text-sm text-gray-700">Approved</span>
+        </div>
+
+        <div v-if="submitApproved != 0"
+        class="relative flex flex-col items-center">
+            <div
+                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+            </div>
             <span class="mt-2 text-sm text-gray-700">Approved</span>
         </div>
     </div>
