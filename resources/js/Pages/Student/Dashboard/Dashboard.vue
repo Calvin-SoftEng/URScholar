@@ -79,7 +79,7 @@
                     <!-- group chat to -->
                     <div v-if="scholar" class="col-span-2">
                         
-                        <div v-show="!GroupChat" class="col-span-2 w-full h-full flex flex-col">
+                        <div v-show="GroupChat" class="col-span-2 w-full h-full flex flex-col">
                             <div class="bg-white shadow-sm border-b border-gray-100 p-4 flex justify-between items-center">
                                 <h3 class="text-lg font-bold text-primary">Conversation</h3>
                                 <!-- Three dots menu aligned with conversation text -->
@@ -264,7 +264,7 @@
 
                     <!-- kapag may scholarship -->
 
-                        <div v-show="GroupChat"
+                        <div v-show="!GroupChat"
                             class="w-full h-full col-span-2 block bg-white shadow-md p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8 rounded-lg">
                             <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
                                 <span class="text-4xl font-bold">Tulong Dunong Program</span>
