@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    
     <meta charset="utf-8">
     <title>Scholarship Report - Batch {{ $batch->batch_no }}</title>
     <style>
@@ -24,7 +27,7 @@
         }
 
         .header .logo-small {
-            width: 80px;
+            width: 60px;
             height: auto;
         }
 
@@ -43,29 +46,19 @@
         h2, p {
             text-align: center;
         }
-        
-        .logo {
-            max-width: 100px;
-        }
-        .logo-small {
-            width: 30px;
-            height: 50px;
-            opacity: 0.8;
-        }
-        .logo-ched {
-            width: 30px;
-            height: 30px;
-        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
+
         th, td {
             border: 1px solid #ddd;
             padding: 8px;
             text-align: left;
         }
+
         th {
             background-color: #f4f4f4;
         }
@@ -74,13 +67,14 @@
 <body>
     <div class="header">
         <!-- First logo (University Seal) -->
-        <img src="../public/assets/images/univ-seal.png" class="logo-small" alt="University Seal">
+        <img src="../public/assets/images/univ-seal.png" class="W-[75px] h-[100px]" alt="University Seal">
+        
+        <!-- Centered Title -->
+        <div class="title">
+            <h1>Republic of the Philippines</h1>
+            <h1>University of Rizal System</h1>
+        </div>
     
-        
-        <h1>Republic of the Philippines</h1>
-        <h1>University of Rizal System</h1>
-        
-
         <!-- Second logo (CHED) -->
         <img src="../public/assets/images/CHED.png" class="logo-ched" alt="CHED Logo">
     </div>

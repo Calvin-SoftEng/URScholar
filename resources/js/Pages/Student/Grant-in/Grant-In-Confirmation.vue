@@ -4,12 +4,12 @@
 
     <AuthenticatedLayout class="shadow-md z-10 min-h-screen overflow-auto">
         <div class="w-full bg-dirtywhite shadow-sm">
-            <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3">
+            <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
                 Confirmation
             </h1>
         </div>
         <div class="pt-3 pb-24 sm:overflow-auto sm:max-h-[90vh] sm:scroll-py-2">
-            <div class="w-full bg-white shadow-md p-10 sm:p-5 flex flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
+            <div class="w-full bg-white shadow-md p-10 sm:p-5 flex flex-col items-center mx-auto max-w-5xl sm:px-6 lg:px-8">
 
 
                 <!-- Image Container (Centered) -->
@@ -20,7 +20,7 @@
                     >
                 </div>
                 <h1 class="font-bold text-2xl font-albert text-center mt-4">
-                    Congratulations! You are qualified for the {{ scholarship.name }} Scholarship!
+                    Congratulations! <br>You are qualified for the {{ scholarship.name }} Scholarship!
                 </h1>
                 <div class="p-24 sm:p-3 sm:mt-10 font-inter text-lg">
                     <p>Dear, {{ scholar.first_name + ' ' + scholar.last_name }}</p>
