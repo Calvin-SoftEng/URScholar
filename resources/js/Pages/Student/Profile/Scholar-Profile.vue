@@ -29,7 +29,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Age</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Date of Birth</span>
@@ -41,7 +41,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Civil Status</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -55,7 +55,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Gender</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Religion</span>
@@ -68,27 +68,31 @@
                         <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                             <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
                             <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
-                            }}</span>
+                                }}</span>
                         </div>
                         <!-- qr -->
                         <div v-if="!EditProfile"
                             class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
-                            <div v-if="scholar.qr_code" class="w-20 h-20">
-                                <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code" class="w-full h-full">
+                            <div v-if="scholar">
+                                <div v-if="scholar.qr_code" class="w-20 h-20">
+                                    <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code"
+                                        class="w-full h-full">
+                                </div>
+                                <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
+                                    <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
+                                </div>
+                                <button @click="openQRModal"
+                                    class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition">
+                                    View & Download QR Code
+                                </button>
                             </div>
-                            <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
-                                <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
-                            </div>
-                            <button @click="openQRModal"
-                                class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition">
-                                View & Download QR Code
-                            </button>
+
                         </div>
                     </div>
                     <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                         <div class="w-full h-1/12">
                             <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                            }},
+                                }},
                                 {{ student.first_name }}</span>
                         </div>
 
@@ -98,7 +102,7 @@
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
-                                    }}</span>
+                                }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -110,7 +114,7 @@
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
-                                    }}, Campus</span>
+                                }}, Campus</span>
                             </div>
                         </div>
 
@@ -129,7 +133,7 @@
                                     <div class="flex flex-col items-end">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ grade ?
                                             grade.grade : 'N/A'
-                                        }}</span>
+                                            }}</span>
                                         <button class="text-sm" @click="toggleCheck">
                                             View Certificate of Grade
                                         </button>
@@ -145,9 +149,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
-                                    }}</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -156,9 +160,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -167,9 +171,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -178,9 +182,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <!-- Vocational Section -->
@@ -190,9 +194,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
 
@@ -203,9 +207,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
 
@@ -346,7 +350,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Civil Status</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -360,7 +364,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Gender</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Religion</span>
@@ -400,7 +404,7 @@
                     <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                         <div class="w-full h-1/12">
                             <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                                }},
+                            }},
                                 {{ student.first_name }}</span>
                         </div>
 
@@ -410,7 +414,7 @@
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
-                                }}</span>
+                                    }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -422,7 +426,7 @@
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
-                                }}, Campus</span>
+                                    }}, Campus</span>
                             </div>
                         </div>
 
@@ -988,7 +992,7 @@ const downloadQRCode = async () => {
         link.click();
         document.body.removeChild(link);
 
-        
+
     } catch (error) {
         console.error('Error downloading file:', error);
         alert('Failed to download file. Please try again.');

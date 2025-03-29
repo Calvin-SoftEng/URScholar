@@ -618,7 +618,16 @@ class StudentController extends Controller
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
         $scholar = Scholar::where('email', Auth::user()->email)->with('course', 'campus')->first();
-        $grade = Grade::where('scholar_id', $scholar->id)->first();
+
+        if ($scholar) {
+            $grade = Grade::where('scholar_id', $scholar->id)->first();
+        }
+        else {
+            $grade = null;
+            $scholar = null;
+        }
+    
+        
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
