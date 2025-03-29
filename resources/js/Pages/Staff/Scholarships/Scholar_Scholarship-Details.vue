@@ -35,38 +35,41 @@
                     <div class="h-full grid grid-cols-2 gap-3 py-3 w-9/12">
                         <!-- 25% Column -->
                         <div class="col-span-2 w-full h-full flex flex-col">
-                            <div
-                                class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col">
+                            <div class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col">
                                 <div class="flex flex-row gap-3">
                                     <div class="bg-black rounded-lg w-3/12 h-full aspect-square">
-
+                                        <img :src="`/storage/user/profile/${scholar.user?.picture}`"
+                                            alt="Profile Picture" class="w-full h-full object-cover">
                                     </div>
                                     <div class="w-full">
                                         <div class="flex flex-col p-2 space-y-3">
                                             <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">Scholar Name</span>
+                                                <span class="font-semibold uppercase text-xs text-gray-500">Scholar
+                                                    Name</span>
                                                 <span class="text-xl font-sora text-primary">
-                                                    {{ scholar.last_name}},
-                                                {{ scholar.first_name }}
-                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
-                                                    word.charAt(0).toUpperCase()).join('.') + '.' : ''}}</span>
+                                                    {{ scholar.last_name }},
+                                                    {{ scholar.first_name }}
+                                                    {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                                        word.charAt(0).toUpperCase()).join('.') + '.' : ''}}</span>
                                             </div>
-
                                             <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                                <span class="text-base text-primary">{{ scholar.campus }}</span>
+                                                <span class="font-semibold uppercase text-xs text-gray-500">URScholar
+                                                    ID</span>
+                                                <span class="text-base text-primary">{{ scholar.urscholar_id }}</span>
                                             </div>
                                         </div>
 
                                         <div class="flex flex-col p-2 space-y-2">
                                             <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                                <span class="text-base text-primary">{{ scholar.course }}</span>
+                                                <span
+                                                    class="font-semibold uppercase text-xs text-gray-500">Program</span>
+                                                <span class="text-base text-primary">{{ scholar.course.name }}</span>
                                             </div>
 
                                             <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                                <span class="text-base text-primary">{{ scholar.campus }}</span>
+                                                <span
+                                                    class="font-semibold uppercase text-xs text-gray-500">Campus</span>
+                                                <span class="text-base text-primary">{{ scholar.campus.name }}</span>
                                             </div>
                                         </div>
 
@@ -85,12 +88,13 @@
                                         </div>
                                         <!-- Ensure button stays at the bottom -->
                                         <div class="mt-auto w-full flex justify-end">
-                                            <button class="w-full rounded-md py-1 bg-primary text-white">View more Details</button>
+                                            <button class="w-full rounded-md py-1 bg-primary text-white">View more
+                                                Details</button>
                                         </div>
                                     </div>
                                 </div>
 
-                                
+
                             </div>
                         </div>
 
@@ -115,7 +119,8 @@
 
                                             <div class="flex flex-row gap-5 items-center justify-center">
                                                 <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                                    <span class="material-symbols-rounded text-lg">assignment_turned_in</span>
+                                                    <span
+                                                        class="material-symbols-rounded text-lg">assignment_turned_in</span>
                                                     <span class="font-medium">Jan 1, 2023</span>
                                                 </div>
                                                 <div>
@@ -172,8 +177,7 @@
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div
                 class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
-                <div
-                    class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{
                         selectedRequirement?.requirement }}</h2>
                     <div class="flex items-center justify-between gap-10">
@@ -185,8 +189,8 @@
                         <button type="button" @click="closeModal"
                             class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                             data-modal-hide="default-modal">
-                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                fill="none" viewBox="0 0 14 14">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
                                     stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                             </svg>

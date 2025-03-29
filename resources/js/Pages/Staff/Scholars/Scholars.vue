@@ -76,7 +76,8 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-12 w-12">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                          <img :src="`/storage/user/profile/${scholar.user?.picture}`"
+                                            alt="Profile Picture" class="w-full h-full object-cover">
                         </div>
                       </div>
                       <div>
@@ -96,12 +97,12 @@
                   <td class="px-5 items-center">
                     <span class="material-symbols-rounded text-sm text-gray-400 mr-1">
                     local_library
-                    </span> {{ scholar.course }}
+                    </span> {{ scholar.course.name }}
                     <br />
                     <span class="badge badge-ghost badge-base">{{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year</span>
                   </td>
                   <td class="px-5">
-                    {{ scholar.campus }}
+                    {{ scholar.campus.name }}
                   </td>
                   <td class="px-5">
                     Batch {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}

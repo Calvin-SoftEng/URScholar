@@ -29,8 +29,10 @@ class ScholarController extends Controller
     public function scholars()
     {
 
+        $scholars = Scholar::with('user', 'campus', 'course', 'batch')->where('status', 'verified')->get();
+
         return Inertia::render('Staff/Scholars/Scholars', [
-            'scholars' => Scholar::where('status', 'verified')->get(),
+            'scholars' => $scholars,
             'userType' => Auth::user()->usertype,
             'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null
         ]);
@@ -38,7 +40,7 @@ class ScholarController extends Controller
 
     public function scholar($id)
     {
-        $scholar = Scholar::findOrFail($id);
+        $scholar = Scholar::with('user', 'campus', 'course')->findOrFail($id);
 
         $scholarship = $scholar->scholarship;
         $batch = Batch::where('scholarship_id', $scholarship->id)->first();

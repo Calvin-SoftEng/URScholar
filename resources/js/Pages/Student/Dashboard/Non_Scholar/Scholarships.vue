@@ -100,5 +100,32 @@
 </template>
 
 <script setup>  
+import { Head, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+
+const props = defineProps({
+    //For scholars only
+    scholar: Object,
+    scholarship: Object,
+    submitReq: Array,
+
+    //For non-scholars only
+    sponsors: {
+        type: Array,
+        required: true
+    },
+    scholarships: {
+        type: Array,
+        required: true
+    },
+    schoolyears: {
+        type: Array,
+        required: true
+    }
+});
+
+const getSponsorDetails = (sponsorId) => {
+    return props.sponsors.find(s => s.id === sponsorId) || { name: 'Unknown Sponsor' };
+};
 
 </script>

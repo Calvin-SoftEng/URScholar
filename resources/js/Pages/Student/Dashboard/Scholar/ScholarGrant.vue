@@ -96,7 +96,7 @@
         <p>Your application has been successfully completed.</p>
         <p>You will be notified about the next steps soon.</p>
         <br>
-        
+
     </div>
 
     <!-- second stepper -->
@@ -113,8 +113,7 @@
         <span>Deadline</span>
         <br>
         <form @submit.prevent="submitRequirements" class="space-y-6">
-            <div v-for="req in returnedRequirements" :key="req.id"
-                class="bg-white border rounded-lg shadow-sm p-4">
+            <div v-for="req in returnedRequirements" :key="req.id" class="bg-white border rounded-lg shadow-sm p-4">
                 <h3 class="font-medium text-gray-900">{{ req.requirement_name }}</h3>
                 <p class="text-sm text-gray-600 mt-1">Return reason: {{ req.return_message }}</p>
 
@@ -123,12 +122,10 @@
                         :id="'file_' + req.id" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                         class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none hover:bg-gray-100" />
 
-                    <div v-if="selectedFiles[req.id]"
-                        class="flex items-center gap-2 text-sm text-gray-600 mt-2">
+                    <div v-if="selectedFiles[req.id]" class="flex items-center gap-2 text-sm text-gray-600 mt-2">
                         <font-awesome-icon :icon="['fas', 'file']" />
                         <span>{{ selectedFiles[req.id] }}</span>
-                        <button type="button" @click="removeFile(req.id)"
-                            class="text-red-600 hover:text-red-800">
+                        <button type="button" @click="removeFile(req.id)" class="text-red-600 hover:text-red-800">
                             <font-awesome-icon :icon="['fas', 'times']" />
                         </button>
                     </div>
@@ -144,8 +141,7 @@
             </div>
 
             <div v-if="returnedRequirements.length > 0" class="flex justify-end">
-                <button type="submit"
-                    :disabled="form.processing || Object.keys(form.files).length === 0"
+                <button type="submit" :disabled="form.processing || Object.keys(form.files).length === 0"
                     class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none
         focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
         transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -162,10 +158,104 @@
         <p>Your application has been successfully completed.</p>
         <p>You will be notified about the payout announcement soon.</p>
         <br>
-        
+
     </div>
 </template>
-
 <script setup>
+import { Head, useForm } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
+
+const props = defineProps({
+    //For scholars only
+    scholar: Object,
+    scholarship: Object,
+    submitReq: Array,
+
+    //For non-scholars only
+    sponsors: {
+        type: Array,
+        required: true
+    },
+    scholarships: {
+        type: Array,
+        required: true
+    },
+    schoolyears: {
+        type: Array,
+        required: true
+    }
+});
+
+// Track selected files
+const selectedFiles = ref({});
+
+// List of returned requirements
+const returnedRequirements = computed(() => props.submitReq || []);
+
+// Form state
+const form = useForm({
+    files: {},
+    requirements: []
+});
+
+
+const handleFile = (event, reqId, requirementName) => {
+    const file = event.target.files[0];
+    if (file) {
+        // Store file
+        form.files[reqId] = file;
+        selectedFiles.value[reqId] = file.name;
+
+        // Add requirement if not exists
+        const existingIndex = form.requirements.findIndex(r => r.id === reqId);
+        if (existingIndex === -1) {
+            form.requirements.push({
+                id: reqId,
+                requirement: requirementName
+            });
+        }
+    }
+};
+
+const removeFile = (reqId) => {
+    // Remove file
+    delete form.files[reqId];
+    delete selectedFiles.value[reqId];
+
+    // Remove requirement from array
+    form.requirements = form.requirements.filter(r => r.id !== reqId);
+
+    // Reset file input
+    const fileInput = document.getElementById(`file_${reqId}`);
+    if (fileInput) {
+        fileInput.value = '';
+    }
+};
+
+const submitRequirements = () => {
+    if (Object.keys(form.files).length === 0) {
+        alert('Please select at least one file before submitting.');
+        return;
+    }
+
+    if (!confirm('Are you sure you want to resubmit these requirements?')) {
+        return;
+    }
+
+    form.post('/student/application/re-upload', {
+        forceFormData: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Requirements resubmitted successfully!');
+            form.reset();
+            selectedFiles.value = {};
+            window.location.reload();
+        },
+        onError: (errors) => {
+            console.error('Upload errors:', errors);
+            alert('There was an issue with the upload. Please try again.');
+        }
+    });
+};
 
 </script>

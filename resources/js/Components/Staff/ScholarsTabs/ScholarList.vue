@@ -63,8 +63,7 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img :src="scholar.profile_image || '../../../../assets/images/no_userpic.png'"
-                            :alt="`${scholar.first_name}'s profile`" />
+                          <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`" alt="Profile Picture">
                         </div>
                       </div>
                       <div>
@@ -98,7 +97,9 @@
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
                       'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
+                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.status === 'Submitted',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Returned'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       {{ scholar.status }}
                     </span>

@@ -73,26 +73,37 @@ class ScholarshipController extends Controller
                 return $query->where('semester', $sem);
             })
             ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course']) // Eager load campus and course relationships
+            ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
             ->first();
 
         // Count scholars with complete submissions
         $completeSubmissionsCount = 0;
 
         $scholars = $batch->scholars->map(function ($scholar) use ($totalRequirements, &$completeSubmissionsCount) {
-            // Get approved requirements for this scholar
+            // Get approved, returned, and total submitted requirements for this scholar
             $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Approved')
+                ->count();
+
+            $returnedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->where('status', 'Returned')
+                ->count();
+
+            $countRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->count();
 
             // Determine status
             $status = 'No submission';
             if ($totalRequirements > 0) {
-                if ($approvedRequirements === 0) {
+                if ($countRequirements === 0) {
                     $status = 'No submission';
                 } elseif ($approvedRequirements === $totalRequirements) {
                     $status = 'Complete';
                     $completeSubmissionsCount++; // Increment counter for complete submissions
+                } elseif ($returnedRequirements > 0) {
+                    $status = 'Returned';
+                } elseif ($countRequirements > 0) {
+                    $status = 'Submitted';
                 } else {
                     $status = 'Incomplete';
                 }
@@ -117,6 +128,9 @@ class ScholarshipController extends Controller
                 'submittedRequirements' => $approvedRequirements,
                 'totalRequirements' => $totalRequirements,
                 'progress' => $progress,
+                'user' => [
+                    'picture' => $scholar->user->picture ?? null // Include user picture
+                ]
             ];
         });
 
@@ -607,19 +621,19 @@ class ScholarshipController extends Controller
         //     ->where('id', '!=', $user->id) // Exclude the current user
         //     ->get();
 
-        $users = User::whereIn('id', function ($query) use ($scholarshipId) { 
+        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
             $query->select('user_id')
-                ->from('scholarship_groups') 
-                ->where('scholarship_id', $scholarshipId); 
+                ->from('scholarship_groups')
+                ->where('scholarship_id', $scholarshipId);
         })
-        ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
-        ->get();
+            ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
+            ->get();
 
         // Create Notification
         $notification = Notification::create([
             'title' => 'New Payout Forwarded',
             'message' => 'Scholars forwarded to cashiers by ' . $user->name,
-            'type' => 'payout_forward', 
+            'type' => 'payout_forward',
         ]);
 
         // Attach users to the notification
