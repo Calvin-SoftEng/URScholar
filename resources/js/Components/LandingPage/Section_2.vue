@@ -13,14 +13,14 @@
                         <span class="flex items-center justify-center w-10 h-10 bg-white border-1 border-gray-800 rounded-md shadow-md mb-3">
                             <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-gray-800 font-bold" />
                         </span>
-                        <span class="font-medium text-xl">Comprehensive Search</span>
+                        <span class="font-medium text-2xl">Comprehensive Search</span>
                         <p class="font-light">Easily find scholarships <br> that match your profile</p>
                     </div>
                     <div class="space-y-2 text-primary">
                         <span class="flex items-center justify-center w-10 h-10 bg-white border-1 border-gray-800 rounded-md shadow-md mb-3">
                             <font-awesome-icon :icon="['fas', 'bell']" class="text-gray-800 font-bold" />
                         </span>
-                        <span class="font-medium text-xl">Timely Updates</span>
+                        <span class="font-medium text-2xl">Timely Updates</span>
                         <p class="font-light">Stay informed with the <br> latest scholarship <br> informations and <br> application deadlines</p>
                     </div>
                     <!-- <div>

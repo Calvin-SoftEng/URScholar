@@ -11,13 +11,13 @@
             </div>
 
         <!-- Centered Menu -->
-        <div class="absolute left-1/2 -translate-x-1/2">
+        <!-- <div class="absolute left-1/2 -translate-x-1/2">
             <ul class="flex space-x-12 font-quicksand font-semibold">
                 <li><a href="#" class="text-white hover:text-primary-foreground transition">Home</a></li>
                 <li><a href="#" class="text-white hover:text-primary-foreground transition">About</a></li>
                 <li><a href="#" class="text-white hover:text-primary-foreground transition">Contact</a></li>
             </ul>
-        </div>
+        </div> -->
 
         <!-- Login / Register (Right-Aligned) -->
         <div class="flex items-center space-x-4 ml-auto font-poppins">
