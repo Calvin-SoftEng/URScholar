@@ -20,7 +20,7 @@
                             <img src="" alt="">
                             <span class="font-semibold font-sora text-lg">{{ campus.name }}</span>
                         </div>
-                        <Link :href="`/mis/univ-settings/course/config/${campus.id}`">
+                        <Link :href="`/system_admin/univ-settings/course/config/${campus.id}`">
                         <button
                             class="bg-white px-3 py-1 rounded-md border-gray-100 text-primary border hover:bg-primary hover:text-dtext dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
                             Add Course
@@ -28,11 +28,9 @@
                         </Link>
                     </div>
 
-                    <div v-for="course in campus.courses" :key="course.id">
-                        <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
-                            <div class="font-instrument font-normal text-sm text-primary">
-                                {{ course.name }}
-                            </div>
+                    <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
+                        <div v-for="course in campus.courses" :key="course.id" class="font-instrument font-normal text-sm text-primary">
+                            {{ course.abbreviation }} - {{ course.name }}
                         </div>
                     </div>
 

@@ -1,6 +1,7 @@
 <template>
-    <div class="lg:max-h-screen flex flex-col border-r border-gray-200 dark:border-r dark:border-gray-600 transition-all duration-300" id="side-bar"
-    :class="{'side-bar-visible': dataOpenSideBar, 'side-bar-close': !dataOpenSideBar}">
+    <div class="lg:max-h-screen flex flex-col border-r border-gray-200 dark:border-gray-600 transition-all duration-300" id="side-bar"
+    :class="{'side-bar-visible': dataOpenSideBar}">
+
       <!-- desktop -->
       <div class="hidden py-5 lg:flex flex-col justify-between h-full dark:bg-dprimary">
         <div class="space-y-1" :class="[ dataOpenSideBar ? 'px-1' : 'px-1']">
@@ -9,10 +10,10 @@
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">System Configuration</div> 
             <!-- Portal Branding, Homepage Settings -->
             
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+            <Link :href="route('sa.portal_branding')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/univ-settings/portal-branding' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">Portal Branding</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/univ-settings/portal-branding' }">Portal Branding</span>
                 </div>
               </div>
             </Link>
@@ -30,26 +31,26 @@
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">User and Role Management</div>
             <!-- Manage Admin and Users, Role-Based Access Controls, User Activity Logs -->
 
-            <Link :href="route('mis.users')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/users' }">
+            <Link :href="route('sa.users')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/users' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/user-settings/users' }">Manage Admin and Users</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/users' }">Manage Admin and Users</span>
                 </div>
               </div>
             </Link>
 
-            <Link :href="route('mis.roles')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/user-settings/user-roles' }">
+            <Link :href="route('sa.user_roles')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/user-roles' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/user-settings/user-roles' }">User Roles Control</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/user-roles' }">User Roles Control</span>
                 </div>
               </div>
             </Link>
 
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+            <Link :href="route('sa.activity_logs')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/activity-logs' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">User Activity Logs</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/activity-logs' }">User Activity Logs</span>
                 </div>
               </div>
             </Link>
@@ -59,26 +60,26 @@
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">University Settings</div>
             <!-- School Year and Term Management, Campus Management, Course and College Management -->
 
-            <Link :href="route('mis.sy_term')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/univ-settings/schoolyear-term' }">
+            <Link :href="route('sa.sy_term')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/univ-settings/schoolyear-term' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/univ-settings/schoolyear-term' }">School Year</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/univ-settings/schoolyear-term' }">School Year</span>
                 </div>
               </div>
             </Link>
 
-            <Link :href="route('mis.campuses')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/mis/univ-settings/campuses' }">
+            <Link :href="route('sa.campuses')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/univ-settings/campuses' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/mis/univ-settings/campuses' }">Campus Management</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/univ-settings/campuses' }">Campus Management</span>
                 </div>
               </div>
             </Link>
 
-            <Link :href="route('mis.course')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/mis/univ-settings/course') }">
+            <Link :href="route('sa.courses')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/system_admin/univ-settings/course') }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url.startsWith('/mis/univ-settings/course') }">Course Management</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url.startsWith('/system_admin/univ-settings/course') }">Course Management</span>
                 </div>
               </div>
             </Link>
@@ -96,10 +97,10 @@
               </div>
             </Link>
 
-            <Link>
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
+            <Link :href="route('sa.archives')">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/security-and-backup/archives' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2">Data Backup and Restore</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url.startsWith('/system_admin/security-and-backup') }">Data Backup and Restore</span>
                 </div>
               </div>
             </Link>
@@ -111,82 +112,6 @@
                 </div>
               </div>
             </Link>
-
-
-            <!-- <Link :href="(route('super_admin.dashboard'))" >
-              <div v-tooltip.right="!dataOpenSideBar ? 'Dashboard' : ''" :class="[
-                'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
-                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/admin/dashboard' }
-              ]">
-              <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url === '/admin/dashboard' }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url === '/admin/dashboard' }]"
-                >
-                dashboard
-                </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/admin/dashboard' }]">Settings</span>
-              </div>
-              </div>
-            </Link>
-
-            <div v-tooltip.right="!dataOpenSideBar ? 'Feed' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-              <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                <span class="material-symbols-rounded text-blue-900 dark:text-dtext" >
-                  rate_review
-                  </span>
-                <span v-show="dataOpenSideBar" class="pl-2">Feed</span>
-              </router-link>
-            </div>
-            
-            <Link :href="route('messaging.index')">
-              <div v-tooltip.right="!dataOpenSideBar ? 'Messaging' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                    <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
-                    forum
-                    </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Messaging</span>
-                  </div>
-              </div>
-            </Link>
-          
-            <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Webpage Settings</div>
-
-              <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
-                    price_check
-                    </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Payouts</span>
-                </router-link>
-              </div>
-              <div v-tooltip.right="!dataOpenSideBar ? 'Reports' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext" >
-                    docs
-                    </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Reports</span>
-                </router-link>
-              </div>
-              <div v-tooltip.right="!dataOpenSideBar ? 'Archives' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext" >
-                    archive
-                    </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Archives</span>
-                </router-link>
-              </div>
-
-          <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Settings</div>
-
-          <Link :href="route('settings.index')">
-            <div v-tooltip.right="!dataOpenSideBar ? 'Settings' : ''" :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/settings') }]">
-              <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                  <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/settings') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/settings') }]">
-                  settings
-                  </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/settings') }]">Settings</span>
-              </div>
-            </div>
-          </Link> -->
         </div>
 
       </div>
@@ -258,6 +183,7 @@ import { ref, onMounted } from 'vue'
 import { Tooltip } from 'primevue';
 import { Link } from '@inertiajs/vue3';
 import { data } from 'autoprefixer';
+
 
 const components = {
   Link,
@@ -334,7 +260,7 @@ const clickHamburger = (event) => {
     })
 </script>
 
-<style>
+<style scoped>
 :root {
   --sidebar-width: 230px; /* Adjust this value to match your sidebar width */
   --p-tooltip-background: #003366 !important;

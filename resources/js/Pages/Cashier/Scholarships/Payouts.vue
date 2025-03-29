@@ -12,6 +12,7 @@
                         </li>
                         <li class="hover:text-gray-600"> 
                             <!-- <span>{{ scholarship.name  }}</span> -->
+                             Same here
                         </li>
                         <li>
                             <span class="text-blue-400 font-semibold"> Batch 1</span>
@@ -25,8 +26,9 @@
                         
                         <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <!-- <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span> <span>scholarship type</span> -->
+                            {{ scholarship.name }}
                         </h1>
-                        <span class="text-xl">SY 2024 - Semester</span>
+                        <span class="text-xl">SY {{ batch.school_year }} - {{ batch.semester }} Semester</span>
                     </div>
                     <div class="flex gap-2">
 
@@ -40,7 +42,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ disbursements.length }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
@@ -48,21 +50,15 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ payout.sub_total }}/{{ payout.total_scholars }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
-                <!-- <div class="w-full h-full px-10 py-5 bg-[#F8F8FA] dark:bg-dprimary overflow-auto">
-                    <div class="w-full mx-auto p-3 rounded-xl text-white"
 
-                            <ScholarList :scholarship="scholarship" :batches="batches" />
-                            
-                    </div>
-                </div> -->
-                <Payout_List/>
+                <Payout_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -135,14 +131,16 @@ const toggleMonitoring = () => {
 
 const props = defineProps({
     scholarship: Object,
-    schoolyear: Object,
-    selectedSem: Object,
-    batches: Object,
-    scholars: Array,
-    requirements: Array,
+    batch: Object,
+    disbursements: Array,
+    payout: Object,
+    scholar: Object,
+    errors: Object,
+    flash: Object,
 });
 
-
+const scannedScholar = ref(null);
+const scannedPayout = ref(null);
 
 const selectedSem = ref("");
 
@@ -169,20 +167,20 @@ const updateFile = (file) => {
 const toastVisible = ref(false);
 const toastMessage = ref("");
 
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
+// watchEffect(() => {
+//     const flashMessage = usePage().props.flash?.success;
 
-    if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
-        toastMessage.value = flashMessage;
-        toastVisible.value = true;
+//     if (flashMessage) {
+//         console.log("Showing toast with message:", flashMessage);
+//         toastMessage.value = flashMessage;
+//         toastVisible.value = true;
 
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
-});
+//         setTimeout(() => {
+//             console.log("Hiding toast...");
+//             toastVisible.value = false;
+//         }, 3000);
+//     }
+// });
 
 </script>
 

@@ -25,9 +25,37 @@ import Tooltip from 'primevue/tooltip';
 import Datepicker from 'primevue/datepicker';
 import InputText from 'primevue/inputtext';
 import Aura from '@primevue/themes/aura';
+
+import VueApexCharts from 'vue3-apexcharts';
 // import { format, isToday } from 'date-fns';
 
 import Papa from 'papaparse';
+
+import { createVuetify } from 'vuetify';
+// import 'vuetify/styles';
+import { VCalendar } from 'vuetify/labs/VCalendar';
+
+const vuetify = createVuetify({
+    components: {
+        VCalendar, 
+    },
+    theme: {
+        defaultTheme: 'customTheme',
+        themes: {
+          customTheme: {
+            colors: {
+              primary: '#003366'
+            }
+          }
+        }
+    }
+});
+
+window.Echo.channel('test-channel')
+    .listen('.TestEvent', (e) => {
+        console.log('Received event:', e.message);
+    });
+
 
 const appName = import.meta.env.VITE_APP_NAME || 'URScholar';
 
@@ -49,7 +77,10 @@ createInertiaApp({
                 },
             })
             .use(initFlowbite)
+            .use(vuetify)
+            .use(VueApexCharts)
             .component('FontAwesomeIcon', FontAwesomeIcon)
+            .component('apexchart', VueApexCharts)
             .directive('tooltip', Tooltip, 'datepicker', Datepicker, InputText)
             .mount(el);
     },

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('suffix_name')->nullable();
-            $table->string('bday')->nullable();
+            $table->date('birthdate')->nullable();
             $table->string('placebirth')->nullable();
             $table->integer('age')->nullable();
             $table->string('gender')->nullable();
@@ -28,6 +28,62 @@ return new class extends Migration
             $table->string('relationship')->nullable();
             $table->timestamps();
         });
+
+        Schema::create('education_records', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_record_id')->constrained()->onDelete('cascade');
+            $table->json('elementary')->nullable();
+            $table->json('junior')->nullable();
+            $table->json('senior')->nullable();
+            $table->json('college')->nullable();
+            $table->json('vocational')->nullable();
+            $table->json('postgrad')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('grades', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
+            $table->decimal('grade')->nullable();
+            $table->string('cog')->nullable();
+            $table->string('path');
+            $table->string('school_year')->nullable();
+            $table->string('semester')->nullable();
+            $table->timestamps();
+        });
+
+
+        Schema::create('family_records', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_record_id')->constrained()->onDelete('cascade');
+            $table->json('mother')->nullable();
+            $table->json('father')->nullable();
+            $table->string('marital_status')->nullable();
+            $table->string('monthly_income')->nullable();
+            $table->string('other_income')->nullable();
+            $table->string('family_housing')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('sibling_records', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('family_record_id')->constrained()->onDelete('cascade');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('age')->nullable();
+            $table->string('occupation')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('org_records', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('student_record_id')->constrained()->onDelete('cascade');
+            $table->string('name')->nullable();
+            $table->string('year')->nullable();
+            $table->string('position')->nullable();
+            $table->timestamps();
+        });
     }
 
     /**
@@ -35,6 +91,11 @@ return new class extends Migration
      */
     public function down(): void
     {
+        Schema::dropIfExists('org_records');
+        Schema::dropIfExists('sibling_records');
+        Schema::dropIfExists('family_records');
+        Schema::dropIfExists('grades');
+        Schema::dropIfExists('education_records');
         Schema::dropIfExists('student_records');
     }
 };

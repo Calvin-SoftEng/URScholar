@@ -44,13 +44,14 @@
                   <th>URScholar ID</th>
                   <th>Scholar</th>
                   <th>Grant</th>
+                  <th>Campus</th>
                   <th>Status</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="text-sm">
-                  <td>test1</td>
+                <tr v-for="disbursement in filteredDisbursements" :key="disbursement.id" class="text-sm">
+                  <td>{{ disbursement.scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
@@ -60,332 +61,379 @@
                       </div>
                       <div>
                         <div class="font-normal">
-                          Raul, John Mark
-                          <!-- <span v-if="scholar.status === 'Verified'"
-                            class="material-symbols-rounded text-sm text-blue-600">verified</span> -->
+                          {{ disbursement.scholar.last_name }}, {{ disbursement.scholar.first_name }} {{
+                            disbursement.scholar.middle_name
+                          }}
                         </div>
                         <div class="text-sm opacity-50">
-                          <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
-                            4th year, Bachelor of Science in Information Technology
+                          {{ disbursement.scholar.year_level }}{{ getYearSuffix(disbursement.scholar.year_level) }}
+                          year, {{
+                            disbursement.scholar.course.name }}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    Binangonan
+                    {{ disbursement.scholar.grant }}
                   </td>
                   <td>
-                    LISTAHANAN
+                    {{ disbursement.scholar.campus.name }}
                   </td>
                   <td>
-                    <!-- <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
+                    <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': disbursement.status === 'Claimed',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      Claimed
-                    </span> -->
-                    <span class="bg-green-100 text-green-800 border border-green-400 text-xs font-medium px-2.5 py-0.5 rounded">Claimed</span>
-                  </td>
-                </tr>
-                <tr class="text-sm">
-                  <td>test2</td>
-                  <td>
-                    <div class="flex items-center gap-3">
-                      <div class="avatar">
-                        <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
-                        </div>
-                      </div>
-                      <div>
-                        <div class="font-normal">
-                        Eyy, Eyy
-                          <!-- <span v-if="scholar.status === 'Verified'"
-                            class="material-symbols-rounded text-sm text-blue-600">verified</span> -->
-                        </div>
-                        <div class="text-sm opacity-50">
-                          <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
-                            4th year, Bachelor of Science in Information Technology
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    Binangonan
-                  </td>
-                  <td>
-                    LISTAHANAN
-                  </td>
-                  <td>
-                    <!-- <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
-                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      Claimed
-                    </span> -->
-                    <span class="bg-gray-200 text-gray-500 border border-gray-400 text-xs font-medium px-2.5 py-0.5 rounded">Pending</span>
+                      {{ disbursement.status }}
+                    </span>
                   </td>
                 </tr>
               </tbody>
             </table>
-            <!-- <div v-if="totalScholars > 10" class="mt-5 flex flex-col items-right">
-              <span class="text-sm text-gray-700 dark:text-gray-400">
-                Showing
-                <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
-                to
-                <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
-                of
-                <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span>
-                Scholars
-              </span>
-              <div class="inline-flex mt-2 xs:mt-0">
-                <button @click="prevPage" :disabled="currentPage === 1" :class="[
-                  'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                  currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
-                ]">
-                  Prev
-                </button>
-                <button @click="nextPage" :disabled="currentPage === totalPages" :class="[
-                  'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                  currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
-                ]">
-                  Next
-                </button>
-              </div>
-            </div> -->
           </div>
         </div>
         <!-- open cam -->
         <div v-if="OpenCamera"
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
           <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
-              <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                  <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                      <h2 class="text-2xl font-bold">Scan QR here</h2>
-                  </span>
-                  <button type="button" @click="closeCamera"
-                      class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                      data-modal-hide="default-modal">
-                      <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                          viewBox="0 0 14 14">
-                          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                              stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                      </svg>
-                  </button>
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+              
+              <div class="flex items-center gap-3">
+                  <!-- Icon -->
+                  <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                  <!-- Title and Description -->
+                  <div class="flex flex-col">
+                      <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                          Scan your QR Code here
+                      </h2>
+                      <span class="text-sm text-gray-600 dark:text-gray-400">
+                          
+                      </span>
+                  </div>
               </div>
 
-              <!-- QR Code Scanner -->
-              <div class="p-4 flex flex-col space-y-4">
-                <qrcode-stream @decode="onDecode" @init="onInit"></qrcode-stream>
-                <p v-if="scannedData" class="text-center font-semibold text-green-600">
-                  Scanned Data: {{ scannedData }}
-                </p>
+
+              <button type="button" @click="closeCamera"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="default-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 14 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- QR Code Scanner -->
+            <div class="p-4 flex flex-col space-y-4">
+              <!-- QR Code Scanner Stream with Animation -->
+              <div v-if="isScanning"
+                class="relative w-full h-96 bg-gray-200 mt-4 flex items-center justify-center custom-corners">
+                <!-- Scanning Line Animation (across the full camera view) -->
+                <div
+                  class="absolute top-0 z-20 left-0 w-full h-full border-t-4 border-dashed border-blue-500 animate-scan-line"
+                  v-if="isScanning"></div>
+
+                <!-- QR Code Stream -->
+                <QrcodeStream @detect="onDetect" class="border p-2 relative z-10" />
               </div>
-              <!-- <div class="mt-2">
-                  <button type="submit"
-                      class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                      {{ isEditing ? 'Update Scholarship' : 'Create Scholarship' }}</button>
-              </div> -->
+
+              <!-- Result Section (Success/Failure Message) -->
+              <div v-if="scannedResult && scholar" class="mt-4 flex justify-center items-center">
+                <div class="w-full max-w-lg text-center p-6">
+                  <div class="text-center text-green-500 font-medium">
+                    <InputError v-if="errors?.message" :message="errors.message" class="text-red-500" />
+                    
+                    <div class="flex justify-center items-center mb-6 overflow-hidden">
+                      <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="Profile Picture"
+                          class="w-40 h-40 object-cover rounded-full border-2 border-primary">
+                    </div>
+
+                    <div class="mb-4">
+                      <span class="font-italic font-sora text-2xl font-bold uppercase">{{ scholar.last_name }}, {{ scholar.first_name }}</span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                      <font-awesome-icon :icon="['fas', 'school']" class="p-2 w-5 h-5 bg-primary rounded-md text-white" />
+                      <span class="text-gray-900 text-lg font-semibold">{{ scholar.campus.name }}, Campus</span>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-2 mb-6 border-b-2 pb-4">
+                      <span class="px-2 py-1 bg-primary rounded-md text-xl text-white font-albert font-bold">@</span>
+                      <span class="pl-2 text-gray-900 text-lg font-bold">{{ scholar.email }}</span>
+                    </div>
+                  </div>
+
+                  <div v-if="errorMessage" class="text-red-500 font-medium mb-4">
+                    <!-- Display error message if exists -->
+                  </div>
+
+                  <div class="flex justify-center">
+                    <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">
+                      Scan Again
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-
       </div>
     </div>
-  
-  
-  
-      <ToastProvider>
-        <ToastRoot v-if="toastVisible"
-          class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-          <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
-          <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
-        </ToastRoot>
-  
-        <ToastViewport class="fixed bottom-4 right-4" />
-      </ToastProvider>
-    </div>
-  </template>
-  
-  <script setup>
-  import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted, computed, watch } from 'vue';
-  import { useForm, Link, usePage, router } from '@inertiajs/vue3';
-  import DataTable from 'primevue/datatable';
-  import Column from 'primevue/column';
-  import Button from 'primevue/button';
-  import FileUpload from 'primevue/fileupload';
-  import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
-  import { QrcodeStream } from "vue-qrcode-reader";
-  
-  const props = defineProps({
-    scholarship: Object,
-    schoolyear: Object,
-    selectedSem: Object,
-    batches: Object,
-    scholars: Array,
-    requirements: Array,
-  });
-  
-  const components = {
-    DataTable,
-    Column,
-    Button,
-    FileUpload,
-  };
-  
-  
-  const currentPage = ref(1);
-  const itemsPerPage = 10;
-  const searchQuery = ref('');
-  
-  // Modify the filteredScholars function to handle pagination
-  const filteredScholars = computed(() => {
-    // Use props.scholars directly instead of accessing from batches
-    const allScholars = props.scholars || [];
-  
-    // Apply search filter
-    let scholars = allScholars.filter(scholar =>
-      scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      scholar.email?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      scholar.campus?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-      scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
-    );
-  
-    // Sort so that 'Verified' scholars appear first
-    scholars.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
-  
-    return scholars;
-  });
-  
-  // Pagination computed properties
-  const paginatedScholars = computed(() => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return filteredScholars.value.slice(startIndex, endIndex);
-  });
-  
-  const totalScholars = computed(() => {
-    return filteredScholars.value.length;
-  });
-  
-  const totalPages = computed(() => {
-    return Math.ceil(totalScholars.value / itemsPerPage);
-  });
-  
-  // Display range computed properties
-  const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage + 1);
-  const endIndex = computed(() => Math.min(currentPage.value * itemsPerPage, totalScholars.value));
-  
-  // Pagination methods
-  const nextPage = () => {
-    if (currentPage.value < totalPages.value) {
-      currentPage.value++;
-    }
-  };
-  
-  const prevPage = () => {
-    if (currentPage.value > 1) {
-      currentPage.value--;
-    }
-  };
-  
-  // Reset page when search changes
-  watch(searchQuery, () => {
-    currentPage.value = 1;
-  });
-  
 
-  const OpenCamera = ref(false);
+    <ToastProvider>
+      <ToastRoot v-if="toastVisible"
+        class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+        <ToastTitle class="font-semibold dark:text-dtext">{{ toastTitle }}</ToastTitle>
+        <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+      </ToastRoot>
 
-  const toggleCamera = () => {
-    OpenCamera.value = !OpenCamera.value;
-  };
+      <ToastViewport class="fixed bottom-4 right-4" />
+    </ToastProvider>
+  </div>
+</template>
 
-  const closeCamera = () => {
-    OpenCamera.value = false;
+<script setup>
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted, computed, watch } from 'vue';
+import { useForm, Link, usePage, router } from '@inertiajs/vue3';
+import DataTable from 'primevue/datatable';
+import Column from 'primevue/column';
+import Button from 'primevue/button';
+import FileUpload from 'primevue/fileupload';
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import { QrcodeStream } from "vue-qrcode-reader";
+import InputError from '@/Components/InputError.vue';
+
+const props = defineProps({
+  scholarship: Object,
+  batch: Object,
+  disbursements: Array,
+  errors: Object,
+  flash: Object,
+  scholar: Object,
+});
+
+const components = {
+  DataTable,
+  Column,
+  Button,
+  FileUpload,
+};
+
+const searchQuery = ref('');
+const showRequirements = ref(false);
+const OpenCamera = ref(false);
+const scannedResult = ref(null);
+const scannedScholar = ref(null);
+const errorMessage = ref(null);
+const successMessage = ref(null);
+const isScanning = ref(true);
+const toastVisible = ref(false);
+const toastTitle = ref('');
+const toastMessage = ref('');
+
+// Filtered payouts based on search query
+const filteredDisbursements = computed(() => {
+  return props.disbursements.filter(disbursements =>
+    disbursements.scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.course?.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    disbursements.scholar.campus?.name?.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+// Toggle camera visibility
+const toggleCamera = () => {
+  OpenCamera.value = !OpenCamera.value;
+  if (OpenCamera.value) {
+    isScanning.value = true;
+    scannedResult.value = null;
+    errorMessage.value = null;
+    successMessage.value = null;
   }
-  
-  
-  // Add download report functionality
-  const openReport = async (batchId) => {
-    try {
-      // Open URL in new tab instead of creating blob
-      window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
-    } catch (err) {
-      console.error('Failed to open report:', err);
-    }
-  };
-  
-  const toggleBatch = (batchId) => {
-    expandedBatches.value = expandedBatches.value === batchId ? null : batchId;
-  };
-  
-  const addingPanel = ref(false)
-  const uploadingPanel = ref(false)
-  
-  const toggleAdd = () => {
-    addingPanel.value = !addingPanel.value
+};
+
+const closeCamera = () => {
+  OpenCamera.value = false;
+}
+
+// Handle QR code detection
+const onDetect = async (detectedCodes) => {
+  if (detectedCodes.length > 0) {
+    scannedResult.value = detectedCodes[0].rawValue;
+    isScanning.value = false;
+
+    // Send scanned QR code data to Laravel
+    router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
+      onSuccess: (page) => {
+        // const flashMessage = page.props.flash.message;
+        // successMessage.value = flashMessage;
+        // errorMessage.value = null;
+
+        // Show toast notification
+        // showToast('Success', flashMessage);
+
+        // If successful, refresh the payouts list
+        // if (page.props.flash.type === 'success') {
+        //   router.reload();
+        // }
+      },
+      onError: (errors) => {
+        errorMessage.value = errors.message || 'An error occurred';
+        successMessage.value = null;
+
+        // Show toast notification for error
+        showToast('Error', errors.message || 'An error occurred');
+      }
+    });
   }
-  
-  const toggleUpload = () => {
-    uploadingPanel.value = !uploadingPanel.value
+};
+
+// Restart QR scanner
+const restartScan = () => {
+  scannedResult.value = null;
+  isScanning.value = true;
+  errorMessage.value = null;
+  successMessage.value = null;
+};
+
+// Open batch report
+const openReport = () => {
+  try {
+    window.open(`/scholarships/${props.scholarship.id}/batch/${props.batch.id}/report`, '_blank');
+  } catch (err) {
+    console.error('Failed to open report:', err);
+    showToast('Error', 'Failed to open report');
   }
-  
-  const closePanel = () => {
-    previewData.value = [];
-    headers.value = [];
-    uploadingPanel.value = false;
-    addingPanel.value = false;
-    entries.value = false;
-  };
-  
-  const getYearSuffix = (year) => {
-    if (year === 1) return "st";
-    if (year === 2) return "nd";
-    if (year === 3) return "rd";
-    return "th";
-  };
-  
-  
-  
-  </script>
-  
-  
-  <style>
-  /* override the prime vue componentss */
-  
-  .p-fileupload-choose-button {
-    background-color: #003366 !important;
-    color: white !important;
-    border-radius: 4px;
+};
+
+// Show toast notification
+// const showToast = (title, message) => {
+//   toastTitle.value = title;
+//   toastMessage.value = message;
+//   toastVisible.value = true;
+
+//   // Hide toast after 3 seconds
+//   setTimeout(() => {
+//     toastVisible.value = false;
+//   }, 3000);
+// };
+
+// Helper function for year level suffix
+const getYearSuffix = (year) => {
+  if (year === 1) return "st";
+  if (year === 2) return "nd";
+  if (year === 3) return "rd";
+  return "th";
+};
+
+watchEffect(() => {
+  const flashMessage = usePage().props.flash?.success;
+
+  if (flashMessage) {
+    console.log("Showing toast with message:", flashMessage);
+    usePage().props.scholar = flashMessage;
+    toastMessage.value = flashMessage.first_name;  // This sets the toast message to "Carl Vincent"
+    toastVisible.value = true;
+    setTimeout(() => {
+      console.log("Hiding toast...");
+      toastVisible.value = false;
+    }, 3000);
   }
-  
-  .slide-enter-active,
-  .slide-leave-active {
-    transition: transform 0.3s ease;
+});
+
+</script>
+
+
+<style>
+.qr-scanner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.qr-scanner-box {
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+}
+
+.loading {
+  background: #fffbcc;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.success {
+  background: #d4edda;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.error {
+  background: #f8d7da;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* In your global styles (e.g., styles.css or a <style> block) */
+@keyframes scanLine {
+  0% {
+    transform: translateY(0);
   }
-  
-  .slide-enter-from,
-  .slide-leave-to {
-    transform: translateX(100%);
+
+  50% {
+    transform: translateY(100%);
+    /* Move the line down the whole camera view */
   }
-  
-  .slide-enter-to,
-  .slide-leave-from {
-    transform: translateX(0);
+
+  100% {
+    transform: translateY(0);
   }
-  
-  /* Fade transition for backdrop */
-  .fade-enter-active,
-  .fade-leave-active {
-    transition: opacity 0.3s ease;
-  }
-  
-  .fade-enter-from,
-  .fade-leave-to {
-    opacity: 0;
-  }
-  </style>
+}
+
+.animate-scan-line {
+  animation: scanLine 2s infinite ease-in-out;
+}
+
+/* override the prime vue componentss */
+
+.p-fileupload-choose-button {
+  background-color: #003366 !important;
+  color: white !important;
+  border-radius: 4px;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  transform: translateX(0);
+}
+
+/* Fade transition for backdrop */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

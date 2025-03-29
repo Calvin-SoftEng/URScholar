@@ -19,15 +19,23 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'picture',
         'email',
         'first_name',
         'last_name',
         'password',
+        'usertype',
+        'campus_id'
     ];
 
     public function studentrecord()
     {
         return $this->hasMany(StudentRecord::class);
+    }
+
+    public function scholar()
+    {
+        return $this->hasMany(Scholar::class);
     }
 
     public function message()
@@ -38,6 +46,24 @@ class User extends Authenticatable
     public function campus()
     {
         return $this->belongsTo(Campus::class);
+    }
+
+    public function scholarships()
+    {
+        return $this->belongsToMany(Scholarship::class, 'scholarship_groups')
+            ->withTimestamps();
+    }
+
+    public function scholarshipGroups()
+    {
+        return $this->belongsToMany(ScholarshipGroup::class);
+    }
+
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class)
+            ->withPivot('read')
+            ->withTimestamps();
     }
 
     /**

@@ -23,14 +23,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
-                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="form.grant"
+                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="manual.grant"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <Select v-model="form.batch_id">
+                            <Select v-model="manual.batch_id">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Batch" class="text-black" />
                                 </SelectTrigger>
@@ -48,16 +48,17 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Higher Education
                                 Institution</label>
-                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System" v-model="hei_name"
+                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System"
+                                v-model="manual.hei_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required value="University of Rizal System" readonly/>
+                                required value="University of Rizal System" readonly />
                         </div>
                     </div>
                     <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                            <Select v-model="form.campus">
+                            <Select v-model="manual.campus">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Campus" class="text-black" />
                                 </SelectTrigger>
@@ -72,14 +73,13 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Course and
                                 Program</label>
-                            <Select v-model="form.course">
+                            <Select v-model="manual.course">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Course" class="text-black" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectGroup>
-                                        <SelectItem v-for="course in filteredCourses" :key="course.id"
-                                            :value="course.id">
+                                        <SelectItem v-for="course in course" :key="course.id" :value="course.id">
                                             {{ course.name }}
                                         </SelectItem>
                                     </SelectGroup>
@@ -89,7 +89,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Year Level</label>
-                            <Select v-model="form.year">
+                            <Select v-model="manual.year">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Year" class="text-black" />
                                 </SelectTrigger>
@@ -121,7 +121,7 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Application
                                 No.</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.app_no" type="text" id="first_name"
                                 placeholder="00000-00000000-00000"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
@@ -129,7 +129,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Award No.</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.award_no" type="text" id="first_name"
                                 placeholder="###-00-00-00000-0000-00000"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
@@ -139,14 +139,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.first_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.last_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -155,14 +155,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.middle_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
-                            <Select v-model="form.sex">
+                            <Select v-model="manual.sex">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Sex" class="text-black" />
                                 </SelectTrigger>
@@ -182,25 +182,25 @@
                     </div>
                     <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                            <Popover>
-                                <PopoverTrigger as-child>
-                                    <Button variant="outline"
-                                        class="w-full h-[42px] justify-start text-left font-normal bg-gray-50 border border-gray-300 text-black">
-                                        <CalendarIcon class="mr-2 h-4 w-4" />
-                                        {{ formatDate(form.birthdate) }}
-                                    </Button>
-                                </PopoverTrigger>
-                                <PopoverContent class="w-auto p-0">
-                                    <Calendar v-model="form.birthdate" initial-focus />
-                                </PopoverContent>
-                            </Popover>
+                            <Label for="birthdate">Date of Birth</Label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                    </svg>
+                                </div>
+                                <input v-model="manual.birthdate" id="datepicker-autohide" datepicker
+                                    datepicker-autohide type="text"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Select Birthdate">
+                            </div>
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.province" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -209,21 +209,21 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Municipality</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.municipality" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
-                            <input v-model="formData.first_name" type="text" id="first_name"
+                            <input v-model="manual.street" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                     </div>
                 </div>
                 <div class="flex justify-end gap-2">
-                    <button type="submit"
+                    <button type="submit" @submit.prevent="submitManual"
                         class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                         Add Scholar
                     </button>
@@ -232,8 +232,30 @@
         </div>
 
         <div v-if="BulkAdding" class="mx-auto w-full justify-center items-center flex flex-col gap-4 ">
+
             <form @submit.prevent="submitForm" class="w-6/12 flex flex-col gap-4">
+                <div v-if="errors?.student" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p class="text-red-600 text-sm">{{ errors.student }}</p>
+                </div>
+                <div v-else-if="errors?.nofile" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p class="text-red-600 text-sm">{{ errors.nofile }}</p>
+                </div>
                 <div class="flex flex-col w-full gap-4 mt-5">
+
+                    <!-- <button @click="downloadFile" 
+                            class="px-4 py-2 bg-white border border-blue-700 text-primary rounded-lg hover:bg-blue-700 hover:text-white transition-all"
+                            :disabled="isLoading">
+                        <span v-if="isLoading">Downloading...</span>
+                        <span v-else>Download Scholar CSV File Template</span>
+                    </button> -->
+
+                    <a @click="downloadFile"
+                        class="px-4 py-2 bg-white border border-blue-700 text-primary rounded-lg hover:bg-blue-700 hover:text-white transition-all"
+                        :disabled="isLoading">
+                        <span v-if="isLoading">Downloading...</span>
+                        <span v-else>Download Scholar CSV File Template</span>
+                    </a>
+
                     <!-- File Drop Zone -->
                     <label for="first_name" class="block text-sm font-medium text-gray-900 dark:text-white">Import CSV
                         File of Scholars</label>
@@ -254,8 +276,12 @@
                             <p class="text-xs text-gray-500 dark:text-gray-400">Only CSV files are allowed</p>
                         </div>
                         <div v-else class="flex flex-col items-center justify-center">
-                            <img :src="form.filePreview" alt="Uploaded Preview"
-                                class="max-h-24 mb-2 rounded-lg text-gray-500" />
+                            <template v-if="form.filePreview && !form.fileName.endsWith('.csv')">
+                                <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
+                            </template>
+                            <template v-else>
+                                <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-48 mb-2" />
+                            </template>
                             <p class="text-sm text-gray-500">{{ form.fileName }}</p>
                         </div>
                         <input id="dropzone-file" type="file" class="hidden" accept=".csv"
@@ -287,7 +313,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect, computed, watch } from 'vue';
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, computed, watch, onMounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -304,6 +330,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover
 import { cn } from '@/lib/utils'
 import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
+import { initFlowbite } from 'flowbite';
 
 const df = new DateFormatter('en-US', {
     dateStyle: 'long',
@@ -313,6 +340,55 @@ const formatDate = (date) => {
     if (!date) return "Pick a date";
     return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(date));
 };
+
+//File download
+const props = defineProps({
+    scholarship: Object,
+    scholars: Array,
+    schoolyear: Object,
+    selectedSem: Object,
+    batch: Array,
+    campuses: Array,
+    course: Array,
+    errors: Object,
+    filePath: {
+        type: String,
+        required: true
+    },
+    fileName: {
+        type: String,
+        required: true
+    },
+    buttonText: {
+        type: String,
+        default: 'Download File'
+    }
+});
+
+const isLoading = ref(false);
+
+/**
+ * Downloads a file from Laravel storage via controller
+ */
+const downloadFile = async () => {
+    try {
+        isLoading.value = true;
+
+        // Option 1: Use direct download link
+        const link = document.createElement('a');
+        link.href = '/storage/system_files/URSCHOLAR-SCHOLAR_FORMAT.csv';
+        link.download = 'URSCHOLAR-SCHOLAR_FORMAT.csv';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (error) {
+        console.error('Error downloading file:', error);
+        alert('Failed to download file. Please try again.');
+    } finally {
+        isLoading.value = false;
+    }
+};
+
 
 
 
@@ -347,16 +423,69 @@ const closePanel = () => {
     entries.value = false;
 };
 
-const props = defineProps({
-    scholarship: Object,
-    scholars: Array,
-    schoolyear: Object,
-    selectedSem: Object,
-    batch: Array,
-    campuses: Array,
-    course: Array,
+
+const manual = ref({
+    grant: '',
+    batch_id: '',
+    hei_name: 'University of Rizal System',
+    campus: '',
+    course: '',
+    year: '',
+    app_no: '',
+    award_no: '',
+    first_name: '',
+    last_name: '',
+    middle_name: '',
+    sex: '',
+    birthdate: null,
+    province: '',
+    municipality: '',
+    street: '',
+    semester: props.selectedSem,         // Add this line
+    schoolyear: props.schoolyear.id      // Add this line
 });
 
+const submitManual = async () => {
+    try {
+        router.post(`/scholarships/${props.scholarship.id}/manual-upload`, manual.value, {
+            onSuccess: () => {
+                // Show success message
+                showToast("Scholar added successfully!");
+                // Reset form
+                resetManualForm();
+            },
+            onError: (errors) => {
+                // Handle validation errors
+                console.error('Validation errors:', errors);
+            }
+        });
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
+};
+
+const resetManualForm = () => {
+    manual.value = {
+        grant: '',
+        batch_id: '',
+        hei_name: 'University of Rizal System',
+        campus: '',
+        course: '',
+        year: '',
+        app_no: '',
+        award_no: '',
+        first_name: '',
+        last_name: '',
+        middle_name: '',
+        sex: '',
+        birthdate: null,
+        province: '',
+        municipality: '',
+        street: '',
+        semester: props.selectedSem,
+        schoolyear: props.schoolyear.id
+    };
+};
 
 const form = ref({
     file: null,
@@ -366,9 +495,6 @@ const form = ref({
     filePreview: null,
 
     // Other form fields...
-
-    campus: null,
-    course: null,
 });
 
 // Add new reactive refs for courses data
@@ -513,6 +639,9 @@ const removeEntry = (index) => {
     entries.value.splice(index, 1)
 }
 
+onMounted(() => {
+    initFlowbite();
+});
 </script>
 
 

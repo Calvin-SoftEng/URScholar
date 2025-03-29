@@ -3,6 +3,8 @@ import { Head, Link } from '@inertiajs/vue3';
 import FloatingNav from '@/Components/LandingPage/FloatingNav.vue';
 import Section_1 from '@/Components/LandingPage/Section_1.vue';
 import Section_2 from '@/Components/LandingPage/Section_2.vue';
+import Section_3 from '@/Components/LandingPage/Section_3.vue';
+import Section_4 from '@/Components/LandingPage/Section_4.vue';
 import SectionFooter from '@/Components/LandingPage/Footer.vue';
 
 defineProps({
@@ -17,6 +19,18 @@ defineProps({
         required: true,
     },
     phpVersion: {
+        type: String,
+        required: true,
+    },
+    scholarships: {
+        type: Array,
+        required: true,
+    },
+    sponsors: {
+        type: Array,
+        required: true,
+    },
+    schoolyears: {
         type: String,
         required: true,
     },
@@ -37,6 +51,8 @@ function handleImageError() {
         <FloatingNav/>
         <Section_1/>
         <Section_2/>
+        <Section_3/>
+        <Section_4 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears"/>
         <SectionFooter/>
     </div>
 </template>

@@ -9,6 +9,9 @@ use App\Models\User;
 use App\Models\Scholar;
 use Inertia\Inertia;
 use App\Mail\SendEmail;
+use App\Models\ActivityLog;
+use App\Models\ScholarshipGroup;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -19,57 +22,75 @@ class EmailController extends Controller
     {
         $scholars = $scholarship->scholars;
 
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+
         return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
             'scholars' => $scholars,
+            'requirements' => $requirements,
         ]);
     }
 
     public function send(Scholarship $scholarship, Request $request)
     {
-        $request->validate([
+        $messages = [
+            'required' => 'This field is required.', // Generic for all required fields
+        ];
+
+        $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:255',
             'content' => 'required|string',
             'requirements' => 'required|array',
             'application' => 'required|date',
             'deadline' => 'required|date'
-        ]);
+        ], $messages);
 
-        // dd($request->all());
         $scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
 
         // Create the requirements for the scholarship
         $req = [];
         foreach ($request['requirements'] as $requirement) {
-
             $req[] = [
                 'scholarship_id' => $scholarship->id,
                 'requirements' => $requirement,
-                'application_start' => $request['application'],
-                'deadline' => $request['deadline'],
+                'date_start' => $request['application'],
+                'date_end' => $request['deadline'],
+                'total_scholars' => $scholars->count(),
             ];
-
         }
 
         Requirements::insert($req);
 
-
         // Create the same requirement for all scholars
         foreach ($scholars as $scholar) {
-
             if ($scholar->email) {
-
-                $userExists = User::where('email', $scholar->email)->exists();
+                $userExists = User::where('email', $scholar->email)->first();
 
                 $password = Str::random(8);
 
                 if (!$userExists) {
-                    User::create([
+                    $user = User::create([
                         'name' => $scholar['first_name'] . ' ' . $scholar['last_name'],
                         'email' => $scholar['email'],
                         'first_name' => $scholar['first_name'],
                         'last_name' => $scholar['last_name'],
                         'password' => bcrypt($password),
+                    ]);
+
+                    // Update scholar's user_id
+                    $scholar->update([
+                        'user_id' => $user->id
+                    ]);
+
+                    ScholarshipGroup::create([
+                        'user_id' => $user->id,
+                        'scholarship_id' => $scholarship->id, // Assuming you have the scholarship
+                    ]);
+                } else {
+                    // If user already exists, update the scholar with existing user's ID
+                    $scholar->update([
+                        'user_id' => $userExists->id
                     ]);
                 }
 
@@ -90,13 +111,19 @@ class EmailController extends Controller
                         "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
                 ];
 
-
                 Mail::to($scholar->email)->send(new SendEmail($mailData));
-
             }
-
         }
 
-        return redirect()->route('requirements.index', $scholarship->id)->with('success', 'Messages has been sent to scholars');
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Email',
+            'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name,
+        ]);
+
+        return back()->with('flash', [
+            'type' => 'success',
+            'message' => "Successfully sent email to all scholars",
+        ]);
     }
 }

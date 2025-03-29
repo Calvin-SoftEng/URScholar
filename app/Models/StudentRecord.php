@@ -9,8 +9,9 @@ class StudentRecord extends Model
     protected $fillable = [
         'user_id',
         'first_name',
+        'middle_name',
         'last_name',
-        'bday',
+        'birthdate',
         'placebirth',
         'age',
         'gender',
@@ -32,6 +33,11 @@ class StudentRecord extends Model
 
     public function familyrecord()
     {
-        return $this->hasOne(FamilyRecord::class);
+        return $this->hasMany(FamilyRecord::class);
+    }
+
+    public function orgrecord()
+    {
+        return $this->hasMany(OrgRecord::class);
     }
 }

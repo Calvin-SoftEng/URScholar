@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('picture')->nullable();
             $table->string('email')->unique();
-            $table->enum('usertype', ['cashier', 'coordinator', 'student', 'super_admin', 'system_admin'])->default('student');
+            $table->enum('usertype', ['cashier', 'coordinator', 'student', 'super_admin', 'system_admin', 'sponsor'])->default('student');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('first_name')->nullable();
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('suffix_name')->nullable();
-            $table->string('campus')->nullable();
+            $table->foreignId('campus_id')->nullable();;
             $table->rememberToken();
             $table->timestamps();
         });

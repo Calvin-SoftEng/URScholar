@@ -9,7 +9,7 @@
                         <QuickPost />
                     </div>
                     <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
-                        <ActiveScholarship :sponsors="sponsors" :scholarships="scholarships" />
+                        <!-- <ActiveScholarship :sponsors="sponsors" :scholarships="scholarships" /> -->
                     </div>
                 </div>
                 <!-- Second Layer with Single Card -->
@@ -35,7 +35,7 @@
 import { ref } from 'vue';
 
 import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
-import QuickPost from '../../../Components/Staff/Dashboard/QuickPost.vue';
+import QuickPost from '../../../Components/Staff/Dashboard/Statistics.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
 
 const components = {

@@ -28,10 +28,13 @@
         "@fortawesome/free-regular-svg-icons": "^6.7.2",
         "@fortawesome/free-solid-svg-icons": "^6.7.2",
         "@fortawesome/vue-fontawesome": "^3.0.8",
+        "@heroicons/vue": "^2.2.0",
         "@internationalized/date": "^3.7.0",
         "@primevue/themes": "^4.2.5",
+        "@syncfusion/ej2-vue-schedule": "^28.2.11",
         "@tailwindcss/line-clamp": "^0.4.4",
         "@vueuse/core": "^12.5.0",
+        "apexcharts": "^4.5.0",
         "boxicons": "^2.1.4",
         "class-variance-authority": "^0.7.1",
         "clsx": "^2.1.1",
@@ -46,6 +49,8 @@
         "tailwind-merge": "^2.6.0",
         "tailwindcss-animate": "^1.0.7",
         "vue-qrcode-reader": "^5.7.1",
-        "vue-router": "^4.5.0"
+        "vue-router": "^4.5.0",
+        "vue3-apexcharts": "^1.8.0",
+        "vuetify": "^3.7.16"
     }
 }

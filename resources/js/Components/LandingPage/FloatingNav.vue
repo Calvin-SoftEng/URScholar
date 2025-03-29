@@ -1,9 +1,14 @@
 <template>
-    <nav class="flex items-center shadow-md bg-primary mx-[200px] sticky top-3 rounded-lg z-50 px-5">
+    <nav class="flex items-center shadow-md bg-[#003366] mx-[200px] sticky top-3 rounded-lg z-50 px-5 py-2.5">
         <!-- Logo (Left-Aligned) -->
-        <div class="flex items-center p-2">
+        <!-- <div class="flex items-center p-2">
             <img src="../../../assets/images/logo-hori-white.png" alt="Logo" class="h-12" />
-        </div>
+        </div> -->
+            <div class="flex flex-row  items-center justify-center gap-2">
+                <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+
+                <span class="font-poppins text-3xl font-bold text-white tracking-tight">URScholar</span>
+            </div>
 
         <!-- Centered Menu -->
         <div class="absolute left-1/2 -translate-x-1/2">

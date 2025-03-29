@@ -1,27 +1,12 @@
 <template>
-  <!-- Global "No Scholars" Message (if no batches exist) -->
-  <!-- <div v-if="!batches || batches.length === 0" class="text-center py-5 mt-5">
-    <p class="text-lg text-gray-700 dark:text-gray-300">No scholars added yet</p>
-  </div> -->
-
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
         <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
+          class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
+          @click="generateReport">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report
         </button>
-        <!-- <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openRequirements">
-          <font-awesome-icon :icon="['fas', 'folder-open']" class="mr-2 text-sm" />View Requirements
-        </button>
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
-        </button> -->
       </div>
       <form class="w-3/12">
         <label for="default-search"
@@ -40,22 +25,17 @@
         </div>
       </form>
     </div>
-    <!-- <div class="bg-gray-100 mx-4 rounded-lg p-1">
-      <ul class="flex space-x-5 flex-grow justify-left font-quicksand font-semibold">
-        <li v-for="batch in batches" :key="batch.id"><button @click="toggleBatch(batch.id)"
-            class="px-10 py-1 border-b-2 cursor-pointer hover:bg-gray-300 hover:text-gray-600 rounded-lg"
-            :class="expandedBatches === batch.id ? 'bg-white text-primary' : 'bg-gray-100 text-gray-400'">Batch {{ batch.batch_no
-            }}</button>
-        </li>
-      </ul>
-    </div> -->
 
     <div>
       <div>
         <div class="w-full bg-white h-full p-4">
+          <!-- Loading indicator -->
+          <div v-if="loading" class="flex justify-center items-center py-10">
+            <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
+          </div>
 
           <!-- table -->
-          <div v-show="!showRequirements" class="overflow-x-auto font-poppins border rounded-lg">
+          <div v-else class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <!-- head -->
               <thead class="justify-center items-center bg-gray-100">
@@ -70,20 +50,25 @@
                 </tr>
               </thead>
               <tbody>
-                <!-- row 1 -->
+                <!-- No results message -->
+                <tr v-if="paginatedScholars.length === 0">
+                  <td colspan="7" class="text-center py-6 text-gray-500">
+                    No scholars found matching your search criteria
+                  </td>
+                </tr>
+                <!-- Scholar rows -->
                 <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
-                  <td>{{scholar.urscholar_id}}</td>
+                  <td>{{ scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                          <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`" alt="Profile Picture">
                         </div>
                       </div>
                       <div>
                         <div class="font-normal">
                           {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
-                          <!-- Show verified icon if scholar.status is 'Verified' -->
                           <span v-if="scholar.status === 'Verified'"
                             class="material-symbols-rounded text-sm text-blue-600">verified</span>
                         </div>
@@ -112,7 +97,9 @@
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
                       'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
+                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.status === 'Submitted',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Returned'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       {{ scholar.status }}
                     </span>
@@ -129,128 +116,120 @@
                 </tr>
               </tbody>
             </table>
-            
           </div>
           <!-- Pagination controls -->
-          <div v-if="totalScholars > 10" class="mt-5 flex flex-col items-right">
-              <span class="text-sm text-gray-700 dark:text-gray-400">
-                Showing
-                <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
-                to
-                <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
-                of
-                <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span>
-                Scholars
-              </span>
-              <div class="inline-flex mt-2 xs:mt-0">
-                <button @click="prevPage" :disabled="currentPage === 1" :class="[
-                  'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                  currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
-                ]">
-                  Prev
-                </button>
-                <button @click="nextPage" :disabled="currentPage === totalPages" :class="[
-                  'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
-                  currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
-                ]">
-                  Next
-                </button>
-              </div>
+          <div v-if="totalScholars > itemsPerPage" class="mt-5 flex justify-between items-center">
+            <span class="text-sm text-gray-700 dark:text-gray-400">
+              Showing
+              <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
+              to
+              <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
+              of
+              <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span>
+              Scholars
+            </span>
+            <div class="inline-flex">
+              <button @click="prevPage" :disabled="currentPage === 1" :class="[
+                'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 rounded-s hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
+              ]">
+                Prev
+              </button>
+              <button @click="nextPage" :disabled="currentPage === totalPages" :class="[
+                'flex items-center justify-center px-4 h-10 text-base font-medium text-white bg-blue-800 border-0 border-s border-gray-700 rounded-e hover:bg-blue-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white',
+                currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
+              ]">
+                Next
+              </button>
             </div>
+          </div>
         </div>
       </div>
     </div>
 
-    <div>
-
-    </div>
-
-
-
+    <!-- Toast notifications -->
     <ToastProvider>
-      <ToastRoot v-if="toastVisible"
+      <ToastRoot v-if="toast.visible"
         class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-        <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
-        <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+        <ToastTitle class="font-semibold dark:text-dtext">{{ toast.title }}</ToastTitle>
+        <ToastDescription class="text-gray-100 dark:text-dtext">{{ toast.message }}</ToastDescription>
       </ToastRoot>
-
       <ToastViewport class="fixed bottom-4 right-4" />
     </ToastProvider>
   </div>
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted, computed, watch } from 'vue';
-import { useForm, Link, usePage, router } from '@inertiajs/vue3';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Button from 'primevue/button';
-import FileUpload from 'primevue/fileupload';
-import Papa from 'papaparse';
-import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import { ref, computed, watch, onMounted } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
   scholarship: Object,
   schoolyear: Object,
   selectedSem: Object,
-  batches: Object,
+  batches: Array,
   scholars: Array,
   requirements: Array,
 });
 
-const components = {
-  DataTable,
-  Column,
-  Button,
-  FileUpload,
-  Papa,
-};
+// Data loading state
+const loading = ref(false);
 
-
+// Pagination state
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const searchQuery = ref('');
 
-// Modify the filteredScholars function to handle pagination
+// Toast notification state
+const toast = ref({
+  visible: false,
+  title: '',
+  message: '',
+  type: 'success'
+});
+
+// Computed properties for scholars filtering and pagination
 const filteredScholars = computed(() => {
-  // Use props.scholars directly instead of accessing from batches
   const allScholars = props.scholars || [];
 
-  // Apply search filter
-  let scholars = allScholars.filter(scholar =>
-    scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.email?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.campus?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
+  if (!searchQuery.value) {
+    return [...allScholars].sort((a, b) =>
+      a.status === 'Verified' ? -1 : b.status === 'Verified' ? 1 : 0
+    );
+  }
+
+  const query = searchQuery.value.toLowerCase();
+  return allScholars.filter(scholar =>
+    scholar.first_name?.toLowerCase().includes(query) ||
+    scholar.last_name?.toLowerCase().includes(query) ||
+    scholar.middle_name?.toLowerCase().includes(query) ||
+    scholar.email?.toLowerCase().includes(query) ||
+    scholar.course?.toLowerCase().includes(query) ||
+    scholar.campus?.toLowerCase().includes(query) ||
+    scholar.grant?.toLowerCase().includes(query) ||
+    scholar.urscholar_id?.toLowerCase().includes(query)
+  ).sort((a, b) =>
+    a.status === 'Verified' ? -1 : b.status === 'Verified' ? 1 : 0
   );
-
-  // Sort so that 'Verified' scholars appear first
-  scholars.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
-
-  return scholars;
 });
 
-// Pagination computed properties
+const totalScholars = computed(() => filteredScholars.value.length);
+const totalPages = computed(() => Math.ceil(totalScholars.value / itemsPerPage));
+
 const paginatedScholars = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  return filteredScholars.value.slice(startIndex, endIndex);
+  const startIdx = (currentPage.value - 1) * itemsPerPage;
+  const endIdx = startIdx + itemsPerPage;
+  return filteredScholars.value.slice(startIdx, endIdx);
 });
 
-const totalScholars = computed(() => {
-  return filteredScholars.value.length;
-});
+const startIndex = computed(() =>
+  totalScholars.value === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1
+);
 
-const totalPages = computed(() => {
-  return Math.ceil(totalScholars.value / itemsPerPage);
-});
-
-// Display range computed properties
-const startIndex = computed(() => (currentPage.value - 1) * itemsPerPage + 1);
-const endIndex = computed(() => Math.min(currentPage.value * itemsPerPage, totalScholars.value));
+const endIndex = computed(() =>
+  Math.min(currentPage.value * itemsPerPage, totalScholars.value)
+);
 
 // Pagination methods
 const nextPage = () => {
@@ -265,88 +244,115 @@ const prevPage = () => {
   }
 };
 
-// Reset page when search changes
+// Reset pagination when search changes
 watch(searchQuery, () => {
   currentPage.value = 1;
 });
 
-
-const showRequirements = ref(false);
-
-// Function to toggle the visibility of the table and second div
-const openRequirements = () => {
-  showRequirements.value = !showRequirements.value;
-};
-
-const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
-
-onMounted(() => {
-  if (props.batches && props.batches.length > 0) {
-    expandedBatches.value = props.batches[0].id;
-  }
-});
-
-// Add download report functionality
-const openReport = async (batchId) => {
+// Fetch fresh data from the server
+const fetchScholars = async () => {
+  loading.value = true;
   try {
-    // Open URL in new tab instead of creating blob
-    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
-  } catch (err) {
-    console.error('Failed to open report:', err);
+    // Using Inertia's router.reload() to refresh the current page data
+    // This will maintain the current URL and just refresh the data
+    await router.reload({
+      only: ['scholars', 'requirements'],
+      onSuccess: () => {
+        showToast('Data Updated', 'Scholar data has been refreshed');
+      },
+      onError: () => {
+        showToast('Error', 'Failed to refresh scholar data', 'error');
+      }
+    });
+  } catch (error) {
+    console.error('Error fetching scholars:', error);
+    showToast('Error', 'Failed to refresh scholar data', 'error');
+  } finally {
+    loading.value = false;
   }
 };
 
-// const toggleBatch = (batchId) => {
-//   if (expandedBatches.value.has(batchId)) {
-//     expandedBatches.value.delete(batchId)
-//   } else {
-//     expandedBatches.value.add(batchId)
-//   }
-// }
-// const expandedBatches = ref(null); // Track the currently open batch
+// Generate report function
+const generateReport = async () => {
+  loading.value = true;
+  try {
+    const batchId = props.batches?.[0]?.id;
+    if (!batchId) {
+      showToast('Error', 'No batch selected', 'error');
+      return;
+    }
 
-const toggleBatch = (batchId) => {
-  expandedBatches.value = expandedBatches.value === batchId ? null : batchId;
+    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  } finally {
+    loading.value = false;
+  }
 };
 
-const addingPanel = ref(false)
-const uploadingPanel = ref(false)
+// Toast helper function
+const showToast = (title, message, type = 'success') => {
+  toast.value = {
+    visible: true,
+    title,
+    message,
+    type
+  };
 
-const toggleAdd = () => {
-  addingPanel.value = !addingPanel.value
-}
-
-const toggleUpload = () => {
-  uploadingPanel.value = !uploadingPanel.value
-}
-
-const closePanel = () => {
-  previewData.value = [];
-  headers.value = [];
-  uploadingPanel.value = false;
-  addingPanel.value = false;
-  entries.value = false;
+  // Hide toast after 3 seconds
+  setTimeout(() => {
+    toast.value.visible = false;
+  }, 3000);
 };
 
+// Helper function for year suffix
 const getYearSuffix = (year) => {
-  if (year === 1) return "st";
-  if (year === 2) return "nd";
-  if (year === 3) return "rd";
+  if (!year) return '';
+  const yearNum = Number(year);
+  if (yearNum === 1) return "st";
+  if (yearNum === 2) return "nd";
+  if (yearNum === 3) return "rd";
   return "th";
 };
 
+// Lifecycle hooks
+onMounted(() => {
+  // Initial data load
+  if (!props.scholars || props.scholars.length === 0) {
+    fetchScholars();
+  }
 
+  // Set up polling to refresh data every 5 minutes (adjust as needed)
+  const dataRefreshInterval = setInterval(() => {
+    fetchScholars();
+  }, 300000); // 5 minutes
 
+  // Clean up interval on component unmount
+  return () => {
+    clearInterval(dataRefreshInterval);
+  };
+});
 </script>
 
-
 <style>
-/* override the prime vue componentss */
-
+/* override the prime vue components */
 .p-fileupload-choose-button {
   background-color: #003366 !important;
   color: white !important;
   border-radius: 4px;
+}
+
+/* Animation classes */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 
 .slide-enter-active,
@@ -362,16 +368,5 @@ const getYearSuffix = (year) => {
 .slide-enter-to,
 .slide-leave-from {
   transform: translateX(0);
-}
-
-/* Fade transition for backdrop */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
 }
 </style>
