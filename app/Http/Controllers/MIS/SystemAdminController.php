@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Mail\SendEmail;
 use App\Mail\SendUser;
+use App\Models\SchoolYear;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -152,7 +153,11 @@ class SystemAdminController extends Controller
 
     public function sy_and_term()
     {
-        return Inertia::render('MIS/Univ_Settings/SY_Term');
+        $scholar_year = SchoolYear::with('academic_year')->get();
+
+        return Inertia::render('MIS/Univ_Settings/SY_Term', [
+            'scholar_year' => $scholar_year,
+        ]);
     }
 
     // users ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
