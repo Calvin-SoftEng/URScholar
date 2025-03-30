@@ -75,7 +75,7 @@
                     <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/cashier/group-page') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/cashier/group-page') }]">
                     forum
                     </span>
-                  <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/cashier/group-page') }]">Groups</span>
+                  <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/cashier/group-page') }]">Communication</span>
                   </div>
               </div>
             </Link>

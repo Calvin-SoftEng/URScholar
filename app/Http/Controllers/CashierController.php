@@ -202,7 +202,7 @@ class CashierController extends Controller
             ->get();
 
         // Return the chat page using Inertia
-        return Inertia::render('Cashier/Messaging/Messaging', [
+        return Inertia::render('Cashier/Communication/Communication', [
             'messages' => [],
             'currentUser' => $currentUser,
             'scholarships' => $scholarships,
