@@ -135,7 +135,7 @@
                                             grade.grade : 'N/A'
                                             }}</span>
                                         <button class="text-sm" @click="toggleCheck">
-                                            View Certificate of Grade
+                                            View Certificate of Grades
                                         </button>
                                     </div>
                                 </div>
@@ -880,10 +880,10 @@
         <div v-if="View_Grades"
             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 dark:bg-primary dark:bg-opacity-50 z-50">
             <!-- Modal Container -->
-            <div class="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-xl p-6 overflow-hidden">
+            <div class="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden">
                 <!-- Close Button (Positioned at Top Right) -->
                 <button @click="closeModal"
-                    class="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-full p-2 transition-all">
+                        class="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-full p-2 transition-all">
                     <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                         viewBox="0 0 14 14">
                         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -892,14 +892,70 @@
                 </button>
 
                 <!-- Modal Header -->
-                <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-4">Viewing Document</h2>
+                <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-4 p-4">List of Grades</h2>
 
                 <!-- Document Viewer -->
-                <div class="w-full h-[80vh]">
-                    <iframe :src="documentUrl" class="w-full h-full border-0"></iframe>
+                <div class="mb-4 overflow-y-auto max-h-[70vh] p-6 space-y-10"> <!-- Added scrollable body with max height -->
+                    
+                    <div>
+                        <!-- Year and Semester -->
+                        <div class="flex items-center justify-between mb-2 font-poppins">
+                            <div class="text-lg font-normal text-gray-900 dark:text-white">Year: 2025-2028</div>
+                            <div class="text-lg font-normal text-gray-900 dark:text-white">Semester: 2nd</div>
+                        </div>
+
+
+                        <!-- Accordion for GWA and File -->
+                        <details class="mb-4">
+                            <summary class="text-lg font-normal text-gray-900 dark:text-white cursor-pointer flex flex-row justify-between font-poppins">
+                                <div class="text-gray-900 dark:text-white">GWA: <span class="font-semibold">3.5</span></div>
+                                <div class="text-gray-900 dark:text-white flex items-center">
+                                    <div class="mr-2"><font-awesome-icon :icon="['fas', 'file']" class="text-primary mr-1" /> Sample_Grade.pdf</div>
+                                </div>
+                            </summary>
+
+                        </details>
+
+                        <!-- Divider -->
+                        <div class="border-t border-gray-300 dark:border-gray-600 my-2"></div>
+                    </div>
+
+                    <div>
+                        <!-- Year and Semester -->
+                        <div class="flex items-center justify-between mb-2 font-poppins">
+                            <div class="text-lg font-normal text-gray-900 dark:text-white">Year: 2025-2028</div>
+                            <div class="text-lg font-normal text-gray-900 dark:text-white">Semester: 1st</div>
+                        </div>
+                        <!-- Divider -->
+                        <div class="border-t border-gray-300 dark:border-gray-600 my-2"></div>
+
+                        <!-- Accordion for GWA and File -->
+                        <details class="mb-4">
+                            <summary class="text-lg font-normal text-gray-900 dark:text-white cursor-pointer flex flex-row justify-between font-poppins">
+                                <div class="text-gray-900 dark:text-white">GWA: <span class="font-semibold">3.5</span></div>
+                                <div class="text-gray-900 dark:text-white flex items-center">
+                                    <div class="mr-2"><font-awesome-icon :icon="['fas', 'file']" class="text-primary mr-1" /> Sample_Grade.pdf</div>
+                                </div>
+                            </summary>
+
+                            <!-- GWA Section -->
+                            <!-- <div class="flex justify-between mb-2">
+                                <div class="text-gray-900 dark:text-white">GWA: 3.5</div>
+                                <div class="text-gray-900 dark:text-white">File: Sample Grade</div>
+                            </div> -->
+                            
+                            <!-- Divider -->
+                            <div class="border-t border-gray-300 dark:border-gray-600 my-2"></div>
+                        </details>
+                    </div>
+
                 </div>
             </div>
         </div>
+                        <!-- Document Viewer (iframe) -->
+                        <!-- <div class="w-full h-[60vh]">
+                            <iframe :src="documentUrl" class="w-full h-full border-0"></iframe>
+                        </div> -->
 
     </AuthenticatedLayout>
 </template>
@@ -933,6 +989,7 @@ watch(() => props.flash?.qrCodeUrl, (newUrl) => {
         qrCodeUrl.value = newUrl;
     }
 });
+
 
 const openQRModal = () => {
     isQRModalOpen.value = true;

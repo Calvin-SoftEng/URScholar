@@ -45,7 +45,7 @@
                             </button>
                         </div>
 
-                        <div class="w-full h-full space-y-5 mb-3">
+                        <div class="w-6/12 mx-auto h-full space-y-5 mb-3">
                             <!-- partnership content -->
                             <div
                                 class="w-full h-[30%] px-5 py-5 bg-[white] rounded-lg shadow-md space-y-5 dark:bg-dsecondary dark:border dark:border-gray-600">
@@ -60,19 +60,20 @@
                                 </div>
 
                                 
-
                                 <div class="flex flex-col gap-2">
-                                    <div class="h-full w-full grid grid-cols-2 gap-3">
-                                        <div class="flex flex-col space-y-2">
+                                    <div class="h-full w-full grid grid-cols-1 gap-5">
+                                        <!-- <div class="flex flex-col space-y-2"> -->
                                             <div class="relative">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">
-                                                    Subject</h3>
-                                                <textarea v-model="form.subject" id="subject" rows="2"
-                                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Write Title to the message"></textarea>
-                                                <InputError v-if="errors.subject" :message="errors.subject" class="mt-1" />
+                                                    Message
+                                                </h3>
+                                                <div class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                    <p>
+                                                        This email message is for the distribution of accounts for students, reminding them of their scholarship opportunities. We encourage all students to check their accounts for updates, and we are happy to provide further assistance with the application process if needed.
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div class="w-full">
+                                            <!-- <div class="w-full">
                                                 <div class="mb-3">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Add Messages
                                                     </h3>
@@ -83,7 +84,7 @@
                                                         class="mt-1" />
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="w-full flex flex-col space-y-7">
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Set Submission
@@ -131,7 +132,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="w-full">
+                                            <div class="w-full mb-5">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Requirements
                                                 </h3>
                                                 <InputError v-if="errors.requirements" :message="errors.requirements"
@@ -280,8 +281,8 @@ const formattedEnd = ref('');
 const errors = ref({});
 
 const form = ref({
-    subject: '',
-    content: '',
+    subject: "ninin",
+    content: "ninnin",
     requirements: [],
     application: '',
     deadline: '',

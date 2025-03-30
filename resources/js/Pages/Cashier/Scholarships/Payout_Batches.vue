@@ -236,6 +236,34 @@
 
                     </div>
 
+                    <!-- <div class="py-4 px-8 flex flex-col gap-3">
+                        <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                            Select a Batch to Forward:
+                        </label>
+
+
+                        <div v-if="isLoading" class="flex justify-center items-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                        </div>
+
+
+                        <div v-if="!isLoading" class="flex flex-col gap-2">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-gray-900 dark:text-white">Send All Batch List</span>
+                            </label>
+
+                            <label v-for="batch in batchesWithScholars" :key="batch.id" class="flex items-center space-x-2">
+                                <input type="checkbox" :value="batch.id" v-model="selectedBatches"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
+                                <span class="text-sm text-gray-500">({{ batch.scholar_count }} scholars)</span>
+                            </label>
+                        </div>
+                    </div> -->
+
                     <!-- Forward Button -->
                     <div class="mt-4">
                         <button type="submit"
