@@ -448,7 +448,7 @@
                                     <div class="flex flex-col space-y-2">
                                         <!-- gwa input -->
                                         <div class="relative pl-1">
-                                            <input v-model="grade.grade" type="text" placeholder="Enter User ID"
+                                            <input  type="text" placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -973,6 +973,46 @@ const props = defineProps({
     latestgrade: Object,
 });
 
+const form = ref({
+    password: '',
+    confirm_password: '',
+    birthdate: '',
+    birthplace: '',
+    age: '',
+    gender: '',
+    civil_status: '',
+    street: '',
+    municipality: '',
+    province: '',
+    religion: '',
+    guardian_name: '',
+    relationship: '',
+    grade: '',
+    cog: '',
+    semester: '',
+    school_year: '',
+    education: {
+        elementary: { name: '', years: '', honors: 'N/A' },
+        junior: { name: '', years: '', honors: 'N/A' },
+        senior: { name: '', years: '', honors: 'N/A' },
+        college: { name: '', years: '', honors: 'N/A' },
+        vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
+        postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
+    },
+    mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
+    father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
+    marital_status: '',
+    monthly_income: '',
+    other_income: 'N/A',
+    family_housing: '',
+    otherText: '',
+    siblings: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
+    organizations: [{ name: '', membership_dates: '', position: '' }],
+    img: null,
+    imgName: null,
+    imgPreview: null,
+});
+
 const EditProfile = ref(false);  // Toggle state
 
 // QR Code state management
@@ -1055,13 +1095,6 @@ const downloadQRCode = async () => {
         loading.value = false;
     }
 };
-
-
-
-const form = ref({
-    img: null,
-    imgPreview: null
-});
 
 const View_Grades = ref(false);
 
