@@ -14,4 +14,9 @@ class SchoolYear extends Model
     {
         return $this->hasMany(Batch::class);
     }
+
+    public function academic_year()
+    {
+        return $this->hasMany(AcademicYear::class);
+    }
 }

@@ -52,7 +52,7 @@ class StudentController extends Controller
 
             $requirementIds = $requirements->pluck('id')->toArray();
 
-            
+
 
             // Fetch only returned submitted requirements related to the scholarship
             $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
@@ -60,7 +60,7 @@ class StudentController extends Controller
                 ->whereIn('requirement_id', $requirementIds)
                 ->get();
 
-                // dd($requirementIds);
+            // dd($requirementIds);
 
             // Map submitted requirements with their corresponding requirement details
             $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
@@ -74,14 +74,14 @@ class StudentController extends Controller
             });
 
             $submitPending = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->where('status', 'Pending')
-            ->whereIn('requirement_id', $requirementIds)
-            ->get();
+                ->where('status', 'Pending')
+                ->whereIn('requirement_id', $requirementIds)
+                ->get();
 
             $submitApproved = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->where('status', 'Approved')
-            ->whereIn('requirement_id', $requirementIds)
-            ->get();
+                ->where('status', 'Approved')
+                ->whereIn('requirement_id', $requirementIds)
+                ->get();
 
             return Inertia::render('Student/Dashboard/Dashboard', [
                 'scholarship' => $scholarship,
@@ -370,12 +370,51 @@ class StudentController extends Controller
         // dd($file);
         // dd($request['grade']);
 
+        // $request->validate([
+        //     'files.*' => 'required|file|',
+        //     'req' => 'array'
+        // ]);
+
+
+        // $scholar = Scholar::where('email', Auth::user()->email)->first();
+
+        // $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+
+        // $requirements = Requirements::where('id', $scholarship->id)->get();
+
+        // $reqID = $requirements->pluck('id')->first();
+
+
+
+        // $uploadedFiles = [];
+
+
+        // foreach ($request->file('files') as $index => $file) {
+
+        //     $path = $file->store('requirements/' . $scholar->id, 'public');
+
+        //     $uploadedFile = SubmittedRequirements::create([
+        //         'scholar_id' => $scholar->id,
+        //         'requirement_id' => $reqID,
+        //         'submitted_requirements' => $file->getClientOriginalName(),
+        //         'path' => $path
+        //     ]);
+
+        //     $uploadedFiles[] = $uploadedFile;
+        // }
+
         if ($file) {
             $originalFileName = $request->file('cog')->getClientOriginalName();
             $extension = $request->file('cog')->getClientOriginalExtension();
-            $newFileName = $scholar->urscholar_id . $extension;
+            // Format: URS-0001[1st(2024-2025)]
+            $newFileName = $scholar->urscholar_id . '[' . $request->semester . '(' . $request->school_year . ')].' . $extension;
 
-            $filePath = $request->file('cog')->storeAs('scholar/grade', $newFileName, 'public');
+
+            $filePath = Storage::disk('public')->putFileAs(
+                'scholar/grade',
+                $request->file('cog'),
+                $newFileName
+            );
 
             $testing = Grade::create([
                 'scholar_id' => $scholar->id,
@@ -385,8 +424,6 @@ class StudentController extends Controller
                 'school_year' => $request->school_year,
                 'semester' => $request->semester,
             ]);
-        } else {
-
         }
 
         // Store the logo file in the local directory with a known path
@@ -679,7 +716,10 @@ class StudentController extends Controller
         $scholar = Scholar::where('email', Auth::user()->email)->with('course', 'campus')->first();
 
         if ($scholar) {
-            $grade = Grade::where('scholar_id', $scholar->id)->first();
+            $grades = Grade::where('scholar_id', $scholar->id)->get();
+            $latestgrade = Grade::where('scholar_id', $scholar->id)
+                ->latest()  // This will order by created_at DESC
+                ->first();  // Get only the first (latest) record
         } else {
             $grade = null;
             $scholar = null;
@@ -692,7 +732,8 @@ class StudentController extends Controller
             'education' => $education,
             'family' => $family,
             'scholar' => $scholar,
-            'grade' => $grade
+            'grades' => $grades,
+            'latestgrade' => $latestgrade,
         ]);
     }
 
