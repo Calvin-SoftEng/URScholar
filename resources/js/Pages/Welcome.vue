@@ -47,12 +47,17 @@ function handleImageError() {
 <template>
     <!-- <Head title="Welcome" /> -->
 
-    <div class="bg-[#E9F4FF]">
-        <FloatingNav/>
-        <Section_1/>
-        <Section_2/>
-        <Section_3/>
-        <Section_4 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears"/>
-        <SectionFooter/>
+    <div class="bg-[#E9F4FF] w-full">
+        <!-- Sticky Navbar for Desktop and Mobile -->
+        <div class="sticky xl:top-3 z-50">
+            <FloatingNav />
+        </div>
+
+        <!-- Page Sections -->
+        <Section_1 />
+        <Section_2 />
+        <Section_3 />
+        <Section_4 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears" />
+        <SectionFooter />
     </div>
 </template>
