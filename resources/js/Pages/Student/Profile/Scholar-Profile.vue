@@ -29,7 +29,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Age</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Date of Birth</span>
@@ -41,7 +41,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Civil Status</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -55,7 +55,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Gender</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                        }}</span>
+                                    }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Religion</span>
@@ -68,7 +68,7 @@
                         <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                             <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
                             <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
-                            }}</span>
+                                }}</span>
                         </div>
                         <!-- qr -->
                         <div v-if="!EditProfile"
@@ -92,7 +92,7 @@
                     <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                         <div class="w-full h-1/12">
                             <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                            }},
+                                }},
                                 {{ student.first_name }}</span>
                         </div>
 
@@ -102,7 +102,7 @@
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
-                                    }}</span>
+                                }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -114,7 +114,7 @@
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
-                                    }}, Campus</span>
+                                }}, Campus</span>
                             </div>
                         </div>
 
@@ -133,7 +133,7 @@
                                     <div class="flex flex-col items-end">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ latestgrade ?
                                             latestgrade.grade : 'N/A'
-                                        }}</span>
+                                            }}</span>
                                         <button class="text-sm" @click="toggleCheck">
                                             View Certificate of Grades
                                         </button>
@@ -149,9 +149,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
-                                    }}</span>
-                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span>
+                                    <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -160,9 +160,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -171,9 +171,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <div>
@@ -182,9 +182,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
-                                        }}</span>
+                                    }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
-                                        }}</span>
+                                    }}</span>
                                 </div>
                             </div>
                             <!-- Vocational Section -->
@@ -194,9 +194,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
 
@@ -207,9 +207,9 @@
                                 </h3>
                                 <div class="w-full flex flex-row justify-between items-center space-y-3">
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
-                                    }}</span>
+                                        }}</span>
                                     <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years
-                                    }}</span>
+                                        }}</span>
                                 </div>
                             </div>
 
@@ -350,7 +350,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Civil Status</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -364,7 +364,7 @@
                                 <div class="w-[40%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Gender</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-[60%] flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Religion</span>
@@ -404,7 +404,7 @@
                     <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                         <div class="w-full h-1/12">
                             <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                                }},
+                            }},
                                 {{ student.first_name }}</span>
                         </div>
 
@@ -414,7 +414,7 @@
                                 <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
-                                }}</span>
+                                    }}</span>
                             </div>
                             <div class="w-full flex flex-row items-center gap-2">
                                 <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -426,7 +426,7 @@
                                 <font-awesome-icon :icon="['fas', 'school']"
                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
-                                }}, Campus</span>
+                                    }}, Campus</span>
                             </div>
                         </div>
 
@@ -894,42 +894,51 @@
                 <!-- Modal Header -->
                 <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-4 p-4">List of Grades</h2>
 
-                <!-- Document Viewer -->
-                <div v-for="grade in grades" :key="grade.id" class="mb-4 overflow-y-auto max-h-[70vh] p-6 space-y-10">
-                    <!-- Added scrollable body with max height -->
+                <div v-if="grades.length > 0">
+                    <!-- Document Viewer -->
+                    <div v-for="grade in grades" :key="grade.id"
+                        class="mb-4 overflow-y-auto max-h-[70vh] p-6 space-y-10">
+                        <!-- Added scrollable body with max height -->
 
-                    <div>
-                        <!-- Year and Semester -->
-                        <div class="flex items-center justify-between mb-2 font-poppins">
-                            <div class="text-lg font-normal text-gray-900 dark:text-white">Year: {{ grade.school_year }}
-                            </div>
-                            <div class="text-lg font-normal text-gray-900 dark:text-white">Semester: {{ grade.semester }}
-                            </div>
-                        </div>
-
-
-                        <!-- Accordion for GWA and File -->
-                        <details class="mb-4">
-                            <summary
-                                class="text-lg font-normal text-gray-900 dark:text-white cursor-pointer flex flex-row justify-between font-poppins">
-                                <div class="text-gray-900 dark:text-white">GWA: <span
-                                        class="font-semibold">{{ grade.grade }}</span></div>
-                                <div class="text-gray-900 dark:text-white flex items-center">
-                                    <a v-tooltip.left="'Click to download'" :href="'/storage/' + grade.path" download
-                                        class="hover:text-primary transition-colors">
-                                        <font-awesome-icon :icon="['fas', 'file']" class="text-primary mr-1" />{{
-                                        grade.cog }}
-                                    </a>
+                        <div>
+                            <!-- Year and Semester -->
+                            <div class="flex items-center justify-between mb-2 font-poppins">
+                                <div class="text-lg font-normal text-gray-900 dark:text-white">Year: {{
+                                    grade.school_year }}
                                 </div>
-                            </summary>
+                                <div class="text-lg font-normal text-gray-900 dark:text-white">Semester: {{
+                                    grade.semester }}
+                                </div>
+                            </div>
 
-                        </details>
 
-                        <!-- Divider -->
-                        <div class="border-t border-gray-300 dark:border-gray-600 my-2"></div>
+                            <!-- Accordion for GWA and File -->
+                            <details class="mb-4">
+                                <summary
+                                    class="text-lg font-normal text-gray-900 dark:text-white cursor-pointer flex flex-row justify-between font-poppins">
+                                    <div class="text-gray-900 dark:text-white">GWA: <span class="font-semibold">{{
+                                            grade.grade }}</span></div>
+                                    <div class="text-gray-900 dark:text-white flex items-center">
+                                        <a v-tooltip.left="'Click to download'" :href="'/storage/' + grade.path"
+                                            download class="hover:text-primary transition-colors">
+                                            <font-awesome-icon :icon="['fas', 'file']" class="text-primary mr-1" />{{
+                                                grade.cog }}
+                                        </a>
+                                    </div>
+                                </summary>
+
+                            </details>
+
+                            <!-- Divider -->
+                            <div class="border-t border-gray-300 dark:border-gray-600 my-2"></div>
+                        </div>
                     </div>
-
                 </div>
+                <div v-else>
+                    <div>ahh walang grade</div>
+                </div>
+
+
             </div>
         </div>
         <!-- Document Viewer (iframe) -->
