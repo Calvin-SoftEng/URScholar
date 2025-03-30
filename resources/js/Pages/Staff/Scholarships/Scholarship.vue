@@ -23,7 +23,9 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <Link>
-                                <button class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">< </button>
+                                <span class="material-symbols-rounded mr-2 text-blue-400 tracking-[-.1rem]">
+                                arrow_back_ios_new
+                                </span> 
                             </Link>
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
