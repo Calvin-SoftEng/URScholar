@@ -1095,7 +1095,7 @@ class StudentController extends Controller
 
 
         // Return the chat page using Inertia, passing the messages and user data
-        return Inertia::render('Student/Messaging/Messaging', [
+        return Inertia::render('Student/Communication/Communication', [
             'messages' => $messages,
             'currentUser' => Auth::user(),
             'scholarships' => $scholarships,

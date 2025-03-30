@@ -36,23 +36,23 @@ const sendMessage = () => {
 
 
 // Set up real-time messaging using Laravel Echo
-onMounted(() => {
+// onMounted(() => {
 
-    const echo = new Echo({
-        broadcaster: 'pusher',
-        key: import.meta.env.VITE_PUSHER_APP_KEY,
-        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-        forceTLS: true,
-        authEndpoint: "/broadcasting/auth", // Required for private channels
-    });
+//     const echo = new Echo({
+//         broadcaster: 'pusher',
+//         key: import.meta.env.VITE_PUSHER_APP_KEY,
+//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//         forceTLS: true,
+//         authEndpoint: "/broadcasting/auth", // Required for private channels
+//     });
 
-    echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
-        .listen('.message.sent', (e) => {
-            fetchMessages(); // Fetch messages after receiving
-            scrollToBottom();
-            messages.value.push(e.message); // Append new message
-        });
-});
+//     echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
+//         .listen('.message.sent', (e) => {
+//             fetchMessages(); // Fetch messages after receiving
+//             scrollToBottom();
+//             messages.value.push(e.message); // Append new message
+//         });
+// });
 
 const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
 

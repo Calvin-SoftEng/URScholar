@@ -119,7 +119,6 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import ScholarGrant from './Scholar/ScholarGrant.vue';
 import Scholarships from './Non_Scholar/Scholarships.vue';
-import Feed from './Scholar/Feed.vue';
 
 const props = defineProps({
     //For scholars only

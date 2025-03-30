@@ -28,7 +28,7 @@
                     </div>
 
                     <div v-if="isPMActive" class="w-[95%]">
-                        <Messaging :messages="messageData" :currentUser="currentUser" :scholarship="selectedData" :form="form" @sendMessage="sendMessage"/>
+                        <Messaging :messages="messages" :currentUser="currentUser" :scholarships="scholarships" :selectedScholarship="selectedScholarship"/>
                     </div>
 
                 </div>
@@ -53,11 +53,11 @@ const props = defineProps({
     selectedScholarship: Object,
 });
 
-const messageData = ref(props.messages);
+// const messageData = ref(props.messages);
 
 
-const isFeedActive = ref(true);
-const isPMActive = ref(false);
+const isFeedActive = ref(false);
+const isPMActive = ref(true);
 
 const showFeedContent = () => {
   isFeedActive.value = true;
@@ -70,63 +70,59 @@ const showPMContent = () => {
 };
 
 
+// const selectedData = ref(props.selectedScholarship);
+// const form = ref({
+//     content: '',
+//     scholarship_id: ''
+// });
+
+// const sendMessage = () => {
+//     // Get scholarship_id from selected scholarship
+//     form.value.scholarship_id = selectedData.value?.id || '';
+
+//     router.post('/group-chat/message', form.value, {
+//         preserveScroll: true,
+//         onSuccess: () => {
+//             fetchMessages(); // Fetch messages after sending
+//             form.value.content = ''; // Clear input after sending
+//         },
+//     });
+// };
 
 
+// // Set up real-time messaging using Laravel Echo
+// onMounted(() => {
 
+//     const echo = new Echo({
+//         broadcaster: 'pusher',
+//         key: import.meta.env.VITE_PUSHER_APP_KEY,
+//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//         forceTLS: true,
+//         authEndpoint: "/broadcasting/auth", // Required for private channels
+//     });
 
-const selectedData = ref(props.selectedScholarship);
-const form = ref({
-    content: '',
-    scholarship_id: ''
-});
+//     echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
+//         .listen('.message.sent', (e) => {
+//             fetchMessages(); // Fetch messages after receiving
+//             scrollToBottom();
+//             messages.value.push(e.message); // Append new message
+//         });
+// });
 
-const sendMessage = () => {
-    // Get scholarship_id from selected scholarship
-    form.value.scholarship_id = selectedData.value?.id || '';
+// const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
 
-    router.post('/group-chat/message', form.value, {
-        preserveScroll: true,
-        onSuccess: () => {
-            fetchMessages(); // Fetch messages after sending
-            form.value.content = ''; // Clear input after sending
-        },
-    });
-};
+// const fetchMessages = async () => {
+//     const { data } = await router.get(route("student.messaging.show", { scholarship: props.selectedScholarship.id }));
 
+//     messageData.value = data;
+// };
 
-// Set up real-time messaging using Laravel Echo
-onMounted(() => {
-
-    const echo = new Echo({
-        broadcaster: 'pusher',
-        key: import.meta.env.VITE_PUSHER_APP_KEY,
-        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-        forceTLS: true,
-        authEndpoint: "/broadcasting/auth", // Required for private channels
-    });
-
-    echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
-        .listen('.message.sent', (e) => {
-            fetchMessages(); // Fetch messages after receiving
-            scrollToBottom();
-            messages.value.push(e.message); // Append new message
-        });
-});
-
-const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
-
-const fetchMessages = async () => {
-    const { data } = await router.get(route("student.messaging.show", { scholarship: props.selectedScholarship.id }));
-
-    messageData.value = data;
-};
-
-const scrollToBottom = () => {
-    const chatContainer = document.querySelector('.overflow-y-auto');
-    if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-};
+// const scrollToBottom = () => {
+//     const chatContainer = document.querySelector('.overflow-y-auto');
+//     if (chatContainer) {
+//         chatContainer.scrollTop = chatContainer.scrollHeight;
+//     }
+// };
 
 // Update scroll after new message
 // watch(messageData, () => {
