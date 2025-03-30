@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Staff;
 
 use App\Events\GeneralNotification;
 use App\Events\NewNotification;
+use App\Models\Condition;
 use App\Models\Course;
+use App\Models\Eligibility;
 use Inertia\Inertia;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
@@ -15,6 +17,7 @@ use App\Models\Campus;
 use App\Models\CampusRecipients;
 use App\Models\Criteria;
 use App\Models\Disbursement;
+use App\Models\Eligible;
 use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\Payout;
@@ -157,13 +160,27 @@ class ScholarshipController extends Controller
     public function show(Request $request, Scholarship $scholarship)
     {
         // If it's a one-time payment scholarship, redirect to the appropriate list
-        if ($scholarship->scholarshipType == 'One-time Payment') {
+        // if ($scholarship->scholarshipType == 'One-time Payment') {
+        //     return redirect()->route('scholarship.onetime_list', [
+        //         'scholarshipId' => $scholarship->id,
+        //     ])->with([
+        //                 'selectedYear' => $request->input('selectedYear'),
+        //                 'selectedSem' => $request->input('selectedSem')
+        //             ]);
+        // }
+
+        $eligible = Eligible::where('scholarship_id', $scholarship->id)->first();
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->where('semester', $request->input('selectedSem')) // Replace 'First' with your desired semester value
+            ->where('school_year', $request->input('selectedYear')) // Replace '2024-2025' with your desired school year value
+            ->first();
+
+        if ($scholarship->scholarshipType == 'One-time Payment' && $batch) {
             return redirect()->route('scholarship.onetime_list', [
                 'scholarshipId' => $scholarship->id,
-            ])->with([
-                        'selectedYear' => $request->input('selectedYear'),
-                        'selectedSem' => $request->input('selectedSem')
-                    ]);
+                'selectedYear' => $request->input('selectedYear'),
+                'selectedSem' => $request->input('selectedSem')
+            ]);
         }
 
         // Get the authenticated user
@@ -230,8 +247,11 @@ class ScholarshipController extends Controller
         $students = Student::all();
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $total_scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
-        $scholarship_form = ScholarshipForm::all();
-        $scholarship_form_data = ScholarshipFormData::all();
+        $scholarship_form = ScholarshipForm::find(2);
+        $scholarship_form_data = ScholarshipFormData::where('scholarship_form_id', $scholarship_form->id)->get();
+        $elibigilities = Eligibility::all();
+        $conditions = Condition::all();
+        $scholarship_form_data = ScholarshipFormData::where('scholarship_form_id', $scholarship_form->id)->get();
         $payouts = Payout::where('scholarship_id', $scholarship->id)->first();
 
         // Get all scholars with all requirements approved
@@ -311,6 +331,8 @@ class ScholarshipController extends Controller
             'students' => $students,
             'scholarship_form' => $scholarship_form,
             'scholarship_form_data' => $scholarship_form_data,
+            'elibigilities' => $elibigilities,
+            'conditions' => $conditions,
             'userType' => $userType, // Pass user type to frontend
             'userCampusId' => $userType == 'coordinator' ? $user->campus_id : null,
             'allBatches' => $allBatches,
@@ -325,6 +347,13 @@ class ScholarshipController extends Controller
         $scholarship = Scholarship::where('id', $scholarshipId)->first();
 
 
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->where('semester', $request->input('selectedSem')) // Replace 'First' with your desired semester value
+            ->where('school_year', $request->input('selectedYear')) // Replace '2024-2025' with your desired school year value
+            ->first();
+
+            // dd($batch);
+
         // Checking if scholar's payment claimed
         $payout = Payout::where('scholarship_id', $scholarshipId)
             ->where('status', 'claimed')
@@ -336,12 +365,6 @@ class ScholarshipController extends Controller
 
         // Get scholars directly without batch relationship
         $scholars = Scholar::where('scholarship_id', $scholarshipId)
-            ->when($request->input('selectedYear'), function ($query, $year) {
-                return $query->where('school_year', $year);
-            })
-            ->when($request->input('selectedSem'), function ($query, $sem) {
-                return $query->where('semester', $sem);
-            })
             ->with(['campus', 'course']) // Eager load campus and course relationships
             ->get()
             ->map(function ($scholar) use ($totalRequirements) {
@@ -386,6 +409,7 @@ class ScholarshipController extends Controller
 
         return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
+            'batch' => $batch,
             'scholars' => $scholars,
             'payout' => $payout,
             'requirements' => $requirements,
@@ -436,6 +460,10 @@ class ScholarshipController extends Controller
             'grade' => 'required|numeric|min:0|max:100',
             'criteria' => 'required|array',
             'criteria.*' => 'exists:scholarship_form_data,id',
+            'conditions' => 'required|array',
+            'conditions.*' => 'exists:conditions,id',
+            'semester' => 'required',
+            'school_year' => 'required',
         ]);
 
         $total_recipients = $validated['total_recipients'];
@@ -521,6 +549,44 @@ class ScholarshipController extends Controller
                 ]);
             }
         }
+
+        // For eligible
+        foreach ($validated['conditions'] as $condition_id) {
+            // Check if record exists
+            $existingEligible = Eligible::where('scholarship_id', $scholarship->id)
+                ->where('condition_id', $condition_id)
+                ->first();
+
+            if ($existingEligible) {
+                // Update existing record
+                $existingEligible->update([
+                    'condition_id' => $condition_id,
+                ]);
+            } else {
+                // Create new record
+                Eligible::create([
+                    'scholarship_id' => $scholarship->id,
+                    'condition_id' => $condition_id,
+                ]);
+            }
+
+        }
+
+        $batch = Batch::where('scholarship_id', $scholarship->id)->first();
+
+        if (!$batch) {
+            Batch::create([
+                'scholarship_id' => $scholarship->id,
+                'batch_no' => '1',
+                'school_year' => $request->school_year,
+                'semester' => $request->semester,
+            ]);
+        }
+
+        //Update Scholarship Status
+        $scholarship->update([
+            'status' => 'Active'
+        ]);
 
 
         return back()->with('success', 'Scholarship recipients and requirements saved successfully');

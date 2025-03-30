@@ -1075,7 +1075,7 @@
                                         <div
                                             class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                                FATHER (Leave blank if deceased)
+                                                FATHER (Type "N/A" if deceased)
                                             </h3>
                                             <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                         </div>
@@ -1362,7 +1362,7 @@
                                         <div
                                             class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                                C.6 Name of Siblings in the Family (Leave blank if none)
+                                                C.5 Name of Siblings in the Family (Leave blank if none)
                                             </h3>
                                             <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                         </div>
@@ -1457,7 +1457,7 @@
                                                 Organizational Membership</h3>
                                             <p
                                                 class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
-                                                Please fill-up missing required fields. Put N/A if not applicable</p>
+                                                Please fill-up missing required fields. Leave Blank if none</p>
                                         </div>
 
                                         <div class="col-span-4 grid w-full items-center gap-1.5 space-y-4">
@@ -1707,7 +1707,7 @@
 
 
 
-                                            <div class="col-span-2 space-x-2 flex justify-end mt-4">
+                                            <div class="col-span-3 space-x-2 flex justify-end mt-4">
                                                 <!-- Back Button -->
                                                 <button type="button" @click="prevStep" :disabled="activeStep === 0"
                                                     class="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none 

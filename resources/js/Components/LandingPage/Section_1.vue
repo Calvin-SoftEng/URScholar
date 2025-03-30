@@ -6,6 +6,11 @@
             <img src="../../../assets/images/vector1.png" class="w-full h-auto" alt="">
         </div>
 
+        <!-- Background Image Positioned Bottom Right -->
+        <div class="absolute z-10 top-[-5%] left-0 w-8/12 max-w-xl rotate-12">
+            <img src="../../../assets/images/pluma.png" class="w-[80%] h-[80%] opacity-80" alt="">
+        </div>
+
         <!-- Text Content -->
         <div class="relative z-10 space-y-6">
             <h1 class="text-8xl font-extrabold text-myblack mb-4 font-albert leading-snug">

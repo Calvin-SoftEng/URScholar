@@ -15,4 +15,9 @@ class Condition extends Model
     {
         return $this->belongsTo(Eligibility::class);
     }
+
+    public function eligible()
+    {
+        return $this->hasMany(Eligible::class);
+    }
 }

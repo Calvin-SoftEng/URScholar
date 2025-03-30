@@ -112,6 +112,7 @@
               class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
               :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
               <div class="w-full">
+                <div >{{ notification.title }}</div>
                 <div class="flex justify-between items-start mb-1.5">
                   <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
                   <button @click.stop="deleteNotification(notification.id)"

@@ -77,6 +77,13 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('eligibility_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->timestamps();   
+        });
+
+        Schema::create('eligibles', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('condition_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -94,6 +101,7 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::dropIfExists('scholarship_groups');
+        Schema::dropIfExists('eligibles');
         Schema::dropIfExists('conditions');
         Schema::dropIfExists('eligibilities');
         Schema::dropIfExists('criterias');

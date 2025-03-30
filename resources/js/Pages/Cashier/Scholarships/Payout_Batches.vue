@@ -74,11 +74,18 @@
                     <span>List of Batches </span>
                     <!-- {{ props.selectedSem }} {{ schoolyear.year }} -->
 
-                    <button @click="toggleSendBatch"
-                        class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                        <span class="font-normal">Forward Completed Scholars</span>
-                    </button>
+                    <div class="flex flex-row space-x-3 items-center">
+                        <button @click="toggleNotify"
+                            class="flex items-center gap-2 bg-white border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg hover:bg-blue-200 transition duration-200">
+                            <font-awesome-icon :icon="['fas', 'bullhorn']" class="text-base" />
+                            <span class="font-normal">Notify Payouts</span>
+                        </button>
+                        <button @click="toggleSendBatch"
+                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                            <span class="font-normal">Forward Completed Scholars</span>
+                        </button>
+                    </div>
                 </div>
 
 
@@ -164,6 +171,110 @@
             </div>
         </div>
 
+        <!-- Simplified forwarding batch list modal -->
+        <div v-if="NotifyPayouts"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Set Claim Schedule
+                            </h2>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Provide the Date and Time for the claim
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="py-4 px-8 flex flex-col gap-3">
+                    
+                    <div class="flex flex-wrap w-full gap-4 items-center">
+                        <!-- Date Picker -->
+                        <div id="default-datepicker" class="relative max-w-sm w-full md:w-1/3">
+                            <label for="default-datepicker" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Select time:</label>
+                            <div class="absolute inset-y-0 top-6 left-0 flex items-center px-3.5 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                </svg>
+                            </div>
+                            <input datepicker id="default-datepicker" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" required>
+                        </div>
+
+                        <!-- Time Picker -->
+                        <form class="max-w-[10rem] w-full mx-auto">
+                            <label for="time" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Select time:</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                        <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
+                                    </svg>
+                                </div>
+                                <input v-model="selectedTime" type="time" id="time" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required>
+                            </div>
+                        </form>
+
+                        <!-- message -->
+                        <div class="w-full">
+                            <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Reminders</label>
+                            <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write important reminders here"></textarea>
+                        </div>
+
+                    </div>
+
+                    <!-- <div class="py-4 px-8 flex flex-col gap-3">
+                        <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                            Select a Batch to Forward:
+                        </label>
+
+
+                        <div v-if="isLoading" class="flex justify-center items-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                        </div>
+
+
+                        <div v-if="!isLoading" class="flex flex-col gap-2">
+                            <label class="flex items-center space-x-2">
+                                <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-gray-900 dark:text-white">Send All Batch List</span>
+                            </label>
+
+                            <label v-for="batch in batchesWithScholars" :key="batch.id" class="flex items-center space-x-2">
+                                <input type="checkbox" :value="batch.id" v-model="selectedBatches"
+                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
+                                <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
+                                <span class="text-sm text-gray-500">({{ batch.scholar_count }} scholars)</span>
+                            </label>
+                        </div>
+                    </div> -->
+
+                    <!-- Forward Button -->
+                    <div class="mt-4">
+                        <button type="submit"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            Set Schedule
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         
 
         <ToastProvider>
@@ -181,31 +292,30 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, watch, onMounted  } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
-import Papa from 'papaparse';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
-import { Input } from '@/Components/ui/input'
-import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
-
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
-
-import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
 import Payout_Batches from '../../../Components/Cashier/Payouts/Payout_Batches_List.vue';
+import { initFlowbite } from 'flowbite';
+import { Schedule } from '@syncfusion/ej2-vue-schedule';
 
 // components
-
 const components = {
     Button,
-    Papa,
 };
 
+const form = ref({
+    scheduled_date: "",
+    scheduled_time: "",
+
+});
 
 const ForwardBatchList = ref(false);
+const NotifyPayouts = ref(false);
 const selectedBatches = ref([]);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
@@ -220,8 +330,17 @@ const toggleSendBatch = async () => {
     // await loadBatchesData();
 };
 
+const toggleNotify = async () => {
+    NotifyPayouts.value = true;
+    initFlowbite();
+
+    // Load batches with scholar counts
+    // await loadBatchesData();
+};
+
 const closeModal = () => {
     ForwardBatchList.value = false;
+    NotifyPayouts.value = false;
     resetForm();
 };
 
@@ -286,6 +405,35 @@ const formData = ref({
 const updateFile = (file) => {
     formData.value.file = file;
 };
+
+const selected_scheduled = ref(''); // Stores the selected start date
+
+onMounted(() => {
+    initFlowbite(); // Initialize Flowbite globally
+
+    watch(NotifyPayouts, (newValue) => {
+        if (newValue) {
+            setTimeout(() => {
+                initFlowbite(); // Initialize Flowbite when modal is accessed
+                
+                const startInput = document.getElementById("default-datepicker");
+                if (startInput) {
+                    startInput.value = selected_scheduled.value; // Keep the previous value
+                    startInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.scheduled_date = date.toISOString().split("T")[0]; 
+                        console.log("Application:", form.value.scheduled_date);
+                        selected_scheduled.value = event.target.value; 
+                    });
+                } else {
+                    console.warn("Start datepicker not found.");
+                }
+            }, 200); // Small delay to ensure modal is in the DOM
+        }
+    });
+
+});
+
 
 
 const toastVisible = ref(false);

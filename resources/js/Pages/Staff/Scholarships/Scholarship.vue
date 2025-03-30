@@ -152,17 +152,15 @@
                                     <p class="text-gray-500 text-sm">Scholarship Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <div v-if="$page.props.auth.user.usertype == 'super_admin'">
+                                    <div v-if="$page.props.auth.user.usertype == 'super_admin'" class="w-full flex flex-row justify-between items-end"> 
                                         <p class="text-4xl font-semibold font-kanit">{{ props.allBatches.length }}</p>
-                                        <template
-                                            v-if="props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
-                                            <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
-                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
-                                                    false).length}} new
-                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
-                                                    false).length === 1 ? 'Batch' : 'Batches'}}
+                                        <template v-if="props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
+                                            <button class="h-5 px-3 py-1 bg-blue-400 text-white rounded-full text-sm inline-flex items-center justify-center">
+                                                {{ props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length }} new
+                                                {{ props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length === 1 ? 'Batch' : 'Batches' }}
                                             </button>
                                         </template>
+
                                     </div>
                                     <div v-else>
                                         <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
@@ -257,7 +255,7 @@
                 </div>
 
                 <!--ONE TIME PAYMENT PROCESS-->
-                <div v-else>
+                <div v-else-if="scholarship.scholarshipType == 'One-time Payment'">
                     <form @submit.prevent="submitForm">
                         <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
                             <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
@@ -464,54 +462,32 @@
                                     </textarea>
                                                 </div>
 
-                                                <div class="flex flex-col justify-center space-y-2 items-start">
+                                                <div v-for="eligiblity in elibigilities" :key="eligiblity.id"
+                                                    class="flex flex-col justify-center space-y-2 items-start">
                                                     <span class="text-sm font-medium text-black whitespace-nowrap ">
-                                                        Financial Need-Based Criteria must be:
+                                                        {{ eligiblity.name }}
                                                     </span>
-                                                    <div class="flex items-center space-x-2 mb-1">
-                                                        <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                                    <div v-for="conditions in getFormData(eligiblity.id)"
+                                                        :key="conditions.id" class="flex items-center space-x-2 mb-1">
+                                                        <input id="accept-terms-{{ conditions.id }}" type="checkbox"
+                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                            :checked="conditionIncludes(conditions.id)"
+                                                            @change="toggleCondition(conditions.id)">
                                                         <label
                                                             class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                            Nakacategory na yan
-                                                        </label>
-                                                    </div>
-
-                                                    <!-- hiwalay na loop to ata -->
-                                                    <div class="flex items-center space-x-2 mb-1">
-                                                        <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                        <label
-                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                            Annual Income range to 10,000 - 20,000
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="flex flex-col justify-center space-y-2 items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap ">
-                                                        Residency & Citizenship Criteria
-                                                    </span>
-                                                    <div class="flex items-center space-x-2 mb-1">
-                                                        <input type="checkbox"
-                                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
-                                                        <label
-                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                            Bisaya ka dapat
+                                                            {{ conditions.name }}
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <!-- <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                                            <div v-for="form in scholarship_form" :key="form.id"
-                                                class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
-                                                <h4
-                                                    class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
-                                                    {{ form.name }}</h4>
+                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                                            <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                                                <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
+                                                    {{ scholarship_form.name }}</h4>
 
-                                                <div v-for="data in getFormData(form.id)" :key="data.id"
+                                                <div v-for="data in scholarship_form_data" :key="data.id"
                                                     class="flex items-center space-x-2 mb-1">
                                                     <input id="accept-terms-{{ data.id }}" type="checkbox"
                                                         class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
@@ -523,7 +499,7 @@
                                                     </label>
                                                 </div>
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
@@ -726,8 +702,10 @@ import InputError from '@/Components/InputError.vue';
 
 // Define props to include scholars data
 const props = defineProps({
-    scholarship_form: Array,
+    scholarship_form: Object,
     scholarship_form_data: Array,
+    elibigilities: Array,
+    conditions: Array,
     batches: Array,
     scholarship: Object,
     schoolyear: Object,
@@ -785,7 +763,7 @@ const directives = {
 };
 
 const getFormData = (formId) => {
-    return props.scholarship_form_data.filter(data => data.scholarship_form_id === formId);
+    return props.conditions.filter(data => data.eligibility_id === formId);
 };
 
 // Forward batch modal state
@@ -879,9 +857,10 @@ const form = ref({
     totalRecipients: 0,
     requirements: [],
     criteria: [],
+    conditions: [],
     grade: 0.0,
     amount: 0,
-    appplication: '',
+    application: '',
     deadline: '',
     payoutStartInput: '',
     payoutEndInput: '',
@@ -896,12 +875,34 @@ const clearForm = () => {
         criteria: [],
         grade: 0.0,
         amount: 0,
-        appplication: '',
+        application: '',
         deadline: '',
     };
 };
 
+// Safe check if criteria includes an ID
+const conditionIncludes = (dataId) => {
+    return form.value && form.value.conditions && Array.isArray(form.value.conditions)
+        ? form.value.conditions.includes(dataId)
+        : false;
+};
 
+// Handle criteria selection
+const toggleCondition = (dataId) => {
+    // Ensure criteria is initialized
+    if (!form.value.conditions) {
+        form.value.conditions = [];
+    }
+
+    const index = form.value.conditions.indexOf(dataId);
+    if (index === -1) {
+        // Add to criteria if not already present
+        form.value.conditions.push(dataId);
+    } else {
+        // Remove from criteria if already present
+        form.value.conditions.splice(index, 1);
+    }
+};
 
 // Safe check if criteria includes an ID
 const criteriaIncludes = (dataId) => {
@@ -998,7 +999,7 @@ onMounted(() => {
             // Correct for time zone issues
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
 
-            form.value.appplication = date.toISOString().split("T")[0]; // Keeps the correct local date
+            form.value.application = date.toISOString().split("T")[0]; // Keeps the correct local date
             console.log("Application:", form.value.application);
             selectedStart.value = event.target.value;
         });
@@ -1211,11 +1212,14 @@ const submitForm = () => {
         total_recipients: form.value.totalRecipients,
         requirements: form.value.requirements,
         criteria: form.value.criteria,
+        conditions: form.value.conditions,
         grade: form.value.grade,
         application: form.value.application,
         deadline: form.value.deadline,
         amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
         campus_recipients: campusRecipients,
+        semester: props.selectedSem,
+        school_year: props.schoolyear.id
     };
 
     // Submit the form to the backend
@@ -1228,7 +1232,7 @@ const submitForm = () => {
             }, 1500);
         },
         onError: (errors) => {
-            showToast('Error', 'There was an error creating the scholarship');
+            // showToast('Error', 'There was an error creating the scholarship');
             errors.value = errors;
             isSubmitting.value = false;
         },
