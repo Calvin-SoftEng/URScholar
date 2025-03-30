@@ -1058,7 +1058,7 @@ class StudentController extends Controller
             ->get();
 
         // Return the chat page using Inertia
-        return Inertia::render('Student/Messaging/Messaging', [
+        return Inertia::render('Student/Communication/Communication', [
             'messages' => [],
             'currentUser' => $currentUser,
             'scholarships' => $scholarships,

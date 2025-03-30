@@ -21,7 +21,6 @@
                             <span class="text-lg font-semibold text-gray-800">View Available Scholarships</span>
                         </div>
 
-
                         <!-- qr code -->
                         <!-- <div class="w-full h-1/12 bg-white shadow-lg rounded-lg flex items-center gap-2 p-3">
                             <img src="../../../../assets/images/qrcodesample.png" alt="" class="w-20 h-20">
@@ -69,7 +68,6 @@
                         </div>
                     </div>
                     
-
                     <!-- kapag wala pang scholarship -->
                     <div v-else
                         class="w-full h-full col-span-2 block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
@@ -121,6 +119,7 @@ import { Head, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import ScholarGrant from './Scholar/ScholarGrant.vue';
 import Scholarships from './Non_Scholar/Scholarships.vue';
+import Feed from './Scholar/Feed.vue';
 
 const props = defineProps({
     //For scholars only
