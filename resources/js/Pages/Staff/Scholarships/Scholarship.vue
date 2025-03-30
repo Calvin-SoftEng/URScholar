@@ -1220,6 +1220,8 @@ const submitForm = () => {
         deadline: form.value.deadline,
         amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
         campus_recipients: campusRecipients,
+        semester: props.selectedSem,
+        school_year: props.schoolyear.id
     };
 
     // Submit the form to the backend
