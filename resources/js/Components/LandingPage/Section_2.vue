@@ -1,10 +1,10 @@
 <template>
-    <section class="relative py-16 px-40 h-screen my-auto items-center bg-dirtywhite">
+    <section class="relative sm:py-12 sm:px-16 md:py-8 md:px-24 lg:py-6 lg:px-20 xl:py-16 xl:px-40 h-screen my-auto items-center bg-dirtywhite">
 
         <div class="flex flex-col text-left space-y-20 justify-center h-full">
             <div class="text-left flex flex-col space-y-5">
                 <span class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-6xl font-bold">Unlock Educational Success</span>
-                <p class="text-4xl text-primary max-w-4xl font-medium font-albert">Access comprehensive database of scholarships <br> and stay updated with the latest announcements <br> to boost your educational journey</p>
+                <p class="sm:text-4xl md:text-2xl lg:text-xl xl:text-lg  text-primary font-medium font-albert">Access comprehensive database of scholarships <br> and stay updated with the latest announcements <br> to boost your educational journey</p>
             </div>
 
             <div class="flex flex-row justify-between">
@@ -28,34 +28,8 @@
                         <p>Ask your queries and <br> concerns with your <br> personal chatbot</p>
                     </div> -->
                 </div>
-                <div class="bg-white rounded-lg p-4 shadow-md">
-                    <div class="flex flex-col space-y-5 font-quicksand p-2">
-                        <span class="font-bold text-xl">Scholar Checker</span>
-                        <span>Our grantee check tool helps you quickly determine if one of the qualified grantee of a scholarship. <br> Simply enter the following:</span>
+                
 
-                        <form action="" class="space-y-4 text-base">
-                            <Select>
-                                <SelectTrigger class="w-full h-[43px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Campus" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                        <SelectItem value="URSB">
-                                            Binangonan, Campus
-                                        </SelectItem>
-                                        <SelectItem value="URSP">
-                                            Pililla, Campus
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                            <Input type="text" placeholder="Enter Student ID" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
-                            <Input type="text" placeholder="Enter Full Name e.g. John Doe" class="w-full h-[43px] bg-gray-50 border border-gray-300" />
-                            <button class="w-full bg-primary border-1 border-gray-300 rounded-md p-2 my-2 text-white">Check</button>
-                        </form>
-                    </div>
-                </div>
             </div>
         </div>
         <!-- <div class="relative z-10 space-y-5">

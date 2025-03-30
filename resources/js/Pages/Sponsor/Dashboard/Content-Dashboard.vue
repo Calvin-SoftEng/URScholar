@@ -21,8 +21,7 @@
 
             <!-- Wide Card (Bottom, 2 Cols Wide) -->
             <div class="bg-white shadow-md p-6 rounded-lg flex flex-col justify-between sm:col-span-2">
-                <h2 class="text-lg font-semibold text-gray-800">Wide Card</h2>
-                <p class="text-sm text-gray-500">This card spans 2 columns.</p>
+                <ScholarsTable />
             </div>
             
         </div>
@@ -33,8 +32,11 @@
 
 <script setup>
 import { ref } from 'vue';
+import { Head } from '@inertiajs/vue3';
+import ScholarsTable from '@/Components/Sponsor/Dashboard/ScholarsTable.vue';
 
 const components = {
+    ScholarsTable
     // ActiveScholarship,
     // QuickPost,
     // Messages,
