@@ -288,6 +288,7 @@
 
 
                 <div v-if="EditProfile" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <form @submit.prevent="submit">
                     <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                         <!-- Upload & Preview Section -->
                         <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
@@ -331,7 +332,7 @@
                                 <div class="w-full flex flex-col items-left gap-1">
                                     <span class="text-gray-500 text-sm">Age</span>
                                     <div class="relative w-full">
-                                        <input v-model="student.age" type="text" placeholder="Enter Email"
+                                        <input v-model="form.age" type="text" placeholder="Age"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -379,7 +380,7 @@
                             <!-- <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
                                 }}</span> -->
                             <div class="relative w-full">
-                                <input type="text" placeholder="Enter Email"
+                                <input type="text" placeholder="Email" v-model="form.email"
                                     class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                 <!-- Icon inside input -->
                                 <font-awesome-icon :icon="['fas', 'pen']"
@@ -448,7 +449,7 @@
                                     <div class="flex flex-col space-y-2">
                                         <!-- gwa input -->
                                         <div class="relative pl-1">
-                                            <input  type="text" placeholder="Enter User ID"
+                                            <input  type="text" placeholder="Enter User ID" v-model="form.grade"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -457,7 +458,7 @@
 
                                         <!-- File Input -->
                                         <div class="">
-                                            <input type="file" @change="handleFileUpload"
+                                            <input type="file" @change="handleFile"
                                                 class="w-full border border-gray-300 rounded-md px-3 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         </div>
                                     </div>
@@ -474,7 +475,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="elementary.name" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.elementary.name" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -483,7 +484,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="elementary.years" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.elementary.years" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -499,7 +500,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="junior.name" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.junior.name" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -508,7 +509,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="junior.years" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.junior.years" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -524,7 +525,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="senior.name" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.senior.name" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -533,7 +534,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="senior.years" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.senior.years" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -549,7 +550,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                         }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="college.name" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.college.name" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -558,7 +559,7 @@
                                     <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                     }}</span> -->
                                     <div class="relative w-full">
-                                        <input v-model="college.years" type="text" placeholder="Enter User ID"
+                                        <input v-model="form.education.college.years" type="text" placeholder="Enter User ID"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -638,7 +639,7 @@
 
                                                 <!-- Input Container (70%) -->
                                                 <div class="relative w-full">
-                                                    <input v-model="mother.first_name" type="text"
+                                                    <input v-model="form.mother.first_name" type="text"
                                                         placeholder="Enter User ID"
                                                         class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
@@ -653,7 +654,7 @@
 
                                                 <!-- Input Container (70%) -->
                                                 <div class="relative w-full">
-                                                    <input v-model="mother.occupation" type="text"
+                                                    <input v-model="form.mother.occupation" type="text"
                                                         placeholder="Enter User ID"
                                                         class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
@@ -677,7 +678,7 @@
 
                                                 <!-- Input Container (70%) -->
                                                 <div class="relative w-full">
-                                                    <input v-model="father.first_name" type="text"
+                                                    <input v-model="form.father.first_name" type="text"
                                                         placeholder="Enter User ID"
                                                         class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
@@ -692,7 +693,7 @@
 
                                                 <!-- Input Container (70%) -->
                                                 <div class="relative w-full">
-                                                    <input v-model="father.occupation" type="text"
+                                                    <input v-model="form.father.occupation" type="text"
                                                         placeholder="Enter User ID"
                                                         class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
@@ -825,9 +826,8 @@
                                 </div>
                             </div>
                         </div>
-
-
                     </div>
+                </form>
                 </div>
             </div>
         </div>
@@ -976,17 +976,11 @@ const props = defineProps({
 const form = ref({
     password: '',
     confirm_password: '',
-    birthdate: '',
-    birthplace: '',
     age: '',
-    gender: '',
-    civil_status: '',
     street: '',
     municipality: '',
     province: '',
     religion: '',
-    guardian_name: '',
-    relationship: '',
     grade: '',
     cog: '',
     semester: '',
@@ -996,8 +990,6 @@ const form = ref({
         junior: { name: '', years: '', honors: 'N/A' },
         senior: { name: '', years: '', honors: 'N/A' },
         college: { name: '', years: '', honors: 'N/A' },
-        vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
-        postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
     },
     mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
     father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
@@ -1038,6 +1030,24 @@ const openQRModal = () => {
     } else {
         // If no QR code exists, generate one
         generateQRCode();
+    }
+};
+
+const handleFile = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+        form.value.cog = file;
+    }
+};
+
+// Re-attach the selected file when switching steps
+const restoreFileInput = () => {
+    const fileInput = document.getElementById("file_upload");
+    if (fileInput && form.value.cog) {
+        // Create a new FileList and assign it to the input
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(form.value.cog);
+        fileInput.files = dataTransfer.files;
     }
 };
 
@@ -1134,6 +1144,23 @@ const handleImgChange = (event) => {
         };
         reader.readAsDataURL(file);
     }
+};
+
+const submit = async () => {
+
+try {
+    if (props.scholar != null) {
+        form.value.semester = props.batch_semester;
+        form.value.school_year = props.school_year.year;
+    }
+
+    router.post(`/verify-account/verifying`, form.value);
+    //await useForm(form.value).post(`/sponsors/create-scholarship`);
+    // await form.post(`/sponsors/${props.sponsor.id}/create`)
+    // resetForm();
+} catch (error) {
+    console.error('Error submitting form:', error);
+}
 };
 
 // Handle Profile Picture Update
