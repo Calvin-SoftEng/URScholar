@@ -69,7 +69,7 @@
 
         <!-- avatar -->
         <div v-if="$page.props.auth.user.picture">
-          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"@click.stop="toggleUserDropdown"
+          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
             data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
             :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
         </div>

@@ -158,6 +158,30 @@ const showMemberList = ref(false);
                                         <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
                                     </button>
                                 </div>
+
+                                <div class="bg-yellow-100 shadow-sm p-4 flex justify-between items-center rounded-lg">
+                                    <!-- Pinned Message Icon and Title -->
+                                    <div class="flex flex-col items-start space-y-2">
+                                        <!-- Icon and Title -->
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-yellow-500 text-xl">📌</span>
+                                            <h3 class="text-lg font-bold text-primary">Pinned Announcement</h3>
+                                        </div>
+                                        
+                                        <!-- Message Body -->
+                                        <div class=" text-gray-700">
+                                            <p class="text-sm">Bukas daw sa registrar may palduhan.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Close Button -->
+                                    <button class="text-gray-600 hover:text-red-600 transition-colors ml-4" @click="closeAnnouncement">
+                                        <span class="text-xl">✖</span>
+                                    </button>
+                                </div>
+
+
+
                                 <!-- Main chat area -->
                                 <div class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                                     <!-- Messages column -->
