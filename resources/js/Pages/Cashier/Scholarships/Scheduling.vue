@@ -15,25 +15,21 @@
                                 <span>Scholarships</span>
                             </li>
                             <li class="hover:text-gray-600">
-                                <!-- <span>{{ scholarship.name }}</span> -->
-                            </li>
-                            <li class="hover:text-gray-600">
-                                <span>Batch 1</span>
+                                <span>{{ scholarship.name }}</span>
                             </li>
                             <li>
-                                <span class="text-blue-400 font-semibold">Sending Access</span>
+                                <span class="text-blue-400 font-semibold">Scheduling Payouts</span>
                             </li>
                         </ul>
                     </div>
 
-                    <div >
+                    <div>
                         <div class="flex justify-between items-center mb-4">
                             <h1
                                 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                                <span
-                                    class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>
-                                        Scheduling Payouts
-                                    </span>
+                                <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>
+                                    Scheduling Payouts
+                                </span>
                             </h1>
 
                             <button
@@ -47,110 +43,106 @@
                         </div>
 
                         <div class="w-6/12 mx-auto h-full space-y-5 mb-3">
-                            <!-- partnership content -->
+                            <!-- Recipients section for all batches -->
                             <div
-                                class="w-full h-[30%] px-5 py-5 bg-[white] rounded-lg shadow-md space-y-5 dark:bg-dsecondary dark:border dark:border-gray-600">
+                                class="w-full px-5 py-5 bg-[white] rounded-lg shadow-md space-y-5 dark:bg-dsecondary dark:border dark:border-gray-600">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">
                                     Recipients</h3>
-                                    <div class="gap-2 bg-gray-50 w-full h-full border border-gray-300 rounded-lg p-2.5 dark:bg-dsecondary dark:border dark:border-gray-600">
-                                        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">
-                                            Batch No
+
+                                <!-- Display all batches -->
+                                <div v-for="batch in batches" :key="batch.id" class="mb-5">
+                                    <div
+                                        class="gap-2 bg-gray-50 w-full h-full border border-gray-300 rounded-lg p-2.5 dark:bg-dsecondary dark:border dark:border-gray-600">
+                                        <span
+                                            class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">
+                                            Batch {{ batch.batch_no }}
                                         </span>
-                                        
+
                                         <!-- Line Divider -->
                                         <div class="w-full h-[1px] bg-gray-300 my-2 dark:bg-gray-600"></div>
 
-                                        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">
-                                            name 2
-                                        </span>
+                                        <!-- List of scholars for this batch -->
+                                        <div class="space-y-1 max-h-40 overflow-y-auto">
+                                            <div v-for="disbursement in getDisbursementsForBatch(batch.id)"
+                                                :key="disbursement.id" class="flex items-center justify-between">
+                                                <span
+                                                    class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">
+                                                    {{ disbursement.scholar.email }}
+                                                </span>
+                                                <span class="text-xs text-gray-500">
+                                                    {{ disbursement.status }}
+                                                </span>
+                                            </div>
 
-                                        <span class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">
-                                            name 1
-                                        </span>
+                                            <!-- Message when no scholars are found -->
+                                            <div v-if="getDisbursementsForBatch(batch.id).length === 0"
+                                                class="text-center text-gray-500 py-2">
+                                                No recipients found for this batch
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
 
-
-                                
+                                <!-- Scheduling section -->
                                 <div class="flex flex-col gap-2">
                                     <div class="h-full w-full grid grid-cols-1 gap-5">
-                                        <!-- <div class="flex flex-col space-y-2"> -->
-                                            <div class="flex flex-row w-full gap-4 items-center">
-                                                <!-- Date Picker -->
-                                                
-                                                <div class="relative max-w-sm w-full md:w-1/3">
-                                                    <label for="default-datepicker" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Select time:</label>
-                                                    <div class="absolute inset-y-0 top-6 left-0 flex items-center px-3.5 pointer-events-none">
-                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                        <div class="flex flex-row w-full gap-4 items-center">
+                                            <!-- Date Picker -->
+                                            <div class="relative max-w-sm w-full md:w-1/3">
+                                                <label for="default-datepicker"
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Select
+                                                    date:</label>
+                                                <div
+                                                    class="absolute inset-y-0 top-6 left-0 flex items-center px-3.5 pointer-events-none">
+                                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                        fill="currentColor" viewBox="0 0 20 20">
+                                                        <path
+                                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                                    </svg>
+                                                </div>
+                                                <input v-model="selected_scheduled" name="end" type="text" datepicker
+                                                    id="default-datepicker"
+                                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                    placeholder="Select date" required>
+                                            </div>
+
+                                            <!-- Time Picker -->
+                                            <form class="w-full mx-auto">
+                                                <label for="time"
+                                                    class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Select
+                                                    time:</label>
+                                                <div class="relative">
+                                                    <div
+                                                        class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none">
+                                                        <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="currentColor" viewBox="0 0 24 24">
+                                                            <path fill-rule="evenodd"
+                                                                d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z"
+                                                                clip-rule="evenodd" />
                                                         </svg>
                                                     </div>
-                                                    <input v-model="selected_scheduled"
-                                                                name="end" type="text" datepicker id="default-datepicker" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" required>
+                                                    <input v-model="selectedTime" type="time" id="time"
+                                                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                        min="09:00" max="18:00" value="00:00" required>
                                                 </div>
+                                            </form>
+                                        </div>
 
-                                                <!-- Time Picker -->
-                                                <form class="w-full mx-auto">
-                                                    <label for="time" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Select time:</label>
-                                                    <div class="relative">
-                                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none">
-                                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
-                                                                <path fill-rule="evenodd" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm11-4a1 1 0 1 0-2 0v4a1 1 0 0 0 .293.707l3 3a1 1 0 0 0 1.414-1.414L13 11.586V8Z" clip-rule="evenodd"/>
-                                                            </svg>
-                                                        </div>
-                                                        <input v-model="selectedTime" type="time" id="time" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" min="09:00" max="18:00" value="00:00" required>
-                                                    </div>
-                                                </form>
-
-                                            </div>
-                                            <!-- message -->
-                                            <div class="w-full">
-                                                <label for="message" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Reminders</label>
-                                                <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write important reminders here"></textarea>
-                                            </div>
-
-                                            <!-- <div class="w-full mb-5">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Requirements
-                                                </h3>
-                                                <InputError v-if="errors.requirements" :message="errors.requirements"
-                                                    class="mt-1" />
-                                                <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
-                                                    <div class="flex items-center mb-4 w-full">
-                                                        <form @submit.prevent="addItem"
-                                                            class="flex items-center w-full">
-                                                            <input v-model="newItem" type="text"
-                                                                placeholder="Enter an item"
-                                                                class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
-                                                            <button type="submit"
-                                                                class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
-                                                                Add
-                                                            </button>
-                                                        </form>
-                                                    </div>
-
-                                                    <form @submit.prevent="removeItem">
-                                                        <div class="grid grid-cols-2 gap-4">
-                                                            <div v-for="(item, index) in items" :key="index"
-                                                                class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
-                                                                <span>{{ item }}</span>
-                                                                <button @click="removeItem(index)"
-                                                                    class="flex items-center text-red-500 hover:text-red-700">
-                                                                    <span class="material-symbols-rounded text-red-600">
-                                                                        delete
-                                                                    </span>
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                    </form>
-                                                </ul>
-                                            </div> -->
-
+                                        <!-- Reminders textarea -->
+                                        <div class="w-full">
+                                            <label for="message"
+                                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Reminders</label>
+                                            <textarea id="message" rows="4"
+                                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                placeholder="Write important reminders here"></textarea>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
             </form>
         </div>
@@ -160,7 +152,6 @@
                 <ToastTitle class="font-semibold dark:text-dtext">Sent Successfully!</ToastTitle>
                 <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
             </ToastRoot>
-
             <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
     </AuthenticatedLayout>
@@ -180,9 +171,9 @@ import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
     scholarship: Object,
-    scholars: Array,
-    requirements: Array,
-    errors: Object,
+    batches: Array,
+    disbursements: Array,
+    payout: Object,
 });
 
 const directives = {
@@ -192,26 +183,24 @@ const directives = {
 
 const selected_scheduled = ref(""); // Stores the selected start date
 const selectedTime = ref(""); // Stores the selected time
-const formattedStart = ref('');
-const formattedEnd = ref('');
 const errors = ref({});
 
+// Form data with email field added
 const form = ref({
     subject: "ninin",
     content: "ninnin",
-    requirements: [],
-    application: '',
-    deadline: '',
     scheduled_date: '',
     scheduled_time: '',
+    reminders: '',
+    scholar_email: '' // Added field for scholar email
 });
 
-
-
-// Computed property
-const hasRequirements = computed(() => {
-    return props.requirements && props.requirements.length > 0;
-});
+// Helper function to get disbursements for a specific batch
+const getDisbursementsForBatch = (batchId) => {
+    return props.disbursements.filter(disbursement => {
+        return disbursement.scholar && disbursement.scholar.batch_id === batchId;
+    });
+};
 
 const formatDateTime = (date) => {
     if (!date) return '';
@@ -220,41 +209,17 @@ const formatDateTime = (date) => {
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
-const restoreScrollPosition = () => {
-    window.scrollTo(0, scrollPosition.value);
-};
-
-// dynamic requirements
-const newItem = ref('');
-const items = ref([]);
-
-const addItem = () => {
-    if (newItem.value.trim() !== '') {
-        items.value.push(newItem.value.trim());
-        form.value.requirements = items.value;
-        newItem.value = '';
-    }
-};
-
-const removeItem = (index) => {
-    items.value = items.value.filter((_, i) => i !== index);
-    form.value.requirements = items.value;
-};
-
-
 const resetForm = () => {
     form.value = {
         subject: '',
         content: '',
-        requirements: [],
-        application: '',
-        deadline: '',
+        scheduled_date: '',
+        scheduled_time: '',
+        reminders: ''
     };
-    items.value = [];
-    scheduled_date.value = '';
-    scheduled_time.value = '';
+    selected_scheduled.value = '';
+    selectedTime.value = '';
 };
-
 
 // Watch for errors from the page props
 watch(() => usePage().props.errors, (newErrors) => {
@@ -268,8 +233,6 @@ onMounted(() => {
     }
 
     initFlowbite(); // Initialize Flowbite first
-
-    // fetchEmailPreview();
 
     // 🎯 Start Date Picker
     const startInput = document.getElementById("default-datepicker");
@@ -299,87 +262,69 @@ onMounted(() => {
 
 // Ensure selected values persist
 watch(selected_scheduled, (newVal) => {
-    document.getElementById("default-datepicker").value = newVal;
+    const element = document.getElementById("default-datepicker");
+    if (element) element.value = newVal;
 });
 
 watch(selectedTime, (newVal) => {
-    document.getElementById("time").value = newVal;
+    const element = document.getElementById("time");
+    if (element) element.value = newVal;
 });
 
 const validateForm = () => {
     errors.value = {};
     let isValid = true;
 
-    if (!form.value.subject) {
-        errors.value.subject = 'This field is required.';
+    if (!form.value.scheduled_date) {
+        errors.value.scheduled_date = 'Date is required.';
         isValid = false;
     }
 
-    if (!form.value.content) {
-        errors.value.content = 'This field is required.';
-        isValid = false;
-    }
-
-    if (!form.value.requirements || form.value.requirements.length === 0) {
-        errors.value.requirements = 'At least one requirement is required.';
-        isValid = false;
-    }
-
-    if (!form.value.application) {
-        errors.value.application = 'Start date is required.';
-        isValid = false;
-    }
-
-    if (!form.value.deadline) {
-        errors.value.deadline = 'Deadline is required.';
+    if (!form.value.scheduled_time) {
+        errors.value.scheduled_time = 'Time is required.';
         isValid = false;
     }
 
     return isValid;
 };
 
-// const fetchEmailPreview = async () => {
-//     try {
-//         const response = await fetch("/scholarships/1/send-access", {
-//             method: "POST",
-//             headers: {
-//                 "Content-Type": "application/json"
-//             },
-//             body: JSON.stringify({
-//                 scholar: {
-//                     first_name: "John",
-//                     email: "john.doe@example.com"
-//                 },
-//                 password: "12345678",
-//                 deadline: "March 31, 2025"
-//             })
-//         });
+// Collect the scholar's email
+const scholarEmail = ref('');
 
-//         if (!response.ok) throw new Error("Failed to fetch email preview");
+// Helper function to get the selected scholar's email
+const getSelectedScholarEmail = () => {
+    // Get the selected scholar from the disbursements
+    const selectedScholar = props.disbursements.find(
+        disbursement => disbursement.scholar?.email === scholarEmail.value
+    );
 
-//         const data = await response.json();
-//         form.value.subject = data.subject;
-//         form.value.content = data.content;
-//     } catch (error) {
-//         console.error("Error fetching email preview:", error);
-//     }
-// };
+    return selectedScholar ? selectedScholar.scholar.email : '';
+};
 
-
+// Submit function
 const submitForm = async () => {
+    // Get the scholar email before submission
+    form.value.scholar_email = getSelectedScholarEmail();
+
     // Client-side validation before submitting
     if (!validateForm()) {
         return;
     }
 
     try {
+        // Get reminder text
+        form.value.reminders = document.getElementById("message").value;
+
         const formData = useForm(form.value);
-        await formData.post(`/scholarships/${props.scholarship.id}/send-access/send`, {
+
+        await formData.post(`/scholarships/${props.scholarship.id}/schedule-payout`, {
             onError: (e) => {
                 errors.value = e;
             },
             onSuccess: () => {
                 resetForm();
+                toastMessage.value = `Payout scheduled successfully for ${form.value.scholar_email}`;
+                toastVisible.value = true;
             }
         });
     } catch (error) {
