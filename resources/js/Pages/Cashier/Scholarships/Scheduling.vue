@@ -107,6 +107,42 @@
                                                 <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write important reminders here"></textarea>
                                             </div>
 
+                                            <!-- <div class="w-full mb-5">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Requirements
+                                                </h3>
+                                                <InputError v-if="errors.requirements" :message="errors.requirements"
+                                                    class="mt-1" />
+                                                <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
+                                                    <div class="flex items-center mb-4 w-full">
+                                                        <form @submit.prevent="addItem"
+                                                            class="flex items-center w-full">
+                                                            <input v-model="newItem" type="text"
+                                                                placeholder="Enter an item"
+                                                                class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
+                                                            <button type="submit"
+                                                                class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
+                                                                Add
+                                                            </button>
+                                                        </form>
+                                                    </div>
+
+                                                    <form @submit.prevent="removeItem">
+                                                        <div class="grid grid-cols-2 gap-4">
+                                                            <div v-for="(item, index) in items" :key="index"
+                                                                class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
+                                                                <span>{{ item }}</span>
+                                                                <button @click="removeItem(index)"
+                                                                    class="flex items-center text-red-500 hover:text-red-700">
+                                                                    <span class="material-symbols-rounded text-red-600">
+                                                                        delete
+                                                                    </span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </ul>
+                                            </div> -->
+
                                     </div>
                                 </div>
                             </div>
