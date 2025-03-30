@@ -23,7 +23,7 @@
         <div class="w-full flex flex-col items-center space-y-4">
             <!-- Check if scholarships exist -->
             <template v-if="scholarships.length > 0">
-                <div v-for="scholarship in scholarships" :key="scholarship.id" class="p-6 w-full min-w-xl bg-white">
+                <div v-for="scholarship in scholarships" :key="scholarship.id" class="p-6 w-full min-w-xl bg-white shadow-lg rounded-lg"> 
                     <div v-if="scholarship.status == 'Active'">
                         <div class="flex flex-row items-center gap-6 justify-between">
                             <!-- Scholarship Image -->
@@ -65,12 +65,12 @@
 
                             <!-- Apply Button (Vertically Centered) -->
                             <div class="flex h-full items-center justify-center">
-                                <Link :href="`/applying-scholarship/${scholarship.id}`">
+                                <!-- <Link :href="`/applying-scholarship/${scholarship.id}`"> -->
                                 <button
                                     class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
                                     Apply Now
                                 </button>
-                                </Link>
+                                <!-- </Link> -->
                             </div>
                         </div>
                     </div>

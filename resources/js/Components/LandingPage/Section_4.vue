@@ -27,7 +27,7 @@
                     <div v-for="scholarship in scholarships" :key="scholarship.id"
                         class="p-6 w-full min-w-xl bg-white">
                         <div v-if="scholarship.status == 'Active'">
-                            <div class="flex flex-row items-center gap-6 justify-between">
+                            <div class="flex flex-row items-center gap-6 justify-between bg-white p-6 rounded-lg shadow-md">
                                 <!-- Scholarship Image -->
                                 <img :src="`/storage/sponsor/logo/${getSponsorDetails(scholarship.sponsor_id).logo}`"
                                     alt="logo" class="w-40 h-40 rounded-lg object-cover">
