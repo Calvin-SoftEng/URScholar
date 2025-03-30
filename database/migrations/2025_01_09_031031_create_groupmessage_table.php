@@ -18,6 +18,20 @@ return new class extends Migration {
             $table->text('content');
             $table->timestamps();
         });
+
+        // Schema::create('pages', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+        //     $table->timestamps();
+        // });
+
+        // Schema::create('postings', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->foreignId('page_id')->constrained()->onDelete('cascade');
+        //     $table->foreignId('user_id')->constrained()->onDelete('cascade');
+        //     $table->text('content');
+        //     $table->timestamps();
+        // });
     }
 
     /**
