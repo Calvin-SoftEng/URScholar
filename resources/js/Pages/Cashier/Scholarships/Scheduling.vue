@@ -77,14 +77,15 @@
                                             <div class="flex flex-row w-full gap-4 items-center">
                                                 <!-- Date Picker -->
                                                 
-                                                <div id="default-datepicker" class="relative max-w-sm w-full md:w-1/3">
+                                                <div class="relative max-w-sm w-full md:w-1/3">
                                                     <label for="default-datepicker" class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Select time:</label>
                                                     <div class="absolute inset-y-0 top-6 left-0 flex items-center px-3.5 pointer-events-none">
                                                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                                                             <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
                                                         </svg>
                                                     </div>
-                                                    <input datepicker id="default-datepicker" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" required>
+                                                    <input v-model="selected_scheduled"
+                                                                name="end" type="text" datepicker id="default-datepicker" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" required>
                                                 </div>
 
                                                 <!-- Time Picker -->
@@ -189,8 +190,8 @@ const directives = {
     DatePicker
 };
 
-const selectedStart = ref(""); // Stores the selected start date
-const selectedEnd = ref("");   // Stores the selected end date
+const selected_scheduled = ref(""); // Stores the selected start date
+const selectedTime = ref(""); // Stores the selected time
 const formattedStart = ref('');
 const formattedEnd = ref('');
 const errors = ref({});
@@ -201,8 +202,8 @@ const form = ref({
     requirements: [],
     application: '',
     deadline: '',
-    scheduled_date: "",
-    scheduled_time: "",
+    scheduled_date: '',
+    scheduled_time: '',
 });
 
 
@@ -250,9 +251,10 @@ const resetForm = () => {
         deadline: '',
     };
     items.value = [];
-    selectedStart.value = "";
-    selectedEnd.value = "";
+    scheduled_date.value = '';
+    scheduled_time.value = '';
 };
+
 
 // Watch for errors from the page props
 watch(() => usePage().props.errors, (newErrors) => {
@@ -267,30 +269,42 @@ onMounted(() => {
 
     initFlowbite(); // Initialize Flowbite first
 
-    fetchEmailPreview();
+    // fetchEmailPreview();
 
-    watch(NotifyPayouts, (newValue) => {
-        if (newValue) {
-            setTimeout(() => {
-                initFlowbite(); // Initialize Flowbite when modal is accessed
-                
-                const startInput = document.getElementById("default-datepicker");
-                if (startInput) {
-                    startInput.value = selected_scheduled.value; // Keep the previous value
-                    startInput.addEventListener("changeDate", (event) => {
-                        const date = new Date(event.target.value); // ✅ Get selected date
-                        form.value.scheduled_date = date.toISOString().split("T")[0]; 
-                        console.log("Application:", form.value.scheduled_date);
-                        selected_scheduled.value = event.target.value; 
-                    });
-                } else {
-                    console.warn("Start datepicker not found.");
-                }
-            }, 200); // Small delay to ensure modal is in the DOM
-        }
-    });
+    // 🎯 Start Date Picker
+    const startInput = document.getElementById("default-datepicker");
+    if (startInput) {
+        startInput.value = selected_scheduled.value; // Keep the previous value
+        startInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value); // ✅ Get selected date
+            const offset = date.getTimezoneOffset() * 60000; // Get timezone offset in milliseconds
+            const localDate = new Date(date.getTime() - offset); // Adjust to local time
+
+            form.value.scheduled_date = localDate.toISOString().split("T")[0]; // Still outputs YYYY-MM-DD correctly
+            selected_scheduled.value = event.target.value;
+        });
+    }
+
+    // 🎯 Time Picker
+    const timeInput = document.getElementById("time");
+    if (timeInput) {
+        timeInput.value = selectedTime.value; // Keep the previous value
+        timeInput.addEventListener("change", (event) => {
+            const time = event.target.value; // Get selected time
+            form.value.scheduled_time = time;
+            selectedTime.value = time;
+        });
+    }
 });
 
+// Ensure selected values persist
+watch(selected_scheduled, (newVal) => {
+    document.getElementById("default-datepicker").value = newVal;
+});
+
+watch(selectedTime, (newVal) => {
+    document.getElementById("time").value = newVal;
+});
 
 const validateForm = () => {
     errors.value = {};
@@ -324,32 +338,32 @@ const validateForm = () => {
     return isValid;
 };
 
-const fetchEmailPreview = async () => {
-    try {
-        const response = await fetch("/scholarships/1/send-access", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                scholar: {
-                    first_name: "John",
-                    email: "john.doe@example.com"
-                },
-                password: "12345678",
-                deadline: "March 31, 2025"
-            })
-        });
+// const fetchEmailPreview = async () => {
+//     try {
+//         const response = await fetch("/scholarships/1/send-access", {
+//             method: "POST",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify({
+//                 scholar: {
+//                     first_name: "John",
+//                     email: "john.doe@example.com"
+//                 },
+//                 password: "12345678",
+//                 deadline: "March 31, 2025"
+//             })
+//         });
 
-        if (!response.ok) throw new Error("Failed to fetch email preview");
+//         if (!response.ok) throw new Error("Failed to fetch email preview");
 
-        const data = await response.json();
-        form.value.subject = data.subject;
-        form.value.content = data.content;
-    } catch (error) {
-        console.error("Error fetching email preview:", error);
-    }
-};
+//         const data = await response.json();
+//         form.value.subject = data.subject;
+//         form.value.content = data.content;
+//     } catch (error) {
+//         console.error("Error fetching email preview:", error);
+//     }
+// };
 
 
 const submitForm = async () => {
