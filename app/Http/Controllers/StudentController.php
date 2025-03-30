@@ -887,7 +887,7 @@ class StudentController extends Controller
         $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
         $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
 
-        return Inertia::render('Student/Scholarships/ScholarshipDetails', [
+        return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipDetail', [
             'scholarship' => $scholarship,
             'sponsor' => $sponsor,
             'requirements' => $requirements,

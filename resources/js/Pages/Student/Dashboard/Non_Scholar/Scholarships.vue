@@ -65,12 +65,12 @@
 
                             <!-- Apply Button (Vertically Centered) -->
                             <div class="flex h-full items-center justify-center">
-                                <!-- <Link :href="`/applying-scholarship/${scholarship.id}`"> -->
+                                <Link :href="`/student/applying-scholarship/${scholarship.id}`">
                                 <button
                                     class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
                                     Apply Now
                                 </button>
-                                <!-- </Link> -->
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
 </template>
 
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3';
+import { Head, useForm, Link } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 
 const props = defineProps({
