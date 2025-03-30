@@ -934,9 +934,17 @@
                         </div>
                     </div>
                 </div>
-                <div v-else>
-                    <div>ahh walang grade</div>
+                <div v-else class="p-2">
+                    <!-- Empty State Message -->
+                    <div class="flex items-center justify-center py-12 px-8 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl text-center">
+                        <div class="text-gray-500">
+                            <h2 class="text-2xl font-semibold mb-4">No Grade Uploaded Yet</h2>
+                            <p class="text-lg">It seems there are no grades available at the moment. Please submit grades as soon as available.</p>
+                        </div>
+                    </div>
                 </div>
+
+
 
 
             </div>
