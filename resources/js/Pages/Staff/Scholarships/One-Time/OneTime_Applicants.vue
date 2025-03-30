@@ -38,8 +38,7 @@
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
                         </h1>
-                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ selectedSem?.name || 'Semester'
-                        }}</span>
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{selectedSem}} Semester</span>
                     </div>
 
                     <!-- Stats Section -->
@@ -50,7 +49,10 @@
                                 <font-awesome-icon :icon="['fas', 'calendar-alt']" class="text-red-600 text-base" />
                                 <p class="text-gray-500 text-sm">Application Deadline</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins text-red-600">Sep 30, 2023</p>
+                            <p class="text-3xl font-semibold font-poppins text-red-600">{{ new Date(requirements[0].date_end).toLocaleDateString('en-US', {
+                                                    year:
+                                                        'numeric', month: 'long', day: 'numeric'
+                                                }) }}</p>
                         </div>
 
                         <!-- Approved Applicants -->
@@ -146,7 +148,7 @@ const props = defineProps({
     scholarship: Object,
     schoolyear: Object,
     selectedSem: Object,
-    batches: Array,
+    batch: Object,
     scholars: Array,
     requirements: Array,
     payout: Array
@@ -225,16 +227,16 @@ watchEffect(() => {
 });
 
 // Watch for flash messages from the server
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
-    const flashError = usePage().props.flash?.error;
+// watchEffect(() => {
+//     const flashMessage = usePage().props.flash?.success;
+//     const flashError = usePage().props.flash?.error;
 
-    if (flashMessage) {
-        showToast('Success', flashMessage);
-    } else if (flashError) {
-        showToast('Error', flashError, 'error');
-    }
-});
+//     if (flashMessage) {
+//         showToast('Success', flashMessage);
+//     } else if (flashError) {
+//         showToast('Error', flashError, 'error');
+//     }
+// });
 
 // Calculate statistics based on scholar data
 const calculateStats = () => {
@@ -264,95 +266,6 @@ const updateStats = (newStats) => {
     stats.value = { ...stats.value, ...newStats };
     // When stats are updated by child component, mark data as changed
     dataChanged.value = true;
-};
-
-// Change the selected batch
-const changeBatch = () => {
-    loading.value = true;
-
-    router.visit(
-        `/scholarships/${props.scholarship.id}/batch/${selectedBatchId.value}`,
-        {
-            preserveState: false,
-            onSuccess: () => {
-                calculateStats();
-                // Reset data change tracking after batch change
-                originalScholars.value = cloneDeep(props.scholars || []);
-                originalRequirements.value = cloneDeep(props.requirements || []);
-                dataChanged.value = false;
-                showToast('Batch Changed', 'Scholarship batch data loaded successfully');
-            },
-            onError: () => {
-                showToast('Error', 'Failed to load batch data', 'error');
-            },
-            onFinish: () => {
-                loading.value = false;
-            }
-        }
-    );
-};
-
-// Navigate to add scholars page
-const openScholarship = () => {
-    router.visit(`/scholarships/${props.scholarship.id}/adding-scholars`, {
-        data: {
-            selectedYear: props.schoolyear.id,
-            selectedSem: props.selectedSem,
-            scholarship: props.scholarship.id,
-            batchId: currentBatch.value?.id
-        },
-        preserveState: true
-    });
-};
-
-// Refresh data with loading indicator
-const refreshData = async () => {
-    if (refreshing.value) return;
-
-    refreshing.value = true;
-
-    try {
-        await router.reload({
-            only: ['scholars', 'requirements'],
-            onSuccess: () => {
-                calculateStats();
-                // Reset the change tracking
-                originalScholars.value = cloneDeep(props.scholars || []);
-                originalRequirements.value = cloneDeep(props.requirements || []);
-                dataChanged.value = false;
-                showToast('Data Updated', 'Scholarship data has been refreshed');
-            },
-            onError: () => {
-                showToast('Error', 'Failed to refresh data', 'error');
-            },
-            onFinish: () => {
-                refreshing.value = false;
-            }
-        });
-    } catch (error) {
-        console.error('Error refreshing data:', error);
-        showToast('Error', 'Failed to refresh data', 'error');
-        refreshing.value = false;
-    }
-};
-
-// Quiet background refresh without notifications
-const quietRefresh = async () => {
-    try {
-        await router.reload({
-            only: ['scholars', 'requirements'],
-            preserveScroll: true,
-            onSuccess: () => {
-                calculateStats();
-                // Reset the change tracking
-                originalScholars.value = cloneDeep(props.scholars || []);
-                originalRequirements.value = cloneDeep(props.requirements || []);
-                dataChanged.value = false;
-            }
-        });
-    } catch (error) {
-        console.error('Error in background refresh:', error);
-    }
 };
 
 // Toast notification helper

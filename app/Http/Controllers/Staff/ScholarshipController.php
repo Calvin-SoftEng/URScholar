@@ -171,17 +171,16 @@ class ScholarshipController extends Controller
 
         $eligible = Eligible::where('scholarship_id', $scholarship->id)->first();
         $batch = Batch::where('scholarship_id', $scholarship->id)
-        ->where('semester', $request->input('selectedSem')) // Replace 'First' with your desired semester value
-        ->where('school_year', $request->input('selectedYear')) // Replace '2024-2025' with your desired school year value
-        ->first();
+            ->where('semester', $request->input('selectedSem')) // Replace 'First' with your desired semester value
+            ->where('school_year', $request->input('selectedYear')) // Replace '2024-2025' with your desired school year value
+            ->first();
 
         if ($scholarship->scholarshipType == 'One-time Payment' && $batch) {
             return redirect()->route('scholarship.onetime_list', [
                 'scholarshipId' => $scholarship->id,
-            ])->with([
-                        'selectedYear' => $request->input('selectedYear'),
-                        'selectedSem' => $request->input('selectedSem')
-                    ]);
+                'selectedYear' => $request->input('selectedYear'),
+                'selectedSem' => $request->input('selectedSem')
+            ]);
         }
 
         // Get the authenticated user
@@ -348,6 +347,13 @@ class ScholarshipController extends Controller
         $scholarship = Scholarship::where('id', $scholarshipId)->first();
 
 
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->where('semester', $request->input('selectedSem')) // Replace 'First' with your desired semester value
+            ->where('school_year', $request->input('selectedYear')) // Replace '2024-2025' with your desired school year value
+            ->first();
+
+            // dd($batch);
+
         // Checking if scholar's payment claimed
         $payout = Payout::where('scholarship_id', $scholarshipId)
             ->where('status', 'claimed')
@@ -359,12 +365,6 @@ class ScholarshipController extends Controller
 
         // Get scholars directly without batch relationship
         $scholars = Scholar::where('scholarship_id', $scholarshipId)
-            ->when($request->input('selectedYear'), function ($query, $year) {
-                return $query->where('school_year', $year);
-            })
-            ->when($request->input('selectedSem'), function ($query, $sem) {
-                return $query->where('semester', $sem);
-            })
             ->with(['campus', 'course']) // Eager load campus and course relationships
             ->get()
             ->map(function ($scholar) use ($totalRequirements) {
@@ -409,6 +409,7 @@ class ScholarshipController extends Controller
 
         return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
+            'batch' => $batch,
             'scholars' => $scholars,
             'payout' => $payout,
             'requirements' => $requirements,
