@@ -75,11 +75,12 @@
                     <!-- {{ props.selectedSem }} {{ schoolyear.year }} -->
 
                     <div class="flex flex-row space-x-3 items-center">
-                        <button @click="toggleNotify"
-                            class="flex items-center gap-2 bg-white border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg hover:bg-blue-200 transition duration-200">
-                            <font-awesome-icon :icon="['fas', 'bullhorn']" class="text-base" />
-                            <span class="font-normal">Notify Payouts</span>
-                        </button>
+                        <Link :href="route('cashier.scheduling')">
+                            <button class="flex items-center gap-2 bg-white border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg hover:bg-blue-200 transition duration-200">
+                                <font-awesome-icon :icon="['fas', 'bullhorn']" class="text-base" />
+                                <span class="font-normal">Notify Payouts</span>
+                            </button>
+                        </Link>
                         <button @click="toggleSendBatch"
                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />

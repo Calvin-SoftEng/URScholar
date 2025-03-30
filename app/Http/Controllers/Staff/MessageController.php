@@ -43,7 +43,7 @@ class MessageController extends Controller
             ->get();
 
         // Return the chat page using Inertia
-        return Inertia::render('Staff/Messaging/Messaging', [
+        return Inertia::render('Staff/Communication/Communication', [
             'messages' => [],
             'currentUser' => $currentUser,
             'scholarships' => $scholarships,

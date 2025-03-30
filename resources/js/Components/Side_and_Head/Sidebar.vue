@@ -154,7 +154,7 @@
               forum
             </span>
             <span v-show="dataOpenSideBar"
-              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Groups</span>
+              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Communication</span>
           </div>
         </div>
         </Link>

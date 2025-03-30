@@ -40,6 +40,12 @@ class CashierController extends Controller
         ]);
     }
 
+    public function scheduling()
+    {
+
+        return Inertia::render('Cashier/Scholarships/Scheduling');
+    }
+
     public function payout_batches(Scholarship $scholarship)
     {
         $batches = Batch::where('scholarship_id', $scholarship->id)

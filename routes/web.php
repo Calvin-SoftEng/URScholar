@@ -210,6 +210,9 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
     Route::get('/cashier/dashboard', [CashierController::class, 'dashboard'])->name('cashier.dashboard');
 
+    // scheduling
+    Route::get('/cashier/scholarships/schedule', [CashierController::class, 'scheduling'])->name('cashier.scheduling');
+
 
     // Scholarship_Payouts
     Route::get('/cashier/scholarships', [CashierController::class, 'scholarships'])->name('cashier.active_scholarships');
