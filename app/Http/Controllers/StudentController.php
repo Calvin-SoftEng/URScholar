@@ -912,7 +912,7 @@ class StudentController extends Controller
 
         $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
 
-        return Inertia::render('Student/Scholarships/ScholarshipApplication', [
+        return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipApplication', [
             'scholarship' => $scholarship,
             'sponsor' => $sponsor,
             'requirements' => $requirements,

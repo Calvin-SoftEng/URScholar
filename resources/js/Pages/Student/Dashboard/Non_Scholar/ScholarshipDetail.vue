@@ -62,8 +62,10 @@
             </div>
             <div class="w-1/4 bg-white flex flex-col gap-4 rounded-lg shadow-md h-fit p-4 border border-gray-50">
                 <!-- 25% width -->
+                <Link :href="`/student/applying-scholarship/${scholarship.id}/application`">
                 <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Apply
                     Now</button>
+                </Link>
                 <div class="flex flex-col">
                     <span class="text-gray-500 text-sm">Application Deadline</span>
                     <span class="font-medium text-xl">{{ formattedDate }}</span>
@@ -90,6 +92,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from 'vue';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 import { onMounted, watchEffect, watch, computed } from 'vue';
 
 const activeTab = ref("eligibility");
