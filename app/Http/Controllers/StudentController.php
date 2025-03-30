@@ -40,6 +40,7 @@ class StudentController extends Controller
         $scholar = Scholar::where('email', Auth::user()->email)->first();
         $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
 
+
         if ($scholarship) {
             $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->first();
@@ -51,11 +52,15 @@ class StudentController extends Controller
 
             $requirementIds = $requirements->pluck('id')->toArray();
 
+            
+
             // Fetch only returned submitted requirements related to the scholarship
             $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Returned')
                 ->whereIn('requirement_id', $requirementIds)
                 ->get();
+
+                // dd($requirementIds);
 
             // Map submitted requirements with their corresponding requirement details
             $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
@@ -199,6 +204,7 @@ class StudentController extends Controller
             'birthplace' => ['required', 'string', 'max:255'],
             'age' => ['required', 'numeric'],
             'gender' => ['required', 'string', 'max:255'],
+            'civil_status' => ['required', 'string', 'max:255'],
             'street' => ['required', 'string', 'max:255'],
             'municipality' => ['required', 'string', 'max:255'],
             'province' => ['required', 'string', 'max:255'],
