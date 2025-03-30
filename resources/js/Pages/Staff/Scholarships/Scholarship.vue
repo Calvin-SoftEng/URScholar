@@ -152,17 +152,15 @@
                                     <p class="text-gray-500 text-sm">Scholarship Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <div v-if="$page.props.auth.user.usertype == 'super_admin'">
+                                    <div v-if="$page.props.auth.user.usertype == 'super_admin'" class="w-full flex flex-row justify-between items-end"> 
                                         <p class="text-4xl font-semibold font-kanit">{{ props.allBatches.length }}</p>
-                                        <template
-                                            v-if="props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
-                                            <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
-                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
-                                                    false).length}} new
-                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
-                                                    false).length === 1 ? 'Batch' : 'Batches'}}
+                                        <template v-if="props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
+                                            <button class="h-5 px-3 py-1 bg-blue-400 text-white rounded-full text-sm inline-flex items-center justify-center">
+                                                {{ props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length }} new
+                                                {{ props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length === 1 ? 'Batch' : 'Batches' }}
                                             </button>
                                         </template>
+
                                     </div>
                                     <div v-else>
                                         <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
