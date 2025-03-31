@@ -202,6 +202,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
 
     Route::get('/sponsor/dashboard', [SponsorController::class, 'sponsor_dashboard'])->name('sponsor.dashboard');
+
+    // view scholars
+    Route::get('/sponsor/scholarships/', [SponsorController::class, 'view_scholars'])->name('sponsor.scholarship');
 });
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -93,4 +93,12 @@ class SponsorController extends Controller
 
         return redirect()->route('sponsor.index')->with('success', 'Sponsor added successfully!');
     }
+
+    public function view_scholars()
+    {
+
+        return Inertia::render('Sponsor/Scholars/Scholarships');
+
+        // return Inertia::render('Coordinator/Scholarships/CreateScholarships');
+    }
 }

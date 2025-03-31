@@ -1,11 +1,13 @@
 <template>
     <div class="space-y-2">
-        <div class="flex justify-between items-center">
-            <!-- Other content of your card goes here -->
+        <Link :href="route('sponsor.scholarship')" class="flex justify-between items-center">
 
-            <!-- Font Awesome Icon aligned to the right -->
-            <font-awesome-icon :icon="['fas', 'up-right-and-down-left-from-center']" class="ml-auto" />
-        </div>
+                <!-- Other content of your card goes here -->
+
+                <!-- Font Awesome Icon aligned to the right -->
+                <font-awesome-icon :icon="['fas', 'up-right-and-down-left-from-center']" class="ml-auto" />
+
+        </Link>
         <!-- Analytics Section -->
         <div class="grid grid-cols-2 gap-4">
             <div class="p-4 border rounded-lg shadow-sm dark:bg-gray-800">
@@ -92,5 +94,7 @@
 </template>
 
 <script setup>
+import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 </script>
