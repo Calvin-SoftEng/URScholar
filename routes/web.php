@@ -284,7 +284,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     // Application
     Route::get('/student/applying-scholarship/{scholarship}/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
-    Route::post('/student/applying-scholarship/{scholarship}/apply', [StudentController::class, 'submitApplication'])->name('scholarship.application');
+    Route::post('/student/applying-scholarship/{scholarship}/apply', [StudentController::class, 'submitApplication'])->name('scholarship.apply');
 });
 
 Route::middleware(['auth'])->group(function () {
