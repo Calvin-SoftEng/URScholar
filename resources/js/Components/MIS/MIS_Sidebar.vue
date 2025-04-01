@@ -105,13 +105,13 @@
               </div>
             </Link>
 
-            <Link>
+            <!-- <Link>
               <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
                   <span class="pl-2">User Access Restrictions</span>
                 </div>
               </div>
-            </Link>
+            </Link> -->
         </div>
 
       </div>
