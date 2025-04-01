@@ -19,7 +19,8 @@
             <span class="hidden md:inline"><br></span>
             never knew you 
             <span class="hidden md:inline"><br></span>
-            <span class="sm:text-primary sm:bg-gray-200 md:bg-yellow-300 lg:bg-blue-500 xl:bg-green-700">Qualified</span> For!
+            <!-- <span class="sm:text-primary sm:bg-gray-200 md:bg-yellow-300 lg:bg-blue-500 xl:bg-green-700">Qualified</span> For! -->
+            <span class="sm:text-primary">Qualified</span> For!
             </h1>
 
             <p class="text-lg sm:text-2xl md:text-3xl text-gray-400 max-w-2xl font-albert font-bold mx-auto">
