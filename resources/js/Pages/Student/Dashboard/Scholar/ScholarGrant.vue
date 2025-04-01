@@ -147,15 +147,23 @@
             
             <!-- Scholarship Details -->
             <div class="bg-white shadow-md p-6 rounded-lg text-center">
-                <h2 class="text-3xl font-bold text-blue-800">Tulong Dunong</h2>
-                <p class="text-xl text-gray-600">2024-2025 Grantee</p>
+                <div class="flex items-center justify-center space-x-4">
+                    <!-- Logo -->
+                    <img src="../../../../../assets/images/CHED.png" alt="CHED Logo" class="w-16 h-16 object-contain">
+
+                    <!-- Scholarship Info -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-blue-800">Tulong Dunong</h2>
+                        <p class="text-xl text-gray-600">2024-2025 Grantee</p>
+                        
+                    </div>
+                </div>
+
                 <div class="h-0.5 bg-gray-300 my-4"></div>
 
                 <div class="grid grid-cols-2 gap-4 text-left text-gray-700">
-                    <p><span class="font-semibold">Started:</span> 2023 - 1st Sem</p>
                     <p><span class="font-semibold">Current Semester:</span> 2023 - 2nd Sem</p>
                     <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">Inactive</span></p>
-                    <p><span class="font-semibold">Expected Next Payout:</span> 2024 - 1st Sem</p>
                 </div>
             </div>
 
@@ -163,6 +171,73 @@
             <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
                 <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
                 <p class="mt-2">Your next payout is expected on <span class="font-bold">faefeafaefae</span>. Stay updated for further announcements.</p>
+            </div>
+
+            <!-- kapag may new requirmeents -->
+
+            <div v-if="fefamefi" 
+            class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm space-y-3">
+                <h2 class="text-xl font-semibold">Documents must be submitted</h2>
+                <div 
+                    class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center gap-5">
+                        <div class="flex items-center space-x-2">
+                            <span
+                                class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
+                                {{ String.fromCharCode(65 + index) }}
+                            </span>
+                            <span class="font-semibold text-gray-800">
+                                {{ requirement.requirements}}
+                            </span>
+                        </div>
+                        <label
+                            class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                            Add File
+                            <input type="file" class="hidden"
+                            @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
+                            :id="'file_input_' + requirement.id"
+                             />
+                        </label>
+                    </div>
+
+                    <!-- Uploaded File Preview -->
+                    <div
+                        class="border border-dashed border-purple-400 rounded-lg p-2 mt-2 flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
+                                class="w-6 h-6" alt="PDF Icon">
+                            <div>
+                                <p class="text-sm font-medium">
+                                    {{form.files[requirement.id].name }}
+                                </p>
+                                <p class="text-xs text-gray-500">
+                                    {{ form.files[requirement.id].size }}
+                                </p>
+                            </div>
+                        </div>
+                        <button type="button" @click="removeFile(requirement.id)"
+                            class="ml-2 text-red-600 hover:text-red-800">
+                            Remove
+                        </button>
+
+                        <!-- <div v-if="form.errors[`files.${requirement.id}`]"
+                            class="text-red-500 text-sm">
+                            {{ form.errors[`files.${requirement.id}`] }}
+                        </div> -->
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" :disabled="form.processing || !isFormValid" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none
+                            focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
+                            transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed
+                            flex items-center justify-center gap-2">
+                        <span class="material-symbols-rounded">outbox</span>
+                        <span>{{ form.processing ? 'Submitting...' : 'Submit' }}</span>
+                    </button>
+                </div>
+
             </div>
 
             <div class="h-0.5 bg-gray-300"></div>
@@ -308,6 +383,26 @@ const removeFile = (reqId) => {
         fileInput.value = '';
     }
 };
+
+// const handleFile = (event, requirementId, requirementName) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//         form.files[requirementId] = file;
+
+//         // Update or add the requirement entry
+//         const existingIndex = form.requirements.findIndex(r => r.id === requirementId);
+//         if (existingIndex !== -1) {
+//             form.requirements[existingIndex] = { id: requirementId, name: requirementName };
+//         } else {
+//             form.requirements.push({ id: requirementId, name: requirementName });
+//         }
+//     }
+// };
+
+// const removeFile = (requirementId) => {
+//     delete form.files[requirementId];
+//     form.requirements = form.requirements.filter(r => r.id !== requirementId);
+// };
 
 const submitRequirements = () => {
     if (Object.keys(form.files).length === 0) {
