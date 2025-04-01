@@ -161,6 +161,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     // Route::post('/group-pagee/{scholarship}/messages', [MessageController::class, 'store'])->name('grouppage.store');
 
     //One-time Payment Applicants
+    Route::get('/scholarships/scholar={id}/one-time', [ScholarController::class, 'scholar_onetime'])->name('scholarships.applicant_details');
     Route::get('/scholarships/{scholarshipId}/applicant', [ScholarshipController::class, 'onetime_list'])->name('scholarship.onetime_list');
     Route::get('/scholarships/one-time/scholars', [ScholarshipController::class, 'onetime_scholars'])->name('scholarship.onetime_scholars');
 
