@@ -267,12 +267,18 @@
                 <!--ONE TIME PAYMENT PROCESS-->
                 <div v-else-if="scholarship.scholarshipType == 'One-time Payment'">
                     <form @submit.prevent="submitForm">
-                        <div class="pt-3 pb-24 overflow-auto h-full scroll-py-4">
+                        <div class="pt-3 pb-20 overflow-auto h-full scroll-py-4">
                             <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
                             <div class="w-full block bg-white px-12 py-6 flex-col items-center mx-auto sm:px-6 lg:px-8">
-                                <span>
-                                    Set up One-Time Payment Scholarship Details
-                                </span>
+                                <div class="flex justify-between items-center py-2">
+                                    <span class="text-lg font-semibold text-gray-700">
+                                        Set up One-Time Payment Scholarship Details
+                                    </span>
+                                    <button type="submit" @click="submitForm"
+                                        class="px-6 py-2 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all">
+                                        {{ isSubmitting ? 'Creating...' : 'Create Scholarship' }}
+                                    </button>
+                                </div>
                                 <div class="mt-5 font-inter text-lg space-y-3">
                                     <div class="flex flex-row w-full gap-3">
                                         <div class="flex flex-col space-y-2 w-full">
@@ -312,7 +318,7 @@
                                                                 d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                         </svg>
                                                     </div>
-                                                    <input id="datepicker-range-start" name="start" type="text"
+                                                    <input id="datepicker-range-start" name="start" type="text" autocomplete="off"
                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select start date">
                                                 </div>
@@ -335,7 +341,7 @@
                                                                 d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                         </svg>
                                                     </div>
-                                                    <input id="datepicker-range-end" name="end" type="text"
+                                                    <input id="datepicker-range-end" name="end" type="text" autocomplete="off"
                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select end date">
                                                 </div>
@@ -552,12 +558,7 @@
                             </div>
                             <!-- </div> -->
                         </div>
-                        <div class="flex justify-end mt-8">
-                            <button type="submit" @click="submitForm"
-                                class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-                                {{ isSubmitting ? 'Creating...' : 'Create Scholarship' }}
-                            </button>
-                        </div>
+                        
                     </form>
                 </div>
 

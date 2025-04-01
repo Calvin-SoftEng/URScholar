@@ -58,7 +58,6 @@
                         </div>
                     </div>
 
-                    <!-- group chat to -->
                     <div v-if="scholar" class="col-span-2">
                     <!-- kapag may scholarship -->
                         <div
@@ -68,11 +67,13 @@
                         </div>
                     </div>
                     
+                    
                     <!-- kapag wala pang scholarship -->
                     <div v-else
                         class="w-full h-full col-span-2 block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
                         <Scholarships :sponsors="sponsors" :scholarships="scholarships"
                             :schoolyears="schoolyears" />
+                            <!-- <Scholarships  /> -->
                     </div>
                 </div>
             </div>

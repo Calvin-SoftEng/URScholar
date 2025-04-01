@@ -134,7 +134,7 @@ class EmailController extends Controller
                         " - Stay updated with announcements and notifications regarding your application status.\n\n" .
                         "*Application Deadline: " . $request['deadline'] . "\n\n" .
                         "Click the following link to access your portal: " .
-                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
+                        "https://urscholar.up.railway.app\n\n"
                 ];
 
                 Mail::to($scholar->email)->send(new SendEmail($mailData));

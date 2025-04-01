@@ -1,5 +1,5 @@
 <template>
-    <template v-if="yes">
+    <template v-if="scholar">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
             <span class="text-4xl font-bold">Tulong Dunong Program</span>
             <span class="text-xl">Grantee</span> 
@@ -131,7 +131,7 @@
 
 
     <!-- scholar grant -->
-    <template v-if="scholar">
+    <!-- <template v-if="scholar">
         <div class="mb-3">
             <span class="text-2xl font-medium font-poppins">My Scholarship</span>
         </div>
@@ -149,12 +149,12 @@
 
                 <div class="max-w-6xl mx-auto space-y-6 mt-4">
                     <div class="grid grid-cols-5 gap-4 items-center">
-                        <!-- Status Column -->
+
                         <div class="col-span-1 flex items-center justify-center text-primary font-bold">
                             Claimed
                         </div>
 
-                        <!-- Details Column -->
+
                         <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
                             <h2 class="text-lg font-semibold">March 30, 2025</h2>
                             <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
@@ -165,7 +165,7 @@
             </div>
             
         </div>
-    </template>
+    </template> -->
 
     <!-- one time -->
     <template v-if="feaf">
