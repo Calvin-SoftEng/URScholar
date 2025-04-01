@@ -187,12 +187,9 @@ const errors = ref({});
 
 // Form data with email field added
 const form = ref({
-    subject: "ninin",
-    content: "ninnin",
     scheduled_date: '',
     scheduled_time: '',
     reminders: '',
-    scholar_email: '' // Added field for scholar email
 });
 
 // Helper function to get disbursements for a specific batch
@@ -211,8 +208,6 @@ const formatDateTime = (date) => {
 
 const resetForm = () => {
     form.value = {
-        subject: '',
-        content: '',
         scheduled_date: '',
         scheduled_time: '',
         reminders: ''
@@ -288,23 +283,9 @@ const validateForm = () => {
     return isValid;
 };
 
-// Collect the scholar's email
-const scholarEmail = ref('');
-
-// Helper function to get the selected scholar's email
-const getSelectedScholarEmail = () => {
-    // Get the selected scholar from the disbursements
-    const selectedScholar = props.disbursements.find(
-        disbursement => disbursement.scholar?.email === scholarEmail.value
-    );
-
-    return selectedScholar ? selectedScholar.scholar.email : '';
-};
 
 // Submit function
 const submitForm = async () => {
-    // Get the scholar email before submission
-    form.value.scholar_email = getSelectedScholarEmail();
 
     // Client-side validation before submitting
     if (!validateForm()) {
@@ -317,7 +298,7 @@ const submitForm = async () => {
 
         const formData = useForm(form.value);
 
-        await formData.post(`/scholarships/${props.scholarship.id}/schedule-payout`, {
+        await formData.post(`/cashier/scholarships/${props.scholarship.id}/notify`, {
             onError: (e) => {
                 errors.value = e;
             },
