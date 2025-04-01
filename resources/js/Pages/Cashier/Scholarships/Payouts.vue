@@ -50,7 +50,7 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ payout.sub_total }}/{{ payout.total_scholars }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ totalClaimed }}/{{ payout.total_scholars }}</p>
                             </div>
                         </div>
                     </div>
@@ -137,6 +137,7 @@ const props = defineProps({
     scholar: Object,
     errors: Object,
     flash: Object,
+    totalClaimed: Object,
 });
 
 const scannedScholar = ref(null);

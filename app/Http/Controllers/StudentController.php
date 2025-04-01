@@ -41,22 +41,40 @@ class StudentController extends Controller
     public function dashboard()
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)->with('school_year')->first();
 
         if ($grantee) {
             $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
 
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
-                ->where('status', 'Claimed')
                 ->first() ?? null;
 
-            $oldestGrantee = Grantees::orderBy('created_at', 'asc')->first(); // Fetch the oldest grantee
+            $oldestGrantee = Grantees::where('id', $grantee->id)
+                ->orderBy('created_at', 'asc')
+                ->with('school_year')
+                ->first();
 
-            $currentYear = SchoolYear::where('id', $grantee->school_year)->first();
+            $historygrantee = Grantees::where('scholar_id', $scholar->id)
+                ->with(['school_year', 'scholar.disbursements'])
+                ->get()
+                ->map(function ($grantee) {
+                    // Get the disbursement for this scholar
+                    $disbursement = $grantee->scholar->disbursements->first();
 
-            $yearQualified = SchoolYear::where('id', $oldestGrantee->school_year)->first();
+                    return [
+                        'id' => $grantee->id,
+                        'scholar_id' => $grantee->scholar_id,
+                        'scholarship_id' => $grantee->scholarship_id,
+                        'school_year' => $grantee->school_year->year ?? 'N/A',
+                        'semester' => $grantee->semester ?? 'N/A',
+                        'batch_name' => $grantee->batch ? $grantee->batch->batch_name : 'N/A',
+                        'dibursement_status' => $disbursement ? $disbursement->status : 'No Disbursement',
+                        'claimed_at' => $disbursement ? $disbursement->claimed_at : null,
+                        'reasons_of_not_claimed' => $disbursement ? $disbursement->reasons_of_not_claimed : null,
+                        // Add any other fields you need from grantee or disbursement
+                    ];
+                });
 
-            $historyGrantee = Grantees::where('id', $grantee->id)->get();
 
 
             if ($scholarship) {
@@ -103,6 +121,8 @@ class StudentController extends Controller
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
                     'grantee' => $grantee,
+                    'oldestGrantee' => $oldestGrantee,
+                    'historygrantee' => $historygrantee,
                     'disbursement' => $disbursement,
                     'scholarship' => $scholarship,
                     'scholar' => $scholar,

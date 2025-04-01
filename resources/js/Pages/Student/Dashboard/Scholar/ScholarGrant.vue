@@ -2,7 +2,7 @@
     <template v-if="!disbursement">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
             <span class="text-4xl font-bold">Tulong Dunong Program</span>
-            <span class="text-xl">Grantee</span> 
+            <span class="text-xl">Grantee</span>
         </div>
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
@@ -18,16 +18,14 @@
             <div class="w-16 h-1 bg-primary relative -top-4"></div>
 
             <!-- Step 2 -->
-            <div v-if="submitReq !=0 || submitPending !=0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
                     2</div>
                 <span class="mt-2 text-sm text-gray-700">Under Review</span>
             </div>
 
-            <div v-if="submitApproved != 0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
@@ -36,20 +34,18 @@
             </div>
 
             <!-- Line -->
-            <div v-if="submitReq !=0 || submitPending !=0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+            <div v-if="submitReq != 0 || submitPending != 0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
             <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
 
             <!-- Step 3 -->
-            <div v-if="submitReq !=0 || submitPending !=0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
                     3</div>
                 <span class="mt-2 text-sm text-gray-700">Approved</span>
             </div>
 
-            <div v-if="submitApproved != 0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
@@ -60,7 +56,7 @@
 
         <!-- first stepper -->
 
-        <div v-if="submitPending !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
+        <div v-if="submitPending != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
             <h1>Congratulations!</h1>
             <p>Your application has been successfully completed.</p>
             <p>You will be notified about the next steps soon.</p>
@@ -69,7 +65,7 @@
 
         <!-- second stepper -->
 
-        <div v-else-if="submitReq !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
+        <div v-else-if="submitReq != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
             <span>From Maam Anorn</span>
             <span>Message</span>
             <p>It is noted, however, that among the requirements you have submittted to DBP, the
@@ -144,7 +140,7 @@
         </div>
 
         <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
-            
+
             <!-- Scholarship Details -->
             <div class="bg-white shadow-md p-6 rounded-lg text-center">
                 <div class="flex items-center justify-center space-x-4">
@@ -153,51 +149,50 @@
 
                     <!-- Scholarship Info -->
                     <div>
-                        <h2 class="text-3xl font-bold text-blue-800">{{scholarship.name}}</h2>
-                        <p class="text-xl text-gray-600">2024-2025 Grantee</p>
-                        
+                        <h2 class="text-3xl font-bold text-blue-800">{{ scholarship.name }}</h2>
+                        <p class="text-xl text-gray-600">{{ oldestGrantee.school_year.year }} Grantee</p>
+
                     </div>
                 </div>
 
                 <div class="h-0.5 bg-gray-300 my-4"></div>
 
                 <div class="grid grid-cols-2 gap-4 text-left text-gray-700">
-                    <p><span class="font-semibold">Current Semester:</span> 2023 - 2nd Sem</p>
-                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">Inactive</span></p>
+                    <p><span class="font-semibold">Current Semester:</span> {{ grantee.school_year.year }} - {{
+                        grantee.semester }} Sem</p>
+                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">{{
+                        grantee.status }}</span></p>
                 </div>
             </div>
 
             <!-- Payout Announcement Card (Only shown if there's a schedule) -->
             <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
                 <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
-                <p class="mt-2">Your next payout is expected on <span class="font-bold">faefeafaefae</span>. Stay updated for further announcements.</p>
+                <p class="mt-2">Your next payout is expected on <span class="font-bold">faefeafaefae</span>. Stay
+                    updated for further announcements.</p>
             </div>
 
             <!-- kapag may new requirmeents -->
 
-            <div v-if="fefamefi" 
-            class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm space-y-3">
+            <div v-if="fefamefi"
+                class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm space-y-3">
                 <h2 class="text-xl font-semibold">Documents must be submitted</h2>
-                <div 
-                    class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
+                <div class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
                     <!-- Header -->
                     <div class="flex justify-between items-center gap-5">
                         <div class="flex items-center space-x-2">
-                            <span
-                                class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
+                            <span class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
                                 {{ String.fromCharCode(65 + index) }}
                             </span>
                             <span class="font-semibold text-gray-800">
-                                {{ requirement.requirements}}
+                                {{ requirement.requirements }}
                             </span>
                         </div>
-                        <label
-                            class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                        <label class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
                             Add File
                             <input type="file" class="hidden"
-                            @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
-                            :id="'file_input_' + requirement.id"
-                             />
+                                @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
+                                :id="'file_input_' + requirement.id" />
                         </label>
                     </div>
 
@@ -205,11 +200,11 @@
                     <div
                         class="border border-dashed border-purple-400 rounded-lg p-2 mt-2 flex items-center justify-between">
                         <div class="flex items-center space-x-2">
-                            <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
-                                class="w-6 h-6" alt="PDF Icon">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" class="w-6 h-6"
+                                alt="PDF Icon">
                             <div>
                                 <p class="text-sm font-medium">
-                                    {{form.files[requirement.id].name }}
+                                    {{ form.files[requirement.id].name }}
                                 </p>
                                 <p class="text-xs text-gray-500">
                                     {{ form.files[requirement.id].size }}
@@ -249,36 +244,52 @@
                     <!-- <span class="font-normal text-base">Show all</span> -->
                 </div>
                 <div class="max-w-6xl mx-auto space-y-6 mt-4">
-                    <div class="grid grid-cols-5 gap-4 items-center">
-                        
-                        <div
-                            class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
-                            <h3 class="font-semibold text-base text-blue-900 dark:text-white">
-                                    1st Semester - 2024-2025
-                            </h3>
-                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
-                        </div>
-
-                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
-                            Claimed
-                        </div>
-
-                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                            <h2 class="text-lg font-semibold">April 1, 2025</h2>
-                            <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>, ID: URSB123</p>
-                            <p class="text-gray-600">Processed at: sa cashier</p>
+                    <div v-if="historygrantee.length === 0">
+                        <div class="grid grid-cols-5 gap-4 items-center">
+                            <div class="col-span-5 flex items-center justify-center text-primary font-bold">
+                                NO history yet
+                            </div>
                         </div>
                     </div>
+
+                    <div v-else>
+                        <div v-for="history in historygrantee" :key="history.id"
+                            class="grid grid-cols-5 gap-4 items-center">
+                            <div class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
+                                <h3 class="font-semibold text-base text-blue-900 dark:text-white">
+                                    {{ history.semester }} Semester - {{ history.school_year }}
+                                </h3>
+                                <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                            </div>
+
+                            <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                                {{ history.dibursement_status }}
+                            </div>
+
+                            <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
+                                <h2 class="text-lg font-semibold">{{ new Date(history.claimed_at).toLocaleDateString('en-US', {
+                                                year:
+                                                    'numeric', month: 'long', day: 'numeric'
+                                            }) }}</h2>
+                                <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>,
+                                    ID: URSB123</p>
+                                <p class="text-gray-600">Processed at: sa cashier</p>
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
 
-                
+
             </div>
 
             <!-- Encouragement & Next Steps -->
             <div class="bg-white shadow-md p-6 rounded-lg text-center">
                 <h2 class="text-2xl font-bold text-blue-800">Keep Going!</h2>
                 <p class="text-gray-600 mt-2">
-                    "Your hard work is paying off! Keep maintaining your academic performance and complete your requirements on time to stay eligible for your next grant."
+                    "Your hard work is paying off! Keep maintaining your academic performance and complete your
+                    requirements on time to stay eligible for your next grant."
                     <br>
                     Update your GWA and upload corresponding documents to renew your scholarship.
                 </p>
@@ -304,11 +315,11 @@
 
 
 
-    
+
 
 </template>
 
-    
+
 
 
 <script setup>
@@ -323,6 +334,9 @@ const props = defineProps({
     submitPending: Array,
     submitApproved: Array,
     disbursement: Object,
+    grantee: Object,
+    oldestGrantee: Object,
+    historygrantee: Array,
 
     //For non-scholars only
     sponsors: {
