@@ -23,7 +23,8 @@
                     </ul>
                 </div>
 
-                <div class="w-full h-full flex justify-center items-center dark:text-dprimary relative">
+                <div class="w-full h-full flex flex-col justify-center items-center dark:text-dprimary relative">
+                    
                     <!-- Close Button -->
                     <button class="absolute top-4 right-10">
                         <span
@@ -33,68 +34,168 @@
                     </button>
 
                     <div class="h-full grid grid-cols-2 gap-3 py-3 w-9/12">
+                        
                         <!-- 25% Column -->
                         <div class="col-span-2 w-full h-full flex flex-col">
-                            <div class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col">
-                                <div class="flex flex-row gap-3">
-                                    <div class="bg-black rounded-lg w-3/12 h-full aspect-square">
-                                        <img :src="`/storage/user/profile/${scholar.user?.picture}`"
-                                            alt="Profile Picture" class="w-full h-full object-cover">
+                            <div class="h-full rounded-xl p-5 shadow-md bg-white dark:bg-dcontainer flex flex-col">
+                                <div class="flex flex-row gap-10 items-center justify-center">
+                                    <div class="flex flex-col items-center space-y-3">
+                                        <div class="bg-black rounded-lg w-84 h-80 overflow-hidden">
+                                            <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture" class="w-full h-full object-cover">
+                                        </div>
                                     </div>
-                                    <div class="w-full">
-                                        <div class="flex flex-col p-2 space-y-3">
-                                            <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">Scholar
-                                                    Name</span>
-                                                <span class="text-xl font-sora text-primary">
-                                                    {{ scholar.last_name }},
-                                                    {{ scholar.first_name }}
-                                                    {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
-                                                        word.charAt(0).toUpperCase()).join('.') + '.' : ''}}</span>
-                                            </div>
-                                            <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">URScholar
-                                                    ID</span>
-                                                <span class="text-base text-primary">{{ scholar.urscholar_id }}</span>
-                                            </div>
-                                        </div>
 
-                                        <div class="flex flex-col p-2 space-y-2">
-                                            <div class="flex flex-col text-black">
-                                                <span
-                                                    class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                                <span class="text-base text-primary">{{ scholar.course.name }}</span>
-                                            </div>
-
-                                            <div class="flex flex-col text-black">
-                                                <span
-                                                    class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                                <span class="text-base text-primary">{{ scholar.campus.name }}</span>
-                                            </div>
-                                        </div>
-
-                                        <div class="flex flex-col p-2 space-y-2">
-                                            <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">Contact
-                                                    No.</span>
-                                                <span class="text-base text-primary">BSIT</span>
-                                            </div>
-
-                                            <div class="flex flex-col text-black">
-                                                <span class="font-semibold uppercase text-xs text-gray-500">Email
-                                                    Address</span>
-                                                <span class="text-base text-primary">{{ scholar.email }}</span>
-                                            </div>
-                                        </div>
-                                        <!-- Ensure button stays at the bottom -->
-                                        <div class="mt-auto w-full flex justify-end">
-                                            <button class="w-full rounded-md py-1 bg-primary text-white">View more
-                                                Details</button>
-                                        </div>
+                                    <div class="flex flex-col justify-end items-end space-y-4">
+                                        <!-- Approve Button -->
+                                        <button class="w-48 px-8 py-3 bg-green-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-200">
+                                            Accept
+                                        </button>
+                                        
+                                        <!-- Disapprove Button -->
+                                        <button class="w-48 px-8 py-3 bg-red-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 transition-all duration-200">
+                                            Decline
+                                        </button>
                                     </div>
                                 </div>
 
+                                <div
+                                    class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                    <h3 class="font-semibold text-base text-blue-900 dark:text-white">
+                                            Personal Information
+                                    </h3>
+                                    <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                </div>
 
+                                <div class="grid grid-cols-2 gap-6 w-full px-10">
+                                    <div class="flex flex-col p-2 space-y-3">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Applicant Name</span>
+                                            <span class="text-xl font-sora text-primary">
+                                                {{ scholar.last_name }},
+                                                {{ scholar.first_name }}
+                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Contact No.</span>
+                                            <span class="text-xl text-primary">43432423432423</span>
+                                        </div>
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Email Address</span>
+                                            <span class="text-xl text-primary">{{ scholar.email }}</span>
+                                        </div>
+
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Address</span>
+                                            <span class="text-xl text-primary">feafaefeaf</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-col p-2 space-y-2">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">URScholar ID</span>
+                                            <span class="text-xl text-primary">{{ scholar.urscholar_id }}</span>
+                                        </div>
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
+                                            <span class="text-xl text-primary">{{ scholar.course.name }}</span>
+                                        </div>
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
+                                            <span class="text-xl text-primary">{{ scholar.campus.name }}</span>
+                                        </div>
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">General Weighted Average</span>
+                                            <span class="text-xl text-primary">1.2</span>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                    <h3 class="font-semibold text-base text-blue-900 dark:text-white">
+                                            Family Information
+                                    </h3>
+                                    <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-6 w-full px-10">
+                                    <div class="flex flex-col p-2 space-y-3">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Mother's Name</span>
+                                            <span class="text-xl font-sora text-primary">
+                                                {{ scholar.last_name }},
+                                                {{ scholar.first_name }}
+                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
+                                            <span class="text-xl text-primary">Trabaho</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex flex-col p-2 space-y-2">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Father's Name</span>
+                                            <span class="text-xl font-sora text-primary">
+                                                {{ scholar.last_name }},
+                                                {{ scholar.first_name }}
+                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
+                                            </span>
+                                        </div>
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
+                                            <span class="text-xl text-primary">Trabaho</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-2 flex flex-col p-2 space-y-3">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Siblings</span>
+                                            <span class="text-xl font-sora text-primary">
+                                              Name 1, Name 2, Name 3
+                                            </span>
+                                            <span class="text-xl font-sora text-primary">
+                                              Work 1, Work 2, Work 3
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-span-2 flex flex-col p-2 space-y-3">
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Marital Status of Parents</span>
+                                            <span class="text-xl font-sora text-primary">
+                                             Married
+                                            </span>
+                                        </div>
+
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Monthly Family Income</span>
+                                            <span class="text-xl font-sora text-primary">
+                                             Married
+                                            </span>
+                                        </div>
+
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Other Source of Income</span>
+                                            <span class="text-xl font-sora text-primary">
+                                             Married
+                                            </span>
+                                        </div>
+
+                                        <div class="flex flex-col text-black">
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Family Type of Housing</span>
+                                            <span class="text-xl font-sora text-primary">
+                                             Married
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+
+                                <div class="h-0.5 bg-gray-100"></div>
                             </div>
                         </div>
 
@@ -103,7 +204,7 @@
                             <!-- Second Layer with Single Card -->
                             <div
                                 class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
-                                <h1 class="text-black font-normal text-xl font-poppins">Requirements Checking</h1>
+                                <h1 class="text-black font-normal text-xl font-poppins">Application Requirements</h1>
                                 <div
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
@@ -141,31 +242,7 @@
                                 </div>
                             </div>
 
-                            <div
-                                class="bg-white p-6 box-border rounded shadow-md flex-1 dark:bg-dcontainer flex flex-col space-y-3">
-                                <h1 class="text-black font-normal text-lg font-poppins">Monitoring</h1>
-                                <div
-                                    class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
-
-                                    <div
-                                        class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
-                                        <div class="flex flex-col">
-                                            <span>Document.pdf</span>
-                                        </div>
-                                        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                            <span class="font-medium">First Semester - @nd Year</span>
-                                        </div>
-                                        <div>
-                                            <button @click="toggleCheck(req)"
-                                                class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                <span class="font-medium text-sm">View</span>
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>

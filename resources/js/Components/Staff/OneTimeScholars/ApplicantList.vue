@@ -113,13 +113,13 @@
                         </span>
                       </td>
                       <td>
-                        <!-- <Link :href="route('scholarship.applicant_details')"> -->
+                        <Link :href="`/scholarships/scholar=${scholar.id}/one-time`">
                         <button
                           class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                           aria-label="View Details">
                           <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                         </button>
-                        <!-- </Link> -->
+                        </Link>
                       </td>
                     </tr>
                   </template>
