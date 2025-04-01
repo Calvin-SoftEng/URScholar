@@ -1,132 +1,232 @@
 <template>
-    <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
-        <span class="text-4xl font-bold">Tulong Dunong Program</span>
-        <span class="text-xl">Grantee</span>
-    </div>
-    <div class="flex items-center justify-center my-8 ">
-        <!-- Step 1 -->
-        <div class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+    <template v-if="yes">
+        <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
+            <span class="text-4xl font-bold">Tulong Dunong Program</span>
+            <span class="text-xl">Grantee</span> 
+        </div>
+        <div class="flex items-center justify-center my-8 ">
+            <!-- Step 1 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Application</span>
             </div>
-            <span class="mt-2 text-sm text-gray-700">Application</span>
-        </div>
 
-        <!-- Line -->
-        <div class="w-16 h-1 bg-primary relative -top-4"></div>
+            <!-- Line -->
+            <div class="w-16 h-1 bg-primary relative -top-4"></div>
 
-        <!-- Step 2 -->
-        <div v-if="submitReq !=0 || submitPending !=0"
-        class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
-                2</div>
-            <span class="mt-2 text-sm text-gray-700">Under Review</span>
-        </div>
-
-        <div v-if="submitApproved != 0"
-        class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+            <!-- Step 2 -->
+            <div v-if="submitReq !=0 || submitPending !=0"
+            class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
+                    2</div>
+                <span class="mt-2 text-sm text-gray-700">Under Review</span>
             </div>
-            <span class="mt-2 text-sm text-gray-700">Under Review</span>
-        </div>
 
-        <!-- Line -->
-        <div v-if="submitReq !=0 || submitPending !=0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
-        <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
-
-        <!-- Step 3 -->
-        <div v-if="submitReq !=0 || submitPending !=0"
-        class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
-                3</div>
-            <span class="mt-2 text-sm text-gray-700">Approved</span>
-        </div>
-
-        <div v-if="submitApproved != 0"
-        class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+            <div v-if="submitApproved != 0"
+            class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Under Review</span>
             </div>
-            <span class="mt-2 text-sm text-gray-700">Approved</span>
+
+            <!-- Line -->
+            <div v-if="submitReq !=0 || submitPending !=0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+            <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
+
+            <!-- Step 3 -->
+            <div v-if="submitReq !=0 || submitPending !=0"
+            class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
+                    3</div>
+                <span class="mt-2 text-sm text-gray-700">Approved</span>
+            </div>
+
+            <div v-if="submitApproved != 0"
+            class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Approved</span>
+            </div>
         </div>
-    </div>
 
-    <!-- first stepper -->
+        <!-- first stepper -->
 
-    <div v-if="submitPending !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-        <h1>Congratulations!</h1>
-        <p>Your application has been successfully completed.</p>
-        <p>You will be notified about the next steps soon.</p>
-        <br>
-    </div>
+        <div v-if="submitPending !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
+            <h1>Congratulations!</h1>
+            <p>Your application has been successfully completed.</p>
+            <p>You will be notified about the next steps soon.</p>
+            <br>
+        </div>
 
-    <!-- second stepper -->
+        <!-- second stepper -->
 
-    <div v-else-if="submitReq !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-        <span>From Maam Anorn</span>
-        <span>Message</span>
-        <p>It is noted, however, that among the requirements you have submittted to DBP, the
-            following documents must be
-            resubmitted.</p>
-        <br>
-        <span>Message nung nasa return: Ex anlabo pre</span>
-        <br>
-        <span>Deadline</span>
-        <br>
-        <form @submit.prevent="submitRequirements" class="space-y-6">
-            <div v-for="req in returnedRequirements" :key="req.id" class="bg-white border rounded-lg shadow-sm p-4">
-                <h3 class="font-medium text-gray-900">{{ req.requirement_name }}</h3>
-                <p class="text-sm text-gray-600 mt-1">Return reason: {{ req.return_message }}</p>
+        <div v-else-if="submitReq !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
+            <span>From Maam Anorn</span>
+            <span>Message</span>
+            <p>It is noted, however, that among the requirements you have submittted to DBP, the
+                following documents must be
+                resubmitted.</p>
+            <br>
+            <span>Message nung nasa return: Ex anlabo pre</span>
+            <br>
+            <span>Deadline</span>
+            <br>
+            <form @submit.prevent="submitRequirements" class="space-y-6">
+                <div v-for="req in returnedRequirements" :key="req.id" class="bg-white border rounded-lg shadow-sm p-4">
+                    <h3 class="font-medium text-gray-900">{{ req.requirement_name }}</h3>
+                    <p class="text-sm text-gray-600 mt-1">Return reason: {{ req.return_message }}</p>
 
-                <div class="mt-3">
-                    <input type="file" @change="(e) => handleFile(e, req.id, req.requirement_name)"
-                        :id="'file_' + req.id" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none hover:bg-gray-100" />
+                    <div class="mt-3">
+                        <input type="file" @change="(e) => handleFile(e, req.id, req.requirement_name)"
+                            :id="'file_' + req.id" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none hover:bg-gray-100" />
 
-                    <div v-if="selectedFiles[req.id]" class="flex items-center gap-2 text-sm text-gray-600 mt-2">
-                        <font-awesome-icon :icon="['fas', 'file']" />
-                        <span>{{ selectedFiles[req.id] }}</span>
-                        <button type="button" @click="removeFile(req.id)" class="text-red-600 hover:text-red-800">
-                            <font-awesome-icon :icon="['fas', 'times']" />
-                        </button>
+                        <div v-if="selectedFiles[req.id]" class="flex items-center gap-2 text-sm text-gray-600 mt-2">
+                            <font-awesome-icon :icon="['fas', 'file']" />
+                            <span>{{ selectedFiles[req.id] }}</span>
+                            <button type="button" @click="removeFile(req.id)" class="text-red-600 hover:text-red-800">
+                                <font-awesome-icon :icon="['fas', 'times']" />
+                            </button>
+                        </div>
+
+                        <p v-if="form.errors[`files.${req.id}`]" class="mt-1 text-sm text-red-600">
+                            {{ form.errors[`files.${req.id}`] }}
+                        </p>
                     </div>
+                </div>
 
-                    <p v-if="form.errors[`files.${req.id}`]" class="mt-1 text-sm text-red-600">
-                        {{ form.errors[`files.${req.id}`] }}
-                    </p>
+                <div v-if="returnedRequirements.length === 0" class="text-center py-8">
+                    <p class="text-gray-500">No returned requirements to resubmit.</p>
+                </div>
+
+                <div v-if="returnedRequirements.length > 0" class="flex justify-end">
+                    <button type="submit" :disabled="form.processing || Object.keys(form.files).length === 0"
+                        class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none
+            focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
+            transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span>{{ form.processing ? 'Submitting...' : 'Submit again' }}</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- third stepper -->
+
+        <div v-if="submitApproved != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
+            <h1>Congratulations!</h1>
+            <p>Your application has been successfully completed.</p>
+            <p>You will be notified about the payout announcement soon.</p>
+            <br>
+        </div>
+    </template>
+
+
+    <!-- scholar grant -->
+    <template v-if="scholar">
+        <div class="mb-3">
+            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
+        </div>
+        
+        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-6 text-primary">
+            <div class="text-center">
+                <span class="text-4xl font-bold">Tulong Dunong Program</span>
+                <p class="text-xl text-gray-600">Grantee</p>
+            </div>
+
+            <div class="h-0.5 bg-gray-300"></div>
+
+            <div>
+                <span class="font-semibold text-xl">Payout History</span>
+
+                <div class="max-w-6xl mx-auto space-y-6 mt-4">
+                    <div class="grid grid-cols-5 gap-4 items-center">
+                        <!-- Status Column -->
+                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                            Claimed
+                        </div>
+
+                        <!-- Details Column -->
+                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
+                            <h2 class="text-lg font-semibold">March 30, 2025</h2>
+                            <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
+                            <p class="text-gray-600">URSB Cashier</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </template>
+
+    <!-- one time -->
+    <template v-if="feaf">
+        <div class="mb-3">
+            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
+        </div>
+
+        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-6 text-primary">
+            <!-- Scholarship Title -->
+            <div class="text-center">
+                <span class="text-4xl font-bold">Tulong Dunong Program</span>
+                <p class="text-xl text-gray-600">Grantee</p>
+            </div>
+
+            <div class="h-0.5 bg-gray-300"></div>
+
+            <!-- Payout History Section -->
+            <div>
+                <span class="font-semibold text-xl">Payout History</span>
+
+                <div class="max-w-6xl mx-auto space-y-6 mt-4">
+                    <div class="grid grid-cols-5 gap-4 items-center">
+                        <!-- Status Column -->
+                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                            Claimed
+                        </div>
+
+                        <!-- Details Column -->
+                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
+                            <h2 class="text-lg font-semibold">March 30, 2025</h2>
+                            <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
+                            <p class="text-gray-600">URSB Cashier</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div v-if="returnedRequirements.length === 0" class="text-center py-8">
-                <p class="text-gray-500">No returned requirements to resubmit.</p>
+            <div class="h-0.5 bg-gray-300"></div>
+
+            <!-- Encouragement Message -->
+            <div class="text-center">
+                <p class="text-lg text-gray-700">
+                    🎉 Congratulations on receiving your scholarship! We hope this support helps you achieve your academic goals.
+                    Your journey doesn’t end here—keep striving for excellence, and remember that new opportunities await! 🚀
+                </p>
             </div>
 
-            <div v-if="returnedRequirements.length > 0" class="flex justify-end">
-                <button type="submit" :disabled="form.processing || Object.keys(form.files).length === 0"
-                    class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none
-        focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
-        transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed">
-                    <span>{{ form.processing ? 'Submitting...' : 'Submit again' }}</span>
+            <!-- Call-to-Action Button -->
+            <div class="flex justify-center">
+                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-300">
+                    Continue on Your Next Journey
                 </button>
             </div>
-        </form>
-    </div>
+        </div>
+    </template>
 
-    <!-- third stepper -->
-
-    <div v-if="submitApproved != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-        <h1>Congratulations!</h1>
-        <p>Your application has been successfully completed.</p>
-        <p>You will be notified about the payout announcement soon.</p>
-        <br>
-    </div>
 </template>
+
+    
+
+
 <script setup>
 import { Head, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
