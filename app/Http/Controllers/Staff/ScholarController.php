@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Scholarship;
 use App\Models\SchoolYear;
+use App\Models\Applicant;
 use App\Models\Grantees;
 use App\Models\Scholar;
 use App\Models\Campus;
@@ -52,6 +53,27 @@ class ScholarController extends Controller
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
 
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
+            'scholar' => $scholar,
+            'scholarship' => $scholarship,
+            'batch' => $batch,
+            'requirements' => $requirements,
+            'submittedRequirements' => $submittedRequirements
+        ]);
+    }
+
+    public function scholar_onetime($id)
+    {
+        $scholar = Scholar::with('user', 'campus', 'course')->findOrFail($id);
+        $applicant = Applicant::where('scholar_id', $scholar->id)->first();
+
+        $scholarship = $applicant->scholarship;
+        $batch = Batch::where('id', $applicant->batch_id)->first();
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+        // Get the submitted requirements for this scholar
+        $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
+
+        return Inertia::render('Staff/Scholarships/One-Time/Applicant-Details', [
             'scholar' => $scholar,
             'scholarship' => $scholarship,
             'batch' => $batch,
@@ -309,7 +331,7 @@ class ScholarController extends Controller
                         'scholarship_id' => $scholarship->id,
                         'batch_id' => $batch->id,
                         'scholar_id' => $scholar->id,
-                        'school_year' => $request->schoolyear,
+                        'school_year_id' => $request->schoolyear,
                         'semester' => $request->semester,
                         'status' => 'Active',
                         'created_at' => now(),
@@ -473,7 +495,7 @@ class ScholarController extends Controller
                     'scholarship_id' => $scholarship->id,
                     'batch_id' => $batch->id,
                     'scholar_id' => $scholar->id,
-                    'school_year' => $request->schoolyear,
+                    'school_year_id' => $request->schoolyear,
                     'semester' => $request->semester,
                     'status' => 'Active',
                     'created_at' => now(),

@@ -59,7 +59,7 @@ return new class extends Migration
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
-            $table->string('school_year');
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
@@ -71,7 +71,7 @@ return new class extends Migration
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
-            $table->string('school_year');
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
             $table->enum('status', ['Successful', 'Unsuccessful', 'Pending'])->default('Pending');
             $table->timestamps();

@@ -139,7 +139,7 @@ class CashierController extends Controller
                         ->orderBy('first_name');
                 }
             ])
-            ->orderBy('batch_no', 'desc')
+            ->orderBy('batch_no', )
             ->get(); // Use get() instead of first to get all batches
 
         // Fetch grantees only if batches exist
@@ -180,12 +180,18 @@ class CashierController extends Controller
             ])
             ->get();
 
+        // Count total claimed disbursements
+        $totalClaimed = Disbursement::where('payout_id', $payout->id)
+            ->where('batch_id', $batchId)
+            ->where('status', 'claimed') // Assuming 'claimed' is the status for claimed disbursements
+            ->count();
 
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'disbursements' => $disbursements,
             'payout' => $payout,
+            'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
         ]);
     }
 

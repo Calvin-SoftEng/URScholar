@@ -21,29 +21,36 @@ class EmailController extends Controller
 {
     public function index(Scholarship $scholarship)
     {
-        $batch = Batch::where('scholarship_id', $scholarship->id)
+        $batches = Batch::where('scholarship_id', $scholarship->id)
             ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
-            ->first();
+            ->with(['scholars.campus', 'scholars.course', 'scholars.user'])
+            ->get();
 
-        // Retrieve scholars via grantees and load relationships
-        $scholars = $scholarship->grantees()
-            ->where('batch_id', $batch->id)
-            ->with('scholar.user', 'scholar.campus', 'scholar.course')
-            ->get()
-            ->map(fn($grantee) => $grantee->scholar)
-            ->filter(); // Remove null scholars (if any)
+        // Initialize an empty collection for all scholars
+        $allScholars = collect();
+
+        // Loop through each batch and collect their scholars
+        foreach ($batches as $batch) {
+            $batchScholars = $scholarship->grantees()
+                ->where('batch_id', $batch->id)
+                ->with('scholar.user', 'scholar.campus', 'scholar.course')
+                ->get()
+                ->map(fn($grantee) => $grantee->scholar)
+                ->filter(); // Remove null scholars (if any)
+
+            $allScholars = $allScholars->concat($batchScholars);
+        }
 
         // Fetch requirements related to the scholarship
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
-            'scholars' => $scholars,
+            'batches' => $batches,
+            'scholars' => $allScholars,
             'requirements' => $requirements,
         ]);
     }
-
 
     public function send(Scholarship $scholarship, Request $request)
     {
@@ -65,7 +72,7 @@ class EmailController extends Controller
             ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
             ->first();
 
-            
+
         // Retrieve scholars through grantees with necessary relationships
         $scholars = $scholarship->grantees()
             ->where('batch_id', $batch->id)
@@ -134,7 +141,7 @@ class EmailController extends Controller
                         " - Stay updated with announcements and notifications regarding your application status.\n\n" .
                         "*Application Deadline: " . $request['deadline'] . "\n\n" .
                         "Click the following link to access your portal: " .
-                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
+                        "https://urscholar.up.railway.app\n\n"
                 ];
 
                 Mail::to($scholar->email)->send(new SendEmail($mailData));

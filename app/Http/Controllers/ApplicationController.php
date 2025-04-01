@@ -64,4 +64,9 @@ class ApplicationController extends Controller
 
         return back()->with('success', 'Application submitted successfully!');
     }
+
+    public function applicant_details($id)
+    {
+        return Inertia::render('Staff/Scholarships/One-Time/Applicant-Details');   
+    }
 }

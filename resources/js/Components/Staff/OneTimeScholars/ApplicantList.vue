@@ -44,7 +44,7 @@
               <font-awesome-icon :icon="['fas', 'user-graduate']"
                 class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
               <p class="text-lg text-gray-700 dark:text-gray-300">
-                No scholars added yet
+                No applicants for this scholarship yet
               </p>
             </div>
             <div v-else>
@@ -113,7 +113,7 @@
                         </span>
                       </td>
                       <td>
-                        <Link :href="`/scholarships/scholar=${scholar.id}`">
+                        <Link :href="`/scholarships/scholar=${scholar.id}/one-time`">
                         <button
                           class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                           aria-label="View Details">
@@ -174,7 +174,7 @@
                         </span>
                       </td>
                       <td>
-                        <Link :href="`/scholarships/scholar=${scholar.id}`">
+                        <Link :href="`/scholarships/scholar=${scholar.id}/one-time`">
                         <button
                           class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                           aria-label="View Details">

@@ -24,6 +24,7 @@ use App\Models\User;
 use App\Models\Scholar;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
+use App\Models\Disbursement;
 use App\Models\Grantees;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -40,61 +41,99 @@ class StudentController extends Controller
     public function dashboard()
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)->with('school_year')->first();
 
-        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
+        if ($grantee) {
+            $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
 
+            $disbursement = Disbursement::where('scholar_id', $scholar->id)
+                ->first() ?? null;
 
-        if ($scholarship) {
-            $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+            $oldestGrantee = Grantees::where('id', $grantee->id)
+                ->orderBy('created_at', 'asc')
+                ->with('school_year')
                 ->first();
-            if (!$submittedRequirements) {
-                return redirect()->route('student.confirmation');
+
+            $historygrantee = Grantees::where('scholar_id', $scholar->id)
+                ->with(['school_year', 'scholar.disbursements'])
+                ->get()
+                ->map(function ($grantee) {
+                    // Get the disbursement for this scholar
+                    $disbursement = $grantee->scholar->disbursements->first();
+
+                    return [
+                        'id' => $grantee->id,
+                        'scholar_id' => $grantee->scholar_id,
+                        'scholarship_id' => $grantee->scholarship_id,
+                        'school_year' => $grantee->school_year->year ?? 'N/A',
+                        'semester' => $grantee->semester ?? 'N/A',
+                        'batch_name' => $grantee->batch ? $grantee->batch->batch_name : 'N/A',
+                        'dibursement_status' => $disbursement ? $disbursement->status : 'No Disbursement',
+                        'claimed_at' => $disbursement ? $disbursement->claimed_at : null,
+                        'reasons_of_not_claimed' => $disbursement ? $disbursement->reasons_of_not_claimed : null,
+                        // Add any other fields you need from grantee or disbursement
+                    ];
+                });
+
+
+
+            if ($scholarship) {
+                $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->first();
+                if (!$submittedRequirements) {
+                    return redirect()->route('student.confirmation');
+                }
+
+                $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+                $requirementIds = $requirements->pluck('id')->toArray();
+
+
+
+                // Fetch only returned submitted requirements related to the scholarship
+                $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Returned')
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
+
+                // dd($requirementIds);
+
+                // Map submitted requirements with their corresponding requirement details
+                $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
+                    $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
+                    return [
+                        'id' => $submitted->id,  // Submitted Requirement ID
+                        'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
+                        'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
+                        'status' => $submitted->status,
+                    ];
+                });
+
+                $submitPending = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Pending')
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
+
+                $submitApproved = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Approved')
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
+
+                return Inertia::render('Student/Dashboard/Dashboard', [
+                    'grantee' => $grantee,
+                    'oldestGrantee' => $oldestGrantee,
+                    'historygrantee' => $historygrantee,
+                    'disbursement' => $disbursement,
+                    'scholarship' => $scholarship,
+                    'scholar' => $scholar,
+                    'submitReq' => $returnedRequirements,
+                    'submitPending' => $submitPending,
+                    'submitApproved' => $submitApproved,
+                ]);
             }
 
-            $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-            $requirementIds = $requirements->pluck('id')->toArray();
-
-
-
-            // Fetch only returned submitted requirements related to the scholarship
-            $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->where('status', 'Returned')
-                ->whereIn('requirement_id', $requirementIds)
-                ->get();
-
-            // dd($requirementIds);
-
-            // Map submitted requirements with their corresponding requirement details
-            $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
-                $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
-                return [
-                    'id' => $submitted->id,  // Submitted Requirement ID
-                    'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
-                    'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
-                    'status' => $submitted->status,
-                ];
-            });
-
-            $submitPending = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->where('status', 'Pending')
-                ->whereIn('requirement_id', $requirementIds)
-                ->get();
-
-            $submitApproved = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->where('status', 'Approved')
-                ->whereIn('requirement_id', $requirementIds)
-                ->get();
-
-            return Inertia::render('Student/Dashboard/Dashboard', [
-                'scholarship' => $scholarship,
-                'scholar' => $scholar,
-                'submitReq' => $returnedRequirements,
-                'submitPending' => $submitPending,
-                'submitApproved' => $submitApproved,
-            ]);
         }
+
 
         $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
         $sponsors = Sponsor::all();
@@ -143,27 +182,27 @@ class StudentController extends Controller
 
             // Get the batch semester logic
             $grantee_semester = null;
-            $grantee_school_year = null;
+            $grantee_school_year_id = null;
 
             if ($grantee) {
                 if ($grantee->semester == '2nd') {
                     $grantee_semester = '1st';
-                    $grantee_school_year = $grantee->school_year; // Keep the same school year
-                    
+                    $grantee_school_year_id = $grantee->school_year_id; // Keep the same school year
+
                 } elseif ($grantee->semester == '1st') {
                     $grantee_semester = '2nd';
 
                     // Adjust the school year based on the current year
-                    if ($grantee->school_year == 1) {
-                        $grantee_school_year = 1; // First school year
+                    if ($grantee->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
                     } else {
-                        $grantee_school_year = $grantee->school_year - 1; // Previous school year
+                        $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
                     }
                 }
             }
 
             // Fetch the school year from the database using the calculated school year ID
-            $school_year = SchoolYear::where('id', $grantee_school_year)->first();
+            $school_year = SchoolYear::where('id', $grantee_school_year_id)->first();
         } else {
             // If no scholar is found, set the variables to null
             $grantee = null;

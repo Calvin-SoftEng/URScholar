@@ -178,10 +178,20 @@
 
                                                 <!-- Uploaded File Preview -->
                                                 <div v-if="form.files[requirement.id]" class="border border-dashed border-purple-400 rounded-lg p-3 mt-2 flex items-center justify-between min-w-[250px]">
-                                                    <div class="flex items-center space-x-3">
+                                                    <!-- <div class="flex items-center space-x-3">
                                                         <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" class="w-8 h-8" alt="PDF Icon">
                                                         <div>
                                                             <p class="text-sm font-medium">{{ form.files[requirement.id].name }}</p>
+                                                            <p class="text-xs text-gray-500">{{ form.files[requirement.id].size }}</p>
+                                                        </div>
+                                                    </div> -->
+
+                                                    <div class="flex items-center space-x-3">
+                                                        <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" class="w-8 h-8" alt="PDF Icon">
+                                                        <div>
+                                                            <p class="text-sm font-medium truncate overflow-hidden max-w-xs" title="{{ form.files[requirement.id].name }}">
+                                                                {{ form.files[requirement.id].name.length > 30 ? form.files[requirement.id].name.substring(0, 30) + '...' : form.files[requirement.id].name }}
+                                                            </p>
                                                             <p class="text-xs text-gray-500">{{ form.files[requirement.id].size }}</p>
                                                         </div>
                                                     </div>
@@ -194,9 +204,9 @@
 
 
                                         <div class="col-span-3 flex justify-end mt-4">
-                                            <button type="submit" @click="nextStep"
+                                            <button type="submit" 
                                                 class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                                Next</button>
+                                                Submit</button>
                                         </div>
                                     </div>
 

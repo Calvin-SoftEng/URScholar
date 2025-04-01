@@ -1,8 +1,8 @@
 <template>
-    <template v-if="yes">
+    <template v-if="!disbursement">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
             <span class="text-4xl font-bold">Tulong Dunong Program</span>
-            <span class="text-xl">Grantee</span> 
+            <span class="text-xl">Grantee</span>
         </div>
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
@@ -18,16 +18,14 @@
             <div class="w-16 h-1 bg-primary relative -top-4"></div>
 
             <!-- Step 2 -->
-            <div v-if="submitReq !=0 || submitPending !=0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
                     2</div>
                 <span class="mt-2 text-sm text-gray-700">Under Review</span>
             </div>
 
-            <div v-if="submitApproved != 0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
@@ -36,20 +34,18 @@
             </div>
 
             <!-- Line -->
-            <div v-if="submitReq !=0 || submitPending !=0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+            <div v-if="submitReq != 0 || submitPending != 0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
             <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
 
             <!-- Step 3 -->
-            <div v-if="submitReq !=0 || submitPending !=0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
                     3</div>
                 <span class="mt-2 text-sm text-gray-700">Approved</span>
             </div>
 
-            <div v-if="submitApproved != 0"
-            class="relative flex flex-col items-center">
+            <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
                     class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
@@ -60,7 +56,7 @@
 
         <!-- first stepper -->
 
-        <div v-if="submitPending !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
+        <div v-if="submitPending != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
             <h1>Congratulations!</h1>
             <p>Your application has been successfully completed.</p>
             <p>You will be notified about the next steps soon.</p>
@@ -69,7 +65,7 @@
 
         <!-- second stepper -->
 
-        <div v-else-if="submitReq !=0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
+        <div v-else-if="submitReq != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
             <span>From Maam Anorn</span>
             <span>Message</span>
             <p>It is noted, however, that among the requirements you have submittted to DBP, the
@@ -121,110 +117,209 @@
 
         <!-- third stepper -->
 
-        <div v-if="submitApproved != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-            <h1>Congratulations!</h1>
-            <p>Your application has been successfully completed.</p>
-            <p>You will be notified about the payout announcement soon.</p>
-            <br>
-        </div>
-    </template>
+        <div v-if="submitApproved != 0" class="bg-white w-full p-6 flex flex-col font-poppins text-xl text-center">
+            <h1 class="text-3xl font-bold text-green-700">Congratulations!</h1>
+            <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
+            <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
 
-
-    <!-- scholar grant -->
-    <template v-if="scholar">
-        <div class="mb-3">
-            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
-        </div>
-        
-        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-6 text-primary">
-            <div class="text-center">
-                <span class="text-4xl font-bold">Tulong Dunong Program</span>
-                <p class="text-xl text-gray-600">Grantee</p>
-            </div>
-
-            <div class="h-0.5 bg-gray-300"></div>
-
-            <div>
-                <span class="font-semibold text-xl">Payout History</span>
-
-                <div class="max-w-6xl mx-auto space-y-6 mt-4">
-                    <div class="grid grid-cols-5 gap-4 items-center">
-                        <!-- Status Column -->
-                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
-                            Claimed
-                        </div>
-
-                        <!-- Details Column -->
-                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                            <h2 class="text-lg font-semibold">March 30, 2025</h2>
-                            <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
-                            <p class="text-gray-600">URSB Cashier</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </template>
-
-    <!-- one time -->
-    <template v-if="feaf">
-        <div class="mb-3">
-            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
-        </div>
-
-        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-6 text-primary">
-            <!-- Scholarship Title -->
-            <div class="text-center">
-                <span class="text-4xl font-bold">Tulong Dunong Program</span>
-                <p class="text-xl text-gray-600">Grantee</p>
-            </div>
-
-            <div class="h-0.5 bg-gray-300"></div>
-
-            <!-- Payout History Section -->
-            <div>
-                <span class="font-semibold text-xl">Payout History</span>
-
-                <div class="max-w-6xl mx-auto space-y-6 mt-4">
-                    <div class="grid grid-cols-5 gap-4 items-center">
-                        <!-- Status Column -->
-                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
-                            Claimed
-                        </div>
-
-                        <!-- Details Column -->
-                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                            <h2 class="text-lg font-semibold">March 30, 2025</h2>
-                            <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
-                            <p class="text-gray-600">URSB Cashier</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="h-0.5 bg-gray-300"></div>
-
-            <!-- Encouragement Message -->
-            <div class="text-center">
-                <p class="text-lg text-gray-700">
-                    🎉 Congratulations on receiving your scholarship! We hope this support helps you achieve your academic goals.
-                    Your journey doesn’t end here—keep striving for excellence, and remember that new opportunities await! 🚀
-                </p>
-            </div>
-
-            <!-- Call-to-Action Button -->
-            <div class="flex justify-center">
-                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-300">
-                    Continue on Your Next Journey
+            <!-- Encouragement to Stay Updated -->
+            <div class="mt-6">
+                <button class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg">
+                    Continue to Dashboard
                 </button>
             </div>
         </div>
+
     </template>
+
+
+    <!-- scholar grant kapag tapos na mag pasa requiremetns -->
+    <template v-else>
+        <div class="mb-3">
+            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
+        </div>
+
+        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
+
+            <!-- Scholarship Details -->
+            <div class="bg-white shadow-md p-6 rounded-lg text-center">
+                <div class="flex items-center justify-center space-x-4">
+                    <!-- Logo -->
+                    <img src="../../../../../assets/images/CHED.png" alt="CHED Logo" class="w-16 h-16 object-contain">
+
+                    <!-- Scholarship Info -->
+                    <div>
+                        <h2 class="text-3xl font-bold text-blue-800">{{ scholarship.name }}</h2>
+                        <p class="text-xl text-gray-600">{{ oldestGrantee.school_year.year }} Grantee</p>
+
+                    </div>
+                </div>
+
+                <div class="h-0.5 bg-gray-300 my-4"></div>
+
+                <div class="grid grid-cols-2 gap-4 text-left text-gray-700">
+                    <p><span class="font-semibold">Current Semester:</span> {{ grantee.school_year.year }} - {{
+                        grantee.semester }} Sem</p>
+                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">{{
+                        grantee.status }}</span></p>
+                </div>
+            </div>
+
+            <!-- Payout Announcement Card (Only shown if there's a schedule) -->
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+                <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
+                <p class="mt-2">Your next payout is expected on <span class="font-bold">faefeafaefae</span>. Stay
+                    updated for further announcements.</p>
+            </div>
+
+            <!-- kapag may new requirmeents -->
+
+            <div v-if="fefamefi"
+                class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm space-y-3">
+                <h2 class="text-xl font-semibold">Documents must be submitted</h2>
+                <div class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center gap-5">
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
+                                {{ String.fromCharCode(65 + index) }}
+                            </span>
+                            <span class="font-semibold text-gray-800">
+                                {{ requirement.requirements }}
+                            </span>
+                        </div>
+                        <label class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                            Add File
+                            <input type="file" class="hidden"
+                                @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
+                                :id="'file_input_' + requirement.id" />
+                        </label>
+                    </div>
+
+                    <!-- Uploaded File Preview -->
+                    <div
+                        class="border border-dashed border-purple-400 rounded-lg p-2 mt-2 flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" class="w-6 h-6"
+                                alt="PDF Icon">
+                            <div>
+                                <p class="text-sm font-medium">
+                                    {{ form.files[requirement.id].name }}
+                                </p>
+                                <p class="text-xs text-gray-500">
+                                    {{ form.files[requirement.id].size }}
+                                </p>
+                            </div>
+                        </div>
+                        <button type="button" @click="removeFile(requirement.id)"
+                            class="ml-2 text-red-600 hover:text-red-800">
+                            Remove
+                        </button>
+
+                        <!-- <div v-if="form.errors[`files.${requirement.id}`]"
+                            class="text-red-500 text-sm">
+                            {{ form.errors[`files.${requirement.id}`] }}
+                        </div> -->
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" :disabled="form.processing || !isFormValid" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none
+                            focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 
+                            transition-all duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed
+                            flex items-center justify-center gap-2">
+                        <span class="material-symbols-rounded">outbox</span>
+                        <span>{{ form.processing ? 'Submitting...' : 'Submit' }}</span>
+                    </button>
+                </div>
+
+            </div>
+
+            <div class="h-0.5 bg-gray-300"></div>
+
+            <!-- Payout History -->
+            <div>
+                <div class="flex flex-row justify-between">
+                    <span class="font-semibold text-xl">Payout History</span>
+                    <!-- <span class="font-normal text-base">Show all</span> -->
+                </div>
+                <div class="max-w-6xl mx-auto space-y-6 mt-4">
+                    <div v-if="historygrantee.length === 0">
+                        <div class="grid grid-cols-5 gap-4 items-center">
+                            <div class="col-span-5 flex items-center justify-center text-primary font-bold">
+                                NO history yet
+                            </div>
+                        </div>
+                    </div>
+
+                    <div v-else>
+                        <div v-for="history in historygrantee" :key="history.id"
+                            class="grid grid-cols-5 gap-4 items-center">
+                            <div class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
+                                <h3 class="font-semibold text-base text-blue-900 dark:text-white">
+                                    {{ history.semester }} Semester - {{ history.school_year }}
+                                </h3>
+                                <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                            </div>
+
+                            <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                                {{ history.dibursement_status }}
+                            </div>
+
+                            <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
+                                <h2 class="text-lg font-semibold">{{ new Date(history.claimed_at).toLocaleDateString('en-US', {
+                                                year:
+                                                    'numeric', month: 'long', day: 'numeric'
+                                            }) }}</h2>
+                                <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>,
+                                    ID: URSB123</p>
+                                <p class="text-gray-600">Processed at: sa cashier</p>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+            <!-- Encouragement & Next Steps -->
+            <div class="bg-white shadow-md p-6 rounded-lg text-center">
+                <h2 class="text-2xl font-bold text-blue-800">Keep Going!</h2>
+                <p class="text-gray-600 mt-2">
+                    "Your hard work is paying off! Keep maintaining your academic performance and complete your
+                    requirements on time to stay eligible for your next grant."
+                    <br>
+                    Update your GWA and upload corresponding documents to renew your scholarship.
+                </p>
+                <!-- <div class="mt-4">
+                    <button class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg">
+                        View Renewal Requirements
+                    </button>
+                </div> -->
+            </div>
+
+            <!-- Scholarship Progress -->
+            <!-- <div class="bg-white shadow-md p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-blue-800">Scholarship Progress</h2>
+                <div class="mt-3 flex flex-col space-y-2 text-gray-600">
+                    <p>✔ Documents Submitted</p>
+                    <p>✔ Payouts Received</p>
+                    <p>🔲 Renewal Application Pending</p>
+                </div>
+            </div> -->
+
+        </div>
+    </template>
+
+
+
+
 
 </template>
 
-    
+
 
 
 <script setup>
@@ -238,6 +333,10 @@ const props = defineProps({
     submitReq: Array,
     submitPending: Array,
     submitApproved: Array,
+    disbursement: Object,
+    grantee: Object,
+    oldestGrantee: Object,
+    historygrantee: Array,
 
     //For non-scholars only
     sponsors: {
@@ -299,6 +398,26 @@ const removeFile = (reqId) => {
         fileInput.value = '';
     }
 };
+
+// const handleFile = (event, requirementId, requirementName) => {
+//     const file = event.target.files[0];
+//     if (file) {
+//         form.files[requirementId] = file;
+
+//         // Update or add the requirement entry
+//         const existingIndex = form.requirements.findIndex(r => r.id === requirementId);
+//         if (existingIndex !== -1) {
+//             form.requirements[existingIndex] = { id: requirementId, name: requirementName };
+//         } else {
+//             form.requirements.push({ id: requirementId, name: requirementName });
+//         }
+//     }
+// };
+
+// const removeFile = (requirementId) => {
+//     delete form.files[requirementId];
+//     form.requirements = form.requirements.filter(r => r.id !== requirementId);
+// };
 
 const submitRequirements = () => {
     if (Object.keys(form.files).length === 0) {

@@ -505,8 +505,7 @@
                                         </div>
 
                                         <div v-else class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
-                                            <span class="text-sm text-red-500 italic">Setup mo na lang ya pag may
-                                                scholarship ka na</span>
+                                            <span class="text-sm text-red-500 italic ">*You can set this up later or if you are qualified for a scholarship</span>
 
                                             <div
                                                 class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
