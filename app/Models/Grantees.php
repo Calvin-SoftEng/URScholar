@@ -22,4 +22,9 @@ class Grantees extends Model
     {
         return $this->belongsTo(Batch::class);
     }
+
+    public function school_year()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
 }

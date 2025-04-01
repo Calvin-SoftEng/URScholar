@@ -24,6 +24,7 @@ use App\Models\User;
 use App\Models\Scholar;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
+use App\Models\Grantees;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -39,7 +40,9 @@ class StudentController extends Controller
     public function dashboard()
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
 
 
         if ($scholarship) {
@@ -131,37 +134,43 @@ class StudentController extends Controller
     public function verifyAccount()
     {
         $user = User::where('email', Auth::user()->email)->first();
-        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $scholar = Scholar::where('user_id', Auth::user()->id)->first();
+
+        // $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
         if ($scholar) {
-            $batch = Batch::where('scholarship_id', $scholar->scholarship_id)->first();
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
             // Get the batch semester logic
-            $batch_semester = null;
-            $batch_school_year = null;
+            $grantee_semester = null;
+            $grantee_school_year = null;
 
-            if ($batch) {
-                if ($batch->semester == '2nd') {
-                    $batch_semester = '1st';
-                    $school_year = $batch->school_year; // Keep the same school year
-                } else if ($batch->semester == '1st') {
-                    $batch_semester = '2nd';
+            if ($grantee) {
+                if ($grantee->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year = $grantee->school_year; // Keep the same school year
+                    
+                } elseif ($grantee->semester == '1st') {
+                    $grantee_semester = '2nd';
 
-                    if ($batch->school_year == 1) {
-                        $batch_school_year = 1; // First school year
+                    // Adjust the school year based on the current year
+                    if ($grantee->school_year == 1) {
+                        $grantee_school_year = 1; // First school year
                     } else {
-                        $batch_school_year = $batch->school_year - 1; // Previous school year
+                        $grantee_school_year = $grantee->school_year - 1; // Previous school year
                     }
                 }
             }
 
-            $school_year = SchoolYear::where('id', $batch_school_year)->first();
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = SchoolYear::where('id', $grantee_school_year)->first();
         } else {
-            $batch = null;
-            $batch_semester = null;
+            // If no scholar is found, set the variables to null
+            $grantee = null;
+            $grantee_semester = null;
+            $grantee_school_year = null;
             $school_year = null;
         }
-
 
         // if ($school_year){
         //     $school_year = SchoolYear::where('id', $batch->school_year)->first();
@@ -173,11 +182,11 @@ class StudentController extends Controller
         return Inertia::render('Student/VerificationAccount/Verification', [
             'user' => $user,
             'scholar' => $scholar,
-            'batch' => $batch,
-            'batch_semester' => $batch_semester,
-            'school_year' => $school_year,
+            'batch_semester' => $grantee_semester,
+            'school_year' => $school_year ?? 'N/A', // Default to 'N/A' if no school year found
         ]);
     }
+
 
     public function verifyingAccount(Request $request)
     {
@@ -679,7 +688,9 @@ class StudentController extends Controller
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
 
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
 
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
@@ -726,7 +737,7 @@ class StudentController extends Controller
             //generate qr_code
             // Check if the scholar already has a QR code
             if ($scholar->qr_code) {
-                
+
             }
 
             // Set up QR code options
@@ -896,22 +907,17 @@ class StudentController extends Controller
 
         $request->validate([
             'files.*' => 'required|file|',
-            'req' => 'array'
+            'requirements' => 'array'
         ]);
 
 
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
-
-        $requirements = Requirements::where('id', $scholarship->id)->get();
-
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $reqID = $requirements->pluck('id')->first();
 
-
-
         $uploadedFiles = [];
-
 
         foreach ($request->file('files') as $index => $file) {
 
