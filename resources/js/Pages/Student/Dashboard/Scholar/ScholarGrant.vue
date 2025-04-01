@@ -99,6 +99,51 @@
                         </p>
                     </div>
                 </div>
+                <!-- <div v-for="req in returnedRequirements" :key="req.id"
+                    class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
+                    
+                    <div class="flex justify-between items-center gap-5">
+                        <div class="flex items-center space-x-2">
+                            <span
+                                class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">{{
+                                String.fromCharCode(65 + index) }}</span>
+                            <span class="font-semibold text-gray-800">{{
+                                req.requirements
+                            }}</span>
+                        </div>
+                        <label
+                            class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                            Add File
+                            <input type="file" class="hidden"
+                            @change="(e) => handleFile(e, req.id, req.requirements)"
+                            :id="'file_input_' + req.id" />
+                        </label>
+                    </div>
+
+                   
+                    <div v-if="form.files[req.id]"
+                        class="border border-dashed border-purple-400 rounded-lg p-2 mt-2 flex items-center justify-between">
+                        <div class="flex items-center space-x-2">
+                            <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
+                                class="w-6 h-6" alt="PDF Icon">
+                            <div>
+                                <p class="text-sm font-medium">{{
+                                    form.files[req.id].name }}</p>
+                                <p class="text-xs text-gray-500">{{
+                                    form.files[req.id].size }}</p>
+                            </div>
+                        </div>
+                        <button type="button" @click="removeFile(req.id)"
+                            class="ml-2 text-red-600 hover:text-red-800">
+                            Remove
+                        </button>
+
+                        <div v-if="form.errors[`files.${req.id}`]"
+                            class="text-red-500 text-sm">
+                            {{ form.errors[`files.${req.id}`] }}
+                        </div>
+                    </div>
+                </div> -->
 
                 <div v-if="returnedRequirements.length === 0" class="text-center py-8">
                     <p class="text-gray-500">No returned requirements to resubmit.</p>

@@ -6,11 +6,11 @@
         <div class="bg-dirtywhite p-6 h-full w-full space-y-10">
             <div>
                 <div>
-                    <h1 class="text-2xl font-bold mb-5">School year</h1>
+                    <h1 class="text-2xl font-bold mb-5">Academic School year</h1>
                 </div>
 
                 <div v-if="scholar_year?.length">
-                    <div v-for="year in scholar_year" :key="year.id"
+                    <div v-for="year in [...scholar_year].reverse()" :key="year.id"
                         class="w-full h-full flex flex-col p-10 mt-5 gap-2 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 font-kanit text-white rounded-xl">
 
                         <span v-if="year.year" class="items-center justify-center font-bold text-3xl">

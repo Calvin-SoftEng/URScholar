@@ -6,7 +6,7 @@
         <div class="bg-dirtywhite p-6 h-full w-full">
             <div class="relative">
                 <h1 class="text-2xl font-bold mb-5">Course List</h1>
-                <Link :href="route('mis.course')">
+                <Link :href="route('sa.courses')">
                 <span class="absolute top-1 right-[-50px] flex flex-col items-center space-y-1">
                     <button>
                         <span

@@ -1,90 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.0.0/dist/tailwind.min.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Scholarship Report - Batch {{ $batch->batch_no }}</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
+        body { font-family: Arial, sans-serif; text-align: center; }
+        
         .header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #ddd;
-            padding-bottom: 10px;
-        }
-
-        .header .logo {
-            width: 80px;
-            height: auto;
-        }
-
-        .header .logo-small {
-            width: 60px;
-            height: auto;
-        }
-
-        .header .logo-ched {
-            width: 60px;
-            height: auto;
-        }
-
-        .header .title {
+            justify-content: space-between;
             text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header img {
+            height: 100px;
+        }
+
+        .title {
             flex-grow: 1;
-            font-size: 1.5em;
-            font-weight: bold;
+            text-align: center;
         }
 
-        h2, p {
-            text-align: center;
+        h1, h2 {
+            margin: 5px 0;
+        }
+
+        .report-info {
+            margin-bottom: 20px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
+            margin-top: 10px;
         }
 
         th, td {
-            border: 1px solid #ddd;
+            border: 1px solid black;
             padding: 8px;
             text-align: left;
         }
 
         th {
-            background-color: #f4f4f4;
+            background-color: #f2f2f2;
+        }
+
+        .footer {
+            margin-top: 20px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
+
+    <!-- Header Section -->
     <div class="header">
-        <!-- First logo (University Seal) -->
-        <img src="../public/assets/images/univ-seal.png" class="W-[75px] h-[100px]" alt="University Seal">
-        
+        <!-- University Seal -->
+        <img src="{{ public_path('assets/images/univ-seal.png') }}" alt="University Seal">
+
         <!-- Centered Title -->
         <div class="title">
             <h1>Republic of the Philippines</h1>
             <h1>University of Rizal System</h1>
+            <h3>Scholarship and Financial Assistance Unit</h3>
         </div>
-    
-        <!-- Second logo (CHED) -->
-        <img src="../public/assets/images/CHED.png" class="logo-ched" alt="CHED Logo">
-    </div>
-    
-    <div>
-        <h2>Scholarship Report - Batch {{ $batch->batch_no }}</h2>
-        <p>School Year: {{ $batch->school_year }}</p>
-        <p>Semester: {{ $batch->semester }}</p>
+
+        <!-- CHED Logo -->
+        <img src="{{ public_path('assets/images/CHED.png') }}" alt="CHED Logo">
     </div>
 
+    <!-- Report Information -->
+    <div class="report-info">
+        <h2>Scholarship Report - Batch {{ $batch->batch_no }}</h2>
+        <p><strong>School Year:</strong> {{ $batch->school_year }}</p>
+        <p><strong>Semester:</strong> {{ $batch->semester }}</p>
+    </div>
+
+    <!-- Scholar Details Table -->
     <table>
         <thead>
             <tr>
@@ -110,9 +105,11 @@
         </tbody>
     </table>
 
+    <!-- Footer Section -->
     <div class="footer">
-        <p>Total Scholars: {{ $scholars->count() }}</p>
-        <p>Generated on: {{ now()->format('F d, Y') }}</p>
+        <p><strong>Total Scholars:</strong> {{ $scholars->count() }}</p>
+        <p><strong>Generated on:</strong> {{ now()->format('F d, Y') }}</p>
     </div>
+
 </body>
 </html>

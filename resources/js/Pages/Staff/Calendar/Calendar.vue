@@ -27,21 +27,42 @@
 
                 <div>
                     <v-sheet class="d-flex p-10" height="54" tile>
-                        <v-select v-model="type" :items="types" class="ma-2 p-5" density="compact" label="View Mode"
-                            variant="outlined" hide-details></v-select>
-                        <v-select v-model="weekday" :items="weekdays" class="ma-2" density="compact" label="weekdays"
-                            variant="outlined" hide-details></v-select>
+                    <v-select
+                        v-model="type"
+                        :items="types"
+                        class="ma-2 p-5"
+                        density="compact"
+                        label="View Mode"
+                        variant="outlined"
+                        hide-details
+                    ></v-select>
+                    <v-select
+                        v-model="weekday"
+                        :items="weekdays"
+                        class="ma-2"
+                        density="compact"
+                        label="weekdays"
+                        variant="outlined"
+                        hide-details
+                    ></v-select>
                     </v-sheet>
                     <v-sheet>
-                        <!-- // Add this to your template part where the v-calendar component is -->
-                        <v-calendar ref="calendar" v-model="value" :events="events" :view-mode="type"
-                            :weekdays="weekday" @click:event="showEventDetails">
-                            <template v-slot:event="{ event }">
-                                <div class="custom-event">
-                                    {{ event.title }}
-                                </div>
-                            </template>
-                        </v-calendar>
+                    <v-calendar
+                        ref="calendar"
+                        v-model="value"
+                        :events="events"
+                        :view-mode="type"
+                        :weekdays="weekday"
+                        color="indigo"
+                        event-color="primary"
+                        @click:event="showEventDetails"
+                    >
+                        <template v-slot:event="{ event }">
+                        <div class="custom-event" :style="{ backgroundColor: event.color || '#1976D2' }">
+                            {{ event.title }}
+                        </div>
+                        </template>
+                    </v-calendar>
                     </v-sheet>
                 </div>
 
@@ -101,27 +122,19 @@ const directives = {
     DatePicker,
 };
 
-
-// Vuetify Date Adapter
-const adapter = useDate();
-
-// Reactive State
+const value = ref(new Date());
 const type = ref('month');
-const types = ref(['month', 'week', 'day']);
-
 const weekday = ref([0, 1, 2, 3, 4, 5, 6]);
+const types = ref(['month', 'week', 'day', '4day']);
 const weekdays = ref([
-    { title: 'Sun - Sat', value: [0, 1, 2, 3, 4, 5, 6] },
-    { title: 'Mon - Sun', value: [1, 2, 3, 4, 5, 6, 0] },
-    { title: 'Mon - Fri', value: [1, 2, 3, 4, 5] },
-    { title: 'Mon, Wed, Fri', value: [1, 3, 5] },
+  { value: [0, 1, 2, 3, 4, 5, 6], text: 'All days' },
+  { value: [1, 2, 3, 4, 5], text: 'Weekdays' },
+  { value: [0, 6], text: 'Weekend' },
 ]);
 
-const value = ref([new Date()]);
-const events = ref([]);
 
-const colors = ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'];
-const titles = ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'];
+// Calendar reference
+const calendar = ref(null);
 
 // Replace the getEvents function with this:
 const getScholarshipEvents = () => {
@@ -177,23 +190,46 @@ watch(() => props.scholarships, () => {
 </script>
 
 <style scoped>
-.test {
-    z-index: 9999;
+/* Calendar header styling */
+:deep(.v-calendar-weekly__head-weekday) {
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #424242;
 }
 
+/* Day number styling */
+:deep(.v-calendar-weekly__day-label) {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  color: #616161;
+}
+
+/* Today highlight */
+:deep(.v-calendar-weekly__day--today) {
+  background-color: rgba(25, 118, 210, 0.1) !important;
+}
+
+/* Custom event styling */
 .custom-event {
-    background-color: #003366 ;
-    /* Green background */
-    color: white;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-    margin-bottom: 2px;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.custom-day {
-    border: 1px solid #ddd;
-    text-align: center;
-    font-weight: bold;
+/* Overall calendar styling */
+:deep(.v-calendar) {
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Selected day styling */
+:deep(.v-calendar-weekly__day--selected) {
+  background-color: rgba(25, 118, 210, 0.2) !important;
 }
 </style>

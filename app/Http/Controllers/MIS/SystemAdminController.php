@@ -101,17 +101,21 @@ class SystemAdminController extends Controller
 
     public function campuses()
     {
-
         $campuses = Campus::all();
 
-        $coor = User::whereIn('usertype', ['coordinator'])
-            ->orderBy('name')
+        // Get coordinators that are only assigned to specific campuses
+        $coor = User::where('usertype', 'coordinator')
+            ->whereNotNull('campus_id')  // Only include users with a campus assignment
+            ->orderBy('first_name')
+            ->with('campus')
             ->get();
 
-        $cashier = User::whereIn('usertype', ['cashier'])
-            ->orderBy('name')
+        // Get cashiers that are only assigned to specific campuses
+        $cashier = User::where('usertype', 'cashier')
+            ->whereNotNull('campus_id')  // Only include users with a campus assignment
+            ->orderBy('first_name')
+            ->with('campus')
             ->get();
-
 
         return Inertia::render('MIS/Univ_Settings/Campus', [
             'campuses' => Campus::with(['coordinator', 'cashier'])->get(),
@@ -153,13 +157,14 @@ class SystemAdminController extends Controller
 
     public function sy_and_term()
     {
-        $scholar_year = SchoolYear::with('academic_year')->get();
+        $scholar_year = SchoolYear::with('academic_year')
+            ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
+            ->get();
 
         return Inertia::render('MIS/Univ_Settings/SY_Term', [
             'scholar_year' => $scholar_year,
         ]);
     }
-
     // users ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // public function user_roles() {
@@ -177,10 +182,13 @@ class SystemAdminController extends Controller
 
     public function system_users()
     {
+        $currentUser = Auth::user();
+
         $campuses = Campus::all();
         $users = User::whereNotIn('usertype', ['student'])
+            ->where('id', '!=', $currentUser->id) // Exclude current user
             ->with('campus') // This eager loads the campus relationship
-            ->get(); // Exclude students
+            ->get();
 
         return Inertia::render('MIS/User_Roles/Users', [
             'campuses' => $campuses,
@@ -240,11 +248,32 @@ class SystemAdminController extends Controller
 
     }
 
+    public function update_users(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
+            'campus_id' => 'required|exists:campuses,id',
+            'role' => 'required|string|in:system_admin,super_admin,coordinator,cashier',
+        ]);
+
+        $user->update([
+            'first_name' => $validated['first_name'],
+            'last_name' => $validated['last_name'],
+            'email' => $validated['email'],
+            'campus_id' => $validated['campus_id'],
+            'usertype' => $validated['role'],
+        ]);
+
+        return back()->with('success', 'User updated successfully');
+    }
+
 
     public function activity_logs()
     {
         $activity = ActivityLog::with('user')->get();
-        return Inertia::render('MIS/User_Roles/Activity_Logs',[
+        return Inertia::render('MIS/User_Roles/Activity_Logs', [
             'activity' => $activity,
         ]);
     }
@@ -252,7 +281,8 @@ class SystemAdminController extends Controller
 
     // security and backup ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public function backup_and_restore() {
+    public function backup_and_restore()
+    {
         return Inertia::render('MIS/Security&Backup/Backup_Restore');
     }
 

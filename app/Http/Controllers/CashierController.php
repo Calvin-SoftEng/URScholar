@@ -261,6 +261,8 @@ class CashierController extends Controller
 
 
                 $disbursement->update([
+                    'claimed_at' => now(),
+                    'claimed_by' => Auth::user()->id,
                     'status' => 'Claimed',
                 ]);
 

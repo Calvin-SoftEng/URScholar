@@ -38,30 +38,28 @@
                                 <!-- Display Day Only Once -->
                                 <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 
-                                <div class="grid grid-cols-[15%_75%_10%] gap-4 items-center">
-                                    <!-- Time Column -->
-                                    <div class="flex flex-col space-y-4">
-                                        <span v-for="(entry, idx) in log.entries" :key="idx"
-                                            class="text-gray-500 text-sm">{{ entry.time }}</span>
-                                    </div>
+                                <!-- Log Entries -->
+                                <div class="space-y-3">
+                                    <div v-for="(entry, idx) in log.entries" :key="idx"
+                                        class="grid grid-cols-[100px_auto_50px] gap-4">
+                                        <!-- Time Column -->
+                                        <div class="text-gray-500 text-sm whitespace-nowrap self-start pt-1">
+                                            {{ entry.time }}
+                                        </div>
 
-                                    <!-- Activity Column -->
-                                    <div class="flex flex-col space-y-4">
-                                        <p v-for="(entry, idx) in log.entries" :key="idx" class="text-gray-700">
-                                            <strong>{{ entry.user }}</strong> {{ entry.action }} <span
-                                                :class="entry.color">{{ entry.item }}</span>.
-                                        </p>
-                                    </div>
+                                        <!-- Activity Column -->
+                                        <div class="text-gray-700 break-words leading-relaxed">
+                                            <strong>{{ entry.user }}</strong> {{ entry.action }}
+                                            <span :class="entry.color">{{ entry.item }}</span>.
+                                        </div>
 
-                                    <!-- Restore Button Column -->
-                                    <div class="flex flex-col space-y-4">
-                                        <button v-for="(_, idx) in log.entries" :key="idx" @click="removeLog(log, idx)"
-                                            v-tooltip.right="'Remove'">
-                                            <span
-                                                class="material-symbols-rounded p-1 font-medium text-primary dark:text-blue-500 bg-blue-100 rounded-lg">
-                                                remove
-                                            </span>
-                                        </button>
+                                        <!-- Restore Button Column -->
+                                        <div class="flex justify-end self-start pt-1">
+                                            <button @click="removeLog(log, idx)" v-tooltip.right="'Remove'"
+                                                class="p-1 rounded-lg text-primary dark:text-blue-500 hover:bg-blue-200 transition">
+                                                <span class="material-symbols-rounded font-medium">remove</span>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -98,7 +96,7 @@ const menuItems = [
     { name: "Super Admin", key: "super_admin" },
     { name: "Coordinators", key: "coordinator" },
     { name: "Cashier", key: "cashier" },
-    { name: "Scholars", key: "scholar" },
+    { name: "Scholars", key: "student" },
 ];
 
 // Track the selected menu
@@ -121,6 +119,7 @@ const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
 };
+
 
 // Process activity logs from props
 const processedLogs = ref([]);
@@ -156,9 +155,6 @@ onMounted(() => {
         processedLogs.value = Object.values(groupedByDate).sort((a, b) => {
             return new Date(b.date) - new Date(a.date);
         });
-    } else {
-        // If no data from props, use sample data
-        processedLogs.value = sampleActivityLogs.value;
     }
 });
 

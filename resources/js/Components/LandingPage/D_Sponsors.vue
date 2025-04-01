@@ -45,7 +45,7 @@
     </div>
 
     <!-- Right Section (Sticky Introduction) --> 
-    <div class="lg:w-1/2 w-full space-y-6 text-center items-center justify-center flex flex-col lg:text-left relative z-10 lg:sticky top-32 self-start">
+    <div class="lg:w-1/2 w-full space-y-6 text-center items-center justify-center flex flex-col lg:text-left relative z-10 lg:sticky top-40 self-start">
         <h1 class="text-5xl font-extrabold text-white drop-shadow-lg">Meet Our Scholarship Sponsors</h1>
         <p class="text-lg text-gray-200 max-w-2xl items-center leading-relaxed">
             Our generous sponsors play a vital role in empowering students at the University of Rizal System. 
