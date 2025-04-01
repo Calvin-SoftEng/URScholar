@@ -68,11 +68,13 @@
                                                 <span
                                                     class="bg-blue-100 text-blue-800 text-sm font-medium me-2 px-2.5 py-0.5 rounded dark:bg-dprimary dark:text-blue-400 border border-blue-400 dark:border-gray-400">
                                                     {{ disbursement.scholar.email }}
+                                                    <!-- Access email directly from scholar -->
                                                 </span>
                                                 <span class="text-xs text-gray-500">
                                                     {{ disbursement.status }}
                                                 </span>
                                             </div>
+
 
                                             <!-- Message when no scholars are found -->
                                             <div v-if="getDisbursementsForBatch(batch.id).length === 0"
@@ -195,9 +197,10 @@ const form = ref({
 // Helper function to get disbursements for a specific batch
 const getDisbursementsForBatch = (batchId) => {
     return props.disbursements.filter(disbursement => {
-        return disbursement.scholar && disbursement.scholar.batch_id === batchId;
+        return disbursement.scholar && disbursement.scholar.grantees && disbursement.scholar.grantees.some(grantee => grantee.batch_id === batchId);
     });
 };
+
 
 const formatDateTime = (date) => {
     if (!date) return '';

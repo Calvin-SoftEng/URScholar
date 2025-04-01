@@ -47,10 +47,18 @@ class CashierController extends Controller
 
     public function scheduling(Scholarship $scholarship)
     {
+        // Get batches related to the grantees for the specific scholarship
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->with('grantees') // Eager load grantees for the batches
+            ->get();
 
-        $batches = Batch::where('scholarship_id', $scholarship->id)->get();
+        // Get the payout for the specific scholarship
         $payout = Payout::where('scholarship_id', $scholarship->id)->first();
-        $disbursements = Disbursement::where('payout_id', $payout->id)->with('scholar')->get();
+
+        // Get disbursements related to the payout, with scholars and their grantees
+        $disbursements = Disbursement::where('payout_id', $payout->id)
+            ->with('scholar.grantees.batch') // Eager load grantees and their batch for each scholar
+            ->get();
 
         return Inertia::render('Cashier/Scholarships/Scheduling', [
             'scholarship' => $scholarship,
@@ -59,6 +67,7 @@ class CashierController extends Controller
             'disbursements' => $disbursements,
         ]);
     }
+
 
     public function notify(Request $request, Scholarship $scholarship)
     {
