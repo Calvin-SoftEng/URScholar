@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\MessageSent;
 use App\Models\Message;
 use App\Events\NewNotification;
+use App\Mail\SendEmail;
+use App\Models\ActivityLog;
 use App\Models\Disbursement;
 use App\Models\Payout;
 use Inertia\Inertia;
@@ -15,10 +17,13 @@ use App\Models\Notification;
 use App\Models\Scholar;
 use App\Models\Sponsor;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class CashierController extends Controller
 {
@@ -40,8 +45,93 @@ class CashierController extends Controller
         ]);
     }
 
+    public function scheduling(Scholarship $scholarship)
+    {
+        // Get batches related to the grantees for the specific scholarship
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->with('grantees') // Eager load grantees for the batches
+            ->get();
+
+        // Get the payout for the specific scholarship
+        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+
+        // Get disbursements related to the payout, with scholars and their grantees
+        $disbursements = Disbursement::where('payout_id', $payout->id)
+            ->with('scholar.grantees.batch') // Eager load grantees and their batch for each scholar
+            ->get();
+
+        return Inertia::render('Cashier/Scholarships/Scheduling', [
+            'scholarship' => $scholarship,
+            'batches' => $batches,
+            'payout' => $payout,
+            'disbursements' => $disbursements,
+        ]);
+    }
+
+
+    public function notify(Request $request, Scholarship $scholarship)
+    {
+
+        $validated = $request->validate([
+            'scheduled_date' => 'required|date',
+            'scheduled_time' => 'required',
+            'reminders' => 'required',
+        ]);
+
+        // dd($validated);
+        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+        $disbursements = Disbursement::where('payout_id', $payout->id)->get();
+
+        $scholarIds = $disbursements->pluck('scholar_id'); // Extract scholar IDs
+
+        $scholars = Scholar::whereIn('id', $scholarIds)->get(); // Fetch scholars with matching IDs
+
+
+        // Create the same requirement for all scholars
+        foreach ($scholars as $scholar) {
+            if ($scholar->email) {
+
+
+
+                //Sending Emails
+                $mailData = [
+                    'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                    'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
+                        "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
+                        "Here are your login credentials:\n\n" .
+                        "*Email: " . $scholar['email'] . "\n" .
+                        "*Next Steps:\n" .
+                        " - Log in to your account using the details above.\n" .
+                        " - Complete your application by submitting the required documents.\n" .
+                        " - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                        "*Bigayan  Date: " . $request['scheduled_date'] . "\n\n" .
+                        "*Bigayan Oras: " . $request['scheduled_time'] . "\n\n" .
+                        "*Reminders be: " . $request['reminders'] . "\n\n" .
+                        "Click the following link to access your portal: " .
+                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
+                ];
+
+                Mail::to($scholar->email)->send(new SendEmail($mailData));
+            }
+        }
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Email',
+            'description' => 'Scholar has been sent an email for payouts ' . $scholarship->name,
+        ]);
+    }
+
+    // return Inertia::render('Cashier/Scholarships/Scheduling',[
+    //     'scholarship' => $scholarship,
+    //     'batches' => $batches,
+    //     'payout' => $payout,
+    //     'disbursements' => $disbursements,
+    // ]);
+
     public function payout_batches(Scholarship $scholarship)
     {
+        // Get batches related to the scholarship, order by batch_no in descending order
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with([
                 'scholars' => function ($query) {
@@ -50,13 +140,24 @@ class CashierController extends Controller
                 }
             ])
             ->orderBy('batch_no', 'desc')
-            ->get();
+            ->get(); // Use get() instead of first to get all batches
+
+        // Fetch grantees only if batches exist
+        $grantees = collect();
+        if ($batches->isNotEmpty()) {
+            $grantees = $scholarship->grantees()
+                ->whereIn('batch_id', $batches->pluck('id')) // Use whereIn for multiple batches
+                ->with('scholar.campus', 'scholar.course')
+                ->get();
+        }
 
         return Inertia::render('Cashier/Scholarships/Payout_Batches', [
             'scholarship' => $scholarship,
-            'batches' => $batches
+            'batches' => $batches,
+            'grantees' => $grantees,
         ]);
     }
+
 
     public function student_payouts($scholarshipId, $batchId)
     {
@@ -119,7 +220,8 @@ class CashierController extends Controller
             }
 
             // Retrieve the scholar's picture
-            $scholarPicture = User::where('email', $scholar->email)->first()->profile_picture ?? null;
+            $scholarPicture = User::where('email', $scholar->email)->first();
+
 
             // Check if the QR code filename matches the expected format
             $expectedQrFilename = $scholar->urscholar_id . '.png';
@@ -165,9 +267,21 @@ class CashierController extends Controller
 
             }
 
+            // Map the scholar's information for the response
+            $scholarData = [
+                'id' => $scholar->id,
+                'name' => $scholar->name,
+                'last_name' => $scholar->last_name,
+                'first_name' => $scholar->first_name,
+                'email' => $scholar->email,
+                'campus' => $scholar->campus->name ?? 'N/A', // Assuming campus has a 'name' attribute
+                'picture' => $scholarPicture->picture,
+                'status' => $disbursement ? $disbursement->status : 'No payout',
+            ];
+
             // Return the scholar with their picture
             return back()->with([
-                'success' => $scholar,
+                'success' => $scholarData,
                 'scholarPicture' => $scholarPicture
             ]);
 
@@ -196,7 +310,7 @@ class CashierController extends Controller
             ->get();
 
         // Return the chat page using Inertia
-        return Inertia::render('Cashier/Messaging/Messaging', [
+        return Inertia::render('Cashier/Communication/Communication', [
             'messages' => [],
             'currentUser' => $currentUser,
             'scholarships' => $scholarships,

@@ -154,7 +154,7 @@
               forum
             </span>
             <span v-show="dataOpenSideBar"
-              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Groups</span>
+              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Communication</span>
           </div>
         </div>
         </Link>
@@ -176,7 +176,7 @@
           </div>
         </Link>
 
-        <div v-tooltip.right="!dataOpenSideBar ? 'Reports' : ''"
+        <!-- <div v-tooltip.right="!dataOpenSideBar ? 'Reports' : ''"
           class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
           <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
             <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
@@ -184,7 +184,7 @@
             </span>
             <span v-show="dataOpenSideBar" class="pl-2">Reports</span>
           </router-link>
-        </div>
+        </div> -->
 
         <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full"
           :class="{ 'opacity-0': !dataOpenSideBar }">Settings</div>

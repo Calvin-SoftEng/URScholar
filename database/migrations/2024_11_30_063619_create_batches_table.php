@@ -53,6 +53,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        //Scholars Grant-Based
         Schema::create('grantees', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
@@ -61,6 +62,18 @@ return new class extends Migration
             $table->string('school_year');
             $table->string('semester');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->timestamps();
+        });
+
+        //Scholars One-Time
+        Schema::create('applicants', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
+            $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
+            $table->string('school_year');
+            $table->string('semester');
+            $table->enum('status', ['Successful', 'Unsuccessful', 'Pending'])->default('Pending');
             $table->timestamps();
         });
 
@@ -82,6 +95,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('submitted_requirements');
+        Schema::dropIfExists('applicants');
         Schema::dropIfExists('grantees');
         Schema::dropIfExists('scholars');
         Schema::dropIfExists('batches');

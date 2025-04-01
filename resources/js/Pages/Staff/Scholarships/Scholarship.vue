@@ -22,12 +22,16 @@
                         <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
+                            <Link>
+                            <span class="material-symbols-rounded mr-2 text-blue-400 tracking-[-.1rem]">
+                                arrow_back_ios_new
+                            </span>
+                            </Link>
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based'" class="flex gap-2">
@@ -133,7 +137,7 @@
                                 <div class="grid grid-cols-3 items-center gap-3">
                                     <!-- Scholars Length -->
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ scholars.length }}
+                                        {{ grantees.length }}
                                     </p>
 
                                     <!-- Divider -->
@@ -152,12 +156,17 @@
                                     <p class="text-gray-500 text-sm">Scholarship Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <div v-if="$page.props.auth.user.usertype == 'super_admin'" class="w-full flex flex-row justify-between items-end"> 
+                                    <div v-if="$page.props.auth.user.usertype == 'super_admin'"
+                                        class="w-full flex flex-row justify-between items-end">
                                         <p class="text-4xl font-semibold font-kanit">{{ props.allBatches.length }}</p>
-                                        <template v-if="props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
-                                            <button class="h-5 px-3 py-1 bg-blue-400 text-white rounded-full text-sm inline-flex items-center justify-center">
-                                                {{ props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length }} new
-                                                {{ props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length === 1 ? 'Batch' : 'Batches' }}
+                                        <template
+                                            v-if="props.allBatches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
+                                            <button
+                                                class="h-5 px-3 py-1 bg-blue-400 text-white rounded-full text-sm inline-flex items-center justify-center">
+                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length }} new
+                                                {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
+                                                false).length === 1 ? 'Batch' : 'Batches' }}
                                             </button>
                                         </template>
 
@@ -240,12 +249,13 @@
                                 <div class="grid grid-cols-2 gap-6">
                                     <div class="flex flex-col items-center">
                                         <span class="text-sm text-gray-600">No. of Scholars</span>
-                                        <span class="text-xl font-bold text-blue-600">{{ batch.scholars.length }}</span>
+                                        <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
+
                                     </div>
                                     <div class="flex flex-col items-center">
                                         <span class="text-sm text-gray-600">Unverified Scholars</span>
                                         <span class="text-xl font-bold text-red-500">
-                                            {{batch.scholars.filter(scholar => !scholar.is_verified).length}}
+                                            {{batch.grantees.filter(grantee => !grantee.scholar.is_verified).length}}
                                         </span>
                                     </div>
                                 </div>
@@ -359,7 +369,7 @@
                                                         <div class="flex flex-row text-sm gap-4">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -665,7 +675,7 @@
                         <div v-else class="mt-4">
                             <button v-tooltip.left="'Complete all batches'" disabled
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                Foward
+                                Forward
                             </button>
                         </div>
                     </div>
@@ -712,7 +722,7 @@ const props = defineProps({
     selectedYear: String,
     selectedSem: String,
     selectedCampus: String,
-    scholars: Array, // Add scholars prop
+    grantees: Array, // Add scholars prop
     campuses: Array,
     courses: Array,
     students: Array,
@@ -812,9 +822,9 @@ const loadBatchesData = async () => {
         // Calculate scholar counts for each batch using the scholars prop
         setTimeout(() => {
             // Group scholars by batch_id and count them
-            const scholarCountsByBatch = props.scholars.reduce((counts, scholar) => {
-                if (scholar.batch_id) {
-                    counts[scholar.batch_id] = (counts[scholar.batch_id] || 0) + 1;
+            const scholarCountsByBatch = props.grantees.reduce((counts, grant) => {
+                if (grant.batch_id) {
+                    counts[grant.batch_id] = (counts[grant.batch_id] || 0) + 1;
                 }
                 return counts;
             }, {});
@@ -1271,16 +1281,23 @@ const forwardBatches = async () => {
         // Create payload with selected batches
         const payload = {
             scholarship_id: props.scholarship.id,
-            scholars: batchesWithScholars.value.reduce((scholars, batch) => {
+            scholars: batchesWithScholars.value.reduce((grantees, batch) => {
                 if (batchesToForward.includes(batch.id)) {
-                    scholars.push(...props.scholars.filter(s => s.batch_id === batch.id));
+                    // Filter the grantees based on the batch_id and map their scholar_ids
+                    grantees.push(...props.grantees
+                        .filter(s => s.batch_id === batch.id)
+                        .map(grantee => ({
+                            ...grantee,
+                            scholar_id: grantee.scholar ? grantee.scholar.scholar_id : null // Ensure scholar_id is added
+                        })));
                 }
-                return scholars;
+                return grantees;
             }, []),
             batch_ids: batchesToForward,
             date_start: form.value.payoutStartInput,
             date_end: form.value.payoutEndInput,
         };
+
 
         // Send the request and wait for response
         // const response = await router.post(`/scholarship/forward-batches`, payload);

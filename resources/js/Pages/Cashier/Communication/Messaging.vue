@@ -25,7 +25,7 @@ const sendMessage = () => {
     // Get scholarship_id from selected scholarship
     form.value.scholarship_id = selectedData.value?.id || '';
 
-    router.post('/group-chat/message', form.value, {
+    router.post('/group-page/message', form.value, {
         preserveScroll: true,
         onSuccess: () => {
             fetchMessages(); // Fetch messages after sending
@@ -57,7 +57,7 @@ onMounted(() => {
 const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
 
 const fetchMessages = async () => {
-    const { data } = await router.get(route("student.messaging.show", { scholarship: props.selectedScholarship.id }));
+    const { data } = await router.get(route("messaging.show", { scholarship: props.selectedScholarship.id }));
 
     messageData.value = data;
 };
@@ -78,28 +78,9 @@ const scrollToBottom = () => {
 const showMemberList = ref(false);
 </script>
 
-<template>
-
     <Head title="Chat" />
-
-    <AuthenticatedLayout>
         <template #default>
-            <div class="w-full h-full bg-dirtywhite">
-                <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
-                    <div class="bg-dirtywhite py-5 w-[5%] h-full">
-                        <div class="flex flex-col items-center justify-center">
-                            <font-awesome-icon :icon="['fas', 'comment']"
-                                class="items-center justify-center w-8 h-8 text-[30px] text-primary p-3 bg-gray-200 rounded-lg" />
-                            <font-awesome-icon :icon="['fas', 'users-rectangle']"
-                                class="items-center justify-center w-8 h-8 text-[30px] text-gray-600 p-3 rounded-lg hover:bg-gray-100" />
-                            <span class="block w-full h-[2px] bg-gray-300 my-3"></span>
-                            <font-awesome-icon :icon="['fab', 'google-scholar']"
-                                class="items-center justify-center w-7 h-7 text-[30px] text-primary p-3.5 bg-white rounded-lg shadow-md mb-3 hover:bg-gray-100"
-                                v-tooltip="'Scholarships'" />
-                            <font-awesome-icon :icon="['fab', 'google-scholar']"
-                                class="items-center justify-center w-7 h-7 text-[30px] text-primary p-3.5 bg-white rounded-lg shadow-md mb-3 hover:bg-gray-100" />
-                        </div>
-                    </div>
+            
                     <div class="bg-dirtywhite w-[95%] p-4 h-full">
                         <div class="bg-white w-full h-full rounded-xl flex flex-row">
                             <div class="w-[30%] border-r">
@@ -128,7 +109,7 @@ const showMemberList = ref(false);
                                 <div class="divide-y">
                                     <Link class="w-full flex items-center space-x-3 mb-2 p-4"
                                         v-for="scholarship in scholarships" :key="scholarship.id"
-                                        :href="route('student.messaging.show', scholarship.id)" :class="[
+                                        :href="route('messaging.show', scholarship.id)" :class="[
                                             'hover:bg-gray-100',
                                             selectedData && selectedData.id === scholarship.id ? 'bg-blue-50 border-l-4 border-primary' : ''
                                         ]">
@@ -158,6 +139,30 @@ const showMemberList = ref(false);
                                         <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
                                     </button>
                                 </div>
+
+                                <div class="bg-yellow-100 shadow-sm p-4 flex justify-between items-center rounded-lg">
+                                    <!-- Pinned Message Icon and Title -->
+                                    <div class="flex flex-col items-start space-y-2">
+                                        <!-- Icon and Title -->
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-yellow-500 text-xl">📌</span>
+                                            <h3 class="text-lg font-bold text-primary">Pinned Announcement</h3>
+                                        </div>
+                                        
+                                        <!-- Message Body -->
+                                        <div class=" text-gray-700">
+                                            <p class="text-sm">Bukas daw sa registrar may palduhan.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Close Button -->
+                                    <button class="text-gray-600 hover:text-red-600 transition-colors ml-4" @click="closeAnnouncement">
+                                        <span class="text-xl">✖</span>
+                                    </button>
+                                </div>
+
+
+
                                 <!-- Main chat area -->
                                 <div class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                                     <!-- Messages column -->
@@ -343,8 +348,5 @@ const showMemberList = ref(false);
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
         </template>
-    </AuthenticatedLayout>
-</template>
+

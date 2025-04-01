@@ -10,7 +10,7 @@
         <div
             class="w-full h-full flex flex-col bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <h1 class="text-2xl font-bold text-center text-gray-900 dark:text-white mt-3">
-                Scholarship Application Title
+                {{ scholarship.name }}
             </h1>
 
             <div class="flex w-full mt-10 my-auto max-w-5xl mx-auto gap-3">
@@ -323,7 +323,7 @@ const submitRequirements = async () => {
             formData.append(`req[${index}]`, requirement.id);
         });
 
-        form.post('/student/applying-scholarship/application/upload', {
+        form.post(`/student/applying-scholarship/${props.scholarship.id}/apply`, {
             forceFormData: true,
             preserveScroll: true,
             preserveState: true,

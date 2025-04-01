@@ -202,6 +202,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
 
     Route::get('/sponsor/dashboard', [SponsorController::class, 'sponsor_dashboard'])->name('sponsor.dashboard');
+
+    // view scholars
+    Route::get('/sponsor/scholarships/', [SponsorController::class, 'view_scholars'])->name('sponsor.scholarship');
 });
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -209,6 +212,10 @@ Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
 Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
     Route::get('/cashier/dashboard', [CashierController::class, 'dashboard'])->name('cashier.dashboard');
+
+    // scheduling
+    Route::get('/cashier/scholarships/{scholarship}/schedule', [CashierController::class, 'scheduling'])->name('cashier.scheduling');
+    Route::post('/cashier/scholarships/{scholarship}/notify', [CashierController::class, 'notify'])->name('cashier.notify');
 
 
     // Scholarship_Payouts
@@ -277,6 +284,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     // Application
     Route::get('/student/applying-scholarship/{scholarship}/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
+    Route::post('/student/applying-scholarship/{scholarship}/apply', [StudentController::class, 'submitApplication'])->name('scholarship.application');
 });
 
 Route::middleware(['auth'])->group(function () {

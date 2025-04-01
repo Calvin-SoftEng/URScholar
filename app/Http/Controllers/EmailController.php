@@ -7,6 +7,7 @@ use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\User;
 use App\Models\Scholar;
+use App\Models\Batch;
 use Inertia\Inertia;
 use App\Mail\SendEmail;
 use App\Models\ActivityLog;
@@ -20,10 +21,21 @@ class EmailController extends Controller
 {
     public function index(Scholarship $scholarship)
     {
-        $scholars = $scholarship->scholars;
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->orderBy('batch_no', 'desc')
+            ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
+            ->first();
 
+        // Retrieve scholars via grantees and load relationships
+        $scholars = $scholarship->grantees()
+            ->where('batch_id', $batch->id)
+            ->with('scholar.user', 'scholar.campus', 'scholar.course')
+            ->get()
+            ->map(fn($grantee) => $grantee->scholar)
+            ->filter(); // Remove null scholars (if any)
+
+        // Fetch requirements related to the scholarship
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
 
         return Inertia::render('Staff/Scholarships/SendingAccess', [
             'scholarship' => $scholarship,
@@ -32,10 +44,12 @@ class EmailController extends Controller
         ]);
     }
 
+
     public function send(Scholarship $scholarship, Request $request)
     {
+        // Validation rules
         $messages = [
-            'required' => 'This field is required.', // Generic for all required fields
+            'required' => 'This field is required.',
         ];
 
         $validator = Validator::make($request->all(), [
@@ -46,7 +60,19 @@ class EmailController extends Controller
             'deadline' => 'required|date'
         ], $messages);
 
-        $scholars = Scholar::where('scholarship_id', $scholarship->id)->get();
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->orderBy('batch_no', 'desc')
+            ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
+            ->first();
+
+            
+        // Retrieve scholars through grantees with necessary relationships
+        $scholars = $scholarship->grantees()
+            ->where('batch_id', $batch->id)
+            ->with('scholar.user', 'scholar.campus', 'scholar.course')
+            ->get()
+            ->map(fn($grantee) => $grantee->scholar)
+            ->filter(); // Remove null scholars (if any)
 
         // Create the requirements for the scholarship
         $req = [];
@@ -94,7 +120,7 @@ class EmailController extends Controller
                     ]);
                 }
 
-                //Sending Emails
+                // Sending Emails
                 $mailData = [
                     'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
                     'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
@@ -115,6 +141,7 @@ class EmailController extends Controller
             }
         }
 
+        // Log the activity
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Email',
@@ -126,4 +153,5 @@ class EmailController extends Controller
             'message' => "Successfully sent email to all scholars",
         ]);
     }
+
 }

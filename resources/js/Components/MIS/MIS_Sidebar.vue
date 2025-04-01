@@ -17,14 +17,14 @@
                 </div>
               </div>
             </Link>
-
+<!-- 
             <Link>
               <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
                   <span class="pl-2">Landing Page Settings</span>
                 </div>
               </div>
-            </Link>
+            </Link> -->
 
 
             <div class="h-0.5 bg-gray-100 w-full"></div>
@@ -89,13 +89,13 @@
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">Security and Backup</div>
             <!-- System Logs and Audit Trail, Data Backup and Restore, User Access Restrictions -->
 
-            <Link>
+            <!-- <Link>
               <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
                   <span class="pl-2">System Logs and Audit Trail</span>
                 </div>
               </div>
-            </Link>
+            </Link> -->
 
             <Link :href="route('sa.archives')">
               <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/security-and-backup/archives' }">

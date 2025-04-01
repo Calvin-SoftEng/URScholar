@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AcademicYear;
 use App\Models\Campus;
 use App\Models\Condition;
 use App\Models\Course;
@@ -96,7 +97,7 @@ class DatabaseSeeder extends Seeder
             'usertype' => 'cashier',
             'campus_id' => '2'
         ]);
-        
+
         User::factory()->create([
             'name' => 'cashier2',
             'email' => 'cashier2@gmail.com',
@@ -217,6 +218,37 @@ class DatabaseSeeder extends Seeder
         //     'user_id' => 3,
         //     'scholarship_id' => 1,
         // ]);
+
+        //academic year
+        AcademicYear::factory()->create([
+            'school_year_id' => '1',
+            'semester' => '1st'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '1',
+            'semester' => '2nd'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '2',
+            'semester' => '1st'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '2',
+            'semester' => '2nd'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '3',
+            'semester' => '1st'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '3',
+            'semester' => '2nd'
+        ]);
 
 
         //sponsor 

@@ -31,7 +31,7 @@
             </li>
             <li>
               <Link :href="(route('student.messaging'))">
-              <p class="text-primary-foreground hover:text-primary-foreground transition">Group Chat</p>
+              <p class="text-primary-foreground hover:text-primary-foreground transition">Communication</p>
               </Link>
             </li>
           </ul>

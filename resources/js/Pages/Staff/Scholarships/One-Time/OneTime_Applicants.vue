@@ -70,7 +70,7 @@
                                 <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
                                 <p class="text-gray-500 text-sm">Number of Applicants</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins">{{ total_scholars }}</p>
+                            <p class="text-3xl font-semibold font-poppins">{{ total_applicants }}</p>
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@
 
                 <div>
                     <!-- Scholar List -->
-                    <ApplicantList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                    <ApplicantList :scholarship="scholarship" :batches="batches" :applicants="applicants" :scholars="scholars"
                         :requirements="requirements" @update:stats="updateStats" />
                 </div>
 
@@ -149,13 +149,14 @@ const props = defineProps({
     schoolyear: Object,
     selectedSem: Object,
     batch: Object,
+    applicants: Array,
     scholars: Array,
     requirements: Array,
     payout: Array
 });
 
-const total_scholars = computed(() => {
-    return props.scholars.filter(scholar => {
+const total_applicants = computed(() => {
+    return props.applicants.filter(applicant => {
         // Add your conditions here, for example:
         // return scholar.isActive === true;
         return true; // Count all scholars by default

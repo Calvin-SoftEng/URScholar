@@ -43,6 +43,13 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('academic_years', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->enum('semester', ['1st', '2nd'])->default('1st');
+            $table->timestamps();
+        });
+
         Schema::create('usertypes', function (Blueprint $table) {
             $table->id();
             $table->string('roles');
@@ -69,6 +76,7 @@ return new class extends Migration {
     {
         Schema::dropIfExists('students');
         Schema::dropIfExists('usertypes');
+        Schema::dropIfExists('academic_years');
         Schema::dropIfExists('school_years');
         Schema::dropIfExists('courses');
         Schema::dropIfExists('campuses');

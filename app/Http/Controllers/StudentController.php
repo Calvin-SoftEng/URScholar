@@ -7,6 +7,7 @@ use App\Events\NewNotification;
 use App\Models\EducationRecord;
 use App\Models\FamilyRecord;
 use App\Models\Grade;
+use App\Models\Applicant;
 use App\Models\OrgRecord;
 use App\Models\Scholarship;
 use App\Models\Requirements;
@@ -23,6 +24,7 @@ use App\Models\User;
 use App\Models\Scholar;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
+use App\Models\Grantees;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -38,7 +40,9 @@ class StudentController extends Controller
     public function dashboard()
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
 
 
         if ($scholarship) {
@@ -52,7 +56,7 @@ class StudentController extends Controller
 
             $requirementIds = $requirements->pluck('id')->toArray();
 
-            
+
 
             // Fetch only returned submitted requirements related to the scholarship
             $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
@@ -60,7 +64,7 @@ class StudentController extends Controller
                 ->whereIn('requirement_id', $requirementIds)
                 ->get();
 
-                // dd($requirementIds);
+            // dd($requirementIds);
 
             // Map submitted requirements with their corresponding requirement details
             $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
@@ -74,14 +78,14 @@ class StudentController extends Controller
             });
 
             $submitPending = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->where('status', 'Pending')
-            ->whereIn('requirement_id', $requirementIds)
-            ->get();
+                ->where('status', 'Pending')
+                ->whereIn('requirement_id', $requirementIds)
+                ->get();
 
             $submitApproved = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->where('status', 'Approved')
-            ->whereIn('requirement_id', $requirementIds)
-            ->get();
+                ->where('status', 'Approved')
+                ->whereIn('requirement_id', $requirementIds)
+                ->get();
 
             return Inertia::render('Student/Dashboard/Dashboard', [
                 'scholarship' => $scholarship,
@@ -130,37 +134,43 @@ class StudentController extends Controller
     public function verifyAccount()
     {
         $user = User::where('email', Auth::user()->email)->first();
-        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $scholar = Scholar::where('user_id', Auth::user()->id)->first();
+
+        // $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
         if ($scholar) {
-            $batch = Batch::where('scholarship_id', $scholar->scholarship_id)->first();
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
             // Get the batch semester logic
-            $batch_semester = null;
-            $batch_school_year = null;
+            $grantee_semester = null;
+            $grantee_school_year = null;
 
-            if ($batch) {
-                if ($batch->semester == '2nd') {
-                    $batch_semester = '1st';
-                    $school_year = $batch->school_year; // Keep the same school year
-                } else if ($batch->semester == '1st') {
-                    $batch_semester = '2nd';
+            if ($grantee) {
+                if ($grantee->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year = $grantee->school_year; // Keep the same school year
+                    
+                } elseif ($grantee->semester == '1st') {
+                    $grantee_semester = '2nd';
 
-                    if ($batch->school_year == 1) {
-                        $batch_school_year = 1; // First school year
+                    // Adjust the school year based on the current year
+                    if ($grantee->school_year == 1) {
+                        $grantee_school_year = 1; // First school year
                     } else {
-                        $batch_school_year = $batch->school_year - 1; // Previous school year
+                        $grantee_school_year = $grantee->school_year - 1; // Previous school year
                     }
                 }
             }
 
-            $school_year = SchoolYear::where('id', $batch_school_year)->first();
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = SchoolYear::where('id', $grantee_school_year)->first();
         } else {
-            $batch = null;
-            $batch_semester = null;
+            // If no scholar is found, set the variables to null
+            $grantee = null;
+            $grantee_semester = null;
+            $grantee_school_year = null;
             $school_year = null;
         }
-
 
         // if ($school_year){
         //     $school_year = SchoolYear::where('id', $batch->school_year)->first();
@@ -172,11 +182,11 @@ class StudentController extends Controller
         return Inertia::render('Student/VerificationAccount/Verification', [
             'user' => $user,
             'scholar' => $scholar,
-            'batch' => $batch,
-            'batch_semester' => $batch_semester,
-            'school_year' => $school_year,
+            'batch_semester' => $grantee_semester,
+            'school_year' => $school_year ?? 'N/A', // Default to 'N/A' if no school year found
         ]);
     }
+
 
     public function verifyingAccount(Request $request)
     {
@@ -370,12 +380,51 @@ class StudentController extends Controller
         // dd($file);
         // dd($request['grade']);
 
+        // $request->validate([
+        //     'files.*' => 'required|file|',
+        //     'req' => 'array'
+        // ]);
+
+
+        // $scholar = Scholar::where('email', Auth::user()->email)->first();
+
+        // $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+
+        // $requirements = Requirements::where('id', $scholarship->id)->get();
+
+        // $reqID = $requirements->pluck('id')->first();
+
+
+
+        // $uploadedFiles = [];
+
+
+        // foreach ($request->file('files') as $index => $file) {
+
+        //     $path = $file->store('requirements/' . $scholar->id, 'public');
+
+        //     $uploadedFile = SubmittedRequirements::create([
+        //         'scholar_id' => $scholar->id,
+        //         'requirement_id' => $reqID,
+        //         'submitted_requirements' => $file->getClientOriginalName(),
+        //         'path' => $path
+        //     ]);
+
+        //     $uploadedFiles[] = $uploadedFile;
+        // }
+
         if ($file) {
             $originalFileName = $request->file('cog')->getClientOriginalName();
             $extension = $request->file('cog')->getClientOriginalExtension();
-            $newFileName = $scholar->urscholar_id . $extension;
+            // Format: URS-0001[1st(2024-2025)]
+            $newFileName = $scholar->urscholar_id . '[' . $request->semester . '(' . $request->school_year . ')].' . $extension;
 
-            $filePath = $request->file('cog')->storeAs('scholar/grade', $newFileName, 'public');
+
+            $filePath = Storage::disk('public')->putFileAs(
+                'scholar/grade',
+                $request->file('cog'),
+                $newFileName
+            );
 
             $testing = Grade::create([
                 'scholar_id' => $scholar->id,
@@ -385,8 +434,6 @@ class StudentController extends Controller
                 'school_year' => $request->school_year,
                 'semester' => $request->semester,
             ]);
-        } else {
-
         }
 
         // Store the logo file in the local directory with a known path
@@ -641,7 +688,9 @@ class StudentController extends Controller
     {
         $scholar = Scholar::where('email', Auth::user()->email)->first();
 
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
 
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
@@ -679,7 +728,45 @@ class StudentController extends Controller
         $scholar = Scholar::where('email', Auth::user()->email)->with('course', 'campus')->first();
 
         if ($scholar) {
-            $grade = Grade::where('scholar_id', $scholar->id)->first();
+            $grades = Grade::where('scholar_id', $scholar->id)->get();
+            $latestgrade = Grade::where('scholar_id', $scholar->id)
+                ->latest()  // This will order by created_at DESC
+                ->first();  // Get only the first (latest) record
+
+
+            //generate qr_code
+            // Check if the scholar already has a QR code
+            if ($scholar->qr_code) {
+
+            }
+
+            // Set up QR code options
+            $options = new QROptions([
+                'outputType' => QRCode::OUTPUT_IMAGE_PNG,
+                'eccLevel' => QRCode::ECC_L,
+                'scale' => 10,
+                'imageBase64' => false,
+            ]);
+
+            // Data to encode in the QR code
+            $qrData = json_encode([
+                'id' => $scholar->urscholar_id,
+                'name' => $scholar->first_name . ' ' . $scholar->last_name,
+                'timestamp' => now()->timestamp,
+            ]);
+
+            // Generate the QR code
+            $qrcode = (new QRCode($options))->render($qrData);
+
+            // Define the file path
+            $filename = $scholar->urscholar_id . '.png';
+
+            // Save the QR code to storage
+            Storage::disk('public')->put('qr_codes/' . $filename, $qrcode);
+
+            // Update the scholar record with the QR code path
+            $scholar->qr_code = $filename;
+            $scholar->save();
         } else {
             $grade = null;
             $scholar = null;
@@ -692,7 +779,8 @@ class StudentController extends Controller
             'education' => $education,
             'family' => $family,
             'scholar' => $scholar,
-            'grade' => $grade
+            'grades' => $grades,
+            'latestgrade' => $latestgrade,
         ]);
     }
 
@@ -819,22 +907,17 @@ class StudentController extends Controller
 
         $request->validate([
             'files.*' => 'required|file|',
-            'req' => 'array'
+            'requirements' => 'array'
         ]);
 
 
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-
-        $scholarship = Scholarship::where('id', $scholar->scholarship_id)->first();
-
-        $requirements = Requirements::where('id', $scholarship->id)->get();
-
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $reqID = $requirements->pluck('id')->first();
 
-
-
         $uploadedFiles = [];
-
 
         foreach ($request->file('files') as $index => $file) {
 
@@ -869,10 +952,20 @@ class StudentController extends Controller
         ]);
     }
 
-    // public function scholarship_application()
-    // {
-    //     return Inertia::render('Student/Application/Scholar_Application');
-    // }
+    public function application(Request $request)
+    {
+        $request->validate([
+            'scholarship_id' => 'required|exists:scholarships,id',
+            'essay' => 'required|string',
+            'files.*' => 'required|file|',
+            'req' => 'array'
+        ]);
+
+
+
+        return back()
+            ->with('success', 'Your scholarship application has been submitted successfully!');
+    }
 
     public function scholarship_details(Scholarship $scholarship)
     {
@@ -923,7 +1016,7 @@ class StudentController extends Controller
         ]);
     }
 
-    public function submitApplication(Request $request)
+    public function submitApplication(Request $request, Scholarship $scholarship)
     {
         $request->validate([
             'scholarship_id' => 'required|exists:scholarships,id',
@@ -932,18 +1025,28 @@ class StudentController extends Controller
             'req' => 'array'
         ]);
 
-        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $scholar = Scholar::where('user_id', Auth::user()->id)->first();
 
-        $scholarship = Scholarship::where('id', $request['scholarship_id'])->first();
 
-        $requirements = Requirements::where('id', $scholarship->id)->get();
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->first();
+
+
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         $reqID = $requirements->pluck('id')->first();
 
 
+        Applicant::create([
+            'scholarship_id' => $scholarship->id,
+            'batch_id' => $batch->id,
+            'scholar_id' => $scholar->id,
+            'school_year' => $batch->school_year,
+            'semester' => $batch->semester,
+        ]);
+
 
         $uploadedFiles = [];
-
 
         foreach ($request->file('files') as $index => $file) {
 
@@ -982,7 +1085,7 @@ class StudentController extends Controller
             ->get();
 
         // Return the chat page using Inertia
-        return Inertia::render('Student/Messaging/Messaging', [
+        return Inertia::render('Student/Communication/Communication', [
             'messages' => [],
             'currentUser' => $currentUser,
             'scholarships' => $scholarships,
@@ -1019,7 +1122,7 @@ class StudentController extends Controller
 
 
         // Return the chat page using Inertia, passing the messages and user data
-        return Inertia::render('Student/Messaging/Messaging', [
+        return Inertia::render('Student/Communication/Communication', [
             'messages' => $messages,
             'currentUser' => Auth::user(),
             'scholarships' => $scholarships,

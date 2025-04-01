@@ -78,28 +78,9 @@ const scrollToBottom = () => {
 const showMemberList = ref(false);
 </script>
 
-<template>
-
     <Head title="Chat" />
-
-    <AuthenticatedLayout>
         <template #default>
-            <div class="w-full h-full bg-dirtywhite">
-                <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
-                    <div class="bg-dirtywhite py-5 w-[5%] h-full">
-                        <div class="flex flex-col items-center justify-center">
-                            <font-awesome-icon :icon="['fas', 'comment']"
-                                class="items-center justify-center w-8 h-8 text-[30px] text-primary p-3 bg-gray-200 rounded-lg" />
-                            <font-awesome-icon :icon="['fas', 'users-rectangle']"
-                                class="items-center justify-center w-8 h-8 text-[30px] text-gray-600 p-3 rounded-lg hover:bg-gray-100" />
-                            <span class="block w-full h-[2px] bg-gray-300 my-3"></span>
-                            <font-awesome-icon :icon="['fab', 'google-scholar']"
-                                class="items-center justify-center w-7 h-7 text-[30px] text-primary p-3.5 bg-white rounded-lg shadow-md mb-3 hover:bg-gray-100"
-                                v-tooltip="'Scholarships'" />
-                            <font-awesome-icon :icon="['fab', 'google-scholar']"
-                                class="items-center justify-center w-7 h-7 text-[30px] text-primary p-3.5 bg-white rounded-lg shadow-md mb-3 hover:bg-gray-100" />
-                        </div>
-                    </div>
+            
                     <div class="bg-dirtywhite w-[95%] p-4 h-full">
                         <div class="bg-white w-full h-full rounded-xl flex flex-row">
                             <div class="w-[30%] border-r">
@@ -367,8 +348,5 @@ const showMemberList = ref(false);
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
         </template>
-    </AuthenticatedLayout>
-</template>
+
