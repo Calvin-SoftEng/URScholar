@@ -74,9 +74,60 @@
 
         <!-- second stepper -->
 
-        
+        <!-- one time -->
+        <!-- <template v-if="scholar">
+            <div class="mb-3">
+                <span class="text-2xl font-medium font-poppins">My Scholarship</span>
+            </div>
 
-        <!-- third stepper -->
+            <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-6 text-primary">
+
+                <div class="text-center">
+                    <span class="text-4xl font-bold">Tulong Dunong Program</span>
+                    <p class="text-xl text-gray-600">Grantee</p>
+                </div>
+
+                <div class="h-0.5 bg-gray-300"></div>
+
+
+                <div>
+                    <span class="font-semibold text-xl">Payout History</span>
+
+                    <div class="max-w-6xl mx-auto space-y-6 mt-4">
+                        <div class="grid grid-cols-5 gap-4 items-center">
+
+                            <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                                Claimed
+                            </div>
+
+
+                            <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
+                                <h2 class="text-lg font-semibold">March 30, 2025</h2>
+                                <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
+                                <p class="text-gray-600">URSB Cashier</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="h-0.5 bg-gray-300"></div>
+
+
+                <div class="text-center">
+                    <p class="text-lg text-gray-700">
+                        🎉 Congratulations on receiving your scholarship! We hope this support helps you achieve your academic goals.
+                        Your journey doesn’t end here—keep striving for excellence, and remember that new opportunities await! 🚀
+                    </p>
+                </div>
+
+
+                <div class="flex justify-center">
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-300">
+                        Continue on Your Next Journey
+                    </button>
+                </div>
+            </div>
+        </template> -->
 
 </template>
 

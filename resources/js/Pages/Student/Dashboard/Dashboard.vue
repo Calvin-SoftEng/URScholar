@@ -119,7 +119,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import ScholarGrant from './Scholar/ScholarGrant.vue';
-import Scholarships from './Non_Scholar/Scholarships.vue';
+import Scholarships from './Non_Scholar/NonScholarDashboard.vue';
 
 const props = defineProps({
     //For scholars only
