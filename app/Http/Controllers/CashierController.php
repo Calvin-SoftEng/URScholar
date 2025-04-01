@@ -131,6 +131,7 @@ class CashierController extends Controller
 
     public function payout_batches(Scholarship $scholarship)
     {
+        // Get batches related to the scholarship, order by batch_no in descending order
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with([
                 'scholars' => function ($query) {
@@ -139,13 +140,24 @@ class CashierController extends Controller
                 }
             ])
             ->orderBy('batch_no', 'desc')
-            ->get();
+            ->get(); // Use get() instead of first to get all batches
+
+        // Fetch grantees only if batches exist
+        $grantees = collect();
+        if ($batches->isNotEmpty()) {
+            $grantees = $scholarship->grantees()
+                ->whereIn('batch_id', $batches->pluck('id')) // Use whereIn for multiple batches
+                ->with('scholar.campus', 'scholar.course')
+                ->get();
+        }
 
         return Inertia::render('Cashier/Scholarships/Payout_Batches', [
             'scholarship' => $scholarship,
-            'batches' => $batches
+            'batches' => $batches,
+            'grantees' => $grantees,
         ]);
     }
+
 
     public function student_payouts($scholarshipId, $batchId)
     {
@@ -208,7 +220,8 @@ class CashierController extends Controller
             }
 
             // Retrieve the scholar's picture
-            $scholarPicture = User::where('email', $scholar->email)->first()->profile_picture ?? null;
+            $scholarPicture = User::where('email', $scholar->email)->first();
+
 
             // Check if the QR code filename matches the expected format
             $expectedQrFilename = $scholar->urscholar_id . '.png';
@@ -254,9 +267,21 @@ class CashierController extends Controller
 
             }
 
+            // Map the scholar's information for the response
+            $scholarData = [
+                'id' => $scholar->id,
+                'name' => $scholar->name,
+                'last_name' => $scholar->last_name,
+                'first_name' => $scholar->first_name,
+                'email' => $scholar->email,
+                'campus' => $scholar->campus->name ?? 'N/A', // Assuming campus has a 'name' attribute
+                'picture' => $scholarPicture->picture,
+                'status' => $disbursement ? $disbursement->status : 'No payout',
+            ];
+
             // Return the scholar with their picture
             return back()->with([
-                'success' => $scholar,
+                'success' => $scholarData,
                 'scholarPicture' => $scholarPicture
             ]);
 

@@ -146,8 +146,8 @@
                     <InputError v-if="errors?.message" :message="errors.message" class="text-red-500" />
                     
                     <div class="flex justify-center items-center mb-6 overflow-hidden">
-                      <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="Profile Picture"
-                          class="w-40 h-40 object-cover rounded-full border-2 border-primary">
+                      <img :src="`/storage/user/profile/${scholar.picture}`" alt="Profile Picture"
+                                    class="w-40 h-40 object-cover rounded-full border-2 border-primary">
                     </div>
 
                     <div class="mb-4">
@@ -156,7 +156,7 @@
 
                     <div class="flex items-center justify-center gap-2 mb-4">
                       <font-awesome-icon :icon="['fas', 'school']" class="p-2 w-5 h-5 bg-primary rounded-md text-white" />
-                      <span class="text-gray-900 text-lg font-semibold">{{ scholar.campus.name }}, Campus</span>
+                      <span class="text-gray-900 text-lg font-semibold">{{ scholar.campus }}, Campus</span>
                     </div>
 
                     <div class="flex items-center justify-center gap-2 mb-6 border-b-2 pb-4">
