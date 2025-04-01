@@ -1282,7 +1282,7 @@ const forwardBatches = async () => {
         // Create payload with selected batches
         const payload = {
             scholarship_id: props.scholarship.id,
-            scholars: batchesWithScholars.value.reduce((grantees, batch) => {
+            grantees: batchesWithScholars.value.reduce((grantees, batch) => {
                 if (batchesToForward.includes(batch.id)) {
                     // Filter the grantees based on the batch_id and map their scholar_ids
                     grantees.push(...props.grantees

@@ -139,7 +139,7 @@ class CashierController extends Controller
                         ->orderBy('first_name');
                 }
             ])
-            ->orderBy('batch_no', 'desc')
+            ->orderBy('batch_no',)
             ->get(); // Use get() instead of first to get all batches
 
         // Fetch grantees only if batches exist

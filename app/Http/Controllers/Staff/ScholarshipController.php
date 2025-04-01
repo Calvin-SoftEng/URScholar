@@ -699,7 +699,7 @@ class ScholarshipController extends Controller
     {
         $request->validate([
             'scholarship_id' => 'required|integer',
-            'scholars' => 'required|array',
+            'grantees' => 'required|array',
             'batch_ids' => 'required|array',
             'batch_ids.*' => 'integer',
             'date_start' => 'required|date',
@@ -709,11 +709,8 @@ class ScholarshipController extends Controller
             'date_end.required' => 'Set a Date end',
         ]);
 
-
-
-
         $scholarshipId = $request->input('scholarship_id');
-        $scholars = $request->input('scholars');
+        $grantees = $request->input('grantees');
         $batchIds = $request->input('batch_ids');
         $user = Auth::user();
 
@@ -727,11 +724,12 @@ class ScholarshipController extends Controller
 
         // Prepare disbursement data
         $dataToInsert = [];
-        foreach ($scholars as $scholar) {
+        $dataToInsert = [];
+        foreach ($grantees as $grantee) {
             $dataToInsert[] = [
                 'payout_id' => $payout->id,
-                'batch_id' => $scholar['batch_id'],
-                'scholar_id' => $scholar['id'],
+                'batch_id' => $grantee['batch_id'],
+                'scholar_id' => $grantee['scholar']['id'], // Changed from $grantee['id'] to access the nested scholar id
                 'created_at' => now(),
                 'updated_at' => now(),
             ];
