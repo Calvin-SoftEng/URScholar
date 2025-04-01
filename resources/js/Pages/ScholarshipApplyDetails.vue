@@ -94,10 +94,10 @@
 import { ref } from 'vue';
 import { Head, Link } from '@inertiajs/vue3';
 import FloatingNav from '@/Components/LandingPage/FloatingNav.vue';
-import Section_1 from '@/Components/LandingPage/Section_1.vue';
-import Section_2 from '@/Components/LandingPage/Section_2.vue';
-import Section_3 from '@/Components/LandingPage/Section_3.vue';
-import Section_4 from '@/Components/LandingPage/Section_4.vue';
+import Section_1 from '@/Components/LandingPage/A_Title_Section.vue';
+import Section_2 from '@/Components/LandingPage/C_Tags.vue';
+import Section_3 from '@/Components/LandingPage/D_Sponsors.vue';
+import Section_4 from '@/Components/LandingPage/E_Scholarships.vue';
 import SectionFooter from '@/Components/LandingPage/Footer.vue';
 import { onMounted, watchEffect, watch, computed } from 'vue';
 

@@ -162,9 +162,10 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     // Route::post('/group-pagee/{scholarship}/messages', [MessageController::class, 'store'])->name('grouppage.store');
 
     //One-time Payment Applicants
-    Route::get('/scholarships/scholar={id}/one-time', [ScholarController::class, 'scholar_onetime'])->name('scholarships.applicant_details');
     Route::get('/scholarships/{scholarshipId}/applicant', [ScholarshipController::class, 'onetime_list'])->name('scholarship.onetime_list');
     Route::get('/scholarships/one-time/scholars', [ScholarshipController::class, 'onetime_scholars'])->name('scholarship.onetime_scholars');
+
+    Route::get('/scholarships/{scholarshipId}/applicant/{id}', [ScholarshipController::class, 'applicant_details'])->name('scholarship.applicant_details');
 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
@@ -197,6 +198,10 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/payouts', [PayoutsController::class, 'payouts_index'])->name('payouts_index.payouts');
     Route::get('/payouts/list', [PayoutsController::class, 'payouts_list'])->name('payouts_list.payouts');
+
+
+    // Reports
+    Route::get('/scholarships/{scholarshipId}/batch/{batchId}/report', [ReportsController::class, 'generateReport']);
 });
 
 // SPONSOR -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -286,7 +291,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     // Application
     Route::get('/student/applying-scholarship/{scholarship}/application', [StudentController::class, 'scholarship_application'])->name('scholarship.application');
-    Route::post('/student/applying-scholarship/{scholarship}/apply', [StudentController::class, 'submitApplication'])->name('scholarship.apply');
+    Route::post('/student/applying-scholarship/{scholarship}/apply', [StudentController::class, 'submitApplication'])->name('scholarship.application');
 });
 
 Route::middleware(['auth'])->group(function () {
