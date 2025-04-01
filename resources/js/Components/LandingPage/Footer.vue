@@ -1,63 +1,59 @@
 <template>
-    <footer class="bg-primary text-primary-foreground py-16 px-8">
-        <div class="max-w-7xl mx-auto grid grid-cols-4 gap-8">
+    <footer class="bg-[#0B132B] text-white py-12 px-8 relative overflow-hidden">
+        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-20 text-sm relative z-10">
             <!-- Scholarship Services -->
-            <div class="text-white">
+            <div>
                 <h3 class="font-semibold text-lg mb-3">Scholarship Services</h3>
                 <ul class="space-y-2">
                     <li><a href="#" class="hover:underline">Apply for Scholarship</a></li>
-                    <li><a href="#" class="hover:underline">Scholarship Eligibility</a></li>
+                    <li><a href="#" class="hover:underline">Eligibility & Requirements</a></li>
                     <li><a href="#" class="hover:underline">Application Status</a></li>
                     <li><a href="#" class="hover:underline">Scholarship Payouts</a></li>
                     <li><a href="#" class="hover:underline">Renewal & Compliance</a></li>
                 </ul>
             </div>
 
-            <!-- Students & Sponsors -->
-            <div class="text-white">
-                <h3 class="font-semibold text-lg mb-3">For Students & Sponsors</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="hover:underline">Student Dashboard</a></li>
-                    <li><a href="#" class="hover:underline">Scholarship Opportunities</a></li>
-                    <li><a href="#" class="hover:underline">Sponsor a Scholar</a></li>
-                    <li><a href="#" class="hover:underline">Manage Donations</a></li>
-                    <li><a href="#" class="hover:underline">Contact a Coordinator</a></li>
-                </ul>
+            <!-- URS Campuses (Two Columns) -->
+            <div>
+                <h3 class="font-semibold text-lg mb-3">Our Campuses</h3>
+                <div class="grid grid-cols-2 gap-x-6">
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:underline">Antipolo Campus</a></li>
+                        <li><a href="#" class="hover:underline">Angono Campus</a></li>
+                        <li><a href="#" class="hover:underline">Binangonan Campus</a></li>
+                        <li><a href="#" class="hover:underline">Cainta Campus</a></li>
+                        <li><a href="#" class="hover:underline">Cardona Campus</a></li>
+                    </ul>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="hover:underline">Morong Campus</a></li>
+                        <li><a href="#" class="hover:underline">Pililla Campus</a></li>
+                        <li><a href="#" class="hover:underline">Rodriguez Campus</a></li>
+                        <li><a href="#" class="hover:underline">Tanay Campus</a></li>
+                        <li><a href="#" class="hover:underline">Taytay Campus</a></li>
+                    </ul>
+                </div>
             </div>
 
-            <!-- URScholar Locations -->
-            <div class="text-white">
-                <h3 class="font-semibold text-lg mb-3">URScholar Locations</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="hover:underline">Rizal Campus</a></li>
-                    <li><a href="#" class="hover:underline">Morong Campus</a></li>
-                    <li><a href="#" class="hover:underline">Tanay Campus</a></li>
-                    <li><a href="#" class="hover:underline">Binangonan Campus</a></li>
-                    <li><a href="#" class="hover:underline">Angono Campus</a></li>
-                </ul>
-            </div>
-
-            <!-- About URScholar -->
-            <div class="text-white">
-                <h3 class="font-semibold text-lg mb-3">About URScholar</h3>
-                <ul class="space-y-2">
-                    <li><a href="#" class="hover:underline">About Us</a></li>
-                    <li><a href="#" class="hover:underline">Our Mission</a></li>
-                    <li><a href="#" class="hover:underline">Student Testimonials</a></li>
-                    <li><a href="#" class="hover:underline">Help & Support</a></li>
-                    <li><a href="#" class="hover:underline">Contact Us</a></li>
-                </ul>
+            <!-- Social Media -->
+            <div>
+                <div class="text-xl font-bold">URSCHOLAR</div>
+                <div class="text-sm text-primary-foreground/70">University of Rizal System - Scholarship Portal</div>
+                <div class="text-sm mt-2">
+                    <p>Scholarship and Financial Assistance Unit</p>
+                    <p>University of Rizal System - Morong Campus</p>
+                    <p>Email: support@urscholar.edu.ph</p>
+                </div>
             </div>
         </div>
 
-        <!-- Branding & Locations -->
-        <div class="border-t border-primary-foreground/30 mt-10 pt-8 flex justify-between items-center text-white">
-            <div class="text-xl font-bold">URSCHOLAR</div>
-            <div class="text-sm text-primary-foreground/70">University of Rizal System - Scholarship Portal</div>
-            <div class="text-sm">
-                <p>Morong, Rizal, Philippines</p>
-                <p>Email: support@urscholar.edu.ph</p>
-            </div>
+        <div class="border-t border-gray-700 mt-8 pt-4 text-center text-xs text-gray-400 relative z-10">
+            &copy; 2025 URScholar. All rights reserved.
+        </div>
+
+        <!-- Logo positioned at bottom right -->
+        <div class="absolute bottom-0 right-0 transform translate-x-4 translate-y-4">
+            <img src="../../../assets/images/ursportallogoonly.png" alt="URS Logo" class="w-80 opacity-15">
         </div>
     </footer>
+
 </template>

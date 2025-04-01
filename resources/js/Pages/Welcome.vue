@@ -1,10 +1,11 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3';
 import FloatingNav from '@/Components/LandingPage/FloatingNav.vue';
-import Section_1 from '@/Components/LandingPage/Section_1.vue';
-import Section_2 from '@/Components/LandingPage/Section_2.vue';
-import Section_3 from '@/Components/LandingPage/Section_3.vue';
-import Section_4 from '@/Components/LandingPage/Section_4.vue';
+import Section_1 from '@/Components/LandingPage/A_Title_Section.vue';
+import Section_2 from '@/Components/LandingPage/B_About_Us.vue';
+import Section_3 from '@/Components/LandingPage/C_Tags.vue';
+import Section_4 from '@/Components/LandingPage/D_Sponsors.vue';
+import Section_5 from '@/Components/LandingPage/E_Scholarships.vue';
 import SectionFooter from '@/Components/LandingPage/Footer.vue';
 
 defineProps({
@@ -57,7 +58,8 @@ function handleImageError() {
         <Section_1 />
         <Section_2 />
         <Section_3 />
-        <Section_4 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears" />
+        <Section_4 />
+        <Section_5 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears" />
         <SectionFooter />
     </div>
 </template>
