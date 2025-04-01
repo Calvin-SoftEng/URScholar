@@ -1,5 +1,5 @@
 <template>
-    <template v-if="dsdd">
+    <template v-if="!disbursement">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
             <span class="text-4xl font-bold">Tulong Dunong Program</span>
             <span class="text-xl">Grantee</span> 
@@ -138,7 +138,7 @@
 
 
     <!-- scholar grant kapag tapos na mag pasa requiremetns -->
-    <template v-if="scholar">
+    <template v-else>
         <div class="mb-3">
             <span class="text-2xl font-medium font-poppins">My Scholarship</span>
         </div>
@@ -153,7 +153,7 @@
 
                     <!-- Scholarship Info -->
                     <div>
-                        <h2 class="text-3xl font-bold text-blue-800">Tulong Dunong</h2>
+                        <h2 class="text-3xl font-bold text-blue-800">{{scholarship.name}}</h2>
                         <p class="text-xl text-gray-600">2024-2025 Grantee</p>
                         
                     </div>
@@ -322,6 +322,7 @@ const props = defineProps({
     submitReq: Array,
     submitPending: Array,
     submitApproved: Array,
+    disbursement: Object,
 
     //For non-scholars only
     sponsors: {

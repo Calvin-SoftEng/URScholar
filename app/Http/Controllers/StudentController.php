@@ -24,6 +24,7 @@ use App\Models\User;
 use App\Models\Scholar;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
+use App\Models\Disbursement;
 use App\Models\Grantees;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -43,7 +44,19 @@ class StudentController extends Controller
         $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
         if ($grantee) {
-            $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
+            $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
+
+            $disbursement = Disbursement::where('scholar_id', $scholar->id)
+                ->where('status', 'Claimed')
+                ->first() ?? null;
+
+            $oldestGrantee = Grantees::orderBy('created_at', 'asc')->first(); // Fetch the oldest grantee
+
+            $currentYear = SchoolYear::where('id', $grantee->school_year)->first();
+
+            $yearQualified = SchoolYear::where('id', $oldestGrantee->school_year)->first();
+
+            $historyGrantee = Grantees::where('id', $grantee->id)->get();
 
 
             if ($scholarship) {
@@ -89,6 +102,8 @@ class StudentController extends Controller
                     ->get();
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
+                    'grantee' => $grantee,
+                    'disbursement' => $disbursement,
                     'scholarship' => $scholarship,
                     'scholar' => $scholar,
                     'submitReq' => $returnedRequirements,
@@ -147,27 +162,27 @@ class StudentController extends Controller
 
             // Get the batch semester logic
             $grantee_semester = null;
-            $grantee_school_year = null;
+            $grantee_school_year_id = null;
 
             if ($grantee) {
                 if ($grantee->semester == '2nd') {
                     $grantee_semester = '1st';
-                    $grantee_school_year = $grantee->school_year; // Keep the same school year
+                    $grantee_school_year_id = $grantee->school_year_id; // Keep the same school year
 
                 } elseif ($grantee->semester == '1st') {
                     $grantee_semester = '2nd';
 
                     // Adjust the school year based on the current year
-                    if ($grantee->school_year == 1) {
-                        $grantee_school_year = 1; // First school year
+                    if ($grantee->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
                     } else {
-                        $grantee_school_year = $grantee->school_year - 1; // Previous school year
+                        $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
                     }
                 }
             }
 
             // Fetch the school year from the database using the calculated school year ID
-            $school_year = SchoolYear::where('id', $grantee_school_year)->first();
+            $school_year = SchoolYear::where('id', $grantee_school_year_id)->first();
         } else {
             // If no scholar is found, set the variables to null
             $grantee = null;
