@@ -82,10 +82,18 @@
                   <td>
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': disbursement.status === 'Claimed',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending'
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending',
+                      'bg-red-100 text-red-800 border border-red-400': disbursement.status === 'Not Claimed'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
                       {{ disbursement.status }}
                     </span>
+                  </td>
+                  <td>
+                    <button @click="toggleReason"
+                      class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
+                      aria-label="View Details">
+                      <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
+                    </button>
                   </td>
                 </tr>
               </tbody>
@@ -179,6 +187,52 @@
             </div>
           </div>
         </div>
+
+        <!-- reasoning -->
+        <div v-if="Reasoning"
+          class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+          <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+              
+              <div class="flex items-center gap-3">
+                  <!-- Icon -->
+                  <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                  <!-- Title and Description -->
+                  <div class="flex flex-col">
+                      <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                          Reason for Not Claim
+                      </h2>
+                      <span class="text-sm text-gray-600 dark:text-gray-400">
+                          You can add here the reason of the student for not claiming 
+                      </span>
+                  </div>
+              </div>
+
+              <button type="button" @click="closeModal"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="default-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 14 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+              </button>
+            </div>
+
+            
+            <div class="p-4 flex flex-col space-y-4">
+              <div class="relative space-y-3">
+                  <h3 class="font-semibold text-gray-900 dark:text-white">
+                      Reason of Not Claim</h3>
+                  <textarea id="subject" rows="4"
+                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Write a message"></textarea>
+                  <!-- <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" /> -->
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -224,6 +278,7 @@ const components = {
 const searchQuery = ref('');
 const showRequirements = ref(false);
 const OpenCamera = ref(false);
+const Reasoning = ref(false);
 const scannedResult = ref(null);
 const scannedScholar = ref(null);
 const errorMessage = ref(null);
@@ -258,6 +313,15 @@ const toggleCamera = () => {
 
 const closeCamera = () => {
   OpenCamera.value = false;
+}
+
+const toggleReason = () => {
+  Reasoning.value = !Reasoning.value;
+  
+};
+
+const closeModal = () => {
+  Reasoning.value = false;
 }
 
 // Handle QR code detection
