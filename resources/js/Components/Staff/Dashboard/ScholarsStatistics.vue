@@ -22,12 +22,12 @@
                 </button>
 
                 <!-- Pie Chart Button -->
-                <button 
+                <!-- <button 
                     @click="setChartType('pie')" 
                     class="p-2 rounded-md transition hover:bg-gray-200 dark:hover:bg-gray-700"
                     :class="{ 'bg-gray-300 dark:bg-gray-600': chartType === 'pie' }">
                     <font-awesome-icon :icon="['fas', 'chart-pie']" class="text-xl" />
-                </button>
+                </button> -->
             </div>
 
 
