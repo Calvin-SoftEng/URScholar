@@ -13,11 +13,13 @@ use App\Models\SchoolYear;
 use App\Models\Batch;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
+use App\Models\Applicant;
 use App\Models\Campus;
 use App\Models\CampusRecipients;
 use App\Models\Criteria;
 use App\Models\Disbursement;
 use App\Models\Eligible;
+use App\Models\Grade;
 use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\Payout;
@@ -342,19 +344,16 @@ class ScholarshipController extends Controller
 
     public function onetime_list(Request $request, $scholarshipId)
     {
-        // dd($scholarshipId);
-        // Now we've changed the parameter to use Laravel's model binding
-        $scholarship = Scholarship::where('id', $scholarshipId)->first();
+        // Find the scholarship by ID
+        $scholarship = Scholarship::findOrFail($scholarshipId);
 
-
+        // Get the batch for the selected semester and school year
         $batch = Batch::where('scholarship_id', $scholarship->id)
-            ->where('semester', $request->input('selectedSem')) // Replace 'First' with your desired semester value
-            ->where('school_year', $request->input('selectedYear')) // Replace '2024-2025' with your desired school year value
-            ->first();
+            ->where('semester', $request->input('selectedSem'))
+            ->where('school_year', $request->input('selectedYear'))
+            ->firstOrFail();
 
-            // dd($batch);
-
-        // Checking if scholar's payment claimed
+        // Check if scholar's payment claimed
         $payout = Payout::where('scholarship_id', $scholarshipId)
             ->where('status', 'claimed')
             ->get();
@@ -363,53 +362,91 @@ class ScholarshipController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
         $totalRequirements = $requirements->count();
 
-        // Get scholars directly without batch relationship
-        $scholars = Scholar::where('scholarship_id', $scholarshipId)
-            ->with(['campus', 'course']) // Eager load campus and course relationships
-            ->get()
-            ->map(function ($scholar) use ($totalRequirements) {
-                // Get approved requirements for this scholar
-                $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
-                    ->where('status', 'Approved')
-                    ->count();
+        // Use relationships to get applicants and their related scholars
+        $applicants = $scholarship->applicants()
+            ->where('batch_id', $batch->id)
+            ->with('scholar.campus', 'scholar.course')
+            ->get();
 
-                // Determine status
-                $status = 'No submission';
-                if ($totalRequirements > 0) {
-                    if ($approvedRequirements === 0) {
-                        $status = 'No submission';
-                    } elseif ($approvedRequirements === $totalRequirements) {
-                        $status = 'Complete';
-                    } else {
-                        $status = 'Incomplete';
-                    }
+        // Count scholars with complete submissions
+        $completeSubmissionsCount = 0;
+
+        // Process scholars data using the relationship
+        $scholars = $applicants->map(function ($applicant) use ($totalRequirements, &$completeSubmissionsCount , $request) {
+            // Skip if there's no related scholar
+            if (!$applicant->scholar) {
+                return null;
+            }
+
+            $scholar = $applicant->scholar;
+
+            // Get the scholar's grade for the selected semester and school year
+            $grade = Grade::where('scholar_id', $scholar->id)
+                ->where('semester', $request->input('selectedSem'))
+                ->where('school_year', $request->input('selectedYear'))
+                ->first();
+
+            $userPicture = User::where('id', $scholar->user_id)
+                ->first();
+
+            $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->where('status', 'Approved')
+                ->count();
+
+            $returnedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->where('status', 'Returned')
+                ->count();
+
+            $countRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->count();
+
+            // Determine status
+            $status = 'No submission';
+            if ($totalRequirements > 0) {
+                if ($countRequirements === 0) {
+                    $status = 'No submission';
+                } elseif ($approvedRequirements === $totalRequirements) {
+                    $status = 'Complete';
+                    $completeSubmissionsCount++; // Increment counter for complete submissions
+                } elseif ($returnedRequirements > 0) {
+                    $status = 'Returned';
+                } elseif ($countRequirements > 0) {
+                    $status = 'Submitted';
+                } else {
+                    $status = 'Incomplete';
                 }
+            }
 
-                // Calculate progress percentage
-                $progress = $totalRequirements > 0
-                    ? ($approvedRequirements / $totalRequirements) * 100
-                    : 0;
+            // Calculate progress percentage
+            $progress = $totalRequirements > 0
+                ? ($approvedRequirements / $totalRequirements) * 100
+                : 0;
 
-                return [
-                    'id' => $scholar->id,
-                    'urscholar_id' => $scholar->urscholar_id,
-                    'first_name' => $scholar->first_name,
-                    'last_name' => $scholar->last_name,
-                    'middle_name' => $scholar->middle_name,
-                    'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
-                    'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
-                    'year_level' => $scholar->year_level,
-                    'grant' => $scholar->grant,
-                    'status' => $status,
-                    'submittedRequirements' => $approvedRequirements,
-                    'totalRequirements' => $totalRequirements,
-                    'progress' => $progress,
-                ];
-            });
+            return [
+                'id' => $scholar->id,
+                'picture' => $userPicture->picture,
+                'urscholar_id' => $scholar->urscholar_id,
+                'first_name' => $scholar->first_name,
+                'last_name' => $scholar->last_name,
+                'middle_name' => $scholar->middle_name,
+                'campus' => $scholar->campus->name ?? 'N/A',
+                'course' => $scholar->course->name ?? 'N/A',
+                'year_level' => $scholar->year_level,
+                'grant' => $scholar->grant,
+                'status' => $status,
+                'submittedRequirements' => $approvedRequirements,
+                'totalRequirements' => $totalRequirements,
+                'progress' => $progress,
+                'grade' => $grade ? $grade->grade : null,
+                'cog' => $grade ? $grade->cog : null,
+                'grade_path' => $grade ? $grade->path : null,
+            ];
+        })->filter(); // Remove any null values
 
         return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
             'batch' => $batch,
+            'applicants' => $applicants,
             'scholars' => $scholars,
             'payout' => $payout,
             'requirements' => $requirements,

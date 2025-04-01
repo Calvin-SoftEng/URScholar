@@ -8,11 +8,21 @@ class Applicant extends Model
 {
 
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'course', 'file_path', 'scholarship_id',
+        'scholarship_id', 'batch_id', 'scholar_id', 'school_year', 'semester', 'status',
     ];
 
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
+    }
+
+    public function scholar()
+    {
+        return $this->belongsTo(Scholar::class);
     }
 }

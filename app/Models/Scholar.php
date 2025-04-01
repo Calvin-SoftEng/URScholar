@@ -55,6 +55,11 @@ class Scholar extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function applicants()
+    {
+        return $this->hasMany(Applicant::class);
+    }
+
     public function submittedRequirements()
     {
         return $this->hasMany(SubmittedRequirements::class);

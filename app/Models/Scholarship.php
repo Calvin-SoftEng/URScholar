@@ -17,13 +17,14 @@ class Scholarship extends Model
         return $this->hasMany(Scholar::class);
     }
 
-    public function disbursement()
-    {
-        return $this->hasMany(Disbursement::class);
-    }
     public function applicants()
     {
         return $this->hasMany(Applicant::class);
+    }
+
+    public function disbursement()
+    {
+        return $this->hasMany(Disbursement::class);
     }
 
     public function criterias()

@@ -7,6 +7,7 @@ use App\Events\NewNotification;
 use App\Models\EducationRecord;
 use App\Models\FamilyRecord;
 use App\Models\Grade;
+use App\Models\Applicant;
 use App\Models\OrgRecord;
 use App\Models\Scholarship;
 use App\Models\Requirements;
@@ -945,10 +946,20 @@ class StudentController extends Controller
         ]);
     }
 
-    // public function scholarship_application()
-    // {
-    //     return Inertia::render('Student/Application/Scholar_Application');
-    // }
+    public function application(Request $request)
+    {
+        $request->validate([
+            'scholarship_id' => 'required|exists:scholarships,id',
+            'essay' => 'required|string',
+            'files.*' => 'required|file|',
+            'req' => 'array'
+        ]);
+
+
+
+        return back()
+            ->with('success', 'Your scholarship application has been submitted successfully!');
+    }
 
     public function scholarship_details(Scholarship $scholarship)
     {
@@ -999,7 +1010,7 @@ class StudentController extends Controller
         ]);
     }
 
-    public function submitApplication(Request $request)
+    public function submitApplication(Request $request, Scholarship $scholarship)
     {
         $request->validate([
             'scholarship_id' => 'required|exists:scholarships,id',
@@ -1008,18 +1019,28 @@ class StudentController extends Controller
             'req' => 'array'
         ]);
 
-        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $scholar = Scholar::where('user_id', Auth::user()->id)->first();
 
-        $scholarship = Scholarship::where('id', $request['scholarship_id'])->first();
 
-        $requirements = Requirements::where('id', $scholarship->id)->get();
+        $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->first();
+
+
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         $reqID = $requirements->pluck('id')->first();
 
 
+        Applicant::create([
+            'scholarship_id' => $scholarship->id,
+            'batch_id' => $batch->id,
+            'scholar_id' => $scholar->id,
+            'school_year' => $batch->school_year,
+            'semester' => $batch->semester,
+        ]);
+
 
         $uploadedFiles = [];
-
 
         foreach ($request->file('files') as $index => $file) {
 
