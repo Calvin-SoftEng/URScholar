@@ -1,5 +1,5 @@
 <template>
-    <template v-if="scholar">
+    <template v-if="dsdd">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
             <span class="text-4xl font-bold">Tulong Dunong Program</span>
             <span class="text-xl">Grantee</span> 
@@ -121,106 +121,115 @@
 
         <!-- third stepper -->
 
-        <div v-if="submitApproved != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-            <h1>Congratulations!</h1>
-            <p>Your application has been successfully completed.</p>
-            <p>You will be notified about the payout announcement soon.</p>
-            <br>
-        </div>
-    </template>
+        <div v-if="submitApproved != 0" class="bg-white w-full p-6 flex flex-col font-poppins text-xl text-center">
+            <h1 class="text-3xl font-bold text-green-700">Congratulations!</h1>
+            <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
+            <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
 
-
-    <!-- scholar grant -->
-    <!-- <template v-if="scholar">
-        <div class="mb-3">
-            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
-        </div>
-        
-        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-6 text-primary">
-            <div class="text-center">
-                <span class="text-4xl font-bold">Tulong Dunong Program</span>
-                <p class="text-xl text-gray-600">Grantee</p>
-            </div>
-
-            <div class="h-0.5 bg-gray-300"></div>
-
-            <div>
-                <span class="font-semibold text-xl">Payout History</span>
-
-                <div class="max-w-6xl mx-auto space-y-6 mt-4">
-                    <div class="grid grid-cols-5 gap-4 items-center">
-
-                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
-                            Claimed
-                        </div>
-
-
-                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                            <h2 class="text-lg font-semibold">March 30, 2025</h2>
-                            <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
-                            <p class="text-gray-600">URSB Cashier</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </template> -->
-
-    <!-- one time -->
-    <template v-if="feaf">
-        <div class="mb-3">
-            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
-        </div>
-
-        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-6 text-primary">
-            <!-- Scholarship Title -->
-            <div class="text-center">
-                <span class="text-4xl font-bold">Tulong Dunong Program</span>
-                <p class="text-xl text-gray-600">Grantee</p>
-            </div>
-
-            <div class="h-0.5 bg-gray-300"></div>
-
-            <!-- Payout History Section -->
-            <div>
-                <span class="font-semibold text-xl">Payout History</span>
-
-                <div class="max-w-6xl mx-auto space-y-6 mt-4">
-                    <div class="grid grid-cols-5 gap-4 items-center">
-                        <!-- Status Column -->
-                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
-                            Claimed
-                        </div>
-
-                        <!-- Details Column -->
-                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                            <h2 class="text-lg font-semibold">March 30, 2025</h2>
-                            <p class="text-gray-600">Claimed by: <span class="font-medium">John Doe</span>, ID: 123456</p>
-                            <p class="text-gray-600">URSB Cashier</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="h-0.5 bg-gray-300"></div>
-
-            <!-- Encouragement Message -->
-            <div class="text-center">
-                <p class="text-lg text-gray-700">
-                    🎉 Congratulations on receiving your scholarship! We hope this support helps you achieve your academic goals.
-                    Your journey doesn’t end here—keep striving for excellence, and remember that new opportunities await! 🚀
-                </p>
-            </div>
-
-            <!-- Call-to-Action Button -->
-            <div class="flex justify-center">
-                <button class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-lg transition duration-300">
-                    Continue on Your Next Journey
+            <!-- Encouragement to Stay Updated -->
+            <div class="mt-6">
+                <button class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg">
+                    Continue to Dashboard
                 </button>
             </div>
         </div>
+
     </template>
+
+
+    <!-- scholar grant kapag tapos na mag pasa requiremetns -->
+    <template v-if="scholar">
+        <div class="mb-3">
+            <span class="text-2xl font-medium font-poppins">My Scholarship</span>
+        </div>
+
+        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
+            
+            <!-- Scholarship Details -->
+            <div class="bg-white shadow-md p-6 rounded-lg text-center">
+                <h2 class="text-3xl font-bold text-blue-800">Tulong Dunong</h2>
+                <p class="text-xl text-gray-600">2024-2025 Grantee</p>
+                <div class="h-0.5 bg-gray-300 my-4"></div>
+
+                <div class="grid grid-cols-2 gap-4 text-left text-gray-700">
+                    <p><span class="font-semibold">Started:</span> 2023 - 1st Sem</p>
+                    <p><span class="font-semibold">Current Semester:</span> 2023 - 2nd Sem</p>
+                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">Inactive</span></p>
+                    <p><span class="font-semibold">Expected Next Payout:</span> 2024 - 1st Sem</p>
+                </div>
+            </div>
+
+            <!-- Payout Announcement Card (Only shown if there's a schedule) -->
+            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+                <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
+                <p class="mt-2">Your next payout is expected on <span class="font-bold">faefeafaefae</span>. Stay updated for further announcements.</p>
+            </div>
+
+            <div class="h-0.5 bg-gray-300"></div>
+
+            <!-- Payout History -->
+            <div>
+                <div class="flex flex-row justify-between">
+                    <span class="font-semibold text-xl">Payout History</span>
+                    <!-- <span class="font-normal text-base">Show all</span> -->
+                </div>
+                <div class="max-w-6xl mx-auto space-y-6 mt-4">
+                    <div class="grid grid-cols-5 gap-4 items-center">
+                        
+                        <div
+                            class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
+                            <h3 class="font-semibold text-base text-blue-900 dark:text-white">
+                                    1st Semester - 2024-2025
+                            </h3>
+                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                        </div>
+
+                        <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                            Claimed
+                        </div>
+
+                        <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
+                            <h2 class="text-lg font-semibold">April 1, 2025</h2>
+                            <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>, ID: URSB123</p>
+                            <p class="text-gray-600">Processed at: sa cashier</p>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <!-- Encouragement & Next Steps -->
+            <div class="bg-white shadow-md p-6 rounded-lg text-center">
+                <h2 class="text-2xl font-bold text-blue-800">Keep Going!</h2>
+                <p class="text-gray-600 mt-2">
+                    "Your hard work is paying off! Keep maintaining your academic performance and complete your requirements on time to stay eligible for your next grant."
+                    <br>
+                    Update your GWA and upload corresponding documents to renew your scholarship.
+                </p>
+                <!-- <div class="mt-4">
+                    <button class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg">
+                        View Renewal Requirements
+                    </button>
+                </div> -->
+            </div>
+
+            <!-- Scholarship Progress -->
+            <!-- <div class="bg-white shadow-md p-6 rounded-lg">
+                <h2 class="text-xl font-semibold text-blue-800">Scholarship Progress</h2>
+                <div class="mt-3 flex flex-col space-y-2 text-gray-600">
+                    <p>✔ Documents Submitted</p>
+                    <p>✔ Payouts Received</p>
+                    <p>🔲 Renewal Application Pending</p>
+                </div>
+            </div> -->
+
+        </div>
+    </template>
+
+
+
+    
 
 </template>
 
