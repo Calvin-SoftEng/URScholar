@@ -27,7 +27,7 @@
                                             stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
                                     </svg>
                                 </div>
-                                <input type="text" id="table-search-users"
+                                <input type="text" id="table-search-users" v-model="searchQuery"
                                     class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Search for users">
                             </div>
@@ -57,7 +57,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-for="user in users" :key="user.id">
+                            <template v-for="user in filteredUsers" :key="user.id">
                                 <tr
                                     class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row"
@@ -157,9 +157,7 @@
                             <select v-model="form.role" id="roleSelect"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                                 <option value="" disabled>Select Role</option>
-                                <option
-                                    v-if="form.role === 'system_admin'"
-                                    value="system_admin">System Admin</option>
+                                <option v-if="form.role === 'system_admin'" value="system_admin">System Admin</option>
                                 <option value="super_admin">Head Administrator</option>
                                 <option value="coordinator">Coordinator</option>
                                 <option value="cashier">Cashier</option>
@@ -187,24 +185,38 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
-import { Tooltip } from 'primevue';
-import { User } from 'lucide-vue-next';
 
-defineProps({
+const props = defineProps({
     campuses: Array,
-    coor: Array,
-    cashier: Array,
     users: Array,
+    userType: String,
+    coordinatorCampus: String
 });
 
-const cancel = () => {
-    isTableVisible.value = !isTableVisible.value;
-};
+const searchQuery = ref('');
+
+const filteredUsers = computed(() => {
+    if (!props.users) return [];
+
+    let filtered = props.users; // Removed role-based filtering
+
+    if (searchQuery.value) {
+        const query = searchQuery.value.toLowerCase();
+
+        filtered = filtered.filter(user =>
+            user.first_name?.toLowerCase().includes(query) ||
+            user.last_name?.toLowerCase().includes(query) ||
+            user.email?.toLowerCase().includes(query) ||
+            user.campus?.name?.toLowerCase().includes(query) ||
+            getRoleName(user.usertype).toLowerCase().includes(query)
+        );
+    }
+
+    return filtered;
+});
 
 const AddUser = ref(false);
 const EditUser = ref(false);
-
-const campusid = ref(null);
 
 const toggleAddUser = () => {
     AddUser.value = !AddUser.value;
@@ -231,7 +243,6 @@ const resetForm = () => {
     };
 };
 
-// Updated form structure with id field for editing
 const form = ref({
     id: null,
     first_name: '',
@@ -241,7 +252,6 @@ const form = ref({
     role: ''
 });
 
-// Function to display role name based on role value
 const getRoleName = (role) => {
     switch (role) {
         case 'system_admin': return 'System Admin';
@@ -252,7 +262,6 @@ const getRoleName = (role) => {
     }
 };
 
-// Function to edit user
 const editUser = (user) => {
     form.value = {
         id: user.id,
@@ -265,22 +274,12 @@ const editUser = (user) => {
     EditUser.value = true;
 };
 
-// Function to update user
 const updateUser = async () => {
     try {
         router.put(`/system_admin/user-settings/users/${form.value.id}/update`, form.value);
         closeModal();
     } catch (error) {
         console.error("Error updating user:", error);
-    }
-};
-
-const submitForm = async () => {
-    try {
-        router.post("/mis/univ-settings/campuses/store", form.value);
-        closeModal();
-    } catch (error) {
-        console.error("Error submitting form:", error);
     }
 };
 

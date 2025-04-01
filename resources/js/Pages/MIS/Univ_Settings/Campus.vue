@@ -189,7 +189,7 @@
                             <option value="" disabled>Coordinator List</option>
                             <option v-for="coordinator in availableCoordinators" :key="coordinator.id"
                                 :value="coordinator.id">
-                                {{ coordinator.name }}
+                                {{ coordinator.first_name }} {{ coordinator.last_name }}
                             </option>
                         </select>
                     </div>
@@ -199,7 +199,7 @@
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                             <option value="" disabled>Cashier List</option>
                             <option v-for="cash in availableCashiers" :key="cash.id" :value="cash.id">
-                                {{ cash.name }}
+                                {{ cash.first_name }} {{ cash.last_name }}
                             </option>
                         </select>
                     </div>
@@ -272,33 +272,27 @@ const toggleAssign = (campusID, name) => {
     }
 };
 
-// Filter out already assigned coordinators
+// Filter coordinators that match the current campus
 const availableCoordinators = computed(() => {
-    if (!currentCampus.value) return props.coor;
+    if (!currentCampus.value) return [];
 
     return props.coor.filter(coordinator => {
-        // Check if this coordinator is already assigned to any campus
-        const isAssigned = props.campuses.some(campus =>
-            campus.coordinator && campus.coordinator.id === coordinator.id
-        );
-
-        // Include if not assigned or if assigned to the current campus
-        return !isAssigned || (currentCampus.value.coordinator && currentCampus.value.coordinator.id === coordinator.id);
+        // Only include coordinators assigned to this campus
+        return coordinator.campus_id === currentCampus.value.id ||
+            // Or if they're already the coordinator for this campus
+            (currentCampus.value.coordinator && currentCampus.value.coordinator.id === coordinator.id);
     });
 });
 
-// Filter out already assigned cashiers
+// Filter cashiers that match the current campus
 const availableCashiers = computed(() => {
-    if (!currentCampus.value) return props.cashier;
+    if (!currentCampus.value) return [];
 
-    return props.cashier.filter(cash => {
-        // Check if this cashier is already assigned to any campus
-        const isAssigned = props.campuses.some(campus =>
-            campus.cashier && campus.cashier.id === cash.id
-        );
-
-        // Include if not assigned or if assigned to the current campus
-        return !isAssigned || (currentCampus.value.cashier && currentCampus.value.cashier.id === cash.id);
+    return props.cashier.filter(cashier => {
+        // Only include cashiers assigned to this campus
+        return cashier.campus_id === currentCampus.value.id ||
+            // Or if they're already the cashier for this campus
+            (currentCampus.value.cashier && currentCampus.value.cashier.id === cashier.id);
     });
 });
 

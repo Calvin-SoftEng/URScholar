@@ -70,6 +70,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     Route::get('/system_admin/user-settings/system-users_roles', [SystemAdminController::class, 'system_user_roles'])->name('sa.user_roles');
     Route::get('/system_admin/user-settings/users', [SystemAdminController::class, 'system_users'])->name('sa.users');
     Route::post('/system_admin/user-settings/users/create', [SystemAdminController::class, 'create_users'])->name('sa.users_create');
+    Route::put('/system_admin/user-settings/users/{user}/update', [SystemAdminController::class, 'update_users'])->name('sa.users_update');
     Route::get('/system_admin/user-settings/activity-logs', [SystemAdminController::class, 'activity_logs'])->name('sa.activity_logs');
 
     // univ settings
