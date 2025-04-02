@@ -44,7 +44,7 @@
                   <th>Scholar</th>
                   <th>Campus</th>
                   <th>Grant</th>
-                  <th>Payout</th>
+                  <th>Time Claimed</th>
                   <th>Status</th>
                   <th></th>
                 </tr>
