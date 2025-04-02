@@ -132,20 +132,27 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="w-full mb-5">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Requirements
-                                                </h3>
-                                                <InputError v-if="errors.requirements" :message="errors.requirements"
-                                                    class="mt-1" />
+
+                                            <button 
+                                            type="button" 
+                                            @click="toggleRequirements" 
+                                            class="text-blue-600 hover:text-blue-800 text-start transition-all max-w-fit"
+                                            v-tooltip.right="'Set Requirements'"
+                                            >
+                                            {{ requestRequirements ? 'Cancel Requirements' : 'Request Requirements' }}
+                                            </button>
+
+
+                                            <div v-show="requestRequirements" class="w-full mb-5">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Requirements</h3>
+                                                <InputError v-if="errors.requirements" :message="errors.requirements" class="mt-1" />
+                                                
                                                 <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                                     <div class="flex items-center mb-4 w-full">
-                                                        <form @submit.prevent="addItem"
-                                                            class="flex items-center w-full">
-                                                            <input v-model="newItem" type="text"
-                                                                placeholder="Enter an item"
+                                                        <form @submit.prevent="addItem" class="flex items-center w-full">
+                                                            <input v-model="newItem" type="text" placeholder="Enter an item"
                                                                 class="border border-gray-300 rounded-lg px-4 py-2 flex-grow dark:bg-dsecondary" />
-                                                            <button type="submit"
-                                                                class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
+                                                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 ml-2 rounded-lg hover:bg-blue-600">
                                                                 Add
                                                             </button>
                                                         </form>
@@ -156,17 +163,51 @@
                                                             <div v-for="(item, index) in items" :key="index"
                                                                 class="flex items-center justify-between text-base bg-gray-100 px-4 py-2 mb-1 rounded-lg dark:bg-primary">
                                                                 <span>{{ item }}</span>
-                                                                <button @click="removeItem(index)"
-                                                                    class="flex items-center text-red-500 hover:text-red-700">
-                                                                    <span class="material-symbols-rounded text-red-600">
-                                                                        delete
-                                                                    </span>
+                                                                <button @click="removeItem(index)" class="flex items-center text-red-500 hover:text-red-700">
+                                                                    <span class="material-symbols-rounded text-red-600">delete</span>
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </ul>
                                             </div>
+
+                                            <button 
+                                            type="button" 
+                                            @click="toggletemplates" 
+                                            class="text-blue-600 hover:text-blue-800 text-start transition-all max-w-fit"
+                                            v-tooltip.right="'Upload Application Files Templates'"
+                                            >
+                                            {{ requirementemplates ? 'Cancel Upload' : 'Upload Templates' }}
+                                            </button>
+
+                                            <div v-show="requirementemplates">
+                                                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">
+                                                Upload multiple files
+                                                </label>
+                                                <input ref="fileInput"
+                                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                                        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                                id="multiple_files" 
+                                                type="file" 
+                                                multiple 
+                                                @change="handleFileChange"
+                                                />
+
+                                                <!-- Preview Selected Files -->
+                                                <div v-if="selectedFiles.length" class="mt-3 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                                <p class="text-sm font-medium text-gray-900 dark:text-white mb-2">Selected Files:</p>
+                                                <ul class="space-y-2">
+                                                    <li v-for="(file, index) in selectedFiles" :key="index" class="flex items-center justify-between text-sm bg-white dark:bg-gray-700 p-2 rounded-lg">
+                                                    <span class="text-gray-700 dark:text-gray-300 truncate max-w-xs">{{ file.name }}</span>
+                                                    <button @click="removeFile(index)" class="text-red-500 hover:text-red-700 text-xs">
+                                                        ✖ Remove
+                                                    </button>
+                                                    </li>
+                                                </ul>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -276,6 +317,8 @@ const directives = {
 
 const selectedStart = ref(""); // Stores the selected start date
 const selectedEnd = ref("");   // Stores the selected end date
+const requestRequirements = ref(false);
+const requirementemplates = ref(false);
 const formattedStart = ref('');
 const formattedEnd = ref('');
 const errors = ref({});
@@ -287,6 +330,15 @@ const form = ref({
     application: '',
     deadline: '',
 });
+
+
+const toggleRequirements = () => {
+  requestRequirements.value = !requestRequirements.value;
+};
+
+const toggletemplates = () => {
+  requirementemplates.value = !requirementemplates.value;
+};
 
 
 // Computed property
@@ -321,6 +373,29 @@ const removeItem = (index) => {
     items.value = items.value.filter((_, i) => i !== index);
     form.value.requirements = items.value;
 };
+
+const selectedFiles = ref([]);
+const fileInput = ref(null);
+
+const handleFileChange = (event) => {
+  selectedFiles.value = Array.from(event.target.files);
+};
+
+const removeFile = (index) => {
+  selectedFiles.value.splice(index, 1); 
+
+  // Reset the file input by clearing and re-adding remaining files
+  const dataTransfer = new DataTransfer();
+  selectedFiles.value.forEach(file => dataTransfer.items.add(file));
+  
+  if (fileInput.value) {
+    fileInput.value.files = dataTransfer.files;
+  }
+};
+
+if (fileInput.value) {
+    fileInput.value.files = dataTransfer.files;
+  }
 
 
 const resetForm = () => {

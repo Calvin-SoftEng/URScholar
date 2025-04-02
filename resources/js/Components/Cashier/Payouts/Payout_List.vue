@@ -230,6 +230,20 @@
                       placeholder="Write a message"></textarea>
                   <!-- <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" /> -->
               </div>
+
+              
+              <div>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Additional Document for reason</label>
+                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">DOCX, PNG, JPG, or PDF.</p>
+              </div>
+
+            </div>
+
+            <div class="mt-2 p-4">
+                <button type="submit"
+                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                    Submit</button>
             </div>
           </div>
         </div>

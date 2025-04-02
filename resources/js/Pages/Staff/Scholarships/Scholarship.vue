@@ -221,6 +221,15 @@
                                     <span class="font-poppins text-sm font-semibold">{{ campuses[0].name }}</span>
                                 </template>
 
+                                <div>
+                                    <button v-tooltip.left="'Scholars already submitted to Casher'" disabled
+                                        class="flex items-center gap-2 dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                                    border border-yellow-300 dark:border-yellow-500  hover:bg-yellow-200 px-4 py-2 rounded-lg  transition duration-200">
+                                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                        <span class="font-normal">View Payrolls</span>
+                                    </button>
+                                </div>
+
                                 <div v-if="!payouts">
                                     <button @click="toggleSendBatch"
                                         class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
@@ -239,25 +248,38 @@
                             </div>
                         </div>
 
-
+                        <!-- batch card -->
                         <div v-for="batch in batches" :key="batch.id"
                             class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
 
                             <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
                                 <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
 
-                                <div class="grid grid-cols-2 gap-6">
+                                <div class="grid grid-cols-2">
                                     <div class="flex flex-col items-center">
                                         <span class="text-sm text-gray-600">No. of Scholars</span>
                                         <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
 
                                     </div>
-                                    <div class="flex flex-col items-center">
+                                    <!-- <div class="flex flex-col items-center">
                                         <span class="text-sm text-gray-600">Unverified Scholars</span>
                                         <span class="text-xl font-bold text-red-500">
                                             {{batch.grantees.filter(grantee => !grantee.scholar.is_verified).length}}
                                         </span>
-                                    </div>
+                                    </div> -->
+                                    <!-- Right Section: Payroll Button -->
+                                    <!-- <div class="ml-6">
+                                        <button 
+                                        @click.stop="openPayroll(batch.id)"
+                                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200">
+                                            Payroll Available
+                                        </button>
+                                        <button 
+                                        
+                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200">
+                                            Payroll Now Available
+                                        </button>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
