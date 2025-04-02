@@ -102,7 +102,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
-import Payout_List from '../../../Components/Cashier/Payouts/Payout_List.vue';
+import Payroll_List from '@/Components/Staff/ScholarsTabs/Payout_List.vue';
 
 // components
 

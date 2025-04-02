@@ -281,7 +281,7 @@
                         <div v-show="showPayrolls">
                             <div v-for="batch in batches" :key="batch.id"
                                 class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
-                                <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
+                                <div @click="() => openPayroll(batch.id)" class="flex justify-between items-center">
                                     <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
 
                                     <div class="grid grid-cols-2">
@@ -1435,6 +1435,17 @@ const toggleMonitoring = () => {
 
 const openBatch = (batchId) => {
     router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}`, {
+        data: {
+            scholarship: props.scholarship.id,
+            selectedYear: props.schoolyear.id,
+            selectedSem: props.selectedSem
+        },
+        preserveState: true
+    });
+};
+
+const openPayroll = (batchId) => {
+    router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}/payroll`, {
         data: {
             scholarship: props.scholarship.id,
             selectedYear: props.schoolyear.id,

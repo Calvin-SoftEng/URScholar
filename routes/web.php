@@ -141,6 +141,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 
     Route::get('/scholarships/{scholarshipId}/batch/{batchId}', [ScholarshipController::class, 'batch'])->name('scholarship.batch');
+    Route::get('/scholarships/{scholarshipId}/batch/{batchId}/payroll', [ScholarshipController::class, 'student_payouts'])->name('scholarship.payrol');
 
 
     Route::post('/scholarships/{scholarship}/manual-upload', [ScholarController::class, 'manual'])->name('scholars.manual');

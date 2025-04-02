@@ -200,7 +200,41 @@ class ScholarshipController extends Controller
         ]);
     }
 
+    public function student_payouts($scholarshipId, $batchId)
+    {
+        $scholarship = Scholarship::findOrFail($scholarshipId);
 
+        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+
+        $batch = Batch::where('id', $batchId)
+            ->where('scholarship_id', $scholarship->id)
+            ->orderBy('batch_no', 'desc')
+            ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
+
+        // Optimize query to reduce N+1 problem
+        $disbursements = Disbursement::where('payout_id', $payout->id)
+            ->where('batch_id', $batchId)
+            ->with([
+                'scholar' => function ($subQuery) {
+                    $subQuery->with(['course', 'campus']);
+                }
+            ])
+            ->get();
+
+        // Count total claimed disbursements
+        $totalClaimed = Disbursement::where('payout_id', $payout->id)
+            ->where('batch_id', $batchId)
+            ->where('status', 'claimed') // Assuming 'claimed' is the status for claimed disbursements
+            ->count();
+
+        return Inertia::render('Staff/Scholarships/Scholarship_Payrolls', [
+            'scholarship' => $scholarship,
+            'batch' => $batch,
+            'disbursements' => $disbursements,
+            'payout' => $payout,
+            'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
+        ]);
+    }
 
     public function show(Request $request, Scholarship $scholarship)
     {
