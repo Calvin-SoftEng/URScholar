@@ -197,7 +197,10 @@
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
                         <div class="flex flex-row justify-between items-center">
-                            <span>List of Batches</span>
+                            <!-- Dynamic Title -->
+                            <h2 class="text-lg font-semibold text-gray-800 mt-4">
+                                {{ showPayrolls ? 'List of Payrolls' : 'List of Scholars Batch list' }}
+                            </h2>
 
                             <div class="flex flex-row space-x-3 items-center">
                                 <!-- Campus Filter - Only shown for super_admin or if coordinator has multiple campuses -->
@@ -222,11 +225,14 @@
                                 </template>
 
                                 <div>
-                                    <button v-tooltip.left="'Scholars already submitted to Casher'" disabled
+                                    <button
+                                        @click="toggleView"
                                         class="flex items-center gap-2 dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
-                                    border border-yellow-300 dark:border-yellow-500  hover:bg-yellow-200 px-4 py-2 rounded-lg  transition duration-200">
+                                        border border-yellow-300 dark:border-yellow-500 hover:bg-yellow-200 px-4 py-2 rounded-lg transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                        <span class="font-normal">View Payrolls</span>
+                                        <span class="font-normal">
+                                            {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                                        </span>
                                     </button>
                                 </div>
 
@@ -248,38 +254,48 @@
                             </div>
                         </div>
 
-                        <!-- batch card -->
-                        <div v-for="batch in batches" :key="batch.id"
-                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <!-- Scholar List -->
+                        <div v-show="!showPayrolls">
+                            <div v-for="batch in batches" :key="batch.id"
+                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
+                                    <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
 
-                            <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
-                                <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
-
-                                <div class="grid grid-cols-2">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">No. of Scholars</span>
-                                        <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
-
+                                    <div class="grid grid-cols-2">
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">No. of Scholars</span>
+                                            <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
+                                        </div>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">Unverified Scholars</span>
+                                            <span class="text-xl font-bold text-red-500">
+                                                {{ batch.grantees.filter(grantee => !grantee.scholar.is_verified).length }}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <!-- <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                        <span class="text-xl font-bold text-red-500">
-                                            {{batch.grantees.filter(grantee => !grantee.scholar.is_verified).length}}
-                                        </span>
-                                    </div> -->
-                                    <!-- Right Section: Payroll Button -->
-                                    <!-- <div class="ml-6">
-                                        <button 
-                                        @click.stop="openPayroll(batch.id)"
-                                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200">
-                                            Payroll Available
-                                        </button>
-                                        <button 
-                                        
-                                            class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-200">
-                                            Payroll Now Available
-                                        </button>
-                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payrolls List -->
+                        <div v-show="showPayrolls">
+                            <div v-for="batch in batches" :key="batch.id"
+                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
+                                    <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+
+                                    <div class="grid grid-cols-2">
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">Completed Payouts</span>
+                                            <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
+                                        </div>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">Missed Payouts</span>
+                                            <span class="text-xl font-bold text-red-500">
+                                                {{ batch.grantees.filter(grantee => !grantee.scholar.is_verified).length }}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -832,6 +848,13 @@ const total_scholars = computed(() => {
     }).length;
 });
 
+
+// Default to showing the Scholar List
+const showPayrolls = ref(false);
+
+const toggleView = () => {
+  showPayrolls.value = !showPayrolls.value;
+};
 
 const toggleSendBatch = async () => {
     ForwardBatchList.value = true;
