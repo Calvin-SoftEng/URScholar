@@ -36,32 +36,35 @@
                             <span><font-awesome-icon :icon="['far', 'envelope']" class="mr-2 text-sm"/>Send Email</span>
                         </button> -->
                         <!-- Stats Section -->
-                        <div class="grid grid-cols-3">
-                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                        <div class="grid grid-cols-3 gap-0 overflow-hidden rounded-lg border border-gray-300">
+                            <!-- Total Claims -->
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300 rounded-l-lg">
                                 <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Total Claims</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">{{ disbursements.length }}</p>
                             </div>
 
-                            <div class="flex flex-col items-start py-4 px-10 border border-gray-300">
+                            <!-- Missed Claims -->
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Missed Claims</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">{{ disbursements.length }}</p>
                             </div>
 
-
-                            <div class="flex flex-col items-start py-4 px-10 border-gray-300">
+                            <!-- Assigned Claims -->
+                            <div class="flex flex-col items-start py-4 px-10 rounded-r-lg">
                                 <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
+                                    <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Assigned Claims</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">{{ totalClaimed }}/{{ payout.total_scholars }}</p>
                             </div>
                         </div>
+
                     </div>
                 </div>
 
@@ -102,7 +105,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
-import Payroll_List from '@/Components/Staff/ScholarsTabs/Payout_List.vue';
+import Payroll_List from '@/Components/Staff/ScholarsTabs/Payroll_List.vue';
 
 // components
 
