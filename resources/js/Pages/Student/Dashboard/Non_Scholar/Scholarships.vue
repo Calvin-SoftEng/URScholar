@@ -58,17 +58,25 @@
                                         </div>
                                         <div class="flex flex-col items-start">
                                             <span class="text-gray-500 text-sm">Deadline</span>
-                                            <span class="font-medium text-red-500">Bukas na</span>
+                                            <span class="font-medium text-red-500">{{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                                    year:
+                                                        'numeric', month: 'long', day: 'numeric'
+                                                }) }}</span>
                                         </div>
                                         <!-- Grade requirement display -->
                                         <div class="flex flex-col items-start">
                                             <span class="text-gray-500 text-sm">Min. Grade Required</span>
                                             <span class="font-medium"
-                                                :class="isEligible(scholarship) ? 'text-green-600' : 'text-red-500'">
+                                                :class="meetsGradeRequirement(scholarship) ? 'text-green-600' : 'text-red-500'">
                                                 {{ getRequiredGrade(scholarship) }}
-                                                <span v-if="isEligible(scholarship)"
-                                                    class="text-xs ml-1">(Eligible)</span>
-                                                <span v-else class="text-xs ml-1">(Not Eligible)</span>
+                                            </span>
+                                        </div>
+                                        <!-- Campus requirement display -->
+                                        <div class="flex flex-col items-start">
+                                            <span class="text-gray-500 text-sm">Campus Eligibility</span>
+                                            <span class="font-medium"
+                                                :class="meetsCampusRequirement(scholarship) ? 'text-green-600' : 'text-red-500'">
+                                                {{ getCampusEligibilityLabel(scholarship) }}
                                             </span>
                                         </div>
                                     </div>
@@ -145,6 +153,16 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    campuses: {
+        type: Array,
+        required: false,
+        default: () => []
+    },
+    courses: {
+        type: Array,
+        required: false,
+        default: () => []
+    },
     applicant: Object,
     grade: Object,
 });
@@ -161,9 +179,8 @@ const getRequiredGrade = (scholarship) => {
     return 'None';
 };
 
-// Check if student is eligible for a scholarship
-const isEligible = (scholarship) => {
-    
+// Check if student meets grade requirements
+const meetsGradeRequirement = (scholarship) => {
     // If no grade criteria is set, student is eligible
     if (!scholarship.criteriaData || !scholarship.criteriaData.grade) {
         return true;
@@ -179,5 +196,52 @@ const isEligible = (scholarship) => {
     const requiredGrade = parseFloat(scholarship.criteriaData.grade);
 
     return studentGrade <= requiredGrade;
+};
+
+// Check if student's campus is eligible
+const meetsCampusRequirement = (scholarship) => {
+    // If student has no campus/course info, not eligible
+    if (props.scholar.campus_id === scholarship.campusRecipients[0].campus_id) {
+
+        for (const recipient of scholarship.campusRecipients) {
+            if (recipient.selected_campus.includes(props.scholar.course.name)) {
+                console.log('meron siya');
+                return true;
+            }
+        }
+    }
+
+    // Check if student's campus is in any of the scholarship's campus recipients
+    // for (const recipient of scholarship.campusRecipients) {
+    //     if (recipient.selected_campus.includes('Bachelor of Science in Information Technology')) {
+    //         console.log('meron siya');
+    //         return true;
+    //     }
+    // }
+
+    return false;
+};
+
+// Get campus eligibility label
+const getCampusEligibilityLabel = (scholarship) => {
+    if (!scholarship.campusRecipients || scholarship.campusRecipients.length === 0) {
+        return 'All Campuses';
+    }
+
+    if (meetsCampusRequirement(scholarship)) {
+        return 'Eligible';
+    }
+    else {
+        if (!props.scholar || !props.scholar.campus_id) {
+            return 'Campus Info Missing';
+        }
+
+        return 'Not Eligible';
+    }
+};
+
+// Overall eligibility check
+const isEligible = (scholarship) => {
+    return meetsGradeRequirement(scholarship) && meetsCampusRequirement(scholarship);
 };
 </script>

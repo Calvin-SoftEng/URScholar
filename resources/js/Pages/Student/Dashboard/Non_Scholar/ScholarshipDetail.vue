@@ -1,6 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto">
+        <div
+            class="w-full h-full bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto">
             <div class="flex w-full mt-10 my-auto max-w-8xl mx-auto gap-3">
                 <div class="w-3/4 p-4 flex flex-col space-y-4"> <!-- 75% width -->
                     <div>
@@ -43,7 +44,8 @@
                                     </div>
                                 </div>
                                 <div v-if="activeTab === 'requirements'">
-                                    <h2 class="text-lg font-semibold">Scholarship recipients are selected on the basis of:
+                                    <h2 class="text-lg font-semibold">Scholarship recipients are selected on the basis
+                                        of:
                                     </h2>
                                     <p>Details about the required documents go here.</p>
                                     <div v-for="requirement in requirements" :key="requirement.id">
@@ -63,9 +65,14 @@
                 </div>
                 <div class="w-1/4 bg-white flex flex-col gap-4 rounded-lg shadow-md h-fit p-4 border border-gray-50">
                     <!-- 25% width -->
-                    <Link :href="`/student/applying-scholarship/${scholarship.id}/application`">
+                    <Link v-if="isEligible(scholarship)"
+                        :href="`/student/applying-scholarship/${scholarship.id}/application`">
                     <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Apply
                         Now</button>
+                    </Link>
+                    <Link v-else>
+                    <button class="bg-gray-400 text-white px-10 py-2 rounded-lg shadow-md cursor-not-allowed">Not
+                        Eligible</button>
                     </Link>
                     <div class="flex flex-col">
                         <span class="text-gray-500 text-sm">Application Deadline</span>
@@ -88,7 +95,7 @@
                 </div>
             </div>
         </div>
-        
+
     </AuthenticatedLayout>
 </template>
 
@@ -134,6 +141,10 @@ const props = defineProps({
     grade: {
         type: Object,
         required: true
+    },
+    scholar: {
+        type: Object,
+        required: true
     }
 });
 
@@ -168,4 +179,29 @@ const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-U
     month: "long",
     day: "numeric"
 });
+
+// Check if student meets grade requirements
+const meetsGradeRequirement = (scholarship) => {
+    // If no grade criteria is set, student is eligible
+    if (!scholarship.criteriaData || !scholarship.criteriaData.grade) {
+        return true;
+    }
+
+    // If no student grade available, not eligible
+    if (!props.grade || !props.grade.grade) {
+        return false;
+    }
+
+    // Compare student grade with required grade
+    const studentGrade = parseFloat(props.scholar.grade.grade);
+    console.log(studentGrade);
+    const requiredGrade = parseFloat(props.grade.grade);
+
+    return studentGrade <= requiredGrade;
+};
+
+// Overall eligibility check
+const isEligible = (scholarship) => {
+    return meetsGradeRequirement(scholarship) //&& meetsCampusRequirement(scholarship);
+};
 </script>

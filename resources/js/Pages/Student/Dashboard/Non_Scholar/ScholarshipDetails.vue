@@ -142,6 +142,10 @@ const props = defineProps({
     grade: {
         type: Object,
         required: true
+    },
+    scholar: {
+        type: Object,
+        required: true
     }
 });
 
