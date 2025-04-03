@@ -116,7 +116,7 @@
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
                                                     <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed')
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -189,6 +189,12 @@
                                                 {{ batch.school_year.year }} - {{ batch.semester }} Semester
                                             </span>
                                         </div>
+                                        <div class="mt-2 flex justify-end">
+                                            <button @click="openBatchPayroll(batch.id)"
+                                                class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md">
+                                                View Payroll
+                                            </button>
+                                        </div>
                                         <div class="mt-2 text-sm text-gray-600">
                                             <p>Scholars: {{ batch.total_scholars || 'N/A' }}</p>
                                         </div>
@@ -199,7 +205,7 @@
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
                                                     <span>Claimed: {{ getClaimCount(historyItem.id, batch.id, 'Claimed')
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -229,7 +235,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, computed } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, router } from '@inertiajs/vue3';
 
 // Define props with proper type checking
 const props = defineProps({
@@ -256,8 +262,41 @@ const props = defineProps({
     academic_years: {
         type: Array,
         default: () => []
+    },
+    scholarship: {
+        type: Object,
+        default: () => ({})
+    },
+    schoolyear: {
+        type: Object,
+        default: () => ({})
+    },
+    selectedSem: {
+        type: String,
+        default: ''
     }
 });
+
+// Function to open payroll for a specific batch
+const openBatchPayroll = (batchId) => {
+    // Find the scholarship ID associated with this batch
+    const batch = props.batches.find(b => b.id === batchId);
+    const scholarshipId = batch ? batch.scholarship_id : null;
+    console.log(scholarshipId);
+    
+    if (scholarshipId) {
+        router.visit(`/payouts/${scholarshipId}/batch/${batchId}`, {
+            data: {
+                scholarship: scholarshipId,
+                selectedYear: props.schoolyear.id,
+                selectedSem: props.selectedSem
+            },
+            preserveState: true
+        });
+    } else {
+        console.error('Scholarship ID not found for batch:', batchId);
+    }
+};
 
 // Menu items
 const menuItems = [

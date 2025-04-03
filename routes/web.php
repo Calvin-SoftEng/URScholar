@@ -199,6 +199,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::delete('/scholarship-form-data/{scholarshipFormData}', [SettingsController::class, 'destroyData'])->name('scholarship.form.data.destroy');
 
     Route::get('/payouts', [PayoutsController::class, 'payouts_index'])->name('payouts_index.payouts');
+    Route::get('/payouts/{scholarshipId}/batch/{batchId}', [PayoutsController::class, 'student_payouts'])->name('payouts.payroll');
     Route::get('/payouts/list', [PayoutsController::class, 'payouts_list'])->name('payouts_list.payouts');
 
 
