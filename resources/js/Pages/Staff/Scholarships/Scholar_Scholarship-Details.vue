@@ -150,16 +150,17 @@
                                     <div
                                         class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
-                                            <span>Document.pdf</span>
+                                            <span>General Weighted Average</span>
+                                            <span>1.3</span>
                                         </div>
                                         <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                            <span class="font-medium">First Semester - @nd Year</span>
+                                            <span class="font-medium">1st Semester - 2023-2024</span>
                                         </div>
                                         <div>
-                                            <button @click="toggleCheck(req)"
+                                            <button @click="toggleMonitor"
                                                 class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                 <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                <span class="font-medium text-sm">View</span>
+                                                <span class="font-medium text-sm">View Certificate of Grades</span>
                                             </button>
                                         </div>
                                     </div>
@@ -240,6 +241,64 @@
             </div>
         </div>
 
+        <div v-if="Monitoring"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div
+                class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">2023-2nd sem</h2>
+                    <div class="flex items-center justify-between gap-10">
+                        <!-- <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
+                            class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
+                            <span class="material-symbols-rounded text-lg">open_in_new</span>
+                            <span class="font-medium">Open in New Tab</span>
+                        </a> -->
+                        <button type="button" @click="closeModal"
+                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                            data-modal-hide="default-modal">
+                            <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                    stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="p-4 flex flex-col gap-3">
+                    <div class="w-full flex justify-center p-5">
+                        <!-- Display Image -->
+                        <!-- <img v-if="selectedRequirement?.submitted_requirements.match(/\.(jpg|jpeg|png|gif)$/i)"
+                            :src="`/storage/${selectedRequirement.path}`"
+                            class="rounded-lg border shadow-sm max-w-full h-auto" alt="Submitted File"> -->
+
+                        <!-- Display PDF -->
+                        <!-- <iframe v-else-if="selectedRequirement?.submitted_requirements.match(/\.(pdf)$/i)"
+                            :src="`/storage/${selectedRequirement.path}#toolbar=0`"
+                            class="w-full h-[600px] border rounded-lg"></iframe> -->
+
+                        <!-- Display Message for Other File Types -->
+                        <!-- <p v-else class="text-gray-600">
+                            Cannot preview this file type. <a :href="`/storage/${selectedRequirement.path}`"
+                                class="text-blue-600 underline" target="_blank">Download here</a>.
+                        </p> -->
+                    </div>
+
+                    <!-- Close Button -->
+                    <!-- <div class="mt-2 flex flex-row justify-between">
+                        <button type="button" @click="updateRequirementStatus('Returned')"
+                            class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Return
+                        </button>
+                        <button type="button" @click="updateRequirementStatus('Approved')"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Approve
+                        </button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
@@ -305,6 +364,7 @@ const statusClass = (status) => {
 // });
 
 const Checking = ref(false);
+const Monitoring = ref(false);
 
 const selectedRequirement = ref(null);
 
@@ -313,9 +373,15 @@ const toggleCheck = (req) => {
     Checking.value = true;
 };
 
+const toggleMonitor = (req) => {
+    // selectedRequirement.value = req;
+    Monitoring.value = true;
+};
+
 const closeModal = () => {
     Checking.value = false;
     selectedRequirement.value = null;
+    Monitoring.value = false;
     resetForm();
 };
 

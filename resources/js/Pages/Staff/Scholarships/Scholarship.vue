@@ -227,9 +227,9 @@
                                 <div>
                                     <button
                                         @click="toggleView"
-                                        class="flex items-center gap-2 dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
-                                        border border-yellow-300 dark:border-yellow-500 hover:bg-yellow-200 px-4 py-2 rounded-lg transition duration-200">
-                                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                        class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                        border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                                        <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
                                         <span class="font-normal">
                                             {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
                                         </span>
@@ -244,9 +244,9 @@
                                     </button>
                                 </div>
                                 <div v-else>
-                                    <button v-tooltip.left="'Scholars already submitted to Casher'" disabled
-                                        class="flex items-center gap-2 dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
-                                    border border-yellow-300 dark:border-yellow-500  hover:bg-yellow-200 px-4 py-2 rounded-lg  transition duration-200">
+                                    <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
+                                        class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                         <span class="font-normal">Forward Completed Scholars</span>
                                     </button>
@@ -259,7 +259,10 @@
                             <div v-for="batch in batches" :key="batch.id"
                                 class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
                                 <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
-                                    <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+                                    <div class="flex flex-col">
+                                        <span class="text-xl font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+                                        <span class="text-lg font-medium text-gray-600">Campus</span>
+                                    </div>
 
                                     <div class="grid grid-cols-2">
                                         <div class="flex flex-col items-center">
