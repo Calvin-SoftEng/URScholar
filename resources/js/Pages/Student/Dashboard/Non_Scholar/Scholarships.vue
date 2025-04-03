@@ -64,21 +64,21 @@
                                                 }) }}</span>
                                         </div>
                                         <!-- Grade requirement display -->
-                                        <div class="flex flex-col items-start">
+                                        <!-- <div class="flex flex-col items-start">
                                             <span class="text-gray-500 text-sm">Min. Grade Required</span>
                                             <span class="font-medium"
                                                 :class="meetsGradeRequirement(scholarship) ? 'text-green-600' : 'text-red-500'">
                                                 {{ getRequiredGrade(scholarship) }}
                                             </span>
-                                        </div>
+                                        </div> -->
                                         <!-- Campus requirement display -->
-                                        <div class="flex flex-col items-start">
+                                        <!-- <div class="flex flex-col items-start">
                                             <span class="text-gray-500 text-sm">Campus Eligibility</span>
                                             <span class="font-medium"
                                                 :class="meetsCampusRequirement(scholarship) ? 'text-green-600' : 'text-red-500'">
                                                 {{ getCampusEligibilityLabel(scholarship) }}
                                             </span>
-                                        </div>
+                                        </div> -->
                                     </div>
                                 </div>
 
@@ -87,17 +87,17 @@
 
                                 <!-- Apply Button -->
                                 <div class="flex h-full items-center justify-center">
-                                    <Link v-if="isEligible(scholarship)"
+                                    <Link 
                                         :href="`/student/applying-scholarship/${scholarship.id}`">
                                     <button
                                         class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
-                                        Apply Now
+                                        View Details
                                     </button>
                                     </Link>
-                                    <button v-else
+                                    <!-- <button v-else
                                         class="bg-gray-400 text-white px-10 py-2 rounded-lg shadow-md cursor-not-allowed">
                                         Not Eligible
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
                         </div>

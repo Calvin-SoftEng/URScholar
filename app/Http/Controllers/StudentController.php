@@ -193,6 +193,10 @@ class StudentController extends Controller
 
     public function scholarship_details(Scholarship $scholarship)
     {
+        $scholar = Scholar::where('email', Auth::user()->email)
+        ->with('campus')
+        ->with('course')
+        ->first();
         $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
 
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
@@ -201,13 +205,12 @@ class StudentController extends Controller
 
         $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
 
-        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
-        $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
+        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->first();
+        $grade = Grade::where('scholar_id', $scholar->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $scholar = Scholar::where('email', Auth::user()->email)
-        ->with('campus')
-        ->with('course')
-        ->first();
+        
 
         return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipDetail', [
             'scholarship' => $scholarship,
