@@ -136,22 +136,34 @@ class CashierController extends Controller
 
     public function payout_batches(Scholarship $scholarship)
     {
-        // Get batches related to the scholarship, order by batch_no in descending order
+        // Get batches related to the scholarship, order by batch_no
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with([
                 'scholars' => function ($query) {
                     $query->orderBy('last_name')
                         ->orderBy('first_name');
-                }
+                },
+                'disbursement' // Add this to load disbursements
             ])
-            ->orderBy('batch_no', )
-            ->get(); // Use get() instead of first to get all batches
+            ->orderBy('batch_no')
+            ->get();
+
+        // Count claimed and not claimed for each batch
+        $batches = $batches->map(function ($batch) {
+            $claimed = $batch->disbursement->where('status', 'Claimed')->count();
+            $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
+        
+            return array_merge($batch->toArray(), [
+                'claimed_count' => $claimed,
+                'not_claimed_count' => $notClaimed
+            ]);
+        });
 
         // Fetch grantees only if batches exist
         $grantees = collect();
         if ($batches->isNotEmpty()) {
             $grantees = $scholarship->grantees()
-                ->whereIn('batch_id', $batches->pluck('id')) // Use whereIn for multiple batches
+                ->whereIn('batch_id', $batches->pluck('id'))
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
         }
@@ -161,6 +173,18 @@ class CashierController extends Controller
             'batches' => $batches,
             'grantees' => $grantees,
         ]);
+    }
+
+    public function forward_payout($scholarshipId)
+    {
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+
+        $payout->status = 'Inactive';
+        $payout->save();
+
+        return redirect()->back()->with('success', 'Forwarded Successfully');
     }
 
 

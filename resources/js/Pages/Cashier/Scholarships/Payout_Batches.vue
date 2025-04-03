@@ -65,8 +65,8 @@
 
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <span
-                                class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }} </span>
+                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{
+                                scholarship.name }} </span>
                             <span> Payout List</span>
                         </h1>
                     </div>
@@ -103,22 +103,22 @@
                         <div class="grid grid-cols-3 gap-5">
                             <div class="flex flex-col justify-center items-center space-y-1">
                                 <span class="text-gray-600 text-sm font-medium">Status</span>
-                                <span class="bg-green-100 text-green-800 border border-green-400 text-xs font-semibold px-3 py-1 rounded-full">
-                                    Completed
+                                <span
+                                    class="bg-green-100 text-green-800 border border-green-400 text-xs font-semibold px-3 py-1 rounded-full">
+                                    {{ batch.not_claimed_count === 0 ? 'Completed' : 'In Progress' }}
                                 </span>
                             </div>
-                            
+
                             <div class="flex flex-col justify-center items-center space-y-1">
                                 <span class="text-gray-600 text-sm font-medium">Claimed</span>
-                                <span class="text-lg font-semibold text-gray-900">200</span>
+                                <span class="text-lg font-semibold text-gray-900">{{ batch.claimed_count }}</span>
                             </div>
 
                             <div class="flex flex-col justify-center items-center space-y-1">
                                 <span class="text-gray-600 text-sm font-medium">Not Claimed</span>
-                                <span class="text-lg font-semibold text-red-500">200</span>
+                                <span class="text-lg font-semibold text-red-500">{{ batch.not_claimed_count }}</span>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -131,7 +131,8 @@
                 <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <div class="flex items-center gap-3">
                         <!-- Icon -->
-                        <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
 
                         <!-- Title and Description -->
                         <div class="flex flex-col">
@@ -163,25 +164,82 @@
                     </div>
 
                     <!-- Batch List -->
-                    <div v-else class="flex flex-col divide-y divide-gray-300">
-                        <div v-for="batch in batchesWithScholars" :key="batch.id" class="py-3 px-4 flex justify-between items-center">
-                            <div>
-                                <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</p>
-                                <p class="text-sm text-gray-500">Includes 100 Claimed, 2 No Claims</p>
+                    <div v-if="ForwardBatchList"
+                        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+                        <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                            <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                                <div class="flex items-center gap-3">
+                                    <!-- Icon -->
+                                    <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                                        class="text-blue-600 text-2xl flex-shrink-0" />
+
+                                    <!-- Title and Description -->
+                                    <div class="flex flex-col">
+                                        <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                            Send Payroll
+                                        </h2>
+                                    </div>
+                                </div>
+                                <button type="button" @click="closeModal"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="default-modal">
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                    </svg>
+                                </button>
                             </div>
-                            <span class="text-sm font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
-                                Ready to Send
-                            </span>
+
+                            <div
+                                class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
+                                <label class="block text-lg font-semibold text-gray-700 dark:text-white">
+                                    Completed Payout Batches
+                                </label>
+
+                                <!-- Loading Indicator -->
+                                <div v-if="isLoading" class="flex justify-center items-center py-4">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                                </div>
+
+                                <!-- Batch List -->
+                                <!-- Batch List -->
+                                <div v-else class="flex flex-col divide-y divide-gray-300">
+                                    <div v-for="batch in batchesWithScholars" :key="batch.id"
+                                        class="py-3 px-4 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                                batch.batch_no }}</p>
+                                            <p class="text-sm text-gray-500">Includes {{ batch.claimed_count }} Claimed,
+                                                {{ batch.not_claimed_count }} Not Claimed</p>
+                                        </div>
+                                        <span
+                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.not_claimed_count === 0 ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                            {{ batch.not_claimed_count === 0 ? 'Ready to Send' : 'Incomplete' }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Forward Button -->
+                                <div class="mt-4">
+                                    <button :disabled="isSubmitting" @click="forwardPayout"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
 
                     <!-- Forward Button -->
-                    <div class="mt-4">
-                        <button :disabled="isSubmitting" @click="forwardBatches"
+                    <!-- <div class="mt-4">
+                        <button :disabled="isSubmitting" @click="forwardPayout"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             {{ isSubmitting ? 'Processing...' : 'Forward' }}
                         </button>
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
@@ -325,7 +383,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, watch, onMounted } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, watch, onMounted, onUnmounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
@@ -424,6 +482,20 @@ const toggleNotify = async () => {
     // await loadBatchesData();
 };
 
+// Submit reason form
+const forwardPayout = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('cashier.forward_payout', { scholarshipId: props.scholarship.id }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
 const closeModal = () => {
     ForwardBatchList.value = false;
     NotifyPayouts.value = false;
@@ -533,6 +605,18 @@ watchEffect(() => {
             toastVisible.value = false;
         }, 3000);
     }
+});
+
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
 });
 
 </script>
