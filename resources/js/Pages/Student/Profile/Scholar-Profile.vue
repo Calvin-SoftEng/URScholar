@@ -887,6 +887,40 @@
                 <!-- Modal Header -->
                 <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-4 p-4">List of Grades</h2>
 
+                <div
+                    class="px-5 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                    <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
+                            Last Available School Year and Semester
+                    </h3>
+                    <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                </div>
+                <!-- Upload Section (Hidden by Default) -->
+                <div class="p-5">
+                    <div
+                        class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
+                        <!-- GWA Input -->
+                        <div
+                            class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
+                            <Label for="gwa">Enter General Weighted Average
+                            </Label>
+                            <input id="gwa" v-model="form.grade" type="text" disabled
+                                placeholder="Enter your GWA (e.g., 2.0)"
+                                class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
+                        </div>
+
+                        <!-- File Upload -->
+                        <div
+                            class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
+                            <Label for="file_upload">Upload Certificate of Grade</Label>
+                            <input id="file_upload" type="file" disabled
+                                class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                        </div>
+                    </div>
+
+                    <hr class="border-gray-300 my-4">
+                </div>
+
                 <div v-if="grades.length > 0">
                     <!-- Document Viewer -->
                     <div v-for="grade in grades" :key="grade.id"
@@ -928,39 +962,7 @@
                     </div>
                 </div>
                 <div v-else class="p-2">
-                    <div
-                        class="px-2 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
-                        <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                Last Available School Year and Semester
-                        </h3>
-                        <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
-                    </div>
-                    <!-- Upload Section (Hidden by Default) -->
-                    <div class="p-5">
-                        <div
-                            class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
-                            <!-- GWA Input -->
-                            <div
-                                class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
-                                <Label for="gwa">Enter General Weighted Average
-                                </Label>
-                                <input id="gwa" v-model="form.grade" type="text" disabled
-                                    placeholder="Enter your GWA (e.g., 2.0)"
-                                    class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
-                            </div>
-
-                            <!-- File Upload -->
-                            <div
-                                class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
-                                <Label for="file_upload">Upload Certificate of Grade</Label>
-                                <input id="file_upload" type="file" disabled
-                                    class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
-                                    dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                            </div>
-                        </div>
-
-                        <hr class="border-gray-300 my-4">
-                    </div>
+                    
                     <!-- Empty State Message -->
                     <div class="flex items-center justify-center py-12 px-8 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl text-center">
                         <div class="text-gray-500">

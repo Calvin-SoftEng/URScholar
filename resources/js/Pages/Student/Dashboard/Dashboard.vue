@@ -44,11 +44,11 @@
                             <div class="w-full h-full space-y-3 flex flex-col items-center">
                                 <div
                                     class="w-full h-1/12 text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    feafafaefaef
+                                    Last Logged In September 30, 2023
                                 </div>
                                 <div
                                     class="w-full h-1/12 text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    fbeapnfpaeinf
+                                    Recent Payout last September 30, 2023
                                 </div>
                                 <div
                                     class="w-full h-1/12 text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
