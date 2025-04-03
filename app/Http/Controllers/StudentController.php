@@ -51,9 +51,17 @@ class StudentController extends Controller
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
                 ->first() ?? null;
             
-            $payout = Payout::where('id', $disbursement->payout_id)->first();
-
-            $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)->first();
+                $payout = null;
+                $payout_schedule = null;
+                
+                if ($disbursement && $disbursement->payout_id) {
+                    $payout = Payout::where('id', $disbursement->payout_id)->first();
+                }
+                
+                if ($payout) {
+                    $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)->first();
+                }
+                
 
             $oldestGrantee = Grantees::where('id', $grantee->id)
                 ->orderBy('created_at', 'asc')
