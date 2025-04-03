@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Batch extends Model
 {
-    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year', 'semester' , 'total_scholars', 'read'];
+    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year_id', 'semester' , 'total_scholars', 'read'];
 
     public function scholarship()
     {

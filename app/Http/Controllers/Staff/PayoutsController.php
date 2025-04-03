@@ -15,7 +15,7 @@ class PayoutsController extends Controller
 
         $scholarships = Scholarship::all();
         $payouts = Payout::all();
-        $batches = Batch::all();
+        $batches = Batch::with('school_year')->get();
 
         return Inertia::render('Staff/Payouts/Payout_Records', [
             'scholarships' => $scholarships,

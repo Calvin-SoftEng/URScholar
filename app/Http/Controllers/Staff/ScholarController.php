@@ -165,7 +165,7 @@ class ScholarController extends Controller
         $schoolyear = SchoolYear::where('id', $selectedYear)->first();
 
         $batch = Batch::where('scholarship_id', $scholarship->id)
-            ->where('school_year', $selectedYear)
+            ->where('school_year_id', $selectedYear)
             ->where('semester', $selectedSem)
             ->get();
 
@@ -301,7 +301,7 @@ class ScholarController extends Controller
             $batch = Batch::create([
                 'scholarship_id' => $scholarship->id,
                 'batch_no' => $firstRecord['BATCH NO.'],
-                'school_year' => $request->schoolyear,
+                'school_year_id' => $request->schoolyear,
                 'semester' => $request->semester,
             ]);
     

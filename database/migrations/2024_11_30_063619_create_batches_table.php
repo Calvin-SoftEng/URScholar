@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->integer('batch_no');
-            $table->string('school_year');
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();

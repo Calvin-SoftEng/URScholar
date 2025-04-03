@@ -73,7 +73,7 @@ class ScholarshipController extends Controller
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), function ($query, $year) {
-                return $query->where('school_year', $year);
+                return $query->where('school_year_id', $year);
             })
             ->when($request->input('selectedSem'), function ($query, $sem) {
                 return $query->where('semester', $sem);
@@ -258,7 +258,7 @@ class ScholarshipController extends Controller
         // Get the batch based on selected filters
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), function ($query) use ($request) {
-                return $query->where('school_year', $request->input('selectedYear'));
+                return $query->where('school_year_id', $request->input('selectedYear'));
             })
             ->when($request->input('selectedSem'), function ($query) use ($request) {
                 return $query->where('semester', $request->input('selectedSem'));
@@ -282,7 +282,7 @@ class ScholarshipController extends Controller
             ]);
 
         if ($request->input('selectedYear')) {
-            $batchesQuery->where('school_year', $request->input('selectedYear'));
+            $batchesQuery->where('school_year_id', $request->input('selectedYear'));
         }
 
         if ($request->input('selectedSem')) {
@@ -367,7 +367,7 @@ class ScholarshipController extends Controller
 
         $completedBatches = Batch::where('scholarship_id', $scholarship->id)
             ->whereRaw('total_scholars = sub_total')
-            ->when($request->input('selectedYear'), fn($query, $year) => $query->where('school_year', $year))
+            ->when($request->input('selectedYear'), fn($query, $year) => $query->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($query, $sem) => $query->where('semester', $sem))
             ->count();
 

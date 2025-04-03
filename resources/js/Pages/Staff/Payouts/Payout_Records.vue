@@ -20,30 +20,29 @@
                             <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
                             <span>Scholarship Payouts</span>
                         </h1>
-                        <!-- <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span> -->
                     </div>
 
                     <!-- Stats Section -->
-                    <!-- <div class="grid grid-cols-2 shadow-sm rounded-lg border">
+                    <div class="grid grid-cols-2 shadow-sm rounded-lg border">
                         <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
-                                <p class="text-gray-500 text-sm">Completed Scholars</p>
+                                <p class="text-gray-500 text-sm">Completed Payouts</p>
                             </div>
-                            <p class="text-4xl font-semibold font-kanit text-green-600">feafaefe</p>
+                            <p class="text-4xl font-semibold font-kanit text-green-600">{{ completedPayouts.length }}
+                            </p>
                         </div>
 
                         <div class="flex flex-col items-start py-4 px-10">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Total Scholars</p>
+                                <p class="text-gray-500 text-sm">Pending Payouts</p>
                             </div>
-                            <p class="text-4xl font-semibold font-kanit">feafeafea</p>
+                            <p class="text-4xl font-semibold font-kanit">{{ recentPayouts.length }}</p>
                         </div>
-                    </div> -->
+                    </div>
                 </div>
             </div>
-            
 
             <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
                 <button v-for="item in menuItems" :key="item.key" @click="selectMenu(item.key)" :class="[
@@ -59,77 +58,107 @@
             </div>
 
             <!-- Recent Payouts Section -->
-            <div v-if="selectedMenu === 'recent'" class="grid grid-cols-[15%_85%] gap-6 p-6 h-full">
-                <!-- Left: Date Section -->
-                <div class="flex flex-col items-center justify-start space-y-10">
+            <div v-if="selectedMenu === 'recent'" class="p-6 h-full">
+                <div class="space-y-8">
                     <div v-for="payout in recentPayouts" :key="payout.id"
-                        class="flex items-center justify-center h-[100px] my-2">
-                        <span class="text-gray-600 font-medium text-lg">{{ formatDate(payout.dateEnd) || 'No Deadline' }}</span>
-                    </div>
-                </div>
-
-                <!-- Right: Payout Cards -->
-                <div class="relative space-y-10">
-                    <div v-for="payout in recentPayouts" :key="payout.id"
-                        class="bg-white p-5 rounded-lg shadow-md relative flex flex-col justify-center">
+                        class="bg-white p-5 rounded-lg shadow-md relative">
                         <!-- Status Badge -->
-                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
-                            Pending
+                        <span
+                            class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
+                            {{ payout.status }}
                         </span>
-                        <!-- Scholarship Info -->
-                        <p class="text-lg font-semibold text-red-500">
-                            {{ payout.scholarshipName }}
-                        </p>
-                        <p class="text-lg font-semibold text-red-500">
-                            {{ payout.batchNumber }}
-                        </p>
-                        <p class="text-sm text-gray-600">
-                            Expected on:
-                            <span v-if="payout.dateEnd">
-                                {{ formatDate(payout.dateEnd) }}
-                            </span>
-                            <span v-else>No Deadline</span>
-                        </p>
+
+                        <!-- Scholarship & Payout Details -->
+                        <div class="flex flex-col md:flex-row justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <p class="text-xl font-semibold text-gray-800">
+                                    {{ payout.scholarshipName }}
+                                </p>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    Payment Period: {{ payout.dateStart }} - {{ payout.dateEnd || 'No Deadline' }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    Total Amount: {{ payout.subTotal }}
+                                </p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    {{ payout.scholarshipType }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Batch Information -->
+                        <div class="mt-6">
+                            <h3 class="text-md font-semibold text-gray-700 mb-3">Associated Batches:</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div v-for="batch in getBatchesForScholarship(payout.scholarshipId)" :key="batch.id"
+                                    class="bg-gray-50 p-3 rounded-md border border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-800 font-medium">Batch {{ batch.batch_no }}</span>
+                                        <span class="text-xs bg-gray-200 px-2 py-1 rounded-full">
+                                            {{ batch.school_year }} - {{ batch.semester }}
+                                        </span>
+                                    </div>
+                                    <div class="mt-2 text-sm text-gray-600">
+                                        <p>Scholars: {{ batch.total_scholars || 'N/A' }}</p>
+                                        <p>Amount: {{ formatCurrency(batch.sub_total) }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-
             <!-- Payout History Section -->
-            <div v-if="selectedMenu === 'history'" class="grid grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">
-                <!-- Left: Date Section -->
-                <div class="flex flex-col items-center justify-start space-y-10">
+            <div v-if="selectedMenu === 'history'" class="p-6 h-full">
+                <div class="space-y-8">
                     <div v-for="historyItem in completedPayouts" :key="historyItem.id"
-                        class="flex items-center justify-center h-[100px] my-2">
-                        <span class="text-gray-600 font-medium text-lg">{{ formatDate(historyItem.dateEnd) || 'No Deadline' }}</span>
-                    </div>
-                </div>
-
-                <!-- Right: Payout Cards -->
-                <div class="relative space-y-10">
-                    <div v v-for="historyItem in completedPayouts" :key="historyItem.id"
-                        class="bg-white p-5 rounded-lg shadow-md relative flex flex-col justify-center">
+                        class="bg-white p-5 rounded-lg shadow-md relative">
                         <!-- Status Badge -->
-                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
-                            Pending
+                        <span
+                            class="absolute -top-3 right-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
+                            {{ historyItem.status }}
                         </span>
-                        <!-- Scholarship Info -->
-                        <p class="text-lg font-semibold text-red-500">
-                            {{ historyItem.scholarshipName }}
-                        </p>
-                        <p class="text-lg font-semibold text-red-500">
-                            {{ historyItem.batchNumber }}
-                        </p>
-                        <p class="text-sm text-gray-600">
-                            Expected on:
-                            <span v-if="historyItem.dateEnd">
-                                {{ formatDate(historyItem.dateEnd) }}
-                            </span>
-                            <span v-else>No Deadline</span>
-                        </p>
+
+                        <!-- Scholarship & Payout Details -->
+                        <div class="flex flex-col md:flex-row justify-between">
+                            <div class="mb-4 md:mb-0">
+                                <p class="text-xl font-semibold text-gray-800">
+                                    {{ historyItem.scholarshipName }}
+                                </p>
+                                <p class="text-sm text-gray-600 mt-1">
+                                    Payment Period: {{ historyItem.dateStart }} - {{ historyItem.dateEnd || 'No Deadline' }}
+                                </p>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
+                                    {{ historyItem.scholarshipType }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Batch Information -->
+                        <div class="mt-6">
+                            <h3 class="text-md font-semibold text-gray-700 mb-3">Associated Batches:</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                <div v-for="batch in getBatchesForScholarship(historyItem.scholarshipId)"
+                                    :key="batch.id" class="bg-gray-50 p-3 rounded-md border border-gray-200">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-800 font-medium">Batch {{ batch.batch_no }}</span>
+                                        <span class="text-xs bg-gray-200 px-2 py-1 rounded-full">
+                                            {{ batch.school_year.year }} - {{ batch.semester }} Semester
+                                        </span>
+                                    </div>
+                                    <div class="mt-2 text-sm text-gray-600">
+                                        <p>Scholars: {{ batch.total_scholars || 'N/A' }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                
             </div>
         </div>
     </AuthenticatedLayout>
@@ -170,54 +199,9 @@ const selectMenu = (key) => {
     selectedMenu.value = key;
 };
 
-// Helper method to get scholarship name
-const scholarshipName = (scholarshipId) => {
-    const scholarship = props.scholarships.find(s => s.id === scholarshipId);
-    return scholarship ? scholarship.name : 'Unknown Scholarship';
-};
-
-// Helper method to get batch number
-const batchNumber = (scholarshipId) => {
-    const scholarship = props.scholarships.find(s => s.id === scholarshipId);
-    const batch = props.batches.find(b => b.id === scholarship?.batch_id);
-    return batch ? batch.batch_no : 'Unknown Batch';
-};
-
-
-// Consolidated function to get payout details
-const getPayoutDetails = (payout) => {
-    // Find the associated scholarship
-    const scholarship = props.scholarships.find(
-        s => s.id === payout.scholarship_id
-    ) || {};
-
-    // Find the associated batch
-    const batch = props.batches.find(
-        b => b.id === scholarship.batch_id
-    ) || {};
-
-    // Return a consolidated object with all relevant details
-    return {
-        // Payout details
-        id: payout.id,
-        dateStart: formatDate(payout.date_start),
-        dateEnd: formatDate(payout.date_end),
-        status: payout.status,
-        subTotal: formatCurrency(payout.sub_total),
-        totalScholars: payout.total_scholars || 0,
-
-        // Scholarship details
-        scholarshipName: scholarship.name || 'Unknown Scholarship',
-        scholarshipType: scholarship.scholarshipType || 'N/A',
-
-        // Batch details
-        batchNumber: batch.batch_no || 'Unknown Batch',
-
-        // Derived display properties
-        displayName: `${scholarship.name || 'Scholarship'} - ${batch.batch_no || 'Batch'}`,
-        isRecent: payout.status === 'Pending' || payout.status === 'Active',
-        isCompleted: payout.status === 'Completed' || payout.status === 'Inactive'
-    };
+// Get batches for a specific scholarship
+const getBatchesForScholarship = (scholarshipId) => {
+    return props.batches.filter(batch => batch.scholarship_id === scholarshipId);
 };
 
 // Helper function to format date
@@ -232,12 +216,35 @@ const formatDate = (dateString) => {
 
 // Helper function to format currency
 const formatCurrency = (amount) => {
-    return amount
-        ? new Intl.NumberFormat('en-PH', {
-            style: 'currency',
-            currency: 'PHP'
-        }).format(amount)
-        : '₱0.00';
+    if (!amount) return '₱0.00';
+    return new Intl.NumberFormat('en-PH', {
+        style: 'currency',
+        currency: 'PHP'
+    }).format(amount);
+};
+
+// Consolidated function to get payout details
+const getPayoutDetails = (payout) => {
+    // Find the associated scholarship
+    const scholarship = props.scholarships.find(
+        s => s.id === payout.scholarship_id
+    ) || {};
+
+    // Return a consolidated object with all relevant details
+    return {
+        // Payout details
+        id: payout.id,
+        dateStart: formatDate(payout.date_start),
+        dateEnd: formatDate(payout.date_end),
+        status: payout.status,
+        subTotal: formatCurrency(payout.sub_total),
+        totalScholars: payout.total_scholars || 0,
+
+        // Scholarship details
+        scholarshipId: scholarship.id,
+        scholarshipName: scholarship.name || 'Unknown Scholarship',
+        scholarshipType: scholarship.scholarshipType || 'N/A',
+    };
 };
 
 // Computed properties for easy access
@@ -259,5 +266,5 @@ const completedPayouts = computed(() =>
 </script>
 
 <style scoped>
-/* Existing styles remain the same */
+/* Add any custom styles here */
 </style>
