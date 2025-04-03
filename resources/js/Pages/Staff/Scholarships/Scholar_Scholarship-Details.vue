@@ -151,7 +151,7 @@
                                         class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
                                             <span>General Weighted Average</span>
-                                            <span>1.3</span>
+                                            <span class="font-bold text-lg">1.3</span>
                                         </div>
                                         <div class="flex items-center gap-2 text-gray-900 dark:text-white">
                                             <span class="font-medium">1st Semester - 2023-2024</span>
