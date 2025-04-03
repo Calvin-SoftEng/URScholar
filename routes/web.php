@@ -167,7 +167,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/{scholarshipId}/applicant', [ScholarshipController::class, 'onetime_list'])->name('scholarship.onetime_list');
     Route::get('/scholarships/one-time/scholars', [ScholarshipController::class, 'onetime_scholars'])->name('scholarship.onetime_scholars');
 
-    Route::get('/scholarships/{scholarshipId}/applicant/{id}', [ScholarshipController::class, 'applicant_details'])->name('scholarship.applicant_details');
+    Route::get('/scholarships/scholar={id}/one-time', [ScholarController::class, 'scholar_onetime'])->name('scholarship.applicant_details');
 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
@@ -271,6 +271,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     //profile
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
     Route::get('/myProfile/generate/{urscholar_id}', [StudentController::class, 'generate'])->name('qrcode.generate');
+    Route::post('/myProfile/{urscholar_id}/upload-grade', [StudentController::class, 'uploadGrade'])->name('student.uploadgrade');
 
     // Messaging
     Route::get('/group-chat', [StudentController::class, 'messaging'])->name('student.messaging');

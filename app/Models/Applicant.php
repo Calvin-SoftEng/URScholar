@@ -8,7 +8,7 @@ class Applicant extends Model
 {
 
     protected $fillable = [
-        'scholarship_id', 'batch_id', 'scholar_id', 'school_year', 'semester', 'status',
+        'scholarship_id', 'batch_id', 'scholar_id', 'school_year_id', 'semester', 'status',
     ];
 
     public function scholarship()

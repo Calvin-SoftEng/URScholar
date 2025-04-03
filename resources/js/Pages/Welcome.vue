@@ -58,7 +58,7 @@ function handleImageError() {
         <Section_1 />
         <Section_2 />
         <Section_3 />
-        <Section_4 />
+        <Section_4 :sponsors="sponsors" />
         <Section_5 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears" />
         <SectionFooter />
     </div>

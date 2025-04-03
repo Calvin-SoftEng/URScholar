@@ -27,19 +27,19 @@
     <section class="relative py-16 px-6 bg-[#F8F8FA] flex flex-col lg:flex-row items-start gap-10 min-h-[50vh]">
     <!-- Left Section (Sponsor List - Auto Expands) --> 
     <div class="lg:w-1/2 w-full p-8 space-y-8 relative z-10">
-        <div
+        <div v-for="sponsor in sponsors" :key="sponsor.id"
             class="bg-white flex flex-col lg:flex-row items-center lg:items-start gap-6 p-8 border border-gray-300 rounded-xl shadow-md hover:shadow-lg transition-all transform hover:scale-[1.02]">
             <div class="flex flex-col items-center space-y-2">
                 <img src="../../../assets/images/univ-seal.png" alt="Sponsor Logo" 
                     class="w-32 h-32 rounded-lg border border-gray-300 shadow-sm">
-                <span class="text-gray-600 text-base font-medium">CHED</span>
+                <span class="text-gray-600 text-base font-medium">{{sponsor.abbreviation}}</span>
             </div>
 
             
             <div class="flex flex-col space-y-3 w-full">
-                <h3 class="text-3xl font-bold text-blue-900">Commissioner of Baasketball</h3>
-                <span class="text-gray-500 text-md">Sponsoring since: <strong class="text-gray-700">2020</strong></span>
-                <p class="text-gray-700 text-lg leading-relaxed">Lorem ipsum dolor sit amet consectetur adipisicing elit. Error nesciunt eum tenetur quo doloremque perferendis, amet quos, quasi pariatur aperiam facilis atque totam provident sunt consequatur architecto dolor reprehenderit ullam!</p>
+                <h3 class="text-3xl font-bold text-blue-900">{{sponsor.name}}</h3>
+                <span class="text-gray-500 text-md">Sponsoring since: <strong class="text-gray-700">{{sponsor.since}}</strong></span>
+                <p class="text-gray-700 text-lg leading-relaxed">{{sponsor.description}}</p>
             </div>
         </div>
     </div>
@@ -75,9 +75,20 @@
 <script setup>
 import { ref } from 'vue';
 
-const sponsors = ref([
-    { id: 1, name: "Sponsor A", logo: "@/assets/images/ursbg_landingpage.png", description: "" },
-]);
+const props = defineProps({
+    sponsors: {
+        type: Array,
+        required: true
+    },
+    scholarships: {
+        type: Array,
+        required: true
+    },
+    schoolyears: {
+        type: Array,
+        required: true
+    }
+});
 
 
 </script>

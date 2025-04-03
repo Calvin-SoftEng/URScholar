@@ -404,7 +404,7 @@ class ScholarshipController extends Controller
             'students' => $students,
             'scholarship_form' => ScholarshipForm::find(2),
             'scholarship_form_data' => ScholarshipFormData::where('scholarship_form_id', 2)->get(),
-            'elibigibilities' => Eligibility::all(),
+            'eligibilities' => Eligibility::all(),
             'conditions' => Condition::all(),
             'userType' => $userType,
             'userCampusId' => $userType == 'coordinator' ? $user->campus_id : null,
@@ -422,7 +422,7 @@ class ScholarshipController extends Controller
         // Get the batch for the selected semester and school year
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->where('semester', $request->input('selectedSem'))
-            ->where('school_year', $request->input('selectedYear'))
+            ->where('school_year_id', $request->input('selectedYear'))
             ->firstOrFail();
 
         // Check if scholar's payment claimed
@@ -455,7 +455,7 @@ class ScholarshipController extends Controller
             // Get the scholar's grade for the selected semester and school year
             $grade = Grade::where('scholar_id', $scholar->id)
                 ->where('semester', $request->input('selectedSem'))
-                ->where('school_year', $request->input('selectedYear'))
+                ->where('school_year_id', $request->input('selectedYear'))
                 ->first();
 
             $userPicture = User::where('id', $scholar->user_id)
@@ -687,7 +687,7 @@ class ScholarshipController extends Controller
             Batch::create([
                 'scholarship_id' => $scholarship->id,
                 'batch_no' => '1',
-                'school_year' => $request->school_year,
+                'school_year_id' => $request->school_year,
                 'semester' => $request->semester,
             ]);
         }

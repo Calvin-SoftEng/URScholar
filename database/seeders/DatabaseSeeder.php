@@ -200,7 +200,6 @@ class DatabaseSeeder extends Seeder
         //Eligibilities
 
         Eligibility::create([
-            'scholarship_id' => 2,
             'name' => 'Financial Need-Based Criteria',
         ]);
 

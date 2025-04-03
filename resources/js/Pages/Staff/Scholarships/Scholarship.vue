@@ -548,7 +548,7 @@
                                     </textarea>
                                                 </div>
 
-                                                <div v-for="eligiblity in elibigilities" :key="eligiblity.id"
+                                                <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
                                                     class="flex flex-col justify-center space-y-2 items-start">
                                                     <span class="text-sm font-medium text-black whitespace-nowrap ">
                                                         {{ eligiblity.name }}
@@ -785,7 +785,7 @@ import InputError from '@/Components/InputError.vue';
 const props = defineProps({
     scholarship_form: Object,
     scholarship_form_data: Array,
-    elibigilities: Array,
+    eligibilities: Array,
     conditions: Array,
     batches: Array,
     scholarship: Object,

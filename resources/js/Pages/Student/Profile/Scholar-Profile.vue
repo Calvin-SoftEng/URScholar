@@ -7,13 +7,14 @@
             <div class="w-full bg-[#e8f0f9] shadow-sm justify-between flex flex-row px-24">
                 <h1 class="text-3xl font-bold font-sora text-left p-3">My Profile</h1>
                 <!-- Toggle Button -->
-               <!-- Buttons -->
+                <!-- Buttons -->
                 <div class="flex space-x-4 p-3">
                     <button type="button" @click="EditProfile = !EditProfile" class="text-sm font-normal text-primary">
                         {{ EditProfile ? 'Save Updates' : 'Edit Profile' }}
                     </button>
 
-                    <button v-if="EditProfile" type="button" @click="EditProfile = false" class="text-sm font-normal text-gray-500">
+                    <button v-if="EditProfile" type="button" @click="EditProfile = false"
+                        class="text-sm font-normal text-gray-500">
                         Cancel
                     </button>
                 </div>
@@ -25,8 +26,8 @@
                         <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                             <!-- pic -->
                             <div class="border w-80 h-80 rounded-lg overflow-hidden">
-                                <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="Profile Picture"
-                                    class="w-full h-full object-cover">
+                                <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                    alt="Profile Picture" class="w-full h-full object-cover">
                             </div>
 
                             <!-- info -->
@@ -50,7 +51,8 @@
                                 <div class="w-full flex flex-row gap-2 py-2">
                                     <div class="w-[40%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Civil Status</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            student.civil
                                         }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
@@ -64,7 +66,8 @@
                                 <div class="w-full flex flex-row gap-2">
                                     <div class="w-[40%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Gender</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            student.gender
                                         }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
@@ -77,11 +80,13 @@
                             <!-- gmail -->
                             <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                                 <!-- Icon -->
-                                <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
+                                <span
+                                    class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
 
                                 <!-- Email Container -->
                                 <div class="flex-1 min-w-0">
-                                    <span class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
+                                    <span
+                                        class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
                                         {{ $page.props.auth.user.email }}
                                     </span>
                                 </div>
@@ -118,7 +123,8 @@
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
+                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        scholar.course.name
                                     }}</span>
                                 </div>
                                 <div class="w-full flex flex-row items-center gap-2">
@@ -130,7 +136,8 @@
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'school']"
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
+                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        scholar.campus.name
                                     }}, Campus</span>
                                 </div>
                             </div>
@@ -145,12 +152,13 @@
                                         General Weighted Average
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">Year and
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ latestgrade.school_year.year }} {{ latestgrade.semester }}
                                             Semester</span>
                                         <div class="flex flex-col items-end">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ latestgrade ?
-                                                latestgrade.grade : 'N/A'
-                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                latestgrade ?
+                                                    latestgrade.grade : 'N/A'
+                                            }}</span>
                                             <button class="text-sm" @click="toggleCheck">
                                                 View Certificate of Grades
                                             </button>
@@ -165,9 +173,11 @@
                                         Elementary
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
-                                            }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            elementary.name
+                                        }}</span>
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            elementary.years
                                         }}</span>
                                     </div>
                                 </div>
@@ -210,10 +220,12 @@
                                         Vocational
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.name
-                                            }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ vocational.years
-                                            }}</span>
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            vocational.name
+                                        }}</span>
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            vocational.years
+                                        }}</span>
                                     </div>
                                 </div>
 
@@ -225,8 +237,9 @@
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
                                             }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.years
-                                            }}</span>
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            postgrad.years
+                                        }}</span>
                                     </div>
                                 </div>
 
@@ -251,9 +264,11 @@
                                     </div>
                                     <div>
                                         <div class="w-full flex flex-col items-left ">
-                                            <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly Family
+                                            <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
+                                                Family
                                                 Income</span>
-                                            <span class="text-gray-900 text-3xl font-semibold leading-tight">100,000</span>
+                                            <span
+                                                class="text-gray-900 text-3xl font-semibold leading-tight">100,000</span>
                                         </div>
                                     </div>
                                     <div>
@@ -270,7 +285,8 @@
                                     </div>
                                     <div>
                                         <div class="w-full flex flex-col items-left gap-1 py-1">
-                                            <span class="text-gray-500 text-base font-semibold leading-tight">Family Housing
+                                            <span class="text-gray-500 text-base font-semibold leading-tight">Family
+                                                Housing
                                                 Type</span>
                                             <span class="text-gray-900 text-lg font-semibold leading-tight">{{
                                                 family.family_housing }}</span>
@@ -281,16 +297,19 @@
                                             <font-awesome-icon :icon="['fas', 'people-roof']"
                                                 class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                             <div class="flex flex-col items-left gap-1">
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">Kapatid1,
+                                                <span
+                                                    class="text-gray-900 text-base font-semibold leading-tight">Kapatid1,
                                                     Kapatid2,</span>
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">Trabaho1,
+                                                <span
+                                                    class="text-gray-900 text-base font-semibold leading-tight">Trabaho1,
                                                     Trabaho2</span>
                                             </div>
                                         </div>
                                     </div>
                                     <div>
                                         <div class="w-full flex flex-col items-left gap-1 py-1">
-                                            <span class="text-gray-500 text-base font-semibold leading-tight">Other Sources
+                                            <span class="text-gray-500 text-base font-semibold leading-tight">Other
+                                                Sources
                                                 of Income</span>
                                             <span class="text-gray-900 text-lg font-semibold leading-tight">{{
                                                 family.other_income }}</span>
@@ -374,8 +393,9 @@
                                 <div class="w-full flex flex-row gap-2 py-2">
                                     <div class="w-[40%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Civil Status</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.civil
-                                            }}</span>
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            student.civil
+                                        }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -388,8 +408,9 @@
                                 <div class="w-full flex flex-row gap-2">
                                     <div class="w-[40%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Gender</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.gender
-                                            }}</span>
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            student.gender
+                                        }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Religion</span>
@@ -400,7 +421,8 @@
                             </div>
                             <!-- gmail -->
                             <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
-                                <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
+                                <span
+                                    class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
                                 <!-- <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
                                     }}</span> -->
                                 <div class="relative w-full">
@@ -415,7 +437,8 @@
                             <div
                                 class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
                                 <div v-if="scholar.qr_code" class="w-20 h-20">
-                                    <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code" class="w-full h-full">
+                                    <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code"
+                                        class="w-full h-full">
                                 </div>
                                 <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
                                     <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
@@ -438,8 +461,9 @@
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.course.name
-                                        }}</span>
+                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        scholar.course.name
+                                    }}</span>
                                 </div>
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -450,8 +474,9 @@
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'school']"
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{ scholar.campus.name
-                                        }}, Campus</span>
+                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        scholar.campus.name
+                                    }}, Campus</span>
                                 </div>
                             </div>
 
@@ -468,7 +493,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                             }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.elementary.name" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.elementary.name" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -477,7 +503,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.elementary.years" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.elementary.years" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -493,7 +520,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                             }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.junior.name" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.junior.name" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -502,7 +530,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.junior.years" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.junior.years" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -518,7 +547,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                             }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.senior.name" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.senior.name" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -527,7 +557,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.senior.years" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.senior.years" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -543,7 +574,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
                                             }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.college.name" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.college.name" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -552,7 +584,8 @@
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
-                                            <input v-model="form.education.college.years" type="text" placeholder="Enter User ID"
+                                            <input v-model="form.education.college.years" type="text"
+                                                placeholder="Enter User ID"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -804,11 +837,13 @@
                                     </div>
                                     <div>
                                         <div class="w-full flex flex-col items-left gap-1 py-1">
-                                            <span class="text-gray-500 text-base font-semibold leading-tight">Other Sources
+                                            <span class="text-gray-500 text-base font-semibold leading-tight">Other
+                                                Sources
                                                 of Income</span>
                                             <!-- Input Container (70%) -->
                                             <div class="relative w-full">
-                                                <input v-model="family.other_income" type="text" placeholder="Enter User ID"
+                                                <input v-model="family.other_income" type="text"
+                                                    placeholder="Enter User ID"
                                                     class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
                                                 <!-- Icon inside input -->
@@ -887,37 +922,40 @@
                 <!-- Modal Header -->
                 <h2 class="text-2xl font-bold text-center text-gray-900 dark:text-white mb-4 p-4">List of Grades</h2>
 
-                <div
-                    class="px-5 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                <div class="px-5 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                     <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                            Last Available School Year and Semester
+                        Last Available School Year and Semester
                     </h3>
                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                 </div>
                 <!-- Upload Section (Hidden by Default) -->
                 <div class="p-5">
-                    <div
-                        class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
-                        <!-- GWA Input -->
+                    <form @submit.prevent="submitGrade">
                         <div
-                            class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
-                            <Label for="gwa">Enter General Weighted Average
-                            </Label>
-                            <input id="gwa" v-model="form.grade" type="text" disabled
-                                placeholder="Enter your GWA (e.g., 2.0)"
-                                class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
-                        </div>
+                            class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
+                            <!-- GWA Input -->
+                            <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
+                                <Label for="gwa">Enter General Weighted Average
+                                </Label>
+                                <input id="gwa" v-model="formGrade.grade" type="text"
+                                    placeholder="Enter your GWA (e.g., 2.0)"
+                                    class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
+                            </div>
 
-                        <!-- File Upload -->
-                        <div
-                            class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
-                            <Label for="file_upload">Upload Certificate of Grade</Label>
-                            <input id="file_upload" type="file" disabled
-                                class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                            <!-- File Upload -->
+                            <div class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
+                                <Label for="file_upload">Upload Certificate of Grade</Label>
+                                <input id="file_upload" type="file" @change="handleFile"
+                                    class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
                                 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                            </div>
                         </div>
-                    </div>
-
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded 
+                    sm:text-xs sm:py-1
+                    xl:px-5">
+                            Upload
+                        </button>
+                    </form>
                     <hr class="border-gray-300 my-4">
                 </div>
 
@@ -931,7 +969,7 @@
                             <!-- Year and Semester -->
                             <div class="flex items-center justify-between mb-2 font-poppins">
                                 <div class="text-lg font-normal text-gray-900 dark:text-white">Year: {{
-                                    grade.school_year }}
+                                    grade.school_year.year }}
                                 </div>
                                 <div class="text-lg font-normal text-gray-900 dark:text-white">Semester: {{
                                     grade.semester }}
@@ -944,7 +982,7 @@
                                 <summary
                                     class="text-lg font-normal text-gray-900 dark:text-white cursor-pointer flex flex-row justify-between font-poppins">
                                     <div class="text-gray-900 dark:text-white">GWA: <span class="font-semibold">{{
-                                            grade.grade }}</span></div>
+                                        grade.grade }}</span></div>
                                     <div class="text-gray-900 dark:text-white flex items-center">
                                         <a v-tooltip.left="'Click to download'" :href="'/storage/' + grade.path"
                                             download class="hover:text-primary transition-colors">
@@ -962,12 +1000,14 @@
                     </div>
                 </div>
                 <div v-else class="p-2">
-                    
+
                     <!-- Empty State Message -->
-                    <div class="flex items-center justify-center py-12 px-8 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl text-center">
+                    <div
+                        class="flex items-center justify-center py-12 px-8 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl text-center">
                         <div class="text-gray-500">
                             <h2 class="text-2xl font-semibold mb-4">No Grade Uploaded Yet</h2>
-                            <p class="text-lg">It seems there are no grades available at the moment. Please submit grades as soon as available.</p>
+                            <p class="text-lg">It seems there are no grades available at the moment. Please submit
+                                grades as soon as available.</p>
                         </div>
                     </div>
                 </div>
@@ -999,6 +1039,8 @@ const props = defineProps({
     scholar: Object,
     grades: Array,
     latestgrade: Object,
+    semesterGrade: Object,
+    schoolyear_grade: Object,
 });
 
 const form = ref({
@@ -1009,10 +1051,6 @@ const form = ref({
     municipality: '',
     province: '',
     religion: '',
-    grade: '',
-    cog: '',
-    semester: '',
-    school_year: '',
     education: {
         elementary: { name: '', years: '', honors: 'N/A' },
         junior: { name: '', years: '', honors: 'N/A' },
@@ -1031,6 +1069,13 @@ const form = ref({
     img: null,
     imgName: null,
     imgPreview: null,
+});
+
+const formGrade = ref({
+    grade: '',
+    cog: '',
+    semester: '',
+    school_year: '',
 });
 
 const EditProfile = ref(false);  // Toggle state
@@ -1065,8 +1110,25 @@ const openQRModal = () => {
 const handleFile = (event) => {
     const file = event.target.files[0];
     if (file) {
-        form.value.cog = file;
+        formGrade.value.cog = file;
     }
+};
+
+const submitGrade = async () => {
+
+try {
+    if (props.scholar != null) {
+        formGrade.value.semester = props.semesterGrade;
+        formGrade.value.school_year = props.schoolyear_grade.id;
+    }
+
+    router.post(`/myProfile/${props.scholar.id}/upload-grade`, formGrade.value);
+    //await useForm(form.value).post(`/sponsors/create-scholarship`);
+    // await form.post(`/sponsors/${props.sponsor.id}/create`)
+    // resetForm();
+} catch (error) {
+    console.error('Error submitting form:', error);
+}
 };
 
 // Re-attach the selected file when switching steps
@@ -1177,19 +1239,19 @@ const handleImgChange = (event) => {
 
 const submit = async () => {
 
-try {
-    if (props.scholar != null) {
-        form.value.semester = props.batch_semester;
-        form.value.school_year = props.school_year.year;
-    }
+    try {
+        if (props.scholar != null) {
+            form.value.semester = props.batch_semester;
+            form.value.school_year = props.school_year.year;
+        }
 
-    router.post(`/verify-account/verifying`, form.value);
-    //await useForm(form.value).post(`/sponsors/create-scholarship`);
-    // await form.post(`/sponsors/${props.sponsor.id}/create`)
-    // resetForm();
-} catch (error) {
-    console.error('Error submitting form:', error);
-}
+        router.post(`/verify-account/verifying`, form.value);
+        //await useForm(form.value).post(`/sponsors/create-scholarship`);
+        // await form.post(`/sponsors/${props.sponsor.id}/create`)
+        // resetForm();
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
 };
 
 // Handle Profile Picture Update

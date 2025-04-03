@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Eligibility extends Model
 {
     protected $fillable = [
-        'scholarship_id',
         'name',
     ];
 
