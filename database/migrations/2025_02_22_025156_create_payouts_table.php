@@ -31,7 +31,6 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-
         Schema::create('disbursements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('payout_id')->constrained()->onDelete('cascade');

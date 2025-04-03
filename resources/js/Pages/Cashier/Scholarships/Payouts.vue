@@ -80,7 +80,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, onUnmounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
@@ -183,6 +183,17 @@ const toastMessage = ref("");
 //     }
 // });
 
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
 </script>
 
 <style>
