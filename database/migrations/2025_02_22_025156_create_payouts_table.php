@@ -27,7 +27,6 @@ return new class extends Migration {
             $table->date('scheduled_date'); // Stores the scheduled payout date
             $table->time('scheduled_time'); // Stores the scheduled payout time
             $table->string('reminders')->nullable();
-            // $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
             $table->timestamps();
         });
 
