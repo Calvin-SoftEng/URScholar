@@ -56,11 +56,12 @@
 
         <!-- first stepper -->
 
-        <div v-if="submitPending != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-            <h1>Congratulations!</h1>
-            <p>Your application has been successfully completed.</p>
-            <p>You will be notified about the next steps soon.</p>
-            <br>
+        <div v-if="submitPending != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <h2 class="text-xl font-semibold">Congratulations!</h2>
+            <p class="mt-2">
+                <p>Your application has been successfully completed.</p>
+                <p>You will be notified about the next steps soon.</p>
+            </p>
         </div>
 
         <!-- second stepper -->
