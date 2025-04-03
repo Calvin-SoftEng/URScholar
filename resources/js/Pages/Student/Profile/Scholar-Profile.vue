@@ -76,10 +76,17 @@
                             </div>
                             <!-- gmail -->
                             <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
+                                <!-- Icon -->
                                 <span class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
-                                <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
-                                    }}</span>
+
+                                <!-- Email Container -->
+                                <div class="flex-1 min-w-0">
+                                    <span class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
+                                        {{ $page.props.auth.user.email }}
+                                    </span>
+                                </div>
                             </div>
+
                             <!-- qr -->
                             <div v-if="!EditProfile"
                                 class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
