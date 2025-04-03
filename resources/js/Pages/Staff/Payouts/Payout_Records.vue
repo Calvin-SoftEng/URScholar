@@ -97,28 +97,39 @@
 
             <!-- Payout History Section -->
             <div v-if="selectedMenu === 'history'" class="grid grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">
-                <div class="w-full">
-                    <span class="text-gray-700 font-medium">Date</span>
+                <!-- Left: Date Section -->
+                <div class="flex flex-col items-center justify-start space-y-10">
+                    <div v-for="historyItem in completedPayouts" :key="historyItem.id"
+                        class="flex items-center justify-center h-[100px] my-2">
+                        <span class="text-gray-600 font-medium text-lg">{{ formatDate(historyItem.dateEnd) || 'No Deadline' }}</span>
+                    </div>
                 </div>
 
-                <div class="relative block">
-                    <div v-for="historyItem in completedPayouts" :key="historyItem.id"
-                        class="bg-white p-5 rounded-lg shadow-md relative mb-4">
-                        <span
-                            class="absolute -top-3 right-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                            Accomplished
+                <!-- Right: Payout Cards -->
+                <div class="relative space-y-10">
+                    <div v v-for="historyItem in completedPayouts" :key="historyItem.id"
+                        class="bg-white p-5 rounded-lg shadow-md relative flex flex-col justify-center">
+                        <!-- Status Badge -->
+                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
+                            Pending
                         </span>
+                        <!-- Scholarship Info -->
                         <p class="text-lg font-semibold text-red-500">
-                            {{ scholarshipName(historyItem.scholarship_id) }}
+                            {{ historyItem.scholarshipName }}
                         </p>
                         <p class="text-lg font-semibold text-red-500">
-                            {{ batchNumber(historyItem.scholarship_id) }}
+                            {{ historyItem.batchNumber }}
                         </p>
                         <p class="text-sm text-gray-600">
-                            {{ formatDate(historyItem.date_end) }}
+                            Expected on:
+                            <span v-if="historyItem.dateEnd">
+                                {{ formatDate(historyItem.dateEnd) }}
+                            </span>
+                            <span v-else>No Deadline</span>
                         </p>
                     </div>
                 </div>
+                
             </div>
         </div>
     </AuthenticatedLayout>
