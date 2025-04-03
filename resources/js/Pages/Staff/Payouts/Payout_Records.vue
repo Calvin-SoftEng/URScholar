@@ -18,15 +18,13 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
-                            <!-- <span>{{ scholarship?.name }}</span> -->
-                            <!-- <span>{{ scholarship?.type }}</span> -->
+                            <span>Scholarship Payouts</span>
                         </h1>
                         <!-- <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span> -->
                     </div>
 
                     <!-- Stats Section -->
-                    <div class="grid grid-cols-2 shadow-sm rounded-lg border">
-                        <!-- Completed Scholars -->
+                    <!-- <div class="grid grid-cols-2 shadow-sm rounded-lg border">
                         <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
@@ -34,8 +32,7 @@
                             </div>
                             <p class="text-4xl font-semibold font-kanit text-green-600">feafaefe</p>
                         </div>
-                        
-                        <!-- Total Scholars -->
+
                         <div class="flex flex-col items-start py-4 px-10">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
@@ -43,12 +40,9 @@
                             </div>
                             <p class="text-4xl font-semibold font-kanit">feafeafea</p>
                         </div>
-
-                    </div>
-
+                    </div> -->
                 </div>
             </div>
-
             
 
             <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
@@ -65,18 +59,24 @@
             </div>
 
             <!-- Recent Payouts Section -->
-            <div v-if="selectedMenu === 'recent'" class="grid grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">
-                <div class="w-full">
-                    <span class="text-gray-700 font-medium">Date</span>
+            <div v-if="selectedMenu === 'recent'" class="grid grid-cols-[15%_85%] gap-6 p-6 h-full">
+                <!-- Left: Date Section -->
+                <div class="flex flex-col items-center justify-start space-y-10">
+                    <div v-for="payout in recentPayouts" :key="payout.id"
+                        class="flex items-center justify-center h-[100px] my-2">
+                        <span class="text-gray-600 font-medium text-lg">{{ formatDate(payout.dateEnd) || 'No Deadline' }}</span>
+                    </div>
                 </div>
 
-                <div class="relative block">
+                <!-- Right: Payout Cards -->
+                <div class="relative space-y-10">
                     <div v-for="payout in recentPayouts" :key="payout.id"
-                        class="bg-white p-5 rounded-lg shadow-md relative mb-4">
-                        <span
-                            class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
+                        class="bg-white p-5 rounded-lg shadow-md relative flex flex-col justify-center">
+                        <!-- Status Badge -->
+                        <span class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
                             Pending
                         </span>
+                        <!-- Scholarship Info -->
                         <p class="text-lg font-semibold text-red-500">
                             {{ payout.scholarshipName }}
                         </p>
@@ -93,6 +93,7 @@
                     </div>
                 </div>
             </div>
+
 
             <!-- Payout History Section -->
             <div v-if="selectedMenu === 'history'" class="grid grid-cols-[15%_85%] gap-6 p-6 h-full justify-center">

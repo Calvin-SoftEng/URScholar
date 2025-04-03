@@ -66,8 +66,8 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span
-                                class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span>
-                            <span>Payout List</span>
+                                class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }} </span>
+                            <span> Payout List</span>
                         </h1>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                         <button @click="toggleSendBatch"
                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                            <span class="font-normal">Forward Completed Scholars</span>
+                            <span class="font-normal">Forward Completed Payouts</span>
                         </button>
                     </div>
                 </div>
@@ -100,21 +100,25 @@
                     <div @click="() => openBatch(batch.id)"
                         class="flex flex-row justify-between items-center cursor-pointer">
                         <span>Batch {{ batch.batch_no }}</span>
-                        <div class="grid grid-cols-3 gap-5 items-center">
-                            <div class="flex flex-col justify-center items-center">
-                                <span>Status</span>
-                                <span
-                                    class="bg-green-100 text-green-800 border border-green-400 text-xs font-medium px-2.5 py-0.5 rounded">Completed</span>
+                        <div class="grid grid-cols-3 gap-5">
+                            <div class="flex flex-col justify-center items-center space-y-1">
+                                <span class="text-gray-600 text-sm font-medium">Status</span>
+                                <span class="bg-green-100 text-green-800 border border-green-400 text-xs font-semibold px-3 py-1 rounded-full">
+                                    Completed
+                                </span>
                             </div>
-                            <div class="flex flex-col justify-center items-center">
-                                <span>Claimed</span>
-                                <span>200</span>
+                            
+                            <div class="flex flex-col justify-center items-center space-y-1">
+                                <span class="text-gray-600 text-sm font-medium">Claimed</span>
+                                <span class="text-lg font-semibold text-gray-900">200</span>
                             </div>
-                            <div class="flex flex-col justify-center items-center">
-                                <span>Assigned</span>
-                                <span>200</span>
+
+                            <div class="flex flex-col justify-center items-center space-y-1">
+                                <span class="text-gray-600 text-sm font-medium">Not Claimed</span>
+                                <span class="text-lg font-semibold text-red-500">200</span>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -125,11 +129,17 @@
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
-                    <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                        <h2 class="text-2xl font-bold">
-                            Send Payroll
-                        </h2>
-                    </span>
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Send Payroll
+                            </h2>
+                        </div>
+                    </div>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal">
@@ -141,41 +151,39 @@
                     </button>
                 </div>
 
-                <div class="py-4 px-8 flex flex-col gap-3">
-                    <label for="batchSelection" class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                        Select a Batch to Forward:
+                <div class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
+                    <label class="block text-lg font-semibold text-gray-700 dark:text-white">
+                        Completed Payout Batches
                     </label>
 
-                    <!-- Loading indicator -->
+                    <!-- Loading Indicator -->
                     <div v-if="isLoading" class="flex justify-center items-center py-4">
                         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
                         <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
                     </div>
 
-                    <!-- Checkbox List -->
-                    <div v-if="!isLoading" class="flex flex-col gap-2">
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                            <span class="text-gray-900 dark:text-white">Send All Batch List</span>
-                        </label>
-
-                        <label v-for="batch in batchesWithScholars" :key="batch.id" class="flex items-center space-x-2">
-                            <input type="checkbox" :value="batch.id" v-model="selectedBatches"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                            <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
-                            <span class="text-sm text-gray-500">({{ batch.scholar_count }} scholars)</span>
-                        </label>
+                    <!-- Batch List -->
+                    <div v-else class="flex flex-col divide-y divide-gray-300">
+                        <div v-for="batch in batchesWithScholars" :key="batch.id" class="py-3 px-4 flex justify-between items-center">
+                            <div>
+                                <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</p>
+                                <p class="text-sm text-gray-500">Includes 100 Claimed, 2 No Claims</p>
+                            </div>
+                            <span class="text-sm font-medium text-green-700 bg-green-100 px-3 py-1 rounded-full">
+                                Ready to Send
+                            </span>
+                        </div>
                     </div>
 
                     <!-- Forward Button -->
                     <div class="mt-4">
-                        <button :disabled="isSubmitting || selectedBatches.length === 0" @click="forwardBatches"
+                        <button :disabled="isSubmitting" @click="forwardBatches"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             {{ isSubmitting ? 'Processing...' : 'Forward' }}
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
 
