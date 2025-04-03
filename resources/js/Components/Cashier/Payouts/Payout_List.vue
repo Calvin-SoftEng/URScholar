@@ -88,10 +88,12 @@
                       {{ disbursement.status }}
                     </span>
                   </td>
+                  <!-- Modified button that only shows for Pending status -->
                   <td>
-                    <button @click="toggleReason"
+                    <button v-if="disbursement.status === 'Pending'" @click="checkAndToggleReason(disbursement)"
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
-                      aria-label="View Details">
+                      :class="{ 'opacity-50 cursor-not-allowed': !dateCheckResult, 'animate-pulse': isNearEndDate }"
+                      :disabled="!dateCheckResult" aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                   </td>
@@ -105,20 +107,20 @@
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
           <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-              
-              <div class="flex items-center gap-3">
-                  <!-- Icon -->
-                  <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
 
-                  <!-- Title and Description -->
-                  <div class="flex flex-col">
-                      <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                          Scan your QR Code here
-                      </h2>
-                      <span class="text-sm text-gray-600 dark:text-gray-400">
-                          
-                      </span>
-                  </div>
+              <div class="flex items-center gap-3">
+                <!-- Icon -->
+                <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                <!-- Title and Description -->
+                <div class="flex flex-col">
+                  <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                    Scan your QR Code here
+                  </h2>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
+
+                  </span>
+                </div>
               </div>
 
 
@@ -152,18 +154,20 @@
                 <div class="w-full max-w-lg text-center p-6">
                   <div class="text-center text-green-500 font-medium">
                     <InputError v-if="errors?.message" :message="errors.message" class="text-red-500" />
-                    
+
                     <div class="flex justify-center items-center mb-6 overflow-hidden">
                       <img :src="`/storage/user/profile/${scholar.picture}`" alt="Profile Picture"
-                                    class="w-40 h-40 object-cover rounded-full border-2 border-primary">
+                        class="w-40 h-40 object-cover rounded-full border-2 border-primary">
                     </div>
 
                     <div class="mb-4">
-                      <span class="font-italic font-sora text-2xl font-bold uppercase">{{ scholar.last_name }}, {{ scholar.first_name }}</span>
+                      <span class="font-italic font-sora text-2xl font-bold uppercase">{{ scholar.last_name }}, {{
+                        scholar.first_name }}</span>
                     </div>
 
                     <div class="flex items-center justify-center gap-2 mb-4">
-                      <font-awesome-icon :icon="['fas', 'school']" class="p-2 w-5 h-5 bg-primary rounded-md text-white" />
+                      <font-awesome-icon :icon="['fas', 'school']"
+                        class="p-2 w-5 h-5 bg-primary rounded-md text-white" />
                       <span class="text-gray-900 text-lg font-semibold">{{ scholar.campus }}, Campus</span>
                     </div>
 
@@ -178,7 +182,8 @@
                   </div>
 
                   <div class="flex justify-center">
-                    <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">
+                    <button @click="restartScan"
+                      class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">
                       Scan Again
                     </button>
                   </div>
@@ -188,25 +193,25 @@
           </div>
         </div>
 
-        <!-- reasoning -->
+        <!-- Modified Reasoning modal to submit data -->
         <div v-if="Reasoning"
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
           <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-              
-              <div class="flex items-center gap-3">
-                  <!-- Icon -->
-                  <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
 
-                  <!-- Title and Description -->
-                  <div class="flex flex-col">
-                      <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                          Reason for Not Claim
-                      </h2>
-                      <span class="text-sm text-gray-600 dark:text-gray-400">
-                          You can add here the reason of the student for not claiming 
-                      </span>
-                  </div>
+              <div class="flex items-center gap-3">
+                <!-- Icon -->
+                <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                <!-- Title and Description -->
+                <div class="flex flex-col">
+                  <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                    Reason for Not Claim
+                  </h2>
+                  <span class="text-sm text-gray-600 dark:text-gray-400">
+                    You can add here the reason of the student for not claiming
+                  </span>
+                </div>
               </div>
 
               <button type="button" @click="closeModal"
@@ -220,31 +225,39 @@
               </button>
             </div>
 
-            
-            <div class="p-4 flex flex-col space-y-4">
-              <div class="relative space-y-3">
+            <form @submit.prevent="submitReason">
+              <div class="p-4 flex flex-col space-y-4">
+                <div class="relative space-y-3">
                   <h3 class="font-semibold text-gray-900 dark:text-white">
-                      Reason of Not Claim</h3>
-                  <textarea id="subject" rows="4"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Write a message"></textarea>
-                  <!-- <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" /> -->
+                    Reason of Not Claim</h3>
+                  <textarea id="reason" v-model="form.reason" rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write a message"></textarea>
+                  <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" />
+                </div>
+
+                <div>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="file_input">Additional
+                    Document for reason</label>
+                  <input
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="file_input_help" id="file_input" type="file"
+                    @input="form.document = $event.target.files[0]">
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">DOCX, PNG, JPG, or PDF.
+                  </p>
+                  <InputError v-if="errors.document" :message="errors.document" class="mt-1" />
+                </div>
               </div>
 
-              
-              <div>
-                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Additional Document for reason</label>
-                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" aria-describedby="file_input_help" id="file_input" type="file">
-                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">DOCX, PNG, JPG, or PDF.</p>
-              </div>
-
-            </div>
-
-            <div class="mt-2 p-4">
+              <div class="mt-2 p-4">
                 <button type="submit"
-                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                    Submit</button>
-            </div>
+                  class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 "
+                  :disabled="form.processing">
+                  {{ form.processing ? 'Submitting...' : 'Submit' }}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
@@ -263,7 +276,7 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted, computed, watch } from 'vue';
+import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted, computed, watch, onBeforeUnmount } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
@@ -280,6 +293,7 @@ const props = defineProps({
   errors: Object,
   flash: Object,
   scholar: Object,
+  payout: Object, // Add the payout object prop
 });
 
 const components = {
@@ -301,6 +315,101 @@ const isScanning = ref(true);
 const toastVisible = ref(false);
 const toastTitle = ref('');
 const toastMessage = ref('');
+const currentDisbursement = ref(null);
+
+// Form for reason submission
+const form = useForm({
+  disbursement_id: null,
+  reason: '',
+  document: null,
+});
+
+// Real-time date checking
+const dateCheckResult = ref(false);
+const isNearEndDate = ref(false);
+const dateCheckTimer = ref(null);
+const REFRESH_INTERVAL = 60000; // Check every minute (60,000ms)
+const NEAR_END_THRESHOLD = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+// Format date to YYYY-MM-DD
+const formatDate = (date) => {
+  return date.toISOString().split('T')[0];
+};
+
+// Check if current date is equal to or after the end date
+const checkDateStatus = () => {
+  if (!props.payout || !props.payout.date_end) {
+    dateCheckResult.value = false;
+    isNearEndDate.value = false;
+    return;
+  }
+
+  const currentDate = new Date();
+  const dateEnd = new Date(props.payout.date_end);
+
+  // Set time to beginning of day for consistent comparison
+  currentDate.setHours(0, 0, 0, 0);
+  dateEnd.setHours(0, 0, 0, 0);
+
+  // Check if current date is equal to or after the end date
+  dateCheckResult.value = currentDate > dateEnd;
+
+  // Check if we're approaching the end date (within threshold)
+  const timeDifference = dateEnd.getTime() - currentDate.getTime();
+  isNearEndDate.value = timeDifference > 0 && timeDifference <= NEAR_END_THRESHOLD;
+
+  console.log(`Date check at ${new Date().toLocaleTimeString()}: Button enabled = ${dateCheckResult.value}, Near end date = ${isNearEndDate.value}`);
+};
+
+// Function for button click that checks date conditions
+const canToggleReason = () => {
+  return dateCheckResult.value;
+};
+
+// Modified toggleReason function with date check
+const checkAndToggleReason = (disbursement) => {
+  if (dateCheckResult.value) {
+    currentDisbursement.value = disbursement;
+    form.disbursement_id = disbursement.id;
+    form.reason = '';
+    form.document = null;
+    Reasoning.value = true;
+  } else {
+    // Show a toast message explaining why the action is disabled
+    showToast('Not Available', 'Reason can only be provided on or after the end date of the payout period.');
+  }
+};
+
+// Submit reason form
+const submitReason = () => {
+  form.post(route('cashier.submit-reason', { scholarshipId: props.scholarship.id, batchId: props.batch.id }), {
+    onSuccess: () => {
+      closeModal();
+      showToast('Success', 'Reason submitted successfully');
+    },
+    onError: (errors) => {
+      console.error('Error submitting reason:', errors);
+    }
+  });
+};
+
+const closeModal = () => {
+  Reasoning.value = false;
+  currentDisbursement.value = null;
+  form.reset();
+};
+
+// Show toast notification
+const showToast = (title, message) => {
+  toastTitle.value = title;
+  toastMessage.value = message;
+  toastVisible.value = true;
+
+  // Hide toast after 3 seconds
+  setTimeout(() => {
+    toastVisible.value = false;
+  }, 3000);
+};
 
 // Filtered payouts based on search query
 const filteredDisbursements = computed(() => {
@@ -314,6 +423,7 @@ const filteredDisbursements = computed(() => {
     disbursements.scholar.campus?.name?.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
+
 // Toggle camera visibility
 const toggleCamera = () => {
   OpenCamera.value = !OpenCamera.value;
@@ -327,16 +437,7 @@ const toggleCamera = () => {
 
 const closeCamera = () => {
   OpenCamera.value = false;
-}
-
-const toggleReason = () => {
-  Reasoning.value = !Reasoning.value;
-  
 };
-
-const closeModal = () => {
-  Reasoning.value = false;
-}
 
 // Handle QR code detection
 const onDetect = async (detectedCodes) => {
@@ -347,23 +448,11 @@ const onDetect = async (detectedCodes) => {
     // Send scanned QR code data to Laravel
     router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
       onSuccess: (page) => {
-        // const flashMessage = page.props.flash.message;
-        // successMessage.value = flashMessage;
-        // errorMessage.value = null;
-
-        // Show toast notification
-        // showToast('Success', flashMessage);
-
-        // If successful, refresh the payouts list
-        // if (page.props.flash.type === 'success') {
-        //   router.reload();
-        // }
+        // Success handling remains the same
       },
       onError: (errors) => {
         errorMessage.value = errors.message || 'An error occurred';
         successMessage.value = null;
-
-        // Show toast notification for error
         showToast('Error', errors.message || 'An error occurred');
       }
     });
@@ -388,18 +477,6 @@ const openReport = () => {
   }
 };
 
-// Show toast notification
-// const showToast = (title, message) => {
-//   toastTitle.value = title;
-//   toastMessage.value = message;
-//   toastVisible.value = true;
-
-//   // Hide toast after 3 seconds
-//   setTimeout(() => {
-//     toastVisible.value = false;
-//   }, 3000);
-// };
-
 // Helper function for year level suffix
 const getYearSuffix = (year) => {
   if (year === 1) return "st";
@@ -414,7 +491,7 @@ watchEffect(() => {
   if (flashMessage) {
     console.log("Showing toast with message:", flashMessage);
     usePage().props.scholar = flashMessage;
-    toastMessage.value = flashMessage.first_name;  // This sets the toast message to "Carl Vincent"
+    toastMessage.value = flashMessage.first_name;
     toastVisible.value = true;
     setTimeout(() => {
       console.log("Hiding toast...");
@@ -423,10 +500,50 @@ watchEffect(() => {
   }
 });
 
+// Set up real-time date checking
+onMounted(() => {
+  console.log("Component mounted, setting up real-time date checking");
+
+  // Check immediately on mount
+  checkDateStatus();
+
+  // Then set interval to check periodically
+  dateCheckTimer.value = setInterval(() => {
+    checkDateStatus();
+
+    // If the date condition becomes true, we could show a notification
+    if (dateCheckResult.value && !Reasoning.value) {
+      showToast('Now Available', 'You can now provide reasons for unclaimed payouts.');
+    }
+  }, REFRESH_INTERVAL);
+});
+
+// Clean up the timer when component is unmounted
+onBeforeUnmount(() => {
+  if (dateCheckTimer.value) {
+    clearInterval(dateCheckTimer.value);
+  }
+});
 </script>
 
-
 <style>
+/* Add pulse animation for near-end-date indicator */
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 .qr-scanner {
   display: flex;
   flex-direction: column;

@@ -8,6 +8,7 @@ use App\Events\NewNotification;
 use App\Mail\SendEmail;
 use App\Models\ActivityLog;
 use App\Models\Disbursement;
+use App\Models\PayoutSchedule;
 use App\Models\Payout;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -86,13 +87,17 @@ class CashierController extends Controller
 
         $scholars = Scholar::whereIn('id', $scholarIds)->get(); // Fetch scholars with matching IDs
 
+        PayoutSchedule::create([
+            'payout_id' => $payout->id,
+            'scheduled_date' => $request['scheduled_date'],
+            'scheduled_time' => $request['scheduled_time'],
+            'reminders' => $request['reminders'],
+        ]);
+
 
         // Create the same requirement for all scholars
         foreach ($scholars as $scholar) {
             if ($scholar->email) {
-
-
-
                 //Sending Emails
                 $mailData = [
                     'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
@@ -193,6 +198,43 @@ class CashierController extends Controller
             'payout' => $payout,
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
         ]);
+    }
+
+    public function submitReason(Request $request)
+    {
+        $validated = $request->validate([
+            'disbursement_id' => 'required|exists:disbursements,id',
+            'reason' => 'required|string|max:1000',
+            'document' => 'nullable|file|mimes:docx,png,jpg,jpeg,pdf|max:5120', // 5MB max
+        ]);
+
+        $disbursement = Disbursement::findOrFail($validated['disbursement_id']);
+
+        // Check if disbursement is pending
+        if ($disbursement->status !== 'Pending') {
+            return back()->with('error', 'Only pending disbursements can have reasons added.');
+        }
+
+        // Handle document upload if provided
+        $documentPath = null;
+        if ($request->hasFile('document')) {
+            $file = $request->file('document');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $documentPath = $file->storeAs('disbursement-reasons', $fileName, 'public');
+        }
+
+        // Update the disbursement with reason
+        $disbursement->reasons_of_not_claimed = $validated['reason'];
+
+        // If you want to store document path in database, you need to add this column
+        $disbursement->path = $documentPath;
+        $disbursement->file_name = $fileName;
+
+        // Update status to 'Not Claimed' since we now have a reason
+        $disbursement->status = 'Not Claimed';
+        $disbursement->save();
+
+        return redirect()->back()->with('success', 'Reason submitted successfully');
     }
 
     public function payouts()

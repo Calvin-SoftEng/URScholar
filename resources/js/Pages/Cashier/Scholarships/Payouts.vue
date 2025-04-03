@@ -58,7 +58,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payout_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash"/>
+                <Payout_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>

@@ -25,6 +25,8 @@ use App\Models\Scholar;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
 use App\Models\Disbursement;
+use App\Models\Payout;
+use App\Models\PayoutSchedule;
 use App\Models\Grantees;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -48,6 +50,10 @@ class StudentController extends Controller
 
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
                 ->first() ?? null;
+            
+            $payout = Payout::where('id', $disbursement->payout_id)->first();
+
+            $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)->first();
 
             $oldestGrantee = Grantees::where('id', $grantee->id)
                 ->orderBy('created_at', 'asc')
@@ -129,6 +135,7 @@ class StudentController extends Controller
                     'submitReq' => $returnedRequirements,
                     'submitPending' => $submitPending,
                     'submitApproved' => $submitApproved,
+                    'payout_schedule' => $payout_schedule,
                 ]);
             }
 
@@ -943,36 +950,29 @@ class StudentController extends Controller
 
     public function applicationUpload(Request $request)
     {
-
         $request->validate([
-            'files.*' => 'required|file|',
+            'files.*' => 'required|file',
             'requirements' => 'array'
         ]);
-
-
+    
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
-        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-        $reqID = $requirements->pluck('id')->first();
-
-        $uploadedFiles = [];
-
-        foreach ($request->file('files') as $index => $file) {
-
+        
+        // Process each uploaded file
+        foreach ($request->file('files') as $requirementId => $file) {
+            // Store the file in the public storage
             $path = $file->store('requirements/' . $scholar->id, 'public');
-
-            $uploadedFile = SubmittedRequirements::create([
+            
+            // Create the submitted requirement record
+            SubmittedRequirements::create([
                 'scholar_id' => $scholar->id,
-                'requirement_id' => $reqID,
+                'requirement_id' => $requirementId, // This now uses the correct requirement ID
                 'submitted_requirements' => $file->getClientOriginalName(),
-                'path' => $path
+                'path' => $path,
+                'status' => 'Pending'
             ]);
-
-            $uploadedFiles[] = $uploadedFile;
         }
-
-        return redirect()->route('student.dashboard');
+    
+        return redirect()->route('student.dashboard')->with('success', 'Requirements submitted successfully');
     }
 
     public function register()

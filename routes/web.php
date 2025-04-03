@@ -233,6 +233,7 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
     Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
 
     Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
+    Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/submit-reason', [CashierController::class, 'submitReason'])->name('cashier.submit-reason');
 
     // Messaging
     Route::get('/cashier/group-page', [CashierController::class, 'messaging'])->name('cashier.messaging');

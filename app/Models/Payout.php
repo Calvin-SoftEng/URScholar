@@ -12,4 +12,9 @@ class Payout extends Model
     {
         return $this->belongsTo(Scholarship::class);
     }
+
+    public function payout_schedule()
+    {
+        return $this->hasMany(PayoutSchedule::class);
+    }
 }

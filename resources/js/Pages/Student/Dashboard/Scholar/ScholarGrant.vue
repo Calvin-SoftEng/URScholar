@@ -211,10 +211,25 @@
             </div>
 
             <!-- Payout Announcement Card (Only shown if there's a schedule) -->
-            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <div v-if="!payout_schedule" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
                 <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
-                <p class="mt-2">Your next payout is expected on <span class="font-bold">faefeafaefae</span>. Stay
-                    updated for further announcements.</p>
+                <p class="mt-2">
+                    <span class="font-bold">Next payout schedule will be announced soon</span>.
+                    Stay updated for further announcements.
+                </p>
+            </div>
+            <div  v-else class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+                <h2 class="text-xl font-semibold">Payout Schedule</h2>
+                <p class="mt-2">
+                    Your next payout is expected on
+                    <span class="font-bold">{{ formattedDate }} at {{ formattedTime }}</span>.
+                    Stay updated for further announcements.
+                </p>
+                <p class="mt-2">
+                    <span class="font-bold">Reminders:</span>
+                    <br>
+                    <span v-html="formattedReminders"></span>
+                </p>
             </div>
 
             <!-- kapag may new requirmeents -->
@@ -312,10 +327,11 @@
                             </div>
 
                             <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                                <h2 class="text-lg font-semibold">{{ new Date(history.claimed_at).toLocaleDateString('en-US', {
-                                                year:
-                                                    'numeric', month: 'long', day: 'numeric'
-                                            }) }}</h2>
+                                <h2 class="text-lg font-semibold">{{ new
+                                    Date(history.claimed_at).toLocaleDateString('en-US', {
+                                        year:
+                                            'numeric', month: 'long', day: 'numeric'
+                                    }) }}</h2>
                                 <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>,
                                     ID: URSB123</p>
                                 <p class="text-gray-600">Processed at: sa cashier</p>
@@ -382,6 +398,7 @@ const props = defineProps({
     grantee: Object,
     oldestGrantee: Object,
     historygrantee: Array,
+    payout_schedule: Object,
 
     //For non-scholars only
     sponsors: {
@@ -428,6 +445,25 @@ const handleFile = (event, reqId, requirementName) => {
         }
     }
 };
+
+// Format Date to "April 5, 2025"
+const formattedDate = computed(() => {
+    const date = new Date(props.payout_schedule.scheduled_date);
+    return new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(date);
+});
+
+// Format Time to "3:05 PM"
+const formattedTime = computed(() => {
+    const [hours, minutes] = props.payout_schedule.scheduled_time.split(":");
+    const date = new Date();
+    date.setHours(hours, minutes);
+    return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", hour12: true }).format(date);
+});
+
+// Convert newlines (`\n`) to `<br>` for proper display
+const formattedReminders = computed(() => {
+    return props.payout_schedule.reminders.replace(/\n/g, "<br>");
+});
 
 const removeFile = (reqId) => {
     // Remove file
