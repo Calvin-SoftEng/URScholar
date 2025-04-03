@@ -69,68 +69,6 @@ class CashierController extends Controller
         ]);
     }
 
-
-    public function notify(Request $request, Scholarship $scholarship)
-    {
-
-        $validated = $request->validate([
-            'scheduled_date' => 'required|date',
-            'scheduled_time' => 'required',
-            'reminders' => 'required',
-        ]);
-
-        // dd($validated);
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
-        
-        $payout->status = 'Active';
-        $payout->save();
-
-        $disbursements = Disbursement::where('payout_id', $payout->id)->get();
-
-        $scholarIds = $disbursements->pluck('scholar_id'); // Extract scholar IDs
-
-        $scholars = Scholar::whereIn('id', $scholarIds)->get(); // Fetch scholars with matching IDs
-
-        PayoutSchedule::create([
-            'payout_id' => $payout->id,
-            'scheduled_date' => $request['scheduled_date'],
-            'scheduled_time' => $request['scheduled_time'],
-            'reminders' => $request['reminders'],
-        ]);
-
-
-        // Create the same requirement for all scholars
-        foreach ($scholars as $scholar) {
-            if ($scholar->email) {
-                //Sending Emails
-                $mailData = [
-                    'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
-                    'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
-                        "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
-                        "Here are your login credentials:\n\n" .
-                        "*Email: " . $scholar['email'] . "\n" .
-                        "*Next Steps:\n" .
-                        " - Log in to your account using the details above.\n" .
-                        " - Complete your application by submitting the required documents.\n" .
-                        " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                        "*Bigayan  Date: " . $request['scheduled_date'] . "\n\n" .
-                        "*Bigayan Oras: " . $request['scheduled_time'] . "\n\n" .
-                        "*Reminders be: " . $request['reminders'] . "\n\n" .
-                        "Click the following link to access your portal: " .
-                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
-                ];
-
-                Mail::to($scholar->email)->send(new SendEmail($mailData));
-            }
-        }
-
-        ActivityLog::create([
-            'user_id' => Auth::user()->id,
-            'activity' => 'Email',
-            'description' => 'Scholar has been sent an email for payouts ' . $scholarship->name,
-        ]);
-    }
-
     // return Inertia::render('Cashier/Scholarships/Scheduling',[
     //     'scholarship' => $scholarship,
     //     'batches' => $batches,

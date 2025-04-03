@@ -225,7 +225,7 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
     // scheduling
     Route::get('/cashier/scholarships/{scholarship}/schedule', [CashierController::class, 'scheduling'])->name('cashier.scheduling');
-    Route::post('/cashier/scholarships/{scholarship}/notify', [CashierController::class, 'notify'])->name('cashier.notify');
+    Route::post('/cashier/scholarships/{scholarship}/notify', [EmailController::class, 'notify'])->name('cashier.notify');
 
 
     // Scholarship_Payouts
