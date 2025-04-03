@@ -23,7 +23,7 @@
 
     <!-- Title -->
     <h2 class="text-lg font-bold text-center mb-4">
-        CERTIFICATION OF ENROLLED GRANTEES
+        CERTIFICATION OF GRADUATED GRANTEES
     </h2>
 
     <!-- Certification Content -->

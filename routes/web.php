@@ -148,7 +148,6 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::post('/scholarships/{scholarship}/checking-upload', [ScholarController::class, 'checking'])->name('scholars.checking');
     Route::post('/scholarships/{scholarship}/upload', [ScholarController::class, 'upload'])->name('scholars.upload');
-    Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
 
     // Calendar
     Route::get('/calendar', [CalendarController::class, 'calendar'])->name('calendar.calendar');
@@ -204,7 +203,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 
     // Reports
-    Route::get('/scholarships/{scholarshipId}/batch/{batchId}/report', [ReportsController::class, 'generateReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
 });
 
 // SPONSOR -------------------------------------------------------------------------------------------------------------------------------------------------------
