@@ -157,7 +157,7 @@ const unblockUser = () => {
 
                 <!-- Password Input -->
                 <div>
-                    <InputLabel for="password" value="Password" class="font-poppins font-semibold text-md mt-6 mb-2"/>
+                    <InputLabel for="password" value="Password" class="font-poppins font-semibold text-md mt-6 mb-2" />
                     <div class="relative w-full">
                         <input 
                             :type="showPassword ? 'text' : 'password'" 
@@ -176,7 +176,18 @@ const unblockUser = () => {
                             class="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue-900"
                         />
                     </div>
+
+                    <!-- Forgot Password Link -->
+                    <Link :href="route('login.forgot-password')" >
+                        <div class="mt-2 text-right">
+                            <span class="text-blue-600 text-sm hover:underline">
+                                Forgot password?
+                            </span>
+                        </div>
+                    </Link>
+                    
                 </div>
+
 
                 <!-- Error Message -->
                 <p v-if="errorMessage" class="text-red-600 text-sm mt-2">

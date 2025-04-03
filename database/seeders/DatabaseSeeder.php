@@ -30,9 +30,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'mis1',
             'email' => 'mis1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Marvin',
+            'last_name' => 'Baquiran',
+            'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'system_admin',
             'campus_id' => '1'
@@ -42,9 +42,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'superadmin1',
             'email' => 'sadmin1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Roslyn',
+            'last_name' => 'Magat',
+            'middle_name' => 'B',
             'password' => bcrypt('password'),
             'usertype' => 'super_admin',
             'campus_id' => '1'
@@ -55,9 +55,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'coordinator1',
             'email' => 'coor1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Baby Eunice',
+            'last_name' => 'Cabaltera',
+            'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
             'campus_id' => '2'
@@ -90,9 +90,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'cashier1',
             'email' => 'cashier1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Denise Ann',
+            'last_name' => 'Lopez',
+            'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
             'campus_id' => '2'
@@ -144,7 +144,7 @@ class DatabaseSeeder extends Seeder
             'abbreviation' => 'CHED',
             'since' => '2021',
             'moa_file' => 'moa1.pdf',
-            'description' => 'sponsor1',
+            'description' => 'CHED Scholarships provide financial assistance to deserving Filipino students in higher education. These include merit-based and need-based grants covering tuition, allowances, and other school-related expenses to support academic excellence and accessibility to quality education.',
             'logo' => 'images.png',
         ]);
 

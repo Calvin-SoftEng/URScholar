@@ -48,4 +48,9 @@ class PasswordResetLinkController extends Controller
             'email' => [trans($status)],
         ]);
     }
+
+    public function forgot_password()
+    {
+        return Inertia::render('Auth/ForgotPassword');
+    }
 }
