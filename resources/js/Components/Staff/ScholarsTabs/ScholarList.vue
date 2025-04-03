@@ -282,7 +282,7 @@ const generateReport = async () => {
       return;
     }
 
-    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
+    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/scholar-summary`, '_blank');
     showToast('Report Generated', 'Your report is being downloaded');
   } catch (err) {
     console.error('Failed to generate report:', err);

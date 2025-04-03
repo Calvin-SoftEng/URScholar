@@ -8,27 +8,16 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function generateReport($scholarshipId, $batchId)
+    public function ScholarSummaryReport(Scholarship $scholarship, Batch $batch)
     {
-        // Dummy Data
-        $scholarship = Scholarship::findOrFail($scholarshipId);
-        $batch = $scholarship->batches()->findOrFail($batchId);
+        $scholars = $batch->scholars;
 
-        $data = [
-            'title' => 'Scholarship Report',
-            'scholarship' => $scholarship->name,
-            'batch' => $batch->name,
-            'date' => now()->format('F j, Y'),
-            'students' => [
-                ['name' => 'John Doe', 'status' => 'Approved'],
-                ['name' => 'Jane Smith', 'status' => 'Pending'],
-                ['name' => 'Michael Brown', 'status' => 'Approved'],
-            ],
-        ];
+        $pdf = PDF::loadView('reports.scholars_summary', [
+            'scholarship' => $scholarship,
+            'batch' => $batch,
+            'scholars' => $scholars
+        ]);
 
-        // Load View
-        $pdf = Pdf::loadView('reports.scholarship_report', $data);
-
-        return $pdf->download('scholarship_report.pdf');
+        return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
 }
