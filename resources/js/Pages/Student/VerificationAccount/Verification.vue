@@ -505,7 +505,7 @@
 
                                         <div v-else class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
                                             <span class="text-sm text-red-500 italic ">* You can set this up
-                                                later</span>
+                                                after verification</span>
 
                                             <div
                                                 class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
@@ -518,7 +518,7 @@
                                                             }}
                                                         </span>
                                                     </Label>
-                                                    <input id="gwa" v-model="form.grade" type="text"
+                                                    <input id="gwa" v-model="form.grade" type="text" disabled
                                                         placeholder="Enter your GWA (e.g., 2.0)"
                                                         class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
                                                 </div>
@@ -527,7 +527,7 @@
                                                 <div
                                                     class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
                                                     <Label for="file_upload">Upload Certificate of Grade</Label>
-                                                    <input id="file_upload" type="file" @change="handleFile"
+                                                    <input id="file_upload" type="file" disabled
                                                         class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
                                                         dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                                                 </div>

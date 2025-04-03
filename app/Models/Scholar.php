@@ -65,6 +65,11 @@ class Scholar extends Model
         return $this->hasMany(SubmittedRequirements::class);
     }
 
+    public function studentrecord()
+    {
+        return $this->hasMany(StudentRecord::class);
+    }
+
     public function grades()
     {
         return $this->hasMany(Grade::class);

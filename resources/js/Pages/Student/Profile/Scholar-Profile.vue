@@ -147,7 +147,7 @@
                                 class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
                                 <h1 class="text-base">Education</h1>
 
-                                <div>
+                                <div v-if="latestgrade">
                                     <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                         General Weighted Average
                                     </h3>
@@ -164,7 +164,22 @@
                                             </button>
                                         </div>
                                     </div>
-
+                                    <hr class="border-gray-300 my-4">
+                                </div>
+                                <div v-else>
+                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        General Weighted Average
+                                    </h3>
+                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                        <span class="text-gray-700 text-base font-medium leading-tight">Must upload <b>{{ semesterGrade }} Semester
+                                            {{ schoolyear_grade.year }}</b>
+                                        </span>
+                                        <div class="flex flex-col items-end">
+                                            <button class="text-sm" @click="toggleCheck">
+                                                View
+                                            </button>
+                                        </div>
+                                    </div>
                                     <hr class="border-gray-300 my-4">
                                 </div>
 

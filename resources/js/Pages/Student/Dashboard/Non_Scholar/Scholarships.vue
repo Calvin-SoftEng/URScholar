@@ -1,32 +1,32 @@
 <template>
     <div class="flex flex-col text-center space-y-8 items-center justify-start h-full">
+        <!-- Header content - keeping the same -->
         <div class="text-left flex flex-col space-y-5">
             <span
                 class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-2xl font-bold">Find
                 Available and Ongoing Scholarships, Check Eligibility, and Apply <br></span>
             <p class="text-lg text-primary max-w-4xl font-medium font-albert text-center">Browse
                 Scholarship
-                Programs offered by the Nation’s Government and Local Governments.
+                Programs offered by the Nation's Government and Local Governments.
                 Have a Financial Assistance Grant and aid your tuition fees and school fees</p>
         </div>
 
+        <!-- Search box - keeping the same -->
         <div class="flex items-center border rounded-md overflow-hidden shadow-sm w-8/12">
             <span class="bg-white px-3 py-2 border-r flex items-center">
                 <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-blue-500 text-lg" />
             </span>
-
             <input type="text" placeholder="Search..." class="w-full px-4 py-2 border-none focus:ring-0" />
         </div>
 
         <div class="w-full h-[1px] bg-gray-200"></div>
 
         <div class="w-full flex flex-col items-center space-y-4">
-
             <!-- Check if scholarships exist -->
-            <template v-if="scholarships.length > 0">
-                <div v-if="grade != null">
+            <template v-if="scholarships && scholarships.length > 0">
+                <div v-if="grade">
                     <div v-for="scholarship in scholarships" :key="scholarship.id"
-                        class="p-6 w-full min-w-xl bg-white shadow-lg rounded-lg">
+                        class="p-6 w-full min-w-xl bg-white shadow-lg rounded-lg mb-4">
                         <div v-if="scholarship.status == 'Active'">
                             <div class="flex flex-row items-center gap-6 justify-between">
                                 <!-- Scholarship Image -->
@@ -60,32 +60,38 @@
                                             <span class="text-gray-500 text-sm">Deadline</span>
                                             <span class="font-medium text-red-500">Bukas na</span>
                                         </div>
+                                        <!-- Grade requirement display -->
+                                        <div class="flex flex-col items-start">
+                                            <span class="text-gray-500 text-sm">Min. Grade Required</span>
+                                            <span class="font-medium"
+                                                :class="isEligible(scholarship) ? 'text-green-600' : 'text-red-500'">
+                                                {{ getRequiredGrade(scholarship) }}
+                                                <span v-if="isEligible(scholarship)"
+                                                    class="text-xs ml-1">(Eligible)</span>
+                                                <span v-else class="text-xs ml-1">(Not Eligible)</span>
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Vertical Divider (Thicker & More Visible) -->
+                                <!-- Vertical Divider -->
                                 <div class="w-[10px] h-full bg-gray-400 mx-6"></div>
 
-                                <!-- Apply Button (Vertically Centered) -->
+                                <!-- Apply Button -->
                                 <div class="flex h-full items-center justify-center">
-                                    <Link :href="`/student/applying-scholarship/${scholarship.id}`">
+                                    <Link v-if="isEligible(scholarship)"
+                                        :href="`/student/applying-scholarship/${scholarship.id}`">
                                     <button
                                         class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
                                         Apply Now
                                     </button>
                                     </Link>
+                                    <button v-else
+                                        class="bg-gray-400 text-white px-10 py-2 rounded-lg shadow-md cursor-not-allowed">
+                                        Not Eligible
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                        <div v-else
-                            class="max-w-4xl flex flex-col items-center justify-center p-10 text-center bg-white border border-gray-200 rounded-xl shadow-md">
-                            <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 14l-2-2m0 0l-2-2m2 2h8m4 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                            <span class="text-lg font-semibold text-gray-700">No scholarships available</span>
-                            <p class="text-gray-500 text-sm mt-2">Check back later for new opportunities.</p>
                         </div>
                     </div>
                 </div>
@@ -97,9 +103,8 @@
                             d="M9 14l-2-2m0 0l-2-2m2 2h8m4 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <span class="text-lg font-semibold text-gray-700">Need to upload grade</span>
-                    <p class="text-gray-500 text-sm mt-2">Check back later for new opportunities.</p>
+                    <p class="text-gray-500 text-sm mt-2">Upload your grade to check scholarship eligibility.</p>
                 </div>
-
             </template>
 
             <!-- If No Scholarships Available -->
@@ -114,7 +119,6 @@
                 <p class="text-gray-500 text-sm mt-2">Check back later for new opportunities.</p>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -149,4 +153,31 @@ const getSponsorDetails = (sponsorId) => {
     return props.sponsors.find(s => s.id === sponsorId) || { name: 'Unknown Sponsor' };
 };
 
+// Get the required grade for a scholarship
+const getRequiredGrade = (scholarship) => {
+    if (scholarship.criteriaData && scholarship.criteriaData.grade) {
+        return scholarship.criteriaData.grade;
+    }
+    return 'None';
+};
+
+// Check if student is eligible for a scholarship
+const isEligible = (scholarship) => {
+    
+    // If no grade criteria is set, student is eligible
+    if (!scholarship.criteriaData || !scholarship.criteriaData.grade) {
+        return true;
+    }
+
+    // If no student grade available, not eligible
+    if (!props.grade || !props.grade.grade) {
+        return false;
+    }
+
+    // Compare student grade with required grade
+    const studentGrade = parseFloat(props.grade.grade);
+    const requiredGrade = parseFloat(scholarship.criteriaData.grade);
+
+    return studentGrade <= requiredGrade;
+};
 </script>

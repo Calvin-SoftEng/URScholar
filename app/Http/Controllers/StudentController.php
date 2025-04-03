@@ -63,7 +63,6 @@ class StudentController extends Controller
                 $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)->first();
             }
 
-
             $oldestGrantee = Grantees::where('id', $grantee->id)
                 ->orderBy('created_at', 'asc')
                 ->with('school_year')
@@ -90,8 +89,6 @@ class StudentController extends Controller
                     ];
                 });
 
-
-
             if ($scholarship) {
                 $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                     ->first();
@@ -103,15 +100,11 @@ class StudentController extends Controller
 
                 $requirementIds = $requirements->pluck('id')->toArray();
 
-
-
                 // Fetch only returned submitted requirements related to the scholarship
                 $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
                     ->where('status', 'Returned')
                     ->whereIn('requirement_id', $requirementIds)
                     ->get();
-
-                // dd($requirementIds);
 
                 // Map submitted requirements with their corresponding requirement details
                 $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
@@ -147,15 +140,30 @@ class StudentController extends Controller
                     'payout_schedule' => $payout_schedule,
                 ]);
             }
-
         }
 
+        // For non-grantees
+        // Get the scholar's latest grade
+        $grade = Grade::where('scholar_id', $scholar->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
+        // Get all active scholarships
+        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')
+            ->where('status', 'Active')
+            ->get();
+
+        // Get all criteria for these scholarships
+        $criteria = Criteria::whereIn('scholarship_id', $scholarships->pluck('id'))->get();
+
+        // Add criteria to each scholarship
+        foreach ($scholarships as $scholarship) {
+            $scholarship->criteriaData = $criteria->where('scholarship_id', $scholarship->id)->first();
+        }
+
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
         $applicant = Applicant::where('scholar_id', $scholar->id)->first() ?? null;
-        $grade = Grade::where('scholar_id', $scholar->id)->first() ?? null;
 
         return Inertia::render('Student/Dashboard/Dashboard', [
             'scholarships' => $scholarships,
@@ -669,8 +677,10 @@ class StudentController extends Controller
             'email_verified_at' => $user->markEmailAsVerified()
         ]);
 
+        $newScholar = Scholar::where('user_id', $user->id)->first();
+
         StudentRecord::create([
-            'user_id' => $user->id,
+            'scholar_id' => $newScholar->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'middle_name' => $request->middle_name,
@@ -685,7 +695,7 @@ class StudentController extends Controller
             'relationship' => $request->relationship,
         ]);
 
-        $studentrecord = StudentRecord::where('user_id', $user->id)->get();
+        $studentrecord = StudentRecord::where('scholar_id', $newScholar->id)->get();
 
         $studentrecordID = $studentrecord->pluck('id')->first();
 
@@ -835,10 +845,11 @@ class StudentController extends Controller
 
     public function profile()
     {
-        $student = StudentRecord::where('user_id', Auth::user()->id)->first();
+        $scholar = Scholar::where('user_id', Auth::user()->id)->with('course', 'campus')->first();
+        $student = StudentRecord::where('scholar_id', $scholar->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
-        $scholar = Scholar::where('email', Auth::user()->email)->with('course', 'campus')->first();
+
 
         if ($scholar) {
             $grades = Grade::where('scholar_id', $scholar->id)->with('school_year')->get();
