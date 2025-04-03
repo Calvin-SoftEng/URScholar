@@ -81,6 +81,10 @@ class CashierController extends Controller
 
         // dd($validated);
         $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+        
+        $payout->status = 'Active';
+        $payout->save();
+
         $disbursements = Disbursement::where('payout_id', $payout->id)->get();
 
         $scholarIds = $disbursements->pluck('scholar_id'); // Extract scholar IDs

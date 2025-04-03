@@ -147,7 +147,13 @@
                                 <div
                                     class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
-                                    <div
+                                    <div v-if="!grade"
+                                        class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                        <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                                            <span class="font-medium">Uload ka Grade ya</span>
+                                        </div>
+                                    </div>
+                                    <div v-else 
                                         class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
                                             <span>General Weighted Average</span>
