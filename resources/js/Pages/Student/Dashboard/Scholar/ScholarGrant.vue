@@ -163,10 +163,12 @@
 
         <!-- third stepper -->
 
-        <div v-if="submitApproved != 0" class="bg-white w-full p-6 flex flex-col font-poppins text-xl text-center">
-            <h1 class="text-3xl font-bold text-green-700">Congratulations!</h1>
-            <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
-            <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
+        <div v-if="submitApproved != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <h2 class="text-xl font-semibold">Congratulations!</h2>
+            <p class="mt-2">
+                <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
+                <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
+            </p>
 
             <!-- Encouragement to Stay Updated -->
             <div class="mt-6">
