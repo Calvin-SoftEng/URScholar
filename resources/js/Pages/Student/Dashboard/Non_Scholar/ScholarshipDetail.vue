@@ -1,6 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto">
+        <div
+            class="w-full h-full bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto">
             <div class="flex w-full mt-10 my-auto max-w-8xl mx-auto gap-3">
                 <div class="w-3/4 p-4 flex flex-col space-y-4"> <!-- 75% width -->
                     <div>
@@ -36,14 +37,12 @@
                                 <div v-if="activeTab === 'eligibility'">
                                     <h2 class="text-lg font-semibold">Applicant for this scholarship must:</h2>
                                     <p>Details about the eligibility criteria go here.</p>
-                                    <p>Grade: {{ grade.grade }}</p>
-                                    <div v-for="criteria in criterias" :key="criteria.id">
-
-                                        <h3 class="text-lg font-semibold">{{ criteria.scholarship_form_data.name }}</h3>
-                                    </div>
+                                    <p>Grade: {{ criterias.grade }}</p>
+                                    <h3 class="text-lg font-semibold">{{ criterias.scholarship_form_data.name }}</h3>
                                 </div>
                                 <div v-if="activeTab === 'requirements'">
-                                    <h2 class="text-lg font-semibold">Scholarship recipients are selected on the basis of:
+                                    <h2 class="text-lg font-semibold">Scholarship recipients are selected on the basis
+                                        of:
                                     </h2>
                                     <p>Details about the required documents go here.</p>
                                     <div v-for="requirement in requirements" :key="requirement.id">
@@ -63,9 +62,14 @@
                 </div>
                 <div class="w-1/4 bg-white flex flex-col gap-4 rounded-lg shadow-md h-fit p-4 border border-gray-50">
                     <!-- 25% width -->
-                    <Link :href="`/student/applying-scholarship/${scholarship.id}/application`">
+                    <Link v-if="isEligible(scholarship)"
+                        :href="`/student/applying-scholarship/${scholarship.id}/application`">
                     <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Apply
                         Now</button>
+                    </Link>
+                    <Link v-else>
+                    <button class="bg-gray-400 text-white px-10 py-2 rounded-lg shadow-md cursor-not-allowed">Not
+                        Eligible</button>
                     </Link>
                     <div class="flex flex-col">
                         <span class="text-gray-500 text-sm">Application Deadline</span>
@@ -88,7 +92,7 @@
                 </div>
             </div>
         </div>
-        
+
     </AuthenticatedLayout>
 </template>
 
@@ -120,7 +124,7 @@ const props = defineProps({
         required: true
     },
     criterias: {
-        type: Array,
+        type: Object,
         required: true
     },
     deadline: {
@@ -132,6 +136,10 @@ const props = defineProps({
         required: true
     },
     grade: {
+        type: Object,
+        required: true
+    },
+    scholar: {
         type: Object,
         required: true
     }
@@ -168,4 +176,61 @@ const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-U
     month: "long",
     day: "numeric"
 });
+
+// Check if student meets grade requirements
+const meetsGradeRequirement = (scholarship) => {
+    // If no grade criteria is set, student is eligible
+    // Get the required grade from criterias
+    const gradeCriteria = props.criterias.grade;
+    console.log(gradeCriteria);
+    if (!gradeCriteria) return true;
+
+    const requiredGrade = gradeCriteria;
+    const studentGrade = props.grade.grade;
+
+    // Assuming lower grades are better (like GPA where 1.0 is better than 4.0)
+    // Adjust this comparison based on your grading system
+    // return studentGrade <= requiredGrade;
+
+
+    if (studentGrade <= requiredGrade) {
+        return true
+    }
+    else {
+        return false
+    }
+
+};
+
+const meetsCampusRequirement = (scholarship) => {
+    // If student has no campus/course info, not eligible
+    if (props.scholar.campus_id === props.selectedCampus.campus_id) {
+        if (props.selectedCampus.selected_campus.includes(props.scholar.course.name)) {
+            console.log('meron siya');
+            return true;
+        }
+    }
+
+
+    return false;
+};
+
+const meetsCriteria = (scholarship) => {
+    // If student has no campus/course info, not eligible
+    if (props.scholar.campus_id === props.criterias.scholarship_form_data.name) {
+        console.log('meron siya');
+        return true;
+    }
+
+
+    return false;
+};
+
+// Overall eligibility check
+const isEligible = (scholarship) => {
+    //return meetsGradeRequirement(scholarship);
+
+    // Uncomment the following if you implement the campus requirement check
+    return meetsGradeRequirement(scholarship) && meetsCampusRequirement(scholarship) //&& meetsCriteria(scholarship);
+};
 </script>
