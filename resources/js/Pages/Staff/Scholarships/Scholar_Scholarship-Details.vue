@@ -151,13 +151,13 @@
                                         class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                         <div class="flex flex-col">
                                             <span>General Weighted Average</span>
-                                            <span class="font-bold text-lg">1.3</span>
+                                            <span class="font-bold text-lg">{{grade.grade}}</span>
                                         </div>
                                         <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                            <span class="font-medium">1st Semester - 2023-2024</span>
+                                            <span class="font-medium">{{grade.semester}} Semester - {{grade.school_year}}</span>
                                         </div>
                                         <div>
-                                            <button @click="toggleMonitor"
+                                            <button @click="toggleMonitor(grade)"
                                                 class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                 <span class="material-symbols-rounded text-base">open_in_full</span>
                                                 <span class="font-medium text-sm">View Certificate of Grades</span>
@@ -246,7 +246,7 @@
             <div
                 class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">2023-2nd sem</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{ selectedMonitor.school_year }} {{ selectedMonitor.semester }} Semester</h2>
                     <div class="flex items-center justify-between gap-10">
                         <!-- <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
                             class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
@@ -268,20 +268,20 @@
                 <div class="p-4 flex flex-col gap-3">
                     <div class="w-full flex justify-center p-5">
                         <!-- Display Image -->
-                        <!-- <img v-if="selectedRequirement?.submitted_requirements.match(/\.(jpg|jpeg|png|gif)$/i)"
-                            :src="`/storage/${selectedRequirement.path}`"
-                            class="rounded-lg border shadow-sm max-w-full h-auto" alt="Submitted File"> -->
+                        <img v-if="selectedMonitor?.cog.match(/\.(jpg|jpeg|png|gif)$/i)"
+                            :src="`/storage/${selectedMonitor.path}`"
+                            class="rounded-lg border shadow-sm max-w-full h-auto" alt="Submitted File">
 
                         <!-- Display PDF -->
-                        <!-- <iframe v-else-if="selectedRequirement?.submitted_requirements.match(/\.(pdf)$/i)"
-                            :src="`/storage/${selectedRequirement.path}#toolbar=0`"
-                            class="w-full h-[600px] border rounded-lg"></iframe> -->
+                        <iframe v-else-if="selectedMonitor?.cog.match(/\.(pdf)$/i)"
+                            :src="`/storage/${selectedMonitor.path}#toolbar=0`"
+                            class="w-full h-[600px] border rounded-lg"></iframe>
 
                         <!-- Display Message for Other File Types -->
-                        <!-- <p v-else class="text-gray-600">
-                            Cannot preview this file type. <a :href="`/storage/${selectedRequirement.path}`"
+                        <p v-else class="text-gray-600">
+                            Cannot preview this file type. <a :href="`/storage/${selectedMonitor.path}`"
                                 class="text-blue-600 underline" target="_blank">Download here</a>.
-                        </p> -->
+                        </p>
                     </div>
 
                     <!-- Close Button -->
@@ -330,6 +330,7 @@ const props = defineProps({
     scholar: Object,
     scholarship: Object,
     batch: Object,
+    grade: Object,
     submittedRequirements: Array,
 });
 
@@ -367,14 +368,15 @@ const Checking = ref(false);
 const Monitoring = ref(false);
 
 const selectedRequirement = ref(null);
+const selectedMonitor = ref(null);
 
 const toggleCheck = (req) => {
     selectedRequirement.value = req;
     Checking.value = true;
 };
 
-const toggleMonitor = (req) => {
-    // selectedRequirement.value = req;
+const toggleMonitor = (monitor) => {
+    selectedMonitor.value = monitor;
     Monitoring.value = true;
 };
 

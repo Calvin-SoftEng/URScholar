@@ -31,7 +31,7 @@
                             <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based'" class="flex gap-2">
@@ -224,9 +224,8 @@
                                     <span class="font-poppins text-sm font-semibold">{{ campuses[0].name }}</span>
                                 </template>
 
-                                <div>
-                                    <button
-                                        @click="toggleView"
+                                <div v-if="payouts">
+                                    <button @click="toggleView"
                                         class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
                                         border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
@@ -260,19 +259,22 @@
                                 class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
                                 <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
                                     <div class="flex flex-col">
-                                        <span class="text-xl font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+                                        <span class="text-xl font-semibold text-gray-800">Batch {{ batch.batch_no
+                                            }}</span>
                                         <span class="text-lg font-medium text-gray-600">Campus</span>
                                     </div>
 
                                     <div class="grid grid-cols-2">
                                         <div class="flex flex-col items-center">
                                             <span class="text-sm text-gray-600">No. of Scholars</span>
-                                            <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
+                                            <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length
+                                                }}</span>
                                         </div>
                                         <div class="flex flex-col items-center">
                                             <span class="text-sm text-gray-600">Unverified Scholars</span>
                                             <span class="text-xl font-bold text-red-500">
-                                                {{ batch.grantees.filter(grantee => !grantee.scholar.is_verified).length }}
+                                                {{batch.grantees.filter(grantee => !grantee.scholar.is_verified).length
+                                                }}
                                             </span>
                                         </div>
                                     </div>
@@ -282,21 +284,41 @@
 
                         <!-- Payrolls List -->
                         <div v-show="showPayrolls">
-                            <div v-for="batch in batches" :key="batch.id"
-                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
-                                <div @click="() => openPayroll(batch.id)" class="flex justify-between items-center">
-                                    <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+                            <div v-if="payouts.status == 'Pending'">
+                                <div class="flex flex-col w-full items-center justify-center mt-5">
+                                    <div
+                                        class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                        <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                            class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                        <p class="text-lg text-gray-700 dark:text-gray-300">
+                                            Payout is still Ongoing
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
 
-                                    <div class="grid grid-cols-2">
-                                        <div class="flex flex-col items-center">
-                                            <span class="text-sm text-gray-600">Completed Payouts</span>
-                                            <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
-                                        </div>
-                                        <div class="flex flex-col items-center">
-                                            <span class="text-sm text-gray-600">Missed Payouts</span>
-                                            <span class="text-xl font-bold text-red-500">
-                                                {{ batch.grantees.filter(grantee => !grantee.scholar.is_verified).length }}
-                                            </span>
+
+                            <div v-else>
+                                <div v-for="batch in batches" :key="batch.id"
+                                    class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                    <div @click="() => openPayroll(batch.id)" class="flex justify-between items-center">
+                                        <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
+                                        }}</span>
+
+                                        <div class="grid grid-cols-2">
+                                            <div class="flex flex-col items-center">
+                                                <span class="text-sm text-gray-600">Completed Payouts</span>
+                                                <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length
+                                                }}</span>
+                                            </div>
+                                            <div class="flex flex-col items-center">
+                                                <span class="text-sm text-gray-600">Missed Payouts</span>
+                                                <span class="text-xl font-bold text-red-500">
+                                                    {{batch.grantees.filter(grantee =>
+                                                        !grantee.scholar.is_verified).length
+                                                    }}
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -418,7 +440,7 @@
                                                         <div class="flex flex-row text-sm gap-4">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -743,7 +765,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed, onUnmounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
@@ -856,7 +878,7 @@ const total_scholars = computed(() => {
 const showPayrolls = ref(false);
 
 const toggleView = () => {
-  showPayrolls.value = !showPayrolls.value;
+    showPayrolls.value = !showPayrolls.value;
 };
 
 const toggleSendBatch = async () => {
@@ -1497,6 +1519,18 @@ watchEffect(() => {
             toastVisible.value = false;
         }, 3000);
     }
+});
+
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
 });
 </script>
 

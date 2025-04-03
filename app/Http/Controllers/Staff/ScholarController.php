@@ -11,6 +11,7 @@ use App\Models\SchoolYear;
 use App\Models\Applicant;
 use App\Models\Grantees;
 use App\Models\Scholar;
+use App\Models\Grade;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\Student;
@@ -45,6 +46,8 @@ class ScholarController extends Controller
         $scholar = Scholar::with('user', 'campus', 'course')->findOrFail($id);
         $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
+        $grade = Grade::where('scholar_id', $scholar->id)->first();
+
         $scholarship = $grantee->scholarship;
         $batch = Batch::where('id', $grantee->batch_id)->first();
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
@@ -57,7 +60,8 @@ class ScholarController extends Controller
             'scholarship' => $scholarship,
             'batch' => $batch,
             'requirements' => $requirements,
-            'submittedRequirements' => $submittedRequirements
+            'submittedRequirements' => $submittedRequirements,
+            'grade' => $grade,
         ]);
     }
 

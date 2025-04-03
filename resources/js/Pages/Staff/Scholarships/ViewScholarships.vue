@@ -267,7 +267,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onUnmounted } from 'vue';
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { useRouter, useRoute } from 'vue-router'
 import Echo from 'laravel-echo';
@@ -427,6 +427,18 @@ const resetForm = () => {
         selectedSem: null,
     };
 };
+
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
 
 </script>
 

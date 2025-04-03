@@ -123,7 +123,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onMounted, computed } from 'vue';
+import { defineProps, ref, watchEffect, onMounted, computed, onUnmounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 import { Input } from '@/Components/ui/input';
@@ -361,6 +361,18 @@ const showToast = (title, message, type = 'success') => {
         toast.value.visible = false;
     }, 3000);
 };
+
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
 </script>
 
 <style>
