@@ -113,7 +113,7 @@
                 <div>
                     <!-- Scholar List -->
                     <ApplicantList :scholarship="scholarship" :batches="batches" :applicants="applicants" :scholars="scholars"
-                        :requirements="requirements" @update:stats="updateStats" />
+                        :requirements="requirements" :campusRecipients="campusRecipients" :totalSlots="totalSlots" @update:stats="updateStats" />
                 </div>
 
             </div>
@@ -152,7 +152,9 @@ const props = defineProps({
     applicants: Array,
     scholars: Array,
     requirements: Array,
-    payout: Array
+    payout: Array,
+    campusRecipients: Array,
+    totalSlots: Number,
 });
 
 const total_applicants = computed(() => {

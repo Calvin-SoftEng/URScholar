@@ -512,8 +512,17 @@ class ScholarshipController extends Controller
                 'grade' => $grade ? $grade->grade : null,
                 'cog' => $grade ? $grade->cog : null,
                 'grade_path' => $grade ? $grade->path : null,
+                'date_applied' => $applicant->created_at,
             ];
         })->filter(); // Remove any null values
+
+
+        // Add this to fetch campus recipient data
+        $campusRecipients = CampusRecipients::where('scholarship_id', $scholarshipId)
+            ->get();
+
+        // Calculate total slots across all campuses
+        $totalSlots = $campusRecipients->sum('slots');
 
         return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
@@ -526,6 +535,8 @@ class ScholarshipController extends Controller
                 ? SchoolYear::find($request->input('selectedYear'))
                 : null,
             'selectedSem' => $request->input('selectedSem', ''),
+            'campusRecipients' => $campusRecipients,
+            'totalSlots' => $totalSlots,
         ]);
     }
 

@@ -90,7 +90,10 @@
                         </div>
                       </td>
                       <td>{{ scholar.campus }}</td>
-                      <td>{{ scholar.created_at }}</td>
+                      <td>{{ new Date(scholar.date_applied).toLocaleString('en-US', {
+                        month: 'long', day: 'numeric',
+                        year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true
+                      }) }}</td>
                       <td>
                         <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
                           {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
@@ -139,8 +142,8 @@
                         <div class="flex items-center gap-3">
                           <div class="avatar">
                             <div class="mask rounded-full h-10 w-10">
-                              <img :src="scholar.profile_image || '../../../../assets/images/no_userpic.png'"
-                                :alt="`${scholar.first_name}'s profile`" />
+                              <img v-if="scholar.picture" :src="`/storage/user/profile/${scholar.picture}`"
+                                alt="Profile Picture">
                             </div>
                           </div>
                           <div>
@@ -156,19 +159,28 @@
                         </div>
                       </td>
                       <td>{{ scholar.campus }}</td>
-                      <td>{{ scholar.date_applied }}</td>
+                      <td>{{ new Date(scholar.date_applied).toLocaleString('en-US', {
+                        month: 'long', day: 'numeric',
+                        year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true
+                      }) }}</td>
+
                       <td>
-                        <span class="text-sm text-gray-700">{{ scholar.submittedRequirements }}/{{
-                          scholar.totalRequirements }}</span>
+                        <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
+                          {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
+                        </span>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                          <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }">
+                          </div>
+                        </div>
                       </td>
-                      <td>
-                        <span class="font-bold text-gray-800">{{ scholar.gwa.toFixed(2) }}</span>
-                      </td>
+                      <td><span class="font-bold text-gray-800">{{ scholar.grade }}</span></td>
                       <td>
                         <span :class="{
                           'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
                           'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                          'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
+                          'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete',
+                          'bg-blue-100 text-blue-800 border border-blue-400': scholar.status === 'Submitted',
+                          'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Returned'
                         }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                           {{ scholar.status }}
                         </span>
@@ -243,6 +255,8 @@ const props = defineProps({
   applicants: Array,
   scholars: Array,
   requirements: Array,
+  campusRecipients: Array,
+  totalSlots: Number,
 });
 
 // Data loading state
@@ -411,13 +425,30 @@ onMounted(() => {
 
 
 
-// Constants
-const recipientLimit = ref(5); // Max recipients
-const requiredGWA = ref(1.5); // Required cutoff GWA
+// Replace the hard-coded recipientLimit with data from the backend
+const recipientLimit = computed(() => props.totalSlots || 0);
 
-// Sorted scholars by score (or any ranking logic)
+// Update the sorted scholars logic to rank by grades (1.0 being highest)
 const sortedScholars = computed(() => {
-  return [...props.scholars].sort((a, b) => b.score - a.score);
+  if (!props.scholars) return [];
+
+  // Create a copy of the scholars array to sort
+  return [...props.scholars].sort((a, b) => {
+    // First priority: Complete vs incomplete requirements
+    if (a.status === 'Complete' && b.status !== 'Complete') return -1;
+    if (a.status !== 'Complete' && b.status === 'Complete') return 1;
+
+    // Second priority: Compare grades (lower numeric value is better in 1.0-5.0 scale)
+    const gradeA = parseFloat(a.grade) || 5.0; // Default to lowest grade if null
+    const gradeB = parseFloat(b.grade) || 5.0;
+
+    if (gradeA !== gradeB) {
+      return gradeA - gradeB; // Lower grade value first (1.0 is better than 2.0)
+    }
+
+    // If grades are equal, sort by date applied (earlier first)
+    return new Date(a.date_applied) - new Date(b.date_applied);
+  });
 });
 
 // Scholars below the cut-off

@@ -46,9 +46,9 @@ class StudentController extends Controller
     public function dashboard()
     {
         $scholar = Scholar::where('email', Auth::user()->email)
-        ->with('campus')
-        ->with('course')
-        ->first();
+            ->with('campus')
+            ->with('course')
+            ->first();
         $grantee = Grantees::where('scholar_id', $scholar->id)->with('school_year')->first();
 
         if ($grantee) {
@@ -194,23 +194,54 @@ class StudentController extends Controller
     public function scholarship_details(Scholarship $scholarship)
     {
         $scholar = Scholar::where('email', Auth::user()->email)
-        ->with('campus')
-        ->with('course')
-        ->first();
+            ->with('campus')
+            ->with('course')
+            ->first();
+
+        // Get the student record
+        $studentRecord = StudentRecord::where('scholar_id', $scholar->id)->first();
+
+        // Get the family record
+        $familyRecord = null;
+        if ($studentRecord) {
+            $familyRecord = FamilyRecord::where('student_record_id', $studentRecord->id)->first();
+        }
+
+        // Map all data to the scholar object
+        if ($studentRecord) {
+            $scholar->first_name = $studentRecord->first_name;
+            $scholar->middle_name = $studentRecord->middle_name;
+            $scholar->last_name = $studentRecord->last_name;
+            $scholar->suffix_name = $studentRecord->suffix_name;
+            $scholar->birthdate = $studentRecord->birthdate;
+            $scholar->placebirth = $studentRecord->placebirth;
+            $scholar->age = $studentRecord->age;
+            $scholar->gender = $studentRecord->gender;
+            $scholar->civil = $studentRecord->civil;
+            $scholar->religion = $studentRecord->religion;
+            $scholar->guardian = $studentRecord->guardian;
+            $scholar->relationship = $studentRecord->relationship;
+        }
+
+        // Map family record data if available
+        if ($familyRecord) {
+            $scholar->mother = $familyRecord->mother;
+            $scholar->father = $familyRecord->father;
+            $scholar->marital_status = $familyRecord->marital_status;
+            $scholar->monthly_income = $familyRecord->monthly_income;
+            $scholar->other_income = $familyRecord->other_income;
+            $scholar->family_housing = $familyRecord->family_housing;
+        }
+
+        // Rest of your code
         $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
-
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
         $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
-
-        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
-
+        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->get();
         $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->first();
         $grade = Grade::where('scholar_id', $scholar->id)
             ->orderBy('created_at', 'desc')
             ->first();
-
-        
 
         return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipDetail', [
             'scholarship' => $scholarship,

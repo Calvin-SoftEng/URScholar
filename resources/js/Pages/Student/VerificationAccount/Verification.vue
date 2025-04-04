@@ -1272,19 +1272,19 @@
                                                 class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
                                                 v-model="form.monthly_income">
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i1" value="below" />
+                                                    <RadioGroupItem id="i1" value="10,000 and below" />
                                                     <Label for="i1">10,000 and below</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i2" value="mid" />
+                                                    <RadioGroupItem id="i2" value="20,001 - 30,000" />
                                                     <Label for="i2">20,001 - 30,000</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i3" value="average" />
+                                                    <RadioGroupItem id="i3" value="10,001 - 20,000" />
                                                     <Label for="i3">10,001 - 20,000</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i4" value="above" />
+                                                    <RadioGroupItem id="i4" value="30,001 and above" />
                                                     <Label for="i4">30,001 and above</Label>
                                                 </div>
                                             </RadioGroup>

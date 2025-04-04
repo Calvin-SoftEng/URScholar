@@ -35,19 +35,25 @@
                             <!-- Tab Content -->
                             <div class="p-4 border border-gray-400">
                                 <div v-if="activeTab === 'eligibility'">
-                                    <h2 class="text-lg font-semibold mb-3">Scholarship recipients are selected on the basis of:</h2>
-                                    <p>Student General Weighted Average must be atleast <span class="font-semibold">{{ criterias.grade }}</span></p>
-                                    <p>Family income must range between <span class="font-semibold">{{ criterias.scholarship_form_data.name }}</span></p>
+                                    <h2 class="text-lg font-semibold mb-3">Scholarship recipients are selected on the
+                                        basis of:</h2>
+                                    <p>Student General Weighted Average must be atleast <span class="font-semibold">{{
+                                        criterias.grade }}</span></p>
+                                    <p>Family income must range between <span class="font-semibold">{{
+                                        criterias.scholarship_form_data.name }}</span></p>
                                 </div>
                                 <div v-if="activeTab === 'requirements'">
-                                    <h2 class="text-lg font-semibold mb-3">Applicant for this scholarship must provide the following:
+                                    <h2 class="text-lg font-semibold mb-3">Applicant for this scholarship must provide
+                                        the following:
                                     </h2>
                                     <div v-for="requirement in requirements" :key="requirement.id">
-                                        <p>A copy of  <span class="font-semibold">{{ requirement.requirements }}</span></p>
+                                        <p>A copy of <span class="font-semibold">{{ requirement.requirements }}</span>
+                                        </p>
                                     </div>
                                 </div>
                                 <div v-if="activeTab === 'awards'">
-                                    <h2 class="text-lg font-semibold">Announcement of qualified applicants will be available to your Dashboard once announced</h2>
+                                    <h2 class="text-lg font-semibold">Announcement of qualified applicants will be
+                                        available to your Dashboard once announced</h2>
                                 </div>
                             </div>
                         </div>
@@ -66,14 +72,22 @@
                         Eligible</button>
                     </Link>
 
-                    <div class="bg-red-100 border-l-4 border-red-500 text-red-900 p-4 shadow-sm">
+                    <div v-if="!isEligible(scholarship)"
+                        class="bg-red-100 border-l-4 border-red-500 text-red-900 p-4 shadow-sm">
                         <h2 class="text-lg font-semibold">Reasons you are not Eligible</h2>
                         <ul class="list-disc pl-5 mt-2 text-base">
-                            <li>Your (call mo gwa q) GWA does not meet the required minimum of 1.2.</li>
-                            <li>Your family income exceeds the required range of ₱10,000–₱20,000.</li>
-                            <li>Your course is not eligible for this scholarship.</li>
+                            <li v-if="!meetsGradeRequirement(scholarship)">
+                                Your {{ props.grade.grade }} GWA does not meet the required minimum of {{
+                                    props.criterias.grade }}.
+                            </li>
+                            <li v-if="!meetsCriteria(scholarship)">
+                                Your family income does not match the required range of
+                                {{ props.criterias.scholarship_form_data.name }}.
+                            </li>
+                            <li v-if="!meetsCampusRequirement(scholarship)">
+                                Your course is not eligible for this scholarship.
+                            </li>
                         </ul>
-
                     </div>
 
                     <div class="flex flex-col">
@@ -156,7 +170,7 @@ const props = defineProps({
 
 const parsedCourses = computed(() => {
     try {
-        const data = props.selectedCampus.selected_campus;
+        const data = props.selectedCampus[0].selected_campus;
         if (typeof data === 'string') {
             return JSON.parse(data);
         } else if (Array.isArray(data)) {
@@ -173,11 +187,11 @@ const parsedCourses = computed(() => {
 
 const fallbackCourseDisplay = computed(() => {
     // Fallback if parsing fails
-    const data = props.selectedCampus.selected_campus;
+    const data = props.selectedCampus[0].selected_campus;
     if (typeof data === 'string' && data.includes('Bachelor')) {
         return data;
     }
-    return 'Course information unavailable';
+    return 'All Courses';
 });
 
 const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-US", {
@@ -212,21 +226,42 @@ const meetsGradeRequirement = (scholarship) => {
 };
 
 const meetsCampusRequirement = (scholarship) => {
-    // If student has no campus/course info, not eligible
-    if (props.scholar.campus_id === props.selectedCampus.campus_id) {
-        if (props.selectedCampus.selected_campus.includes(props.scholar.course.name)) {
-            console.log('meron siya');
-            return true;
+    // Check if there are any selected campuses
+    // if (!props.selectedCampus || props.selectedCampus.length === 0) {
+    //     return false;
+    // }
+    // if (props.scholar.campus_id === props.selectedCampus.campus_id) {
+    //     if (props.selectedCampus.selected_campus.includes('')) {
+    //         return true;
+    //     }
+    //     if (props.selectedCampus.selected_campus.includes(props.scholar.course.name)) {
+    //         console.log('meron siya');
+    //         return true;
+    //     }
+        
+    // }
+
+    // Look for a matching campus in the selectedCampus array
+    for (const campus of props.selectedCampus) {
+        if (campus.campus_id === props.scholar.campus_id) {
+            // If selected_campus array is empty, any course at this campus is eligible
+            if (campus.selected_campus.includes('')) {
+                return true;
+            }
+
+            // If scholar's course is in the selected_campus array, they're eligible
+            if (campus.selected_campus.includes(props.scholar.course.name)) {
+                return true;
+            }
         }
     }
-
 
     return false;
 };
 
 const meetsCriteria = (scholarship) => {
     // If student has no campus/course info, not eligible
-    if (props.scholar.campus_id === props.criterias.scholarship_form_data.name) {
+    if (props.scholar.monthly_income === props.criterias.scholarship_form_data.name) {
         console.log('meron siya');
         return true;
     }
@@ -240,6 +275,6 @@ const isEligible = (scholarship) => {
     //return meetsGradeRequirement(scholarship);
 
     // Uncomment the following if you implement the campus requirement check
-    return meetsGradeRequirement(scholarship) && meetsCampusRequirement(scholarship) //&& meetsCriteria(scholarship);
+    return meetsGradeRequirement(scholarship) && meetsCampusRequirement(scholarship) && meetsCriteria(scholarship);
 };
 </script>
