@@ -33,7 +33,7 @@
                     </button>
 
                     <div class="h-full grid grid-cols-[60%_40%] gap-3 py-3 w-10/12">
-                        
+
                         <!-- 25% Column -->
                         <div class="col-span-1 w-full h-full flex flex-col">
                             <div class="h-full rounded-xl p-5 shadow-md bg-white dark:bg-dcontainer flex flex-col">
@@ -41,15 +41,16 @@
                                     <div class="flex flex-row gap-10 items-start w-full">
                                         <!-- Profile Picture -->
                                         <div class="w-full max-w-xs aspect-square bg-black rounded-lg overflow-hidden">
-                                            <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture" 
-                                                class="w-full h-full object-cover">
+                                            <img :src="`/storage/user/profile/${scholar.user?.picture}`"
+                                                alt="Profile Picture" class="w-full h-full object-cover">
                                         </div>
 
                                         <!-- Personal Information -->
                                         <div class="w-full">
                                             <!-- Header with Divider -->
                                             <div class="flex items-center gap-2 mb-4">
-                                                <h3 class="font-semibold text-lg text-blue-900 dark:text-white">Applicant Information</h3>
+                                                <h3 class="font-semibold text-lg text-blue-900 dark:text-white">
+                                                    Applicant Information</h3>
                                                 <div class="flex-1 h-0.5 bg-gray-300 rounded"></div>
                                             </div>
 
@@ -58,22 +59,29 @@
                                                 <!-- Column 1 -->
                                                 <div class="space-y-4">
                                                     <div class="text-black">
-                                                        <span class="text-xs font-semibold uppercase text-gray-500">Applicant Name</span>
+                                                        <span
+                                                            class="text-xs font-semibold uppercase text-gray-500">Applicant
+                                                            Name</span>
                                                         <p class="text-lg font-sora text-primary">
-                                                            {{ scholar.last_name }}, {{ scholar.first_name }}
-                                                            {{ scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : '' }}
+                                                            {{ formatScholarName(scholar) }}
                                                         </p>
+
                                                     </div>
                                                     <div class="text-black">
-                                                        <span class="text-xs font-semibold uppercase text-gray-500">Contact No.</span>
+                                                        <span
+                                                            class="text-xs font-semibold uppercase text-gray-500">Contact
+                                                            No.</span>
                                                         <p class="text-lg text-primary">43432423432423</p>
                                                     </div>
                                                     <div class="text-black">
-                                                        <span class="text-xs font-semibold uppercase text-gray-500">Email Address</span>
+                                                        <span
+                                                            class="text-xs font-semibold uppercase text-gray-500">Email
+                                                            Address</span>
                                                         <p class="text-lg text-primary">{{ scholar.email }}</p>
                                                     </div>
                                                     <div class="text-black">
-                                                        <span class="text-xs font-semibold uppercase text-gray-500">Address</span>
+                                                        <span
+                                                            class="text-xs font-semibold uppercase text-gray-500">Address</span>
                                                         <p class="text-lg text-primary">feafaefeaf</p>
                                                     </div>
                                                 </div>
@@ -87,7 +95,7 @@
                                 <div
                                     class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-base text-blue-900 dark:text-white">
-                                            Educational Information
+                                        Educational Information
                                     </h3>
                                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                 </div>
@@ -96,7 +104,8 @@
                                     <!-- Column 2 -->
                                     <div class="space-y-4">
                                         <div class="text-black">
-                                            <span class="text-xs font-semibold uppercase text-gray-500">URScholar ID</span>
+                                            <span class="text-xs font-semibold uppercase text-gray-500">URScholar
+                                                ID</span>
                                             <p class="text-lg text-primary">{{ scholar.urscholar_id }}</p>
                                         </div>
                                         <div class="text-black">
@@ -111,17 +120,18 @@
                                             <span class="text-xl text-primary">{{ scholar.course.name }}</span>
                                         </div>
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">General Weighted Average</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">General Weighted
+                                                Average</span>
                                             <span class="text-xl text-primary">1.2</span>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
 
                                 <div
                                     class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-base text-blue-900 dark:text-white">
-                                            Family Information
+                                        Family Information
                                     </h3>
                                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                 </div>
@@ -129,30 +139,36 @@
                                 <div class="grid grid-cols-2 gap-6 w-full px-10">
                                     <div class="flex flex-col p-2 space-y-3">
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Mother's Name</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Mother's
+                                                Name</span>
                                             <span class="text-xl font-sora text-primary">
                                                 {{ scholar.last_name }},
                                                 {{ scholar.first_name }}
-                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
+                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                                    word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                             </span>
                                         </div>
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
+                                            <span
+                                                class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
                                             <span class="text-xl text-primary">Trabaho</span>
                                         </div>
                                     </div>
 
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Father's Name</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Father's
+                                                Name</span>
                                             <span class="text-xl font-sora text-primary">
                                                 {{ scholar.last_name }},
                                                 {{ scholar.first_name }}
-                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
+                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                                    word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                             </span>
                                         </div>
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
+                                            <span
+                                                class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
                                             <span class="text-xl text-primary">Trabaho</span>
                                         </div>
                                     </div>
@@ -161,44 +177,48 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Siblings</span>
                                             <span class="text-xl font-sora text-primary">
-                                              Name 1, Name 2, Name 3
+                                                Name 1, Name 2, Name 3
                                             </span>
                                             <span class="text-xl font-sora text-primary">
-                                              Work 1, Work 2, Work 3
+                                                Work 1, Work 2, Work 3
                                             </span>
                                         </div>
                                     </div>
 
                                     <div class="col-span-2 flex flex-col p-2 space-y-3">
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Marital Status of Parents</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Marital Status
+                                                of Parents</span>
                                             <span class="text-xl font-sora text-primary">
-                                             Married
+                                                Married
                                             </span>
                                         </div>
 
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Monthly Family Income</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Monthly Family
+                                                Income</span>
                                             <span class="text-xl font-sora text-primary">
-                                             Married
+                                                Married
                                             </span>
                                         </div>
 
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Other Source of Income</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Other Source of
+                                                Income</span>
                                             <span class="text-xl font-sora text-primary">
-                                             Married
+                                                Married
                                             </span>
                                         </div>
 
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Family Type of Housing</span>
+                                            <span class="font-semibold uppercase text-xs text-gray-500">Family Type of
+                                                Housing</span>
                                             <span class="text-xl font-sora text-primary">
-                                             Married
+                                                Married
                                             </span>
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -209,38 +229,45 @@
                             <div class="flex flex-col h-full gap-2">
                                 <div
                                     class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
-                                    <h1 class="text-black font-normal text-xl font-poppins">Application Requirements</h1>
+                                    <h1 class="text-black font-normal text-xl font-poppins">Application Requirements
+                                    </h1>
                                     <div
                                         class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
                                         <!-- Requirement List -->
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                             <!-- Requirement Item -->
-                                            <div v-for="req in submittedRequirements" :key="req.id"
-                                                class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
-                                                <div class="flex flex-col space-y-2">
-                                                    <span class="font-bold">Call mo yung requiremtn na need here</span>
-                                                    <div class="flex items-center gap-2 text-gray-800">
-                                                        <font-awesome-icon :icon="['fas', 'file']" class="text-blue-600 text-lg" />
-                                                        <span class="text-base font-medium">{{ req.submitted_requirements }}</span>
+                                            <div v-for="requirement in requirements" :key="requirement.id">
+                                                <div v-for="req in submittedRequirements" :key="req.id"
+                                                    class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
+                                                    <div class="flex flex-col space-y-2">
+                                                        <span class="font-bold">{{requirement.requirements}}</span>
+                                                        <div class="flex items-center gap-2 text-gray-800">
+                                                            <font-awesome-icon :icon="['fas', 'file']"
+                                                                class="text-blue-600 text-lg" />
+                                                            <span class="text-base font-medium">{{
+                                                                req.submitted_requirements }}</span>
+                                                        </div>
+
                                                     </div>
 
-                                                </div>
-
-                                                <div class="flex flex-col gap-3 items-center justify-center">
-                                                    <div>
-                                                        <span :class="statusClass(req.status)"
-                                                            class="text-sm font-medium px-2.5 py-0.5 rounded border">
-                                                            {{ req.status }}
-                                                        </span>
+                                                    <div class="flex flex-col gap-3 items-center justify-center">
+                                                        <div>
+                                                            <span :class="statusClass(req.status)"
+                                                                class="text-sm font-medium px-2.5 py-0.5 rounded border">
+                                                                {{ req.status }}
+                                                            </span>
+                                                        </div>
+                                                        <button @click="toggleCheck(req)"
+                                                            class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
+                                                            <span
+                                                                class="material-symbols-rounded text-base">open_in_full</span>
+                                                            <span class="font-medium text-sm">View</span>
+                                                        </button>
                                                     </div>
-                                                    <button @click="toggleCheck(req)"
-                                                        class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                        <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                        <span class="font-medium text-sm">View</span>
-                                                    </button>
                                                 </div>
                                             </div>
+
                                         </div>
 
                                     </div>
@@ -254,10 +281,11 @@
 
                                         <div v-if="!grade"
                                             class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
-                                            
+
                                             <!-- Message -->
                                             <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                                <span class="font-medium">The student has not uploaded their grade yet.</span>
+                                                <span class="font-medium">The student has not uploaded their grade
+                                                    yet.</span>
                                             </div>
 
                                             <!-- Ping Button -->
@@ -268,14 +296,15 @@
                                                 {{ isNotified ? 'Notified' : 'Ping Student' }}
                                             </button>
                                         </div>
-                                        <div v-else 
+                                        <div v-else
                                             class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
                                             <div class="flex flex-col">
                                                 <span>General Weighted Average</span>
-                                                <span class="font-bold text-lg">{{grade.grade}}</span>
+                                                <span class="font-bold text-lg">{{ grade.grade }}</span>
                                             </div>
                                             <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                                <span class="font-medium">{{grade.semester}} Semester - {{grade.school_year}}</span>
+                                                <span class="font-medium">{{ grade.semester }} Semester -
+                                                    {{ grade.school_year }}</span>
                                             </div>
                                             <div>
                                                 <button @click="toggleMonitor(grade)"
@@ -290,7 +319,7 @@
                                 </div>
                             </div>
 
-                            
+
                         </div>
                     </div>
 
@@ -352,7 +381,7 @@
                     </div>
 
                     <!-- Close Button -->
-                    <div class="mt-2 flex flex-row justify-between">
+                    <div v-if="props.batch.status !== 'Inactive'" class="mt-2 flex flex-row justify-between">
                         <button type="button" @click="updateRequirementStatus('Returned')"
                             class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                             Return
@@ -362,6 +391,17 @@
                             Approve
                         </button>
                     </div>
+                    <div v-else class="mt-2 flex flex-row justify-between">
+                        <button type="button" disabled
+                            class="text-white font-sans w-full bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600 cursor-not-allowed opacity-70 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Return
+                        </button>
+                        <button type="button" disabled
+                            class="text-white font-sans w-full bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600 cursor-not-allowed opacity-70 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Approve
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -371,7 +411,8 @@
             <div
                 class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{ selectedMonitor.school_year }} {{ selectedMonitor.semester }} Semester</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{ selectedMonitor.school_year }}
+                        {{ selectedMonitor.semester }} Semester</h2>
                     <div class="flex items-center justify-between gap-10">
                         <!-- <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
                             class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
@@ -457,6 +498,7 @@ const props = defineProps({
     batch: Object,
     grade: Object,
     submittedRequirements: Array,
+    requirements: Array,
 });
 
 const components = {
@@ -467,7 +509,7 @@ const components = {
 const isNotified = ref(false);
 
 const notifyStudent = () => {
-  isNotified.value = true;
+    isNotified.value = true;
 };
 
 const statusClass = (status) => {
@@ -494,6 +536,14 @@ const statusClass = (status) => {
 //         return [];
 //     }
 // });
+
+const formatScholarName = (scholar) => {
+    const middle = scholar.middle_name
+        ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.'
+        : '';
+    return `${scholar.last_name}, ${scholar.first_name} ${middle}`;
+};
+
 
 const Checking = ref(false);
 const Monitoring = ref(false);

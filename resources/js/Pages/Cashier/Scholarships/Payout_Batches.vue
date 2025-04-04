@@ -496,6 +496,7 @@ const forwardPayout = () => {
         }
     });
 };
+
 const closeModal = () => {
     ForwardBatchList.value = false;
     NotifyPayouts.value = false;

@@ -35,12 +35,14 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <Link>
-                                <button class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">< </button>
-                            </Link>
-                            <span>{{ scholarship?.name }}</span>
-                            <span>{{ scholarship?.type }}</span>
+                            <button class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">
+                                < </button>
+                                    </Link>
+                                    <span>{{ scholarship?.name }}</span>
+                                    <span>{{ scholarship?.type }}</span>
                         </h1>
-                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span>
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
+                        }} Semester</span>
                     </div>
 
                     <!-- Stats Section -->
@@ -53,7 +55,7 @@
                             </div>
                             <p class="text-4xl font-semibold font-kanit text-green-600">{{ stats.completedCount }}</p>
                         </div>
-                        
+
                         <!-- Total Scholars -->
                         <div class="flex flex-col items-start py-4 px-10">
                             <div class="flex flex-row space-x-3 items-center">
@@ -100,8 +102,26 @@
                     </Button>
                 </div>
 
-                <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
+                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
                         :requirements="requirements" @update:stats="updateStats" />
+                </div>
+                <div v-else>
+                    <div v-if="props.batches.status === 'Active'"
+                        class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                        <font-awesome-icon :icon="['fas', 'user-graduate']"
+                            class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                        <p class="text-lg text-gray-700 dark:text-gray-300">
+                            Batch still on going. Please check back later.
+                        </p>
+                    </div>
+                    <div v-else>
+                        <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                            :requirements="requirements" @update:stats="updateStats" />
+                    </div>
+
+                </div>
+
 
                 <!-- <Payroll_List :scholarship="scholarship" :batches="batches" :scholars="scholars"
                         :requirements="requirements" @update:stats="updateStats" /> -->

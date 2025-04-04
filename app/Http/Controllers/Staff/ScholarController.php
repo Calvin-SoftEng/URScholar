@@ -50,7 +50,7 @@ class ScholarController extends Controller
 
         $scholarship = $grantee->scholarship;
         $batch = Batch::where('id', $grantee->batch_id)->first();
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
+        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         // Get the submitted requirements for this scholar
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();

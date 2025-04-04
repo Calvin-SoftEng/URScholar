@@ -137,6 +137,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/{scholarship}/adding-scholars', [ScholarController::class, 'adding'])->name('scholars.adding');
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
+    Route::post('scholarships/{scholarshipId}/forward', [ScholarshipController::class, 'forward_coor'])->name('scholarship.forward_coor');
 
 
 

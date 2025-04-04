@@ -2,6 +2,7 @@
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
+
         <button
           class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
           @click="generateReport">
@@ -63,7 +64,8 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`" alt="Profile Picture">
+                          <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`"
+                            alt="Profile Picture">
                         </div>
                       </div>
                       <div>

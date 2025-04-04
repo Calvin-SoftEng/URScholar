@@ -273,6 +273,17 @@ class ScholarshipController extends Controller
             ]);
         }
 
+        //Count total batches per campus
+        $totalBatches = Batch::where('scholarship_id', $scholarship->id)
+            ->where('campus_id', $request->input('selectedCampus'))
+            ->when($request->input('selectedYear'), function ($query) use ($request) {
+                return $query->where('school_year_id', $request->input('selectedYear'));
+            })
+            ->when($request->input('selectedSem'), function ($query) use ($request) {
+                return $query->where('semester', $request->input('selectedSem'));
+            })
+            ->count();
+
         // Build base batches query
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->with([
@@ -396,13 +407,13 @@ class ScholarshipController extends Controller
             $newStatus = $batch->status;
 
             // If batch is pending and has at least one completed requirement, change to active
-            if ($batch->status == 'Pending' && $hasCompletedRequirements) {
+            if ($batch->status == 'Pending' && $hasCompletedRequirements && $approvedScholarsCount > 0) {
                 $newStatus = 'Active';
             }
-            // If batch is active and all scholars have completed all requirements (total_scholars == sub_total)
-            elseif ($batch->status == 'Active' && $approvedScholarsCount == $batch->total_scholars) {
-                $newStatus = 'Inactive';
-            }
+            // // If batch is active and all scholars have completed all requirements (total_scholars == sub_total)
+            // elseif ($batch->status == 'Active' && $approvedScholarsCount == $batch->total_scholars) {
+            //     $newStatus = 'Inactive';
+            // }
 
             // Update this specific batch's sub_total and status
             Batch::where('id', $batch->id)->update([
@@ -434,14 +445,37 @@ class ScholarshipController extends Controller
             ['scholarship_id' => $scholarship->id, 'read' => true]
         ));
 
+        // Check if all batches for the selected campus are inactive
+        $allBatchesInactive = true;
+
+        // Get filtered batches for the selected campus
+        $selectedCampusBatches = $batches->filter(function ($batch) use ($request) {
+            return $batch->campus_id == $request->input('selectedCampus');
+        });
+
+        // If we have batches, check if any are not inactive
+        if ($selectedCampusBatches->count() > 0) {
+            foreach ($selectedCampusBatches as $batch) {
+                if ($batch->status !== 'Inactive') {
+                    $allBatchesInactive = false;
+                    break;
+                }
+            }
+        } else {
+            // If no batches found for the campus, set to false
+            $allBatchesInactive = false;
+        }
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches, // Keep original batches for backward compatibility
             'batchesByCampus' => $batchesByCampus, // Add new batches grouped by campus
+            'allBatchesInactive' => $allBatchesInactive,
             'total_scholars' => $total_scholars,
             'requirements' => $requirements,
             'grantees' => $grantees,
             'completedBatches' => $completedBatches,
+            'totalBatches' => $totalBatches,
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
             'selectedCampus' => $request->input('selectedCampus', ''),
@@ -457,6 +491,33 @@ class ScholarshipController extends Controller
             'allBatches' => $allBatches,
             'payouts' => Payout::where('scholarship_id', $scholarship->id)->first(),
         ]);
+    }
+
+    public function forward_coor($scholarshipId, Request $request)
+    {
+        // Find the scholarship
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        // Get parameters from the request
+        $selectedSem = $request->input('selectedSem');
+        $schoolYearId = $request->input('school_year');
+        $selectedCampus = $request->input('selectedCampus');
+
+        // Find all matching batches
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->where('semester', $selectedSem)
+            ->where('school_year_id', $schoolYearId)
+            ->where('campus_id', $selectedCampus)
+            ->get();
+
+        // Update each batch individually using the requested format
+        foreach ($batches as $batch) {
+            Batch::where('id', $batch->id)->update([
+                'status' => 'Inactive'
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Forwarded Successfully');
     }
 
 
