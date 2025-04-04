@@ -410,10 +410,6 @@ class ScholarshipController extends Controller
             if ($batch->status == 'Pending' && $hasCompletedRequirements && $approvedScholarsCount > 0) {
                 $newStatus = 'Active';
             }
-            // // If batch is active and all scholars have completed all requirements (total_scholars == sub_total)
-            // elseif ($batch->status == 'Active' && $approvedScholarsCount == $batch->total_scholars) {
-            //     $newStatus = 'Inactive';
-            // }
 
             // Update this specific batch's sub_total and status
             Batch::where('id', $batch->id)->update([
@@ -466,12 +462,29 @@ class ScholarshipController extends Controller
             $allBatchesInactive = false;
         }
 
+        // Get payouts by campus
+        $payoutQuery = Payout::where('scholarship_id', $scholarship->id)
+            ->with('campus');
+
+        // Apply campus filter if needed
+        if ($userType == 'coordinator') {
+            $payoutQuery->where('campus_id', $user->campus_id);
+        } elseif ($request->input('selectedCampus')) {
+            $payoutQuery->where('campus_id', $request->input('selectedCampus'));
+        }
+
+        $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
+
+        // Get single payout record for backward compatibility
+        $mainPayout = Payout::where('scholarship_id', $scholarship->id)->first();
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches, // Keep original batches for backward compatibility
             'batchesByCampus' => $batchesByCampus, // Add new batches grouped by campus
             'allBatchesInactive' => $allBatchesInactive,
             'total_scholars' => $total_scholars,
+            'payoutsByCampus' => $payoutsByCampus, // Add new payouts grouped by campus
             'requirements' => $requirements,
             'grantees' => $grantees,
             'completedBatches' => $completedBatches,
@@ -489,7 +502,7 @@ class ScholarshipController extends Controller
             'userType' => $userType,
             'userCampusId' => $userType == 'coordinator' ? $user->campus_id : null,
             'allBatches' => $allBatches,
-            'payouts' => Payout::where('scholarship_id', $scholarship->id)->first(),
+            'payouts' => $mainPayout, // Keep original payouts for backward compatibility
         ]);
     }
 
