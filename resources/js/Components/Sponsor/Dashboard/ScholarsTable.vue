@@ -1,23 +1,16 @@
 <template>
-    <div class="space-y-2">
-        <Link :href="route('sponsor.scholarship')" class="flex justify-between items-center">
+    <div class="space-y-5">
 
-                <!-- Other content of your card goes here -->
+        <div class="flex flex-row justify-between items-center">
+            <span class="font-poppins font-semibold text-xl dark:text-dtext">Scholars</span>
+            <Link :href="route('sponsor.scholarship')" class="flex justify-between items-center">
 
-                <!-- Font Awesome Icon aligned to the right -->
-                <font-awesome-icon :icon="['fas', 'up-right-and-down-left-from-center']" class="ml-auto" />
+                    <!-- Other content of your card goes here -->
+                    <!-- expand -->
+                    <font-awesome-icon :icon="['fas', 'up-right-and-down-left-from-center']" class="ml-auto" />
 
-        </Link>
-        <!-- Analytics Section -->
-        <div class="grid grid-cols-2 gap-4">
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-gray-800">
-                <span class="text-sm text-gray-500 dark:text-gray-400">Total Applicants</span>
-                <p class="text-2xl font-semibold">43242</p>
-            </div>
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-gray-800">
-                <span class="text-sm text-gray-500 dark:text-gray-400">Total Verified Scholars</span>
-                <p class="text-2xl font-semibold">4324</p>
-            </div>
+            </Link>
+
         </div>
 
         <!-- Scholarship List Container -->
@@ -47,32 +40,12 @@
                                     <div>
                                         <div class="font-normal">
                                             feafe
-                                            <!-- <span v-if="scholar.status === 'Verified'"
-                                                class="material-symbols-rounded text-sm text-blue-600">verified</span> -->
                                         </div>
                                         <div class="text-sm opacity-50">Bianngonan</div>
                                     </div>
                                 </div>
                             </td>
                             <td>RDP</td>
-                            <!-- <td v-if="selectedScholarshipType === 'Need-Based'">
-                                <div class="flex items-center">
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
-                                        <div class="bg-blue-600 h-2.5 rounded-full"
-                                            :style="{ width: scholar.progress + '%' }"></div>
-                                    </div>
-                                    <span>{{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}</span>
-                                </div>
-                            </td> -->
-                            <!-- <td>
-                                <span :class="{
-                                    'text-green-600': scholar.status === 'Verified',
-                                    'text-yellow-500': scholar.status === 'Pending',
-                                    'text-red-600': scholar.status === 'Rejected'
-                                }">
-                                    {{ scholar.status }}
-                                </span>
-                            </td> -->
                             <td>fefeaf</td>
                             <td>feafae</td>
                             <td>
@@ -81,10 +54,6 @@
                                 </button>
                             </td>
                         </tr>
-                        <!-- <tr v-if="latestSubmissions.length === 0">
-                            <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7" class="text-center py-4">No
-                                recent submissions found</td>
-                        </tr> -->
                     </tbody>
                 </table>
             </div>
