@@ -590,7 +590,7 @@
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
-                                    <div class="w-6/12">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="w-full">
                                             <label for="totalRecipients" class="text-sm font-medium text-gray-700">
                                                 List Requirements
@@ -623,6 +623,37 @@
                                                 </form>
                                             </ul>
                                         </div>
+                                        
+                                        <div>
+                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700">
+                                                Upload multiple file templates
+                                            </label>
+                                            <!-- <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">
+                                            Upload multiple file templates
+                                            </label> -->
+                                            <input ref="fileInput"
+                                            class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                                    dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                            id="multiple_files" 
+                                            type="file" 
+                                            multiple 
+                                            @change="handleFileChange"
+                                            />
+
+                                            <!-- Preview Selected Files -->
+                                            <div v-if="selectedFiles.length" class="mt-3 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                            <p class="text-sm font-medium text-gray-900 dark:text-white mb-2">Selected Files:</p>
+                                            <ul class="space-y-2">
+                                                <li v-for="(file, index) in selectedFiles" :key="index" class="flex items-center justify-between text-sm bg-white dark:bg-gray-700 p-2 rounded-lg">
+                                                <span class="text-gray-700 dark:text-gray-300 truncate max-w-xs">{{ file.name }}</span>
+                                                <button @click="removeFile(index)" class="text-red-500 hover:text-red-700 text-xs">
+                                                    ✖ Remove
+                                                </button>
+                                                </li>
+                                            </ul>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -879,8 +910,37 @@ const total_scholars = computed(() => {
 });
 
 
+const requirementemplates = ref(false);
+const selectedFiles = ref([]);
+const fileInput = ref(null);
 // Default to showing the Scholar List
 const showPayrolls = ref(false);
+
+
+const toggletemplates = () => {
+  requirementemplates.value = !requirementemplates.value;
+};
+
+const handleFileChange = (event) => {
+  selectedFiles.value = Array.from(event.target.files);
+};
+
+const removeFile = (index) => {
+  selectedFiles.value.splice(index, 1); 
+
+  // Reset the file input by clearing and re-adding remaining files
+  const dataTransfer = new DataTransfer();
+  selectedFiles.value.forEach(file => dataTransfer.items.add(file));
+  
+  if (fileInput.value) {
+    fileInput.value.files = dataTransfer.files;
+  }
+};
+
+if (fileInput.value) {
+    fileInput.value.files = dataTransfer.files;
+  }
+
 
 const toggleView = () => {
     showPayrolls.value = !showPayrolls.value;
