@@ -27,6 +27,11 @@
             <p class="text-primary-foreground hover:text-primary-foreground transition">My Scholarships</p>
             </Link>
           </li>
+          <li>
+            <Link :href="(route('student.dashboard'))">
+            <p class="text-primary-foreground hover:text-primary-foreground transition">Communication</p>
+            </Link>
+          </li>
         </ul>
       </div>
 

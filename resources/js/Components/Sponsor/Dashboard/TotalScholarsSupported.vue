@@ -6,13 +6,13 @@
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3H5v14h12V10h-4z" />
             </svg>
-            <span class="text-xl font-semibold">Total Active Scholars</span>
+            <span class="text-xl font-semibold">Total Scholars Supported</span>
         </div>
         
         <!-- Number Section -->
-        <div>
-            <span class="text-4xl font-extrabold">25</span>
-            <p class="text-lg font-medium">Current Scholars</p>
+        <div class="pr-12">
+            <span class="text-4xl font-extrabold">1,002</span>
+            <p class="text-lg font-medium">Scholars</p>
         </div>
     </div>
 
