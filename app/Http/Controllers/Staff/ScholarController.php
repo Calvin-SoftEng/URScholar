@@ -254,29 +254,7 @@ class ScholarController extends Controller
                 return back()->withErrors([
                     'student' => 'Uy lods, outdated na yung student info. Paki-update naman 😅',
                 ])->withInput();
-
             }
-
-
-            $checkBatch = Batch::where('scholarship_id', $scholarship->id)
-                ->where('batch_no', $firstRecord['BATCH NO.'])
-                ->where('school_year_id', $request->schoolyear)
-                ->where('semester', $request->semester)
-                ->first();
-
-            // Check if the batch already exists
-            if (!$checkBatch) {
-                // Create a new batch
-                $batch = Batch::create([
-                    'scholarship_id' => $scholarship->id,
-                    'batch_no' => $firstRecord['BATCH NO.'],
-                    'school_year_id' => $request->schoolyear,
-                    'semester' => $request->semester,
-                ]);
-            } else {
-                $batch = $checkBatch;
-            }
-
 
             // Get all campuses for efficient lookup
             $campuses = Campus::all()->mapWithKeys(function ($campus) {
@@ -330,6 +308,9 @@ class ScholarController extends Controller
                 $currentNumber = (int) substr($highestId, 4);
                 $nextId = $currentNumber + 1;
             }
+
+            // Track campusBatches
+            $campusBatches = [];
 
             // Process each record from the CSV
             foreach ($records as $record) {
@@ -475,30 +456,81 @@ class ScholarController extends Controller
             }
 
             // Collect all scholar IDs (both existing and newly created)
-            $allScholarIds = $existingScholarIds;
+            $allScholars = [];
 
-            foreach ($createdScholars as $scholar) {
-                $allScholarIds[] = $scholar->id;
+            // Add existing scholars
+            if (!empty($existingScholarIds)) {
+                $existingScholars = Scholar::whereIn('id', $existingScholarIds)->get();
+                $allScholars = array_merge($allScholars, $existingScholars->toArray());
             }
 
-            // Create grantee entries for ALL scholars (both existing and new)
-            $granteesData = [];
-            foreach ($allScholarIds as $scholarId) {
-                $granteesData[] = [
-                    'scholarship_id' => $scholarship->id,
-                    'batch_id' => $batch->id,
-                    'scholar_id' => $scholarId,
-                    'school_year_id' => $request->schoolyear,
-                    'semester' => $request->semester,
-                    'status' => 'Active',
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+            // Add newly created scholars
+            if (!empty($createdScholars)) {
+                foreach ($createdScholars as $scholar) {
+                    $allScholars[] = $scholar->toArray();
+                }
             }
 
-            // Bulk insert grantees
-            if (!empty($granteesData)) {
-                Grantees::insert($granteesData);
+            // Group scholars by campus
+            $scholarsByCompus = [];
+            foreach ($allScholars as $scholar) {
+                $campusId = $scholar['campus_id'];
+                if ($campusId) {
+                    if (!isset($scholarsByCompus[$campusId])) {
+                        $scholarsByCompus[$campusId] = [];
+                    }
+                    $scholarsByCompus[$campusId][] = $scholar['id'];
+                }
+            }
+
+            // Create or find batches for each campus
+            foreach ($scholarsByCompus as $campusId => $scholarIds) {
+                // Check if batch already exists for this campus
+                $existingBatch = Batch::where('scholarship_id', $scholarship->id)
+                    ->where('batch_no', $firstRecord['BATCH NO.'])
+                    ->where('school_year_id', $request->schoolyear)
+                    ->where('semester', $request->semester)
+                    ->where('campus_id', $campusId)
+                    ->first();
+
+                if (!$existingBatch) {
+                    // Create a new batch for this campus
+                    $batch = Batch::create([
+                        'scholarship_id' => $scholarship->id,
+                        'batch_no' => $firstRecord['BATCH NO.'],
+                        'school_year_id' => $request->schoolyear,
+                        'semester' => $request->semester,
+                        'campus_id' => $campusId,
+                    ]);
+                    $campusBatches[$campusId] = $batch;
+                } else {
+                    $campusBatches[$campusId] = $existingBatch;
+                }
+
+                // Create grantee entries for scholars in this campus
+                $granteesData = [];
+                foreach ($scholarIds as $scholarId) {
+                    $granteesData[] = [
+                        'scholarship_id' => $scholarship->id,
+                        'batch_id' => $campusBatches[$campusId]->id,
+                        'scholar_id' => $scholarId,
+                        'school_year_id' => $request->schoolyear,
+                        'semester' => $request->semester,
+                        'status' => 'Active',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                // Bulk insert grantees for this campus
+                if (!empty($granteesData)) {
+                    Grantees::insert($granteesData);
+                }
+
+                // Update the batch total scholars
+                $campusBatches[$campusId]->update([
+                    'total_scholars' => count($scholarIds)
+                ]);
             }
 
             // Student verification process for new scholars only
@@ -529,20 +561,14 @@ class ScholarController extends Controller
                 }
             }
 
-            // Update the total scholars in the batch
-            $batch->update([
-                'total_scholars' => count($allScholarIds)
-            ]);
-
             // Update Scholarship Status
             $scholarship->update([
                 'status' => 'Active'
             ]);
 
             // Get campuses for all scholars
-            $scholarIds = array_unique($allScholarIds);
-            $campusIds = Scholar::whereIn('id', $scholarIds)->pluck('campus_id')->unique()->filter();
-            $campuses = Campus::whereIn('id', $campusIds)->get();
+            $campusIds = array_keys($campusBatches);
+            $campusesForGroups = Campus::whereIn('id', $campusIds)->get();
 
             // Create scholarship group for current user
             ScholarshipGroup::create([
@@ -551,7 +577,7 @@ class ScholarController extends Controller
             ]);
 
             // Create scholarship groups for coordinators and cashiers
-            foreach ($campuses as $campus) {
+            foreach ($campusesForGroups as $campus) {
                 // Find coordinator
                 $coordinator = User::find($campus->coordinator_id);
 
@@ -585,11 +611,12 @@ class ScholarController extends Controller
 
             $existingScholarsCount = count($existingScholarIds);
             $newScholarsCount = count($createdScholars);
+            $totalCampuses = count($campusBatches);
 
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
                     'type' => 'success',
-                    'message' => "Successfully processed " . count($records) . " records. Added {$existingScholarsCount} existing scholars and created {$newScholarsCount} new scholars. New scholars - Matched: {$matchedCount}, Unmatched: {$unmatchedCount}."
+                    'message' => "Successfully processed " . count($records) . " records. Added {$existingScholarsCount} existing scholars and created {$newScholarsCount} new scholars across {$totalCampuses} campuses. New scholars - Matched: {$matchedCount}, Unmatched: {$unmatchedCount}."
                 ]);
 
         } catch (\Exception $e) {

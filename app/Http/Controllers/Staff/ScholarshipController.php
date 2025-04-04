@@ -263,7 +263,7 @@ class ScholarshipController extends Controller
             ->when($request->input('selectedSem'), function ($query) use ($request) {
                 return $query->where('semester', $request->input('selectedSem'));
             })
-            ->first(); // Use first() instead of get() to get a single model
+            ->first();
 
         if ($scholarship->scholarshipType == 'One-time Payment' && $batch) {
             return redirect()->route('scholarship.onetime_list', [
@@ -273,7 +273,7 @@ class ScholarshipController extends Controller
             ]);
         }
 
-        // Build batches query
+        // Build base batches query
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->with([
                 'grantees.scholar' => function ($query) {
@@ -289,14 +289,35 @@ class ScholarshipController extends Controller
             $batchesQuery->where('semester', $request->input('selectedSem'));
         }
 
-        if ($request->input('selectedCampus')) {
-            $campusId = $request->input('selectedCampus');
+        // Get filtered campuses (either all or just the user's campus)
+        $filteredCampuses = $userType == 'coordinator'
+            ? $campuses->where('id', $user->campus_id)
+            : ($request->input('selectedCampus')
+                ? $campuses->where('id', $request->input('selectedCampus'))
+                : $campuses);
 
-            $batchesQuery->whereHas('grantees.scholar', function ($query) use ($campusId) {
-                $query->where('campus_id', $campusId);
-            });
+        // Initialize array to store batches grouped by campus
+        $batchesByCampus = [];
+
+        // For each campus, get its batches
+        foreach ($filteredCampuses as $campus) {
+            $campusBatchesQuery = clone $batchesQuery;
+
+            // Get batches for this campus
+            $campusBatches = $campusBatchesQuery
+                ->where('campus_id', $campus->id)
+                ->orderBy('batch_no')
+                ->get();
+
+            if ($campusBatches->count() > 0) {
+                $batchesByCampus[$campus->id] = [
+                    'campus' => $campus,
+                    'batches' => $campusBatches
+                ];
+            }
         }
 
+        // Get all batches (for backward compatibility)
         $batches = $batchesQuery->orderBy('batch_no')->get();
 
         $schoolyear = $request->input('selectedYear')
@@ -338,7 +359,7 @@ class ScholarshipController extends Controller
         // Remove duplicates if a scholar appears in multiple batches
         $total_scholars = $total_scholars->unique('id');
 
-        // Replace the existing batch update code with this more accurate per-batch calculation
+        // Calculate per-batch statistics
         foreach ($batches as $batch) {
             // Get scholars from this specific batch
             $batchScholars = $batch->grantees->map(fn($grantee) => $grantee->scholar)->filter()->unique('id');
@@ -371,7 +392,6 @@ class ScholarshipController extends Controller
             ->when($request->input('selectedSem'), fn($query, $sem) => $query->where('semester', $sem))
             ->count();
 
-
         $allBatches = Batch::where('scholarship_id', $scholarship->id)
             ->with([
                 'grantees.scholar' => function ($query) {
@@ -391,7 +411,8 @@ class ScholarshipController extends Controller
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
-            'batches' => $batches,
+            'batches' => $batches, // Keep original batches for backward compatibility
+            'batchesByCampus' => $batchesByCampus, // Add new batches grouped by campus
             'total_scholars' => $total_scholars,
             'requirements' => $requirements,
             'grantees' => $grantees,
