@@ -71,6 +71,7 @@
                         <ul class="list-disc pl-5 mt-2 text-base">
                             <li>Your (call mo gwa q) GWA does not meet the required minimum of 1.2.</li>
                             <li>Your family income exceeds the required range of ₱10,000–₱20,000.</li>
+                            <li>Your course is not eligible for this scholarship.</li>
                         </ul>
 
                     </div>
