@@ -40,11 +40,11 @@
                 </div>
 
                 <div class="w-full mt-5">
-                    <div class="relative overflow-x-auto border border-gray-200 rounded-lg w-full">
+                    <div class="relative overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg w-full">
                         <div
-                            class="grid grid-cols-4 w-full py-1 items-center justify-between gap-10 bg-gray-50 dark:bg-gray-700">
+                            class="grid grid-cols-4 w-full py-1 items-center justify-between gap-10 bg-gray-50 dark:bg-dcontainer ">
                             <div class="flex flex-col w-full px-14">
-                                <span class="flex items-center text-xs font-bold text-gray-700 uppercase ">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase ">
                                     Name
                                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -53,11 +53,11 @@
                                     </svg>
                                 </span>
                                 <input type="text" id="first_name"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="" />
                             </div>
                             <div class="flex flex-col w-full px-14">
-                                <span class="flex items-center text-xs font-bold text-gray-700 uppercase">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase">
                                     Campus
                                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -66,11 +66,11 @@
                                     </svg>
                                 </span>
                                 <input type="text" id="first_name"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="" />
                             </div>
                             <div class="flex flex-col w-full px-14">
-                                <span class="flex items-center text-xs font-bold text-gray-700 uppercase">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase">
                                     Course
                                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -79,11 +79,11 @@
                                     </svg>
                                 </span>
                                 <input type="text" id="first_name"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="" />
                             </div>
                             <div class="flex flex-col w-full px-14">
-                                <span class="flex items-center text-xs font-bold text-gray-700 uppercase">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase">
                                     Year Level
                                     <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                         width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -92,15 +92,15 @@
                                     </svg>
                                 </span>
                                 <input type="text" id="first_name"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="" />
                             </div>
                         </div>
                         <table
-                            class="mt-2 w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg overflow-y-auto">
+                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg overflow-y-auto">
                             <thead
-                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
+                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary ">
+                                <tr class="dark:text-dtext">
                                     <th scope="col" class="px-6 py-3">
                                         Student Name
                                     </th>
@@ -123,7 +123,7 @@
                             </thead>
                             <tbody>
                                 <template v-for="student in paginatedStudents" :key="student.id">
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                    <tr class="bg-white border-b dark:bg-dsecondary dark:border-gray-700 border-gray-200">
                                         <td class="px-6 py-4">
                                             {{ student.first_name }} {{ student.last_name }}
                                         </td>

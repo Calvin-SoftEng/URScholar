@@ -201,18 +201,18 @@
                             {{ selectedScholarship.name }}<span> Scholars</span>
                         </h1>
 
-                        <div class="py-5 text-gray-500 ">
+                        <div class="py-5 text-gray-500 dark:text-gray-300">
                             Select School Year and Semester
                         </div>
                         <div class="grid grid-cols-3 justify-center items-center gap-3">
                             <div
-                                class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                                class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
                                 Academic Year: </div>
                             <div class="col-span-2 w-full">
                                 <Select v-model="selectedYear" required>
                                     <SelectTrigger class="w-full border"
                                         :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
-                                        <SelectValue placeholder="Select year" class="dark:text-dtext" />
+                                        <SelectValue placeholder="Select year" class="" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup v-for="schoolyear in [...schoolyears].reverse()"
@@ -226,13 +226,13 @@
                                 </Select>
                             </div>
                             <div
-                                class="col-span-1 text-primary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                                class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
                                 Semester: </div>
                             <div class="col-span-2 w-full">
                                 <Select v-model="selectedSem" required>
                                     <SelectTrigger class="w-full border"
                                         :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
-                                        <SelectValue placeholder="Select Semester" class="dark:text-dtext" />
+                                        <SelectValue placeholder="Select Semester" class="" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         <SelectGroup>
@@ -414,6 +414,11 @@ const openScholarship = () => {
 
 const closeModal = () => {
     ScholarshipSpecification.value = false;
+    selectedScholarship.value = null;
+    selectedYear.value = "";
+    selectedSem.value = "";
+    formErrors.value.selectedSem = "";
+    formErrors.value.selectedYear = "";
     resetForm();
 };
 

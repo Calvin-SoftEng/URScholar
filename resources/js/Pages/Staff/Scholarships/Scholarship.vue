@@ -31,7 +31,7 @@
                             <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based'" class="flex gap-2">
@@ -40,19 +40,19 @@
                             <button v-tooltip.left="'You need to add students before importing scholars'" disabled
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                    font-poppins flex items-center gap-2">
+                                    font-poppins flex items-center gap-2 dark:hover:bg-yellow-800">
                                 <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
                                 <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
-                                <span>Import Scholars</span>
+                                <span class="dark:text-dtext">Import Scholars</span>
                             </button>
 
                             <!-- Disabled Send Email Button -->
                             <button v-tooltip.left="'You need to add scholars before sending emails'" disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                    font-poppins flex items-center gap-2">
+                                    font-poppins flex items-center gap-2 dark:hover:bg-yellow-800">
                                 <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
-                                <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
-                                <span>Send Email</span>
+                                <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext " />
+                                <span class="dark:text-dtext ">Send Email</span>
                             </button>
                         </div>
 
@@ -95,7 +95,7 @@
                 <div v-if="scholarship.scholarshipType == 'Grant-Based'">
                     <div v-if="!batches || batches.length === 0"
                         class="flex flex-col w-full items-center justify-center mt-5">
-                        <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                        <div class="bg-white w-full dark:bg-dsecondary p-6 rounded-lg text-center animate-fade-in">
                             <font-awesome-icon :icon="['fas', 'user-graduate']"
                                 class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                             <p class="text-lg text-gray-700 dark:text-gray-300">
@@ -377,9 +377,9 @@
                     <form @submit.prevent="submitForm">
                         <div class="pt-3 pb-20 overflow-auto h-full scroll-py-4">
                             <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
-                            <div class="w-full block bg-white px-12 py-6 flex-col items-center mx-auto sm:px-6 lg:px-8">
+                            <div class="w-full block bg-white dark:bg-dsecondary px-12 py-6 flex-col items-center mx-auto sm:px-6 lg:px-8">
                                 <div class="flex justify-between items-center py-2">
-                                    <span class="text-lg font-semibold text-gray-700">
+                                    <span class="text-lg font-semibold text-gray-700 dark:text-dtext">
                                         Set up One-Time Payment Scholarship Details
                                     </span>
                                     <button type="submit" @click="submitForm"
@@ -391,7 +391,7 @@
                                     <div class="flex flex-row w-full gap-3">
                                         <div class="flex flex-col space-y-2 w-full">
                                             <label for="suffixName"
-                                                class="text-sm font-medium text-gray-700">Scholarship Name</label>
+                                                class="text-sm font-medium text-gray-700 dark:text-dtext">Scholarship Name</label>
                                             <input id="suffixName" :value="scholarship.name" readonly type="text"
                                                 placeholder="Scholarship Name"
                                                 class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
@@ -399,7 +399,7 @@
 
                                         <div class="flex flex-col space-y-2 w-full">
                                             <label for="suffixName"
-                                                class="text-sm font-medium text-gray-700">Scholarship Type</label>
+                                                class="text-sm font-medium text-gray-700 dark:text-dtext">Scholarship Type</label>
                                             <input id="suffixName" :value="scholarship.scholarshipType" readonly
                                                 type="text" placeholder="Scholarship Type"
                                                 class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
@@ -414,7 +414,7 @@
                                             <!-- Application Start Date -->
                                             <div class="flex flex-col w-full">
                                                 <label for="datepicker-range-start"
-                                                    class="text-sm font-medium text-gray-700 mb-1">Application
+                                                    class="text-sm font-medium text-gray-700 mb-1 dark:text-dtext">Application
                                                     Start</label>
                                                 <div class="relative">
                                                     <div
@@ -438,7 +438,7 @@
                                             <!-- Application Deadline -->
                                             <div class="flex flex-col w-full">
                                                 <label for="datepicker-range-end"
-                                                    class="text-sm font-medium text-gray-700 mb-1">Application
+                                                    class="text-sm font-medium text-gray-700 mb-1 dark:text-dtext">Application
                                                     Deadline</label>
                                                 <div class="relative">
                                                     <div
@@ -466,7 +466,7 @@
                                         <div>
                                             <!-- Total Recipients Input -->
                                             <div class="flex w-6/12 pr-2 flex-col">
-                                                <label for="totalRecipients" class="text-sm font-medium text-gray-700">
+                                                <label for="totalRecipients" class="text-sm font-medium text-gray-700 dark:text-dtext">
                                                     Number of Recipients
                                                 </label>
                                                 <input id="totalRecipients" type="number" v-model="form.totalRecipients"
@@ -480,14 +480,14 @@
                                                 <!-- Header with Label & Stats -->
                                                 <div class="flex flex-row justify-between items-center py-2">
                                                     <div class="flex flex-col space-y-2">
-                                                        <label class="text-sm font-medium">Distribute Recipients per
+                                                        <label class="text-sm font-medium dark:text-dtext">Distribute Recipients per
                                                             Selected Campus</label>
-                                                        <div class="flex flex-row text-sm gap-4">
+                                                        <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
                                                                 }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
-                                                                class="text-red-500 font-medium">
+                                                                class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
                                                                 }}
                                                                 recipients still need to be allocated
@@ -501,8 +501,8 @@
                                                             <button @click="distributeRecipients"
                                                                 class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600">
                                                                 <span
-                                                                    class="material-symbols-rounded text-base">restart_alt</span>
-                                                                <span>Reset to Auto Distribution</span>
+                                                                    class="material-symbols-rounded text-base dark:text-dtext">restart_alt</span>
+                                                                <span class="text-sm dark:text-dtext">Reset to Auto Distribution</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -519,7 +519,7 @@
 
 
                                                         <label :for="`campus-${campus.id}`"
-                                                            class="text-base font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
+                                                            class="text-base font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2 dark:text-dtext">
                                                             {{ campus.name }}
                                                         </label>
 
@@ -537,9 +537,9 @@
                                         <!-- Right Side: Course List Display Grouped by Campus -->
                                         <div class="flex flex-col space-y-4">
                                             <div v-for="campus in selectedCampuses" :key="campus.id"
-                                                class="py-3 px-4 bg-gray-50 border rounded-md">
+                                                class="py-3 px-4 bg-gray-50 dark:bg-dnavy border rounded-md">
                                                 <!-- Selected Campus Name -->
-                                                <div class="text-sm font-semibold text-gray-700 mb-2">
+                                                <div class="text-sm font-semibold text-gray-700 mb-2 dark:text-dtext">
                                                     {{ campus.name }}
                                                 </div>
 
@@ -548,7 +548,7 @@
                                                     <input type="checkbox" :id="`course-${campus.id}-${course}`"
                                                         v-model="selectedCoursesMap[course]" class="rounded" />
                                                     <label :for="`course-${campus.id}-${course}`"
-                                                        class="text-sm ml-2 cursor-pointer">{{
+                                                        class="text-sm ml-2 cursor-pointer dark:text-dtext">{{
                                                             course }}</label>
                                                 </div>
                                             </div>
@@ -558,7 +558,7 @@
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
-                                    <h3 class="text-base font-medium text-black">List
+                                    <h3 class="text-base font-medium text-black dark:text-dtext">List
                                         Criteria and Eligibility</h3>
                                     <div class="grid grid-cols-2 space-x-2">
                                         <div class="w-full flex flex-col p-2">
@@ -566,7 +566,7 @@
                                             <div class="space-y-4">
                                                 <div class="flex flex-col justify-center items-start">
                                                     <span
-                                                        class="text-sm font-medium text-black whitespace-nowrap mb-2">General
+                                                        class="text-sm font-medium text-black whitespace-nowrap mb-2 dark:text-dtext">General
                                                         Weighted Average must be:
                                                     </span>
 
@@ -577,7 +577,7 @@
                                                 </div>
 
                                                 <div class="flex flex-col space-y-2 justify-center items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap">
+                                                    <span class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
                                                         Must be enrolled in:
                                                     </span>
 
@@ -590,7 +590,7 @@
 
                                                 <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
                                                     class="flex flex-col justify-center space-y-2 items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap ">
+                                                    <span class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
                                                         {{ eligiblity.name }}
                                                     </span>
                                                     <div v-for="conditions in getFormData(eligiblity.id)"
@@ -609,7 +609,7 @@
                                         </div>
 
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                                            <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                                            <div class="p-4 ">
                                                 <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
                                                     {{ scholarship_form.name }}</h4>
 
@@ -620,7 +620,7 @@
                                                         :checked="criteriaIncludes(data.id)"
                                                         @change="toggleCriteria(data.id)">
                                                     <label :for="'accept-terms-' + data.id"
-                                                        class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                        class="text-sm font-medium text-gray-700 cursor-pointer dark:text-dtext">
                                                         {{ data.name }}
                                                     </label>
                                                 </div>
@@ -632,7 +632,7 @@
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="w-full">
-                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700">
+                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700 dark:text-dtext" >
                                                 List Requirements
                                             </label>
                                             <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
@@ -665,7 +665,7 @@
                                         </div>
 
                                         <div>
-                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700">
+                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700 dark:text-dtext">
                                                 Upload multiple file templates
                                             </label>
                                             <!-- <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">

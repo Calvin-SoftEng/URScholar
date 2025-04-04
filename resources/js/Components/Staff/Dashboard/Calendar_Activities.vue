@@ -12,7 +12,7 @@
                     <!-- People / Group Chats List -->
                     <ul class="w-full space-y-2 px-3">
                         <li v-for="(activity, index) in activities" :key="index" class="flex flex-col p-3 rounded-md bg-white shadow-sm border border-gray-200 dark:bg-dcontainer dark:border-gray-600">
-                        <span class="text-primary font-quicksand font-semibold text-sm">{{ activity.title }}</span>
+                        <span class="text-dprimary font-quicksand font-semibold text-sm dark:text-dtext">{{ activity.title }}</span>
                         <span class="text-gray-500 text-xs">{{ activity.date }}</span>
                         </li>
                         

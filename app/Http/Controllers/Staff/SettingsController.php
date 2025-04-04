@@ -485,4 +485,20 @@ class SettingsController extends Controller
 
         return redirect()->back()->with('success', 'Criteria deleted successfully.');
     }
+
+    public function archives()
+    {
+
+        return Inertia::render(
+            'Staff/Settings/Archives'
+        );
+    }
+
+    public function user_activities()
+    {
+
+        return Inertia::render(
+            'Staff/Settings/User_Activities'
+        );
+    }
 }

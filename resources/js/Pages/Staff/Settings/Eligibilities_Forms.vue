@@ -9,11 +9,11 @@
                 </h1>
 
                 <div class="w-full mt-5">
-                    <div class="relative overflow-x-auto rounded-lg w-full p-5 bg-white">
+                    <div class="relative overflow-x-auto rounded-lg w-full p-5 bg-white dark:bg-dcontainer">
                         <!-- Eligibility Forms Section -->
                         <div class="mb-5 space-y-5">
                             <div class="flex flex-row justify-between border-b items-center pb-3">
-                                <h2 class="text-lg font-semibold text-gray-700">Scholarship Eligibility Categories</h2>
+                                <h2 class="text-lg font-semibold text-gray-700 dark:text-dtext">Scholarship Eligibility Categories</h2>
                                 <button @click="toggleNewEligibility" class="text-blue-600 text-sm hover:underline">Add
                                     New Category</button>
                             </div>
@@ -25,18 +25,27 @@
 
                             <!-- Loop through eligibilities -->
                             <div v-for="item in eligibility" :key="item.id"
-                                class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                class="bg-white dark:bg-dsecondary border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                                 <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                                     <div>
-                                        <span class="font-semibold font-quicksand text-lg">{{ item.name }}</span>
+                                        <span class="font-semibold font-quicksand text-lg dark:text-dtext">{{ item.name }}</span>
                                     </div>
-                                    <div class="flex gap-2">
-                                        <button @click="toggleEditEligibility(item)"
-                                            class="text-blue-600 text-sm hover:underline">Edit Category</button>
-                                        <button @click="toggleAddCondition(item.id)"
-                                            class="text-blue-600 text-sm hover:underline">Add Condition</button>
-                                        <button @click="deleteEligibility(item.id)"
-                                            class="text-red-600 text-sm hover:underline">Delete</button>
+                                    <div class="flex gap-2 items-center">
+                                        <button @click="toggleEditEligibility(item)" class="text-blue-600 text-sm hover:underline">
+                                            Edit Category
+                                        </button>
+                                        
+                                        <div class="h-4 border-l border-gray-400"></div> <!-- Vertical Line -->
+
+                                        <button @click="toggleAddCondition(item.id)" class="text-blue-600 text-sm hover:underline">
+                                            Add Condition
+                                        </button>
+                                        
+                                        <div class="h-4 border-l border-gray-400"></div> <!-- Vertical Line -->
+
+                                        <button @click="deleteEligibility(item.id)" class="text-red-600 text-sm hover:underline">
+                                            Delete
+                                        </button>
                                     </div>
                                 </div>
 
@@ -50,8 +59,8 @@
 
                                         <!-- Loop through conditions for this eligibility -->
                                         <div v-for="cond in getConditions(item.id)" :key="cond.id"
-                                            class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                            <span class="text-gray-700">{{ cond.name }}</span>
+                                            class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100 dark:hover:bg-dprimary">
+                                            <span class="text-gray-700 dark:text-dtext">{{ cond.name }}</span>
                                             <div class="ml-2 flex gap-1">
                                                 <button @click="toggleEditCondition(cond)"
                                                     class="p-1 rounded hover:bg-gray-200">
