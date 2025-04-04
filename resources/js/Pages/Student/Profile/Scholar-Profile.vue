@@ -965,11 +965,11 @@
                                 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
                             </div>
                         </div>
-                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded 
-                    sm:text-xs sm:py-1
-                    xl:px-5">
-                            Upload
-                        </button>
+                        <div class="pl-5 mt-4 justify-end flex items-end">
+                            <button type="submit"
+                                class="text-white font-sans w-6/12 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm py-2.5 text-center mb-2 ">
+                                Add Grade</button>
+                        </div>
                     </form>
                     <hr class="border-gray-300 my-4">
                 </div>

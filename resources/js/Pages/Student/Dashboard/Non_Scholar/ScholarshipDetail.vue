@@ -35,25 +35,19 @@
                             <!-- Tab Content -->
                             <div class="p-4 border border-gray-400">
                                 <div v-if="activeTab === 'eligibility'">
-                                    <h2 class="text-lg font-semibold">Applicant for this scholarship must:</h2>
-                                    <p>Details about the eligibility criteria go here.</p>
-                                    <p>Grade: {{ criterias.grade }}</p>
-                                    <h3 class="text-lg font-semibold">{{ criterias.scholarship_form_data.name }}</h3>
+                                    <h2 class="text-lg font-semibold mb-3">Scholarship recipients are selected on the basis of:</h2>
+                                    <p>Student General Weighted Average must be atleast <span class="font-semibold">{{ criterias.grade }}</span></p>
+                                    <p>Family income must range between <span class="font-semibold">{{ criterias.scholarship_form_data.name }}</span></p>
                                 </div>
                                 <div v-if="activeTab === 'requirements'">
-                                    <h2 class="text-lg font-semibold">Scholarship recipients are selected on the basis
-                                        of:
+                                    <h2 class="text-lg font-semibold mb-3">Applicant for this scholarship must provide the following:
                                     </h2>
-                                    <p>Details about the required documents go here.</p>
                                     <div v-for="requirement in requirements" :key="requirement.id">
-
-                                        <h3 class="text-lg font-semibold">{{ requirement.requirements }}</h3>
+                                        <p>A copy of  <span class="font-semibold">{{ requirement.requirements }}</span></p>
                                     </div>
                                 </div>
                                 <div v-if="activeTab === 'awards'">
-                                    <h2 class="text-lg font-semibold">As part of your application, you must upload the
-                                        following:</h2>
-                                    <p>Details about the awards and benefits go here.</p>
+                                    <h2 class="text-lg font-semibold">Announcement of qualified applicants will be available to your Dashboard once announced</h2>
                                 </div>
                             </div>
                         </div>
@@ -71,19 +65,32 @@
                     <button class="bg-gray-400 text-white px-10 py-2 rounded-lg shadow-md cursor-not-allowed">Not
                         Eligible</button>
                     </Link>
+
+                    <div class="bg-red-100 border-l-4 border-red-500 text-red-900 p-4 shadow-sm">
+                        <h2 class="text-lg font-semibold">Reasons you are not Eligible</h2>
+                        <p class="mt-2 text-base">
+                            <p>Your application has been successfully completed.</p>
+                            <p>You will be notified about the next steps soon.</p>
+                        </p>
+                    </div>
+
                     <div class="flex flex-col">
                         <span class="text-gray-500 text-sm">Application Deadline</span>
                         <span class="font-medium text-xl">{{ formattedDate }}</span>
                     </div>
+
                     <div class="flex flex-col">
                         <span class="text-gray-500 text-sm">Scholarship For</span>
-                        <div class="font-medium text-xl">
+                        <div class="font-medium text-lg">
                             <!-- Replace the single line with this loop -->
                             <template v-if="Array.isArray(parsedCourses) && parsedCourses.length">
-                                <div v-for="(course, index) in parsedCourses" :key="index">
-                                    {{ course.course }}
-                                </div>
+                                <ul class="list-disc pl-5">
+                                    <li v-for="(course, index) in parsedCourses" :key="index">
+                                        {{ course.course }}
+                                    </li>
+                                </ul>
                             </template>
+
                             <div v-else>
                                 {{ fallbackCourseDisplay }}
                             </div>

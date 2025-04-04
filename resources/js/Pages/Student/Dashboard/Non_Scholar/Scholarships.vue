@@ -34,7 +34,7 @@
                                     alt="logo" class="w-40 h-40 rounded-lg object-cover">
 
                                 <!-- Scholarship Details -->
-                                <div class="flex flex-col flex-grow space-y-1 items-start">
+                                <div class="flex flex-col flex-grow space-y-2 items-start">
                                     <span class="font-semibold text-2xl text-gray-800">{{ scholarship.name }}</span>
                                     <span class="text-sm text-gray-600 space-x-2">
                                         Funded by <span class="font-medium text-gray-800">{{
@@ -42,7 +42,7 @@
                                         <span class="text-gray-500">Since <span class="font-medium text-gray-800">{{
                                             getSponsorDetails(scholarship.sponsor_id).since }}</span></span>
                                     </span>
-                                    <p class="text-sm text-gray-700 leading-relaxed mt-2">
+                                    <p class="text-sm text-gray-700 leading-relaxed mt-2 text-justify">
                                         {{ getSponsorDetails(scholarship.sponsor_id).description }}
                                     </p>
 
@@ -90,8 +90,8 @@
                                     <Link 
                                         :href="`/student/applying-scholarship/${scholarship.id}`">
                                     <button
-                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
-                                        View Details
+                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200 whitespace-nowrap">
+                                        View More
                                     </button>
                                     </Link>
                                     <!-- <button v-else
