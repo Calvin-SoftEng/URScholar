@@ -25,7 +25,7 @@
                 <!-- Check if scholarships exist -->
                 <template v-if="scholarships.length > 0">
                     <div v-for="scholarship in scholarships" :key="scholarship.id"
-                        class="p-6 w-full min-w-xl bg-white">
+                        class="p-6 w-full min-w-xl max-w-7xl bg-white">
                         <div v-if="scholarship.status == 'Active'">
                             <div class="flex flex-row items-center gap-6 justify-between bg-white p-6 rounded-lg shadow-md">
                                 <!-- Scholarship Image -->
@@ -41,12 +41,12 @@
                                         <span class="text-gray-500">Since <span class="font-medium text-gray-800">{{
                                             getSponsorDetails(scholarship.sponsor_id).since }}</span></span>
                                     </span>
-                                    <p class="text-sm text-gray-700 leading-relaxed mt-2">
+                                    <p class="text-sm text-gray-700 leading-relaxed pt-4 text-start">
                                         {{ getSponsorDetails(scholarship.sponsor_id).description }}
                                     </p>
 
                                     <!-- Scholarship Info -->
-                                    <div class="flex gap-6 mt-5">
+                                    <div class="flex gap-6 pt-5">
                                         <div class="flex flex-col items-start">
                                             <span class="text-gray-500 text-sm">Scholarship for</span>
                                             <span class="font-medium text-gray-800">All Courses</span>
@@ -69,8 +69,8 @@
                                 <div class="flex h-full items-center justify-center">
                                     <Link :href="`/applying-scholarship/${scholarship.id}`">
                                     <button
-                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
-                                        Apply Now
+                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200 whitespace-nowrap">
+                                        View More
                                     </button>
                                     </Link>
                                 </div>

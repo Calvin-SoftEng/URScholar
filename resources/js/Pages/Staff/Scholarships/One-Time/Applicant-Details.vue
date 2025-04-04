@@ -205,7 +205,7 @@
                         </div>
 
                         <!-- 75% Column -->
-                        <div class="col-span-1 h-full flex flex-col space-y-3">
+                        <div class="col-span-1 h-fit flex flex-col space-y-3">
                             <!-- Second Layer with Single Card -->
                             <div
                                 class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
