@@ -69,9 +69,10 @@
                     <div class="bg-red-100 border-l-4 border-red-500 text-red-900 p-4 shadow-sm">
                         <h2 class="text-lg font-semibold">Reasons you are not Eligible</h2>
                         <p class="mt-2 text-base">
-                            <p>Your application has been successfully completed.</p>
-                            <p>You will be notified about the next steps soon.</p>
+                            <p>Your (call mo gwa q) GWA does not meet the required minimum of 1.2.</p>
+                            <p>Your family income exceeds the required range of ₱10,000–₱20,000.</p>
                         </p>
+
                     </div>
 
                     <div class="flex flex-col">
