@@ -68,10 +68,10 @@
 
                     <div class="bg-red-100 border-l-4 border-red-500 text-red-900 p-4 shadow-sm">
                         <h2 class="text-lg font-semibold">Reasons you are not Eligible</h2>
-                        <p class="mt-2 text-base">
-                            <p>Your (call mo gwa q) GWA does not meet the required minimum of 1.2.</p>
-                            <p>Your family income exceeds the required range of ₱10,000–₱20,000.</p>
-                        </p>
+                        <ul class="list-disc pl-5 mt-2 text-base">
+                            <li>Your (call mo gwa q) GWA does not meet the required minimum of 1.2.</li>
+                            <li>Your family income exceeds the required range of ₱10,000–₱20,000.</li>
+                        </ul>
 
                     </div>
 
