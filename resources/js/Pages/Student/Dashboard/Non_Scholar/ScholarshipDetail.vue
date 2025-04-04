@@ -41,6 +41,8 @@
                                         criterias.grade }}</span></p>
                                     <p>Family income must range between <span class="font-semibold">{{
                                         criterias.scholarship_form_data.name }}</span></p>
+                                    <!-- dito mo ilist -->
+                                    <p>Must belong to a low-income household (based on government records)</p>
                                 </div>
                                 <div v-if="activeTab === 'requirements'">
                                     <h2 class="text-lg font-semibold mb-3">Applicant for this scholarship must provide
