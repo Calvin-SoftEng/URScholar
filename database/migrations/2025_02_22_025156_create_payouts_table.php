@@ -13,6 +13,7 @@ return new class extends Migration {
         Schema::create('payouts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
             $table->integer('total_scholars')->nullable();
             $table->integer('sub_total')->nullable();
             $table->date('date_start');

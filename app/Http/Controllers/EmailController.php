@@ -17,6 +17,7 @@ use App\Mail\SendEmail;
 use App\Models\ActivityLog;
 use App\Models\Payout;
 use App\Models\ScholarshipGroup;
+use App\Models\SchoolYear;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
@@ -26,12 +27,16 @@ use Illuminate\Support\Facades\Hash;
 
 class EmailController extends Controller
 {
-    public function index(Scholarship $scholarship)
+    public function index(Scholarship $scholarship, Request $request)
     {
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->orderBy('batch_no', 'desc')
             ->with(['scholars.campus', 'scholars.course', 'scholars.user'])
             ->get();
+
+        $selectedYear = $request->input('selectedYear', '');
+        $selectedSem = $request->input('selectedSem', '');
+        // dd($semester, $schoolYear);
 
         // Initialize an empty collection for all scholars
         $allScholars = collect();
@@ -56,6 +61,8 @@ class EmailController extends Controller
             'batches' => $batches,
             'scholars' => $allScholars,
             'requirements' => $requirements,
+            'semester' => $selectedSem,
+            'school_year' => $selectedYear,
         ]);
     }
 
@@ -71,22 +78,27 @@ class EmailController extends Controller
             'content' => 'required|string',
             'requirements' => 'required|array',
             'application' => 'required|date',
-            'deadline' => 'required|date'
+            'deadline' => 'required|date',
+            'semester' => 'required',
+            'school_year' => 'required',
         ], $messages);
 
-        $batch = Batch::where('scholarship_id', $scholarship->id)
-            ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
-            ->first();
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
+        // Find batches matching the specified semester and school year
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->where('semester', $request->semester)
+            ->where('school_year_id', $request->school_year)
+            ->get();
 
-        // Retrieve scholars through grantees with necessary relationships
-        $scholars = $scholarship->grantees()
-            ->where('batch_id', $batch->id)
-            ->with('scholar.user', 'scholar.campus', 'scholar.course')
-            ->get()
-            ->map(fn($grantee) => $grantee->scholar)
-            ->filter(); // Remove null scholars (if any)
+        if ($batches->isEmpty()) {
+            return back()->with('flash', [
+                'type' => 'error',
+                'message' => "No batches found for the specified semester and school year.",
+            ]);
+        }
 
         // Create the requirements for the scholarship
         $req = [];
@@ -96,64 +108,112 @@ class EmailController extends Controller
                 'requirements' => $requirement,
                 'date_start' => $request['application'],
                 'date_end' => $request['deadline'],
-                'total_scholars' => $scholars->count(),
+                'total_scholars' => 0, // We'll update this after counting all scholars
             ];
         }
 
-        Requirements::insert($req);
+        // Store the requirements and get the IDs
+        $requirementIds = [];
+        foreach ($req as $requirement) {
+            $newRequirement = Requirements::create($requirement);
+            $requirementIds[] = $newRequirement->id;
+        }
 
-        // Create the same requirement for all scholars
-        foreach ($scholars as $scholar) {
-            if ($scholar->email) {
-                $userExists = User::where('email', $scholar->email)->first();
+        $totalScholarsProcessed = 0;
+        $emailsSent = 0;
 
-                $password = Str::random(8);
+        // Process each batch
+        foreach ($batches as $batch) {
+            // Retrieve scholars through grantees with necessary relationships
+            $scholars = $scholarship->grantees()
+                ->where('batch_id', $batch->id)
+                ->where('semester', $request->semester)
+                ->where('school_year_id', $request->school_year)
+                ->where('status', 'Active')
+                ->with('scholar.user', 'scholar.campus', 'scholar.course')
+                ->get()
+                ->map(fn($grantee) => $grantee->scholar)
+                ->filter(); // Remove null scholars (if any)
 
-                if (!$userExists) {
-                    $user = User::create([
-                        'name' => $scholar['first_name'] . ' ' . $scholar['last_name'],
-                        'email' => $scholar['email'],
-                        'first_name' => $scholar['first_name'],
-                        'last_name' => $scholar['last_name'],
-                        'password' => bcrypt($password),
-                    ]);
+            $totalScholarsProcessed += $scholars->count();
 
-                    // Update scholar's user_id
-                    $scholar->update([
-                        'user_id' => $user->id
-                    ]);
+            // Process each scholar in the batch
+            foreach ($scholars as $scholar) {
+                if ($scholar && $scholar->email) {
+                    $userExists = User::where('email', $scholar->email)->first();
+                    $password = null;
 
-                    ScholarshipGroup::create([
-                        'user_id' => $user->id,
-                        'scholarship_id' => $scholarship->id, // Assuming you have the scholarship
-                    ]);
-                } else {
-                    // If user already exists, update the scholar with existing user's ID
-                    $scholar->update([
-                        'user_id' => $userExists->id
-                    ]);
+                    if (!$userExists) {
+                        $password = Str::random(8);
+                        $user = User::create([
+                            'name' => $scholar->first_name . ' ' . $scholar->last_name,
+                            'email' => $scholar->email,
+                            'first_name' => $scholar->first_name,
+                            'last_name' => $scholar->last_name,
+                            'password' => bcrypt($password),
+                        ]);
+
+                        // Update scholar's user_id
+                        $scholar->update([
+                            'user_id' => $user->id
+                        ]);
+
+                        // Check if scholarship group already exists
+                        $scholarshipGroupExists = ScholarshipGroup::where('user_id', $user->id)
+                            ->where('scholarship_id', $scholarship->id)
+                            ->exists();
+
+                        if (!$scholarshipGroupExists) {
+                            ScholarshipGroup::create([
+                                'user_id' => $user->id,
+                                'scholarship_id' => $scholarship->id,
+                            ]);
+                        }
+                    } else {
+                        // If user already exists, update the scholar with existing user's ID if needed
+                        if (!$scholar->user_id) {
+                            $scholar->update([
+                                'user_id' => $userExists->id
+                            ]);
+                        }
+
+                        // Check if scholarship group already exists
+                        $scholarshipGroupExists = ScholarshipGroup::where('user_id', $userExists->id)
+                            ->where('scholarship_id', $scholarship->id)
+                            ->exists();
+
+                        if (!$scholarshipGroupExists) {
+                            ScholarshipGroup::create([
+                                'user_id' => $userExists->id,
+                                'scholarship_id' => $scholarship->id,
+                            ]);
+                        }
+                    }
+
+                    // Sending Emails
+                    $mailData = [
+                        'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                        'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
+                            "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
+                            "Here are your login credentials:\n\n" .
+                            "*Email: " . $scholar['email'] . "\n" .
+                            "*Password: " . $password . "\n\n" .
+                            "*Next Steps:\n" .
+                            " - Log in to your account using the details above.\n" .
+                            " - Complete your application by submitting the required documents.\n" .
+                            " - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                            "*Application Deadline: " . $request['deadline'] . "\n\n" .
+                            "Click the following link to access your portal: " .
+                            "https://urscholar.up.railway.app\n\n"
+                    ];
+
+                    Mail::to($scholar->email)->send(new SendEmail($mailData));
                 }
-
-                // Sending Emails
-                $mailData = [
-                    'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
-                    'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
-                        "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
-                        "Here are your login credentials:\n\n" .
-                        "*Email: " . $scholar['email'] . "\n" .
-                        "*Password: " . $password . "\n\n" .
-                        "*Next Steps:\n" .
-                        " - Log in to your account using the details above.\n" .
-                        " - Complete your application by submitting the required documents.\n" .
-                        " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                        "*Application Deadline: " . $request['deadline'] . "\n\n" .
-                        "Click the following link to access your portal: " .
-                        "https://urscholar.up.railway.app\n\n"
-                ];
-
-                Mail::to($scholar->email)->send(new SendEmail($mailData));
             }
         }
+
+        // Update the total scholars count for each requirement
+        Requirements::whereIn('id', $requirementIds)->update(['total_scholars' => $totalScholarsProcessed]);
 
         // Log the activity
         ActivityLog::create([
@@ -164,10 +224,9 @@ class EmailController extends Controller
 
         return back()->with('flash', [
             'type' => 'success',
-            'message' => "Successfully sent email to all scholars",
+            'message' => "Successfully sent email to {$emailsSent} scholars out of {$totalScholarsProcessed} total scholars.",
         ]);
     }
-
     public function notify(Request $request, Scholarship $scholarship)
     {
 

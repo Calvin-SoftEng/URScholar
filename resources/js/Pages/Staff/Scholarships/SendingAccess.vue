@@ -308,6 +308,8 @@ const props = defineProps({
     scholars: Array,
     requirements: Array,
     errors: Object,
+    semester: Object,
+    school_year: Object,
 });
 
 const directives = {
@@ -329,6 +331,8 @@ const form = ref({
     requirements: [],
     application: '',
     deadline: '',
+    semester: props.semester,
+    school_year: props.school_year,
 });
 
 

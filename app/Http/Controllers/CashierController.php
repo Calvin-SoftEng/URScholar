@@ -78,15 +78,28 @@ class CashierController extends Controller
 
     public function payout_batches(Scholarship $scholarship)
     {
-        // Get batches related to the scholarship, order by batch_no
-        $batches = Batch::where('scholarship_id', $scholarship->id)
-            ->with([
-                'scholars' => function ($query) {
-                    $query->orderBy('last_name')
-                        ->orderBy('first_name');
-                },
-                'disbursement' // Add this to load disbursements
-            ])
+        $user = Auth::user();
+
+        // Get user campus IDs (null for admin, array for cashier and other roles)
+        $userCampusIds = $user->usertype === 'admin'
+            ? null
+            : [$user->campus_id]; // Convert to array for non-admin users including cashiers
+
+        // Get batches related to the scholarship, filtered by campus if needed
+        $batchesQuery = Batch::where('scholarship_id', $scholarship->id);
+
+        if ($userCampusIds) {
+            $batchesQuery->whereIn('campus_id', $userCampusIds);
+        }
+
+        $batches = $batchesQuery->with([
+            'scholars' => function ($query) {
+                $query->orderBy('last_name')
+                    ->orderBy('first_name');
+            },
+            'disbursement',
+            'campus:id,name'
+        ])
             ->orderBy('batch_no')
             ->get();
 
@@ -94,7 +107,7 @@ class CashierController extends Controller
         $batches = $batches->map(function ($batch) {
             $claimed = $batch->disbursement->where('status', 'Claimed')->count();
             $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
-        
+
             return array_merge($batch->toArray(), [
                 'claimed_count' => $claimed,
                 'not_claimed_count' => $notClaimed
@@ -110,10 +123,27 @@ class CashierController extends Controller
                 ->get();
         }
 
+        // Get payouts for this scholarship, filtered by campus if needed
+        $payoutsQuery = Payout::where('scholarship_id', $scholarship->id);
+
+        if ($userCampusIds) {
+            $payoutsQuery->whereIn('campus_id', $userCampusIds);
+        }
+
+        $payouts = $payoutsQuery->with([
+            'campus:id,name',
+            'disbursement.scholar:id,first_name,last_name'
+        ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return Inertia::render('Cashier/Scholarships/Payout_Batches', [
             'scholarship' => $scholarship,
             'batches' => $batches,
             'grantees' => $grantees,
+            'payouts' => $payouts,
+            'user_campus_ids' => $userCampusIds ?? [],
+            'user_type' => $user->usertype // Added user type for frontend access control
         ]);
     }
 

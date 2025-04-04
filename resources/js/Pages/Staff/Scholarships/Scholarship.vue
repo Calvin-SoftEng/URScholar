@@ -77,14 +77,12 @@
                                 </button>
                             </div>
                             <div v-else>
-                                <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-                                <button @click="importScholars"
+                                <button @click="openSendEmail"
                                     class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
                                         border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
                                     <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
                                     <span>Send Email</span>
                                 </button>
-                                </Link>
                             </div>
 
                         </div>
@@ -224,7 +222,8 @@
                                     <span class="font-poppins text-sm font-semibold">{{ campuses[0].name }}</span>
                                 </template>
 
-                                <div v-if="payouts">
+                                <div v-if="$page.props.auth.user.usertype === 'super_admin'">
+                                    <div v-if="payouts">
                                     <button @click="toggleView"
                                         class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
                                         border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
@@ -233,23 +232,52 @@
                                             {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
                                         </span>
                                     </button>
-                                </div>
-
-                                <div v-if="!payouts">
+                                    </div>
+                                    <div v-if="!payouts">
                                     <button @click="toggleSendBatch"
                                         class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                         <span class="font-normal">Forward Completed Scholars</span>
                                     </button>
-                                </div>
-                                <div v-else>
+                                    </div>
+                                    <div v-else>
                                     <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
                                         class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
                                     border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                         <span class="font-normal">Forward Completed Scholars</span>
                                     </button>
+                                    </div>
                                 </div>
+                                <div v-else>
+                                    <div v-if="payouts">
+                                    <button @click="toggleView"
+                                        class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                        border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                                        <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                                        <span class="font-normal">
+                                            {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                                        </span>
+                                    </button>
+                                    </div>
+                                    <div v-if="!payouts">
+                                    <button @click="toggleForwardCoor"
+                                        class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                        <span class="font-normal">Forward Completed Scholars</span>
+                                    </button>
+                                    </div>
+                                    <div v-else>
+                                    <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
+                                        class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                        <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                        <span class="font-normal">Forward Completed Scholars</span>
+                                    </button>
+                                    </div>
+                                </div>
+                                
+                                
                             </div>
                         </div>
 
@@ -802,6 +830,127 @@
             </div>
         </div>
 
+                <!-- Simplified forwarding batch list modal -->
+                <div v-if="ForwardCoorList"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Send Payroll
+                            </h2>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
+                    <label class="block text-lg font-semibold text-gray-700 dark:text-white">
+                        Completed Payout Batches
+                    </label>
+
+                    <!-- Loading Indicator -->
+                    <div v-if="isLoading" class="flex justify-center items-center py-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                        <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                    </div>
+
+                    <!-- Batch List -->
+                    <div v-if="ForwardCoorList"
+                        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+                        <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                            <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                                <div class="flex items-center gap-3">
+                                    <!-- Icon -->
+                                    <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                                        class="text-blue-600 text-2xl flex-shrink-0" />
+
+                                    <!-- Title and Description -->
+                                    <div class="flex flex-col">
+                                        <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                            Send Payroll
+                                        </h2>
+                                    </div>
+                                </div>
+                                <button type="button" @click="closeModal"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="default-modal">
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div
+                                class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
+                                <label class="block text-lg font-semibold text-gray-700 dark:text-white">
+                                    Completed Payout Batches
+                                </label>
+
+                                <!-- Loading Indicator -->
+                                <div v-if="isLoading" class="flex justify-center items-center py-4">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                                </div>
+
+                                <!-- Batch List -->
+                                <!-- Batch List -->
+                                <div v-else class="flex flex-col divide-y divide-gray-300">
+                                    <div v-for="batch in batchesWithScholars" :key="batch.id"
+                                        class="py-3 px-4 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                                batch.batch_no }}</p>
+                                            <p class="text-sm text-gray-500">Includes {{ batch.claimed_count }} Claimed,
+                                                {{ batch.not_claimed_count }} Not Claimed</p>
+                                        </div>
+                                        <span
+                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.not_claimed_count === 0 ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                            {{ batch.not_claimed_count === 0 ? 'Ready to Send' : 'Incomplete' }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Forward Button -->
+                                <div class="mt-4">
+                                    <button :disabled="isSubmitting" @click="forwardPayout"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Forward Button -->
+                    <!-- <div class="mt-4">
+                        <button :disabled="isSubmitting" @click="forwardPayout"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                        </button>
+                    </div> -->
+                </div>
+
+            </div>
+        </div>
+
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
@@ -899,6 +1048,7 @@ const getFormData = (formId) => {
 
 // Forward batch modal state
 const ForwardBatchList = ref(false);
+const ForwardCoorList = ref(false);
 const selectedBatches = ref([]);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
@@ -967,6 +1117,13 @@ const toggleView = () => {
 
 const toggleSendBatch = async () => {
     ForwardBatchList.value = true;
+
+    // Load batches with scholar counts
+    await loadBatchesData();
+};
+
+const toggleForwardCoor = async () => {
+    ForwardCoorList.value = true;
 
     // Load batches with scholar counts
     await loadBatchesData();
@@ -1504,6 +1661,7 @@ const forwardBatches = async () => {
 
 const closeModal = () => {
     ForwardBatchList.value = false;
+    ForwardCoorList.value = false;
     resetForm();
 };
 
@@ -1573,6 +1731,13 @@ selectedSem.value = props.selectedSem;
 
 const openScholarship = () => {
     router.visit(`/scholarships/${props.scholarship.id}/adding-scholars`, {
+        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
+        preserveState: true
+    });
+};
+
+const openSendEmail = () => {
+    router.visit(`/scholarships/${props.scholarship.id}/send-access`, {
         data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
         preserveState: true
     });
