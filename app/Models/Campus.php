@@ -13,6 +13,11 @@ class Campus extends Model
         return $this->hasMany(Course::class);
     }
 
+    public function batches()
+    {
+        return $this->hasMany(Batch::class);
+    }
+
     public function user()
     {
         return $this->hasMany(User::class);
