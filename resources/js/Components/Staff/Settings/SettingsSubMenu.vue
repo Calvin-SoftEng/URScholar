@@ -1,5 +1,5 @@
 <template>
-    <div class="submenu-width lg:max-h-screen dark:bg-dprimary flex flex-col border-r transition-all duration-300"
+    <div class="submenu-width lg:max-h-screen dark:bg-dprimary flex flex-col border-r dark:border-gray-600 transition-all duration-300"
         id="side-bar">
         <!-- desktop -->
         <div class="hidden lg:flex flex-col justify-between h-full bg-white dark:bg-dprimary">
@@ -22,7 +22,7 @@
                 </Link>
 
                 <Link :href="(route('settings.eligibilities_forms'))">
-                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/scholarship-forms' }]" >
+                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/eligibilities-forms' }]" >
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>Eligibility Standards</span>
                     </router-link>
@@ -37,13 +37,21 @@
                     </div>
                 </Link>
 
-                <!-- <Link :href="route('messaging.index')"> -->
-                <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer">
-                    <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                        <span>Archives</span>
+                <Link :href="route('settings.archives')">
+                    <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/archives' }]" >
+                        <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+                            <span>Archives</span>
+                        </router-link>
                     </div>
-                </div>
-                <!-- </Link> -->
+                </Link>
+
+                <Link :href="route('settings.user_activities')">
+                    <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/user-activities' }]" >
+                        <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+                            <span>User Activities</span>
+                        </router-link>
+                    </div>
+                </Link>
 
             </div>
         </div>

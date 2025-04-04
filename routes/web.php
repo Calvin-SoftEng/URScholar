@@ -175,6 +175,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
     Route::post('/settings/adding-students/store', [SettingsController::class, 'store_student'])->name('settings.store');
 
+    Route::get('/settings/archives', [SettingsController::class, 'archives'])->name('settings.archives');
+    Route::get('/settings/user-activities', [SettingsController::class, 'user_activities'])->name('settings.user_activities');
+
     // Eligibility & Conditions Routes
     Route::get('/settings/eligibilities-forms', [SettingsController::class, 'eligibilities_forms'])->name('settings.eligibilities_forms');
     Route::post('/settings/eligibilities', [SettingsController::class, 'eligibilities_store']);

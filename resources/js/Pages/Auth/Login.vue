@@ -135,8 +135,8 @@ const unblockUser = () => {
             <!-- Form -->
             <div class="w-full fit-content relative flex flex-col gap-1 px-10 py-9">
                 <div class="flex flex-col items-start justify-start mb-8">
-                    <p class="font-extrabold font-sora text-2xl">Login to your Account</p>
-                    <span class="max-w-[90%] text-sm">Enter the details sent by the Scholarship Office</span>
+                    <p class="font-extrabold font-sora text-2xl text-primary">Login to your Account</p>
+                    <span class="max-w-[90%] text-sm text-primary">Enter the details sent by the Scholarship Office</span>
                 </div>
 
                 <!-- Email Input -->
@@ -151,7 +151,7 @@ const unblockUser = () => {
                         required 
                         autofocus 
                         autocomplete="username"
-                        class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500"
+                        class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500 text-primary"
                     />
                 </div>
 
@@ -167,7 +167,7 @@ const unblockUser = () => {
                             v-model="form.password" 
                             required 
                             autocomplete="current-password"
-                            class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500"
+                            class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500 text-primary"
                         />
                         <font-awesome-icon
                             v-if="form.password"

@@ -41,7 +41,7 @@
                     <div class="relative overflow-x-auto border border-gray-200 rounded-lg">
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr>
+                                <tr class="dark:text-dtext dark:bg-dcontainer">
                                     <th scope="col" class="px-1 py-3">
                                         <span class="sr-only">Image</span>
                                     </th>
@@ -64,7 +64,7 @@
                             </thead>
                             <tbody>
                                 <template v-for="sponsor in sponsors" :key="sponsor.id">
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                    <tr class="bg-white border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200">
                                         <th scope="row"
                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"

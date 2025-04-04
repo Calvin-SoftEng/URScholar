@@ -1,15 +1,15 @@
 <template>
     <!-- Content Container -->
-    <div class="bg-white w-full h-full space-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
+    <div class="bg-white p-2 w-full h-full rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col min-h-0 flex-shrink-0">
         <div class="flex flex-row justify-between">
             <span class="font-poppins font-semibold text-xl dark:text-dtext px-5 pt-5">Total Scholars</span>
             <!-- Chart Selection Buttons -->
-            <div class="flex space-x-2">
+            <div class="flex space-x-2 p-1">
                 <!-- Line Chart Button -->
                 <button 
                     @click="setChartType('line')" 
                     class="p-2 rounded-md transition hover:bg-gray-200 dark:hover:bg-gray-700"
-                    :class="{ 'bg-gray-300 dark:bg-gray-600': chartType === 'line' }">
+                    :class="{ 'bg-gray-300 dark:bg-gray-600 text-white': chartType === 'line' }">
                     <span class="material-symbols-rounded text-xl">show_chart</span>
                 </button>
 
@@ -34,13 +34,15 @@
         </div>
        
         
-        <div class="px-2">
+        <div class="min-h-0 flex-shrink-0 h-[300px] max-h-[300px] overflow-hidden">
             <VueApexCharts
-            :type="chartType"
-            :series="lineSeries"
-            :options="lineOptions"
+                :type="chartType"
+                :series="lineSeries"
+                :options="lineOptions"
+                class="w-full h-full"
             />
         </div>
+
 <!-- 
         <div>
             <VueApexCharts
@@ -55,7 +57,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import VueApexCharts from 'vue3-apexcharts';
 
@@ -70,6 +72,27 @@ const props = defineProps({
     }
 });
 
+// Detect Dark Mode Reactively
+const isDarkMode = ref(false);
+
+const updateDarkMode = () => {
+  isDarkMode.value = document.documentElement.classList.contains("dark");
+};
+
+onMounted(() => {
+  updateDarkMode(); // Initial Check
+
+
+  const observer = new MutationObserver(updateDarkMode);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+
+
+  onUnmounted(() => observer.disconnect());
+});
+
 const chartType = ref("line");
 
 // Function to change the chart type
@@ -79,12 +102,38 @@ const setChartType = (type) => {
 
 const lineSeries = ref([{
     name: "Scholars",
-    data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
+    data: [60, 100, 35, 200, 176, 300]
 }]);
 
-const lineOptions = ref({
+const lineOptions = computed(() => ({
+    chart: {
+        background: "transparent",
+    },
+    theme: {
+        mode: isDarkMode.value ? "dark" : "light",
+    },
     xaxis: {
-    categories: [1991,1992,1993,1994,1995,1996,1997,1998,1999]
-  },
-});
+        categories: [2020, 2021, 2022, 2023, 2024, 2025],
+        labels: {
+        style: {
+            colors: isDarkMode.value ? "#ffffff" : "#333333",
+        },
+        },
+    },
+    yaxis: {
+        labels: {
+        style: {
+            colors: isDarkMode.value ? "#ffffff" : "#333333",
+        },
+        },
+    },
+    tooltip: {
+        theme: isDarkMode.value ? "dark" : "light",
+    },
+    legend: {
+        labels: {
+        colors: isDarkMode.value ? "#ffffff" : "#333333",
+        },
+    },
+    }));
 </script>

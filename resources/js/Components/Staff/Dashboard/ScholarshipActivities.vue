@@ -12,17 +12,17 @@
                 <div class="flex border rounded-lg overflow-hidden">
                     <button v-for="filter in ['day', 'week', 'month']" :key="filter"
                         @click="selectedDateFilter = filter"
-                        class="px-4 py-2 text-sm font-medium border-r last:border-r-0 dark:bg-gray-700 dark:text-white"
+                        class="px-4 py-2 text-sm font-medium border-r last:border-r-0 dark:bg-dprimary dark:text-white"
                         :class="{
-                            'bg-blue-600 text-white': selectedDateFilter === filter,
-                            'hover:bg-gray-200 dark:hover:bg-gray-600': selectedDateFilter !== filter
+                            'bg-blue-600 dark:bg-dnavy text-white': selectedDateFilter === filter,
+                            'hover:bg-gray-200 dark:hover:bg-dprimary': selectedDateFilter !== filter
                         }">
                         {{ filter.charAt(0).toUpperCase() + filter.slice(1) }}
                     </button>
                 </div>
                 <!-- Scholarship Type Filter -->
                 <select v-model="selectedScholarshipType"
-                    class="p-2 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+                    class="p-2 text-sm border border-gray-200 rounded-lg dark:bg-dprimary dark:text-white">
                     <option value="Grant-Based">Grant-Based</option>
                     <option value="one-time">One-Time Payment</option>
                 </select>
@@ -31,13 +31,13 @@
 
         <!-- Analytics Section -->
         <div class="grid grid-cols-2 gap-4">
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-gray-800">
-                <span class="text-sm text-gray-500 dark:text-gray-400">Total Applicants</span>
-                <p class="text-2xl font-semibold">{{ totalApplicants }}</p>
+            <div class="p-4 border rounded-lg shadow-sm dark:bg-dprimary">
+                <span class="text-sm text-gray-500 dark:text-dtext">Total Applicants</span>
+                <p class="text-2xl font-semibold dark:text-dtext">{{ totalApplicants }}</p>
             </div>
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-gray-800">
-                <span class="text-sm text-gray-500 dark:text-gray-400">Total Verified Scholars</span>
-                <p class="text-2xl font-semibold">{{ totalVerifiedScholars }}</p>
+            <div class="p-4 border rounded-lg shadow-sm dark:bg-dprimary">
+                <span class="text-sm text-gray-500 dark:text-dtext">Total Verified Scholars</span>
+                <p class="text-2xl font-semibold dark:text-dtext">{{ totalVerifiedScholars }}</p>
             </div>
         </div>
 
@@ -48,8 +48,8 @@
             <div class="overflow-x-auto font-poppins border rounded-lg">
                 <table class="table rounded-lg w-full">
                     <!-- Head -->
-                    <thead class="bg-gray-100">
-                        <tr class="text-xs uppercase">
+                    <thead class="bg-gray-100 dark:bg-dnavy">
+                        <tr class="text-xs uppercase dark:text-dtext">
                             <th>URScholar ID</th>
                             <th>Name</th>
                             <th>Scholarship</th>
@@ -103,7 +103,7 @@
                             </td>
                         </tr>
                         <tr v-if="latestSubmissions.length === 0">
-                            <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7" class="text-center py-4">No
+                            <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7" class="text-center py-4 dark:text-dtext">No
                                 recent submissions found</td>
                         </tr>
                     </tbody>
