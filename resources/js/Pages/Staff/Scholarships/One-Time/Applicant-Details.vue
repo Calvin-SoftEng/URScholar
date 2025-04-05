@@ -237,7 +237,7 @@
                                                 <button @click="toggleCheck(req)"
                                                     class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                     <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                    <span class="font-medium text-sm">View</span>
+                                                    <span class="font-medium text-sm">Check</span>
                                                 </button>
                                             </div>
                                         </div>

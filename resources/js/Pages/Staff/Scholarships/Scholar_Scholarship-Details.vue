@@ -265,7 +265,7 @@
                                                             class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                             <span
                                                                 class="material-symbols-rounded text-base">open_in_full</span>
-                                                            <span class="font-medium text-sm">View</span>
+                                                            <span class="font-medium text-sm">Check</span>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -301,20 +301,22 @@
                                         </div>
                                         <div v-else
                                             class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
-                                            <div class="flex flex-col">
+                                            <div class="flex flex-col space-y-2">
                                                 <span>General Weighted Average</span>
                                                 <span class="font-bold text-lg">{{ grade.grade }}</span>
                                             </div>
-                                            <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                                <span class="font-medium">{{ grade.semester }} Semester -
-                                                    {{ grade.school_year }}</span>
-                                            </div>
-                                            <div>
-                                                <button @click="toggleMonitor(grade)"
-                                                    class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                    <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                    <span class="font-medium text-sm">View Certificate of Grades</span>
-                                                </button>
+                                            <div class="flex flex-col space-y-2">
+                                                <div class="flex items-center gap-2 text-gray-900 dark:text-white">
+                                                    <span class="font-medium">{{ grade.semester }} Semester -
+                                                        {{ grade.school_year }}</span>
+                                                </div>
+                                                <div>
+                                                    <button @click="toggleMonitor(grade)"
+                                                        class="flex items-center gap-2 px-3 py-1 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
+                                                        <span class="material-symbols-rounded text-base">open_in_full</span>
+                                                        <span class="font-medium text-sm">View Certificate of Grades</span>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
 

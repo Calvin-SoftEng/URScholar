@@ -155,17 +155,27 @@
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ latestgrade.school_year.year }} {{ latestgrade.semester }}
                                             Semester</span>
                                         <div class="flex flex-col items-end">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
-                                                latestgrade ?
-                                                    latestgrade.grade : 'N/A'
-                                            }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">
+                                                {{ latestgrade ? latestgrade.grade : 'N/A' }}
+                                            </span>
                                             <button class="text-sm" @click="toggleCheck">
                                                 View Certificate of Grades
                                             </button>
                                         </div>
                                     </div>
-                                    <hr class="border-gray-300 my-4">
+                                    <hr class="border-gray-300">
                                 </div>
+
+                                <!-- Notification Message for Stakeholder -->
+                                <div v-if="latestgrade" class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mt-4 flex flex-col items-left">
+                                    <span class="space-x-2">
+                                        <font-awesome-icon :icon="['fas', 'circle-exclamation']" class="text-yellow-800" />
+                                        <span class="font-semibold">Reminder:</span>
+                                    </span>
+                                    Your grades need to be updated. Please upload your latest Copy of Grades and General Weighted Average (GWA).
+                                </div>
+
+
                                 <div v-else>
                                     <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                         General Weighted Average

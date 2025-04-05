@@ -84,17 +84,26 @@
           </div>
         </button>
 
-        <!-- avatar -->
+        <!-- Avatar with Red Notification Dot -->
         <div v-if="$page.props.auth.user.picture">
-          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
-            data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-            :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+            <div class="relative">
+                <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+                    data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                <!-- Red Notification Dot -->
+                <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+            </div>
         </div>
         <div v-else>
-          <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
-            data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-            :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+            <div class="relative">
+                <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+                    data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                <!-- Red Notification Dot -->
+                <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+            </div>
         </div>
+
 
 
         <!-- Notifs Dropdown menu -->
@@ -152,12 +161,24 @@
         <div>{{ $page.props.auth.user.name }}</div>
         <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
       </div>
-      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-        <li>
-          <Link :href="(route('student.profile'))"
-            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
-        </li>
+        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+          <li class="relative">
+              <Link :href="route('student.profile')"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  Profile
+              </Link>
+              <!-- Notification Dot with FontAwesome Icon -->
+              <div class="absolute top-0 right-1 flex items-center space-x-2">
+                  <!-- Red Notification Icon with FontAwesome -->
+                  <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
+                      <font-awesome-icon :icon="['fas', 'exclamation']" />
+                  </div>
+              </div>
+          </li>
       </ul>
+
+
+
       <div class="py-1 text-left">
         <Link :href="route('logout')" method="post" as="button"
           class="w-full px-4 items-start justify-start py-2 text-sm text-gray-700 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
