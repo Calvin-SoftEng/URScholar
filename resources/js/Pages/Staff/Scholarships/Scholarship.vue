@@ -222,7 +222,7 @@
                                     <span class="font-poppins text-sm font-semibold">{{ campuses[0].name }}</span>
                                 </template>
 
-                                <div v-if="$page.props.auth.user.usertype === 'super_admin'">
+                                <div v-if="$page.props.auth.user.usertype === 'super_admin'" class="flex flex-row space-x-3 items-center">
                                     <div v-if="payouts">
                                         <button @click="toggleView"
                                             class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
@@ -249,7 +249,7 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div v-else>
+                                <div v-else class="flex flex-row space-x-3 items-center">
                                     <div v-if="payouts">
                                         <button @click="toggleView"
                                             class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
