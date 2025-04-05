@@ -59,57 +59,54 @@
 
             <!-- Recent Payouts Section -->
             <div v-if="selectedMenu === 'recent'" class="p-6 h-full">
-                <div v-for="(payouts, academicYear) in groupedRecentPayouts" :key="academicYear" class="mb-8">
-                    <!-- Academic Year Header -->
+                <div v-for="(scholarshipData, scholarshipId) in groupedScholarshipData" :key="scholarshipId" class="mb-8">
+                    <!-- Scholarship Header -->
                     <div class="mb-4 bg-blue-50 p-3 rounded-lg shadow-sm">
-                        <h2 class="text-xl font-bold text-blue-800">{{ academicYear }}</h2>
+                        <h2 class="text-xl font-bold text-blue-800">{{ scholarshipData.name }}</h2>
+                        <p class="text-sm text-gray-600">{{ scholarshipData.type }}</p>
                     </div>
 
-                    <div class="space-y-8">
-                        <div v-for="payout in payouts" :key="payout.id"
-                            class="bg-white p-5 rounded-lg shadow-md relative">
-                            <!-- Status Badge -->
-                            <span
-                                class="absolute -top-3 right-3 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full">
-                                {{ payout.status }}
-                            </span>
+                    <!-- Campus Sections -->
+                    <div v-for="(campusData, campusId) in scholarshipData.campuses" :key="campusId" class="mb-6 ml-4">
+                        <div class="mb-3 bg-gray-50 p-2 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-semibold text-gray-700">Campus: {{ campusData.name }}</h3>
+                        </div>
 
-                            <!-- Scholarship & Payout Details -->
-                            <div class="flex flex-col md:flex-row justify-between">
-                                <div class="mb-4 md:mb-0">
-                                    <p class="text-xl font-semibold text-gray-800">
-                                        {{ payout.scholarshipName }}
-                                    </p>
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        Payment Period: {{ payout.dateStart }} - {{ payout.dateEnd || 'No Deadline' }}
-                                    </p>
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        <span class="font-medium">Scheduled:</span> {{ payout.payoutSchedule }}
-                                    </p>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-                                        {{ payout.scholarshipType }}
+                        <!-- Batches for this campus -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ml-3">
+                            <div v-for="batch in campusData.batches" :key="batch.id" 
+                                class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-md font-medium">Batch {{ batch.batch_no }}</span>
+                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                        {{ batch.school_year.year }} - {{ batch.semester }} Semester
                                     </span>
                                 </div>
-                            </div>
 
-                            <!-- Batch Information -->
-                            <div class="mt-6">
-                                <h3 class="text-md font-semibold text-gray-700 mb-3">Associated Batches:</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    <div v-for="batch in getBatchesForScholarship(payout.scholarshipId)" :key="batch.id"
+                                <!-- Payouts for this batch -->
+                                <div v-if="batch.payouts.length > 0" class="space-y-3">
+                                    <h4 class="text-sm font-medium text-gray-700 border-b pb-1">Payouts</h4>
+                                    <div v-for="payout in batch.payouts" :key="payout.id" 
                                         class="bg-gray-50 p-3 rounded-md border border-gray-200">
+                                        <!-- Status Badge -->
                                         <div class="flex justify-between items-center">
-                                            <span class="text-gray-800 font-medium">Batch {{ batch.batch_no }}</span>
-                                            <span class="text-xs bg-gray-200 px-2 py-1 rounded-full">
-                                                {{ batch.school_year.year }} - {{ batch.semester }} Semester
+                                            <p class="text-sm font-medium text-gray-800">
+                                                {{ formatDate(payout.date_start) }} - {{ formatDate(payout.date_end) }}
+                                            </p>
+                                            <span :class="[
+                                                'text-xs font-semibold px-2 py-1 rounded-full',
+                                                payout.status === 'Completed' ? 'bg-green-500 text-white' : 
+                                                payout.status === 'Active' ? 'bg-blue-500 text-white' : 
+                                                'bg-yellow-500 text-white'
+                                            ]">
+                                                {{ payout.status }}
                                             </span>
                                         </div>
+
+                                        <!-- Payout Details -->
                                         <div class="mt-2 text-sm text-gray-600">
-                                            <p>Scholars: {{ batch.total_scholars || 'N/A' }}</p>
-                                            <p class="mt-1">Campus: <span class="font-medium">{{
-                                                    getCampusName(batch.campus_id) }}</span></p>
+                                            <p>Schedule: {{ getPayoutSchedule(payout.id) }}</p>
+                                            <p>Total: {{ formatCurrency(payout.sub_total) }}</p>
                                         </div>
 
                                         <!-- Claim Status -->
@@ -117,8 +114,7 @@
                                             <div class="flex justify-between text-sm">
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                                                    <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed')
-                                                        }}</span>
+                                                    <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed') }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -134,7 +130,17 @@
                                                 {{ getClaimPercentage(payout.id, batch.id) }}% claimed
                                             </div>
                                         </div>
+
+                                        <div class="mt-3">
+                                            <button @click="openBatchPayroll(batch.id)"
+                                                class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md">
+                                                View Payroll
+                                            </button>
+                                        </div>
                                     </div>
+                                </div>
+                                <div v-else class="text-sm text-gray-500 italic">
+                                    No payouts for this batch
                                 </div>
                             </div>
                         </div>
@@ -144,63 +150,49 @@
 
             <!-- Payout History Section -->
             <div v-if="selectedMenu === 'history'" class="p-6 h-full">
-                <div v-for="(payouts, academicYear) in groupedCompletedPayouts" :key="academicYear" class="mb-8">
-                    <!-- Academic Year Header -->
+                <div v-for="(scholarshipData, scholarshipId) in groupedCompletedScholarshipData" :key="scholarshipId" class="mb-8">
+                    <!-- Scholarship Header -->
                     <div class="mb-4 bg-green-50 p-3 rounded-lg shadow-sm">
-                        <h2 class="text-xl font-bold text-green-800">{{ academicYear }}</h2>
+                        <h2 class="text-xl font-bold text-green-800">{{ scholarshipData.name }}</h2>
+                        <p class="text-sm text-gray-600">{{ scholarshipData.type }}</p>
                     </div>
 
-                    <div class="space-y-8">
-                        <div v-for="historyItem in payouts" :key="historyItem.id"
-                            class="bg-white p-5 rounded-lg shadow-md relative">
-                            <!-- Status Badge -->
-                            <span
-                                class="absolute -top-3 right-3 bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full">
-                                {{ historyItem.status }}
-                            </span>
+                    <!-- Campus Sections -->
+                    <div v-for="(campusData, campusId) in scholarshipData.campuses" :key="campusId" class="mb-6 ml-4">
+                        <div class="mb-3 bg-gray-50 p-2 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-semibold text-gray-700">Campus: {{ campusData.name }}</h3>
+                        </div>
 
-                            <!-- Scholarship & Payout Details -->
-                            <div class="flex flex-col md:flex-row justify-between">
-                                <div class="mb-4 md:mb-0">
-                                    <p class="text-xl font-semibold text-gray-800">
-                                        {{ historyItem.scholarshipName }}
-                                    </p>
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        Payment Period: {{ historyItem.dateStart }} - {{ historyItem.dateEnd || 'No Deadline' }}
-                                    </p>
-                                    <p class="text-sm text-gray-600 mt-1">
-                                        <span class="font-medium">Scheduled:</span> {{ historyItem.payoutSchedule }}
-                                    </p>
-                                </div>
-                                <div class="flex items-center">
-                                    <span class="bg-blue-100 text-blue-800 text-sm font-medium px-3 py-1 rounded-full">
-                                        {{ historyItem.scholarshipType }}
+                        <!-- Batches for this campus -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ml-3">
+                            <div v-for="batch in campusData.batches" :key="batch.id" 
+                                class="bg-white p-4 rounded-lg shadow-md">
+                                <div class="flex justify-between items-center mb-3">
+                                    <span class="text-md font-medium">Batch {{ batch.batch_no }}</span>
+                                    <span class="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full">
+                                        {{ batch.school_year.year }} - {{ batch.semester }} Semester
                                     </span>
                                 </div>
-                            </div>
 
-                            <!-- Batch Information -->
-                            <div class="mt-6">
-                                <h3 class="text-md font-semibold text-gray-700 mb-3">Associated Batches:</h3>
-                                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    <div v-for="batch in getBatchesForScholarship(historyItem.scholarshipId)"
-                                        :key="batch.id" class="bg-gray-50 p-3 rounded-md border border-gray-200">
+                                <!-- Completed Payouts for this batch -->
+                                <div v-if="batch.payouts.length > 0" class="space-y-3">
+                                    <h4 class="text-sm font-medium text-gray-700 border-b pb-1">Completed Payouts</h4>
+                                    <div v-for="payout in batch.payouts" :key="payout.id" 
+                                        class="bg-gray-50 p-3 rounded-md border border-gray-200">
+                                        <!-- Status Badge -->
                                         <div class="flex justify-between items-center">
-                                            <span class="text-gray-800 font-medium">Batch {{ batch.batch_no }}</span>
-                                            <span class="text-xs bg-gray-200 px-2 py-1 rounded-full">
-                                                {{ batch.school_year.year }} - {{ batch.semester }} Semester
+                                            <p class="text-sm font-medium text-gray-800">
+                                                {{ formatDate(payout.date_start) }} - {{ formatDate(payout.date_end) }}
+                                            </p>
+                                            <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                                                {{ payout.status }}
                                             </span>
                                         </div>
-                                        <div class="mt-2 flex justify-between items-center">
-                                            <span class="text-sm text-gray-600">Campus: <span class="font-medium">{{
-                                                    getCampusName(batch.campus_id) }}</span></span>
-                                            <button @click="openBatchPayroll(batch.id)"
-                                                class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md">
-                                                View Payroll
-                                            </button>
-                                        </div>
+
+                                        <!-- Payout Details -->
                                         <div class="mt-2 text-sm text-gray-600">
-                                            <p>Scholars: {{ batch.total_scholars || 'N/A' }}</p>
+                                            <p>Completed: {{ formatDate(payout.completed_date || payout.updated_at) }}</p>
+                                            <p>Total: {{ formatCurrency(payout.sub_total) }}</p>
                                         </div>
 
                                         <!-- Claim Status -->
@@ -208,24 +200,33 @@
                                             <div class="flex justify-between text-sm">
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                                                    <span>Claimed: {{ getClaimCount(historyItem.id, batch.id, 'Claimed')
-                                                        }}</span>
+                                                    <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed') }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
-                                                    <span>Not Claimed: {{ getClaimCount(historyItem.id, batch.id, 'Not Claimed') }}</span>
+                                                    <span>Not Claimed: {{ getClaimCount(payout.id, batch.id, 'Not Claimed') }}</span>
                                                 </div>
                                             </div>
                                             <div class="mt-2 w-full bg-gray-200 rounded-full h-2.5">
                                                 <div class="bg-green-500 h-2.5 rounded-full"
-                                                    :style="{ width: getClaimPercentage(historyItem.id, batch.id) + '%' }">
+                                                    :style="{ width: getClaimPercentage(payout.id, batch.id) + '%' }">
                                                 </div>
                                             </div>
                                             <div class="text-xs text-gray-500 mt-1 text-right">
-                                                {{ getClaimPercentage(historyItem.id, batch.id) }}% claimed
+                                                {{ getClaimPercentage(payout.id, batch.id) }}% claimed
                                             </div>
                                         </div>
+
+                                        <div class="mt-3">
+                                            <button @click="openBatchPayroll(batch.id)"
+                                                class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md">
+                                                View Payroll
+                                            </button>
+                                        </div>
                                     </div>
+                                </div>
+                                <div v-else class="text-sm text-gray-500 italic">
+                                    No completed payouts for this batch
                                 </div>
                             </div>
                         </div>
@@ -296,7 +297,6 @@ const openBatchPayroll = (batchId) => {
     // Find the scholarship ID associated with this batch
     const batch = props.batches.find(b => b.id === batchId);
     const scholarshipId = batch ? batch.scholarship_id : null;
-    console.log(scholarshipId);
 
     if (scholarshipId) {
         router.visit(`/payouts/${scholarshipId}/batch/${batchId}`, {
@@ -329,6 +329,14 @@ const selectMenu = (key) => {
 // Get batches for a specific scholarship
 const getBatchesForScholarship = (scholarshipId) => {
     return props.batches.filter(batch => batch.scholarship_id === scholarshipId);
+};
+
+// Get batches for a specific scholarship and campus
+const getBatchesForScholarshipAndCampus = (scholarshipId, campusId) => {
+    return props.batches.filter(batch => 
+        batch.scholarship_id === scholarshipId && 
+        batch.campus_id === campusId
+    );
 };
 
 // Get count of claimed/not claimed disbursements for a specific payout and batch
@@ -400,55 +408,163 @@ const getPayoutSchedule = (payoutId) => {
     return formatDateTime(schedule.scheduled_date, schedule.scheduled_time);
 };
 
-// Get academic year for a batch
-const getAcademicYear = (batchId) => {
-    const batch = props.batches.find(b => b.id === batchId);
-    if (!batch || !batch.school_year) return 'Unknown Academic Year';
+// Get payouts for a specific batch
+const getPayoutsForBatch = (batchId, status = null) => {
+    let filteredPayouts = props.payouts.filter(payout => {
+        // Find disbursements for this payout and batch combination
+        const hasDisbursement = props.disbursements.some(
+            d => d.payout_id === payout.id && d.batch_id === batchId
+        );
+        
+        return hasDisbursement;
+    });
 
-    return `${batch.school_year.year} - ${batch.semester} Semester`;
+    // Filter by status if specified
+    if (status === 'active') {
+        filteredPayouts = filteredPayouts.filter(p => 
+            p.status === 'Pending' || p.status === 'Active'
+        );
+    } else if (status === 'completed') {
+        filteredPayouts = filteredPayouts.filter(p => 
+            p.status === 'Completed' || p.status === 'Inactive'
+        );
+    }
+
+    return filteredPayouts;
 };
 
-// Consolidated function to get payout details
-const getPayoutDetails = (payout) => {
-    // Find the associated scholarship
-    const scholarship = props.scholarships.find(
-        s => s.id === payout.scholarship_id
-    ) || {};
+// Computed properties for scholarship data grouped by campus
+const groupedScholarshipData = computed(() => {
+    const result = {};
 
-    // Find associated batch to determine academic year
-    const batches = getBatchesForScholarship(scholarship.id);
-    const primaryBatch = batches.length > 0 ? batches[0] : null;
-    const academicYear = primaryBatch ?
-        `${primaryBatch.school_year.year} - ${primaryBatch.semester} Semester` :
-        'Unknown Academic Year';
+    // For each scholarship
+    props.scholarships.forEach(scholarship => {
+        const scholarshipId = scholarship.id;
+        
+        // Get all batches for this scholarship
+        const scholarshipBatches = getBatchesForScholarship(scholarshipId);
+        
+        // If no batches, skip this scholarship
+        if (scholarshipBatches.length === 0) return;
 
-    // Return a consolidated object with all relevant details
-    return {
-        // Payout details
-        id: payout.id,
-        dateStart: formatDate(payout.date_start),
-        dateEnd: formatDate(payout.date_end),
-        status: payout.status,
-        subTotal: formatCurrency(payout.sub_total),
-        totalScholars: payout.total_scholars || 0,
-        payoutSchedule: getPayoutSchedule(payout.id),
-        academicYear: academicYear,
-        campusId: payout.campus_id,
+        // Initialize scholarship data
+        result[scholarshipId] = {
+            id: scholarshipId,
+            name: scholarship.name || 'Unknown Scholarship',
+            type: scholarship.scholarshipType || 'N/A',
+            campuses: {}
+        };
 
-        // Scholarship details
-        scholarshipId: scholarship.id,
-        scholarshipName: scholarship.name || 'Unknown Scholarship',
-        scholarshipType: scholarship.scholarshipType || 'N/A',
-    };
-};
+        // Group batches by campus
+        scholarshipBatches.forEach(batch => {
+            const campusId = batch.campus_id;
+            
+            // Initialize campus if not exists
+            if (!result[scholarshipId].campuses[campusId]) {
+                result[scholarshipId].campuses[campusId] = {
+                    id: campusId,
+                    name: getCampusName(campusId),
+                    batches: []
+                };
+            }
 
-// Computed properties for easy access
+            // Get active payouts for this batch
+            const batchPayouts = getPayoutsForBatch(batch.id, 'active');
+            
+            // Add batch with its payouts
+            result[scholarshipId].campuses[campusId].batches.push({
+                ...batch,
+                payouts: batchPayouts
+            });
+        });
+
+        // Remove scholarships with no active payouts
+        let hasActivePayouts = false;
+        Object.values(result[scholarshipId].campuses).forEach(campus => {
+            campus.batches.forEach(batch => {
+                if (batch.payouts.length > 0) {
+                    hasActivePayouts = true;
+                }
+            });
+        });
+
+        if (!hasActivePayouts) {
+            delete result[scholarshipId];
+        }
+    });
+
+    return result;
+});
+
+// Computed properties for completed scholarship data grouped by campus
+const groupedCompletedScholarshipData = computed(() => {
+    const result = {};
+
+    // For each scholarship
+    props.scholarships.forEach(scholarship => {
+        const scholarshipId = scholarship.id;
+        
+        // Get all batches for this scholarship
+        const scholarshipBatches = getBatchesForScholarship(scholarshipId);
+        
+        // If no batches, skip this scholarship
+        if (scholarshipBatches.length === 0) return;
+
+        // Initialize scholarship data
+        result[scholarshipId] = {
+            id: scholarshipId,
+            name: scholarship.name || 'Unknown Scholarship',
+            type: scholarship.scholarshipType || 'N/A',
+            campuses: {}
+        };
+
+        // Group batches by campus
+        scholarshipBatches.forEach(batch => {
+            const campusId = batch.campus_id;
+            
+            // Initialize campus if not exists
+            if (!result[scholarshipId].campuses[campusId]) {
+                result[scholarshipId].campuses[campusId] = {
+                    id: campusId,
+                    name: getCampusName(campusId),
+                    batches: []
+                };
+            }
+
+            // Get completed payouts for this batch
+            const batchPayouts = getPayoutsForBatch(batch.id, 'completed');
+            
+            // Add batch with its payouts
+            result[scholarshipId].campuses[campusId].batches.push({
+                ...batch,
+                payouts: batchPayouts
+            });
+        });
+
+        // Remove scholarships with no completed payouts
+        let hasCompletedPayouts = false;
+        Object.values(result[scholarshipId].campuses).forEach(campus => {
+            campus.batches.forEach(batch => {
+                if (batch.payouts.length > 0) {
+                    hasCompletedPayouts = true;
+                }
+            });
+        });
+
+        if (!hasCompletedPayouts) {
+            delete result[scholarshipId];
+        }
+    });
+
+    return result;
+});
+
+// Computed properties for original structure (kept for compatibility)
 const recentPayouts = computed(() =>
     props.payouts
         .filter(payout =>
             payout.status === 'Pending' || payout.status === 'Active'
         )
-        .map(getPayoutDetails)
 );
 
 const completedPayouts = computed(() =>
@@ -456,35 +572,7 @@ const completedPayouts = computed(() =>
         .filter(payout =>
             payout.status === 'Completed' || payout.status === 'Inactive'
         )
-        .map(getPayoutDetails)
 );
-
-// Group payouts by academic year
-const groupedRecentPayouts = computed(() => {
-    const grouped = {};
-
-    recentPayouts.value.forEach(payout => {
-        if (!grouped[payout.academicYear]) {
-            grouped[payout.academicYear] = [];
-        }
-        grouped[payout.academicYear].push(payout);
-    });
-
-    return grouped;
-});
-
-const groupedCompletedPayouts = computed(() => {
-    const grouped = {};
-
-    completedPayouts.value.forEach(payout => {
-        if (!grouped[payout.academicYear]) {
-            grouped[payout.academicYear] = [];
-        }
-        grouped[payout.academicYear].push(payout);
-    });
-
-    return grouped;
-});
 </script>
 
 <style scoped>

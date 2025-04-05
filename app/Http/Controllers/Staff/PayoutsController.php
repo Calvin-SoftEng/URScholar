@@ -17,12 +17,21 @@ class PayoutsController extends Controller
     public function payouts_index()
     {
         $scholarships = Scholarship::all();
+
+        // Get payouts with date information
         $payouts = Payout::all();
+
+        // Get batches with school year and campus information
+        $batches = Batch::with(['school_year', 'campus'])->get();
+
+        // Get all disbursements to track claims
         $disbursements = Disbursement::all();
+
+        // Get scheduled payout dates
         $payout_schedule = PayoutSchedule::all();
-        $batches = Batch::with('school_year')->get();
+
         $academic_years = AcademicYear::all();
-        $campuses = Campus::all(); // Added campus data
+        $campuses = Campus::all();
 
         return Inertia::render('Staff/Payouts/Payout_Records', [
             'scholarships' => $scholarships,
@@ -31,7 +40,7 @@ class PayoutsController extends Controller
             'disbursements' => $disbursements,
             'payout_schedule' => $payout_schedule,
             'academic_years' => $academic_years,
-            'campuses' => $campuses, // Passing campuses to the view
+            'campuses' => $campuses,
         ]);
     }
 
