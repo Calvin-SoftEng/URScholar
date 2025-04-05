@@ -96,57 +96,93 @@
                                     placeholder="" />
                             </div>
                         </div>
-                        <table
-                            class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg overflow-y-auto">
-                            <thead
-                                class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary ">
-                                <tr class="dark:text-dtext">
-                                    <th scope="col" class="px-6 py-3">
-                                        Student Name
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Course
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Campus
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Year Level
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Email
-                                    </th>
-                                    <th scope="col" class="px-6 py-3">
-                                        Contact Number
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template v-for="student in paginatedStudents" :key="student.id">
-                                    <tr class="bg-white border-b dark:bg-dsecondary dark:border-gray-700 border-gray-200">
-                                        <td class="px-6 py-4">
-                                            {{ student.first_name }} {{ student.last_name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ student.course.name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ student.campus.name }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ student.year_level }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ student.email }}
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            {{ student.contact_number ?? 'N/A' }}
-                                        </td>
+                        <div class="overflow-x-auto max-w-[1400px]">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg overflow-x-auto max-w-[1000px]">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary">
+                                    <tr class="dark:text-dtext">
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Student Number
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Student Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Course
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Campus
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Year Level
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Contact Number
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Permanent Address
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Facebook Account (if any)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Place of Birth
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap" >
+                                            Date of Birth
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Religion
+                                        </th>
                                     </tr>
-                                </template>
+                                </thead>
+                                <tbody>
+                                    <template v-for="student in paginatedStudents" :key="student.id">
+                                        <tr class="bg-white border-b dark:bg-dsecondary dark:border-gray-700 border-gray-200">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.student_number }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.first_name }} {{ student.last_name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.course.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.campus.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.year_level }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.email }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.contact_number ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.permanent_address ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.facebook_account ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.place_of_birth ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.date_of_birth ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                                {{ student.religion ?? 'N/A' }}
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
 
-                            </tbody>
-                        </table>
                     </div>
                     <!-- Pagination controls -->
                     <div v-if="totalStudents > itemsPerPage" class="mt-5 flex justify-between items-center">
