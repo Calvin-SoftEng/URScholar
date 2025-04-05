@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mt-5 bg-white rounded-xl">
+  <div class="w-full bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <!-- <div class="flex flex-row gap-2">
         <button
@@ -24,6 +24,46 @@
             placeholder="Search Scholar" required />
         </div>
       </form>
+
+      <div class="flex flex-wrap gap-10">
+        <!-- Campus Filter -->
+        <div>
+          <label class=" text-sm block mb-1">Filter Campus</label>
+          <select
+            class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+            <option value="">All Campuses</option>
+            <option>nfieafaef</option>
+          </select>
+        </div>
+
+        <!-- School Year Filter -->
+        <div>
+          <label class=" text-sm block mb-1">Filter School Year</label>
+          <select
+            class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+            <option value="">2023-2024</option>
+            <option>nfieafaef</option>
+          </select>
+        </div>
+
+        <!-- Semester Filter -->
+        <div>
+          <label class=" text-sm block mb-1">Filter Semester</label>
+          <div class="flex items-center gap-4 text-sm">
+            <label class="flex items-center gap-1">
+              <input type="radio" name="semester" value="1st"
+                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" />
+              1st
+            </label>
+            <label class="flex items-center gap-1">
+              <input type="radio" name="semester" value="2nd"
+                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" />
+              2nd
+            </label>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div>
@@ -136,8 +176,12 @@
                     FEAFAEFAE
                   </td>
                   <td>
-                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
-                      1.23
+                    1.23
+                  </td>
+                  <td>
+                    <span class="
+                      bg-green-100 text-green-800 border border-green-400"
+                      >Active
                     </span>
                   </td>
                   <th>

@@ -20,32 +20,16 @@
             <div class="w-full mx-auto px-28 space-y-3">
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>My
-                        Scholars
+                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
+                        {scholarship name} Scholars
                     </h1>
                 </div>
 
                 <div class="mx-auto py-5">
                     <div class="flex w-full flex-col gap-6">
-
-                        <div>
-                            <span class="font-poppins text-sm">Filter Campus</span>
-                            <select 
-                                class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
-                                <option value="">All
-                                    Campuses</option>
-                                <option>
-                                    nfieafaef
-                                </option>
-                            </select>
-                        </div>
-
                         <ScholarList :scholarships="props.scholarships" :sponsors="props.sponsors" />
-
-
                     </div>
                 </div>
-
 
             </div>
         </div>
