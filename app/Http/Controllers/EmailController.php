@@ -237,8 +237,10 @@ class EmailController extends Controller
         ]);
 
         // dd($validated);
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
-
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('campus_id', Auth::user()->campus_id)
+        ->first();
+        
         $payout->status = 'Active';
         $payout->save();
 

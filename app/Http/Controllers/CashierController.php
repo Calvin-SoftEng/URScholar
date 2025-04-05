@@ -37,7 +37,9 @@ class CashierController extends Controller
     {
         $scholarships = Scholarship::all();
         $sponsors = Sponsor::all();
-        $payouts = Payout::all();
+        $payouts = Payout::where('campus_id', Auth::user()->campus_id)
+            ->where('status', '!=', 'Inactive')
+            ->get();
 
         return Inertia::render('Cashier/Scholarships/Active_Scholarships', [
             'scholarships' => $scholarships,
@@ -51,10 +53,15 @@ class CashierController extends Controller
         // Get batches related to the grantees for the specific scholarship
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with('grantees') // Eager load grantees for the batches
+            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
             ->get();
 
         // Get the payout for the specific scholarship
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+            ->where('status', '!=', 'Inactive')
+            ->orderBy('created_at', 'desc')
+        ->first();
 
         // Get disbursements related to the payout, with scholars and their grantees
         $disbursements = Disbursement::where('payout_id', $payout->id)
@@ -124,7 +131,9 @@ class CashierController extends Controller
         }
 
         // Get payouts for this scholarship, filtered by campus if needed
-        $payoutsQuery = Payout::where('scholarship_id', $scholarship->id);
+        $payoutsQuery = Payout::where('scholarship_id', $scholarship->id)
+            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+            ->where('status', '!=', 'Inactive');
 
         if ($userCampusIds) {
             $payoutsQuery->whereIn('campus_id', $userCampusIds);
@@ -135,7 +144,9 @@ class CashierController extends Controller
             'disbursement.scholar:id,first_name,last_name'
         ])
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->first();
+
+        $canForward = $payouts->total_scholars == $payouts->sub_total;
 
         return Inertia::render('Cashier/Scholarships/Payout_Batches', [
             'scholarship' => $scholarship,
@@ -143,7 +154,8 @@ class CashierController extends Controller
             'grantees' => $grantees,
             'payouts' => $payouts,
             'user_campus_ids' => $userCampusIds ?? [],
-            'user_type' => $user->usertype // Added user type for frontend access control
+            'user_type' => $user->usertype, // Added user type for frontend access control
+            'canForward' => $canForward,
         ]);
     }
 
@@ -151,7 +163,10 @@ class CashierController extends Controller
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+        ->where('status', '!=', 'Inactive')
+        ->first();
 
         $payout->status = 'Inactive';
         $payout->save();
@@ -164,10 +179,14 @@ class CashierController extends Controller
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+        ->where('status', '!=', 'Inactive')
+        ->first();
 
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
+            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
             ->orderBy('batch_no', 'desc')
             ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
 

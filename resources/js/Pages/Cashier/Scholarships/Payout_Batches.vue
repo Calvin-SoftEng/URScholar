@@ -223,9 +223,19 @@
 
                                 <!-- Forward Button -->
                                 <div class="mt-4">
-                                    <button :disabled="isSubmitting" @click="forwardPayout"
+                                    <button v-if="!isDateMatched && canForward" :disabled="isSubmitting"
+                                        @click="forwardPayout"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                                    </button>
+                                    <button v-else-if="isDateMatched && !canForward"
+                                        v-tooltip.left="'Complete all batches'"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Forward (Overdue {{ formatDate(payouts.date_end) }})
+                                    </button>
+                                    <button v-else v-tooltip.left="dateEndMessage" disabled
+                                        class="w-full bg-gray-400 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Forward (Available on {{ formatDate(payouts.date_end) }})
                                     </button>
                                 </div>
                             </div>
@@ -383,7 +393,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, watch, onMounted, onUnmounted } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, watch, onMounted, onUnmounted, computed } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
@@ -401,6 +411,8 @@ const components = {
 
 const props = defineProps({
     scholarship: Object,
+    payouts: Object,
+    canForward: Object,
     batches: Array,
     grantees: Array,
 });
@@ -480,6 +492,26 @@ const toggleNotify = async () => {
 
     // Load batches with scholar counts
     // await loadBatchesData();
+};
+
+const isDateMatched = computed(() => {
+    // Get current date in YYYY-MM-DD format, considering midnight UTC
+    const today = new Date();
+    const currentDate = today.toISOString().split('T')[0]; // Format: YYYY-MM-DD
+
+    // Compare with payout's date_end (assuming format is YYYY-MM-DD)
+    return currentDate >= props.payouts.date_end;
+});
+
+const dateEndMessage = computed(() => {
+    return `Button will be available on ${formatDate(props.payouts.date_end)}`;
+});
+
+const formatDate = (dateString) => {
+    // Parse YYYY-MM-DD format
+    const [year, month, day] = dateString.split('-');
+    const date = new Date(year, month - 1, day); // month is 0-indexed in JavaScript
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 };
 
 // Submit reason form
