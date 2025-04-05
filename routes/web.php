@@ -213,6 +213,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ReportsController::class, 'ScholarSummaryReport']);
     Route::get('/scholarships/{scholarship}/batch/{batch}/enrolled-scholars', [ReportsController::class, 'EnrolledSummaryReport']);
     Route::get('/scholarships/{scholarship}/batch/{batch}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/payroll', [ReportsController::class, 'PayrollReport']);
 
 
 });

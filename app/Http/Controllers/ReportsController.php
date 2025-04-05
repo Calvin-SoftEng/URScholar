@@ -113,4 +113,39 @@ class ReportsController extends Controller
 
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
+
+    public function PayrollReport(Scholarship $scholarship, Batch $batch)
+    {
+           // Fetch real scholars
+        $scholars = $batch->scholars;
+
+        // Dummy fallback if no scholars exist
+        if ($scholars->isEmpty()) {
+            $scholars = collect([
+                (object)[
+                    'name' => 'Juan Dela Cruz',
+                    'email' => 'juan@example.com',
+                    'status' => 'Active'
+                ],
+                (object)[
+                    'name' => 'Maria Santos',
+                    'email' => 'maria@example.com',
+                    'status' => 'Graduated'
+                ],
+                (object)[
+                    'name' => 'Pedro Reyes',
+                    'email' => 'pedro@example.com',
+                    'status' => 'Inactive'
+                ]
+            ]);
+        }
+
+        $pdf = PDF::loadView('reports.payroll', [
+            'scholarship' => $scholarship,
+            'batch' => $batch,
+            'scholars' => $scholars
+        ]);
+
+        return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
+    }
 }

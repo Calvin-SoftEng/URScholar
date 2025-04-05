@@ -2115,13 +2115,14 @@ const generateGraduateList = async () => {
 const generatePayroll = async () => {
   try {
     // Open PDF report in new tab
-    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank'); // Dummy ID values
+    window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
     showToast('Report Generated', 'Your report is being downloaded');
   } catch (err) {
     console.error('Failed to generate report:', err);
     showToast('Error', 'Failed to generate report', 'error');
   }
 };
+
 </script>
 
 <style scoped>
