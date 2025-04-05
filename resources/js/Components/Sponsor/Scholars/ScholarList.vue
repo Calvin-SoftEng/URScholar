@@ -30,12 +30,12 @@
       <div>
         <div class="w-full bg-white h-full p-4">
           <!-- Loading indicator -->
-          <div v-if="loading" class="flex justify-center items-center py-10">
+          <!-- <div v-if="loading" class="flex justify-center items-center py-10">
             <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-primary"></div>
-          </div>
+          </div> -->
 
           <!-- table -->
-          <div v-else class="overflow-x-auto font-poppins border rounded-lg">
+          <div class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <!-- head -->
               <thead class="justify-center items-center bg-gray-100">
@@ -51,13 +51,13 @@
               </thead>
               <tbody>
                 <!-- No results message -->
-                <tr v-if="paginatedScholars.length === 0">
+                <!-- <tr v-if="paginatedScholars.length === 0">
                   <td colspan="7" class="text-center py-6 text-gray-500">
                     No scholars found matching your search criteria
                   </td>
-                </tr>
+                </tr> -->
                 <!-- Scholar rows -->
-                <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
+                <!-- <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
                   <td>{{ scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
@@ -100,6 +100,48 @@
                   </td>
                   <th>
                     <Link :href="`/scholarships/scholar=${scholar.id}`">
+                    <button
+                      class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
+                      aria-label="View Details">
+                      <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
+                    </button>
+                    </Link>
+                  </th>
+                </tr> -->
+                <tr class="text-sm">
+                  <td>FEAFAEFEAFA</td>
+                  <td>
+                    <div class="flex items-center gap-3">
+                      <div class="avatar">
+                        <div class="mask rounded-full h-10 w-10">
+                          <img alt="Profile Picture">
+                        </div>
+                      </div>
+                      <div>
+                        <!-- <div class="font-normal">
+                          {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
+                          <span v-if="scholar.status === 'Verified'"
+                            class="material-symbols-rounded text-sm text-blue-600">verified</span>
+                        </div> -->FFAEFEAFAE
+                        <div class="text-sm opacity-50">
+                         FEFEAFEAFAEF
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                    bINANGONAN
+                  </td>
+                  <td>
+                    FEAFAEFAE
+                  </td>
+                  <td>
+                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
+                      1.23
+                    </span>
+                  </td>
+                  <th>
+                    <Link>
                     <button
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">

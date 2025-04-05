@@ -21,7 +21,7 @@
 
             <!-- Right Column (70% width) -->
             <div class="bg-white shadow-md p-6 rounded-lg flex flex-col justify-between">
-                <ScholarsTable />
+                <Scholarships />
             </div>
         </div>
 
@@ -34,13 +34,13 @@
 <script setup>
 import { ref } from 'vue';
 import { Head } from '@inertiajs/vue3';
-import ScholarsTable from '@/Components/Sponsor/Dashboard/ScholarsTable.vue';
+import Scholarships from '@/Components/Sponsor/Dashboard/Scholarships.vue';
 import ScholarsSupported from '@/Components/Sponsor/Dashboard/ScholarsSupported.vue';
 import TotalScholarsSupported from '@/Components/Sponsor/Dashboard/TotalScholarsSupported.vue';
 import Disbursements from '@/Components/Sponsor/Dashboard/Disbursements.vue';
 
 const components = {
-    ScholarsTable,
+    Scholarships,
     ScholarsSupported,
     TotalScholarsSupported,
     Disbursements,
