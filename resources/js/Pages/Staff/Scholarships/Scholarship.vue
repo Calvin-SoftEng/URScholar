@@ -412,7 +412,7 @@
                                         Campus</h3>
 
                                     <!-- Display payout status for this campus -->
-                                    <div v-if="campusData[0].status == 'Pending'" class="mb-4">
+                                    <div v-if="campusData[0].status == 'Pending' || campusData[0].status == 'Active' " class="mb-4">
                                         <div
                                             class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
                                             <font-awesome-icon :icon="['fas', 'user-graduate']"

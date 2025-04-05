@@ -148,6 +148,12 @@ class CashierController extends Controller
 
         $canForward = $payouts->total_scholars == $payouts->sub_total;
 
+
+        
+
+        $payout_schedule = PayoutSchedule::where('payout_id', $payouts->id)
+        ->first();
+
         return Inertia::render('Cashier/Scholarships/Payout_Batches', [
             'scholarship' => $scholarship,
             'batches' => $batches,
@@ -156,6 +162,7 @@ class CashierController extends Controller
             'user_campus_ids' => $userCampusIds ?? [],
             'user_type' => $user->usertype, // Added user type for frontend access control
             'canForward' => $canForward,
+            'payout_schedule' => $payout_schedule,
         ]);
     }
 
@@ -171,7 +178,7 @@ class CashierController extends Controller
         $payout->status = 'Inactive';
         $payout->save();
 
-        return redirect()->back()->with('success', 'Forwarded Successfully');
+        return redirect()->route('cashier.active_scholarships')->with('success', 'Forwarded Successfully');
     }
 
 
@@ -206,12 +213,16 @@ class CashierController extends Controller
             ->where('status', 'claimed') // Assuming 'claimed' is the status for claimed disbursements
             ->count();
 
+        $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
+            ->first();
+
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'disbursements' => $disbursements,
             'payout' => $payout,
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
+            'payout_schedule' => $payout_schedule,
         ]);
     }
 

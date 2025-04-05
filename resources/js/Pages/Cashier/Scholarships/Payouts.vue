@@ -58,7 +58,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payout_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
+                <Payout_List :payout_schedule="payout_schedule"  :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -138,6 +138,7 @@ const props = defineProps({
     errors: Object,
     flash: Object,
     totalClaimed: Object,
+    payout_schedule: Object,
 });
 
 const scannedScholar = ref(null);

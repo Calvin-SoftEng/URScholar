@@ -281,7 +281,13 @@
                                         <div class="w-full flex flex-row items-center gap-2 py-2">
                                             <font-awesome-icon :icon="['fas', 'person-dress']"
                                                 class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                            <div class="flex flex-col items-left gap-1">
+                                                
+                                            <div v-if="mother.first_name === 'n\/a'"
+                                                class="flex flex-col items-left gap-1">
+                                                <span
+                                                    class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                            </div>
+                                            <div v-else class="flex flex-col items-left gap-1">
                                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                                     mother.first_name }}</span>
                                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{
@@ -302,7 +308,12 @@
                                         <div class="w-full flex flex-row items-center gap-2 py-2">
                                             <font-awesome-icon :icon="['fas', 'person']"
                                                 class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                            <div class="flex flex-col items-left gap-1">
+                                            <div v-if="father.first_name === 'n\/a'"
+                                                class="flex flex-col items-left gap-1">
+                                                <span
+                                                    class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                            </div>
+                                            <div v-else class="flex flex-col items-left gap-1">
                                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                                     father.first_name }}</span>
                                                 <span class="text-gray-900 text-base font-semibold leading-tight">{{
@@ -323,13 +334,16 @@
                                         <div class="w-full flex flex-row items-center gap-2 py-2">
                                             <font-awesome-icon :icon="['fas', 'people-roof']"
                                                 class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                            <div class="flex flex-col items-left gap-1">
-                                                <span
-                                                    class="text-gray-900 text-base font-semibold leading-tight">Kapatid1,
-                                                    Kapatid2,</span>
-                                                <span
-                                                    class="text-gray-900 text-base font-semibold leading-tight">Trabaho1,
-                                                    Trabaho2</span>
+                                            <div v-if="siblings.length === 0"
+                                                class="flex flex-col items-left gap-1">
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">N/A</span>
+                                            </div>
+                                            <div v-else v-for="sibling in siblings" :key="sibling.id"
+                                                class="flex flex-col items-left gap-1">
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    sibling.first_name }} {{ sibling.last_name }}</span>
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    sibling.occupation }}</span>
                                             </div>
                                         </div>
                                     </div>
@@ -1063,6 +1077,7 @@ const props = defineProps({
     student: Object,
     education: Object,
     family: Object,
+    siblings: Array,
     scholar: Object,
     grades: Array,
     latestgrade: Object,

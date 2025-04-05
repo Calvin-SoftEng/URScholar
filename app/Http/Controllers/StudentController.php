@@ -938,6 +938,7 @@ class StudentController extends Controller
         $student = StudentRecord::where('scholar_id', $scholar->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
+        $siblings = SiblingRecord::where('family_record_id', $family->id)->get();
 
 
 
@@ -1057,6 +1058,7 @@ class StudentController extends Controller
             'student' => $student,
             'education' => $education,
             'family' => $family,
+            'siblings' => $siblings,
             'scholar' => $scholar,
             'grades' => $grades,
             'latestgrade' => $latestgrade,

@@ -144,17 +144,21 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Mother's
                                                 Name</span>
-                                            <span class="text-xl font-sora text-primary">
-                                                {{ scholar.last_name }},
-                                                {{ scholar.first_name }}
-                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                            <span v-if="mother.first_name === 'n\/a'"
+                                                class="text-xl font-sora text-primary">
+                                                Deceased
+                                            </span>
+                                            <span v-else class="text-xl font-sora text-primary">
+                                                {{ mother.last_name }},
+                                                {{ mother.first_name }}
+                                                {{mother.middle_name ? mother.middle_name.split(' ').map(word =>
                                                     word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                             </span>
                                         </div>
-                                        <div class="flex flex-col text-black">
+                                        <div v-if="mother.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl text-primary">Trabaho</span>
+                                            <span class="text-xl text-primary">{{ mother.occupation }}</span>
                                         </div>
                                     </div>
 
@@ -162,29 +166,44 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Father's
                                                 Name</span>
-                                            <span class="text-xl font-sora text-primary">
-                                                {{ scholar.last_name }},
-                                                {{ scholar.first_name }}
-                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
+                                            <span v-if="father.first_name === 'n\/a'"
+                                                class="text-xl font-sora text-primary">
+                                                Deceased
+                                            </span>
+                                            <span v-else class="text-xl font-sora text-primary">
+                                                {{ father.last_name }},
+                                                {{ father.first_name }}
+                                                {{father.middle_name ? father.middle_name.split(' ').map(word =>
                                                     word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                             </span>
                                         </div>
-                                        <div class="flex flex-col text-black">
+                                        <div v-if="father.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl text-primary">Trabaho</span>
+                                            <span class="text-xl text-primary">{{ father.occupation }}</span>
                                         </div>
                                     </div>
 
                                     <div class="col-span-2 flex flex-col p-2 space-y-3">
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Siblings</span>
-                                            <span class="text-xl font-sora text-primary">
-                                                Name 1, Name 2, Name 3
-                                            </span>
-                                            <span class="text-xl font-sora text-primary">
-                                                Work 1, Work 2, Work 3
-                                            </span>
+                                            <div v-if="siblings.length === 0">
+                                                <span class="text-xl font-sora text-primary">
+                                                    N/A
+                                                </span>
+                                            </div>
+                                            <div v-else v-for="sibling in siblings" :key="sibling.id">
+                                                <span class="text-xl font-sora text-primary">
+                                                    {{ sibling.last_name }},
+                                                    {{ sibling.first_name }}
+                                                    {{sibling.middle_name ? sibling.middle_name.split(' ').map(word =>
+                                                        word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
+                                                </span>
+                                                <span class="text-xl font-sora text-primary">
+                                                    {{ sibling.occupation }}
+                                                </span>
+                                            </div>
+
                                         </div>
                                     </div>
 
@@ -193,7 +212,7 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Marital Status
                                                 of Parents</span>
                                             <span class="text-xl font-sora text-primary">
-                                                Married
+                                                {{ family.marital_status }}
                                             </span>
                                         </div>
 
@@ -201,7 +220,7 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Monthly Family
                                                 Income</span>
                                             <span class="text-xl font-sora text-primary">
-                                                Married
+                                                {{ family.monthly_income }}
                                             </span>
                                         </div>
 
@@ -209,7 +228,7 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Other Source of
                                                 Income</span>
                                             <span class="text-xl font-sora text-primary">
-                                                Married
+                                                {{ family.other_income }}
                                             </span>
                                         </div>
 
@@ -217,7 +236,7 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Family Type of
                                                 Housing</span>
                                             <span class="text-xl font-sora text-primary">
-                                                Married
+                                                {{ family.family_housing }}
                                             </span>
                                         </div>
                                     </div>
@@ -504,6 +523,10 @@ import { Button } from '@/Components/ui/button'
 
 const props = defineProps({
     scholar: Object,
+    student: Object,
+    education: Object,
+    family: Object,
+    siblings: Array,
     scholarship: Object,
     batch: Object,
     grade: Object,
@@ -656,6 +679,77 @@ watchEffect(() => {
     }
 });
 
+const elementary = computed(() => {
+    try {
+        return JSON.parse(props.education.elementary);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const junior = computed(() => {
+    try {
+        return JSON.parse(props.education.junior);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const senior = computed(() => {
+    try {
+        return JSON.parse(props.education.senior);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const college = computed(() => {
+    try {
+        return JSON.parse(props.education.college);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const vocational = computed(() => {
+    try {
+        return JSON.parse(props.education.vocational);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const postgrad = computed(() => {
+    try {
+        return JSON.parse(props.education.postgrad);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const mother = computed(() => {
+    try {
+        return JSON.parse(props.family.mother);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const father = computed(() => {
+    try {
+        return JSON.parse(props.family.father);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
 </script>
 
 <style>

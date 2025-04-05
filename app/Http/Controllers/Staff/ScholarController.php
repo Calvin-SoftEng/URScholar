@@ -13,6 +13,10 @@ use App\Models\Applicant;
 use App\Models\Grantees;
 use App\Models\Scholar;
 use App\Models\Grade;
+use App\Models\StudentRecord;
+use App\Models\EducationRecord;
+use App\Models\FamilyRecord;
+use App\Models\SiblingRecord;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\Student;
@@ -49,12 +53,12 @@ class ScholarController extends Controller
             'user',
             'campus',
             'course',
-            'studentRecord', // Add this relationship
-            'studentRecord.educationrecord', // Add this nested relationship
-            'studentRecord.familyrecord', // Add this nested relationship
-            'studentRecord.familyrecord.siblings', // Add this nested relationship
-            'studentRecord.orgrecord' // Add this nested relationship
         ])->findOrFail($id);
+
+        $student = StudentRecord::where('scholar_id', $scholar->id)->first();
+        $education = EducationRecord::where('student_record_id', $student->id)->first();
+        $family = FamilyRecord::where('student_record_id', $student->id)->first();
+        $siblings = SiblingRecord::where('family_record_id', $family->id)->get();
 
         if ($scholar) {
             $grantee = Grantees::where('scholar_id', $scholar->id)->first();
@@ -129,6 +133,10 @@ class ScholarController extends Controller
 
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
             'scholar' => $scholar,
+            'student' => $student,
+            'education' => $education,
+            'family' => $family,
+            'siblings' => $siblings,
             'scholarship' => $scholarship,
             'batch' => $batch,
             'requirements' => $requirements,

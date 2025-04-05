@@ -294,6 +294,7 @@ const props = defineProps({
   flash: Object,
   scholar: Object,
   payout: Object, // Add the payout object prop
+  payout_schedule: Object,
 });
 
 const components = {
@@ -336,29 +337,35 @@ const formatDate = (date) => {
   return date.toISOString().split('T')[0];
 };
 
-// Check if current date is equal to or after the end date
-const checkDateStatus = () => {
-  if (!props.payout || !props.payout.date_end) {
+// Check if current date and time match the scheduled date and time
+const checkDateTimeStatus = () => {
+  if (!props.payout_schedule || !props.payout_schedule.scheduled_date || !props.payout_schedule.scheduled_time) {
     dateCheckResult.value = false;
     isNearEndDate.value = false;
     return;
   }
 
   const currentDate = new Date();
-  const dateEnd = new Date(props.payout.date_end);
+  
+  // Parse the scheduled date and time from payout_schedule
+  const scheduledDate = new Date(props.payout_schedule.scheduled_date);
+  const [hours, minutes] = props.payout_schedule.scheduled_time.split(':').map(Number);
+  
+  // Set the time component on the scheduled date
+  scheduledDate.setHours(hours, minutes, 0, 0);
+  
+  // Get current time in milliseconds
+  const currentTime = currentDate.getTime();
+  const scheduledTime = scheduledDate.getTime();
 
-  // Set time to beginning of day for consistent comparison
-  currentDate.setHours(0, 0, 0, 0);
-  dateEnd.setHours(0, 0, 0, 0);
+  // Check if current date and time match or have passed the scheduled date and time
+  dateCheckResult.value = currentTime >= scheduledTime;
 
-  // Check if current date is equal to or after the end date
-  dateCheckResult.value = currentDate > dateEnd;
-
-  // Check if we're approaching the end date (within threshold)
-  const timeDifference = dateEnd.getTime() - currentDate.getTime();
+  // Check if we're approaching the scheduled time (within threshold)
+  const timeDifference = scheduledTime - currentTime;
   isNearEndDate.value = timeDifference > 0 && timeDifference <= NEAR_END_THRESHOLD;
 
-  console.log(`Date check at ${new Date().toLocaleTimeString()}: Button enabled = ${dateCheckResult.value}, Near end date = ${isNearEndDate.value}`);
+  console.log(`DateTime check at ${new Date().toLocaleTimeString()}: Button enabled = ${dateCheckResult.value}, Near scheduled time = ${isNearEndDate.value}`);
 };
 
 // Function for button click that checks date conditions
@@ -505,11 +512,11 @@ onMounted(() => {
   console.log("Component mounted, setting up real-time date checking");
 
   // Check immediately on mount
-  checkDateStatus();
+  checkDateTimeStatus();
 
   // Then set interval to check periodically
   dateCheckTimer.value = setInterval(() => {
-    checkDateStatus();
+    checkDateTimeStatus();
 
     // If the date condition becomes true, we could show a notification
     if (dateCheckResult.value && !Reasoning.value) {
