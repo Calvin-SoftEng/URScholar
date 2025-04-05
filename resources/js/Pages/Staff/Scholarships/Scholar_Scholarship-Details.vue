@@ -294,10 +294,13 @@
                                             <!-- Ping Button -->
                                             <button @click="notifyStudent"
                                                 class="px-3 py-1 text-white text-sm font-medium rounded-lg transition"
-                                                :class="isNotified ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-primary/90'"
-                                                :disabled="isNotified">
-                                                {{ isNotified ? 'Notified' : 'Ping Student' }}
+                                                :class="notify?.read === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-primary/90'"
+                                                :disabled="notify?.read === 0">
+                                                {{ notify?.read === 0 ? 'Notified' : 'Ping Student' }}
                                             </button>
+
+
+
                                         </div>
                                         <div v-else
                                             class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
@@ -313,8 +316,10 @@
                                                 <div>
                                                     <button @click="toggleMonitor(grade)"
                                                         class="flex items-center gap-2 px-3 py-1 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                        <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                        <span class="font-medium text-sm">View Certificate of Grades</span>
+                                                        <span
+                                                            class="material-symbols-rounded text-base">open_in_full</span>
+                                                        <span class="font-medium text-sm">View Certificate of
+                                                            Grades</span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -502,6 +507,7 @@ const props = defineProps({
     scholarship: Object,
     batch: Object,
     grade: Object,
+    notify: Object,
     submittedRequirements: Array,
     requirements: Array,
 });

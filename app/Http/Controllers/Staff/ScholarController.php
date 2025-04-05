@@ -69,6 +69,10 @@ class ScholarController extends Controller
         // Get the submitted requirements for this scholar
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
 
+        $notify = StudentNotifier::where('scholar_id', $scholar->id)
+        ->where('read', 0)
+        ->first();
+
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
             'scholar' => $scholar,
             'scholarship' => $scholarship,
@@ -76,6 +80,7 @@ class ScholarController extends Controller
             'requirements' => $requirements,
             'submittedRequirements' => $submittedRequirements,
             'grade' => $grade,
+            'notify' => $notify,
         ]);
     }
 
