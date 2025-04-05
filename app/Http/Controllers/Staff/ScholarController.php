@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Events\NewNotification;
+use App\Models\StudentNotifier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -76,6 +77,20 @@ class ScholarController extends Controller
             'submittedRequirements' => $submittedRequirements,
             'grade' => $grade,
         ]);
+    }
+
+    public function scholar_notifier($scholarID)
+    {
+        $scholar = Scholar::findOrFail($scholarID);
+
+        StudentNotifier::create([
+            'scholar_id' => $scholar->id,
+            'title' => 'Grade Notification',
+            'message' => 'You need to update your grade.',
+            'type' => 'scholarship_notification',
+        ]);
+
+        return back()->with('success', 'Notify scholar successfully!');
     }
 
     public function scholar_onetime($id)

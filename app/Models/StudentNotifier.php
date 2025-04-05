@@ -11,6 +11,7 @@ class StudentNotifier extends Model
         'title',
         'message',
         'type',
+        'read',
     ];
 
     public function scholar()

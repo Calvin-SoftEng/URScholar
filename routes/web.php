@@ -126,6 +126,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::post('/scholarship/forward-batches', [ScholarshipController::class, 'forward'])->name('scholars.forward');
 
     Route::get('/scholarships/scholar={id}', [ScholarController::class, 'scholar'])->name('scholarships.scholar_scholarship_details');
+    Route::post('/scholarships/scholar={scholarID}/notify', [ScholarController::class, 'scholar_notifier'])->name('scholarships.scholar_notifier');
     Route::post('/scholarships/scholar/update-requirements', [ScholarController::class, 'updateStatus'])->name('scholarships.updateStatus');
 
 

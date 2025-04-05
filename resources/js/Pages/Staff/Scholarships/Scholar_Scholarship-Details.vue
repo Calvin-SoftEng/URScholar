@@ -512,8 +512,38 @@ const components = {
 const isNotified = ref(false);
 
 const notifyStudent = () => {
+    router.post(route('scholarships.scholar_notifier', {
+        scholarID: props.scholar.id
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
     isNotified.value = true;
 };
+
+// Submit reason form
+const forwardCoor = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('scholarship.forward_coor', {
+        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
+        selectedCampus: props.selectedCampus
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
+
 
 const statusClass = (status) => {
     switch (status) {
