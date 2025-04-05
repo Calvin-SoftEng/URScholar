@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full mt-5 bg-white rounded-xl">
+  <div class="w-full bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <!-- <div class="flex flex-row gap-2">
         <button
@@ -8,22 +8,74 @@
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report
         </button>
       </div> -->
-      <form class="w-3/12">
-        <label for="default-search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
+      <div class="flex flex-row gap-2 w-5/12">
+        <form class="w-7/12">
+          <label for="default-search"
+            class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+              </svg>
+            </div>
+            <input type="search" id="default-search" v-model="searchQuery"
+              class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              placeholder="Search Scholar" required />
           </div>
-          <input type="search" id="default-search" v-model="searchQuery"
-            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
+        </form>
+        <div>
+            <button 
+                class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+            border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                <span class="font-normal">
+                    {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                </span>
+            </button>
         </div>
-      </form>
+      </div>
+
+      <div class="flex flex-wrap gap-10">
+        <!-- Campus Filter -->
+        <div>
+          <label class=" text-sm block mb-1">Filter Campus</label>
+          <select
+            class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+            <option value="">All Campuses</option>
+            <option>nfieafaef</option>
+          </select>
+        </div>
+
+        <!-- School Year Filter -->
+        <div>
+          <label class=" text-sm block mb-1">Filter School Year</label>
+          <select
+            class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
+            <option value="">2023-2024</option>
+            <option>nfieafaef</option>
+          </select>
+        </div>
+
+        <!-- Semester Filter -->
+        <div>
+          <label class=" text-sm block mb-1">Filter Semester</label>
+          <div class="flex items-center gap-4 text-sm">
+            <label class="flex items-center gap-1">
+              <input type="radio" name="semester" value="1st"
+                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" />
+              1st
+            </label>
+            <label class="flex items-center gap-1">
+              <input type="radio" name="semester" value="2nd"
+                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" />
+              2nd
+            </label>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <div>
@@ -136,8 +188,12 @@
                     FEAFAEFAE
                   </td>
                   <td>
-                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
-                      1.23
+                    1.23
+                  </td>
+                  <td>
+                    <span class="
+                      bg-green-100 text-green-800 border border-green-400"
+                      >Active
                     </span>
                   </td>
                   <th>

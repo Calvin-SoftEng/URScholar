@@ -191,8 +191,17 @@
                                             class="text-yellow-800" />
                                         <span class="font-semibold">Reminder:</span>
                                     </span>
-                                    Your grades need to be updated. Please upload your latest Copy of Grades and General
+                                    Your grades need to be updated. Please upload your latest available Copy of Grades and General
                                     Weighted Average (GWA).
+                                </div>
+
+                                <!-- Notification Message for Stakeholder -->
+                                <div class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mt-4 flex flex-col items-left">
+                                    <span class="space-x-2">
+                                        <font-awesome-icon :icon="['fas', 'circle-exclamation']" class="text-yellow-800" />
+                                        <span class="font-semibold">Reminder:</span>
+                                    </span>
+                                    Your grades need to be updated. Please upload your latest Copy of Grades and General Weighted Average (GWA).
                                 </div>
 
                                 <div>
