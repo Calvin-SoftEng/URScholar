@@ -1047,9 +1047,11 @@ class StudentController extends Controller
 
         $notify = StudentNotifier::where('scholar_id', $scholar->id)->first();
 
-        $notify->update([
-            'read' => true,
-        ]);
+        if ($notify) {
+            $notify->update([
+                'read' => true,
+            ]);
+        }
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
