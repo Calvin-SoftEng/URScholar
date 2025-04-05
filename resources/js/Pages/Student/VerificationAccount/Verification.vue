@@ -324,6 +324,9 @@
                                                             <SelectItem value="Single">
                                                                 Single
                                                             </SelectItem>
+                                                            <SelectItem value="Married">
+                                                                Married
+                                                            </SelectItem>
                                                             <SelectItem value="widowed">
                                                                 Widowed
                                                             </SelectItem>
@@ -408,13 +411,13 @@
                                             class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="guardian_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Guardian
-                                                    Name
+                                                    <span class="text-red-900 font-bold mr-1">*</span>
+                                                    Name of Guardian (If not living with Parents)
                                                 </Label>
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="guardian_name" type="text" placeholder="Guardian Name"
+                                                <Input id="guardian_name" type="text" placeholder="Full Name"
                                                     v-model="form.guardian_name" @focus="errors.guardian_name = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.guardian_name" :message="errors.guardian_name"
@@ -426,12 +429,12 @@
                                             class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="guardian_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Relationship
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Relationship with Guardian
                                                 </Label>
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="guardian_name" type="text" placeholder="Guardian Name"
+                                                <Input id="guardian_name" type="text" placeholder="Relationship with Guardian"
                                                     v-model="form.relationship" @focus="errors.relationship = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.relationship" :message="errors.relationship"
@@ -1614,18 +1617,38 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="flex flex-col gap-1.5">
-                                                        <div class="flex flex-row items-center gap-2">
-                                                            <Label for="email" class="items-center flex">
-                                                                <span class="text-red-900 font-bold mr-1">*</span>Email
-                                                            </Label>
-                                                            <InputError v-if="errors?.email" :message="errors.email"
-                                                                class="items-center flex text-xs" />
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                        <div class="flex flex-col gap-1.5">
+                                                            <div class="flex flex-row items-center gap-2">
+                                                                <Label for="first_name" class="items-center flex">
+                                                                    <span
+                                                                        class="text-red-900 font-bold mr-1">*</span>
+                                                                    Email
+                                                                </Label>
+                                                                <InputError v-if="errors?.email" :message="errors.email"
+                                                                    class="items-center flex text-xs" />
+                                                            </div>
+                                                            <Input id="first_name" type="text" placeholder="Email"
+                                                                v-model="form.email"
+                                                                class="w-full border border-gray-200" />
                                                         </div>
-                                                        <Input id="email" type="email" placeholder="Email"
-                                                            v-model="form.email" readonly
-                                                            class="w-full border border-gray-200" />
+
+                                                        <div class="flex flex-col gap-1.5">
+                                                            <div class="flex flex-row items-center gap-2">
+                                                                <Label for="last_name" class="items-center flex">
+                                                                    <span
+                                                                        class="text-red-900 font-bold mr-1">*</span>Student ID
+                                                                </Label>
+                                                                <InputError v-if="errors?.last_name"
+                                                                    :message="errors.last_name"
+                                                                    class="items-center flex text-xs" />
+                                                            </div>
+                                                            <Input id="last_name" type="text" placeholder="Student ID"
+                                                                v-model="form.last_name"
+                                                                class="w-full border border-gray-200" />
+                                                        </div>
                                                     </div>
+
 
                                                     <!-- <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                                         <div class="flex flex-row items-center gap-2">
@@ -1668,7 +1691,7 @@
                                                         </div>
                                                         <div class="relative w-full">
                                                             <Input id="middle_name" type="text"
-                                                                placeholder="Enter Password"
+                                                                placeholder="Confirm Password"
                                                                 v-model="form.confirm_password"
                                                                 @focus="errors.confirm_password = null"
                                                                 class="w-full border border-gray-200 pr-10" />
