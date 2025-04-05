@@ -56,17 +56,18 @@
 
         <!-- first stepper -->
 
-        <div v-if="submitPending != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-            <h1>Congratulations!</h1>
-            <p>Your application has been successfully completed.</p>
-            <p>You will be notified about the next steps soon.</p>
-            <br>
+        <div v-if="submitPending != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <h2 class="text-xl font-semibold">Congratulations!</h2>
+            <p class="mt-2">
+                <p>Your application has been successfully completed.</p>
+                <p>You will be notified about the next steps soon.</p>
+            </p>
         </div>
 
         <!-- second stepper -->
 
-        <div v-else-if="submitReq != 0" class="bg-dirtywhite w-full p-3 flex flex-col font-popins text-xl">
-            <span>From Maam Anorn</span>
+        <div v-else-if="submitReq != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
+            <span>From Maam Anorn:</span>
             <span>Message</span>
             <p>It is noted, however, that among the requirements you have submittted to DBP, the
                 following documents must be
@@ -99,51 +100,7 @@
                         </p>
                     </div>
                 </div>
-                <!-- <div v-for="req in returnedRequirements" :key="req.id"
-                    class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
-                    
-                    <div class="flex justify-between items-center gap-5">
-                        <div class="flex items-center space-x-2">
-                            <span
-                                class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">{{
-                                String.fromCharCode(65 + index) }}</span>
-                            <span class="font-semibold text-gray-800">{{
-                                req.requirements
-                            }}</span>
-                        </div>
-                        <label
-                            class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
-                            Add File
-                            <input type="file" class="hidden"
-                            @change="(e) => handleFile(e, req.id, req.requirements)"
-                            :id="'file_input_' + req.id" />
-                        </label>
-                    </div>
-
-                   
-                    <div v-if="form.files[req.id]"
-                        class="border border-dashed border-purple-400 rounded-lg p-2 mt-2 flex items-center justify-between">
-                        <div class="flex items-center space-x-2">
-                            <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
-                                class="w-6 h-6" alt="PDF Icon">
-                            <div>
-                                <p class="text-sm font-medium">{{
-                                    form.files[req.id].name }}</p>
-                                <p class="text-xs text-gray-500">{{
-                                    form.files[req.id].size }}</p>
-                            </div>
-                        </div>
-                        <button type="button" @click="removeFile(req.id)"
-                            class="ml-2 text-red-600 hover:text-red-800">
-                            Remove
-                        </button>
-
-                        <div v-if="form.errors[`files.${req.id}`]"
-                            class="text-red-500 text-sm">
-                            {{ form.errors[`files.${req.id}`] }}
-                        </div>
-                    </div>
-                </div> -->
+                
 
                 <div v-if="returnedRequirements.length === 0" class="text-center py-8">
                     <p class="text-gray-500">No returned requirements to resubmit.</p>
@@ -162,10 +119,12 @@
 
         <!-- third stepper -->
 
-        <div v-if="submitApproved != 0" class="bg-white w-full p-6 flex flex-col font-poppins text-xl text-center">
-            <h1 class="text-3xl font-bold text-green-700">Congratulations!</h1>
-            <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
-            <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
+        <div v-if="submitApproved != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <h2 class="text-xl font-semibold">Congratulations!</h2>
+            <p class="mt-2">
+                <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
+                <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
+            </p>
 
             <!-- Encouragement to Stay Updated -->
             <div class="mt-6">
@@ -211,10 +170,25 @@
             </div>
 
             <!-- Payout Announcement Card (Only shown if there's a schedule) -->
-            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <div v-if="!payout_schedule" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
                 <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
-                <p class="mt-2">Your next payout is expected on <span class="font-bold">faefeafaefae</span>. Stay
-                    updated for further announcements.</p>
+                <p class="mt-2">
+                    <span class="font-bold">Next payout schedule will be announced soon</span>.
+                    Stay updated for further announcements.
+                </p>
+            </div>
+            <div  v-else class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+                <h2 class="text-xl font-semibold">Payout Schedule</h2>
+                <p class="mt-2">
+                    Your next payout is expected on
+                    <span class="font-bold">{{ formattedDate }} at {{ formattedTime }}</span>.
+                    Stay updated for further announcements.
+                </p>
+                <p class="mt-2">
+                    <span class="font-bold">Reminders:</span>
+                    <br>
+                    <span v-html="formattedReminders"></span>
+                </p>
             </div>
 
             <!-- kapag may new requirmeents -->
@@ -312,10 +286,11 @@
                             </div>
 
                             <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                                <h2 class="text-lg font-semibold">{{ new Date(history.claimed_at).toLocaleDateString('en-US', {
-                                                year:
-                                                    'numeric', month: 'long', day: 'numeric'
-                                            }) }}</h2>
+                                <h2 class="text-lg font-semibold">{{ new
+                                    Date(history.claimed_at).toLocaleDateString('en-US', {
+                                        year:
+                                            'numeric', month: 'long', day: 'numeric'
+                                    }) }}</h2>
                                 <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>,
                                     ID: URSB123</p>
                                 <p class="text-gray-600">Processed at: sa cashier</p>
@@ -382,6 +357,7 @@ const props = defineProps({
     grantee: Object,
     oldestGrantee: Object,
     historygrantee: Array,
+    payout_schedule: Object,
 
     //For non-scholars only
     sponsors: {
@@ -428,6 +404,25 @@ const handleFile = (event, reqId, requirementName) => {
         }
     }
 };
+
+// Format Date to "April 5, 2025"
+const formattedDate = computed(() => {
+    const date = new Date(props.payout_schedule.scheduled_date);
+    return new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(date);
+});
+
+// Format Time to "3:05 PM"
+const formattedTime = computed(() => {
+    const [hours, minutes] = props.payout_schedule.scheduled_time.split(":");
+    const date = new Date();
+    date.setHours(hours, minutes);
+    return new Intl.DateTimeFormat("en-US", { hour: "numeric", minute: "2-digit", hour12: true }).format(date);
+});
+
+// Convert newlines (`\n`) to `<br>` for proper display
+const formattedReminders = computed(() => {
+    return props.payout_schedule.reminders.replace(/\n/g, "<br>");
+});
 
 const removeFile = (reqId) => {
     // Remove file

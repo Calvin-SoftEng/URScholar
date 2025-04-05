@@ -20,6 +20,7 @@ class ScholarshipFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'sponsor_id' => \App\Models\Sponsor::factory(),
+            'user_id' => \App\Models\User::factory(),
             'scholarshipType' => $this->faker->word(),
             'status' => $this->faker->word(),
             'date_start' => $this->faker->date(),

@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('scholarshipType', ['Grant-Based', 'One-time Payment'])->default('Grant-Based');
             $table->date('date_start');
             $table->date('date_end');
@@ -30,6 +31,16 @@ return new class extends Migration {
             $table->date('date_end');
             $table->integer('subtotal_scholars')->nullable(); //1
             $table->integer('total_scholars')->nullable(); //4
+            $table->timestamps();
+        });
+
+        Schema::create('scholarship_templates', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('requirement_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('filename');
+            $table->string('path');
+            $table->string('mime_type');
             $table->timestamps();
         });
 
@@ -68,7 +79,6 @@ return new class extends Migration {
 
         Schema::create('eligibilities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });
@@ -108,6 +118,7 @@ return new class extends Migration {
         Schema::dropIfExists('campus_recipients');
         Schema::dropIfExists('scholarship_form_data');
         Schema::dropIfExists('scholarship_forms');
+        Schema::dropIfExists('scholarship_templates');
         Schema::dropIfExists('requirements');
         Schema::dropIfExists('scholarships');
     }

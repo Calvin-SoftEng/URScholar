@@ -44,11 +44,11 @@
                             <div class="w-full h-full space-y-3 flex flex-col items-center">
                                 <div
                                     class="w-full h-1/12 text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    feafafaefaef
+                                    Last Logged In September 30, 2023
                                 </div>
                                 <div
                                     class="w-full h-1/12 text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    fbeapnfpaeinf
+                                    Recent Payout last September 30, 2023
                                 </div>
                                 <div
                                     class="w-full h-1/12 text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
@@ -57,12 +57,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <div v-if="scholar" class="col-span-2">
                     <!-- kapag may scholarship -->
+                    <div v-if="grantee" class="col-span-2">
                         <div
                             class="w-full h-full col-span-2 block bg-white shadow-md p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8 rounded-lg">
-                            <ScholarGrant :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
+                            <ScholarGrant :payout_schedule="payout_schedule" :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :historygrantee="historygrantee" :disbursement="disbursement" :grantee="grantee" :oldestGrantee="oldestGrantee" :submitApproved="submitApproved"/>
                         </div>
                     </div>
@@ -71,9 +70,14 @@
                     <!-- kapag wala pang scholarship -->
                     <div v-else
                         class="w-full h-full col-span-2 block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
-                        <Scholarships :sponsors="sponsors" :scholarships="scholarships"
-                            :schoolyears="schoolyears" />
-                            <!-- <Scholarships  /> -->
+                        <div v-if="!applicant">
+                            <Scholarships :sponsors="sponsors" :scholarships="scholarships"
+                            :schoolyears="schoolyears" :scholar="scholar" :grade="grade" />
+                        </div>
+                        <div v-else>
+                            <ScholarAppliant :sponsors="sponsors" :scholarships="scholarships"
+                            :schoolyears="schoolyears" :scholar="scholar" />
+                        </div>
                     </div>
                 </div>
             </div>
@@ -119,7 +123,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, useForm } from '@inertiajs/vue3';
 import { computed, ref } from 'vue';
 import ScholarGrant from './Scholar/ScholarGrant.vue';
-import Scholarships from './Non_Scholar/NonScholarDashboard.vue';
+import Scholarships from './Non_Scholar/Scholarships.vue';
+import ScholarAppliant from './Non_Scholar/NonScholarDashboard.vue';
 
 const props = defineProps({
     //For scholars only
@@ -132,6 +137,7 @@ const props = defineProps({
     disbursement: Object,
     grantee: Object,
     oldestGrantee: Object,
+    payout_schedule: Object,
 
     //For non-scholars only
     sponsors: {
@@ -145,7 +151,9 @@ const props = defineProps({
     schoolyears: {
         type: Array,
         required: true
-    }
+    },
+    applicant: Object,
+    grade: Object,
 });
 
 const isQrCodeVisible = ref(false);

@@ -1,31 +1,35 @@
 <template>
-    <section class="relative py-16 px-40 min-h-screen items-center bg-white">
 
+
+    <section class="relative py-16 px-6 sm:px-3 min-h-screen items-center bg-white">
         <div class="flex flex-col text-center space-y-8 items-center justify-start h-full">
+            <!-- Header Section -->
             <div class="text-left flex flex-col space-y-5">
                 <span
-                    class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-2xl font-bold">Find
-                    Available and Ongoing Scholarships, Check Eligibility, and Apply <br></span>
-                <p class="text-lg text-primary max-w-4xl font-medium font-albert text-center">Browse Scholarship
-                    Programs offered by the Nation’s Government and Local Governments.
-                    Have a Financial Assistance Grant and aid your tuition fees and school fees</p>
+                    class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-xl sm:text-lg font-bold">
+                    Find Available and Ongoing Scholarships, Check Eligibility, and Apply
+                </span>
+                <p class="text-base sm:text-sm text-primary max-w-4xl font-medium font-albert text-center">
+                    Browse Scholarship Programs offered by the Nation’s Government and Local Governments.
+                    Have a Financial Assistance Grant and aid your tuition fees and school fees.
+                </p>
             </div>
 
-            <div class="flex items-center border rounded-md overflow-hidden shadow-sm w-8/12">
+            <!-- Search Bar -->
+            <div class="flex items-center border rounded-md overflow-hidden shadow-sm w-full sm:w-10/12">
                 <span class="bg-white px-3 py-2 border-r flex items-center">
                     <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-blue-500 text-lg" />
                 </span>
-
                 <input type="text" placeholder="Search..." class="w-full px-4 py-2 border-none focus:ring-0" />
             </div>
 
             <div class="w-full h-[1px] bg-gray-200"></div>
 
+            <!-- Scholarships List -->
             <div class="w-full flex flex-col items-center space-y-4">
-                <!-- Check if scholarships exist -->
                 <template v-if="scholarships.length > 0">
                     <div v-for="scholarship in scholarships" :key="scholarship.id"
-                        class="p-6 w-full min-w-xl bg-white">
+                        class="p-6 w-full min-w-xl max-w-7xl bg-white">
                         <div v-if="scholarship.status == 'Active'">
                             <div class="flex flex-row items-center gap-6 justify-between bg-white p-6 rounded-lg shadow-md">
                                 <!-- Scholarship Image -->
@@ -41,12 +45,12 @@
                                         <span class="text-gray-500">Since <span class="font-medium text-gray-800">{{
                                             getSponsorDetails(scholarship.sponsor_id).since }}</span></span>
                                     </span>
-                                    <p class="text-sm text-gray-700 leading-relaxed mt-2">
+                                    <p class="text-sm text-gray-700 leading-relaxed pt-4 text-start">
                                         {{ getSponsorDetails(scholarship.sponsor_id).description }}
                                     </p>
 
                                     <!-- Scholarship Info -->
-                                    <div class="flex gap-6 mt-5">
+                                    <div class="flex gap-6 pt-5">
                                         <div class="flex flex-col items-start">
                                             <span class="text-gray-500 text-sm">Scholarship for</span>
                                             <span class="font-medium text-gray-800">All Courses</span>
@@ -69,8 +73,8 @@
                                 <div class="flex h-full items-center justify-center">
                                     <Link :href="`/applying-scholarship/${scholarship.id}`">
                                     <button
-                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
-                                        Apply Now
+                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200 whitespace-nowrap">
+                                        View More
                                     </button>
                                     </Link>
                                 </div>
@@ -101,10 +105,9 @@
                     <p class="text-gray-500 text-sm mt-2">Check back later for new opportunities.</p>
                 </div>
             </div>
-
-
         </div>
     </section>
+
 
 </template>
 

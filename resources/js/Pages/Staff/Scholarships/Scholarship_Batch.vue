@@ -35,12 +35,14 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <Link>
-                                <button class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">< </button>
-                            </Link>
-                            <span>{{ scholarship?.name }}</span>
-                            <span>{{ scholarship?.type }}</span>
+                            <button class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">
+                                < </button>
+                                    </Link>
+                                    <span>{{ scholarship?.name }}</span>
+                                    <span>{{ scholarship?.type }}</span>
                         </h1>
-                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span>
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
+                            }} Semester</span>
                     </div>
 
                     <!-- Stats Section -->
@@ -53,7 +55,7 @@
                             </div>
                             <p class="text-4xl font-semibold font-kanit text-green-600">{{ stats.completedCount }}</p>
                         </div>
-                        
+
                         <!-- Total Scholars -->
                         <div class="flex flex-col items-start py-4 px-10">
                             <div class="flex flex-row space-x-3 items-center">
@@ -100,8 +102,41 @@
                     </Button>
                 </div>
 
-                <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
+
+                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
                         :requirements="requirements" @update:stats="updateStats" />
+                </div>
+                <div v-else>
+                    <div v-if="props.batches.status === 'Active'"
+                        class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                        <font-awesome-icon :icon="['fas', 'user-graduate']"
+                            class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                        <p class="text-lg text-gray-700 dark:text-gray-300">
+                            Batch still on going. Please check back later.
+                        </p>
+                    </div>
+                    <div v-else>
+                        <div v-if="props.batches.status !== 'Inactive'"
+                            class="bg-white w-full dark:bg-dsecondary p-6 rounded-lg text-center animate-fade-in">
+                            <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                This
+                            </p>
+                        </div>
+                        <div v-else>
+                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                                :requirements="requirements" @update:stats="updateStats" />
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- <Payroll_List :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                        :requirements="requirements" @update:stats="updateStats" /> -->
 
             </div>
         </div>
@@ -120,7 +155,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onMounted, computed } from 'vue';
+import { defineProps, ref, watchEffect, onMounted, computed, onUnmounted } from 'vue';
 import { Link, usePage, router } from '@inertiajs/vue3';
 import { ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 import { Input } from '@/Components/ui/input';
@@ -128,7 +163,7 @@ import { Label } from '@/Components/ui/label';
 import { Button } from '@/Components/ui/button';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/Components/ui/select';
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
-import PayrollTable from '@/Components/Staff/ScholarsTabs/PayrollTable.vue';
+import Payroll_List from '@/Components/Staff/ScholarsTabs/Payroll_List.vue';
 import { cloneDeep, isEqual } from 'lodash';
 
 const props = defineProps({
@@ -358,6 +393,18 @@ const showToast = (title, message, type = 'success') => {
         toast.value.visible = false;
     }, 3000);
 };
+
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
 </script>
 
 <style>

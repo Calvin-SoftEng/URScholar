@@ -15,10 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->integer('batch_no');
-            $table->string('school_year');
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
             $table->string('semester');
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();
+            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
             $table->boolean('read')->default(false);
             $table->timestamps();
         });
@@ -50,6 +52,16 @@ return new class extends Migration
             $table->string('pwd_classification')->nullable();
             $table->string('email')->nullable();
             $table->enum('status', ['Verified', 'Unverified'])->default('Unverified');
+            $table->timestamps();
+        });
+
+        Schema::create('student_notifiers', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
+            $table->string('title');
+            $table->string('message');
+            $table->string('type');
+            $table->boolean('read')->default(false);
             $table->timestamps();
         });
 
@@ -97,6 +109,7 @@ return new class extends Migration
         Schema::dropIfExists('submitted_requirements');
         Schema::dropIfExists('applicants');
         Schema::dropIfExists('grantees');
+        Schema::dropIfExists('student_notifiers');
         Schema::dropIfExists('scholars');
         Schema::dropIfExists('batches');
     }

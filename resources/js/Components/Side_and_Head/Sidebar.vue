@@ -232,8 +232,16 @@
               </div>
               <!-- Text (displayed only when dataOpenSideBar) -->
               <div class="flex flex-col items-start text-[12px] text-blue-900 dark:text-dtext">
-                <span v-show="dataOpenSideBar">{{ $page.props.auth.user.email }}</span>
-                <span v-show="dataOpenSideBar">{{ $page.props.auth.user.usertype }}</span>
+                <span v-show="dataOpenSideBar">{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name }} </span>
+                <span v-show="dataOpenSideBar">
+                  {{
+                    $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :
+                    $page.props.auth.user.usertype === 'coordinator' ? 'Coordinator' :
+                    $page.props.auth.user.usertype
+                  }}
+                </span>
+
+
               </div>
             </div>
             <div>

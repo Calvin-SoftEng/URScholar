@@ -15,16 +15,23 @@ use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
 use App\Models\Criteria;
 use App\Models\CampusRecipients;
+use App\Models\Campus;
+use App\Models\Eligible;
+use App\Models\Course;
 use App\Models\Batch;
 use App\Models\Message;
+use App\Models\StudentNotifier;
 use App\Models\Notification;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
 use App\Models\User;
 use App\Models\Scholar;
 use App\Models\SchoolYear;
+use App\Models\AcademicYear;
 use App\Models\Sponsor;
 use App\Models\Disbursement;
+use App\Models\Payout;
+use App\Models\PayoutSchedule;
 use App\Models\Grantees;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -40,7 +47,10 @@ class StudentController extends Controller
 {
     public function dashboard()
     {
-        $scholar = Scholar::where('email', Auth::user()->email)->first();
+        $scholar = Scholar::where('email', Auth::user()->email)
+            ->with('campus')
+            ->with('course')
+            ->first();
         $grantee = Grantees::where('scholar_id', $scholar->id)->with('school_year')->first();
 
         if ($grantee) {
@@ -48,6 +58,17 @@ class StudentController extends Controller
 
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
                 ->first() ?? null;
+
+            $payout = null;
+            $payout_schedule = null;
+
+            if ($disbursement && $disbursement->payout_id) {
+                $payout = Payout::where('id', $disbursement->payout_id)->first();
+            }
+
+            if ($payout) {
+                $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)->first();
+            }
 
             $oldestGrantee = Grantees::where('id', $grantee->id)
                 ->orderBy('created_at', 'asc')
@@ -75,8 +96,6 @@ class StudentController extends Controller
                     ];
                 });
 
-
-
             if ($scholarship) {
                 $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                     ->first();
@@ -88,15 +107,11 @@ class StudentController extends Controller
 
                 $requirementIds = $requirements->pluck('id')->toArray();
 
-
-
                 // Fetch only returned submitted requirements related to the scholarship
                 $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
                     ->where('status', 'Returned')
                     ->whereIn('requirement_id', $requirementIds)
                     ->get();
-
-                // dd($requirementIds);
 
                 // Map submitted requirements with their corresponding requirement details
                 $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
@@ -129,38 +144,111 @@ class StudentController extends Controller
                     'submitReq' => $returnedRequirements,
                     'submitPending' => $submitPending,
                     'submitApproved' => $submitApproved,
+                    'payout_schedule' => $payout_schedule,
                 ]);
             }
-
         }
 
+        // For non-grantees
+        // Get the scholar's latest grade
+        $grade = Grade::where('scholar_id', $scholar->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
+        // Get all active scholarships
+        $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')
+            ->with('requirements')
+            ->where('status', 'Active')
+            ->get();
+
+        // Get all criteria for these scholarships
+        $criteria = Criteria::whereIn('scholarship_id', $scholarships->pluck('id'))->get();
+
+        // Get campus recipients for these scholarships
+        $campusRecipients = CampusRecipients::whereIn('scholarship_id', $scholarships->pluck('id'))->get();
+
+        // Add criteria to each scholarship
+        foreach ($scholarships as $scholarship) {
+            $scholarship->criteriaData = $criteria->where('scholarship_id', $scholarship->id)->first();
+            $scholarship->campusRecipients = $campusRecipients->where('scholarship_id', $scholarship->id)->values();
+        }
+
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
+        $applicant = Applicant::where('scholar_id', $scholar->id)->first() ?? null;
+
+        // Get all campuses and courses
+        $campuses = Campus::all();
+        $courses = Course::all();
 
         return Inertia::render('Student/Dashboard/Dashboard', [
             'scholarships' => $scholarships,
             'sponsors' => $sponsors,
             'schoolyears' => $schoolyear,
+            'scholar' => $scholar,
+            'applicant' => $applicant,
+            'grade' => $grade,
+            'campuses' => $campuses,
+            'courses' => $courses,
         ]);
     }
 
-    public function scholarship_apply_details(Scholarship $scholarship)
+    public function scholarship_details(Scholarship $scholarship)
     {
+        $scholar = Scholar::where('email', Auth::user()->email)
+            ->with('campus')
+            ->with('course')
+            ->first();
 
+        // Get the student record
+        $studentRecord = StudentRecord::where('scholar_id', $scholar->id)->first();
+
+        // Get the family record
+        $familyRecord = null;
+        if ($studentRecord) {
+            $familyRecord = FamilyRecord::where('student_record_id', $studentRecord->id)->first();
+        }
+
+        // Map all data to the scholar object
+        if ($studentRecord) {
+            $scholar->first_name = $studentRecord->first_name;
+            $scholar->middle_name = $studentRecord->middle_name;
+            $scholar->last_name = $studentRecord->last_name;
+            $scholar->suffix_name = $studentRecord->suffix_name;
+            $scholar->birthdate = $studentRecord->birthdate;
+            $scholar->placebirth = $studentRecord->placebirth;
+            $scholar->age = $studentRecord->age;
+            $scholar->gender = $studentRecord->gender;
+            $scholar->civil = $studentRecord->civil;
+            $scholar->religion = $studentRecord->religion;
+            $scholar->guardian = $studentRecord->guardian;
+            $scholar->relationship = $studentRecord->relationship;
+        }
+
+        // Map family record data if available
+        if ($familyRecord) {
+            $scholar->mother = $familyRecord->mother;
+            $scholar->father = $familyRecord->father;
+            $scholar->marital_status = $familyRecord->marital_status;
+            $scholar->monthly_income = $familyRecord->monthly_income;
+            $scholar->other_income = $familyRecord->other_income;
+            $scholar->family_housing = $familyRecord->family_housing;
+        }
+
+        // Rest of your code
         $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
-
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
         $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
+        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->get();
+        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->first();
+        $grade = Grade::where('scholar_id', $scholar->id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+        $eligibles = Eligible::where('scholarship_id', $scholarship->id)
+            ->with('condition')
+            ->get();
 
-        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
-
-        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
-        $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
-
-        return Inertia::render('Student/Scholarships/ScholarshipDetails', [
+        return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipDetail', [
             'scholarship' => $scholarship,
             'sponsor' => $sponsor,
             'requirements' => $requirements,
@@ -168,12 +256,41 @@ class StudentController extends Controller
             'selectedCampus' => $selectedCampus,
             'criterias' => $criteria,
             'grade' => $grade,
+            'scholar' => $scholar,
+            'eligibles' => $eligibles,
         ]);
     }
+
+    // public function scholarship_apply_details(Scholarship $scholarship)
+    // {
+
+    //     $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
+
+    //     $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+    //     $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+    //     $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
+
+    //     $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
+    //     $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
+
+    //     return Inertia::render('Student/Scholarships/ScholarshipDetails', [
+    //         'scholarship' => $scholarship,
+    //         'sponsor' => $sponsor,
+    //         'requirements' => $requirements,
+    //         'deadline' => $deadline,
+    //         'selectedCampus' => $selectedCampus,
+    //         'criterias' => $criteria,
+    //         'grade' => $grade,
+    //     ]);
+    // }
+
     public function verifyAccount()
     {
         $user = User::where('email', Auth::user()->email)->first();
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
+        $studentData = Student::where('email', Auth::user()->email)->first();
 
         // $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
@@ -204,11 +321,32 @@ class StudentController extends Controller
             // Fetch the school year from the database using the calculated school year ID
             $school_year = SchoolYear::where('id', $grantee_school_year_id)->first();
         } else {
-            // If no scholar is found, set the variables to null
-            $grantee = null;
+            // If no scholar is found, get the most recent academic year
+            $academic_year = AcademicYear::orderBy('id', 'desc')->first();
+
+            // Apply similar logic as for scholars to determine semester and school year
             $grantee_semester = null;
-            $grantee_school_year = null;
-            $school_year = null;
+            $grantee_school_year_id = null;
+
+            if ($academic_year) {
+                if ($academic_year->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
+
+                } elseif ($academic_year->semester == '1st') {
+                    $grantee_semester = '2nd';
+
+                    // Adjust the school year based on the current year
+                    if ($academic_year->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
+                    } else {
+                        $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
+                    }
+                }
+            }
+
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
         }
 
         // if ($school_year){
@@ -223,6 +361,39 @@ class StudentController extends Controller
             'scholar' => $scholar,
             'batch_semester' => $grantee_semester,
             'school_year' => $school_year ?? 'N/A', // Default to 'N/A' if no school year found
+            'studentData' => $studentData,
+        ]);
+    }
+    public function uploadGrade($urscholar_id, Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'grade' => [''],
+            'cog' => [''],
+            'school_year' => [''],
+            'semester' => [''],
+        ]);
+
+        $scholar = Scholar::where('id', $urscholar_id)->first();
+
+        $originalFileName = $request->file('cog')->getClientOriginalName();
+        $extension = $request->file('cog')->getClientOriginalExtension();
+        // Format: URS-0001[1st(2024-2025)]
+        $newFileName = $scholar->urscholar_id . '[' . $request->semester . '(' . $request->school_year . ')].' . $extension;
+
+
+        $filePath = Storage::disk('public')->putFileAs(
+            'scholar/grade',
+            $request->file('cog'),
+            $newFileName
+        );
+
+        $testing = Grade::create([
+            'scholar_id' => $scholar->id,
+            'grade' => $request->grade,
+            'cog' => $originalFileName,
+            'path' => $filePath,
+            'school_year_id' => $request->school_year,
+            'semester' => $request->semester,
         ]);
     }
 
@@ -470,7 +641,7 @@ class StudentController extends Controller
                 'grade' => $request->grade,
                 'cog' => $originalFileName,
                 'path' => $filePath,
-                'school_year' => $request->school_year,
+                'school_year_id' => $request->school_year,
                 'semester' => $request->semester,
             ]);
         }
@@ -595,8 +766,10 @@ class StudentController extends Controller
             'email_verified_at' => $user->markEmailAsVerified()
         ]);
 
+        $newScholar = Scholar::where('user_id', $user->id)->first();
+
         StudentRecord::create([
-            'user_id' => $user->id,
+            'scholar_id' => $newScholar->id,
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
             'middle_name' => $request->middle_name,
@@ -611,7 +784,7 @@ class StudentController extends Controller
             'relationship' => $request->relationship,
         ]);
 
-        $studentrecord = StudentRecord::where('user_id', $user->id)->get();
+        $studentrecord = StudentRecord::where('scholar_id', $newScholar->id)->get();
 
         $studentrecordID = $studentrecord->pluck('id')->first();
 
@@ -761,16 +934,20 @@ class StudentController extends Controller
 
     public function profile()
     {
-        $student = StudentRecord::where('user_id', Auth::user()->id)->first();
+        $scholar = Scholar::where('user_id', Auth::user()->id)->with('course', 'campus')->first();
+        $student = StudentRecord::where('scholar_id', $scholar->id)->first();
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
-        $scholar = Scholar::where('email', Auth::user()->email)->with('course', 'campus')->first();
+        $siblings = SiblingRecord::where('family_record_id', $family->id)->get();
+
+
 
         if ($scholar) {
-            $grades = Grade::where('scholar_id', $scholar->id)->get();
+            $grades = Grade::where('scholar_id', $scholar->id)->with('school_year')->get();
             $latestgrade = Grade::where('scholar_id', $scholar->id)
-                ->latest()  // This will order by created_at DESC
-                ->first();  // Get only the first (latest) record
+                ->with('school_year')
+                ->latest()
+                ->first();
 
 
             //generate qr_code
@@ -811,15 +988,83 @@ class StudentController extends Controller
             $scholar = null;
         }
 
+        if ($scholar) {
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
+            // Get the batch semester logic
+            $grantee_semester = null;
+            $grantee_school_year_id = null;
+
+            if ($grantee) {
+                if ($grantee->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year_id = $grantee->school_year_id; // Keep the same school year
+
+                } elseif ($grantee->semester == '1st') {
+                    $grantee_semester = '2nd';
+
+                    // Adjust the school year based on the current year
+                    if ($grantee->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
+                    } else {
+                        $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
+                    }
+                }
+            }
+
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = SchoolYear::where('id', $grantee_school_year_id)->first();
+        } else {
+            // If no scholar is found, get the most recent academic year
+            $academic_year = AcademicYear::orderBy('id', 'desc')->first();
+
+            // Apply similar logic as for scholars to determine semester and school year
+            $grantee_semester = null;
+            $grantee_school_year_id = null;
+
+            if ($academic_year) {
+                if ($academic_year->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
+
+                } elseif ($academic_year->semester == '1st') {
+                    $grantee_semester = '2nd';
+
+                    // Adjust the school year based on the current year
+                    if ($academic_year->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
+                    } else {
+                        $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
+                    }
+                }
+            }
+
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
+        }
+
+        // Fetch the school year from the database using the calculated school year ID
+        $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
+
+        $notify = StudentNotifier::where('scholar_id', $scholar->id)->first();
+
+        if ($notify) {
+            $notify->update([
+                'read' => true,
+            ]);
+        }
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
             'education' => $education,
             'family' => $family,
+            'siblings' => $siblings,
             'scholar' => $scholar,
             'grades' => $grades,
             'latestgrade' => $latestgrade,
+            'semesterGrade' => $grantee_semester,
+            'schoolyear_grade' => $school_year,
+            'notify' => $notify,
         ]);
     }
 
@@ -943,36 +1188,29 @@ class StudentController extends Controller
 
     public function applicationUpload(Request $request)
     {
-
         $request->validate([
-            'files.*' => 'required|file|',
+            'files.*' => 'required|file',
             'requirements' => 'array'
         ]);
 
-
         $scholar = Scholar::where('email', Auth::user()->email)->first();
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
-        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-        $reqID = $requirements->pluck('id')->first();
 
-        $uploadedFiles = [];
-
-        foreach ($request->file('files') as $index => $file) {
-
+        // Process each uploaded file
+        foreach ($request->file('files') as $requirementId => $file) {
+            // Store the file in the public storage
             $path = $file->store('requirements/' . $scholar->id, 'public');
 
-            $uploadedFile = SubmittedRequirements::create([
+            // Create the submitted requirement record
+            SubmittedRequirements::create([
                 'scholar_id' => $scholar->id,
-                'requirement_id' => $reqID,
+                'requirement_id' => $requirementId, // This now uses the correct requirement ID
                 'submitted_requirements' => $file->getClientOriginalName(),
-                'path' => $path
+                'path' => $path,
+                'status' => 'Pending'
             ]);
-
-            $uploadedFiles[] = $uploadedFile;
         }
 
-        return redirect()->route('student.dashboard');
+        return redirect()->route('student.dashboard')->with('success', 'Requirements submitted successfully');
     }
 
     public function register()
@@ -1004,30 +1242,6 @@ class StudentController extends Controller
 
         return back()
             ->with('success', 'Your scholarship application has been submitted successfully!');
-    }
-
-    public function scholarship_details(Scholarship $scholarship)
-    {
-        $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
-
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-        $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
-
-        $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
-
-        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
-        $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
-
-        return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipDetail', [
-            'scholarship' => $scholarship,
-            'sponsor' => $sponsor,
-            'requirements' => $requirements,
-            'deadline' => $deadline,
-            'selectedCampus' => $selectedCampus,
-            'criterias' => $criteria,
-            'grade' => $grade,
-        ]);
     }
 
     public function scholarship_application(Scholarship $scholarship)
@@ -1080,29 +1294,26 @@ class StudentController extends Controller
             'scholarship_id' => $scholarship->id,
             'batch_id' => $batch->id,
             'scholar_id' => $scholar->id,
-            'school_year' => $batch->school_year,
+            'school_year_id' => $batch->school_year_id,
             'semester' => $batch->semester,
         ]);
 
-
-        $uploadedFiles = [];
-
-        foreach ($request->file('files') as $index => $file) {
-
+        // Process each uploaded file
+        foreach ($request->file('files') as $requirementId => $file) {
+            // Store the file in the public storage
             $path = $file->store('requirements/' . $scholar->id, 'public');
 
-            $uploadedFile = SubmittedRequirements::create([
+            // Create the submitted requirement record
+            SubmittedRequirements::create([
                 'scholar_id' => $scholar->id,
-                'requirement_id' => $reqID,
+                'requirement_id' => $requirementId, // This now uses the correct requirement ID
                 'submitted_requirements' => $file->getClientOriginalName(),
-                'path' => $path
+                'path' => $path,
+                'status' => 'Pending'
             ]);
-
-            $uploadedFiles[] = $uploadedFile;
         }
 
-        return back()
-            ->with('success', 'Your scholarship application has been submitted successfully!');
+        return redirect()->route('student.dashboard')->with('success', 'Requirements submitted successfully');
     }
 
     public function messaging(User $user)

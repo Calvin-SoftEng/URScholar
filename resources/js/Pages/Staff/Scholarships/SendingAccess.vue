@@ -59,21 +59,25 @@
                                     </span>
                                 </div>
 
-                                
+
                                 <div class="flex flex-col gap-2">
                                     <div class="h-full w-full grid grid-cols-1 gap-5">
                                         <!-- <div class="flex flex-col space-y-2"> -->
-                                            <div class="relative">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">
-                                                    Message
-                                                </h3>
-                                                <div class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                                                    <p>
-                                                        This email message is for the distribution of accounts for students, reminding them of their scholarship opportunities. We encourage all students to check their accounts for updates, and we are happy to provide further assistance with the application process if needed.
-                                                    </p>
-                                                </div>
+                                        <div class="relative">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">
+                                                Message
+                                            </h3>
+                                            <div
+                                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <p>
+                                                    This email message is for the distribution of accounts for students,
+                                                    reminding them of their scholarship opportunities. We encourage all
+                                                    students to check their accounts for updates, and we are happy to
+                                                    provide further assistance with the application process if needed.
+                                                </p>
                                             </div>
-                                            <!-- <div class="w-full">
+                                        </div>
+                                        <!-- <div class="w-full">
                                                 <div class="mb-3">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Add Messages
                                                     </h3>
@@ -94,15 +98,20 @@
                                                     <!-- Application Start Date -->
                                                     <div class="flex flex-col w-full">
                                                         <div class="relative">
-                                                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                            <div
+                                                                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                                    aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path
+                                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                                 </svg>
                                                             </div>
                                                             <input :value="selectedStart"
                                                                 @input="selectedStart = $event.target.value"
                                                                 id="datepicker-range-start" name="start" type="text"
-                                                                autocomplete="off" 
+                                                                autocomplete="off"
                                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                                 placeholder="Submission Start Date">
                                                         </div>
@@ -115,15 +124,20 @@
                                                     <!-- Application Deadline -->
                                                     <div class="flex flex-col w-full">
                                                         <div class="relative">
-                                                            <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                                                <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
+                                                            <div
+                                                                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                                    aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path
+                                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                                 </svg>
                                                             </div>
                                                             <input :value="selectedEnd"
                                                                 @input="selectedEnd = $event.target.value"
                                                                 id="datepicker-range-end" name="end" type="text"
-                                                                autocomplete="off" 
+                                                                autocomplete="off"
                                                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                                 placeholder="Submission Deadline">
                                                         </div>
@@ -132,11 +146,21 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="w-full mb-5">
+
+                                            <button type="button" @click="toggleRequirements"
+                                                class="text-blue-600 hover:text-blue-800 text-start transition-all max-w-fit"
+                                                v-tooltip.right="'Set Requirements'">
+                                                {{ requestRequirements ? 'Cancel Requirements' : 'Request Requirements'
+                                                }}
+                                            </button>
+
+
+                                            <div v-show="requestRequirements" class="w-full mb-5">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Requirements
                                                 </h3>
                                                 <InputError v-if="errors.requirements" :message="errors.requirements"
                                                     class="mt-1" />
+
                                                 <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                                     <div class="flex items-center mb-4 w-full">
                                                         <form @submit.prevent="addItem"
@@ -158,15 +182,54 @@
                                                                 <span>{{ item }}</span>
                                                                 <button @click="removeItem(index)"
                                                                     class="flex items-center text-red-500 hover:text-red-700">
-                                                                    <span class="material-symbols-rounded text-red-600">
-                                                                        delete
-                                                                    </span>
+                                                                    <span
+                                                                        class="material-symbols-rounded text-red-600">delete</span>
                                                                 </button>
                                                             </div>
                                                         </div>
                                                     </form>
                                                 </ul>
                                             </div>
+
+                                            <button type="button" @click="toggletemplates"
+                                                class="text-blue-600 hover:text-blue-800 text-start transition-all max-w-fit"
+                                                v-tooltip.right="'Upload Application Files Templates'">
+                                                {{ requirementemplates ? 'Cancel Upload' : 'Upload Templates' }}
+                                            </button>
+
+                                            <!-- Update the file input section to properly handle file uploads -->
+                                            <div v-show="requirementemplates">
+                                                <label
+                                                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                                    for="multiple_files">
+                                                    Upload multiple files
+                                                </label>
+                                                <input ref="fileInput"
+                                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                    dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                                    id="multiple_files" type="file" multiple @change="handleFileChange"
+                                                    name="templates[]" />
+
+                                                <!-- Preview Selected Files -->
+                                                <div v-if="selectedFiles.length"
+                                                    class="mt-3 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                                    <p class="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                                                        Selected Files:</p>
+                                                    <ul class="space-y-2">
+                                                        <li v-for="(file, index) in selectedFiles" :key="index"
+                                                            class="flex items-center justify-between text-sm bg-white dark:bg-gray-700 p-2 rounded-lg">
+                                                            <span
+                                                                class="text-gray-700 dark:text-gray-300 truncate max-w-xs">{{
+                                                                    file.name }}</span>
+                                                            <button type="button" @click="removeFile(index)"
+                                                                class="text-red-500 hover:text-red-700 text-xs">
+                                                                ✖ Remove
+                                                            </button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -253,7 +316,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted, computed, watchEffect, nextTick, watch } from 'vue';
-import { Head, useForm, Link, usePage } from '@inertiajs/vue3';
+import { Head, useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
 import { useDateFormat, useNow } from '@vueuse/core'
@@ -267,6 +330,8 @@ const props = defineProps({
     scholars: Array,
     requirements: Array,
     errors: Object,
+    semester: Object,
+    school_year: Object,
 });
 
 const directives = {
@@ -276,6 +341,8 @@ const directives = {
 
 const selectedStart = ref(""); // Stores the selected start date
 const selectedEnd = ref("");   // Stores the selected end date
+const requestRequirements = ref(false);
+const requirementemplates = ref(false);
 const formattedStart = ref('');
 const formattedEnd = ref('');
 const errors = ref({});
@@ -286,7 +353,18 @@ const form = ref({
     requirements: [],
     application: '',
     deadline: '',
+    semester: props.semester,
+    school_year: props.school_year,
 });
+
+
+const toggleRequirements = () => {
+    requestRequirements.value = !requestRequirements.value;
+};
+
+const toggletemplates = () => {
+    requirementemplates.value = !requirementemplates.value;
+};
 
 
 // Computed property
@@ -321,6 +399,29 @@ const removeItem = (index) => {
     items.value = items.value.filter((_, i) => i !== index);
     form.value.requirements = items.value;
 };
+
+const selectedFiles = ref([]);
+const fileInput = ref(null);
+
+const handleFileChange = (event) => {
+    selectedFiles.value = Array.from(event.target.files);
+};
+
+const removeFile = (index) => {
+    selectedFiles.value.splice(index, 1);
+
+    // Reset the file input by clearing and re-adding remaining files
+    const dataTransfer = new DataTransfer();
+    selectedFiles.value.forEach(file => dataTransfer.items.add(file));
+
+    if (fileInput.value) {
+        fileInput.value.files = dataTransfer.files;
+    }
+};
+
+if (fileInput.value) {
+    fileInput.value.files = dataTransfer.files;
+}
 
 
 const resetForm = () => {
@@ -457,14 +558,41 @@ const submitForm = async () => {
     }
 
     try {
-        const formData = useForm(form.value);
-        await formData.post(`/scholarships/${props.scholarship.id}/send-access/send`, {
-            onError: (e) => {
-                errors.value = e;
+        // Create FormData object to handle file uploads
+        const formData = new FormData();
+
+        // Add regular form fields
+        formData.append('subject', form.value.subject);
+        formData.append('content', form.value.content);
+        formData.append('application', form.value.application);
+        formData.append('deadline', form.value.deadline);
+        formData.append('semester', form.value.semester);
+        formData.append('school_year', form.value.school_year);
+
+        // Add requirements as JSON to preserve array structure
+        formData.append('requirements', JSON.stringify(form.value.requirements));
+
+        // Add files
+        if (selectedFiles.value.length > 0) {
+            selectedFiles.value.forEach((file, index) => {
+                formData.append(`templates[]`, file);
+            });
+        }
+
+        // Use Inertia's post method with FormData
+        await router.post(`/scholarships/${props.scholarship.id}/send-access/send`, formData, {
+            onError: (errors) => {
+                console.error('Form submission errors:', errors);
+                errors.value = errors;
             },
             onSuccess: () => {
                 resetForm();
-            }
+                selectedFiles.value = [];
+                if (fileInput.value) {
+                    fileInput.value.value = '';
+                }
+            },
+            forceFormData: true
         });
     } catch (error) {
         console.error('Error submitting form:', error);

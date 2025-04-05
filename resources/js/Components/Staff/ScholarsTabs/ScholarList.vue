@@ -2,11 +2,12 @@
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
-        <button
+
+        <!-- <button
           class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
           @click="generateReport">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report
-        </button>
+        </button> -->
       </div>
       <form class="w-3/12">
         <label for="default-search"
@@ -63,7 +64,8 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`" alt="Profile Picture">
+                          <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`"
+                            alt="Profile Picture">
                         </div>
                       </div>
                       <div>
@@ -162,6 +164,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
+import { initFlowbite } from 'flowbite';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
@@ -282,7 +285,7 @@ const generateReport = async () => {
       return;
     }
 
-    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/report`, '_blank');
+    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/scholar-summary`, '_blank');
     showToast('Report Generated', 'Your report is being downloaded');
   } catch (err) {
     console.error('Failed to generate report:', err);
@@ -319,6 +322,7 @@ const getYearSuffix = (year) => {
 
 // Lifecycle hooks
 onMounted(() => {
+  initFlowbite();
   // Initial data load
   if (!props.scholars || props.scholars.length === 0) {
     fetchScholars();

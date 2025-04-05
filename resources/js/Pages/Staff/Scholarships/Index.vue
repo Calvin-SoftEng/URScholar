@@ -326,8 +326,8 @@ const form = ref({
     scholarshipType: null,
     school_year: null,
     semester: null,
-    application: '',
-    deadline: '',
+    date_start: '',
+    date_end: '',
     name: '',
     scholarshipType: '',
     totalRecipients: 0,
@@ -406,7 +406,7 @@ onMounted(() => {
                     startInput.value = selectedStart.value; // Keep the previous value
                     startInput.addEventListener("changeDate", (event) => {
                         const date = new Date(event.target.value); // ✅ Get selected date
-                        form.value.application = date.toISOString().split("T")[0]; 
+                        form.value.date_start = date.toISOString().split("T")[0]; 
                         console.log("Application:", form.value.application);
                         selectedStart.value = event.target.value; 
                     });
@@ -419,7 +419,7 @@ onMounted(() => {
                     endInput.value = selectedEnd.value; // Keep the previous value
                     endInput.addEventListener("changeDate", (event) => {
                         const date = new Date(event.target.value); // ✅ Get selected date
-                        form.value.deadline = date.toISOString().split("T")[0]; 
+                        form.value.date_end = date.toISOString().split("T")[0]; 
                         selectedEnd.value = event.target.value; 
                     });
                 } else {

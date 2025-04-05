@@ -97,7 +97,15 @@ class SponsorController extends Controller
     public function view_scholars()
     {
 
-        return Inertia::render('Sponsor/Scholars/Scholarships');
+        return Inertia::render('Sponsor/Scholars/ScholarsTable');
+
+        // return Inertia::render('Coordinator/Scholarships/CreateScholarships');
+    }
+
+    public function scholar_description()
+    {
+
+        return Inertia::render('Sponsor/Scholars/Scholar_Scholarship-Details');
 
         // return Inertia::render('Coordinator/Scholarships/CreateScholarships');
     }

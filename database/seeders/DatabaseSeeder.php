@@ -30,9 +30,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'mis1',
             'email' => 'mis1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Marvin',
+            'last_name' => 'Baquiran',
+            'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'system_admin',
             'campus_id' => '1'
@@ -42,9 +42,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'superadmin1',
             'email' => 'sadmin1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Roslyn',
+            'last_name' => 'Magat',
+            'middle_name' => 'B',
             'password' => bcrypt('password'),
             'usertype' => 'super_admin',
             'campus_id' => '1'
@@ -55,9 +55,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'coordinator1',
             'email' => 'coor1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Baby Eunice',
+            'last_name' => 'Cabaltera',
+            'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
             'campus_id' => '2'
@@ -90,9 +90,9 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'cashier1',
             'email' => 'cashier1@gmail.com',
-            'first_name' => 'John Paul',
-            'last_name' => 'Manalo',
-            'middle_name' => 'De Guzman',
+            'first_name' => 'Denise Ann',
+            'last_name' => 'Lopez',
+            'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
             'campus_id' => '2'
@@ -124,16 +124,30 @@ class DatabaseSeeder extends Seeder
         //Campus
         Campus::create([
             'name' => 'Morong',
-            'location' => 'Morong, Rizal',
+            'location' => 'Sumulong St, Morong, Rizal',
             'coordinator_id' => '4',
             'cashier_id' => '7',
         ]);
 
         Campus::create([
             'name' => 'Binangonan',
-            'location' => 'Binangonan, Rizal',
+            'location' => '601: Manila East Rd, Binangonan, Philippines',
             'coordinator_id' => '3',
             'cashier_id' => '6',
+        ]);
+
+        Campus::create([
+            'name' => 'Taytay',
+            'location' => ' A. Luna Street, Highway 2000 Brgy. San Juan, Taytay, Rizal',
+            // 'coordinator_id' => '3',
+            // 'cashier_id' => '6',
+        ]);
+
+        Campus::create([
+            'name' => 'Pililla',
+            'location' => 'Dampol Street, Manaila East Road, Bagumbayan, Pililia, Rizal',
+            // 'coordinator_id' => '4',
+            // 'cashier_id' => '7',
         ]);
 
 
@@ -144,7 +158,7 @@ class DatabaseSeeder extends Seeder
             'abbreviation' => 'CHED',
             'since' => '2021',
             'moa_file' => 'moa1.pdf',
-            'description' => 'sponsor1',
+            'description' => 'CHED Scholarships provide financial assistance to deserving Filipino students in higher education. These include merit-based and need-based grants covering tuition, allowances, and other school-related expenses to support academic excellence and accessibility to quality education.',
             'logo' => 'images.png',
         ]);
 
@@ -152,6 +166,7 @@ class DatabaseSeeder extends Seeder
         Scholarship::factory()->create([
             'name' => 'Tulong Dunong Program',
             'sponsor_id' => 1,
+            'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
             'date_start' => '2025-03-15',
@@ -161,6 +176,7 @@ class DatabaseSeeder extends Seeder
         Scholarship::factory()->create([
             'name' => 'DBP-Rise',
             'sponsor_id' => 1,
+            'user_id' => 2,
             'scholarshipType' => 'One-time Payment',
             'status' => 'Pending',
             'date_start' => '2025-03-15',
@@ -185,14 +201,66 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //Course
+        // morong
+        // binangonan
+        // taytay
+        // pililla
         Course::create([
-            'campus_id' => 1,
+            'campus_id' => 2,
             'name' => 'Bachelor of Science in Information Technology',
             'abbreviation' => 'BSIT',
         ]);
 
         Course::create([
             'campus_id' => 2,
+            'name' => 'Bachelor of Science in Business Administration',
+            'abbreviation' => 'BSBA',
+        ]);
+
+        Course::create([
+            'campus_id' => 2,
+            'name' => 'Bachelor of Science in Accountancy',
+            'abbreviation' => 'BSA',
+        ]);
+
+        Course::create([
+            'campus_id' => 1,
+            'name' => 'Bachelor of Science in Civil Engineering',
+            'abbreviation' => 'BCE',
+        ]);
+
+        Course::create([
+            'campus_id' => 1,
+            'name' => 'Bachelor of Science in Mechanical Engineering',
+            'abbreviation' => 'BME',
+        ]);
+
+        Course::create([
+            'campus_id' => 1,
+            'name' => 'Bachelor of Science in Electrical Engineering',
+            'abbreviation' => 'BEE',
+        ]);
+
+        Course::create([
+            'campus_id' => 1,
+            'name' => 'Bachelor of Arts in English',
+            'abbreviation' => 'BAE',
+        ]);
+
+        Course::create([
+            'campus_id' => 4,
+            'name' => 'Bachelor of Science in Secondary Education',
+            'abbreviation' => 'BSEd',
+        ]);
+
+        Course::create([
+            'campus_id' => 3,
+            'name' => 'Bachelor of Science in Nursing',
+            'abbreviation' => 'BSN',
+        ]);
+
+        Course::create([
+            'campus_id' => 4,
             'name' => 'Bachelor of Science in Business Administrator',
             'abbreviation' => 'BSBA',
         ]);
@@ -200,7 +268,6 @@ class DatabaseSeeder extends Seeder
         //Eligibilities
 
         Eligibility::create([
-            'scholarship_id' => 2,
             'name' => 'Financial Need-Based Criteria',
         ]);
 

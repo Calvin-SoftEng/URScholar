@@ -476,7 +476,6 @@
                                         <div v-if="scholar" class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
                                             <span class="text-sm text-gray-500 italic">* You can set this up
                                                 later</span>
-
                                             <div
                                                 class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
                                                 <!-- GWA Input -->
@@ -505,7 +504,8 @@
                                         </div>
 
                                         <div v-else class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
-                                            <span class="text-sm text-red-500 italic ">*You can set this up later or if you are qualified for a scholarship</span>
+                                            <span class="text-sm text-red-500 italic ">* You can set this up
+                                                after verification</span>
 
                                             <div
                                                 class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
@@ -513,6 +513,10 @@
                                                 <div
                                                     class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
                                                     <Label for="gwa">Enter General Weighted Average
+                                                        <span class="italic text-gray-500">*must be {{
+                                                            props.batch_semester }} semester {{ school_year.year
+                                                            }}
+                                                        </span>
                                                     </Label>
                                                     <input id="gwa" v-model="form.grade" type="text" disabled
                                                         placeholder="Enter your GWA (e.g., 2.0)"
@@ -914,7 +918,7 @@
                                         <div
                                             class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white">
-                                                  MOTHER (Type "N/A" if deceased)
+                                                MOTHER (Type "N/A" if deceased)
                                             </h3>
                                             <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                         </div>
@@ -929,8 +933,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="First Name"
-                                                    v-model="form.mother.first_name"
-                                                    @input="handleMotherFirstNameInput"
+                                                    v-model="form.mother.first_name" @input="handleMotherFirstNameInput"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
                                         </div>
@@ -944,8 +947,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Last Name"
-                                                    v-model="form.mother.last_name"
-                                                    :disabled="form.mother.isDeceased"
+                                                    v-model="form.mother.last_name" :disabled="form.mother.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.mother.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -960,8 +962,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Middle Name"
-                                                    v-model="form.mother.middle_name"
-                                                    :disabled="form.mother.isDeceased"
+                                                    v-model="form.mother.middle_name" :disabled="form.mother.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.mother.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -992,8 +993,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Permanent Address"
-                                                    v-model="form.mother.address" 
-                                                    :disabled="form.mother.isDeceased"
+                                                    v-model="form.mother.address" :disabled="form.mother.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.mother.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1008,8 +1008,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Ex. Filipino"
-                                                    v-model="form.mother.citizenship"
-                                                    :disabled="form.mother.isDeceased"
+                                                    v-model="form.mother.citizenship" :disabled="form.mother.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.mother.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1024,8 +1023,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Occupation"
-                                                    v-model="form.mother.occupation"
-                                                    :disabled="form.mother.isDeceased"
+                                                    v-model="form.mother.occupation" :disabled="form.mother.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.mother.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1042,8 +1040,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Ex. College Graudate"
-                                                    v-model="form.mother.education"
-                                                    :disabled="form.mother.isDeceased"
+                                                    v-model="form.mother.education" :disabled="form.mother.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.mother.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1062,8 +1059,7 @@
                                                 <Input type="text" placeholder="Leave blank if none"
                                                     @focus="clearSubField('mother', 'batch')"
                                                     @blur="restoreSubField('mother', 'batch')"
-                                                    v-model="form.mother.batch"
-                                                    :disabled="form.mother.isDeceased"
+                                                    v-model="form.mother.batch" :disabled="form.mother.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.mother.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1088,8 +1084,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="First Name"
-                                                    v-model="form.father.first_name"
-                                                    @input="handleFatherFirstNameInput"
+                                                    v-model="form.father.first_name" @input="handleFatherFirstNameInput"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
                                         </div>
@@ -1103,8 +1098,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Last Name"
-                                                    v-model="form.father.last_name"
-                                                    :disabled="form.father.isDeceased"
+                                                    v-model="form.father.last_name" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1119,8 +1113,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Middle Name"
-                                                    v-model="form.father.middle_name"
-                                                    :disabled="form.father.isDeceased"
+                                                    v-model="form.father.middle_name" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1151,8 +1144,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Permanent Address"
-                                                    v-model="form.father.address" 
-                                                    :disabled="form.father.isDeceased"
+                                                    v-model="form.father.address" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1167,8 +1159,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Ex. Filipino"
-                                                    v-model="form.father.citizenship"
-                                                    :disabled="form.father.isDeceased"
+                                                    v-model="form.father.citizenship" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1183,8 +1174,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Occupation"
-                                                    v-model="form.father.occupation"
-                                                    :disabled="form.father.isDeceased"
+                                                    v-model="form.father.occupation" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1207,8 +1197,7 @@
                                             </div>
                                             <div class="relative w-full">
                                                 <Input type="text" placeholder="Ex. College Graudate"
-                                                    v-model="form.father.education"
-                                                    :disabled="form.father.isDeceased"
+                                                    v-model="form.father.education" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1232,8 +1221,7 @@
                                                 <Input type="text" placeholder="Leave blank if none"
                                                     @focus="clearSubField('father', 'batch')"
                                                     @blur="restoreSubField('father', 'batch')"
-                                                    v-model="form.father.batch"
-                                                    :disabled="form.father.isDeceased"
+                                                    v-model="form.father.batch" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1284,19 +1272,19 @@
                                                 class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
                                                 v-model="form.monthly_income">
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i1" value="below" />
+                                                    <RadioGroupItem id="i1" value="10,000 and below" />
                                                     <Label for="i1">10,000 and below</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i2" value="mid" />
+                                                    <RadioGroupItem id="i2" value="20,001 - 30,000" />
                                                     <Label for="i2">20,001 - 30,000</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i3" value="average" />
+                                                    <RadioGroupItem id="i3" value="10,001 - 20,000" />
                                                     <Label for="i3">10,001 - 20,000</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i4" value="above" />
+                                                    <RadioGroupItem id="i4" value="30,001 and above" />
                                                     <Label for="i4">30,001 and above</Label>
                                                 </div>
                                             </RadioGroup>
@@ -1757,6 +1745,7 @@ const props = defineProps({
     batch: Object,
     batch_semester: Object,
     school_year: Object,
+    studentData: Object,
 });
 
 const form = ref({
@@ -1769,14 +1758,14 @@ const form = ref({
     confirm_password: '',
     suffix: 'N/A',
     birthdate: usePage().props.scholar?.birthdate ?? '',
-    birthplace: '',
-    age: '',
+    birthplace: props.studentData?.birthplace ?? '',
+    age: props.studentData?.age ?? '',
     gender: usePage().props.scholar?.sex ?? '',
-    civil_status: '',
+    civil_status: props.studentData?.civil_status ?? '',
     street: usePage().props.scholar?.street ?? '',
     municipality: usePage().props.scholar?.municipality ?? '',
     province: usePage().props.scholar?.province ?? '',
-    religion: '',
+    religion: props.studentData?.religion ?? '',
     guardian_name: '',
     relationship: '',
     grade: '',
@@ -1854,63 +1843,63 @@ const restoreMainField = () => {
 };
 
 function handleMotherFirstNameInput(event) {
-  const value = event.target.value;
-  
-  if (value.trim().toUpperCase() === 'N/A') {
-    // Update our data model using .value with ref
-    form.value.mother.isDeceased = true;
-    form.value.mother.last_name = 'N/A';
-    form.value.mother.middle_name = 'N/A';
-    form.value.mother.age = 'N/A';
-    form.value.mother.address = 'N/A';
-    form.value.mother.citizenship = 'N/A';
-    form.value.mother.occupation = 'N/A';
-    form.value.mother.education = 'N/A';
-    form.value.mother.batch = 'N/A';
-  } else if (form.value.mother.isDeceased) {
-    // If it was previously N/A
-    form.value.mother.isDeceased = false;
-    
-    // Only clear if they contain "N/A"
-    if (form.value.mother.last_name === 'N/A') form.value.mother.last_name = '';
-    if (form.value.mother.middle_name === 'N/A') form.value.mother.middle_name = '';
-    if (form.value.mother.age === 'N/A') form.value.mother.age = '';
-    if (form.value.mother.address === 'N/A') form.value.mother.address = '';
-    if (form.value.mother.citizenship === 'N/A') form.value.mother.citizenship = '';
-    if (form.value.mother.occupation === 'N/A') form.value.mother.occupation = '';
-    if (form.value.mother.education === 'N/A') form.value.mother.education = '';
-    if (form.value.mother.batch === 'N/A') form.value.mother.batch = '';
-  }
+    const value = event.target.value;
+
+    if (value.trim().toUpperCase() === 'N/A') {
+        // Update our data model using .value with ref
+        form.value.mother.isDeceased = true;
+        form.value.mother.last_name = 'N/A';
+        form.value.mother.middle_name = 'N/A';
+        form.value.mother.age = 'N/A';
+        form.value.mother.address = 'N/A';
+        form.value.mother.citizenship = 'N/A';
+        form.value.mother.occupation = 'N/A';
+        form.value.mother.education = 'N/A';
+        form.value.mother.batch = 'N/A';
+    } else if (form.value.mother.isDeceased) {
+        // If it was previously N/A
+        form.value.mother.isDeceased = false;
+
+        // Only clear if they contain "N/A"
+        if (form.value.mother.last_name === 'N/A') form.value.mother.last_name = '';
+        if (form.value.mother.middle_name === 'N/A') form.value.mother.middle_name = '';
+        if (form.value.mother.age === 'N/A') form.value.mother.age = '';
+        if (form.value.mother.address === 'N/A') form.value.mother.address = '';
+        if (form.value.mother.citizenship === 'N/A') form.value.mother.citizenship = '';
+        if (form.value.mother.occupation === 'N/A') form.value.mother.occupation = '';
+        if (form.value.mother.education === 'N/A') form.value.mother.education = '';
+        if (form.value.mother.batch === 'N/A') form.value.mother.batch = '';
+    }
 }
 
 function handleFatherFirstNameInput(event) {
-  const value = event.target.value;
-  
-  if (value.trim().toUpperCase() === 'N/A') {
-    // Update our data model using .value with ref
-    form.value.father.isDeceased = true;
-    form.value.father.last_name = 'N/A';
-    form.value.father.middle_name = 'N/A';
-    form.value.father.age = 'N/A';
-    form.value.father.address = 'N/A';
-    form.value.father.citizenship = 'N/A';
-    form.value.father.occupation = 'N/A';
-    form.value.father.education = 'N/A';
-    form.value.father.batch = 'N/A';
-  } else if (form.value.father.isDeceased) {
-    // If it was previously N/A
-    form.value.father.isDeceased = false;
-    
-    // Only clear if they contain "N/A"
-    if (form.value.father.last_name === 'N/A') form.value.father.last_name = '';
-    if (form.value.father.middle_name === 'N/A') form.value.father.middle_name = '';
-    if (form.value.father.age === 'N/A') form.value.first_name.age = '';
-    if (form.value.father.address === 'N/A') form.value.father.address = '';
-    if (form.value.father.citizenship === 'N/A') form.value.father.citizenship = '';
-    if (form.value.father.occupation === 'N/A') form.value.father.occupation = '';
-    if (form.value.father.education === 'N/A') form.value.father.education = '';
-    if (form.value.father.batch === 'N/A') form.value.father.batch = '';
-  }
+    const value = event.target.value;
+
+    if (value.trim().toUpperCase() === 'N/A') {
+        // Update our data model using .value with ref
+        form.value.father.isDeceased = true;
+        form.value.father.last_name = 'N/A';
+        form.value.father.middle_name = 'N/A';
+        form.value.father.age = 'N/A';
+        form.value.father.address = 'N/A';
+        form.value.father.citizenship = 'N/A';
+        form.value.father.occupation = 'N/A';
+        form.value.father.education = 'N/A';
+        form.value.father.batch = 'N/A';
+    } else if (form.value.father.isDeceased) {
+        // If it was previously N/A
+        form.value.father.isDeceased = false;
+
+        // Only clear if they contain "N/A"
+        if (form.value.father.last_name === 'N/A') form.value.father.last_name = '';
+        if (form.value.father.middle_name === 'N/A') form.value.father.middle_name = '';
+        if (form.value.father.age === 'N/A') form.value.first_name.age = '';
+        if (form.value.father.address === 'N/A') form.value.father.address = '';
+        if (form.value.father.citizenship === 'N/A') form.value.father.citizenship = '';
+        if (form.value.father.occupation === 'N/A') form.value.father.occupation = '';
+        if (form.value.father.education === 'N/A') form.value.father.education = '';
+        if (form.value.father.batch === 'N/A') form.value.father.batch = '';
+    }
 }
 
 const handleFile = (event) => {
@@ -1962,7 +1951,7 @@ const submit = async () => {
     try {
         if (props.scholar != null) {
             form.value.semester = props.batch_semester;
-            form.value.school_year = props.school_year.year;
+            form.value.school_year = props.school_year.id;
         }
 
         router.post(`/verify-account/verifying`, form.value);

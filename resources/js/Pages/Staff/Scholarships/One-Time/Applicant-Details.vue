@@ -33,76 +33,83 @@
                         </span>
                     </button>
 
-                    <div class="h-full grid grid-cols-2 gap-3 py-3 w-9/12">
+                    <div class="h-full grid grid-cols-[60%_40%] gap-3 py-3 w-10/12">
                         
                         <!-- 25% Column -->
-                        <div class="col-span-2 w-full h-full flex flex-col">
+                        <div class="col-span-1 w-full h-full flex flex-col">
                             <div class="h-full rounded-xl p-5 shadow-md bg-white dark:bg-dcontainer flex flex-col">
                                 <div class="flex flex-row gap-10 items-center justify-center">
-                                    <div class="flex flex-col items-center space-y-3">
-                                        <div class="bg-black rounded-lg w-84 h-80 overflow-hidden">
-                                            <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture" class="w-full h-full object-cover">
+                                    <div class="flex flex-row gap-10 items-start w-full">
+                                        <!-- Profile Picture -->
+                                        <div class="w-full max-w-xs aspect-square bg-black rounded-lg overflow-hidden">
+                                            <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture" 
+                                                class="w-full h-full object-cover">
+                                        </div>
+
+                                        <!-- Personal Information -->
+                                        <div class="w-full">
+                                            <!-- Header with Divider -->
+                                            <div class="flex items-center gap-2 mb-4">
+                                                <h3 class="font-semibold text-lg text-blue-900 dark:text-white">Applicant Information</h3>
+                                                <div class="flex-1 h-0.5 bg-gray-300 rounded"></div>
+                                            </div>
+
+                                            <!-- Grid Info -->
+                                            <div class="grid grid-cols-1 gap-6 w-full px-2 sm:px-4 md:px-10">
+                                                <!-- Column 1 -->
+                                                <div class="space-y-4">
+                                                    <div class="text-black">
+                                                        <span class="text-xs font-semibold uppercase text-gray-500">Applicant Name</span>
+                                                        <p class="text-lg font-sora text-primary">
+                                                            {{ scholar.last_name }}, {{ scholar.first_name }}
+                                                            {{ scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : '' }}
+                                                        </p>
+                                                    </div>
+                                                    <div class="text-black">
+                                                        <span class="text-xs font-semibold uppercase text-gray-500">Contact No.</span>
+                                                        <p class="text-lg text-primary">43432423432423</p>
+                                                    </div>
+                                                    <div class="text-black">
+                                                        <span class="text-xs font-semibold uppercase text-gray-500">Email Address</span>
+                                                        <p class="text-lg text-primary">{{ scholar.email }}</p>
+                                                    </div>
+                                                    <div class="text-black">
+                                                        <span class="text-xs font-semibold uppercase text-gray-500">Address</span>
+                                                        <p class="text-lg text-primary">feafaefeaf</p>
+                                                    </div>
+                                                </div>
+
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div class="flex flex-col justify-end items-end space-y-4">
-                                        <!-- Approve Button -->
-                                        <button class="w-48 px-8 py-3 bg-green-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 transition-all duration-200">
-                                            Accept
-                                        </button>
-                                        
-                                        <!-- Disapprove Button -->
-                                        <button class="w-48 px-8 py-3 bg-red-600 text-white text-lg font-semibold rounded-lg shadow-md hover:bg-red-700 focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 transition-all duration-200">
-                                            Decline
-                                        </button>
-                                    </div>
                                 </div>
 
                                 <div
                                     class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-base text-blue-900 dark:text-white">
-                                            Personal Information
+                                            Educational Information
                                     </h3>
                                     <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-6 w-full px-10">
-                                    <div class="flex flex-col p-2 space-y-3">
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Applicant Name</span>
-                                            <span class="text-xl font-sora text-primary">
-                                                {{ scholar.last_name }},
-                                                {{ scholar.first_name }}
-                                                {{scholar.middle_name ? scholar.middle_name.split(' ').map(word => word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
-                                            </span>
+                                    <!-- Column 2 -->
+                                    <div class="space-y-4">
+                                        <div class="text-black">
+                                            <span class="text-xs font-semibold uppercase text-gray-500">URScholar ID</span>
+                                            <p class="text-lg text-primary">{{ scholar.urscholar_id }}</p>
                                         </div>
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Contact No.</span>
-                                            <span class="text-xl text-primary">43432423432423</span>
-                                        </div>
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Email Address</span>
-                                            <span class="text-xl text-primary">{{ scholar.email }}</span>
-                                        </div>
-
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Address</span>
-                                            <span class="text-xl text-primary">feafaefeaf</span>
+                                        <div class="text-black">
+                                            <span class="text-xs font-semibold uppercase text-gray-500">Campus</span>
+                                            <p class="text-lg text-primary">{{ scholar.campus.name }}</p>
                                         </div>
                                     </div>
 
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">URScholar ID</span>
-                                            <span class="text-xl text-primary">{{ scholar.urscholar_id }}</span>
-                                        </div>
-                                        <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
                                             <span class="text-xl text-primary">{{ scholar.course.name }}</span>
-                                        </div>
-                                        <div class="flex flex-col text-black">
-                                            <span class="font-semibold uppercase text-xs text-gray-500">Campus</span>
-                                            <span class="text-xl text-primary">{{ scholar.campus.name }}</span>
                                         </div>
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">General Weighted Average</span>
@@ -194,13 +201,11 @@
                                     </div>
                                     
                                 </div>
-
-                                <div class="h-0.5 bg-gray-100"></div>
                             </div>
                         </div>
 
                         <!-- 75% Column -->
-                        <div class="col-span-2 h-full flex flex-col space-y-3">
+                        <div class="col-span-1 h-fit flex flex-col space-y-3">
                             <!-- Second Layer with Single Card -->
                             <div
                                 class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
@@ -213,17 +218,16 @@
                                         <!-- Requirement Item -->
                                         <div v-for="req in submittedRequirements" :key="req.id"
                                             class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
-                                            <div class="flex flex-col">
-                                                <span class="font-bold">{{ req.requirement }}</span>
-                                                <span>{{ req.submitted_requirements }}</span>
+                                            <div class="flex flex-col space-y-2">
+                                                <span class="font-bold">Call mo yung requiremtn na need here</span>
+                                                <div class="flex items-center gap-2 text-gray-800">
+                                                    <font-awesome-icon :icon="['fas', 'file']" class="text-blue-600 text-lg" />
+                                                    <span class="text-base font-medium">{{ req.submitted_requirements }}</span>
+                                                </div>
+
                                             </div>
 
-                                            <div class="flex flex-row gap-5 items-center justify-center">
-                                                <div class="flex items-center gap-2 text-gray-900 dark:text-white">
-                                                    <span
-                                                        class="material-symbols-rounded text-lg">assignment_turned_in</span>
-                                                    <span class="font-medium">Jan 1, 2023</span>
-                                                </div>
+                                            <div class="flex flex-col gap-3 items-center justify-center">
                                                 <div>
                                                     <span :class="statusClass(req.status)"
                                                         class="text-sm font-medium px-2.5 py-0.5 rounded border">
@@ -233,7 +237,7 @@
                                                 <button @click="toggleCheck(req)"
                                                     class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
                                                     <span class="material-symbols-rounded text-base">open_in_full</span>
-                                                    <span class="font-medium text-sm">View</span>
+                                                    <span class="font-medium text-sm">Check</span>
                                                 </button>
                                             </div>
                                         </div>

@@ -5,25 +5,25 @@
             <div class="col-span-3 h-full flex flex-col space-y-3">
                 <!-- First Layer with 2 Column Cards -->
                 <div class="grid grid-cols-2 gap-3 h-[35%]">
-                    <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
-                        <QuickPost />
+                    <div class="h-full w-full">
+                        <Statistics />
                     </div>
                     <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
-                        <!-- <ActiveScholarship :sponsors="sponsors" :scholarships="scholarships" /> -->
+                        <ActivePayouts :sponsors="sponsors" :scholarships="scholarships" />
                     </div>
                 </div>
                 <!-- Second Layer with Single Card -->
                 <div class="bg-white box-border rounded shadow-md h-[65%] dark:bg-dcontainer">
-                <!-- <ContentComponent /> -->
+                    <ScholarPayouts :sponsors="sponsors" :scholarships="scholarships" />
                 </div>
             </div>
             <!-- 25% Column -->
             <div class="w-full h-full flex flex-col space-y-3">
                 <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
-                    <!-- <Calendar /> -->
+                    <Messages />
                 </div>
                 <div class="bg-white rounded shadow-md h-[65%] dark:bg-dcontainer">
-
+                    <Calendar_Activities />
                 </div>
             </div>
         </div>
@@ -35,12 +35,20 @@
 import { ref } from 'vue';
 
 import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
-import QuickPost from '../../../Components/Staff/Dashboard/Statistics.vue';
+import ActivePayouts from '../../../Components/Cashier/Dashboard/ActivePayouts.vue';
+import Messages from '@/Components/Cashier/Dashboard/Messages.vue';
+import ScholarPayouts from '@/Components/Cashier/Dashboard/ScholarPayouts.vue';
+import Calendar_Activities from '@/Components/Cashier/Dashboard/Calendar_Activities.vue';
+import Statistics from '@/Components/Cashier/Dashboard/Statistics.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
 
 const components = {
     ActiveScholarship,
-    QuickPost,
+    ActivePayouts,
+    Messages,
+    ScholarPayouts,
+    Calendar_Activities,
+    Statistics,
     // Calendar,
 };
 

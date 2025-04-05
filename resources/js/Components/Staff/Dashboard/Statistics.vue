@@ -9,28 +9,25 @@
         <div class="flex flex-wrap gap-3 w-full flex-grow">
 
             <!-- Box 1 -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
-                <p class="text-2xl font-bold text-primary">120</p>
-                <p class="text-gray-600 dark:text-gray-300">University Students</p>
+            <div class="w-fullbg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
+                <p class="text-4xl font-bold dark:text-lprimary">75</p>
+                <p class="text-gray-600 dark:text-gray-300">Scholarship Sponsors</p>
+                
             </div>
 
             <!-- Box 2 -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
-                <p class="text-2xl font-bold text-primary">45</p>
+            <div class="w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
+                <p class="text-4xl font-bold dark:text-lprimary">45</p>
                 <p class="text-gray-600 dark:text-gray-300">Total Scholars</p>
             </div>
 
             <!-- Box 3 -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
-                <p class="text-2xl font-bold text-primary">75</p>
-                <p class="text-gray-600 dark:text-gray-300">Scholarship Sponsors</p>
+            <div class="w-fullbg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
+                <p class="text-4xl font-bold dark:text-lprimary">12</p>
+                <p class="text-gray-600 dark:text-gray-300">University Students</p>
             </div>
 
             <!-- Box 4 -->
-            <div class="bg-white dark:bg-gray-800 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
-                <p class="text-2xl font-bold text-primary">15</p>
-                <p class="text-gray-600 dark:text-gray-300">URScholar Users</p>
-            </div>
 
         </div>
 

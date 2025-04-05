@@ -8,6 +8,7 @@ use App\Events\NewNotification;
 use App\Mail\SendEmail;
 use App\Models\ActivityLog;
 use App\Models\Disbursement;
+use App\Models\PayoutSchedule;
 use App\Models\Payout;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -36,7 +37,9 @@ class CashierController extends Controller
     {
         $scholarships = Scholarship::all();
         $sponsors = Sponsor::all();
-        $payouts = Payout::all();
+        $payouts = Payout::where('campus_id', Auth::user()->campus_id)
+            ->where('status', '!=', 'Inactive')
+            ->get();
 
         return Inertia::render('Cashier/Scholarships/Active_Scholarships', [
             'scholarships' => $scholarships,
@@ -50,10 +53,15 @@ class CashierController extends Controller
         // Get batches related to the grantees for the specific scholarship
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with('grantees') // Eager load grantees for the batches
+            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
             ->get();
 
         // Get the payout for the specific scholarship
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+            ->where('status', '!=', 'Inactive')
+            ->orderBy('created_at', 'desc')
+        ->first();
 
         // Get disbursements related to the payout, with scholars and their grantees
         $disbursements = Disbursement::where('payout_id', $payout->id)
@@ -68,60 +76,6 @@ class CashierController extends Controller
         ]);
     }
 
-
-    public function notify(Request $request, Scholarship $scholarship)
-    {
-
-        $validated = $request->validate([
-            'scheduled_date' => 'required|date',
-            'scheduled_time' => 'required',
-            'reminders' => 'required',
-        ]);
-
-        // dd($validated);
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
-        $disbursements = Disbursement::where('payout_id', $payout->id)->get();
-
-        $scholarIds = $disbursements->pluck('scholar_id'); // Extract scholar IDs
-
-        $scholars = Scholar::whereIn('id', $scholarIds)->get(); // Fetch scholars with matching IDs
-
-
-        // Create the same requirement for all scholars
-        foreach ($scholars as $scholar) {
-            if ($scholar->email) {
-
-
-
-                //Sending Emails
-                $mailData = [
-                    'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
-                    'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
-                        "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
-                        "Here are your login credentials:\n\n" .
-                        "*Email: " . $scholar['email'] . "\n" .
-                        "*Next Steps:\n" .
-                        " - Log in to your account using the details above.\n" .
-                        " - Complete your application by submitting the required documents.\n" .
-                        " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                        "*Bigayan  Date: " . $request['scheduled_date'] . "\n\n" .
-                        "*Bigayan Oras: " . $request['scheduled_time'] . "\n\n" .
-                        "*Reminders be: " . $request['reminders'] . "\n\n" .
-                        "Click the following link to access your portal: " .
-                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
-                ];
-
-                Mail::to($scholar->email)->send(new SendEmail($mailData));
-            }
-        }
-
-        ActivityLog::create([
-            'user_id' => Auth::user()->id,
-            'activity' => 'Email',
-            'description' => 'Scholar has been sent an email for payouts ' . $scholarship->name,
-        ]);
-    }
-
     // return Inertia::render('Cashier/Scholarships/Scheduling',[
     //     'scholarship' => $scholarship,
     //     'batches' => $batches,
@@ -131,31 +85,100 @@ class CashierController extends Controller
 
     public function payout_batches(Scholarship $scholarship)
     {
-        // Get batches related to the scholarship, order by batch_no in descending order
-        $batches = Batch::where('scholarship_id', $scholarship->id)
-            ->with([
-                'scholars' => function ($query) {
-                    $query->orderBy('last_name')
-                        ->orderBy('first_name');
-                }
-            ])
-            ->orderBy('batch_no', )
-            ->get(); // Use get() instead of first to get all batches
+        $user = Auth::user();
+
+        // Get user campus IDs (null for admin, array for cashier and other roles)
+        $userCampusIds = $user->usertype === 'admin'
+            ? null
+            : [$user->campus_id]; // Convert to array for non-admin users including cashiers
+
+        // Get batches related to the scholarship, filtered by campus if needed
+        $batchesQuery = Batch::where('scholarship_id', $scholarship->id);
+
+        if ($userCampusIds) {
+            $batchesQuery->whereIn('campus_id', $userCampusIds);
+        }
+
+        $batches = $batchesQuery->with([
+            'scholars' => function ($query) {
+                $query->orderBy('last_name')
+                    ->orderBy('first_name');
+            },
+            'disbursement',
+            'campus:id,name'
+        ])
+            ->orderBy('batch_no')
+            ->get();
+
+        // Count claimed and not claimed for each batch
+        $batches = $batches->map(function ($batch) {
+            $claimed = $batch->disbursement->where('status', 'Claimed')->count();
+            $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
+
+            return array_merge($batch->toArray(), [
+                'claimed_count' => $claimed,
+                'not_claimed_count' => $notClaimed
+            ]);
+        });
 
         // Fetch grantees only if batches exist
         $grantees = collect();
         if ($batches->isNotEmpty()) {
             $grantees = $scholarship->grantees()
-                ->whereIn('batch_id', $batches->pluck('id')) // Use whereIn for multiple batches
+                ->whereIn('batch_id', $batches->pluck('id'))
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
         }
+
+        // Get payouts for this scholarship, filtered by campus if needed
+        $payoutsQuery = Payout::where('scholarship_id', $scholarship->id)
+            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+            ->where('status', '!=', 'Inactive');
+
+        if ($userCampusIds) {
+            $payoutsQuery->whereIn('campus_id', $userCampusIds);
+        }
+
+        $payouts = $payoutsQuery->with([
+            'campus:id,name',
+            'disbursement.scholar:id,first_name,last_name'
+        ])
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        $canForward = $payouts->total_scholars == $payouts->sub_total;
+
+
+        
+
+        $payout_schedule = PayoutSchedule::where('payout_id', $payouts->id)
+        ->first();
 
         return Inertia::render('Cashier/Scholarships/Payout_Batches', [
             'scholarship' => $scholarship,
             'batches' => $batches,
             'grantees' => $grantees,
+            'payouts' => $payouts,
+            'user_campus_ids' => $userCampusIds ?? [],
+            'user_type' => $user->usertype, // Added user type for frontend access control
+            'canForward' => $canForward,
+            'payout_schedule' => $payout_schedule,
         ]);
+    }
+
+    public function forward_payout($scholarshipId)
+    {
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+        ->where('status', '!=', 'Inactive')
+        ->first();
+
+        $payout->status = 'Inactive';
+        $payout->save();
+
+        return redirect()->route('cashier.active_scholarships')->with('success', 'Forwarded Successfully');
     }
 
 
@@ -163,10 +186,14 @@ class CashierController extends Controller
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+        ->where('status', '!=', 'Inactive')
+        ->first();
 
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
+            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
             ->orderBy('batch_no', 'desc')
             ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
 
@@ -186,13 +213,54 @@ class CashierController extends Controller
             ->where('status', 'claimed') // Assuming 'claimed' is the status for claimed disbursements
             ->count();
 
+        $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
+            ->first();
+
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'disbursements' => $disbursements,
             'payout' => $payout,
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
+            'payout_schedule' => $payout_schedule,
         ]);
+    }
+
+    public function submitReason(Request $request)
+    {
+        $validated = $request->validate([
+            'disbursement_id' => 'required|exists:disbursements,id',
+            'reason' => 'required|string|max:1000',
+            'document' => 'nullable|file|mimes:docx,png,jpg,jpeg,pdf|max:5120', // 5MB max
+        ]);
+
+        $disbursement = Disbursement::findOrFail($validated['disbursement_id']);
+
+        // Check if disbursement is pending
+        if ($disbursement->status !== 'Pending') {
+            return back()->with('error', 'Only pending disbursements can have reasons added.');
+        }
+
+        // Handle document upload if provided
+        $documentPath = null;
+        if ($request->hasFile('document')) {
+            $file = $request->file('document');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $documentPath = $file->storeAs('disbursement-reasons', $fileName, 'public');
+        }
+
+        // Update the disbursement with reason
+        $disbursement->reasons_of_not_claimed = $validated['reason'];
+
+        // If you want to store document path in database, you need to add this column
+        $disbursement->path = $documentPath;
+        $disbursement->file_name = $fileName;
+
+        // Update status to 'Not Claimed' since we now have a reason
+        $disbursement->status = 'Not Claimed';
+        $disbursement->save();
+
+        return redirect()->back()->with('success', 'Reason submitted successfully');
     }
 
     public function payouts()

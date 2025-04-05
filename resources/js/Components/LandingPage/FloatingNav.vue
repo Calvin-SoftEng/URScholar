@@ -70,7 +70,7 @@
             <!-- Menu Links with animation -->
             <ul class="text-white text-2xl font-medium space-y-6 text-center font-poppins w-full pt-6">
                 <li class="transform transition-transform duration-300 hover:scale-110">
-                <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Login</a>
+                <Link :href="route('login')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Login</Link>
                 </li>
                 <li class="transform transition-transform duration-300 hover:scale-110">
                 <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Register</a>

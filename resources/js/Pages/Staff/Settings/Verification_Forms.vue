@@ -8,47 +8,53 @@
                 </h1>
 
                 <div class="w-full mt-5">
-                    <div class="relative overflow-x-auto rounded-lg w-full p-5 bg-white">
+                    <div class="relative overflow-x-auto rounded-lg w-full p-5 bg-white dark:bg-dcontainer">
                         <!-- Scholarship Forms Section -->
                         <div class="mb-5 space-y-5">
                             <div class="flex flex-row justify-between border-b items-center pb-3">
-                                <h2 class="text-lg font-semibold text-gray-700">List of Scholarship Forms</h2>
+                                <h2 class="text-lg font-semibold text-gray-700 dark:text-dtext">List of Scholarship Forms</h2>
                                 <!-- <button @click="toggleNewForm" class="text-blue-600 text-sm hover:underline">Add New
                                     Form</button> -->
                             </div>
 
                                 <!-- Loop through scholarship forms -->
                                 <div v-for="form in scholarship_form" :key="form.id"
-                                    class="bg-white border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
+                                    class="bg-white dark:bg-dsecondary border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                                     <div
                                         class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                                         <div>
-                                            <span class="font-semibold font-quicksand text-lg">{{ form.name }}</span>
+                                            <span class="font-semibold font-quicksand text-lg dark:text-dtext">{{ form.name }}</span>
                                         </div>
-                                        <div class="flex gap-2">
-                                            <button @click="toggleEditForm(form)"
-                                                class="text-blue-600 text-sm hover:underline">Edit Form</button>
-                                            <button @click="toggleAddCriteria(form.id)"
-                                                class="text-blue-600 text-sm hover:underline">Add Criteria</button>
+                                        <div class="flex gap-2 items-center">
+                                            <button @click="toggleEditForm(form)" class="text-blue-600 text-sm hover:underline">
+                                                Edit Form
+                                            </button>
+                                            
+                                            <div class="h-4 border-l border-gray-400"></div> <!-- Vertical Line -->
+
+                                            <button @click="toggleAddCriteria(form.id)" class="text-blue-600 text-sm hover:underline">
+                                                Add Criteria
+                                            </button>
                                         </div>
+
                                     </div>
 
                                     <div>
                                         <div class="w-full grid grid-cols-2 px-5 py-3 gap-2">
                                             
                                             <div v-for="data in getFormData(form.id)" :key="data.id"
-                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100">
-                                                <span class="text-gray-700">{{ data.name }}</span>
+                                                class="flex items-center gap-2 border rounded-md px-3 justify-between py-1 hover:bg-gray-100 dark:hover:bg-dprimary">
+                                                <span class="text-gray-700 dark:text-dtext">{{ data.name }}</span>
                                                 <div class="ml-2 flex gap-1">
                                                     <button @click="toggleEditCriteria(data)"
                                                         class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="text-primary" />
+                                                            class="text-dprimary dark:text-primary" />
                                                     </button>
                                                     <button @click="deleteCriteria(data.id)"
                                                         class="p-1 rounded hover:bg-gray-200">
                                                         <font-awesome-icon :icon="['fas', 'box-archive']"
-                                                            class="text-primary" />
+                                                            class="text-dprimary dark:text-primary" />
                                                     </button>
                                                 </div>
                                             </div>

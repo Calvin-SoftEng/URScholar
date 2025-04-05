@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Batch extends Model
 {
-    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year', 'semester' , 'total_scholars', 'read'];
+    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year_id', 'campus_id', 'semester' , 'total_scholars', 'read' , 'status'];
 
     public function scholarship()
     {
@@ -41,5 +41,10 @@ class Batch extends Model
     public function school_year()
     {
         return $this->belongsTo(SchoolYear::class);
+    }
+
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
     }
 }

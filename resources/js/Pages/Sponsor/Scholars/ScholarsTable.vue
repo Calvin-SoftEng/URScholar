@@ -11,7 +11,7 @@
                             Home
                         </li class="hover:text-gray-600">
                         <li>
-                            <span class="text-blue-400 font-semibold dark:text-gray-300">Scholarships</span>
+                            <span class="text-blue-400 font-semibold dark:text-gray-300">Scholars</span>
                         </li>
                     </ul>
                 </div>
@@ -20,92 +20,16 @@
             <div class="w-full mx-auto px-28 space-y-3">
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS
-                        Scholarships
+                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
+                        {scholarship name} Scholars
                     </h1>
                 </div>
 
                 <div class="mx-auto py-5">
                     <div class="flex w-full flex-col gap-6">
-
-                        <!-- Need-Based Scholarships -->
-                        <h2
-                            class="text-xl font-semibold text-gray-700 dark:text-dtext flex items-center gap-3 before:flex-1 before:border-t before:border-gray-300 after:flex-1 after:border-t after:border-gray-300">
-                            Grant-Based Scholarships
-                        </h2>
-
-                        <!-- <button v-for="scholarship in grantBasedScholarships" :key="scholarship.id"
-                            @click="toggleSpecification(scholarship)" class="w-full"> -->
-                        <button>
-
-                            <div class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
-                                hover:shadow-md transition-all duration-300 py-5 px-10 flex flex-col md:flex-row 
-                                justify-between items-start md:items-center space-y-5 md:space-y-0">
-
-                                <!-- Notification Badge -->
-                                <!-- <span v-if="scholarship.read !== 1"
-                                    class="absolute top-[-13px] right-2 bg-primary text-white text-sm font-bold px-5 py-1 rounded-full">
-                                    New Scholarship
-                                </span> -->
-
-                                <!-- Scholarship Info -->
-                                <div class="space-y-4 flex flex-col items-start justify-start">
-                                    <div class="badge badge-info text-xs badge-outline px-3 py-1">
-                                        fefaf
-                                    </div>
-
-                                    <h2
-                                        class="w-full items-start text-3xl md:text-2xl font-semibold text-gray-900 dark:text-dtext">
-                                        feafaefe
-                                    </h2>
-
-                                    <p class="flex flex-col text-sm text-gray-500 items-start space-y-1">
-                                        <!-- <span class="items-start">Created on: {{ new
-                                            Date(scholarship.created_at).toLocaleDateString() }}</span>
-                                        <span class="items-start">Sponsoring Since:
-                                            {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                year:
-                                                    'numeric', month: 'long', day: 'numeric'
-                                            }) }}
-                                        </span> -->feafeafa
-                                    </p>
-
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                                        <!-- <span class="font-medium">Requirements Deadline:</span>
-                                        <span
-                                            v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
-                                            {{ new
-                                                Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
-                                                    year: 'numeric', month: 'long', day: 'numeric'
-                                                }) }}
-                                        </span>
-                                        <span v-else>
-                                            No Deadline
-                                        </span> -->
-                                        feafaefef
-                                    </p>
-                                </div>
-
-                                <!-- Additional Info -->
-                                <div class="flex flex-row gap-6">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-gray-500 text-sm">Batches</span>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-dtext">34</span>
-                                    </div>
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-gray-500 text-sm">Campuses</span>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-dtext">2</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </button>
-
-
+                        <ScholarList :scholarships="props.scholarships" :sponsors="props.sponsors" />
                     </div>
                 </div>
-
 
             </div>
         </div>
@@ -119,6 +43,7 @@ import { ref, onMounted, computed } from 'vue';
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { useRouter, useRoute } from 'vue-router'
 import Echo from 'laravel-echo';
+import ScholarList from '@/Components/Sponsor/Scholars/ScholarList.vue';
 
 import { Tooltip } from 'primevue';
 

@@ -40,19 +40,19 @@
                             <button v-tooltip.left="'You need to add students before importing scholars'" disabled
                                 class="px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                    font-poppins flex items-center gap-2">
+                                    font-poppins flex items-center gap-2 dark:hover:bg-yellow-800">
                                 <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
                                 <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
-                                <span>Import Scholars</span>
+                                <span class="dark:text-dtext">Import Scholars</span>
                             </button>
 
                             <!-- Disabled Send Email Button -->
                             <button v-tooltip.left="'You need to add scholars before sending emails'" disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                    font-poppins flex items-center gap-2">
+                                    font-poppins flex items-center gap-2 dark:hover:bg-yellow-800">
                                 <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
-                                <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
-                                <span>Send Email</span>
+                                <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext " />
+                                <span class="dark:text-dtext ">Send Email</span>
                             </button>
                         </div>
 
@@ -77,14 +77,12 @@
                                 </button>
                             </div>
                             <div v-else>
-                                <Link :href="`/scholarships/${props.scholarship.id}/send-access`">
-                                <button @click="importScholars"
+                                <button @click="openSendEmail"
                                     class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
                                         border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
                                     <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
                                     <span>Send Email</span>
                                 </button>
-                                </Link>
                             </div>
 
                         </div>
@@ -97,7 +95,7 @@
                 <div v-if="scholarship.scholarshipType == 'Grant-Based'">
                     <div v-if="!batches || batches.length === 0"
                         class="flex flex-col w-full items-center justify-center mt-5">
-                        <div class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                        <div class="bg-white w-full dark:bg-dsecondary p-6 rounded-lg text-center animate-fade-in">
                             <font-awesome-icon :icon="['fas', 'user-graduate']"
                                 class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                             <p class="text-lg text-gray-700 dark:text-gray-300">
@@ -164,15 +162,15 @@
                                             <button
                                                 class="h-5 px-3 py-1 bg-blue-400 text-white rounded-full text-sm inline-flex items-center justify-center">
                                                 {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length }} new
+                                                    false).length}} new
                                                 {{props.allBatches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length === 1 ? 'Batch' : 'Batches' }}
+                                                    false).length === 1 ? 'Batch' : 'Batches'}}
                                             </button>
                                         </template>
 
                                     </div>
                                     <div v-else>
-                                        <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p>
+                                        <p class="text-4xl font-semibold font-kanit">{{ props.totalBatches }}</p>
                                         <template v-if="filteredUnreadBatches.length > 0">
                                             <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
                                                 {{ filteredUnreadBatches.length }} new
@@ -197,7 +195,10 @@
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
                         <div class="flex flex-row justify-between items-center">
-                            <span>List of Batches</span>
+                            <!-- Dynamic Title -->
+                            <h2 class="text-lg font-semibold text-gray-800 mt-4">
+                                {{ showPayrolls ? 'List of Payrolls' : 'List of Scholars Batch list' }}
+                            </h2>
 
                             <div class="flex flex-row space-x-3 items-center">
                                 <!-- Campus Filter - Only shown for super_admin or if coordinator has multiple campuses -->
@@ -221,43 +222,337 @@
                                     <span class="font-poppins text-sm font-semibold">{{ campuses[0].name }}</span>
                                 </template>
 
-                                <div v-if="!payouts">
-                                    <button @click="toggleSendBatch"
+                                <div v-if="$page.props.auth.user.usertype === 'super_admin'"
+                                    class="flex flex-row space-x-3 items-center">
+                                    <!-- reports -->
+                                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" 
+                                    class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                        border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200" type="button">
+                                        <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                        </svg>
+                                    </button>
+
+                                    <!-- Dropdown menu -->
+                                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-48 dark:bg-gray-700">
+                                        <ul class="py-2 text-base text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                                            <li>
+                                                <button @click="generateScholarsList"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Scholars List
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button @click="generateEnrolledList"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Enrolled List
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button @click="generateGraduateList"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Graduate List
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button @click="generatePayroll"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Payout List
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div v-if="payouts">
+                                        <button @click="toggleView"
+                                            class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                        border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                                            <span class="font-normal">
+                                                {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <!-- Forward to Sponsor -->
+                                    <div>
+                                    <button @click="toggleForwardSponsor"
                                         class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                        <span class="font-normal">Forward Completed Scholars</span>
+                                        <span class="font-normal">Forward to <span class="font-semibold">Sponsor</span> </span>
                                     </button>
-                                </div>
-                                <div v-else>
-                                    <button v-tooltip.left="'Scholars already submitted to Casher'" disabled
-                                        class="flex items-center gap-2 dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
-                                    border border-yellow-300 dark:border-yellow-500  hover:bg-yellow-200 px-4 py-2 rounded-lg  transition duration-200">
+                                    </div>
+
+                                    <!-- Forward to Cashier -->
+                                    <div v-if="!payouts">
+                                    <button @click="toggleSendBatch"
+                                        class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                        <span class="font-normal">Forward Completed Scholars</span>
+                                        <span class="font-normal">Forward to <span class="font-semibold">Cashier</span></span>
                                     </button>
+                                    </div>
+
+                                    <div v-else>
+                                        <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
+                                            class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                            <span class="font-normal">Forward to Cashier</span>
+                                        </button>
+                                    </div>
                                 </div>
+                                <div v-else class="flex flex-row space-x-3 items-center">
+                                    <div v-if="payouts">
+                                        <button @click="toggleView"
+                                            class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                        border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                                            <span class="font-normal">
+                                                {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                                            </span>
+                                        </button>
+                                    </div>
+                                    <div v-if="allBatchesInactive !== true">
+                                        <button @click="toggleForwardCoor"
+                                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                            <span class="font-normal">Forward to Head Scholarship</span>
+                                        </button>
+                                    </div>
+                                    <div v-else>
+                                        <button v-tooltip.left="'Batches already submitted to Head Scholarship'"
+                                            disabled
+                                            class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                            <span class="font-normal">Forward to Head Scholarship</span>
+                                        </button>
+                                    </div>
+                                </div>
+
+
                             </div>
                         </div>
 
+                        <!-- Scholar List -->
+                        <div v-show="!showPayrolls">
+                            <div v-if="batchesByCampus && Object.keys(batchesByCampus).length === 0">
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                    <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                        class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                    <p class="text-lg text-gray-700 dark:text-gray-300">
+                                        No available scholarship for this campus
+                                    </p>
+                                </div>
+                            </div>
+                            <div v-else>
+                                <!-- Check if we have batches by campus -->
+                                <div v-if="batchesByCampus && Object.keys(batchesByCampus).length > 0">
+                                    <!-- Loop through each campus in the batches -->
+                                    <div v-for="(campusData, campusId) in batchesByCampus" :key="campusId" class="mb-6">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campusData.campus.name }}
+                                            Campus</h3>
 
-                        <div v-for="batch in batches" :key="batch.id"
-                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                        <!-- Display scholarship status for this campus -->
+                                        <div v-if="campusData.batches?.some(batch => batch.status === 'Pending') && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)"
+                                            class="mb-4">
+                                            <div
+                                                class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                                <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                                    class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                                <p class="text-lg text-gray-700 dark:text-gray-300">
+                                                    Scholarship for this campus is still Ongoing
+                                                </p>
+                                            </div>
+                                        </div>
 
-                            <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
-                                <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
+                                        <!-- If not ongoing, show batches for this campus -->
+                                        <div v-else>
+                                            <!-- Loop through batches for this campus -->
+                                            <div v-for="batch in campusData.batches" :key="batch.id"
+                                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                                <div @click="() => openBatch(batch.id)"
+                                                    class="flex justify-between items-center">
+                                                    <div class="flex flex-col">
+                                                        <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                            batch.batch_no }}</span>
+                                                        <span class="text-md font-medium text-gray-600">
+                                                            {{ schoolyear ? schoolyear.school_year : '' }} {{
+                                                                batch.semester
+                                                            }}
+                                                        </span>
+                                                    </div>
 
-                                <div class="grid grid-cols-2 gap-6">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">No. of Scholars</span>
-                                        <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length }}</span>
-
+                                                    <div class="grid grid-cols-2">
+                                                        <div class="flex flex-col items-center">
+                                                            <span class="text-sm text-gray-600">No. of Scholars</span>
+                                                            <span class="text-xl font-bold text-blue-600">{{
+                                                                batch.grantees.length }}</span>
+                                                        </div>
+                                                        <div class="flex flex-col items-center">
+                                                            <span class="text-sm text-gray-600">Unverified
+                                                                Scholars</span>
+                                                            <span class="text-xl font-bold text-red-500">
+                                                                {{batch.grantees.filter(grantee =>
+                                                                    !grantee.scholar?.is_verified).length}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                        <span class="text-xl font-bold text-red-500">
-                                            {{batch.grantees.filter(grantee => !grantee.scholar.is_verified).length}}
-                                        </span>
+                                </div>
+
+                                <!-- Fallback to the original batches display if batchesByCampus is not available -->
+                                <div v-else-if="batches && batches.length > 0">
+                                    <div v-for="batch in batches" :key="batch.id"
+                                        class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                        <div @click="() => openBatch(batch.id)"
+                                            class="flex justify-between items-center">
+                                            <div class="flex flex-col">
+                                                <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                    batch.batch_no
+                                                    }}</span>
+                                                <span class="text-md font-medium text-gray-600">
+                                                    {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
+                                                </span>
+                                            </div>
+
+                                            <div class="grid grid-cols-2">
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">No. of Scholars</span>
+                                                    <span class="text-xl font-bold text-blue-600">{{
+                                                        batch.grantees.length
+                                                        }}</span>
+                                                </div>
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">Unverified Scholars</span>
+                                                    <span class="text-xl font-bold text-red-500">
+                                                        {{batch.grantees.filter(grantee =>
+                                                            !grantee.scholar?.is_verified).length}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                </div>
+
+                                <!-- No scholars/batches message -->
+                                <div v-else class="flex flex-col w-full items-center justify-center mt-5">
+                                    <div
+                                        class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                        <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                            class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                        <p class="text-lg text-gray-700 dark:text-gray-300">
+                                            No scholarship information available
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Payrolls List -->
+                        <div v-show="showPayrolls">
+                            <!-- Check if we have payouts by campus -->
+                            <div v-if="payoutsByCampus && Object.keys(payoutsByCampus).length > 0">
+                                <!-- Loop through each campus in the payouts -->
+                                <div v-for="(campusData, campusId) in payoutsByCampus" :key="campusId" class="mb-6">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campusData[0].campus.name }}
+                                        Campus</h3>
+
+                                    <!-- Display payout status for this campus -->
+                                    <div v-if="campusData[0].status == 'Pending' || campusData[0].status == 'Active' " class="mb-4">
+                                        <div
+                                            class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                            <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                                Payout for this campus is still Ongoing
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- If not pending, show batches for this campus -->
+                                    <div v-else>
+                                        <!-- Filter batches that belong to this campus -->
+                                        <div v-for="batch in batchesByCampus[campusId]?.batches || []" :key="batch.id"
+                                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                            <div @click="() => openPayroll(batch.id)"
+                                                class="flex justify-between items-center">
+                                                <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                    batch.batch_no }}</span>
+
+                                                <div class="grid grid-cols-2">
+                                                    <div class="flex flex-col items-center">
+                                                        <span class="text-sm text-gray-600">Completed Payouts</span>
+                                                        <span class="text-xl font-bold text-blue-600">{{
+                                                            batch.grantees.length }}</span>
+                                                    </div>
+                                                    <div class="flex flex-col items-center">
+                                                        <span class="text-sm text-gray-600">Missed Payouts</span>
+                                                        <span class="text-xl font-bold text-red-500">
+                                                            {{batch.grantees.filter(grantee =>
+                                                                !grantee.scholar.is_verified).length}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Fallback to the original payouts display if payoutsByCampus is not available -->
+                            <div v-else-if="payouts">
+                                <div v-if="payouts.status == 'Pending'">
+                                    <div class="flex flex-col w-full items-center justify-center mt-5">
+                                        <div
+                                            class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                            <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                                Payout is still Ongoing
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-else>
+                                    <div v-for="batch in batches" :key="batch.id"
+                                        class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                                        <div @click="() => openPayroll(batch.id)"
+                                            class="flex justify-between items-center">
+                                            <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
+                                            }}</span>
+
+                                            <div class="grid grid-cols-2">
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">Completed Payouts</span>
+                                                    <span class="text-xl font-bold text-blue-600">{{
+                                                        batch.grantees.length }}</span>
+                                                </div>
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">Missed Payouts</span>
+                                                    <span class="text-xl font-bold text-red-500">
+                                                        {{batch.grantees.filter(grantee =>
+                                                            !grantee.scholar.is_verified).length}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- No payouts message -->
+                            <div v-else class="flex flex-col w-full items-center justify-center mt-5">
+                                <div
+                                    class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                    <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                        class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                    <p class="text-lg text-gray-700 dark:text-gray-300">
+                                        No payout information available
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -269,9 +564,10 @@
                     <form @submit.prevent="submitForm">
                         <div class="pt-3 pb-20 overflow-auto h-full scroll-py-4">
                             <!-- <div class="mx-auto max-w-8xl sm:px-6 lg:px-8 "> -->
-                            <div class="w-full block bg-white px-12 py-6 flex-col items-center mx-auto sm:px-6 lg:px-8">
+                            <div
+                                class="w-full block bg-white dark:bg-dsecondary px-12 py-6 flex-col items-center mx-auto sm:px-6 lg:px-8">
                                 <div class="flex justify-between items-center py-2">
-                                    <span class="text-lg font-semibold text-gray-700">
+                                    <span class="text-lg font-semibold text-gray-700 dark:text-dtext">
                                         Set up One-Time Payment Scholarship Details
                                     </span>
                                     <button type="submit" @click="submitForm"
@@ -283,7 +579,8 @@
                                     <div class="flex flex-row w-full gap-3">
                                         <div class="flex flex-col space-y-2 w-full">
                                             <label for="suffixName"
-                                                class="text-sm font-medium text-gray-700">Scholarship Name</label>
+                                                class="text-sm font-medium text-gray-700 dark:text-dtext">Scholarship
+                                                Name</label>
                                             <input id="suffixName" :value="scholarship.name" readonly type="text"
                                                 placeholder="Scholarship Name"
                                                 class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
@@ -291,7 +588,8 @@
 
                                         <div class="flex flex-col space-y-2 w-full">
                                             <label for="suffixName"
-                                                class="text-sm font-medium text-gray-700">Scholarship Type</label>
+                                                class="text-sm font-medium text-gray-700 dark:text-dtext">Scholarship
+                                                Type</label>
                                             <input id="suffixName" :value="scholarship.scholarshipType" readonly
                                                 type="text" placeholder="Scholarship Type"
                                                 class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
@@ -306,7 +604,7 @@
                                             <!-- Application Start Date -->
                                             <div class="flex flex-col w-full">
                                                 <label for="datepicker-range-start"
-                                                    class="text-sm font-medium text-gray-700 mb-1">Application
+                                                    class="text-sm font-medium text-gray-700 mb-1 dark:text-dtext">Application
                                                     Start</label>
                                                 <div class="relative">
                                                     <div
@@ -318,7 +616,8 @@
                                                                 d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                         </svg>
                                                     </div>
-                                                    <input id="datepicker-range-start" name="start" type="text" autocomplete="off"
+                                                    <input id="datepicker-range-start" name="start" type="text"
+                                                        autocomplete="off"
                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select start date">
                                                 </div>
@@ -329,7 +628,7 @@
                                             <!-- Application Deadline -->
                                             <div class="flex flex-col w-full">
                                                 <label for="datepicker-range-end"
-                                                    class="text-sm font-medium text-gray-700 mb-1">Application
+                                                    class="text-sm font-medium text-gray-700 mb-1 dark:text-dtext">Application
                                                     Deadline</label>
                                                 <div class="relative">
                                                     <div
@@ -341,7 +640,8 @@
                                                                 d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                         </svg>
                                                     </div>
-                                                    <input id="datepicker-range-end" name="end" type="text" autocomplete="off"
+                                                    <input id="datepicker-range-end" name="end" type="text"
+                                                        autocomplete="off"
                                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                         placeholder="Select end date">
                                                 </div>
@@ -356,7 +656,8 @@
                                         <div>
                                             <!-- Total Recipients Input -->
                                             <div class="flex w-6/12 pr-2 flex-col">
-                                                <label for="totalRecipients" class="text-sm font-medium text-gray-700">
+                                                <label for="totalRecipients"
+                                                    class="text-sm font-medium text-gray-700 dark:text-dtext">
                                                     Number of Recipients
                                                 </label>
                                                 <input id="totalRecipients" type="number" v-model="form.totalRecipients"
@@ -370,14 +671,15 @@
                                                 <!-- Header with Label & Stats -->
                                                 <div class="flex flex-row justify-between items-center py-2">
                                                     <div class="flex flex-col space-y-2">
-                                                        <label class="text-sm font-medium">Distribute Recipients per
+                                                        <label class="text-sm font-medium dark:text-dtext">Distribute
+                                                            Recipients per
                                                             Selected Campus</label>
-                                                        <div class="flex flex-row text-sm gap-4">
+                                                        <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                                }}</div>
+                                                            }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
-                                                                class="text-red-500 font-medium">
+                                                                class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
                                                                 }}
                                                                 recipients still need to be allocated
@@ -391,8 +693,9 @@
                                                             <button @click="distributeRecipients"
                                                                 class="px-2 text-gray-700 flex items-center space-x-1 hover:text-blue-600">
                                                                 <span
-                                                                    class="material-symbols-rounded text-base">restart_alt</span>
-                                                                <span>Reset to Auto Distribution</span>
+                                                                    class="material-symbols-rounded text-base dark:text-dtext">restart_alt</span>
+                                                                <span class="text-sm dark:text-dtext">Reset to Auto
+                                                                    Distribution</span>
                                                             </button>
                                                         </div>
                                                     </div>
@@ -409,7 +712,7 @@
 
 
                                                         <label :for="`campus-${campus.id}`"
-                                                            class="text-base font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2">
+                                                            class="text-base font-medium leading-none cursor-pointer text-gray-700 flex-grow pl-2 dark:text-dtext">
                                                             {{ campus.name }}
                                                         </label>
 
@@ -427,9 +730,9 @@
                                         <!-- Right Side: Course List Display Grouped by Campus -->
                                         <div class="flex flex-col space-y-4">
                                             <div v-for="campus in selectedCampuses" :key="campus.id"
-                                                class="py-3 px-4 bg-gray-50 border rounded-md">
+                                                class="py-3 px-4 bg-gray-50 dark:bg-dnavy border rounded-md">
                                                 <!-- Selected Campus Name -->
-                                                <div class="text-sm font-semibold text-gray-700 mb-2">
+                                                <div class="text-sm font-semibold text-gray-700 mb-2 dark:text-dtext">
                                                     {{ campus.name }}
                                                 </div>
 
@@ -438,7 +741,7 @@
                                                     <input type="checkbox" :id="`course-${campus.id}-${course}`"
                                                         v-model="selectedCoursesMap[course]" class="rounded" />
                                                     <label :for="`course-${campus.id}-${course}`"
-                                                        class="text-sm ml-2 cursor-pointer">{{
+                                                        class="text-sm ml-2 cursor-pointer dark:text-dtext">{{
                                                             course }}</label>
                                                 </div>
                                             </div>
@@ -448,7 +751,7 @@
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
-                                    <h3 class="text-base font-medium text-black">List
+                                    <h3 class="text-base font-medium text-black dark:text-dtext">List
                                         Criteria and Eligibility</h3>
                                     <div class="grid grid-cols-2 space-x-2">
                                         <div class="w-full flex flex-col p-2">
@@ -456,7 +759,7 @@
                                             <div class="space-y-4">
                                                 <div class="flex flex-col justify-center items-start">
                                                     <span
-                                                        class="text-sm font-medium text-black whitespace-nowrap mb-2">General
+                                                        class="text-sm font-medium text-black whitespace-nowrap mb-2 dark:text-dtext">General
                                                         Weighted Average must be:
                                                     </span>
 
@@ -467,7 +770,8 @@
                                                 </div>
 
                                                 <div class="flex flex-col space-y-2 justify-center items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap">
+                                                    <span
+                                                        class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
                                                         Must be enrolled in:
                                                     </span>
 
@@ -478,9 +782,10 @@
                                     </textarea>
                                                 </div>
 
-                                                <div v-for="eligiblity in elibigilities" :key="eligiblity.id"
+                                                <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
                                                     class="flex flex-col justify-center space-y-2 items-start">
-                                                    <span class="text-sm font-medium text-black whitespace-nowrap ">
+                                                    <span
+                                                        class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
                                                         {{ eligiblity.name }}
                                                     </span>
                                                     <div v-for="conditions in getFormData(eligiblity.id)"
@@ -499,7 +804,7 @@
                                         </div>
 
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                                            <div class="p-4 bg-white dark:bg-gray-800 rounded-lg shadow-md">
+                                            <div class="p-4 ">
                                                 <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
                                                     {{ scholarship_form.name }}</h4>
 
@@ -510,7 +815,7 @@
                                                         :checked="criteriaIncludes(data.id)"
                                                         @change="toggleCriteria(data.id)">
                                                     <label :for="'accept-terms-' + data.id"
-                                                        class="text-sm font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                        class="text-sm font-medium text-gray-700 cursor-pointer dark:text-dtext">
                                                         {{ data.name }}
                                                     </label>
                                                 </div>
@@ -520,9 +825,10 @@
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
-                                    <div class="w-6/12">
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="w-full">
-                                            <label for="totalRecipients" class="text-sm font-medium text-gray-700">
+                                            <label for="totalRecipients"
+                                                class="text-sm font-medium text-gray-700 dark:text-dtext">
                                                 List Requirements
                                             </label>
                                             <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
@@ -553,12 +859,47 @@
                                                 </form>
                                             </ul>
                                         </div>
+
+                                        <div>
+                                            <label for="totalRecipients"
+                                                class="text-sm font-medium text-gray-700 dark:text-dtext">
+                                                Upload multiple file templates
+                                            </label>
+                                            <!-- <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">
+                                            Upload multiple file templates
+                                            </label> -->
+                                            <input ref="fileInput"
+                                                class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
+                                                    dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                                id="multiple_files" type="file" multiple @change="handleFileChange" />
+
+                                            <!-- Preview Selected Files -->
+                                            <div v-if="selectedFiles.length"
+                                                class="mt-3 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                                                <p class="text-sm font-medium text-gray-900 dark:text-white mb-2">
+                                                    Selected Files:</p>
+                                                <ul class="space-y-2">
+                                                    <li v-for="(file, index) in selectedFiles" :key="index"
+                                                        class="flex items-center justify-between text-sm bg-white dark:bg-gray-700 p-2 rounded-lg">
+                                                        <span
+                                                            class="text-gray-700 dark:text-gray-300 truncate max-w-xs">{{
+                                                                file.name
+                                                            }}</span>
+                                                        <button @click="removeFile(index)"
+                                                            class="text-red-500 hover:text-red-700 text-xs">
+                                                            ✖ Remove
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
                             <!-- </div> -->
                         </div>
-                        
+
                     </form>
                 </div>
 
@@ -643,27 +984,233 @@
                             Select a Batch to Forward:
                         </label>
 
-                        <!-- Loading indicator -->
+                        <!-- Loading Indicator -->
                         <div v-if="isLoading" class="flex justify-center items-center py-4">
                             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
                             <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
                         </div>
 
-                        <!-- Checkbox List -->
-                        <div v-if="!isLoading" class="flex flex-col gap-2">
-                            <label class="flex items-center space-x-2">
-                                <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <span class="text-gray-900 dark:text-white">Send All Batch List</span>
-                            </label>
+                        <!-- Batch List -->
+                        <!-- Batch List -->
+                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                            class="flex flex-col divide-y divide-gray-300">
+                            <p>
+                                {{ campusData.campus.name }}
+                            </p>
+                            <div v-for="batch in campusData.batches" :key="batch.id"
+                                class="py-3 px-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                        batch.batch_no }}</p>
+                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                </div>
+                                <span
+                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                    {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                    }}
+                                </span>
+                            </div>
+                        </div>
 
-                            <label v-for="batch in batchesWithScholars" :key="batch.id"
-                                class="flex items-center space-x-2">
-                                <input type="checkbox" :value="batch.id" v-model="selectedBatches"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
-                                <span class="text-sm text-gray-500">({{ batch.scholar_count }} scholars)</span>
-                            </label>
+                        <!-- Forward Button -->
+                        <div v-if="completedBatches === batches.length" class="mt-4">
+                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                            </button>
+                        </div>
+                        <div v-else class="mt-4">
+                            <button v-tooltip.left="'Complete all batches'" disabled
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Forward
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Simplified forwarding batch list modal -->
+        <div v-if="ForwardCoorList"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Send Completed Batches
+                            </h2>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
+                    <label class="block text-lg font-semibold text-gray-700 dark:text-white">
+                        Completed Payout Batches
+                    </label>
+
+                    <!-- Loading Indicator -->
+                    <div v-if="isLoading" class="flex justify-center items-center py-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                        <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                    </div>
+
+                    <!-- Batch List -->
+                    <div v-if="ForwardCoorList"
+                        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+                        <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                            <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                                <div class="flex items-center gap-3">
+                                    <!-- Icon -->
+                                    <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                                        class="text-blue-600 text-2xl flex-shrink-0" />
+
+                                    <!-- Title and Description -->
+                                    <div class="flex flex-col">
+                                        <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                            Send Completed Batches
+                                        </h2>
+                                    </div>
+                                </div>
+                                <button type="button" @click="closeModal"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                                    data-modal-hide="default-modal">
+                                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        fill="none" viewBox="0 0 14 14">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <div
+                                class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
+                                <label class="block text-lg font-semibold text-gray-700 dark:text-white">
+                                    Completed Payout Batches
+                                </label>
+
+                                <!-- Loading Indicator -->
+                                <div v-if="isLoading" class="flex justify-center items-center py-4">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                                    <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                                </div>
+
+                                <!-- Batch List -->
+                                <!-- Batch List -->
+                                <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                                    class="flex flex-col divide-y divide-gray-300">
+                                    <div v-for="batch in campusData.batches" :key="batch.id"
+                                        class="py-3 px-4 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                                batch.batch_no }}</p>
+                                            <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                        </div>
+                                        <span
+                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                            {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                            }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Forward Button -->
+                                <div v-if="completedBatches === props.totalBatches" class="mt-4">
+                                    <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                                        @click="forwardCoor"
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                                    </button>
+                                </div>
+                                <div v-else class="mt-4">
+                                    <button v-tooltip.left="'Complete all batches'" disabled
+                                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        Forward
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Forward Button -->
+                    <!-- <div class="mt-4">
+                        <button :disabled="isSubmitting" @click="forwardPayout"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                        </button>
+                    </div> -->
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Simplified forwarding batch list modal -->
+        <div v-if="ForwardtoSponsor"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Forwarding to Sponsor</h2>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form @submit.prevent="forwardBatches">
+                    <div class="py-4 px-8 flex flex-col gap-3">
+
+                        <label for="batchSelection"
+                            class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                            Select a Batch to Forward:
+                        </label>
+
+                        <!-- Loading Indicator -->
+                        <div v-if="isLoading" class="flex justify-center items-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                        </div>
+
+                        <!-- Batch List -->
+                        <!-- Batch List -->
+                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                            class="flex flex-col divide-y divide-gray-300">
+                            <p>
+                                {{ campusData.campus.name }}
+                            </p>
+                            <div v-for="batch in campusData.batches" :key="batch.id"
+                                class="py-3 px-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                        batch.batch_no }}</p>
+                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                </div>
+                                <span
+                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                    {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                    }}
+                                </span>
+                            </div>
                         </div>
 
                         <!-- Forward Button -->
@@ -700,10 +1247,10 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed, onUnmounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
+// import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
 import { Checkbox } from '@/Components/ui/checkbox'
 import { Input } from '@/Components/ui/input'
 import { initFlowbite } from 'flowbite';
@@ -712,28 +1259,33 @@ import InputError from '@/Components/InputError.vue';
 
 
 // Define props to include scholars data
+// Define props with the new batchesByCampus property
 const props = defineProps({
+    totalBatches: Number,
     scholarship_form: Object,
     scholarship_form_data: Array,
-    elibigilities: Array,
+    eligibilities: Array,
     conditions: Array,
     batches: Array,
+    batchesByCampus: Array, // New prop with batches organized by campus
     scholarship: Object,
     schoolyear: Object,
     selectedYear: String,
     selectedSem: String,
     selectedCampus: String,
-    grantees: Array, // Add scholars prop
+    allBatchesInactive: Object,
+    grantees: Array,
     campuses: Array,
     courses: Array,
     students: Array,
+    payoutsByCampus: Array,
     total_scholars: Array,
     requirements: Array,
     completedBatches: Array,
     errors: Object,
     userType: String,
     userCampusId: Number,
-    allBatches: Array, // New prop for all batches regardless of filters
+    allBatches: Array,
     payouts: Object,
 });
 
@@ -749,7 +1301,7 @@ const filteredUnreadBatches = computed(() => {
     if (props.userType === 'coordinator') {
         unreadBatches = unreadBatches.filter(batch => {
             // Check if any scholars in this batch belong to the coordinator's campus
-            return batch.scholars.some(scholar => scholar.campus_id === props.userCampusId);
+            return batch.scholars?.some(scholar => scholar.campus_id === props.userCampusId);
         });
     }
 
@@ -779,6 +1331,7 @@ const getFormData = (formId) => {
 
 // Forward batch modal state
 const ForwardBatchList = ref(false);
+const ForwardCoorList = ref(false);
 const selectedBatches = ref([]);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
@@ -809,8 +1362,78 @@ const total_scholars = computed(() => {
 });
 
 
+const requirementemplates = ref(false);
+const selectedFiles = ref([]);
+const fileInput = ref(null);
+// Default to showing the Scholar List
+const showPayrolls = ref(false);
+
+
+const toggletemplates = () => {
+    requirementemplates.value = !requirementemplates.value;
+};
+
+const handleFileChange = (event) => {
+    selectedFiles.value = Array.from(event.target.files);
+};
+
+const removeFile = (index) => {
+    selectedFiles.value.splice(index, 1);
+
+    // Reset the file input by clearing and re-adding remaining files
+    const dataTransfer = new DataTransfer();
+    selectedFiles.value.forEach(file => dataTransfer.items.add(file));
+
+    if (fileInput.value) {
+        fileInput.value.files = dataTransfer.files;
+    }
+};
+
+if (fileInput.value) {
+    fileInput.value.files = dataTransfer.files;
+}
+
+// Submit reason form
+const forwardCoor = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('scholarship.forward_coor', {
+        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
+        selectedCampus: props.selectedCampus
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
+
+
+const toggleView = () => {
+    showPayrolls.value = !showPayrolls.value;
+};
+
 const toggleSendBatch = async () => {
     ForwardBatchList.value = true;
+
+    // Load batches with scholar counts
+    await loadBatchesData();
+};
+
+const toggleForwardCoor = async () => {
+    ForwardCoorList.value = true;
+
+    // Load batches with scholar counts
+    await loadBatchesData();
+};
+
+const ForwardtoSponsor = ref(false);
+
+const toggleForwardSponsor = async () => {
+    ForwardtoSponsor.value = true;
 
     // Load batches with scholar counts
     await loadBatchesData();
@@ -964,6 +1587,7 @@ const campusesData = ref([]);
 
 // Initialize campus data from props
 onMounted(() => {
+    initFlowbite();
     // Make sure form.criteria is initialized
     if (!form.value.criteria) {
         form.value.criteria = [];
@@ -1070,7 +1694,6 @@ onMounted(() => {
 
     // Initial distribution
     distributeRecipients();
-    initFlowbite();
 });
 
 // Watch errors.date_start and open the modal if an error exists
@@ -1299,22 +1922,6 @@ const forwardBatches = async () => {
             date_end: form.value.payoutEndInput,
         };
 
-
-        // Send the request and wait for response
-        // const response = await router.post(`/scholarship/forward-batches`, payload);
-
-        // // Only proceed if request was successful
-        // const totalScholars = batchesToForward.reduce((total, batchId) => {
-        //     const batch = batchesWithScholars.value.find(b => b.id === batchId);
-        //     return total + (batch ? batch.scholar_count : 0);
-        // }, 0);
-
-        // toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
-        // toastVisible.value = true;
-
-        // Close the modal only on success
-        // closeModal();
-
         // Send the request only when user confirms
         router.post(`/scholarship/forward-batches`, payload, {
             preserveScroll: true,
@@ -1348,6 +1955,8 @@ const forwardBatches = async () => {
 
 const closeModal = () => {
     ForwardBatchList.value = false;
+    ForwardCoorList.value = false;
+    ForwardtoSponsor.value = false;
     resetForm();
 };
 
@@ -1397,6 +2006,17 @@ const openBatch = (batchId) => {
     });
 };
 
+const openPayroll = (batchId) => {
+    router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}/payroll`, {
+        data: {
+            scholarship: props.scholarship.id,
+            selectedYear: props.schoolyear.id,
+            selectedSem: props.selectedSem
+        },
+        preserveState: true
+    });
+};
+
 const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
 
 
@@ -1406,6 +2026,13 @@ selectedSem.value = props.selectedSem;
 
 const openScholarship = () => {
     router.visit(`/scholarships/${props.scholarship.id}/adding-scholars`, {
+        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
+        preserveState: true
+    });
+};
+
+const openSendEmail = () => {
+    router.visit(`/scholarships/${props.scholarship.id}/send-access`, {
         data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
         preserveState: true
     });
@@ -1437,6 +2064,64 @@ watchEffect(() => {
         }, 3000);
     }
 });
+
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+
+// Generate report function
+const generateScholarsList = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
+
+const generateEnrolledList = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
+
+const generateGraduateList = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
+
+const generatePayroll = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
 </script>
 
 <style scoped>

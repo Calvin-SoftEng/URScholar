@@ -42,7 +42,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ disbursements.length }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ payout.total_scholars }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
@@ -50,7 +50,7 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ totalClaimed }}/{{ payout.total_scholars }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ totalClaimed }}</p>
                             </div>
                         </div>
                     </div>
@@ -58,7 +58,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payout_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash"/>
+                <Payout_List :payout_schedule="payout_schedule"  :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -80,7 +80,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, onUnmounted } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
@@ -138,6 +138,7 @@ const props = defineProps({
     errors: Object,
     flash: Object,
     totalClaimed: Object,
+    payout_schedule: Object,
 });
 
 const scannedScholar = ref(null);
@@ -183,6 +184,17 @@ const toastMessage = ref("");
 //     }
 // });
 
+onMounted(() => {
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
+
+onUnmounted(() => {
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
+});
 </script>
 
 <style>

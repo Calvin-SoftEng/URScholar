@@ -123,7 +123,25 @@ class SettingsController extends Controller
             $csv->setHeaderOffset(0);
 
             // Validate CSV headers
-            $requiredHeaders = ['first_name', 'last_name', 'email', 'course', 'campus', 'year_level', 'semester'];
+            $requiredHeaders = [
+                'student_number',
+                'first_name',
+                'last_name',
+                'email',
+                'course',
+                'campus',
+                'year_level',
+                'semester',
+                'age',
+                'religion',
+                'birthplace',
+                'birthdate',
+                'civil_status',
+                'permanent_address',
+                'facebook_account',
+                'contact_no',
+            ];
+
             $headers = $csv->getHeader();
             $missingHeaders = array_diff($requiredHeaders, $headers);
 
@@ -178,6 +196,7 @@ class SettingsController extends Controller
 
                 // Prepare student data
                 $insertData[] = [
+                    'student_number' => $record['student_number'],
                     'first_name' => $record['first_name'],
                     'last_name' => $record['last_name'],
                     'email' => $record['email'],
@@ -185,6 +204,15 @@ class SettingsController extends Controller
                     'course_id' => $courseId,
                     'year_level' => $record['year_level'],
                     'semester' => $record['semester'],
+                    'age' => $record['age'],
+                    'religion' => $record['religion'],
+                    'birthplace' => $record['birthplace'],
+                    'birthdate' => $record['birthdate'],
+                    'civil_status' => $record['civil_status'],
+                    'permanent_address' => $record['permanent_address'],
+                    'facebook_account' => $record['facebook_account'],
+                    'contact_no' => $record['contact_no'],
+                    // Add any other fields you need to import
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
@@ -484,5 +512,21 @@ class SettingsController extends Controller
         $scholarshipFormData->delete();
 
         return redirect()->back()->with('success', 'Criteria deleted successfully.');
+    }
+
+    public function archives()
+    {
+
+        return Inertia::render(
+            'Staff/Settings/Archives'
+        );
+    }
+
+    public function user_activities()
+    {
+
+        return Inertia::render(
+            'Staff/Settings/User_Activities'
+        );
     }
 }

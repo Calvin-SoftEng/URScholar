@@ -1,13 +1,19 @@
 <template>
-    <section class="relative sm:py-12 sm:px-16 md:py-20 md:px-24 lg:py-6 lg:px-20 xl:py-16 xl:px-40 h-fit my-auto items-center bg-dirtywhite">
-
-        <div class="flex flex-col text-left space-y-20 justify-center h-full max-w-8xl mx-auto">
-            <div class="text-left flex flex-col space-y-5">
-                <span class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-7xl font-bold">Unlock Educational Success</span>
-                <p class="sm:text-4xl md:text-2xl lg:text-3xl xl:text-4lg text-primary font-medium font-albert">Access comprehensive database of scholarships <br> and stay updated with the latest announcements <br> to boost your educational journey</p>
+    <section class="relative py-10 px-6 sm:py-12 sm:px-16 md:py-20 md:px-24 lg:py-6 lg:px-20 xl:py-16 xl:px-40 h-fit my-auto items-center bg-dirtywhite">
+        <div class="flex flex-col text-center sm:text-left space-y-10 sm:space-y-20 justify-center h-full max-w-8xl mx-auto">
+            <div class="text-center sm:text-left flex flex-col space-y-5">
+                <span class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-4xl sm:text-7xl font-bold">
+                    Unlock Educational Success
+                </span>
+                <p class="text-xl sm:text-2xl lg:text-3xl xl:text-4lg text-primary font-medium font-albert">
+                    Access comprehensive database of scholarships <br class="hidden sm:block"> 
+                    and stay updated with the latest announcements <br class="hidden sm:block"> 
+                    to boost your educational journey
+                </p>
             </div>
 
             <div class="flex justify-center">
+                <!-- tags -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-10 text-primary text-center justify-items-center">
                     <!-- Comprehensive Search -->
                     <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">

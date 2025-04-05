@@ -6,7 +6,7 @@
     <div class="flex flex-col gap-3 flex-grow h-full relative">
         <!-- Scrollable Scholarships -->
         <div class="max-h-[calc(30vh-10px)] h-full overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded flex flex-col justify-start gap-2">
-            <div class="space-y-1">
+            <div class="space-y-2">
                 <!-- Scholarship Card 1 -->
                 <div class="flex flex-row p-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 border border-blue-400 shadow-lg hover:shadow-xl transition-all duration-300 justify-between items-center text-white dark:from-dsecondary dark:to-dprimary dark:border-gray-600">
                     <div class="flex flex-col">

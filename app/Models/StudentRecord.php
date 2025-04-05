@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class StudentRecord extends Model
 {
     protected $fillable = [
-        'user_id',
+        'scholar_id',
         'first_name',
         'middle_name',
         'last_name',
@@ -21,9 +21,9 @@ class StudentRecord extends Model
         'relationship',
     ];
 
-    public function user()
+    public function scholar()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Scholar::class);
     }
 
     public function educationrecord()

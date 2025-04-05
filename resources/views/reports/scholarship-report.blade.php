@@ -3,112 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarship Report - Batch {{ $batch->batch_no }}</title>
+    <title>Scholarship Report</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        
-        .header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .header img {
-            height: 100px;
-        }
-
-        .title {
-            flex-grow: 1;
-            text-align: center;
-        }
-
-        h1, h2 {
-            margin: 5px 0;
-        }
-
-        .report-info {
-            margin-bottom: 20px;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        th, td {
-            border: 1px solid black;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        .footer {
-            margin-top: 20px;
-            text-align: left;
-        }
+        {!! file_get_contents(public_path('css/tailwind.min.css')) !!}
     </style>
 </head>
-<body>
+<body class="text-gray-900">
 
+    <h1 class="font-bold text-base">Annex 2 - TES Continuing Form 5</h1>
     <!-- Header Section -->
-    <div class="header">
-        <!-- University Seal -->
-        <img src="{{ public_path('assets/images/univ-seal.png') }}" alt="University Seal">
+    <div class="text-center mb-6">
+        <h2 class="text-red-600 font-bold text-lg">INSERT HEI LETTERHEAD</h2>
+        <p>Republic of the Philippines</p>
+        <p class="text-red-500 font-bold">(Name of the HEI)</p>
+        <p class="text-red-500 font-bold">(Address of the HEI)</p>
+    </div>
 
-        <!-- Centered Title -->
-        <div class="title">
-            <h1>Republic of the Philippines</h1>
-            <h1>University of Rizal System</h1>
-            <h3>Scholarship and Financial Assistance Unit</h3>
+    <p class="flex items-center mt-3 absolute right-0 top-2 transform -translate-y-0">Date: ________________________</p>
+
+    <br>
+    <br>
+    <!-- Title -->
+    <h2 class="text-lg font-bold text-center mb-4">
+        CERTIFICATION OF GRADUATED GRANTEES
+    </h2>
+
+    <h3 class="text-lg font-bold">TO WHOM IT MAY CONCERN:</h3>
+
+    <!-- Certification Content -->
+    <p class="text-justify mb-4 indent-8">
+        This is to certify that the total number of Continuing TES grantees by campus as shown
+    below graduated in 2023.
+    </p>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="w-full border border-gray-700">
+            <thead class="bg-gray-300">
+                <tr>
+                    <th class="border border-gray-700 px-4 py-2">Name of Campus</th>
+                    <th class="border border-gray-700 px-4 py-2">Number of TES Grantees who
+                        Graduated</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="border border-gray-700 px-4 py-2">Campus A</td>
+                    <td class="border border-gray-700 px-4 py-2"></td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-700 px-4 py-2">Campus B</td>
+                    <td class="border border-gray-700 px-4 py-2"></td>
+                </tr>
+                <tr>
+                    <td class="border border-gray-700 px-4 py-2 italic">(Insert more rows for additional Campus)</td>
+                    <td class="border border-gray-700 px-4 py-2"></td>
+                </tr>
+                <tr class="bg-gray-200 font-bold">
+                    <td class="border border-gray-700 px-4 py-2">Total</td>
+                    <td class="border border-gray-700 px-4 py-2"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Additional Notes -->
+    <p class="mt-4 indent-8">
+        This further certifies that the student’s information indicated in 
+        <span class="text-red-500 font-semibold">Annex 2 - TES Continuing Form 2</span> is accurate and complete.
+    </p>
+
+    <p class="mt-4 font-bold indent-8">
+        This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of 2022, 
+        Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
+    </p>
+
+    <!-- Signatures -->
+    <div class="mt-6 justify-between">
+        <!-- Notary Section -->
+        <div class="flex justify-between items-center mt-6 absolute left-0 bottom-10 transform -translate-y-0">
+            <div class="border border-gray-700 rounded-full w-24 h-24 flex items-center justify-center text-xs italic">
+                Official Dry Seal
+            </div>
+            <p class="text-red-500 font-bold">(must be notarized)</p>
         </div>
 
-        <!-- CHED Logo -->
-        <img src="{{ public_path('assets/images/CHED.png') }}" alt="CHED Logo">
-    </div>
+        <div class="flex items-center mt-6 absolute right-0 bottom-10 transform -translate-y-0">
+            <p class="mb-2 font-semibold text-center">Certified by:</p>
+            <br>
+            <p class="text-red-500 font-bold">Signature over Printed Name of the School Registrar</p>
 
-    <!-- Report Information -->
-    <div class="report-info">
-        <h2>Scholarship Report - Batch {{ $batch->batch_no }}</h2>
-        <p><strong>School Year:</strong> {{ $batch->school_year }}</p>
-        <p><strong>Semester:</strong> {{ $batch->semester }}</p>
-    </div>
-
-    <!-- Scholar Details Table -->
-    <table>
-        <thead>
-            <tr>
-                <th>Scholar Name</th>
-                <th>Course</th>
-                <th>Year Level</th>
-                <th>Campus</th>
-                <th>Grant</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($scholars as $scholar)
-            <tr>
-                <td>{{ $scholar->last_name }}, {{ $scholar->first_name }} {{ $scholar->middle_name }}</td>
-                <td>{{ $scholar->course }}</td>
-                <td>{{ $scholar->year_level }}</td>
-                <td>{{ $scholar->campus }}</td>
-                <td>{{ $scholar->grant }}</td>
-                <td>{{ $scholar->status }}</td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <!-- Footer Section -->
-    <div class="footer">
-        <p><strong>Total Scholars:</strong> {{ $scholars->count() }}</p>
-        <p><strong>Generated on:</strong> {{ now()->format('F d, Y') }}</p>
+            <p class="mt-4 mb-2 font-semibold text-center">Approved by:</p>
+            <br>
+            <p class="text-red-500 font-bold">Signature over Printed Name of the President of the HEIs</p>
+        </div>
     </div>
 
 </body>
