@@ -204,43 +204,43 @@ class DatabaseSeeder extends Seeder
         // taytay
         // pililla
         Course::create([
-            'campus_id' => 1,
+            'campus_id' => 2,
             'name' => 'Bachelor of Science in Information Technology',
             'abbreviation' => 'BSIT',
         ]);
 
         Course::create([
-            'campus_id' => 1,
+            'campus_id' => 2,
             'name' => 'Bachelor of Science in Business Administration',
             'abbreviation' => 'BSBA',
         ]);
 
         Course::create([
-            'campus_id' => 1,
+            'campus_id' => 2,
             'name' => 'Bachelor of Science in Accountancy',
             'abbreviation' => 'BSA',
         ]);
 
         Course::create([
-            'campus_id' => 2,
+            'campus_id' => 1,
             'name' => 'Bachelor of Science in Civil Engineering',
             'abbreviation' => 'BCE',
         ]);
 
         Course::create([
-            'campus_id' => 2,
+            'campus_id' => 1,
             'name' => 'Bachelor of Science in Mechanical Engineering',
             'abbreviation' => 'BME',
         ]);
 
         Course::create([
-            'campus_id' => 2,
+            'campus_id' => 1,
             'name' => 'Bachelor of Science in Electrical Engineering',
             'abbreviation' => 'BEE',
         ]);
 
         Course::create([
-            'campus_id' => 2,
+            'campus_id' => 1,
             'name' => 'Bachelor of Arts in English',
             'abbreviation' => 'BAE',
         ]);

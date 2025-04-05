@@ -12,10 +12,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li class="hover:text-gray-600">
-                            <span>{{ scholarship.name }}</span>
-                        </li>
-                        <li class="hover:text-gray-600">
-                            <span>Batch 1</span>
+                            <!-- <span>{{ scholarship.name }}</span> -->
                         </li>
                         <li>
                             <span class="text-blue-400 font-semibold">Scholar Details</span>
@@ -41,8 +38,8 @@
                                     <div class="flex flex-row gap-10 items-start w-full">
                                         <!-- Profile Picture -->
                                         <div class="w-full max-w-xs aspect-square bg-black rounded-lg overflow-hidden">
-                                            <img :src="`/storage/user/profile/${scholar.user?.picture}`"
-                                                alt="Profile Picture" class="w-full h-full object-cover">
+                                            <!-- <img :src="`/storage/user/profile/${scholar.user?.picture}`"
+                                                alt="Profile Picture" class="w-full h-full object-cover"> -->
                                         </div>
 
                                         <!-- Personal Information -->
@@ -63,7 +60,7 @@
                                                             class="text-xs font-semibold uppercase text-gray-500">Applicant
                                                             Name</span>
                                                         <p class="text-lg font-sora text-primary">
-                                                            {{ formatScholarName(scholar) }}
+                                                            <!-- {{ formatScholarName(scholar) }} -->
                                                         </p>
 
                                                     </div>
@@ -77,7 +74,9 @@
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Email
                                                             Address</span>
-                                                        <p class="text-lg text-primary">{{ scholar.email }}</p>
+                                                        <p class="text-lg text-primary">
+                                                            <!-- {{ scholar.email }} -->
+                                                        </p>
                                                     </div>
                                                     <div class="text-black">
                                                         <span
@@ -106,18 +105,24 @@
                                         <div class="text-black">
                                             <span class="text-xs font-semibold uppercase text-gray-500">URScholar
                                                 ID</span>
-                                            <p class="text-lg text-primary">{{ scholar.urscholar_id }}</p>
+                                            <p class="text-lg text-primary">
+                                                <!-- {{ scholar.urscholar_id }} -->
+                                            </p>
                                         </div>
                                         <div class="text-black">
                                             <span class="text-xs font-semibold uppercase text-gray-500">Campus</span>
-                                            <p class="text-lg text-primary">{{ scholar.campus.name }}</p>
+                                            <p class="text-lg text-primary">
+                                                <!-- {{ scholar.campus.name }} -->
+                                            </p>
                                         </div>
                                     </div>
 
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <span class="text-xl text-primary">{{ scholar.course.name }}</span>
+                                            <span class="text-xl text-primary">
+                                                <!-- {{ scholar.course.name }} -->
+                                            </span>
                                         </div>
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">General Weighted
@@ -141,12 +146,12 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Mother's
                                                 Name</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <!-- <span class="text-xl font-sora text-primary">
                                                 {{ scholar.last_name }},
                                                 {{ scholar.first_name }}
                                                 {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
                                                     word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
-                                            </span>
+                                            </span> -->
                                         </div>
                                         <div class="flex flex-col text-black">
                                             <span
@@ -159,12 +164,12 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Father's
                                                 Name</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <!-- <span class="text-xl font-sora text-primary">
                                                 {{ scholar.last_name }},
                                                 {{ scholar.first_name }}
                                                 {{scholar.middle_name ? scholar.middle_name.split(' ').map(word =>
                                                     word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
-                                            </span>
+                                            </span> -->
                                         </div>
                                         <div class="flex flex-col text-black">
                                             <span
@@ -237,7 +242,7 @@
                                         <!-- Requirement List -->
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                             <!-- Requirement Item -->
-                                            <div v-for="requirement in requirements" :key="requirement.id">
+                                            <!-- <div v-for="requirement in requirements" :key="requirement.id">
                                                 <div v-for="req in submittedRequirements" :key="req.id"
                                                     class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
                                                     <div class="flex flex-col space-y-2">
@@ -266,14 +271,14 @@
                                                         </button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> -->
 
                                         </div>
 
                                     </div>
                                 </div>
 
-                                <div
+                                <!-- <div
                                     class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
                                     <h1 class="text-black font-normal text-xl font-poppins">Monitoring</h1>
                                     <div
@@ -282,13 +287,11 @@
                                         <div v-if="!grade"
                                             class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
 
-                                            <!-- Message -->
                                             <div class="flex items-center gap-2 text-gray-900 dark:text-white">
                                                 <span class="font-medium">The student has not uploaded their grade
                                                     yet.</span>
                                             </div>
 
-                                            <!-- Ping Button -->
                                             <button @click="notifyStudent"
                                                 class="px-3 py-1 text-white text-sm font-medium rounded-lg transition"
                                                 :class="isNotified ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-primary/90'"
@@ -316,7 +319,7 @@
                                         </div>
 
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
 
 

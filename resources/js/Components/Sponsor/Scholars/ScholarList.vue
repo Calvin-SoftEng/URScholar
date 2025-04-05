@@ -141,7 +141,8 @@
                     </span>
                   </td>
                   <th>
-                    <Link>
+                    <Link :href="route('sponsor.scholars-description')">
+                      
                     <button
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">
