@@ -3,110 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarship Report</title>
+    <title>Scholarship Summary Report</title>
     <style>
         {!! file_get_contents(public_path('css/tailwind.min.css')) !!}
+        body {
+            font-family: sans-serif;
+        }
     </style>
 </head>
-<body class="text-gray-900">
+<body class="text-gray-900 p-8">
 
-    <h1 class="font-bold text-base">Annex 2 - TES Continuing Form 4</h1>
-    <!-- Header Section -->
-    <div class="text-center mb-6">
-        <h2 class="text-red-600 font-bold text-lg">INSERT HEI LETTERHEAD</h2>
-        <p>Republic of the Philippines</p>
-        <p class="text-red-500 font-bold">(Name of the HEI)</p>
-        <p class="text-red-500 font-bold">(Address of the HEI)</p>
+    <!-- Header with logos -->
+    <div class="flex justify-between items-center border-b pb-4 mb-6">
+        <!-- Left Logo -->
+        <img src="{{ public_path('assets/images/univ-seal.png') }}"
+             class="absolute left-5 top-0 w-20 h-24 object-contain"
+             alt="Left Logo">
+        
+        <div class="text-center">
+            <h1 class="text-lg font-bold">Republic of the Philippines</h1>
+            <h2 class="text-xl font-semibold">University of Rizal System</h2>
+            <p class="text-sm">Scholarship and Financial Assistance Office</p>
+        </div>
+
+        <!-- Right Logo -->
+        <img src="{{ public_path('assets/images/CHED.png') }}"
+             class="absolute right-5 top-0 w-20 h-20 object-contain"
+             alt="Right Logo">
     </div>
 
-    <p class="flex items-center mt-3 absolute right-0 top-2 transform -translate-y-0">Date: ________________________</p>
 
-    <br>
-    <br>
-    <!-- Title -->
-    <h2 class="text-lg font-bold text-center mb-4">
-        CERTIFICATION OF ENROLLED GRANTEES
-    </h2>
+    <!-- Report Title -->
+    <div class="text-center mb-8">
+        <h2 class="text-2xl font-bold uppercase underline">Scholarship Summary Report</h2>
+        <p class="text-sm mt-2">Academic Year: <span class="font-semibold">2024–2025</span></p>
+        <p class="text-sm">Semester: <span class="font-semibold">1st Semester</span></p>
+    </div>
 
-    <!-- Certification Content -->
-    <p class="text-justify mb-4">
-        This is to certify that the total number of Continuing TES grantees by campus as shown below, 
-        are qualified to avail of the Tertiary Education Subsidy (TES) program under R.A. No. 10931 also 
-        known as Universal Access to Quality Tertiary Education (UAQTE) for the 
-        <span class="text-red-500 font-semibold">(1st or 2nd semester)</span> of Academic Year __________.
-    </p>
-
-    <!-- Table -->
+    <!-- Scholars Table -->
     <div class="overflow-x-auto">
-        <table class="w-full border border-gray-700">
-            <thead class="bg-gray-300">
+        <table class="w-full border border-gray-700 text-sm">
+            <thead class="bg-gray-200 text-gray-900">
                 <tr>
-                    <th class="border border-gray-700 px-4 py-2">Name of Campus</th>
-                    <th class="border border-gray-700 px-4 py-2">Number of TES Grantees</th>
-                    <th class="border border-gray-700 px-4 py-2">Number of TES Grantees with TES3-a</th>
-                    <th class="border border-gray-700 px-4 py-2">Total</th>
+                    <th class="border px-4 py-2 text-left">#</th>
+                    <th class="border px-4 py-2 text-left">Student ID</th>
+                    <th class="border px-4 py-2 text-left">Name</th>
+                    <th class="border px-4 py-2 text-left">Course</th>
+                    <th class="border px-4 py-2 text-left">Year Level</th>
+                    <th class="border px-4 py-2 text-left">Status</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td class="border border-gray-700 px-4 py-2">Campus A</td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
+                {{-- @foreach($scholars as $index => $scholar)
+                <tr class="odd:bg-white even:bg-gray-100">
+                    <td class="border px-4 py-2">{{ $index + 1 }}</td>
+                    <td class="border px-4 py-2">{{ $scholar->student_id }}</td>
+                    <td class="border px-4 py-2">{{ $scholar->name }}</td>
+                    <td class="border px-4 py-2">{{ $scholar->course }}</td>
+                    <td class="border px-4 py-2">{{ $scholar->year_level }}</td>
+                    <td class="border px-4 py-2">{{ ucfirst($scholar->status) }}</td>
                 </tr>
-                <tr>
-                    <td class="border border-gray-700 px-4 py-2">Campus B</td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                </tr>
-                <tr>
-                    <td class="border border-gray-700 px-4 py-2 italic">(Insert more rows for additional Campus)</td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                </tr>
-                <tr class="bg-gray-200 font-bold">
-                    <td class="border border-gray-700 px-4 py-2">Total</td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                    <td class="border border-gray-700 px-4 py-2"></td>
-                </tr>
+                @endforeach --}}
             </tbody>
         </table>
     </div>
 
-    <!-- Additional Notes -->
-    <p class="mt-4">
-        This further certifies that the student’s information indicated in 
-        <span class="text-red-500 font-semibold">Annex 2 - TES Continuing Form 2</span> is accurate and complete.
-    </p>
-
-    <p class="mt-4 font-bold">
-        This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of 2022, 
-        Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
-    </p>
-
-    <!-- Signatures -->
-    <div class="mt-6 justify-between">
-        <!-- Notary Section -->
-        <div class="flex justify-between items-center mt-6 absolute left-0 bottom-10 transform -translate-y-0">
-            <div class="border border-gray-700 rounded-full w-24 h-24 flex items-center justify-center text-xs italic">
-                Official Dry Seal
-            </div>
-            <p class="text-red-500 font-bold">(must be notarized)</p>
-        </div>
-
-        <div class="flex items-center mt-6 absolute right-0 bottom-10 transform -translate-y-0">
-            <p class="mb-2 font-semibold text-center">Certified by:</p>
-            <br>
-            <p class="text-red-500 font-bold">Signature over Printed Name of the School Registrar</p>
-
-            <p class="mt-4 mb-2 font-semibold text-center">Approved by:</p>
-            <br>
-            <p class="text-red-500 font-bold">Signature over Printed Name of the President of the HEIs</p>
-        </div>
+    <!-- Footer -->
+    <div class="mt-10 text-sm">
+        <p>Generated on: {{ \Carbon\Carbon::now()->format('F d, Y') }}</p>
+        <p>Prepared by: <span class="font-semibold">Scholarship Administrator</span></p>
     </div>
 
 </body>
 </html>
+
