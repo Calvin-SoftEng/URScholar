@@ -43,10 +43,23 @@ class ScholarController extends Controller
 
     public function scholar($id)
     {
-        $scholar = Scholar::with('user', 'campus', 'course')->findOrFail($id);
+        $scholar = Scholar::with([
+            'user', 
+            'campus', 
+            'course',
+            'studentRecord', // Add this relationship
+            'studentRecord.educationRecord', // Add this nested relationship
+            'studentRecord.familyRecord', // Add this nested relationship
+            'studentRecord.familyRecord.siblings', // Add this nested relationship
+            'studentRecord.orgrecord' // Add this nested relationship
+        ])->findOrFail($id);
+
         $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
-        $grade = Grade::where('scholar_id', $scholar->id)->first();
+        $grade = Grade::where('scholar_id', $scholar->id)
+        ->where('school_year_id', $grantee->school_year_id)
+        ->where('semester', $grantee->semester)
+        ->first();
 
         $scholarship = $grantee->scholarship;
         $batch = Batch::where('id', $grantee->batch_id)->first();

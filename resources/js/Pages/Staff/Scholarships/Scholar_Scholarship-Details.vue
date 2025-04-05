@@ -122,7 +122,10 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">General Weighted
                                                 Average</span>
-                                            <span class="text-xl text-primary">1.2</span>
+                                            <span class="text-xl" :class="grade ? 'text-primary' : 'text-red-500'">
+                                                {{ grade ? grade.grade : 'No grade Uploaded' }}
+                                            </span>
+
                                         </div>
 
                                     </div>
@@ -241,7 +244,7 @@
                                                 <div v-for="req in submittedRequirements" :key="req.id"
                                                     class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
                                                     <div class="flex flex-col space-y-2">
-                                                        <span class="font-bold">{{requirement.requirements}}</span>
+                                                        <span class="font-bold">{{ requirement.requirements }}</span>
                                                         <div class="flex items-center gap-2 text-gray-800">
                                                             <font-awesome-icon :icon="['fas', 'file']"
                                                                 class="text-blue-600 text-lg" />

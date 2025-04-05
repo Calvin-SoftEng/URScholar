@@ -47,6 +47,11 @@ class Scholarship extends Model
         return $this->hasMany(Batch::class);
     }
 
+    public function scholarshipTemplates()
+    {
+        return $this->hasMany(ScholarshipTemplate::class);
+    }
+
     public function requirements()
     {
         return $this->hasMany(Requirements::class);

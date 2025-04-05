@@ -822,6 +822,7 @@ class ScholarshipController extends Controller
             Batch::create([
                 'scholarship_id' => $scholarship->id,
                 'batch_no' => '1',
+                'campus_id' => 2,
                 'school_year_id' => $request->school_year,
                 'semester' => $request->semester,
             ]);

@@ -21,4 +21,9 @@ class Requirements extends Model
     {
         return $this->hasMany(SubmittedRequirements::class);
     }
+
+    public function scholarshipTemplates()
+    {
+        return $this->hasMany(ScholarshipTemplate::class);
+    }
 }

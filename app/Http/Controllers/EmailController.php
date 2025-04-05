@@ -15,6 +15,7 @@ use App\Models\Batch;
 use Inertia\Inertia;
 use App\Mail\SendEmail;
 use App\Models\ActivityLog;
+use App\Models\ScholarshipTemplate;
 use App\Models\Payout;
 use App\Models\ScholarshipGroup;
 use App\Models\SchoolYear;
@@ -76,16 +77,22 @@ class EmailController extends Controller
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:255',
             'content' => 'required|string',
-            'requirements' => 'required|array',
+            'requirements' => 'required',
             'application' => 'required|date',
             'deadline' => 'required|date',
             'semester' => 'required',
             'school_year' => 'required',
+            'templates.*' => 'nullable|file|max:10240', // Allow up to 10MB per file
         ], $messages);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
+
+        // Handle requirements - may come as JSON string if using FormData
+        $requirements = is_string($request->requirements)
+            ? json_decode($request->requirements, true)
+            : $request->requirements;
 
         // Find batches matching the specified semester and school year
         $batches = Batch::where('scholarship_id', $scholarship->id)
@@ -100,14 +107,37 @@ class EmailController extends Controller
             ]);
         }
 
+        // Process uploaded files
+        $uploadedFiles = [];
+        $storagePaths = [];
+
+        if ($request->hasFile('templates')) {
+            foreach ($request->file('templates') as $file) {
+                // Generate a unique filename
+                $filename = time() . '_' . $file->getClientOriginalName();
+
+                // Store file in public storage for easy access - alternatively use private storage
+                $path = $file->storeAs('scholarship_templates/' . $scholarship->id, $filename, 'public');
+
+                $uploadedFiles[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'storage_path' => storage_path('app/public/' . $path),
+                    'mime' => $file->getMimeType(),
+                ];
+
+                $storagePaths[] = $path;
+            }
+        }
+
         // Create the requirements for the scholarship
         $req = [];
-        foreach ($request['requirements'] as $requirement) {
+        foreach ($requirements as $requirement) {
             $req[] = [
                 'scholarship_id' => $scholarship->id,
                 'requirements' => $requirement,
-                'date_start' => $request['application'],
-                'date_end' => $request['deadline'],
+                'date_start' => $request->application,
+                'date_end' => $request->deadline,
                 'total_scholars' => 0, // We'll update this after counting all scholars
             ];
         }
@@ -117,6 +147,20 @@ class EmailController extends Controller
         foreach ($req as $requirement) {
             $newRequirement = Requirements::create($requirement);
             $requirementIds[] = $newRequirement->id;
+        }
+
+        // Store file information in database if needed
+        if (!empty($uploadedFiles)) {
+            foreach ($uploadedFiles as $file) {
+                // Create a model to track uploaded templates
+                ScholarshipTemplate::create([
+                    'scholarship_id' => $scholarship->id,
+                    'filename' => $file['name'],
+                    'path' => $file['path'],
+                    'mime_type' => $file['mime'],
+                    'requirement_id' => $requirementIds[0], // Associate with first requirement or loop through requirements
+                ]);
+            }
         }
 
         $totalScholarsProcessed = 0;
@@ -207,7 +251,21 @@ class EmailController extends Controller
                             "https://urscholar.up.railway.app\n\n"
                     ];
 
-                    Mail::to($scholar->email)->send(new SendEmail($mailData));
+                    // Create mailable instance
+                    $email = new SendEmail($mailData);
+
+                    // Attach files to the email
+                    foreach ($uploadedFiles as $file) {
+                        $email->attach($file['storage_path'], [
+                            'as' => $file['name'],
+                            'mime' => $file['mime'],
+                        ]);
+                    }
+
+                    // Mail::to($scholar->email)->send(new SendEmail($mailData));
+                    // Send email with attachments
+                    Mail::to($scholar->email)->send($email);
+                    $emailsSent++;
                 }
             }
         }
@@ -224,9 +282,10 @@ class EmailController extends Controller
 
         return back()->with('flash', [
             'type' => 'success',
-            'message' => "Successfully sent email to {$emailsSent} scholars out of {$totalScholarsProcessed} total scholars.",
+            'message' => "Successfully sent email to {$emailsSent} scholars out of {$totalScholarsProcessed} total scholars with " . count($uploadedFiles) . " attachment(s).",
         ]);
     }
+
     public function notify(Request $request, Scholarship $scholarship)
     {
 
@@ -238,9 +297,9 @@ class EmailController extends Controller
 
         // dd($validated);
         $payout = Payout::where('scholarship_id', $scholarship->id)
-        ->where('campus_id', Auth::user()->campus_id)
-        ->first();
-        
+            ->where('campus_id', Auth::user()->campus_id)
+            ->first();
+
         $payout->status = 'Active';
         $payout->save();
 
