@@ -124,16 +124,30 @@ class DatabaseSeeder extends Seeder
         //Campus
         Campus::create([
             'name' => 'Morong',
-            'location' => 'Morong, Rizal',
+            'location' => 'Sumulong St, Morong, Rizal',
             'coordinator_id' => '4',
             'cashier_id' => '7',
         ]);
 
         Campus::create([
             'name' => 'Binangonan',
-            'location' => 'Binangonan, Rizal',
+            'location' => '601: Manila East Rd, Binangonan, Philippines',
             'coordinator_id' => '3',
             'cashier_id' => '6',
+        ]);
+
+        Campus::create([
+            'name' => 'Taytay',
+            'location' => ' A. Luna Street, Highway 2000 Brgy. San Juan, Taytay, Rizal',
+            // 'coordinator_id' => '3',
+            // 'cashier_id' => '6',
+        ]);
+
+        Campus::create([
+            'name' => 'Pililla',
+            'location' => 'Dampol Street, Manaila East Road, Bagumbayan, Pililia, Rizal',
+            // 'coordinator_id' => '4',
+            // 'cashier_id' => '7',
         ]);
 
 
@@ -185,6 +199,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //Course
+        // morong
+        // binangonan
+        // taytay
+        // pililla
         Course::create([
             'campus_id' => 1,
             'name' => 'Bachelor of Science in Information Technology',
@@ -192,7 +210,55 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Course::create([
+            'campus_id' => 1,
+            'name' => 'Bachelor of Science in Business Administration',
+            'abbreviation' => 'BSBA',
+        ]);
+
+        Course::create([
+            'campus_id' => 1,
+            'name' => 'Bachelor of Science in Accountancy',
+            'abbreviation' => 'BSA',
+        ]);
+
+        Course::create([
             'campus_id' => 2,
+            'name' => 'Bachelor of Science in Civil Engineering',
+            'abbreviation' => 'BCE',
+        ]);
+
+        Course::create([
+            'campus_id' => 2,
+            'name' => 'Bachelor of Science in Mechanical Engineering',
+            'abbreviation' => 'BME',
+        ]);
+
+        Course::create([
+            'campus_id' => 2,
+            'name' => 'Bachelor of Science in Electrical Engineering',
+            'abbreviation' => 'BEE',
+        ]);
+
+        Course::create([
+            'campus_id' => 2,
+            'name' => 'Bachelor of Arts in English',
+            'abbreviation' => 'BAE',
+        ]);
+
+        Course::create([
+            'campus_id' => 4,
+            'name' => 'Bachelor of Science in Secondary Education',
+            'abbreviation' => 'BSEd',
+        ]);
+
+        Course::create([
+            'campus_id' => 3,
+            'name' => 'Bachelor of Science in Nursing',
+            'abbreviation' => 'BSN',
+        ]);
+
+        Course::create([
+            'campus_id' => 4,
             'name' => 'Bachelor of Science in Business Administrator',
             'abbreviation' => 'BSBA',
         ]);
