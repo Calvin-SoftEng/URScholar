@@ -10,7 +10,7 @@
 </head>
 <body class="text-gray-900">
 
-    <h1 class="font-bold text-base">Annex 2 - TES Continuing Form 5</h1>
+    <h1 class="font-bold text-base">Annex 2 - TES Continuing Form 4</h1>
     <!-- Header Section -->
     <div class="text-center mb-6">
         <h2 class="text-red-600 font-bold text-lg">INSERT HEI LETTERHEAD</h2>
@@ -25,15 +25,15 @@
     <br>
     <!-- Title -->
     <h2 class="text-lg font-bold text-center mb-4">
-        CERTIFICATION OF GRADUATED GRANTEES
+        CERTIFICATION OF ENROLLED GRANTEES
     </h2>
 
-    <h3 class="text-lg font-bold">TO WHOM IT MAY CONCERN:</h3>
-
     <!-- Certification Content -->
-    <p class="text-justify mb-4 indent-8">
-        This is to certify that the total number of Continuing TES grantees by campus as shown
-    below graduated in 2023.
+    <p class="text-justify mb-4">
+        This is to certify that the total number of Continuing TES grantees by campus as shown below, 
+        are qualified to avail of the Tertiary Education Subsidy (TES) program under R.A. No. 10931 also 
+        known as Universal Access to Quality Tertiary Education (UAQTE) for the 
+        <span class="text-red-500 font-semibold">(1st or 2nd semester)</span> of Academic Year __________.
     </p>
 
     <!-- Table -->
@@ -77,12 +77,12 @@
     </div>
 
     <!-- Additional Notes -->
-    <p class="mt-4 indent-8">
+    <p class="mt-4">
         This further certifies that the student’s information indicated in 
         <span class="text-red-500 font-semibold">Annex 2 - TES Continuing Form 2</span> is accurate and complete.
     </p>
 
-    <p class="mt-4 font-bold indent-8">
+    <p class="mt-4 font-bold">
         This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of 2022, 
         Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
     </p>

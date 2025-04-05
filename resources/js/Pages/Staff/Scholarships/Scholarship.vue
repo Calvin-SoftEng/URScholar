@@ -224,6 +224,45 @@
 
                                 <div v-if="$page.props.auth.user.usertype === 'super_admin'"
                                     class="flex flex-row space-x-3 items-center">
+                                    <!-- reports -->
+                                    <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown" 
+                                    class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                        border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200" type="button">
+                                        <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 4 4 4-4"/>
+                                        </svg>
+                                    </button>
+
+                                    <!-- Dropdown menu -->
+                                    <div id="dropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-48 dark:bg-gray-700">
+                                        <ul class="py-2 text-base text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+                                            <li>
+                                                <button @click="generateScholarsList"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Scholars List
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button @click="generateEnrolledList"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Enrolled List
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button @click="generateGraduateList"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Graduate List
+                                                </button>
+                                            </li>
+                                            <li>
+                                                <button @click="generatePayroll"
+                                                class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                                                Payout List
+                                                </button>
+                                            </li>
+                                        </ul>
+                                    </div>
+
                                     <div v-if="payouts">
                                         <button @click="toggleView"
                                             class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
@@ -1548,6 +1587,7 @@ const campusesData = ref([]);
 
 // Initialize campus data from props
 onMounted(() => {
+    initFlowbite();
     // Make sure form.criteria is initialized
     if (!form.value.criteria) {
         form.value.criteria = [];
@@ -1654,7 +1694,6 @@ onMounted(() => {
 
     // Initial distribution
     distributeRecipients();
-    initFlowbite();
 });
 
 // Watch errors.date_start and open the modal if an error exists
@@ -1883,22 +1922,6 @@ const forwardBatches = async () => {
             date_end: form.value.payoutEndInput,
         };
 
-
-        // Send the request and wait for response
-        // const response = await router.post(`/scholarship/forward-batches`, payload);
-
-        // // Only proceed if request was successful
-        // const totalScholars = batchesToForward.reduce((total, batchId) => {
-        //     const batch = batchesWithScholars.value.find(b => b.id === batchId);
-        //     return total + (batch ? batch.scholar_count : 0);
-        // }, 0);
-
-        // toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
-        // toastVisible.value = true;
-
-        // Close the modal only on success
-        // closeModal();
-
         // Send the request only when user confirms
         router.post(`/scholarship/forward-batches`, payload, {
             preserveScroll: true,
@@ -2053,6 +2076,52 @@ onUnmounted(() => {
         window.location.reload();
     });
 });
+
+
+// Generate report function
+const generateScholarsList = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
+
+const generateEnrolledList = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
+
+const generateGraduateList = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
+
+const generatePayroll = async () => {
+  try {
+    // Open PDF report in new tab
+    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank'); // Dummy ID values
+    showToast('Report Generated', 'Your report is being downloaded');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+    showToast('Error', 'Failed to generate report', 'error');
+  }
+};
 </script>
 
 <style scoped>
