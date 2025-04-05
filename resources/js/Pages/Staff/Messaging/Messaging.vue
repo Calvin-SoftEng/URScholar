@@ -18,7 +18,8 @@ const messageData = ref(props.messages);
 const selectedData = ref(props.selectedScholarship);
 const form = ref({
     content: '',
-    scholarship_id: ''
+    scholarship_id: '',
+    batch_id: '',
 });
 
 const sendMessage = () => {
@@ -137,6 +138,7 @@ const showMemberList = ref(false);
                                         {{ scholarship.name.charAt(0) }}
                                     </div>
                                     <div class="flex flex-col space-y-1">
+                                        <p class="text-xs text-gray-400 italic">Batch No. {{ scholarship.status }}</p>
                                         <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
                                             scholarship.name }}</span>
                                         <div class="flex-grow">
