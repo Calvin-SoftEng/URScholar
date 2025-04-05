@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     protected $fillable = [
+        'student_number',
         'first_name',
         'last_name',
         'email',
@@ -14,6 +15,14 @@ class Student extends Model
         'course_id',
         'year_level',
         'semester',
+        'age',
+        'religion',
+        'birthplace',
+        'birthdate',
+        'civil_status',
+        'permanent_address',
+        'facebook_account',
+        'contact_no',
     ];
 
     public function campus()

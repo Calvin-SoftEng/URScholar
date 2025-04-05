@@ -1745,6 +1745,7 @@ const props = defineProps({
     batch: Object,
     batch_semester: Object,
     school_year: Object,
+    studentData: Object,
 });
 
 const form = ref({
@@ -1757,14 +1758,14 @@ const form = ref({
     confirm_password: '',
     suffix: 'N/A',
     birthdate: usePage().props.scholar?.birthdate ?? '',
-    birthplace: '',
-    age: '',
+    birthplace: props.studentData?.birthplace ?? '',
+    age: props.studentData?.age ?? '',
     gender: usePage().props.scholar?.sex ?? '',
-    civil_status: '',
+    civil_status: props.studentData?.civil_status ?? '',
     street: usePage().props.scholar?.street ?? '',
     municipality: usePage().props.scholar?.municipality ?? '',
     province: usePage().props.scholar?.province ?? '',
-    religion: '',
+    religion: props.studentData?.religion ?? '',
     guardian_name: '',
     relationship: '',
     grade: '',

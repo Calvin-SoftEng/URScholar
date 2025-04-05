@@ -289,6 +289,7 @@ class StudentController extends Controller
     {
         $user = User::where('email', Auth::user()->email)->first();
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
+        $studentData = Student::where('email', Auth::user()->email)->first();
 
         // $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
@@ -359,6 +360,7 @@ class StudentController extends Controller
             'scholar' => $scholar,
             'batch_semester' => $grantee_semester,
             'school_year' => $school_year ?? 'N/A', // Default to 'N/A' if no school year found
+            'studentData' => $studentData,
         ]);
     }
     public function uploadGrade($urscholar_id, Request $request)
