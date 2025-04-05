@@ -6,6 +6,7 @@ use App\Models\AcademicYear;
 use App\Models\Batch;
 use App\Models\Disbursement;
 use App\Models\Payout;
+use App\Models\Campus; // Added Campus model
 use App\Models\PayoutSchedule;
 use App\Models\Scholarship;
 use Inertia\Inertia;
@@ -15,13 +16,13 @@ class PayoutsController extends Controller
 {
     public function payouts_index()
     {
-
         $scholarships = Scholarship::all();
         $payouts = Payout::all();
         $disbursements = Disbursement::all();
         $payout_schedule = PayoutSchedule::all();
         $batches = Batch::with('school_year')->get();
         $academic_years = AcademicYear::all();
+        $campuses = Campus::all(); // Added campus data
 
         return Inertia::render('Staff/Payouts/Payout_Records', [
             'scholarships' => $scholarships,
@@ -30,6 +31,7 @@ class PayoutsController extends Controller
             'disbursements' => $disbursements,
             'payout_schedule' => $payout_schedule,
             'academic_years' => $academic_years,
+            'campuses' => $campuses, // Passing campuses to the view
         ]);
     }
 

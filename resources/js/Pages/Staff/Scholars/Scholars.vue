@@ -1,145 +1,149 @@
 <template>
   <AuthenticatedLayout>
-    <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+    <div
+      class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
       <div class="w-full mx-auto space-y-3">
         <div class="breadcrumbs text-sm text-gray-400 mb-5">
-            <ul>
-                <li class="hover:text-gray-600">
-                    Home
-                </li>
-                <li>
-                    <span class="text-blue-400 font-semibold">Scholars</span>
-                </li>
-            </ul>
+          <ul>
+            <li class="hover:text-gray-600">
+              Home
+            </li>
+            <li>
+              <span class="text-blue-400 font-semibold">Scholars</span>
+            </li>
+          </ul>
         </div>
 
-          
-          <!-- Header section with title and search -->
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-            <!-- <h1 class="text-2xl sm:text-4xl font-poppins font-extrabold text-[darkblue] text-left">
+
+        <!-- Header section with title and search -->
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+          <!-- <h1 class="text-2xl sm:text-4xl font-poppins font-extrabold text-[darkblue] text-left">
               <span>{{ scholarship.name }}</span> Scholars 2024-2025
             </h1> -->
 
-            <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
-              <!-- Icon -->
-              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
-                <font-awesome-icon :icon="['fas', 'users']" class="text-2xl" />
-              </div>
-
-              <!-- Text Content -->
-              <div class="flex flex-col">
-                <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
-                <span class="font-semibold text-xl text-gray-900">{{props.scholars.length}}</span>
-              </div>
+          <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
+            <!-- Icon -->
+            <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+              <font-awesome-icon :icon="['fas', 'users']" class="text-2xl" />
             </div>
 
-
-            <!-- Search Bar -->
-            <div class="flex items-center justify-end w-full sm:w-auto sm:max-w-md">
-              <div class="relative w-full">
-                <input
-                  type="text"
-                  v-model="searchQuery"
-                  placeholder="Search scholars..."
-                  class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                />
-                <span class="absolute right-3 top-2.5 text-gray-400">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </span>
-              </div>
+            <!-- Text Content -->
+            <div class="flex flex-col">
+              <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
+              <span class="font-semibold text-xl text-gray-900">{{ props.scholars.length }}</span>
             </div>
           </div>
 
-          <!-- table -->
-          <div class="bg-white overflow-x-auto text-black font-poppins border rounded-lg overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-[70vh]">
-            <table class="table rounded-lg">
-              <!-- head -->
-              <thead class="justify-center items-center sticky top-[-1px] z-10 shadow-sm bg-white">
-                <tr class="font-normal text-sm uppercase">
-                  <th class="border-x border-gray-100">URScholar ID</th>
-                  <th class="border-x border-gray-100">Scholar</th>
-                  <th class="border-x border-gray-100">Course</th>
-                  <th class="border-x border-gray-100">Campus</th>
-                  <th class="border-x border-gray-100">Grant</th>
-                  <th class="border-x border-gray-100">Email</th>
-                  <th class="border-x border-gray-100">Status</th>
-                  <th class="border-x border-gray-100"></th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- row 1 -->
-                <tr v-for="scholar in filteredScholars" :key="scholar.id" class="text-sm">
-                  <td class="px-5">{{scholar.urscholar_id}}</td>
-                  <td class="px-5">
-                    <div class="flex items-center gap-3">
-                      <div class="avatar">
-                        <div class="mask rounded-full h-12 w-12">
-                          <img :src="`/storage/user/profile/${scholar.user?.picture}`"
-                                            alt="Profile Picture" class="w-full h-full object-cover">
-                        </div>
-                      </div>
-                      <div>
-                        <div class="font-normal">
-                          {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
-                          <font-awesome-icon v-if="scholar.sex === 'Male'" :icon="['fas', 'mars']" class="text-blue-500" />
-                          <font-awesome-icon v-if="scholar.sex === 'Female'" :icon="['fas', 'venus']" class="text-pink-500" />
-                        </div>
 
-                        <div class="text-sm opacity-50">
-                          <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
-                          {{ scholar.sex }}, <span> <font-awesome-icon :icon="['far', 'calendar']" class="mr-1 text-gray-500" /> {{ formatDate(scholar.birthdate) }}</span>
-                        </div>
+          <!-- Search Bar -->
+          <div class="flex items-center justify-end w-full sm:w-auto sm:max-w-md">
+            <div class="relative w-full">
+              <input type="text" v-model="searchQuery" placeholder="Search scholars..."
+                class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
+              <span class="absolute right-3 top-2.5 text-gray-400">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- table -->
+        <div
+          class="bg-white overflow-x-auto text-black font-poppins border rounded-lg overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-[70vh]">
+          <table class="table rounded-lg">
+            <!-- head -->
+            <thead class="justify-center items-center sticky top-[-1px] z-10 shadow-sm bg-white">
+              <tr class="font-normal text-sm uppercase">
+                <th class="border-x border-gray-100">URScholar ID</th>
+                <th class="border-x border-gray-100">Scholar</th>
+                <th class="border-x border-gray-100">Course</th>
+                <th class="border-x border-gray-100">Campus</th>
+                <th class="border-x border-gray-100">Grant</th>
+                <th class="border-x border-gray-100">Email</th>
+                <th class="border-x border-gray-100">Status</th>
+                <th class="border-x border-gray-100"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- row 1 -->
+              <tr v-for="scholar in filteredScholars" :key="scholar.id" class="text-sm">
+                <td class="px-5">{{ scholar.urscholar_id }}</td>
+                <td class="px-5">
+                  <div class="flex items-center gap-3">
+                    <div class="avatar">
+                      <div class="mask rounded-full h-12 w-12">
+                        <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture"
+                          class="w-full h-full object-cover">
                       </div>
                     </div>
-                  </td>
-                  <td class="px-5 items-center">
-                    <span class="material-symbols-rounded text-sm text-gray-400 mr-1">
-                    local_library
-                    </span> {{ scholar.course.name }}
-                    <br />
-                    <span class="badge badge-ghost badge-base">{{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year</span>
-                  </td>
-                  <td class="px-5">
-                    {{ scholar.campus.name }}
-                  </td>
-                  <td class="px-5">
-                    Batch {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
-                    <br />
-                    <span class="badge badge-ghost badge-base">{{ scholar.grant }}</span>
-                  </td>
-                  <td class="px-5">
-                    <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500"/> {{ scholar.email ? scholar.email : 'dummy@gmail.com' }}
-                  </td>
-                  <td class="px-5">
-                    <span :class="{
-                      'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
-                      'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
-                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ scholar.status }}
-                    </span>
-                  </td>
-                  <th>
-                    <!-- <Link :href="route('scholars.scholar_information')"> -->
-                    <Link :href="route('scholars.scholar_information')">
-                      <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                        aria-label="View Details">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </button>
-                    </Link>
-                    <!-- </Link> -->
-                  </th>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                    <div>
+                      <div class="font-normal">
+                        {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
+                        <font-awesome-icon v-if="scholar.sex === 'Male'" :icon="['fas', 'mars']"
+                          class="text-blue-500" />
+                        <font-awesome-icon v-if="scholar.sex === 'Female'" :icon="['fas', 'venus']"
+                          class="text-pink-500" />
+                      </div>
 
+                      <div class="text-sm opacity-50">
+                        <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
+                        {{ scholar.sex }}, <span> <font-awesome-icon :icon="['far', 'calendar']"
+                            class="mr-1 text-gray-500" /> {{ formatDate(scholar.birthdate) }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td class="px-5 items-center">
+                  <span class="material-symbols-rounded text-sm text-gray-400 mr-1">
+                    local_library
+                  </span> {{ scholar.course.name }}
+                  <br />
+                  <span class="badge badge-ghost badge-base">{{ scholar.year_level }}{{
+                    getYearSuffix(scholar.year_level) }} year</span>
+                </td>
+                <td class="px-5">
+                  {{ scholar.campus.name }}
+                </td>
+                <td class="px-5">
+                  Batch {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
+                  <br />
+                  <span class="badge badge-ghost badge-base">{{ scholar.grant }}</span>
+                </td>
+                <td class="px-5">
+                  <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500" /> {{ scholar.email ?
+                    scholar.email : 'dummy@gmail.com' }}
+                </td>
+                <td class="px-5">
+                  <span :class="{
+                    'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
+                    'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
+                  }" class="text-xs font-medium px-2.5 py-0.5 rounded">
+                    {{ scholar.status }}
+                  </span>
+                </td>
+                <th>
+                  <!-- <Link :href="route('scholars.scholar_information')"> -->
+                  <Link :href="route('scholars.scholar_information')">
+                  <button class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    aria-label="View Details">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </button>
+                  </Link>
+                  <!-- </Link> -->
+                </th>
+              </tr>
+            </tbody>
+          </table>
         </div>
+
       </div>
+    </div>
   </AuthenticatedLayout>
 </template>
 
@@ -182,21 +186,17 @@ const props = defineProps({
 // Add search functionality
 const searchQuery = ref('');
 
-// Update the filteredScholars computed property to include search
+// Replace the existing filteredScholars computed property with this:
 const filteredScholars = computed(() => {
   if (!props.scholars) return [];
 
-  let filtered = props.userType === 'super_admin' 
-    ? props.scholars 
-    : props.userType === 'coordinator' && props.coordinatorCampus
-      ? props.scholars.filter(scholar => scholar.campus === props.coordinatorCampus)
-      : [];
+  let filtered = props.scholars;  // No filtering by userType anymore
 
   // Apply search filter
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
-    
-    filtered = filtered.filter(scholar => 
+
+    filtered = filtered.filter(scholar =>
       scholar.first_name?.toLowerCase().includes(query) ||
       scholar.last_name?.toLowerCase().includes(query) ||
       scholar.middle_name?.toLowerCase().includes(query) ||

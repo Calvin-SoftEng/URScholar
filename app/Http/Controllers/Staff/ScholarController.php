@@ -38,7 +38,16 @@ class ScholarController extends Controller
     public function scholars()
     {
 
-        $scholars = Scholar::with('user', 'campus', 'course', 'batch')->where('status', 'verified')->get();
+        if (Auth::user()->usertype === 'coordinator') {
+            $scholars = Scholar::with('user', 'campus', 'course', 'batch')
+                ->where('status', 'verified')
+                ->where('campus_id', Auth::user()->campus_id)
+                ->get();
+        } else {
+            $scholars = Scholar::with('user', 'campus', 'course', 'batch')
+                ->where('status', 'verified')
+                ->get();
+        }
 
         return Inertia::render('Staff/Scholars/Scholars', [
             'scholars' => $scholars,

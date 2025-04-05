@@ -108,6 +108,8 @@
                                         </div>
                                         <div class="mt-2 text-sm text-gray-600">
                                             <p>Scholars: {{ batch.total_scholars || 'N/A' }}</p>
+                                            <p class="mt-1">Campus: <span class="font-medium">{{
+                                                    getCampusName(batch.campus_id) }}</span></p>
                                         </div>
 
                                         <!-- Claim Status -->
@@ -116,7 +118,7 @@
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
                                                     <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed')
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -189,7 +191,9 @@
                                                 {{ batch.school_year.year }} - {{ batch.semester }} Semester
                                             </span>
                                         </div>
-                                        <div class="mt-2 flex justify-end">
+                                        <div class="mt-2 flex justify-between items-center">
+                                            <span class="text-sm text-gray-600">Campus: <span class="font-medium">{{
+                                                    getCampusName(batch.campus_id) }}</span></span>
                                             <button @click="openBatchPayroll(batch.id)"
                                                 class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md">
                                                 View Payroll
@@ -205,7 +209,7 @@
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
                                                     <span>Claimed: {{ getClaimCount(historyItem.id, batch.id, 'Claimed')
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -274,8 +278,18 @@ const props = defineProps({
     selectedSem: {
         type: String,
         default: ''
+    },
+    campuses: {
+        type: Array,
+        default: () => []
     }
 });
+
+// Function to get campus name by ID
+const getCampusName = (campusId) => {
+    const campus = props.campuses.find(c => c.id === campusId);
+    return campus ? campus.name : 'Unknown Campus';
+};
 
 // Function to open payroll for a specific batch
 const openBatchPayroll = (batchId) => {
@@ -283,7 +297,7 @@ const openBatchPayroll = (batchId) => {
     const batch = props.batches.find(b => b.id === batchId);
     const scholarshipId = batch ? batch.scholarship_id : null;
     console.log(scholarshipId);
-    
+
     if (scholarshipId) {
         router.visit(`/payouts/${scholarshipId}/batch/${batchId}`, {
             data: {
@@ -419,6 +433,7 @@ const getPayoutDetails = (payout) => {
         totalScholars: payout.total_scholars || 0,
         payoutSchedule: getPayoutSchedule(payout.id),
         academicYear: academicYear,
+        campusId: payout.campus_id,
 
         // Scholarship details
         scholarshipId: scholarship.id,
