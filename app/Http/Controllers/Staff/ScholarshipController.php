@@ -46,11 +46,24 @@ class ScholarshipController extends Controller
 
     public function scholarship(Sponsor $sponsors)
     {
+        // Get the authenticated user's ID and campus_id
+        $userId = Auth::user()->id;
+        $userCampusId = Auth::user()->campus_id;
 
-        $scholarships = Scholarship::with('requirements')->get();
+        // Get scholarships that either:
+        // 1. Have batches matching the user's campus_id, OR
+        // 2. Were created by the authenticated user
+        $scholarships = Scholarship::with('requirements')
+            ->where(function ($query) use ($userId, $userCampusId) {
+                $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
+                    $subQuery->where('campus_id', $userCampusId);
+                })
+                    ->orWhere('user_id', $userId); // Add this condition to include scholarships created by the user
+            })
+            ->get();
+
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
-
 
         return inertia('Staff/Scholarships/ViewScholarships', [
             'sponsors' => $sponsors,
@@ -211,8 +224,8 @@ class ScholarshipController extends Controller
             ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
 
         $payout = Payout::where('scholarship_id', $scholarship->id)
-        ->where('campus_id', $batch->campus_id)
-        ->first();
+            ->where('campus_id', $batch->campus_id)
+            ->first();
 
 
         // Optimize query to reduce N+1 problem

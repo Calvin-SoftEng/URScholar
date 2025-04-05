@@ -1951,7 +1951,7 @@ const submit = async () => {
     try {
         if (props.scholar != null) {
             form.value.semester = props.batch_semester;
-            form.value.school_year = props.school_year.year;
+            form.value.school_year = props.school_year.id;
         }
 
         router.post(`/verify-account/verifying`, form.value);

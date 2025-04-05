@@ -166,6 +166,7 @@ class DatabaseSeeder extends Seeder
         Scholarship::factory()->create([
             'name' => 'Tulong Dunong Program',
             'sponsor_id' => 1,
+            'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
             'date_start' => '2025-03-15',
@@ -175,6 +176,7 @@ class DatabaseSeeder extends Seeder
         Scholarship::factory()->create([
             'name' => 'DBP-Rise',
             'sponsor_id' => 1,
+            'user_id' => 2,
             'scholarshipType' => 'One-time Payment',
             'status' => 'Pending',
             'date_start' => '2025-03-15',

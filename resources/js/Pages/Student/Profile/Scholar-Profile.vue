@@ -40,7 +40,7 @@
                                     <div class="w-[40%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Age</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Date of Birth</span>
@@ -53,7 +53,7 @@
                                         <span class="text-gray-500 text-sm">Civil Status</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                             student.civil
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -68,7 +68,7 @@
                                         <span class="text-gray-500 text-sm">Gender</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                             student.gender
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Religion</span>
@@ -114,7 +114,7 @@
                         <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                             <div class="w-full h-1/12">
                                 <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                                    }},
+                                }},
                                     {{ student.first_name }}</span>
                             </div>
 
@@ -125,7 +125,7 @@
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                         scholar.course.name
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -138,7 +138,7 @@
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                         scholar.campus.name
-                                    }}, Campus</span>
+                                        }}, Campus</span>
                                 </div>
                             </div>
 
@@ -152,7 +152,8 @@
                                         General Weighted Average
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ latestgrade.school_year.year }} {{ latestgrade.semester }}
+                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            latestgrade.school_year.year }} {{ latestgrade.semester }}
                                             Semester</span>
                                         <div class="flex flex-col items-end">
                                             <span class="text-gray-700 text-base font-medium leading-tight">
@@ -165,24 +166,14 @@
                                     </div>
                                     <hr class="border-gray-300">
                                 </div>
-
-                                <!-- Notification Message for Stakeholder -->
-                                <div v-if="latestgrade" class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mt-4 flex flex-col items-left">
-                                    <span class="space-x-2">
-                                        <font-awesome-icon :icon="['fas', 'circle-exclamation']" class="text-yellow-800" />
-                                        <span class="font-semibold">Reminder:</span>
-                                    </span>
-                                    Your grades need to be updated. Please upload your latest Copy of Grades and General Weighted Average (GWA).
-                                </div>
-
-
                                 <div v-else>
                                     <h3 class="text-gray-900 text-lg font-semibold leading-tight">
                                         General Weighted Average
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">Must upload <b>{{ semesterGrade }} Semester
-                                            {{ schoolyear_grade.year }}</b>
+                                        <span class="text-gray-700 text-base font-medium leading-tight">Must upload
+                                            <b>{{ semesterGrade }} Semester
+                                                {{ schoolyear_grade.year }}</b>
                                         </span>
                                         <div class="flex flex-col items-end">
                                             <button class="text-sm" @click="toggleCheck">
@@ -192,6 +183,17 @@
                                     </div>
                                     <hr class="border-gray-300 my-4">
                                 </div>
+                                <!-- Notification Message for Stakeholder -->
+                                <div v-if="notify && !latestgrade"
+                                    class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mt-4 flex flex-col items-left">
+                                    <span class="space-x-2">
+                                        <font-awesome-icon :icon="['fas', 'circle-exclamation']"
+                                            class="text-yellow-800" />
+                                        <span class="font-semibold">Reminder:</span>
+                                    </span>
+                                    Your grades need to be updated. Please upload your latest Copy of Grades and General
+                                    Weighted Average (GWA).
+                                </div>
 
                                 <div>
                                     <h3 class="text-gray-900 text-lg font-semibold leading-tight">
@@ -200,10 +202,10 @@
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{
                                             elementary.name
-                                        }}</span>
+                                            }}</span>
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{
                                             elementary.years
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -212,9 +214,9 @@
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
-                                        }}</span>
+                                            }}</span>
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -223,9 +225,9 @@
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
-                                        }}</span>
+                                            }}</span>
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
                                 <div>
@@ -234,9 +236,9 @@
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
-                                        }}</span>
+                                            }}</span>
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
                                 <!-- Vocational Section -->
@@ -247,10 +249,10 @@
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{
                                             vocational.name
-                                        }}</span>
+                                            }}</span>
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{
                                             vocational.years
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
 
@@ -261,10 +263,10 @@
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center space-y-3">
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
-                                            }}</span>
+                                        }}</span>
                                         <span class="text-gray-700 text-base font-medium leading-tight">{{
                                             postgrad.years
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                 </div>
 
@@ -420,7 +422,7 @@
                                         <span class="text-gray-500 text-sm">Civil Status</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                             student.civil
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Place of Birth</span>
@@ -435,7 +437,7 @@
                                         <span class="text-gray-500 text-sm">Gender</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                             student.gender
-                                        }}</span>
+                                            }}</span>
                                     </div>
                                     <div class="w-[60%] flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Religion</span>
@@ -477,7 +479,7 @@
                         <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                             <div class="w-full h-1/12">
                                 <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                                }},
+                                    }},
                                     {{ student.first_name }}</span>
                             </div>
 
@@ -488,7 +490,7 @@
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                         scholar.course.name
-                                    }}</span>
+                                        }}</span>
                                 </div>
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'id-card-clip']"
@@ -501,7 +503,7 @@
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                         scholar.campus.name
-                                    }}, Campus</span>
+                                        }}, Campus</span>
                                 </div>
                             </div>
 
@@ -1066,6 +1068,7 @@ const props = defineProps({
     latestgrade: Object,
     semesterGrade: Object,
     schoolyear_grade: Object,
+    notify: Object,
 });
 
 const form = ref({
@@ -1141,19 +1144,19 @@ const handleFile = (event) => {
 
 const submitGrade = async () => {
 
-try {
-    if (props.scholar != null) {
-        formGrade.value.semester = props.semesterGrade;
-        formGrade.value.school_year = props.schoolyear_grade.id;
-    }
+    try {
+        if (props.scholar != null) {
+            formGrade.value.semester = props.semesterGrade;
+            formGrade.value.school_year = props.schoolyear_grade.id;
+        }
 
-    router.post(`/myProfile/${props.scholar.id}/upload-grade`, formGrade.value);
-    //await useForm(form.value).post(`/sponsors/create-scholarship`);
-    // await form.post(`/sponsors/${props.sponsor.id}/create`)
-    // resetForm();
-} catch (error) {
-    console.error('Error submitting form:', error);
-}
+        router.post(`/myProfile/${props.scholar.id}/upload-grade`, formGrade.value);
+        //await useForm(form.value).post(`/sponsors/create-scholarship`);
+        // await form.post(`/sponsors/${props.sponsor.id}/create`)
+        // resetForm();
+    } catch (error) {
+        console.error('Error submitting form:', error);
+    }
 };
 
 // Re-attach the selected file when switching steps

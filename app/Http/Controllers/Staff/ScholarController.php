@@ -20,6 +20,7 @@ use App\Models\Batch;
 use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\ScholarshipGroup;
+use App\Models\AcademicYear;
 use App\Models\SubmittedRequirements;
 use App\Models\User;
 use Inertia\Inertia;
@@ -45,22 +46,75 @@ class ScholarController extends Controller
     public function scholar($id)
     {
         $scholar = Scholar::with([
-            'user', 
-            'campus', 
+            'user',
+            'campus',
             'course',
             'studentRecord', // Add this relationship
-            'studentRecord.educationRecord', // Add this nested relationship
-            'studentRecord.familyRecord', // Add this nested relationship
-            'studentRecord.familyRecord.siblings', // Add this nested relationship
+            'studentRecord.educationrecord', // Add this nested relationship
+            'studentRecord.familyrecord', // Add this nested relationship
+            'studentRecord.familyrecord.siblings', // Add this nested relationship
             'studentRecord.orgrecord' // Add this nested relationship
         ])->findOrFail($id);
 
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        if ($scholar) {
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+            // Get the batch semester logic
+            $grantee_semester = null;
+            $grantee_school_year_id = null;
+
+            if ($grantee) {
+                if ($grantee->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year_id = $grantee->school_year_id; // Keep the same school year
+
+                } elseif ($grantee->semester == '1st') {
+                    $grantee_semester = '2nd';
+
+                    // Adjust the school year based on the current year
+                    if ($grantee->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
+                    } else {
+                        $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
+                    }
+                }
+            }
+
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = SchoolYear::where('id', $grantee_school_year_id)->first();
+        } else {
+            // If no scholar is found, get the most recent academic year
+            $academic_year = AcademicYear::orderBy('id', 'desc')->first();
+
+            // Apply similar logic as for scholars to determine semester and school year
+            $grantee_semester = null;
+            $grantee_school_year_id = null;
+
+            if ($academic_year) {
+                if ($academic_year->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
+
+                } elseif ($academic_year->semester == '1st') {
+                    $grantee_semester = '2nd';
+
+                    // Adjust the school year based on the current year
+                    if ($academic_year->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
+                    } else {
+                        $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
+                    }
+                }
+            }
+
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
+        }
 
         $grade = Grade::where('scholar_id', $scholar->id)
-        ->where('school_year_id', $grantee->school_year_id)
-        ->where('semester', $grantee->semester)
-        ->first();
+            ->where('school_year_id', $grantee_school_year_id)
+            ->where('semester', $grantee_semester)
+            ->first();
 
         $scholarship = $grantee->scholarship;
         $batch = Batch::where('id', $grantee->batch_id)->first();
@@ -70,8 +124,8 @@ class ScholarController extends Controller
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
 
         $notify = StudentNotifier::where('scholar_id', $scholar->id)
-        ->where('read', 0)
-        ->first();
+            ->where('read', 0)
+            ->first();
 
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details', [
             'scholar' => $scholar,

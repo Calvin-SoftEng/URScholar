@@ -285,103 +285,121 @@
 
                         <!-- Scholar List -->
                         <div v-show="!showPayrolls">
-                            <!-- Check if we have batches by campus -->
-                            <div v-if="batchesByCampus && Object.keys(batchesByCampus).length > 0">
-                                <!-- Loop through each campus in the batches -->
-                                <div v-for="(campusData, campusId) in batchesByCampus" :key="campusId" class="mb-6">
-                                    <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campusData.campus.name }}
-                                        Campus</h3>
-
-                                    <!-- Display scholarship status for this campus -->
-                                    <div v-if="campusData.batches?.some(batch => batch.status === 'Pending') && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)"   class="mb-4">
-                                        <div
-                                            class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
-                                            <font-awesome-icon :icon="['fas', 'user-graduate']"
-                                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
-                                            <p class="text-lg text-gray-700 dark:text-gray-300">
-                                                Scholarship for this campus is still Ongoing
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    <!-- If not ongoing, show batches for this campus -->
-                                    <div v-else>
-                                        <!-- Loop through batches for this campus -->
-                                        <div v-for="batch in campusData.batches" :key="batch.id"
-                                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                            <div @click="() => openBatch(batch.id)"
-                                                class="flex justify-between items-center">
-                                                <div class="flex flex-col">
-                                                    <span class="text-lg font-semibold text-gray-800">Batch {{
-                                                        batch.batch_no }}</span>
-                                                    <span class="text-md font-medium text-gray-600">
-                                                        {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester
-                                                        }}
-                                                    </span>
-                                                </div>
-
-                                                <div class="grid grid-cols-2">
-                                                    <div class="flex flex-col items-center">
-                                                        <span class="text-sm text-gray-600">No. of Scholars</span>
-                                                        <span class="text-xl font-bold text-blue-600">{{
-                                                            batch.grantees.length }}</span>
-                                                    </div>
-                                                    <div class="flex flex-col items-center">
-                                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                                        <span class="text-xl font-bold text-red-500">
-                                                            {{batch.grantees.filter(grantee =>
-                                                            !grantee.scholar?.is_verified).length }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Fallback to the original batches display if batchesByCampus is not available -->
-                            <div v-else-if="batches && batches.length > 0">
-                                <div v-for="batch in batches" :key="batch.id"
-                                    class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                    <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
-                                        <div class="flex flex-col">
-                                            <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
-                                                }}</span>
-                                            <span class="text-md font-medium text-gray-600">
-                                                {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
-                                            </span>
-                                        </div>
-
-                                        <div class="grid grid-cols-2">
-                                            <div class="flex flex-col items-center">
-                                                <span class="text-sm text-gray-600">No. of Scholars</span>
-                                                <span class="text-xl font-bold text-blue-600">{{ batch.grantees.length
-                                                    }}</span>
-                                            </div>
-                                            <div class="flex flex-col items-center">
-                                                <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                                <span class="text-xl font-bold text-red-500">
-                                                    {{batch.grantees.filter(grantee =>
-                                                    !grantee.scholar?.is_verified).length }}
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- No scholars/batches message -->
-                            <div v-else class="flex flex-col w-full items-center justify-center mt-5">
-                                <div
-                                    class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                            <div v-if="batchesByCampus && Object.keys(batchesByCampus).length === 0">
+                                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
                                     <font-awesome-icon :icon="['fas', 'user-graduate']"
                                         class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                                     <p class="text-lg text-gray-700 dark:text-gray-300">
-                                        No scholarship information available
+                                        No available scholarship for this campus
                                     </p>
                                 </div>
                             </div>
+                            <div v-else>
+                                <!-- Check if we have batches by campus -->
+                                <div v-if="batchesByCampus && Object.keys(batchesByCampus).length > 0">
+                                    <!-- Loop through each campus in the batches -->
+                                    <div v-for="(campusData, campusId) in batchesByCampus" :key="campusId" class="mb-6">
+                                        <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campusData.campus.name }}
+                                            Campus</h3>
+
+                                        <!-- Display scholarship status for this campus -->
+                                        <div v-if="campusData.batches?.some(batch => batch.status === 'Pending') && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)"
+                                            class="mb-4">
+                                            <div
+                                                class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                                <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                                    class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                                <p class="text-lg text-gray-700 dark:text-gray-300">
+                                                    Scholarship for this campus is still Ongoing
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- If not ongoing, show batches for this campus -->
+                                        <div v-else>
+                                            <!-- Loop through batches for this campus -->
+                                            <div v-for="batch in campusData.batches" :key="batch.id"
+                                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                                <div @click="() => openBatch(batch.id)"
+                                                    class="flex justify-between items-center">
+                                                    <div class="flex flex-col">
+                                                        <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                            batch.batch_no }}</span>
+                                                        <span class="text-md font-medium text-gray-600">
+                                                            {{ schoolyear ? schoolyear.school_year : '' }} {{
+                                                                batch.semester
+                                                            }}
+                                                        </span>
+                                                    </div>
+
+                                                    <div class="grid grid-cols-2">
+                                                        <div class="flex flex-col items-center">
+                                                            <span class="text-sm text-gray-600">No. of Scholars</span>
+                                                            <span class="text-xl font-bold text-blue-600">{{
+                                                                batch.grantees.length }}</span>
+                                                        </div>
+                                                        <div class="flex flex-col items-center">
+                                                            <span class="text-sm text-gray-600">Unverified
+                                                                Scholars</span>
+                                                            <span class="text-xl font-bold text-red-500">
+                                                                {{batch.grantees.filter(grantee =>
+                                                                    !grantee.scholar?.is_verified).length}}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Fallback to the original batches display if batchesByCampus is not available -->
+                                <div v-else-if="batches && batches.length > 0">
+                                    <div v-for="batch in batches" :key="batch.id"
+                                        class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                        <div @click="() => openBatch(batch.id)"
+                                            class="flex justify-between items-center">
+                                            <div class="flex flex-col">
+                                                <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                    batch.batch_no
+                                                    }}</span>
+                                                <span class="text-md font-medium text-gray-600">
+                                                    {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
+                                                </span>
+                                            </div>
+
+                                            <div class="grid grid-cols-2">
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">No. of Scholars</span>
+                                                    <span class="text-xl font-bold text-blue-600">{{
+                                                        batch.grantees.length
+                                                        }}</span>
+                                                </div>
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">Unverified Scholars</span>
+                                                    <span class="text-xl font-bold text-red-500">
+                                                        {{batch.grantees.filter(grantee =>
+                                                            !grantee.scholar?.is_verified).length}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- No scholars/batches message -->
+                                <div v-else class="flex flex-col w-full items-center justify-center mt-5">
+                                    <div
+                                        class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                        <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                            class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                        <p class="text-lg text-gray-700 dark:text-gray-300">
+                                            No scholarship information available
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
 
                         <!-- Payrolls List -->

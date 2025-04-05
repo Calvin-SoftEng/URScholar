@@ -20,6 +20,7 @@ use App\Models\Eligible;
 use App\Models\Course;
 use App\Models\Batch;
 use App\Models\Message;
+use App\Models\StudentNotifier;
 use App\Models\Notification;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
@@ -939,6 +940,7 @@ class StudentController extends Controller
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
 
 
+
         if ($scholar) {
             $grades = Grade::where('scholar_id', $scholar->id)->with('school_year')->get();
             $latestgrade = Grade::where('scholar_id', $scholar->id)
@@ -985,32 +987,69 @@ class StudentController extends Controller
             $scholar = null;
         }
 
-        // If no scholar is found, get the most recent academic year
-        $academic_year = AcademicYear::orderBy('id', 'desc')->first();
+        if ($scholar) {
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
-        // Apply similar logic as for scholars to determine semester and school year
-        $grantee_semester = null;
-        $grantee_school_year_id = null;
+            // Get the batch semester logic
+            $grantee_semester = null;
+            $grantee_school_year_id = null;
 
-        if ($academic_year) {
-            if ($academic_year->semester == '2nd') {
-                $grantee_semester = '1st';
-                $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
+            if ($grantee) {
+                if ($grantee->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year_id = $grantee->school_year_id; // Keep the same school year
 
-            } elseif ($academic_year->semester == '1st') {
-                $grantee_semester = '2nd';
+                } elseif ($grantee->semester == '1st') {
+                    $grantee_semester = '2nd';
 
-                // Adjust the school year based on the current year
-                if ($academic_year->school_year_id == 1) {
-                    $grantee_school_year_id = 1; // First school year
-                } else {
-                    $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
+                    // Adjust the school year based on the current year
+                    if ($grantee->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
+                    } else {
+                        $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
+                    }
                 }
             }
+
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = SchoolYear::where('id', $grantee_school_year_id)->first();
+        } else {
+            // If no scholar is found, get the most recent academic year
+            $academic_year = AcademicYear::orderBy('id', 'desc')->first();
+
+            // Apply similar logic as for scholars to determine semester and school year
+            $grantee_semester = null;
+            $grantee_school_year_id = null;
+
+            if ($academic_year) {
+                if ($academic_year->semester == '2nd') {
+                    $grantee_semester = '1st';
+                    $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
+
+                } elseif ($academic_year->semester == '1st') {
+                    $grantee_semester = '2nd';
+
+                    // Adjust the school year based on the current year
+                    if ($academic_year->school_year_id == 1) {
+                        $grantee_school_year_id = 1; // First school year
+                    } else {
+                        $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
+                    }
+                }
+            }
+
+            // Fetch the school year from the database using the calculated school year ID
+            $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
         }
 
         // Fetch the school year from the database using the calculated school year ID
         $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
+
+        $notify = StudentNotifier::where('scholar_id', $scholar->id)->first();
+
+        $notify->update([
+            'read' => true,
+        ]);
 
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
@@ -1021,6 +1060,7 @@ class StudentController extends Controller
             'latestgrade' => $latestgrade,
             'semesterGrade' => $grantee_semester,
             'schoolyear_grade' => $school_year,
+            'notify' => $notify,
         ]);
     }
 
