@@ -209,7 +209,12 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     // Reports
     Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
-    Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
+    // Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ReportsController::class, 'ScholarSummaryReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/enrolled-scholars', [ReportsController::class, 'EnrolledSummaryReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport']);
+
+
 });
 
 // SPONSOR -------------------------------------------------------------------------------------------------------------------------------------------------------

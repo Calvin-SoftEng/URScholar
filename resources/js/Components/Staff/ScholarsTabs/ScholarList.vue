@@ -3,11 +3,11 @@
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
 
-        <button
+        <!-- <button
           class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
           @click="generateReport">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report
-        </button>
+        </button> -->
       </div>
       <form class="w-3/12">
         <label for="default-search"
@@ -164,6 +164,7 @@
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
+import { initFlowbite } from 'flowbite';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
@@ -321,6 +322,7 @@ const getYearSuffix = (year) => {
 
 // Lifecycle hooks
 onMounted(() => {
+  initFlowbite();
   // Initial data load
   if (!props.scholars || props.scholars.length === 0) {
     fetchScholars();
