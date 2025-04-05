@@ -3,6 +3,11 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head } from '@inertiajs/vue3';
 import ContentDashboard from '@/Pages/Sponsor/Dashboard/Content-Dashboard.vue';
 
+const props = defineProps({
+    sponsor: Object,
+    scholarships: Array,
+});
+
 </script>
 
 <template>
@@ -11,7 +16,7 @@ import ContentDashboard from '@/Pages/Sponsor/Dashboard/Content-Dashboard.vue';
     <AuthenticatedLayout>
         <template #default>
             <!-- Your dashboard content goes here -->
-            <ContentDashboard class="w-full h-full dark:bg-dprimary"/>
+            <ContentDashboard class="w-full h-full dark:bg-dprimary" :sponsor="sponsor" :scholarships="scholarships"/>
         </template>
     </AuthenticatedLayout>
 </template>

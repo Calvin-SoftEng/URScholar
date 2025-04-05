@@ -28,7 +28,7 @@
                     </div>
 
                     <div v-if="isPMActive" class="w-[95%]">
-                        <Messaging :messages="messages" :currentUser="currentUser" :scholarships="scholarships" :selectedScholarship="selectedScholarship"/>
+                        <Messaging :messages="messages" :currentUser="currentUser" :scholarships="scholarships" :selectedScholarship="selectedScholarship" :organizedScholarships="organizedScholarships"/>
                     </div>
 
                 </div>
@@ -51,6 +51,7 @@ const props = defineProps({
     currentUser: Object,
     scholarships: Array,
     selectedScholarship: Object,
+    organizedScholarships: Array,
 });
 
 // const messageData = ref(props.messages);

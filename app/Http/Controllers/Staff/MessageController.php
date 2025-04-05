@@ -34,7 +34,12 @@ class MessageController extends Controller
             'latestMessage.user',
             'users' => function ($query) {
                 $query->select('users.id', 'users.name');
-            }
+            },
+            'scholarshipGroups' => function ($query) use ($currentUser) {
+                $query->where('user_id', $currentUser->id);
+            },
+            'scholarshipGroups.batch',
+            'scholarshipGroups.campus'
         ])
             ->whereHas('users', function ($query) use ($currentUser) {
                 $query->where('users.id', $currentUser->id);
@@ -42,24 +47,81 @@ class MessageController extends Controller
             ->withCount('users')
             ->get();
 
+        // Organize scholarships by batch and campus
+        $organizedScholarships = [];
+
+        foreach ($scholarships as $scholarship) {
+            $scholarshipData = [
+                'id' => $scholarship->id,
+                'name' => $scholarship->name,
+                'description' => $scholarship->description,
+                'status' => $scholarship->status,
+                'latest_message' => $scholarship->latestMessage,
+                'users_count' => $scholarship->users_count,
+                'batches' => []
+            ];
+
+            // Group scholarship groups by batch
+            $groupedByBatch = $scholarship->scholarshipGroups->groupBy('batch_id');
+
+            foreach ($groupedByBatch as $batchId => $batchGroups) {
+                if (!$batchId)
+                    continue; // Skip if batch_id is null
+
+                $batch = $batchGroups->first()->batch;
+                if (!$batch)
+                    continue; // Skip if batch not found
+
+                $batchData = [
+                    'id' => $batch->id,
+                    'batch_no' => $batch->batch_no,
+                    'semester' => $batch->semester,
+                    'school_year_id' => $batch->school_year_id,
+                    'total_scholars' => $batch->total_scholars ?? 0,
+                    'campuses' => []
+                ];
+
+                // Group by campus within this batch
+                $groupedByCampus = $batchGroups->groupBy('campus_id');
+
+                foreach ($groupedByCampus as $campusId => $campusGroups) {
+                    if (!$campusId)
+                        continue; // Skip if campus_id is null
+
+                    $campus = $campusGroups->first()->campus;
+                    if (!$campus)
+                        continue; // Skip if campus not found
+
+                    $batchData['campuses'][] = [
+                        'id' => $campus->id,
+                        'name' => $campus->name,
+                        'group_id' => $campusGroups->first()->id // Include the scholarship_group id for reference
+                    ];
+                }
+
+                if (count($batchData['campuses']) > 0) {
+                    $scholarshipData['batches'][] = $batchData;
+                }
+            }
+
+            if (count($scholarshipData['batches']) > 0) {
+                $organizedScholarships[] = $scholarshipData;
+            }
+        }
+
         // Return the chat page using Inertia
         return Inertia::render('Staff/Communication/Communication', [
-            'messages' => [],
+            'messages' => [], // Initially empty or pass the latest messages
             'currentUser' => $currentUser,
-            'scholarships' => $scholarships,
+            'scholarships' => $scholarships, // Original scholarships data
+            'organizedScholarships' => $organizedScholarships, // New organized structure
             'selectedScholarship' => [],
         ]);
     }
 
-    public function show(Scholarship $scholarship)
+
+    public function show(User $user)
     {
-
-        // Get all messages with the user who sent them (eager loading)
-        $messages = Message::with(['user', 'scholarship'])
-            ->where('scholarship_id', $scholarship->id)
-            ->latest()
-            ->get();
-
         // Get the authenticated user
         $currentUser = Auth::user();
 
@@ -68,7 +130,12 @@ class MessageController extends Controller
             'latestMessage.user',
             'users' => function ($query) {
                 $query->select('users.id', 'users.name');
-            }
+            },
+            'scholarshipGroups' => function ($query) use ($currentUser) {
+                $query->where('user_id', $currentUser->id);
+            },
+            'scholarshipGroups.batch',
+            'scholarshipGroups.campus'
         ])
             ->whereHas('users', function ($query) use ($currentUser) {
                 $query->where('users.id', $currentUser->id);
@@ -76,15 +143,75 @@ class MessageController extends Controller
             ->withCount('users')
             ->get();
 
-        $selectedScholarship = $scholarship;
+        // Organize scholarships by batch and campus
+        $organizedScholarships = [];
 
+        foreach ($scholarships as $scholarship) {
+            $scholarshipData = [
+                'id' => $scholarship->id,
+                'name' => $scholarship->name,
+                'description' => $scholarship->description,
+                'status' => $scholarship->status,
+                'latest_message' => $scholarship->latestMessage,
+                'users_count' => $scholarship->users_count,
+                'batches' => []
+            ];
 
-        // Return the chat page using Inertia, passing the messages and user data
-        return Inertia::render('Staff/Messaging/Messaging', [
-            'messages' => $messages,
-            'currentUser' => Auth::user(),
-            'scholarships' => $scholarships,
-            'selectedScholarship' => $selectedScholarship,
+            // Group scholarship groups by batch
+            $groupedByBatch = $scholarship->scholarshipGroups->groupBy('batch_id');
+
+            foreach ($groupedByBatch as $batchId => $batchGroups) {
+                if (!$batchId)
+                    continue; // Skip if batch_id is null
+
+                $batch = $batchGroups->first()->batch;
+                if (!$batch)
+                    continue; // Skip if batch not found
+
+                $batchData = [
+                    'id' => $batch->id,
+                    'batch_no' => $batch->batch_no,
+                    'semester' => $batch->semester,
+                    'school_year_id' => $batch->school_year_id,
+                    'total_scholars' => $batch->total_scholars ?? 0,
+                    'campuses' => []
+                ];
+
+                // Group by campus within this batch
+                $groupedByCampus = $batchGroups->groupBy('campus_id');
+
+                foreach ($groupedByCampus as $campusId => $campusGroups) {
+                    if (!$campusId)
+                        continue; // Skip if campus_id is null
+
+                    $campus = $campusGroups->first()->campus;
+                    if (!$campus)
+                        continue; // Skip if campus not found
+
+                    $batchData['campuses'][] = [
+                        'id' => $campus->id,
+                        'name' => $campus->name,
+                        'group_id' => $campusGroups->first()->id // Include the scholarship_group id for reference
+                    ];
+                }
+
+                if (count($batchData['campuses']) > 0) {
+                    $scholarshipData['batches'][] = $batchData;
+                }
+            }
+
+            if (count($scholarshipData['batches']) > 0) {
+                $organizedScholarships[] = $scholarshipData;
+            }
+        }
+
+        // Return the chat page using Inertia
+        return Inertia::render('Staff/Communication/Communication', [
+            'messages' => [],
+            'currentUser' => $currentUser,
+            'scholarships' => $scholarships, // Original scholarships data
+            'organizedScholarships' => $organizedScholarships, // New organized structure
+            'selectedScholarship' => [],
         ]);
     }
 
@@ -129,13 +256,13 @@ class MessageController extends Controller
         $scholarshipId = $scholarship->id;
 
         // Get users who belong to the specified scholarship group
-        $users = User::whereIn('id', function ($query) use ($scholarshipId) { 
+        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
             $query->select('user_id')
-                ->from('scholarship_groups') 
-                ->where('scholarship_id', $scholarshipId); 
+                ->from('scholarship_groups')
+                ->where('scholarship_id', $scholarshipId);
         })
-        ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
-        ->get();
+            ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
+            ->get();
 
         // Attach users to the notification
         $notification->users()->attach($users->pluck('id'));

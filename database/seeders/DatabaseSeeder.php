@@ -155,6 +155,7 @@ class DatabaseSeeder extends Seeder
         //sponsor
         Sponsor::factory()->create([
             'name' => 'Commissioner of Higher Education',
+            'user_id' => 5,
             'abbreviation' => 'CHED',
             'since' => '2021',
             'moa_file' => 'moa1.pdf',

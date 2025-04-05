@@ -59,7 +59,8 @@
 
             <!-- Recent Payouts Section -->
             <div v-if="selectedMenu === 'recent'" class="p-6 h-full">
-                <div v-for="(scholarshipData, scholarshipId) in groupedScholarshipData" :key="scholarshipId" class="mb-8">
+                <div v-for="(scholarshipData, scholarshipId) in groupedScholarshipData" :key="scholarshipId"
+                    class="mb-8">
                     <!-- Scholarship Header -->
                     <div class="mb-4 bg-blue-50 p-3 rounded-lg shadow-sm">
                         <h2 class="text-xl font-bold text-blue-800">{{ scholarshipData.name }}</h2>
@@ -74,7 +75,7 @@
 
                         <!-- Batches for this campus -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ml-3">
-                            <div v-for="batch in campusData.batches" :key="batch.id" 
+                            <div v-for="batch in campusData.batches" :key="batch.id"
                                 class="bg-white p-4 rounded-lg shadow-md">
                                 <div class="flex justify-between items-center mb-3">
                                     <span class="text-md font-medium">Batch {{ batch.batch_no }}</span>
@@ -86,7 +87,7 @@
                                 <!-- Payouts for this batch -->
                                 <div v-if="batch.payouts.length > 0" class="space-y-3">
                                     <h4 class="text-sm font-medium text-gray-700 border-b pb-1">Payouts</h4>
-                                    <div v-for="payout in batch.payouts" :key="payout.id" 
+                                    <div v-for="payout in batch.payouts" :key="payout.id"
                                         class="bg-gray-50 p-3 rounded-md border border-gray-200">
                                         <!-- Status Badge -->
                                         <div class="flex justify-between items-center">
@@ -95,9 +96,9 @@
                                             </p>
                                             <span :class="[
                                                 'text-xs font-semibold px-2 py-1 rounded-full',
-                                                payout.status === 'Completed' ? 'bg-green-500 text-white' : 
-                                                payout.status === 'Active' ? 'bg-blue-500 text-white' : 
-                                                'bg-yellow-500 text-white'
+                                                payout.status === 'Completed' ? 'bg-green-500 text-white' :
+                                                    payout.status === 'Active' ? 'bg-blue-500 text-white' :
+                                                        'bg-yellow-500 text-white'
                                             ]">
                                                 {{ payout.status }}
                                             </span>
@@ -114,7 +115,8 @@
                                             <div class="flex justify-between text-sm">
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                                                    <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed') }}</span>
+                                                    <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed')
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -150,7 +152,8 @@
 
             <!-- Payout History Section -->
             <div v-if="selectedMenu === 'history'" class="p-6 h-full">
-                <div v-for="(scholarshipData, scholarshipId) in groupedCompletedScholarshipData" :key="scholarshipId" class="mb-8">
+                <div v-for="(scholarshipData, scholarshipId) in groupedCompletedScholarshipData" :key="scholarshipId"
+                    class="mb-8">
                     <!-- Scholarship Header -->
                     <div class="mb-4 bg-green-50 p-3 rounded-lg shadow-sm">
                         <h2 class="text-xl font-bold text-green-800">{{ scholarshipData.name }}</h2>
@@ -165,7 +168,7 @@
 
                         <!-- Batches for this campus -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ml-3">
-                            <div v-for="batch in campusData.batches" :key="batch.id" 
+                            <div v-for="batch in campusData.batches" :key="batch.id"
                                 class="bg-white p-4 rounded-lg shadow-md">
                                 <div class="flex justify-between items-center mb-3">
                                     <span class="text-md font-medium">Batch {{ batch.batch_no }}</span>
@@ -177,21 +180,23 @@
                                 <!-- Completed Payouts for this batch -->
                                 <div v-if="batch.payouts.length > 0" class="space-y-3">
                                     <h4 class="text-sm font-medium text-gray-700 border-b pb-1">Completed Payouts</h4>
-                                    <div v-for="payout in batch.payouts" :key="payout.id" 
+                                    <div v-for="payout in batch.payouts" :key="payout.id"
                                         class="bg-gray-50 p-3 rounded-md border border-gray-200">
                                         <!-- Status Badge -->
                                         <div class="flex justify-between items-center">
                                             <p class="text-sm font-medium text-gray-800">
                                                 {{ formatDate(payout.date_start) }} - {{ formatDate(payout.date_end) }}
                                             </p>
-                                            <span class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                                            <span
+                                                class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
                                                 {{ payout.status }}
                                             </span>
                                         </div>
 
                                         <!-- Payout Details -->
                                         <div class="mt-2 text-sm text-gray-600">
-                                            <p>Completed: {{ formatDate(payout.completed_date || payout.updated_at) }}</p>
+                                            <p>Completed: {{ formatDate(payout.completed_date || payout.updated_at) }}
+                                            </p>
                                             <p>Total: {{ formatCurrency(payout.sub_total) }}</p>
                                         </div>
 
@@ -200,7 +205,8 @@
                                             <div class="flex justify-between text-sm">
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
-                                                    <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed') }}</span>
+                                                    <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed')
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -333,8 +339,8 @@ const getBatchesForScholarship = (scholarshipId) => {
 
 // Get batches for a specific scholarship and campus
 const getBatchesForScholarshipAndCampus = (scholarshipId, campusId) => {
-    return props.batches.filter(batch => 
-        batch.scholarship_id === scholarshipId && 
+    return props.batches.filter(batch =>
+        batch.scholarship_id === scholarshipId &&
         batch.campus_id === campusId
     );
 };
@@ -415,17 +421,17 @@ const getPayoutsForBatch = (batchId, status = null) => {
         const hasDisbursement = props.disbursements.some(
             d => d.payout_id === payout.id && d.batch_id === batchId
         );
-        
+
         return hasDisbursement;
     });
 
     // Filter by status if specified
     if (status === 'active') {
-        filteredPayouts = filteredPayouts.filter(p => 
+        filteredPayouts = filteredPayouts.filter(p =>
             p.status === 'Pending' || p.status === 'Active'
         );
     } else if (status === 'completed') {
-        filteredPayouts = filteredPayouts.filter(p => 
+        filteredPayouts = filteredPayouts.filter(p =>
             p.status === 'Completed' || p.status === 'Inactive'
         );
     }
@@ -433,7 +439,7 @@ const getPayoutsForBatch = (batchId, status = null) => {
     return filteredPayouts;
 };
 
-// Computed properties for scholarship data grouped by campus
+// Modify the groupedScholarshipData computed property to skip campuses with only inactive payouts
 const groupedScholarshipData = computed(() => {
     const result = {};
 
@@ -459,36 +465,37 @@ const groupedScholarshipData = computed(() => {
         scholarshipBatches.forEach(batch => {
             const campusId = batch.campus_id;
             
-            // Initialize campus if not exists
-            if (!result[scholarshipId].campuses[campusId]) {
-                result[scholarshipId].campuses[campusId] = {
-                    id: campusId,
-                    name: getCampusName(campusId),
-                    batches: []
-                };
-            }
-
-            // Get active payouts for this batch
+            // Get active payouts for this batch (only Pending or Active status)
             const batchPayouts = getPayoutsForBatch(batch.id, 'active');
             
-            // Add batch with its payouts
-            result[scholarshipId].campuses[campusId].batches.push({
-                ...batch,
-                payouts: batchPayouts
-            });
-        });
-
-        // Remove scholarships with no active payouts
-        let hasActivePayouts = false;
-        Object.values(result[scholarshipId].campuses).forEach(campus => {
-            campus.batches.forEach(batch => {
-                if (batch.payouts.length > 0) {
-                    hasActivePayouts = true;
+            // Only process this batch if it has active payouts
+            if (batchPayouts.length > 0) {
+                // Initialize campus if not exists
+                if (!result[scholarshipId].campuses[campusId]) {
+                    result[scholarshipId].campuses[campusId] = {
+                        id: campusId,
+                        name: getCampusName(campusId),
+                        batches: []
+                    };
                 }
-            });
+                
+                // Add batch with its payouts
+                result[scholarshipId].campuses[campusId].batches.push({
+                    ...batch,
+                    payouts: batchPayouts
+                });
+            }
         });
 
-        if (!hasActivePayouts) {
+        // Remove campuses with no batches
+        Object.keys(result[scholarshipId].campuses).forEach(campusId => {
+            if (result[scholarshipId].campuses[campusId].batches.length === 0) {
+                delete result[scholarshipId].campuses[campusId];
+            }
+        });
+
+        // Remove scholarships with no campuses
+        if (Object.keys(result[scholarshipId].campuses).length === 0) {
             delete result[scholarshipId];
         }
     });
@@ -496,7 +503,9 @@ const groupedScholarshipData = computed(() => {
     return result;
 });
 
-// Computed properties for completed scholarship data grouped by campus
+// For the "Payout History" section, you need to modify how batches are filtered
+// Update the groupedCompletedScholarshipData computed property
+
 const groupedCompletedScholarshipData = computed(() => {
     const result = {};
 
@@ -522,36 +531,37 @@ const groupedCompletedScholarshipData = computed(() => {
         scholarshipBatches.forEach(batch => {
             const campusId = batch.campus_id;
             
-            // Initialize campus if not exists
-            if (!result[scholarshipId].campuses[campusId]) {
-                result[scholarshipId].campuses[campusId] = {
-                    id: campusId,
-                    name: getCampusName(campusId),
-                    batches: []
-                };
-            }
-
             // Get completed payouts for this batch
             const batchPayouts = getPayoutsForBatch(batch.id, 'completed');
             
-            // Add batch with its payouts
-            result[scholarshipId].campuses[campusId].batches.push({
-                ...batch,
-                payouts: batchPayouts
-            });
-        });
-
-        // Remove scholarships with no completed payouts
-        let hasCompletedPayouts = false;
-        Object.values(result[scholarshipId].campuses).forEach(campus => {
-            campus.batches.forEach(batch => {
-                if (batch.payouts.length > 0) {
-                    hasCompletedPayouts = true;
+            // Only process this batch if it has completed payouts
+            if (batchPayouts.length > 0) {
+                // Initialize campus if not exists
+                if (!result[scholarshipId].campuses[campusId]) {
+                    result[scholarshipId].campuses[campusId] = {
+                        id: campusId,
+                        name: getCampusName(campusId),
+                        batches: []
+                    };
                 }
-            });
+                
+                // Add batch with its payouts
+                result[scholarshipId].campuses[campusId].batches.push({
+                    ...batch,
+                    payouts: batchPayouts
+                });
+            }
         });
 
-        if (!hasCompletedPayouts) {
+        // Remove campuses with no batches
+        Object.keys(result[scholarshipId].campuses).forEach(campusId => {
+            if (result[scholarshipId].campuses[campusId].batches.length === 0) {
+                delete result[scholarshipId].campuses[campusId];
+            }
+        });
+
+        // Remove scholarships with no campuses
+        if (Object.keys(result[scholarshipId].campuses).length === 0) {
             delete result[scholarshipId];
         }
     });

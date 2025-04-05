@@ -100,4 +100,9 @@ class Scholarship extends Model
     {
         return $this->hasOne(Message::class)->latest();
     }
+
+    public function scholarshipGroups()
+    {
+        return $this->hasMany(ScholarshipGroup::class);
+    }
 }

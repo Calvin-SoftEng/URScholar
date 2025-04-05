@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Batch extends Model
 {
-    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year_id', 'campus_id', 'semester' , 'total_scholars', 'read' , 'status'];
+    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year_id', 'campus_id', 'semester', 'total_scholars', 'read', 'status'];
 
     public function scholarship()
     {
@@ -46,5 +46,29 @@ class Batch extends Model
     public function campus()
     {
         return $this->belongsTo(Campus::class);
+    }
+
+    //chat
+    public function scholarships()
+    {
+        return $this->belongsToMany(Scholarship::class, 'scholarship_groups')
+            ->withTimestamps();
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'scholarship_groups')
+            ->withTimestamps();
+    }
+
+    public function campuses()
+    {
+        return $this->belongsToMany(Campus::class, 'scholarship_groups')
+            ->withTimestamps();
+    }
+
+    public function scholarshipGroups()
+    {
+        return $this->hasMany(ScholarshipGroup::class);
     }
 }

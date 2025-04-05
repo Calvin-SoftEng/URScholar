@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Sponsor;
 use App\Http\Controllers\Controller;
 use App\Models\Campus;
 use App\Models\Course;
+use App\Models\Payout;
 use Illuminate\Http\Request;
 use App\Models\Sponsor;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +16,23 @@ class SponsorController extends Controller
 {
     public function sponsor_dashboard()
     {
-        return Inertia::render('Sponsor/Dashboard');
+        //Scholarships Listing
+        $sponsor = Sponsor::where('user_id', Auth::user()->id)
+            ->first();
+
+        $scholarship = $sponsor->scholarship;
+
+        // Disbursement Listing
+        $payout = Payout::whereIn('scholarship_id', $sponsor->scholarship->pluck('id'))
+            ->with(['campus'])
+            ->get();
+
+        return Inertia::render('Sponsor/Dashboard', [
+            'sponsor' => $sponsor,
+            'scholarships' => $scholarship,
+            'payouts' => $payout,  // Don't forget to pass this to your view
+        ]);
+
     }
 
     public function index()
