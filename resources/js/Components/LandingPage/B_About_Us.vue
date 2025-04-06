@@ -3,8 +3,8 @@
         <div class="flex flex-col text-left space-y-12 sm:space-y-16 justify-center h-full max-w-5xl mx-auto">
             
             <!-- About Us Heading -->
-            <div class="text-center sm:text-right flex flex-col space-y-6 sm:space-y-10">
-                <span class="bg-gradient-to-r from-[#0D3B80] via-white to-[#296fd6] bg-clip-text text-transparent font-sora text-4xl sm:text-6xl md:text-7xl font-bold">
+            <div class="sm:text-center text-right flex flex-col space-y-6 sm:space-y-10">
+                <span class="bg-gradient-to-r from-[#0D3B80] via-white to-[#296fd6] bg-clip-text lg:text-right sm:text-center text-transparent font-sora sm:text-3xl lg:text-7xl font-bold">
                     About Our System
                 </span>
                 <p class="text-justify text-base sm:text-lg md:text-2xl text-white max-w-5xl mx-auto font-medium font-albert leading-relaxed sm:leading-tight">

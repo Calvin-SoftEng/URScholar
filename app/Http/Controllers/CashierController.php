@@ -372,5 +372,10 @@ class CashierController extends Controller
             return back()->withErrors(['message' => 'Error processing QR code: ' . $e->getMessage()]);
         }
     }
+
+    public function payrolls(Request $request)
+    {
+        return Inertia::render('Cashier/Payrolls/Payout_Records');
+    }
 }
 
