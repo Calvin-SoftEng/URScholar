@@ -398,7 +398,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide, defineProps } from 'vue'
 import { Tooltip } from 'primevue';
 import { Link } from '@inertiajs/vue3';
 import { data } from 'autoprefixer';
@@ -409,14 +409,15 @@ const components = {
 }
 
 const props = defineProps({
-  clickHamburger: Function
+  clickHamburger: Function,
+  dataOpenSideBar: Boolean
 })
 
-const methods = {
-  toggle(event) {
-    this.$refs.menu.toggle(event);
-  }
-}
+// const methods = {
+//   toggle(event) {
+//     this.$refs.menu.toggle(event);
+//   }
+// }
 
 const initialSidebarState = localStorage.getItem('sidebarState') === 'true';
 
@@ -424,9 +425,11 @@ const dataOpenSideBar = ref(initialSidebarState);
 
 const clickHamburger = (event) => {
   dataOpenSideBar.value = !dataOpenSideBar.value
-  // localStorage.setItem('sidebarState', JSON.stringify(dataOpenSideBar.value)); // Persist the state
   localStorage.setItem('sidebarState', dataOpenSideBar.value);
 }
+
+provide('dataOpenSideBar', dataOpenSideBar);
+
 
 const isScholarshipMenuOpen = ref(false)
 const isScholarsMenuOpen = ref(false)

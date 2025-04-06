@@ -22,11 +22,9 @@
                         <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <Link>
-                            <span class="material-symbols-rounded mr-2 text-blue-400 tracking-[-.1rem]">
-                                arrow_back_ios_new
-                            </span>
-                            </Link>
+                            <button @click="goBack" class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
+                                <
+                            </button>
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
                         </h1>
@@ -1256,6 +1254,7 @@ import { Input } from '@/Components/ui/input'
 import { initFlowbite } from 'flowbite';
 import { Tooltip } from 'primevue';
 import InputError from '@/Components/InputError.vue';
+import BackLink from '@/Components/BackLink.vue'
 
 
 // Define props to include scholars data
@@ -1288,6 +1287,10 @@ const props = defineProps({
     allBatches: Array,
     payouts: Object,
 });
+
+const goBack = () => {
+  window.history.back();
+};
 
 // Initialize selectedCampus with the value from props
 const selectedCampus = ref(props.selectedCampus || '');

@@ -59,6 +59,7 @@ window.Echo.channel('test-channel')
 
 const appName = import.meta.env.VITE_APP_NAME || 'URScholar';
 
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
