@@ -272,9 +272,46 @@ class DatabaseSeeder extends Seeder
             'name' => 'Financial Need-Based Criteria',
         ]);
 
+        Eligibility::create([
+            'name' => 'Residency & Citizenship Criteria',
+        ]);
+
+        Eligibility::create([
+            'name' => 'Community Involvement & Leadership Criteria',
+        ]);
+
+        Eligibility::create([
+            'name' => 'Special Group Scholarships',
+        ]);
+
         Condition::create([
             'eligibility_id' => 1,
             'name' => 'Must belong to a low-income household (based on government records)',
+        ]);
+
+        Condition::create([
+            'eligibility_id' => 2,
+            'name' => 'Must be a Filipino Citizen',
+        ]);
+
+        Condition::create([
+            'eligibility_id' => 2,
+            'name' => 'Must have lived in the community for at least 3 years',
+        ]);
+
+        Condition::create([
+            'eligibility_id' => 3,
+            'name' => 'Must hold an officer position in a student organization',
+        ]);
+
+        Condition::create([
+            'eligibility_id' => 4,
+            'name' => 'Open only to students with disabilities',
+        ]);
+
+        Condition::create([
+            'eligibility_id' => 4,
+            'name' => 'For single parents or children of single parents',
         ]);
         //Group Chat
         // ScholarshipGroup::create([
