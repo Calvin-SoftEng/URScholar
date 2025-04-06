@@ -77,8 +77,10 @@
                 ({{ batch.batch.school_year.year || 'N/A' }}, {{ batch.batch.semester || 'N/A' }} Semester)
               </span>
             </h3>
-            <div class="text-sm text-gray-600">
-              Complete: {{ batch.completeSubmissionsCount }}/{{ batch.scholars.length }} Scholars
+            <div class="text-sm text-gray-600 flex gap-4">
+              <span>Complete: {{ batch.completeSubmissionsCount }}/{{ batch.scholars.length }} Scholars</span>
+              <span class="text-green-600">Claimed: {{ batch.claimed_count || 0 }}</span>
+              <span class="text-orange-600">Not Claimed: {{ batch.not_claimed_count || 0 }}</span>
             </div>
           </div>
 
@@ -93,8 +95,7 @@
                   <th>Campus</th>
                   <th>Course</th>
                   <th>Grant</th>
-                  <th>Monitoring</th>
-                  <th>Status</th>
+                  <th>Payout Status</th>
                   <th></th>
                 </tr>
               </thead>
@@ -133,20 +134,13 @@
                   <td>{{ scholar.course }}</td>
                   <td>{{ scholar.grant }}</td>
                   <td>
-                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
-                      {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
-                    </span>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                      <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }"></div>
-                    </div>
-                  </td>
-                  <td>
+                    <!-- Payout Status -->
                     <span class="px-2 py-1 rounded-md text-xs" :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.status === 'Submitted' || scholar.status === 'Returned',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'No submission' || scholar.status === 'Incomplete'
+                      'bg-green-100 text-green-800 border border-green-400': getPayoutStatus(scholar.id, batch.batch.id) === 'Claimed',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': getPayoutStatus(scholar.id, batch.batch.id) === 'Pending',
+                      'bg-red-100 text-red-800 border border-red-400': getPayoutStatus(scholar.id, batch.batch.id) === 'Not Claimed'
                     }">
-                      {{ scholar.status }}
+                      {{ getPayoutStatus(scholar.id, batch.batch.id) }}
                     </span>
                   </td>
                   <th>
@@ -163,11 +157,43 @@
             </table>
           </div>
 
+
         </div>
 
         <!-- No batches message (outside the v-for loop) -->
         <div v-if="filteredBatches.length === 0" class="text-center py-10 text-gray-500">
           No matching scholars found
+        </div>
+      </div>
+    </div>
+
+    <!-- Payout Summary Section (if payouts are available) -->
+    <div v-if="processedPayouts" class="p-4 mt-4 border-t">
+      <div class="bg-gray-50 p-4 rounded-lg">
+        <h3 class="text-lg font-semibold mb-3">Payout Summary</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-white p-3 rounded-lg shadow-sm">
+            <div class="text-sm text-gray-500">Total Scholars</div>
+            <div class="text-xl font-semibold">{{ processedPayouts.payout.total_scholars || 0 }}</div>
+          </div>
+          <div class="bg-white p-3 rounded-lg shadow-sm">
+            <div class="text-sm text-gray-500">Sub Total</div>
+            <div class="text-xl font-semibold">{{ processedPayouts.payout.sub_total || 0 }}</div>
+          </div>
+          <div class="bg-white p-3 rounded-lg shadow-sm" :class="{ 'bg-green-50': processedPayouts.canForward }">
+            <div class="text-sm text-gray-500">Status</div>
+            <div class="text-xl font-semibold" :class="{ 'text-green-600': processedPayouts.canForward }">
+              {{ processedPayouts.canForward ? 'Ready to Forward' : 'Pending Completion' }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Payout Schedule if available -->
+        <div v-if="processedPayouts.payout_schedule" class="mt-4 bg-white p-3 rounded-lg shadow-sm">
+          <div class="text-sm font-medium">Payout Schedule</div>
+          <div class="text-sm mt-1">
+            {{ new Date(processedPayouts.payout_schedule.date).toLocaleDateString() }}
+          </div>
         </div>
       </div>
     </div>
@@ -195,7 +221,11 @@ const props = defineProps({
   selectedSem: String,
   processedBatches: Array,
   requirements: Array,
-  payout: Number,
+  payout: Object,
+  processedPayouts: Object,
+  user_campus_ids: Array,
+  user_type: String,
+  processedPayouts: Array,
 });
 
 // Data loading state
@@ -272,6 +302,27 @@ const matchesFilters = (scholar) => {
   return true;
 };
 
+// Method to get payout status for a scholar
+const getPayoutStatus = (scholarId, batchId) => {
+  // First find the correct batch in the processedBatches array
+  if (props.processedBatches && Array.isArray(props.processedBatches)) {
+    // Find the specific batch that matches the batchId
+    const batchData = props.processedBatches.find(item => item.batch.id === batchId);
+
+    // If batch exists and has disbursement data
+    if (batchData && batchData.batch && batchData.batch.disbursement) {
+      // Find the disbursement for this scholar
+      const disbursement = batchData.batch.disbursement.find(
+        d => d.scholar_id === scholarId
+      );
+
+      return disbursement ? disbursement.status : 'Not Found';
+    }
+  }
+
+  // Default status if no data available
+  return 'Pending';
+};
 const updateFilters = () => {
   // Navigate to the same route with updated query parameters
   router.get(route(route().current()), {
@@ -288,7 +339,7 @@ const fetchData = async () => {
   loading.value = true;
   try {
     await router.reload({
-      only: ['processedBatches', 'requirements'],
+      only: ['processedBatches', 'requirements', 'processedPayouts'],
       data: {
         selectedYear: selectedYear.value,
         selectedSem: selectedSemester.value,

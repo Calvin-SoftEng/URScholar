@@ -40,7 +40,7 @@
                 <div class="mx-auto py-5">
                     <div v-if="showPayrolls" class="flex w-full flex-col gap-6">
                         <PayrollList :scholarship="scholarship" :schoolyear="schoolyear" :selectedSem="selectedSem" :processedBatches="processedBatches"
-                        :requirements="requirements" :payout="payout"/>
+                        :requirements="requirements" :payout="payout" :processedPayouts="processedPayouts"/>
                     </div>
                     <div v-else class="flex w-full flex-col gap-6">
                         <ScholarList :scholarship="scholarship" :schoolyear="schoolyear" :selectedSem="selectedSem" :processedBatches="processedBatches"
@@ -75,6 +75,7 @@ const props = defineProps({
   schoolyear: Object,
   selectedSem: String,
   processedBatches: Array,
+  processedPayouts: Array,
   requirements: Array,
   payout: Number,
 });

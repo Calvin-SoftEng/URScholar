@@ -9,6 +9,7 @@ use App\Models\Payout;
 use App\Models\SchoolYear;
 use App\Models\Requirements;
 use App\Models\SubmittedRequirements;
+use App\Models\PayoutSchedule;
 use App\Models\User;
 use App\Models\Batch;
 use Illuminate\Http\Request;
@@ -123,10 +124,48 @@ class SponsorController extends Controller
 
     public function view_scholars(Request $request, $scholarshipId)
     {
-        // Checking if scholar's payment claimed
-        $payout = 0;
-
+        // Get the scholarship
         $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        // Get the authenticated user
+        $user = Auth::user();
+
+        // Get user campus IDs (null for admin, array for cashier and other roles)
+        $userCampusIds = $user->usertype === 'admin'
+            ? null
+            : [$user->campus_id]; // Convert to array for non-admin users including cashiers
+
+        // Set up payout query for this scholarship, filtered by campus if needed
+        $payoutsQuery = Payout::where('scholarship_id', $scholarship->id)
+            ->where('status', '!=', 'Inactive');
+
+        if ($userCampusIds) {
+            $payoutsQuery->whereIn('campus_id', $userCampusIds);
+        }
+
+        // Get the latest payout
+        $payout = $payoutsQuery->with([
+            'campus:id,name',
+            'disbursement.scholar:id,first_name,last_name'
+        ])
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        // Process payout information
+        $processedPayouts = null;
+        $canForward = false;
+        $payout_schedule = null;
+
+        if ($payout) {
+            $canForward = $payout->total_scholars == $payout->sub_total;
+            $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)->first();
+
+            $processedPayouts = [
+                'payout' => $payout,
+                'canForward' => $canForward,
+                'payout_schedule' => $payout_schedule
+            ];
+        }
 
         // Get all requirements for this scholarship
         $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
@@ -141,7 +180,7 @@ class SponsorController extends Controller
                 return $query->where('semester', $sem);
             })
             ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course', 'scholars.user', 'school_year'])
+            ->with(['scholars.campus', 'scholars.course', 'scholars.user', 'school_year', 'disbursement', 'campus:id,name'])
             ->get();
 
         // Process all batches and their scholars
@@ -153,6 +192,10 @@ class SponsorController extends Controller
 
             // Count scholars with complete submissions
             $completeSubmissionsCount = 0;
+
+            // Add claimed and not claimed counts for each batch
+            $claimed = $batch->disbursement ? $batch->disbursement->where('status', 'Claimed')->count() : 0;
+            $notClaimed = $batch->disbursement ? $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count() : 0;
 
             $scholars = $grantees->map(function ($grantee) use ($totalRequirements, &$completeSubmissionsCount) {
                 // Skip if there's no related scholar
@@ -205,26 +248,49 @@ class SponsorController extends Controller
                     ? ($approvedRequirements / $totalRequirements) * 100
                     : 0;
 
-                return [
-                    'id' => $scholar->id,
-                    'picture' => $userPicture,
-                    'urscholar_id' => $scholar->urscholar_id,
-                    'first_name' => $scholar->first_name,
-                    'last_name' => $scholar->last_name,
-                    'middle_name' => $scholar->middle_name,
-                    'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
-                    'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
-                    'year_level' => $scholar->year_level,
-                    'grant' => $scholar->grant,
-                    'status' => $status,
-                    'submittedRequirements' => $approvedRequirements,
-                    'totalRequirements' => $totalRequirements,
-                    'progress' => $progress,
-                    'user' => [
-                        'picture' => $scholar->user->picture ?? null // Include user picture
-                    ],
-                    'userVerified' => $userVerified->email_verified_at,
-                ];
+                if ($scholar->user_id !== null) {
+                    return [
+                        'id' => $scholar->id,
+                        'picture' => $userPicture,
+                        'urscholar_id' => $scholar->urscholar_id,
+                        'first_name' => $scholar->first_name,
+                        'last_name' => $scholar->last_name,
+                        'middle_name' => $scholar->middle_name,
+                        'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                        'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
+                        'year_level' => $scholar->year_level,
+                        'grant' => $scholar->grant,
+                        'status' => $status,
+                        'submittedRequirements' => $approvedRequirements,
+                        'totalRequirements' => $totalRequirements,
+                        'progress' => $progress,
+                        'user' => [
+                            'picture' => $scholar->user->picture ?? null // Include user picture
+                        ],
+                        'userVerified' => $userVerified->email_verified_at,
+                    ];
+                } else {
+                    return [
+                        'id' => $scholar->id,
+                        'picture' => $userPicture,
+                        'urscholar_id' => $scholar->urscholar_id,
+                        'first_name' => $scholar->first_name,
+                        'last_name' => $scholar->last_name,
+                        'middle_name' => $scholar->middle_name,
+                        'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                        'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
+                        'year_level' => $scholar->year_level,
+                        'grant' => $scholar->grant,
+                        'status' => $status,
+                        'submittedRequirements' => $approvedRequirements,
+                        'totalRequirements' => $totalRequirements,
+                        'progress' => $progress,
+                        'user' => [
+                                'picture' => $scholar->user->picture ?? null // Include user picture
+                            ],
+                    ];
+                }
+
             })->filter()->values();
 
             // Update the batch to mark as read
@@ -235,7 +301,9 @@ class SponsorController extends Controller
             return [
                 'batch' => $batch,
                 'scholars' => $scholars,
-                'completeSubmissionsCount' => $completeSubmissionsCount
+                'completeSubmissionsCount' => $completeSubmissionsCount,
+                'claimed_count' => $claimed,
+                'not_claimed_count' => $notClaimed
             ];
         });
 
@@ -243,11 +311,14 @@ class SponsorController extends Controller
             'scholarship' => $scholarship,
             'processedBatches' => $processedBatches,
             'payout' => $payout,
+            'processedPayouts' => $processedPayouts,
             'requirements' => $requirements,
             'schoolyear' => $request->input('selectedYear')
                 ? SchoolYear::find($request->input('selectedYear'))
                 : null,
             'selectedSem' => $request->input('selectedSem', ''),
+            'user_campus_ids' => $userCampusIds ?? [],
+            'user_type' => $user->usertype, // Added user type for frontend access control
         ]);
     }
 

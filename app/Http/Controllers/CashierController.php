@@ -149,8 +149,6 @@ class CashierController extends Controller
         $canForward = $payouts->total_scholars == $payouts->sub_total;
 
 
-
-
         $payout_schedule = PayoutSchedule::where('payout_id', $payouts->id)
             ->first();
 
