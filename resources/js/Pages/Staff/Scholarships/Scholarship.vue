@@ -1228,7 +1228,8 @@
                         </div>
                     </div>
                 </form>
-                <form v-ielse @submit.prevent="forwardBatches">
+
+                <form v-else @submit.prevent="forwardBatches">
                     <div class="py-4 px-8 flex flex-col gap-3">
                         <!-- Loading Indicator -->
                         <div v-if="isLoading" class="flex justify-center items-center py-4">
@@ -1964,6 +1965,8 @@ const forwardBatches = async () => {
             batch_ids: batchesToForward,
             date_start: form.value.payoutStartInput,
             date_end: form.value.payoutEndInput,
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         };
 
         // Send the request only when user confirms

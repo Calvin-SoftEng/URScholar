@@ -28,7 +28,7 @@
                             <!-- <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span> <span>scholarship type</span> -->
                             {{ scholarship.name }}
                         </h1>
-                        <span class="text-xl">SY {{ batch.school_year }} - {{ batch.semester }} Semester</span>
+                        <span class="text-xl">SY {{ batch.school_year.year }} - {{ batch.semester }} Semester</span>
                     </div>
                     <div class="flex gap-2">
 

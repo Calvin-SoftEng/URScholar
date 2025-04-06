@@ -335,29 +335,29 @@ const updateFilters = () => {
 };
 
 // Fetch data from the server
-const fetchData = async () => {
-  loading.value = true;
-  try {
-    await router.reload({
-      only: ['processedBatches', 'requirements', 'processedPayouts'],
-      data: {
-        selectedYear: selectedYear.value,
-        selectedSem: selectedSemester.value,
-      },
-      onSuccess: () => {
-        showToast('Data Updated', 'Scholarship data has been refreshed');
-      },
-      onError: () => {
-        showToast('Error', 'Failed to refresh scholarship data', 'error');
-      }
-    });
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    showToast('Error', 'Failed to refresh data', 'error');
-  } finally {
-    loading.value = false;
-  }
-};
+// const fetchData = async () => {
+//   loading.value = true;
+//   try {
+//     await router.reload({
+//       only: ['processedBatches', 'requirements', 'processedPayouts'],
+//       data: {
+//         selectedYear: selectedYear.value,
+//         selectedSem: selectedSemester.value,
+//       },
+//       onSuccess: () => {
+//         showToast('Data Updated', 'Scholarship data has been refreshed');
+//       },
+//       onError: () => {
+//         showToast('Error', 'Failed to refresh scholarship data', 'error');
+//       }
+//     });
+//   } catch (error) {
+//     console.error('Error fetching data:', error);
+//     showToast('Error', 'Failed to refresh data', 'error');
+//   } finally {
+//     loading.value = false;
+//   }
+// };
 
 // Toast helper function
 const showToast = (title, message, type = 'success') => {

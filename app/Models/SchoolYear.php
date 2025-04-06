@@ -20,6 +20,11 @@ class SchoolYear extends Model
         return $this->hasMany(Grade::class);
     }
 
+    public function payouts()
+    {
+        return $this->hasMany(Payout::class);
+    }
+
     public function grantees()
     {
         return $this->hasMany(Grantees::class);

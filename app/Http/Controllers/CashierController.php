@@ -83,7 +83,7 @@ class CashierController extends Controller
     //     'disbursements' => $disbursements,
     // ]);
 
-    public function payout_batches(Scholarship $scholarship)
+    public function payout_batches(Payout $payout)
     {
         $user = Auth::user();
 
@@ -92,8 +92,13 @@ class CashierController extends Controller
             ? null
             : [$user->campus_id]; // Convert to array for non-admin users including cashiers
 
+        $scholarship = Scholarship::findOrFail($payout->scholarship_id);
+
         // Get batches related to the scholarship, filtered by campus if needed
-        $batchesQuery = Batch::where('scholarship_id', $scholarship->id);
+        $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
+            ->where('semester', $payout->semester)
+            ->where('school_year_id', $payout->school_year_id);
+
 
         if ($userCampusIds) {
             $batchesQuery->whereIn('campus_id', $userCampusIds);
@@ -187,12 +192,14 @@ class CashierController extends Controller
         $payout = Payout::where('scholarship_id', $scholarship->id)
             ->where('campus_id', Auth::user()->campus_id) // Filter by campus
             ->where('status', '!=', 'Inactive')
+            ->with('school_year')
             ->first();
 
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
             ->where('campus_id', Auth::user()->campus_id) // Filter by campus
             ->orderBy('batch_no', 'desc')
+            ->with('school_year')
             ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
 
         // Optimize query to reduce N+1 problem
