@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout>
         <div
-            class="w-full h-full flex flex-col py-2 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto">
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
@@ -151,23 +151,23 @@
             </div>
 
             <!-- Payout History Section -->
-            <div v-if="selectedMenu === 'history'" class="h-fit">
+            <div v-if="selectedMenu === 'history'" class="p-6 h-full">
                 <div v-for="(scholarshipData, scholarshipId) in groupedCompletedScholarshipData" :key="scholarshipId"
-                    class="mb-2 p-2 bg-gray-100 rounded-lg">
+                    class="mb-8">
                     <!-- Scholarship Header -->
-                    <div class="mb-4 pt-2 px-5">
-                        <h2 class="text-2xl font-bold text-primary">{{ scholarshipData.name }}</h2>
-                        <p class="text-base text-gray-600">{{ scholarshipData.type }}</p>
+                    <div class="mb-4 bg-green-50 p-3 rounded-lg shadow-sm">
+                        <h2 class="text-xl font-bold text-green-800">{{ scholarshipData.name }}</h2>
+                        <p class="text-sm text-gray-600">{{ scholarshipData.type }}</p>
                     </div>
 
                     <!-- Campus Sections -->
-                    <div v-for="(campusData, campusId) in scholarshipData.campuses" :key="campusId" class="mb-5 ml-4 p-4 bg-gray-50 rounded-xl">
-                        <div class="p-2">
-                            <h3 class="text-xl font-semibold text-gray-700">{{ campusData.name }} Campus</h3>
+                    <div v-for="(campusData, campusId) in scholarshipData.campuses" :key="campusId" class="mb-6 ml-4">
+                        <div class="mb-3 bg-gray-50 p-2 rounded-lg shadow-sm">
+                            <h3 class="text-lg font-semibold text-gray-700">Campus: {{ campusData.name }}</h3>
                         </div>
 
                         <!-- Batches for this campus -->
-                        <div class="grid grid-cols-2 md:grid-cols-2 gap-4 ml-3">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 ml-3">
                             <div v-for="batch in campusData.batches" :key="batch.id"
                                 class="bg-white p-4 rounded-lg shadow-md">
                                 <div class="flex justify-between items-center mb-3">
@@ -184,13 +184,12 @@
                                         class="bg-gray-50 p-3 rounded-md border border-gray-200">
                                         <!-- Status Badge -->
                                         <div class="flex justify-between items-center">
-                                            <p class="text-base font-medium text-gray-800">
+                                            <p class="text-sm font-medium text-gray-800">
                                                 {{ formatDate(payout.date_start) }} - {{ formatDate(payout.date_end) }}
                                             </p>
                                             <span
-                                            v-if="payout.status === 'Inactive'"
-                                            class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                                            Completed
+                                                class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                                                {{ payout.status }}
                                             </span>
                                         </div>
 
@@ -198,6 +197,7 @@
                                         <div class="mt-2 text-sm text-gray-600">
                                             <p>Completed: {{ formatDate(payout.completed_date || payout.updated_at) }}
                                             </p>
+                                            <p>Total: {{ formatCurrency(payout.sub_total) }}</p>
                                         </div>
 
                                         <!-- Claim Status -->
@@ -223,9 +223,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="mt-1">
+                                        <div class="mt-3">
                                             <button @click="openBatchPayroll(batch.id)"
-                                                class="text-base text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md">
+                                                class="text-sm text-white bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md">
                                                 View Payroll
                                             </button>
                                         </div>
@@ -236,8 +236,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        
                     </div>
                 </div>
             </div>
@@ -322,7 +320,7 @@ const openBatchPayroll = (batchId) => {
 
 // Menu items
 const menuItems = [
-    { name: "Active Payouts", key: "recent" },
+    { name: "Recent Payouts", key: "recent" },
     { name: "Payout History", key: "history" }
 ];
 

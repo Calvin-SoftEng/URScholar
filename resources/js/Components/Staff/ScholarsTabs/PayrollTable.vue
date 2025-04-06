@@ -88,7 +88,7 @@
                     </span>
                   </td>
                   <td>
-                    {{ payout.claimted_at }}
+                    {{ payout.claimed_at }}
                   </td>
                 </tr>
               </tbody>
