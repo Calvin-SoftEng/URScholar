@@ -76,6 +76,36 @@
                                             </div>
                                         </div>
                                     </div>
+
+                                    <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
+                                        <div class="w-full flex flex-row gap-2">
+                                            <div class="w-[40%] flex flex-col items-left gap-1">
+                                                <span class="text-gray-500 text-sm">Gender</span>
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    student.gender
+                                                    }}</span>
+                                            </div>
+                                            <div class="w-[60%] flex flex-col items-left gap-1">
+                                                <span class="text-gray-500 text-sm">Religion</span>
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    student.religion }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- gmail -->
+                                    <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
+                                        <!-- Icon -->
+                                        <span
+                                            class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
+
+                                        <!-- Email Container -->
+                                        <div class="flex-1 min-w-0">
+                                            <span
+                                                class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
+                                                {{ $page.props.auth.user.email }}
+                                            </span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
