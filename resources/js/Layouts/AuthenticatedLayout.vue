@@ -127,7 +127,7 @@
                 /> -->
 
                 <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 bg-gray-100">
+                <div class="flex-1 lg:h-full h-auto lg:ml-0 bg-white">
                 <slot></slot>
                 </div>
             </div>
