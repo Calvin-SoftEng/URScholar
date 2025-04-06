@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Staff;
+namespace App\Http\Controllers;
 
 use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
@@ -47,7 +47,7 @@ class MessageController extends Controller
             ->withCount('users')
             ->get();
 
-        if ($currentUser->usertype == 'super_admin') {
+        if ($currentUser->usertype == 'super_admin' || $currentUser->usertype == 'coordinator') {
             // Return the chat page using Inertia
             return Inertia::render('Staff/Communication/Communication', [
                 'messages' => [],

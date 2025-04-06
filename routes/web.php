@@ -12,7 +12,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ScholarshipController;
 use App\Http\Controllers\Staff\ScholarController;
-use App\Http\Controllers\Staff\MessageController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Staff\PayoutsController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\MISController;
