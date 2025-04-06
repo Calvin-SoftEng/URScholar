@@ -324,6 +324,9 @@
                                                             <SelectItem value="Single">
                                                                 Single
                                                             </SelectItem>
+                                                            <SelectItem value="Married">
+                                                                Married
+                                                            </SelectItem>
                                                             <SelectItem value="widowed">
                                                                 Widowed
                                                             </SelectItem>
@@ -408,13 +411,13 @@
                                             class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="guardian_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Guardian
-                                                    Name
+                                                    <span class="text-red-900 font-bold mr-1">*</span>
+                                                    Name of Guardian (If not living with Parents)
                                                 </Label>
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="guardian_name" type="text" placeholder="Guardian Name"
+                                                <Input id="guardian_name" type="text" placeholder="Full Name"
                                                     v-model="form.guardian_name" @focus="errors.guardian_name = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.guardian_name" :message="errors.guardian_name"
@@ -426,12 +429,12 @@
                                             class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="guardian_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Relationship
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Relationship with Guardian
                                                 </Label>
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="guardian_name" type="text" placeholder="Guardian Name"
+                                                <Input id="guardian_name" type="text" placeholder="Relationship with Guardian"
                                                     v-model="form.relationship" @focus="errors.relationship = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.relationship" :message="errors.relationship"
@@ -596,7 +599,7 @@
                                         <div
                                             class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
-                                                    sm:whitespace-normal md:whitespace-nowrap">
+                                                    sm:whitespace-nowrap md:whitespace-nowrap">
                                                 Junior High School
                                             </h3>
 
@@ -652,7 +655,7 @@
                                         <div
                                             class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
-                                                    sm:whitespace-normal md:whitespace-nowrap">
+                                                    sm:whitespace-nowrap md:whitespace-nowrap">
                                                 Senior High School
                                             </h3>
 
@@ -824,7 +827,7 @@
                                         <div
                                             class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
-                                                    sm:whitespace-normal md:whitespace-nowrap">
+                                                    sm:whitespace-nowrap md:whitespace-nowrap">
                                                 Post Graduate
                                             </h3>
 
@@ -1143,8 +1146,8 @@
                                                 </Label>
                                             </div>
                                             <div class="relative w-full">
-                                                <Input type="text" placeholder="Permanent Address"
-                                                    v-model="form.father.address" :disabled="form.father.isDeceased"
+                                                <Input type="text" placeholder="Permanent Address" v-model="form.father.address" 
+                                                    :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1266,8 +1269,12 @@
 
                                         <div
                                             class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
-                                            <Label for="marital-status" class="text-gray-500">C.2 Monthly Family
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="marital-status" class="text-gray-500">C.2 Monthly Family
                                                 Income</Label>
+                                                <InputError v-if="errors?.monthly_income" :message="errors.monthly_income"
+                                                class="items-center flex text-xs" />
+                                            </div>
                                             <RadioGroup default-value="comfortable"
                                                 class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
                                                 v-model="form.monthly_income">
@@ -1276,20 +1283,18 @@
                                                     <Label for="i1">10,000 and below</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i2" value="20,001 - 30,000" />
-                                                    <Label for="i2">20,001 - 30,000</Label>
-                                                </div>
-                                                <div class="flex items-center space-x-2">
                                                     <RadioGroupItem id="i3" value="10,001 - 20,000" />
                                                     <Label for="i3">10,001 - 20,000</Label>
+                                                </div>
+                                                <div class="flex items-center space-x-2">
+                                                    <RadioGroupItem id="i2" value="20,001 - 30,000" />
+                                                    <Label for="i2">20,001 - 30,000</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
                                                     <RadioGroupItem id="i4" value="30,001 and above" />
                                                     <Label for="i4">30,001 and above</Label>
                                                 </div>
                                             </RadioGroup>
-                                            <InputError v-if="errors?.monthly_income" :message="errors.monthly_income"
-                                                class="items-center flex text-xs" />
                                         </div>
 
                                         <div
@@ -1614,18 +1619,38 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="flex flex-col gap-1.5">
-                                                        <div class="flex flex-row items-center gap-2">
-                                                            <Label for="email" class="items-center flex">
-                                                                <span class="text-red-900 font-bold mr-1">*</span>Email
-                                                            </Label>
-                                                            <InputError v-if="errors?.email" :message="errors.email"
-                                                                class="items-center flex text-xs" />
+                                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                        <div class="flex flex-col gap-1.5">
+                                                            <div class="flex flex-row items-center gap-2">
+                                                                <Label for="first_name" class="items-center flex">
+                                                                    <span
+                                                                        class="text-red-900 font-bold mr-1">*</span>
+                                                                    Email
+                                                                </Label>
+                                                                <InputError v-if="errors?.email" :message="errors.email"
+                                                                    class="items-center flex text-xs" />
+                                                            </div>
+                                                            <Input id="first_name" type="text" placeholder="Email"
+                                                                v-model="form.email"
+                                                                class="w-full border border-gray-200" />
                                                         </div>
-                                                        <Input id="email" type="email" placeholder="Email"
-                                                            v-model="form.email" readonly
-                                                            class="w-full border border-gray-200" />
+
+                                                        <div class="flex flex-col gap-1.5">
+                                                            <div class="flex flex-row items-center gap-2">
+                                                                <Label for="last_name" class="items-center flex">
+                                                                    <span
+                                                                        class="text-red-900 font-bold mr-1">*</span>Student ID
+                                                                </Label>
+                                                                <InputError v-if="errors?.last_name"
+                                                                    :message="errors.last_name"
+                                                                    class="items-center flex text-xs" />
+                                                            </div>
+                                                            <Input id="last_name" type="text" placeholder="Student ID"
+                                                                v-model="form.last_name"
+                                                                class="w-full border border-gray-200" />
+                                                        </div>
                                                     </div>
+
 
                                                     <!-- <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                                         <div class="flex flex-row items-center gap-2">
@@ -1668,7 +1693,7 @@
                                                         </div>
                                                         <div class="relative w-full">
                                                             <Input id="middle_name" type="text"
-                                                                placeholder="Enter Password"
+                                                                placeholder="Confirm Password"
                                                                 v-model="form.confirm_password"
                                                                 @focus="errors.confirm_password = null"
                                                                 class="w-full border border-gray-200 pr-10" />
@@ -1893,7 +1918,7 @@ function handleFatherFirstNameInput(event) {
         // Only clear if they contain "N/A"
         if (form.value.father.last_name === 'N/A') form.value.father.last_name = '';
         if (form.value.father.middle_name === 'N/A') form.value.father.middle_name = '';
-        if (form.value.father.age === 'N/A') form.value.first_name.age = '';
+        if (form.value.father.age === 'N/A') form.value.father.age = '';
         if (form.value.father.address === 'N/A') form.value.father.address = '';
         if (form.value.father.citizenship === 'N/A') form.value.father.citizenship = '';
         if (form.value.father.occupation === 'N/A') form.value.father.occupation = '';

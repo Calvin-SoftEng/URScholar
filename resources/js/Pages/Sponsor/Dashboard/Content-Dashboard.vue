@@ -21,7 +21,7 @@
 
             <!-- Right Column (70% width) -->
             <div class="bg-white shadow-md p-6 rounded-lg flex flex-col justify-between">
-                <Scholarships />
+                <Scholarships :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
             </div>
         </div>
 
@@ -32,8 +32,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { ref, onMounted, computed, onUnmounted } from 'vue';
+import { Head, useForm, Link, router } from '@inertiajs/vue3';
+import { useRouter, useRoute } from 'vue-router'
 import Scholarships from '@/Components/Sponsor/Dashboard/Scholarships.vue';
 import ScholarsSupported from '@/Components/Sponsor/Dashboard/ScholarsSupported.vue';
 import TotalScholarsSupported from '@/Components/Sponsor/Dashboard/TotalScholarsSupported.vue';
@@ -50,10 +51,17 @@ const components = {
     // Calendar,
 };
 
-// const props = defineProps({
-//     scholarships: Array,
-//     sponsors: Array,
-//     scholars: Array,
-// });
+const props = defineProps({
+    sponsor: Object,
+    scholarships: Array,
+    schoolyears: Array,
+});
 
+const grantBasedScholarships = computed(() =>
+    props.scholarships.filter(scholarship => scholarship.scholarshipType === 'Grant-Based')
+);
+
+const oneTimeScholarships = computed(() =>
+    props.scholarships.filter(scholarship => scholarship.scholarshipType === 'One-time Payment')
+);
 </script>

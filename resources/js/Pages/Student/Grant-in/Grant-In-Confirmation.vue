@@ -13,7 +13,7 @@
 
 
                 <!-- Image Container (Centered) -->
-                <div class="w-44 h-44 sm:w-20 sm:h-20 md:w-32 md:h-44 lg:w-44 lg:h-34 flex justify-center mx-auto">
+                <div class="w-44 h-44 sm:w-20 sm:h-40 md:w-42 md:h-44 lg:w-44 lg:h-34 flex justify-center mx-auto">
                     <img 
                         src="../../../../assets/images/qualifiedvector.png" 
                         alt="Congrats" 

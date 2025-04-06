@@ -20,7 +20,7 @@ use App\Models\Eligible;
 use App\Models\Course;
 use App\Models\Batch;
 use App\Models\Message;
-use App\Models\StudentNotifier;
+use App\Models\Notifier;
 use App\Models\Notification;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
@@ -82,6 +82,8 @@ class StudentController extends Controller
                     // Get the disbursement for this scholar
                     $disbursement = $grantee->scholar->disbursements->first();
 
+                    $user = User::where('id', $disbursement->claimed_by)->first();
+
                     return [
                         'id' => $grantee->id,
                         'scholar_id' => $grantee->scholar_id,
@@ -91,6 +93,7 @@ class StudentController extends Controller
                         'batch_name' => $grantee->batch ? $grantee->batch->batch_name : 'N/A',
                         'dibursement_status' => $disbursement ? $disbursement->status : 'No Disbursement',
                         'claimed_at' => $disbursement ? $disbursement->claimed_at : null,
+                        'claimed_by' => $user ? $user : null,
                         'reasons_of_not_claimed' => $disbursement ? $disbursement->reasons_of_not_claimed : null,
                         // Add any other fields you need from grantee or disbursement
                     ];
@@ -1046,7 +1049,7 @@ class StudentController extends Controller
         // Fetch the school year from the database using the calculated school year ID
         $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
 
-        $notify = StudentNotifier::where('scholar_id', $scholar->id)->first();
+        $notify = Notifier::where('user_id', $scholar->user_id)->first();
 
         if ($notify) {
             $notify->update([
@@ -1205,6 +1208,8 @@ class StudentController extends Controller
                 'scholar_id' => $scholar->id,
                 'requirement_id' => $requirementId, // This now uses the correct requirement ID
                 'submitted_requirements' => $file->getClientOriginalName(),
+                'message' => null,
+                'approved_date' => now(),
                 'path' => $path,
                 'status' => 'Pending'
             ]);
@@ -1314,127 +1319,5 @@ class StudentController extends Controller
         }
 
         return redirect()->route('student.dashboard')->with('success', 'Requirements submitted successfully');
-    }
-
-    public function messaging(User $user)
-    {
-        // Get the authenticated user
-        $currentUser = Auth::user();
-
-        // Get scholarships with relationships that the current user has
-        $scholarships = Scholarship::with([
-            'latestMessage.user',
-            'users' => function ($query) {
-                $query->select('users.id', 'users.name');
-            }
-        ])
-            ->whereHas('users', function ($query) use ($currentUser) {
-                $query->where('users.id', $currentUser->id);
-            })
-            ->withCount('users')
-            ->get();
-
-        // Return the chat page using Inertia
-        return Inertia::render('Student/Communication/Communication', [
-            'messages' => [],
-            'currentUser' => $currentUser,
-            'scholarships' => $scholarships,
-            'selectedScholarship' => [],
-        ]);
-    }
-
-    public function show(Scholarship $scholarship)
-    {
-
-        // Get all messages with the user who sent them (eager loading)
-        $messages = Message::with(['user', 'scholarship'])
-            ->where('scholarship_id', $scholarship->id)
-            ->latest()
-            ->get();
-
-        // Get the authenticated user
-        $currentUser = Auth::user();
-
-        // Get scholarships with relationships that the current user has
-        $scholarships = Scholarship::with([
-            'latestMessage.user',
-            'users' => function ($query) {
-                $query->select('users.id', 'users.name');
-            }
-        ])
-            ->whereHas('users', function ($query) use ($currentUser) {
-                $query->where('users.id', $currentUser->id);
-            })
-            ->withCount('users')
-            ->get();
-
-        $selectedScholarship = $scholarship;
-
-
-        // Return the chat page using Inertia, passing the messages and user data
-        return Inertia::render('Student/Communication/Communication', [
-            'messages' => $messages,
-            'currentUser' => Auth::user(),
-            'scholarships' => $scholarships,
-            'selectedScholarship' => $selectedScholarship,
-        ]);
-    }
-
-    public function oldstore(Request $request)
-    {
-
-        $request->validate([
-            'content' => 'required|string',
-            'scholarship_id' => 'required'
-        ]);
-
-        // dd($request);
-        $user = Auth::user()->id;
-
-        $message = Message::create([
-            'user_id' => $user,
-            'scholarship_id' => $request->scholarship_id,
-            'content' => $request->content,
-        ]);
-
-        // MessageSent::dispatch($message);
-        broadcast(new MessageSent($message))->toOthers();
-
-        //Notifs
-        // $user = Auth::user();
-
-        // $notification = Notification::create([
-        //     'creator_id' => $user->id,
-        //     'title' => 'New Message',
-        //     'message' => 'May nag text ngani ' . now()->format('H:i:s'),
-        //     'type' => 'info',
-        // ]);
-
-        $scholarship = Scholarship::find($request->scholarship_id);
-
-        $notification = Notification::create([
-            'title' => 'New Group Chat Message!',
-            'message' => 'You have a new message in the group chat' . $scholarship->name,
-            'type' => 'group_chat',
-        ]);
-
-        $scholarshipId = $scholarship->id;
-
-        // Get users who belong to the specified scholarship group
-        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
-            $query->select('user_id')
-                ->from('scholarship_groups')
-                ->where('scholarship_id', $scholarshipId);
-        })
-            ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
-            ->get();
-
-        // Attach users to the notification
-        $notification->users()->attach($users->pluck('id'));
-
-
-        event(new NewNotification($notification));
-
-        return back();
     }
 }

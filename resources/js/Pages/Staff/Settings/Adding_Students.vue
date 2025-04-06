@@ -97,7 +97,7 @@
                             </div>
                         </div>
                         <div class="overflow-x-auto max-w-[1400px]">
-                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg overflow-x-auto max-w-[1000px]">
+                            <table class="w-fit text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg overflow-x-auto max-w-[1000px]">
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary">
                                     <tr class="dark:text-dtext">
                                         <th scope="col" class="px-6 py-3 whitespace-nowrap">
@@ -294,7 +294,7 @@
 
 <script setup>
 import { useForm, Link, router } from '@inertiajs/vue3';
-import { ref, watchEffect, computed, watch } from 'vue';
+import { ref, watchEffect, computed, watch, inject } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { usePage } from "@inertiajs/vue3";
@@ -303,6 +303,17 @@ import { DatePicker } from 'primevue';
 import InputError from '@/Components/InputError.vue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
+
+const dataOpenSideBar = inject('dataOpenSideBar');
+
+// Add a check for undefined in case it hasn't been provided
+if (!dataOpenSideBar) {
+  console.error('Failed to inject dataOpenSideBar');
+}
+
+watch(dataOpenSideBar, (newValue) => {
+  console.log('Sidebar state changed:', newValue);
+});
 
 const props = defineProps({
     sponsors: Array,

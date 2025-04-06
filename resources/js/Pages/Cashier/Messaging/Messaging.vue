@@ -8,24 +8,24 @@ import Pusher from 'pusher-js';
 const props = defineProps({
     messages: Array,
     currentUser: Object,
-    scholarships: Array,
-    selectedScholarship: Object,
+    batches: Array,
+    selectedBatch: Object,
 });
 
 const messageData = ref(props.messages);
 
 
-const selectedData = ref(props.selectedScholarship);
+const selectedData = ref(props.selectedBatch);
 const form = ref({
     content: '',
-    scholarship_id: ''
+    batch_id: '',
 });
 
 const sendMessage = () => {
     // Get scholarship_id from selected scholarship
-    form.value.scholarship_id = selectedData.value?.id || '';
+    form.value.batch_id = selectedData.value?.id || '';
 
-    router.post('/cashier/group-page/message', form.value, {
+    router.post('/group-page/message', form.value, {
         preserveScroll: true,
         onSuccess: () => {
             fetchMessages(); // Fetch messages after sending
@@ -46,7 +46,7 @@ onMounted(() => {
         authEndpoint: "/broadcasting/auth", // Required for private channels
     });
 
-    echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
+    echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
         .listen('.message.sent', (e) => {
             fetchMessages(); // Fetch messages after receiving
             scrollToBottom();
@@ -54,10 +54,10 @@ onMounted(() => {
         });
 });
 
-const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
+const scholarshipId = ref(props.selectedBatch); // Or however you're getting the ID
 
 const fetchMessages = async () => {
-    const { data } = await router.get(route("cashier.messaging.show", { scholarship: props.selectedScholarship.id }));
+    const { data } = await router.get(route("messaging.show", { batch: props.selectedBatch.id }));
 
     messageData.value = data;
 };
@@ -126,22 +126,22 @@ const showMemberList = ref(false);
                                 </form>
                                 <!-- In the people/group list section -->
                                 <div class="divide-y">
-                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4"
-                                        v-for="scholarship in scholarships" :key="scholarship.id"
-                                        :href="route('cashier.messaging.show', scholarship.id)" :class="[
+                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4" v-for="batch in batches"
+                                        :key="batch.id" :href="route('messaging.show', batch.id)" :class="[
                                             'hover:bg-gray-100',
-                                            selectedData && selectedData.id === scholarship.id ? 'bg-blue-50 border-l-4 border-primary' : ''
+                                            selectedData && selectedData.id === batch.id ? 'bg-blue-50 border-l-4 border-primary' : ''
                                         ]">
                                     <div
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                        {{ scholarship.name.charAt(0) }}
+                                        {{ batch.batch_no }}
                                     </div>
                                     <div class="flex flex-col space-y-1">
+                                        <p class="text-xs text-gray-400 italic">Batch No. {{ batch.status }}</p>
                                         <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
-                                            scholarship.name }}</span>
+                                            batch.name }}</span>
                                         <div class="flex-grow">
-                                            <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
-                                                {{ scholarship.latest_message.content }}
+                                            <p class="text-xs text-gray-500 truncate" v-if="batch.latest_message">
+                                                {{ batch.latest_message.content }}
                                             </p>
                                             <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
                                         </div>
@@ -158,8 +158,34 @@ const showMemberList = ref(false);
                                         <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
                                     </button>
                                 </div>
+
+                                <div class="bg-yellow-100 shadow-sm p-4 flex justify-between items-center rounded-lg">
+                                    <!-- Pinned Message Icon and Title -->
+                                    <div class="flex flex-col items-start space-y-2">
+                                        <!-- Icon and Title -->
+                                        <div class="flex items-center space-x-2">
+                                            <span class="text-yellow-500 text-xl">📌</span>
+                                            <h3 class="text-lg font-bold text-primary">Pinned Announcement</h3>
+                                        </div>
+
+                                        <!-- Message Body -->
+                                        <div class=" text-gray-700">
+                                            <p class="text-sm">Bukas daw sa registrar may palduhan.</p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Close Button -->
+                                    <button class="text-gray-600 hover:text-red-600 transition-colors ml-4"
+                                        @click="closeAnnouncement">
+                                        <span class="text-xl">✖</span>
+                                    </button>
+                                </div>
+
+
+
                                 <!-- Main chat area -->
-                                <div class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+                                <div
+                                    class="flex flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
                                     <!-- Messages column -->
                                     <div
                                         class="flex-1 px-2 overflow-y-auto overscroll-contain inset-shadow-sm flex flex-col-reverse">
@@ -200,7 +226,8 @@ const showMemberList = ref(false);
                                                         class="w-8 h-8 rounded-full mt-6 border"
                                                         :src="`/storage/user/profile/male.png`" alt="picture">
                                                 </div>
-                                                <div class="flex flex-col gap-1 w-full justify-start max-w-[320px] mb-3">
+                                                <div
+                                                    class="flex flex-col gap-1 w-full justify-start max-w-[320px] mb-3">
                                                     <div
                                                         class="flex justify-start items-center space-x-1 rtl:space-x-reverse">
                                                         <span
@@ -210,7 +237,7 @@ const showMemberList = ref(false);
                                                         <span
                                                             class="text-sm font-semibold text-gray-400 dark:text-white">
                                                             {{ message.user.usertype }}
-                                                        </span> 
+                                                        </span>
                                                     </div>
                                                     <div
                                                         class="flex flex-col leading-1.5 p-4 bg-gray-100 text-gray-900 rounded-es-xl rounded-se-xl dark:bg-gray-700">

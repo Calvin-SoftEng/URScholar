@@ -8,22 +8,22 @@ import Pusher from 'pusher-js';
 const props = defineProps({
     messages: Array,
     currentUser: Object,
-    scholarships: Array,
-    selectedScholarship: Object,
+    batches: Array,
+    selectedBatch: Object,
 });
 
 const messageData = ref(props.messages);
 
 
-const selectedData = ref(props.selectedScholarship);
+const selectedData = ref(props.selectedBatch);
 const form = ref({
     content: '',
-    scholarship_id: ''
+    batch_id: '',
 });
 
 const sendMessage = () => {
     // Get scholarship_id from selected scholarship
-    form.value.scholarship_id = selectedData.value?.id || '';
+    form.value.batch_id = selectedData.value?.id || '';
 
     router.post('/group-page/message', form.value, {
         preserveScroll: true,
@@ -46,7 +46,7 @@ onMounted(() => {
         authEndpoint: "/broadcasting/auth", // Required for private channels
     });
 
-    echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
+    echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
         .listen('.message.sent', (e) => {
             fetchMessages(); // Fetch messages after receiving
             scrollToBottom();
@@ -54,10 +54,10 @@ onMounted(() => {
         });
 });
 
-const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
+const scholarshipId = ref(props.selectedBatch); // Or however you're getting the ID
 
 const fetchMessages = async () => {
-    const { data } = await router.get(route("messaging.show", { scholarship: props.selectedScholarship.id }));
+    const { data } = await router.get(route("messaging.show", { batch: props.selectedBatch.id }));
 
     messageData.value = data;
 };
@@ -127,21 +127,22 @@ const showMemberList = ref(false);
                                 <!-- In the people/group list section -->
                                 <div class="divide-y">
                                     <Link class="w-full flex items-center space-x-3 mb-2 p-4"
-                                        v-for="scholarship in scholarships" :key="scholarship.id"
-                                        :href="route('messaging.show', scholarship.id)" :class="[
+                                        v-for="batch in batches" :key="batch.id"
+                                        :href="route('messaging.show', batch.id)" :class="[
                                             'hover:bg-gray-100',
-                                            selectedData && selectedData.id === scholarship.id ? 'bg-blue-50 border-l-4 border-primary' : ''
+                                            selectedData && selectedData.id === batch.id ? 'bg-blue-50 border-l-4 border-primary' : ''
                                         ]">
                                     <div
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                        {{ scholarship.name.charAt(0) }}
+                                        {{ batch.batch_no }}
                                     </div>
                                     <div class="flex flex-col space-y-1">
+                                        <p class="text-xs text-gray-400 italic">Batch No. {{ batch.status }}</p>
                                         <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
-                                            scholarship.name }}</span>
+                                            batch.name }}</span>
                                         <div class="flex-grow">
-                                            <p class="text-xs text-gray-500 truncate" v-if="scholarship.latest_message">
-                                                {{ scholarship.latest_message.content }}
+                                            <p class="text-xs text-gray-500 truncate" v-if="batch.latest_message">
+                                                {{ batch.latest_message.content }}
                                             </p>
                                             <p class="text-xs text-gray-400 italic" v-else>No messages yet</p>
                                         </div>

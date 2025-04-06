@@ -73,6 +73,7 @@ class SettingsController extends Controller
         // Save sponsor record in the database
         Sponsor::create([
             'name' => $request->name,
+            'user_id' => Auth::user()->id,
             'abbreviation' => $request->abbreviation,
             'since' => $request->since,
             'moa_file' => $filePath,

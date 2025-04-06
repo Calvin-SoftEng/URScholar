@@ -55,9 +55,9 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('student_notifiers', function (Blueprint $table) {
+        Schema::create('notifiers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('title');
             $table->string('message');
             $table->string('type');
@@ -96,6 +96,7 @@ return new class extends Migration
             $table->string('submitted_requirements');
             $table->string('path');
             $table->string('message')->nullable();
+            $table->date('approved_date');
             $table->enum('status', ['Approved', 'Pending', 'Returned'])->default('Pending');
             $table->timestamps();
         });
@@ -109,7 +110,7 @@ return new class extends Migration
         Schema::dropIfExists('submitted_requirements');
         Schema::dropIfExists('applicants');
         Schema::dropIfExists('grantees');
-        Schema::dropIfExists('student_notifiers');
+        Schema::dropIfExists('notifiers');
         Schema::dropIfExists('scholars');
         Schema::dropIfExists('batches');
     }

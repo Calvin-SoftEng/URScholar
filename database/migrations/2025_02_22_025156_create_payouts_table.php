@@ -16,6 +16,8 @@ return new class extends Migration {
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
             $table->integer('total_scholars')->nullable();
             $table->integer('sub_total')->nullable();
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->string('semester');
             $table->date('date_start');
             $table->date('date_end');
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');

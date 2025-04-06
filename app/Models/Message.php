@@ -11,7 +11,7 @@ class Message extends Model
 
     protected $fillable = [
         'user_id',
-        'scholarship_id',
+        'batch_id',
         'content',
     ];
 
@@ -25,5 +25,10 @@ class Message extends Model
     public function scholarship()
     {
         return $this->belongsTo(Scholarship::class);
+    }
+
+    public function batch()
+    {
+        return $this->belongsTo(Batch::class);
     }
 }

@@ -19,6 +19,8 @@ class SponsorFactory extends Factory
     {
         return [
             'name' => $this->faker->name(),
+            'created_id' => \App\Models\User::factory(),
+            'assign_id' => \App\Models\User::factory(),
             'abbreviation' => $this->faker->word(),
             'since' => $this->faker->date(),
             'moa_file' => $this->faker->word(),

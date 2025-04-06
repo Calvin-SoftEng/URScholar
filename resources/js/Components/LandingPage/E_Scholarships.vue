@@ -29,61 +29,64 @@
             <div class="w-full flex flex-col items-center space-y-4">
                 <template v-if="scholarships.length > 0">
                     <div v-for="scholarship in scholarships" :key="scholarship.id"
-                        class="p-6 w-full min-w-xl max-w-7xl bg-white">
-                        <div v-if="scholarship.status == 'Active'">
-                            <div class="flex flex-row items-center gap-6 justify-between bg-white p-6 rounded-lg shadow-md">
-                                <!-- Scholarship Image -->
-                                <img :src="`/storage/sponsor/logo/${getSponsorDetails(scholarship.sponsor_id).logo}`"
-                                    alt="logo" class="w-40 h-40 rounded-lg object-cover">
+                        class="p-4 sm:p-6 w-full max-w-7xl bg-white">
+                        <div v-if="scholarship.status === 'Active'"
+                            class="flex flex-col md:flex-row gap-6 items-center justify-between bg-white p-4 sm:p-6 rounded-lg shadow-md">
+                            
+                            <!-- Scholarship Image -->
+                            <img :src="`/storage/sponsor/logo/${getSponsorDetails(scholarship.sponsor_id).logo}`"
+                                alt="logo" class="sm:w-40 sm:h-40 rounded-lg object-cover flex-shrink-0" />
 
-                                <!-- Scholarship Details -->
-                                <div class="flex flex-col flex-grow space-y-1 items-start">
-                                    <span class="font-semibold text-2xl text-gray-800">{{ scholarship.name }}</span>
-                                    <span class="text-sm text-gray-600 space-x-2">
-                                        Funded by <span class="font-medium text-gray-800">{{
-                                            getSponsorDetails(scholarship.sponsor_id).name }}</span>
-                                        <span class="text-gray-500">Since <span class="font-medium text-gray-800">{{
-                                            getSponsorDetails(scholarship.sponsor_id).since }}</span></span>
+                            <!-- Scholarship Details -->
+                            <div class="flex flex-col flex-grow space-y-2 lg:items-start sm:text-center lg:text-left">
+                                <span class="font-semibold text-xl sm:text-2xl sm:text-center sm:justify-center text-gray-800">{{ scholarship.name }}</span>
+                                <span class="text-sm text-gray-600">
+                                    Funded by <span class="font-medium text-gray-800">{{
+                                        getSponsorDetails(scholarship.sponsor_id).name }}</span>
+                                    <span class="text-gray-500"> Since <span class="font-medium text-gray-800">
+                                        {{ getSponsorDetails(scholarship.sponsor_id).since }}</span>
                                     </span>
-                                    <p class="text-sm text-gray-700 leading-relaxed pt-4 text-start">
-                                        {{ getSponsorDetails(scholarship.sponsor_id).description }}
-                                    </p>
+                                </span>
+                                <p class="text-sm text-gray-700 leading-relaxed pt-2 sm:pt-4 lg:text-left">
+                                    {{ getSponsorDetails(scholarship.sponsor_id).description }}
+                                </p>
 
-                                    <!-- Scholarship Info -->
-                                    <div class="flex gap-6 pt-5">
-                                        <div class="flex flex-col items-start">
-                                            <span class="text-gray-500 text-sm">Scholarship for</span>
-                                            <span class="font-medium text-gray-800">All Courses</span>
-                                        </div>
-                                        <div class="flex flex-col items-start">
-                                            <span class="text-gray-500 text-sm">Application</span>
-                                            <span class="font-medium text-green-600">Ongoing</span>
-                                        </div>
-                                        <div class="flex flex-col items-start">
-                                            <span class="text-gray-500 text-sm">Deadline</span>
-                                            <span class="font-medium text-red-500">Bukas na</span>
-                                        </div>
+                                <!-- Scholarship Info -->
+                                <div class="flex flex-wrap gap-4 pt-4">
+                                    <div class="flex flex-col items-start">
+                                        <span class="text-gray-500 text-sm">Scholarship for</span>
+                                        <span class="font-medium text-gray-800">All Courses</span>
+                                    </div>
+                                    <div class="flex flex-col items-start">
+                                        <span class="text-gray-500 text-sm">Application</span>
+                                        <span class="font-medium text-green-600">Ongoing</span>
+                                    </div>
+                                    <div class="flex flex-col items-start">
+                                        <span class="text-gray-500 text-sm">Deadline</span>
+                                        <span class="font-medium text-red-500">Bukas na</span>
                                     </div>
                                 </div>
+                            </div>
 
-                                <!-- Vertical Divider (Thicker & More Visible) -->
-                                <div class="w-[10px] h-full bg-gray-400 mx-6"></div>
+                            <!-- Divider (Hide on small screens) -->
+                            <div class="hidden md:block w-[10px] h-full bg-gray-400 mx-6"></div>
 
-                                <!-- Apply Button (Vertically Centered) -->
-                                <div class="flex h-full items-center justify-center">
-                                    <Link :href="`/applying-scholarship/${scholarship.id}`">
+                            <!-- Apply Button -->
+                            <div class="w-full md:w-auto flex justify-center md:justify-end">
+                                <Link :href="`/applying-scholarship/${scholarship.id}`">
                                     <button
-                                        class="bg-primary text-white px-10 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200 whitespace-nowrap">
+                                        class="w-full md:w-auto text-sm sm:text-base bg-primary text-white px-6 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
                                         View More
                                     </button>
-                                    </Link>
-                                </div>
+                                </Link>
                             </div>
                         </div>
+
+                        <!-- Inactive Scholarship -->
                         <div v-else
-                            class="max-w-4xl flex flex-col items-center justify-center p-10 text-center bg-white border border-gray-200 rounded-xl shadow-md">
-                            <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            class="flex flex-col items-center justify-center p-6 text-center bg-white border border-gray-200 rounded-xl shadow-md">
+                            <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 14l-2-2m0 0l-2-2m2 2h8m4 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
@@ -93,7 +96,7 @@
                     </div>
                 </template>
 
-                <!-- If No Scholarships Available -->
+                <!-- No Scholarships at All -->
                 <div v-else
                     class="max-w-4xl flex flex-col items-center justify-center p-10 text-center bg-white border border-gray-200 rounded-xl shadow-md">
                     <svg class="w-16 h-16 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"

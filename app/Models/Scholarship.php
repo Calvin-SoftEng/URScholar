@@ -10,7 +10,7 @@ class Scholarship extends Model
 {
 
     use HasFactory, Notifiable;
-    protected $fillable = ['name', 'sponsor_id', 'scholarshipType', 'status', 'date_start', 'date_end', 'read'];
+    protected $fillable = ['name', 'sponsor_id', 'user_id','scholarshipType', 'status', 'date_start', 'date_end', 'read'];
 
     public function scholars()
     {
@@ -90,14 +90,14 @@ class Scholarship extends Model
             ->withTimestamps();
     }
 
-    public function messages()
+    public function scholarshipGroups()
     {
-        return $this->hasMany(Message::class);
+        return $this->hasMany(ScholarshipGroup::class);
     }
 
-    // Get the latest message for the scholarship group
-    public function latestMessage()
+    public function batch()
     {
-        return $this->hasOne(Message::class)->latest();
+        return $this->belongsToMany(Batch::class, 'scholarship_groups')
+            ->withTimestamps();
     }
 }

@@ -12,7 +12,7 @@ use App\Http\Controllers\EmailController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Staff\ScholarshipController;
 use App\Http\Controllers\Staff\ScholarController;
-use App\Http\Controllers\Staff\MessageController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Staff\PayoutsController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\MISController;
@@ -91,6 +91,14 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 });
 
+Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])->group(function () {
+        // Messaging
+    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
+    Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
+    Route::get('/group-page/{batch}', [MessageController::class, 'show'])->name('messaging.show');
+});
+
+
 // SCHOLARSHIP STAFF -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function () {
@@ -126,7 +134,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::post('/scholarship/forward-batches', [ScholarshipController::class, 'forward'])->name('scholars.forward');
 
     Route::get('/scholarships/scholar={id}', [ScholarController::class, 'scholar'])->name('scholarships.scholar_scholarship_details');
-    Route::post('/scholarships/scholar={scholarID}/notify', [ScholarController::class, 'scholar_notifier'])->name('scholarships.scholar_notifier');
+    Route::post('/scholarships/scholar={scholarID}/notify', [ScholarController::class, 'notifier'])->name('scholarships.scholar_notifier');
     Route::post('/scholarships/scholar/update-requirements', [ScholarController::class, 'updateStatus'])->name('scholarships.updateStatus');
 
 
@@ -154,11 +162,6 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     // Calendar
     Route::get('/calendar', [CalendarController::class, 'calendar'])->name('calendar.calendar');
 
-
-    // Messaging
-    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
-    Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
-    Route::get('/group-page/{scholarship}', [MessageController::class, 'show'])->name('messaging.show');
 
     // Route::get('/group-pagee', [GroupPageController::class, 'index'])->name('grouppage.index');
     // Route::get('/group-pagee/{scholarship}', [GroupPageController::class, 'show'])->name('grouppage.show');
@@ -213,6 +216,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ReportsController::class, 'ScholarSummaryReport']);
     Route::get('/scholarships/{scholarship}/batch/{batch}/enrolled-scholars', [ReportsController::class, 'EnrolledSummaryReport']);
     Route::get('/scholarships/{scholarship}/batch/{batch}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/payroll', [ReportsController::class, 'PayrollReport']);
 
 
 });
@@ -224,7 +228,7 @@ Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
     Route::get('/sponsor/dashboard', [SponsorController::class, 'sponsor_dashboard'])->name('sponsor.dashboard');
 
     // view scholars
-    Route::get('/sponsor/scholarships/', [SponsorController::class, 'view_scholars'])->name('sponsor.scholars');
+    Route::get('/sponsor/scholarships/{scholarship}', [SponsorController::class, 'view_scholars'])->name('sponsor.scholars');
     Route::get('/sponsor/scholarships/scholar', [SponsorController::class, 'scholar_description'])->name('sponsor.scholars-description');
 });
 
@@ -242,21 +246,15 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
     // Scholarship_Payouts
     Route::get('/cashier/scholarships', [CashierController::class, 'scholarships'])->name('cashier.active_scholarships');
 
-    Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
+    Route::get('/cashier/scholarships/{payout}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
     Route::post('/cashier/scholarships/{scholarshipId}/forward', [CashierController::class, 'forward_payout'])->name('cashier.forward_payout');
 
     Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
     Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/submit-reason', [CashierController::class, 'submitReason'])->name('cashier.submit-reason');
 
-    // Messaging
-    Route::get('/cashier/group-page', [CashierController::class, 'messaging'])->name('cashier.messaging');
-    Route::post('/cashier/group-page/message', [CashierController::class, 'oldstore'])->name('cashier.messaging.store');
-    Route::get('/cashier/group-page/{scholarship}', [CashierController::class, 'show'])->name('cashier.messaging.show');
-
-
-
-
     Route::post('/cashier/verify-qr', [CashierController::class, 'verify_qr'])->name('cashier.verify_qr');
+
+    Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}/payroll', [CashierController::class, 'payrolls'])->name('cashier.payroll');
 
 });
 
@@ -283,11 +281,6 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
     Route::get('/myProfile/generate/{urscholar_id}', [StudentController::class, 'generate'])->name('qrcode.generate');
     Route::post('/myProfile/{urscholar_id}/upload-grade', [StudentController::class, 'uploadGrade'])->name('student.uploadgrade');
-
-    // Messaging
-    Route::get('/group-chat', [StudentController::class, 'messaging'])->name('student.messaging');
-    Route::post('/group-chat/message', [StudentController::class, 'oldstore'])->name('student.messaging.store');
-    Route::get('/group-chat/{scholarship}', [StudentController::class, 'show'])->name('student.messaging.show');
 
 
     //VerifyAccount

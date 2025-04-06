@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Events\NewNotification;
-use App\Models\StudentNotifier;
+use App\Models\Notifier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -136,7 +136,7 @@ class ScholarController extends Controller
         // Get the submitted requirements for this scholar
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
 
-        $notify = StudentNotifier::where('scholar_id', $scholar->id)
+        $notify = Notifier::where('user_id', $scholar->user_id)
             ->where('read', 0)
             ->first();
 
@@ -155,12 +155,12 @@ class ScholarController extends Controller
         ]);
     }
 
-    public function scholar_notifier($scholarID)
+    public function notifier($scholarID)
     {
         $scholar = Scholar::findOrFail($scholarID);
 
-        StudentNotifier::create([
-            'scholar_id' => $scholar->id,
+        Notifier::create([
+            'user_id' => $scholar->user_id,
             'title' => 'Grade Notification',
             'message' => 'You need to update your grade.',
             'type' => 'scholarship_notification',
@@ -674,34 +674,51 @@ class ScholarController extends Controller
             $campusIds = array_keys($campusBatches);
             $campusesForGroups = Campus::whereIn('id', $campusIds)->get();
 
-            // Create scholarship group for current user
-            ScholarshipGroup::create([
-                'user_id' => Auth::id(),
-                'scholarship_id' => $scholarship->id,
-            ]);
-
-            // Create scholarship groups for coordinators and cashiers
-            foreach ($campusesForGroups as $campus) {
-                // Find coordinator
-                $coordinator = User::find($campus->coordinator_id);
-
-                // Find cashier
-                $cashier = User::find($campus->cashier_id);
-
-                // Insert messages for coordinator
-                if ($coordinator) {
+            // Update for the current user - only create for matching campus/batch
+            $currentUser = Auth::user();
+            foreach ($campusBatches as $campusId => $batch) {
+                // Only create if the current user's campus matches the batch campus
+                if ($currentUser->campus_id == $campusId) {
                     ScholarshipGroup::create([
-                        'user_id' => $coordinator->id,
+                        'user_id' => Auth::id(),
                         'scholarship_id' => $scholarship->id,
+                        'batch_id' => $batch->id,
+                        'campus_id' => $campusId,
                     ]);
                 }
+            }
 
-                // Insert messages for cashier
-                if ($cashier) {
-                    ScholarshipGroup::create([
-                        'user_id' => $cashier->id,
-                        'scholarship_id' => $scholarship->id,
-                    ]);
+            // Create scholarship groups for coordinators and cashiers, only if their campus matches
+            foreach ($campusesForGroups as $campus) {
+                // Only create groups for batches that exist for this campus
+                if (isset($campusBatches[$campus->id])) {
+                    $batch = $campusBatches[$campus->id];
+
+                    // Find coordinator
+                    $coordinator = User::find($campus->coordinator_id);
+
+                    // Insert records for coordinator if they exist and their campus matches
+                    if ($coordinator && $coordinator->campus_id == $campus->id) {
+                        ScholarshipGroup::create([
+                            'user_id' => $coordinator->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
+                    }
+
+                    // Find cashier
+                    $cashier = User::find($campus->cashier_id);
+
+                    // Insert records for cashier if they exist and their campus matches
+                    if ($cashier && $cashier->campus_id == $campus->id) {
+                        ScholarshipGroup::create([
+                            'user_id' => $cashier->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
+                    }
                 }
             }
 

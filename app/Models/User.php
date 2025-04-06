@@ -48,9 +48,9 @@ class User extends Authenticatable
         return $this->belongsTo(Campus::class);
     }
 
-    public function scholarships()
+    public function batch()
     {
-        return $this->belongsToMany(Scholarship::class, 'scholarship_groups')
+        return $this->belongsToMany(Batch::class, 'scholarship_groups')
             ->withTimestamps();
     }
 
@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsToMany(ScholarshipGroup::class);
     }
 
+    
+    public function notifier()
+    {
+        return $this->belongsTo(Notifier::class);
+    }
     public function notifications()
     {
         return $this->belongsToMany(Notification::class)

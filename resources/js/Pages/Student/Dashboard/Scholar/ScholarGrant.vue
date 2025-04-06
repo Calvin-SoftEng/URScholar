@@ -1,56 +1,57 @@
 <template>
-    <template v-if="!disbursement">
+    <template v-if="!disbursement && !isDashboard">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
-            <span class="text-4xl font-bold">Tulong Dunong Program</span>
+            <span class="text-4xl font-bold sm:text-center">Tulong Dunong Program</span>
             <span class="text-xl">Grantee</span>
         </div>
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
                 </div>
-                <span class="mt-2 text-sm text-gray-700">Application</span>
+                <span class="mt-2 sm:text-xs lg:text-sm text-gray-700">Application</span>
             </div>
 
             <!-- Line -->
-            <div class="w-16 h-1 bg-primary relative -top-4"></div>
+            <div class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
 
             <!-- Step 2 -->
             <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     2</div>
-                <span class="mt-2 text-sm text-gray-700">Under Review</span>
+                <span class="mt-2 sm:text-xs lg:text-sm whitespace-nowrap text-gray-700">Under Review</span>
             </div>
 
             <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
                 </div>
-                <span class="mt-2 text-sm text-gray-700">Under Review</span>
+                <span class="mt-2 sm:text-xs lg:text-sm whitespace-nowrap text-gray-700">Under Review</span>
             </div>
 
             <!-- Line -->
-            <div v-if="submitReq != 0 || submitPending != 0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
-            <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
+            <div v-if="submitReq != 0 || submitPending != 0"
+                class="sm:w-8 lg:w-16 h-1 bg-gray-300 relative sm:-top-3 lg:-top-4"></div>
+            <div v-if="submitApproved != 0" class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
 
             <!-- Step 3 -->
             <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     3</div>
-                <span class="mt-2 text-sm text-gray-700">Approved</span>
+                <span class="mt-2 sm:text-xs lg:text-sm whitespace-nowrap text-gray-700">Approved</span>
             </div>
 
             <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
                 </div>
-                <span class="mt-2 text-sm text-gray-700">Approved</span>
+                <span class="mt-2 sm:text-xs lg:text-sm whitespace-nowrap text-gray-700">Approved</span>
             </div>
         </div>
 
@@ -59,14 +60,19 @@
         <div v-if="submitPending != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
             <h2 class="text-xl font-semibold">Congratulations!</h2>
             <p class="mt-2">
-                <p>Your application has been successfully completed.</p>
-                <p>You will be notified about the next steps soon.</p>
+            <p>Your application has been successfully completed.</p>
+            <p>You will be notified about the next steps soon.</p>
+            <br>
+            <p>For now kindly update and upload your grades to the system by navigativing to the profile then education
+                section. Thankyou!</p>
+            <p></p>
             </p>
         </div>
 
         <!-- second stepper -->
 
-        <div v-else-if="submitReq != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
+        <div v-else-if="submitReq != 0"
+            class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
             <span>From Maam Anorn:</span>
             <span>Message</span>
             <p>It is noted, however, that among the requirements you have submittted to DBP, the
@@ -100,7 +106,7 @@
                         </p>
                     </div>
                 </div>
-                
+
 
                 <div v-if="returnedRequirements.length === 0" class="text-center py-8">
                     <p class="text-gray-500">No returned requirements to resubmit.</p>
@@ -122,13 +128,13 @@
         <div v-if="submitApproved != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
             <h2 class="text-xl font-semibold">Congratulations!</h2>
             <p class="mt-2">
-                <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
-                <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
+            <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
+            <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
             </p>
 
             <!-- Encouragement to Stay Updated -->
             <div class="mt-6">
-                <button class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg">
+                <button @click="goToDashboard" class="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg">
                     Continue to Dashboard
                 </button>
             </div>
@@ -138,46 +144,44 @@
 
 
     <!-- scholar grant kapag tapos na mag pasa requiremetns -->
-    <template v-else>
-        <div class="mb-3">
+    <template v-if="isDashboard">
+        <div class="mb-3 p-1">
             <span class="text-2xl font-medium font-poppins">My Scholarship</span>
         </div>
 
-        <div class="bg-dirtywhite w-full p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
+        <div class="bg-dirtywhite w-full sm:p-2 lg:p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
 
             <!-- Scholarship Details -->
             <div class="bg-white shadow-md p-6 rounded-lg text-center">
-                <div class="flex items-center justify-center space-x-4">
+                <div class="flex flex-col sm:flex-row items-center justify-center space-x-4">
                     <!-- Logo -->
-                    <img src="../../../../../assets/images/CHED.png" alt="CHED Logo" class="w-16 h-16 object-contain">
+                    <img src="../../../../../assets/images/CHED.png" alt="CHED Logo" class="w-16 h-16 object-contain mb-4 sm:mb-0">
 
                     <!-- Scholarship Info -->
                     <div>
-                        <h2 class="text-3xl font-bold text-blue-800">{{ scholarship.name }}</h2>
-                        <p class="text-xl text-gray-600">{{ oldestGrantee.school_year.year }} Grantee</p>
-
+                        <h2 class="text-2xl sm:text-3xl font-bold text-blue-800">{{ scholarship.name }}</h2>
+                        <p class="text-lg sm:text-xl text-gray-600">{{ oldestGrantee.school_year.year }} Grantee</p>
                     </div>
                 </div>
 
                 <div class="h-0.5 bg-gray-300 my-4"></div>
 
-                <div class="grid grid-cols-2 gap-4 text-left text-gray-700">
-                    <p><span class="font-semibold">Current Semester:</span> {{ grantee.school_year.year }} - {{
-                        grantee.semester }} Sem</p>
-                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">{{
-                        grantee.status }}</span></p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left text-gray-700">
+                    <p><span class="font-semibold">Current Semester:</span> {{ grantee.school_year.year }} - {{ grantee.semester }} Sem</p>
+                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">{{ grantee.status }}</span></p>
                 </div>
             </div>
 
             <!-- Payout Announcement Card (Only shown if there's a schedule) -->
-            <div v-if="!payout_schedule" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <div v-if="!payout_schedule || disbursement.status === 'Claimed'"
+                class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
                 <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
                 <p class="mt-2">
                     <span class="font-bold">Next payout schedule will be announced soon</span>.
                     Stay updated for further announcements.
                 </p>
             </div>
-            <div  v-else class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <div v-else class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
                 <h2 class="text-xl font-semibold">Payout Schedule</h2>
                 <p class="mt-2">
                     Your next payout is expected on
@@ -190,6 +194,7 @@
                     <span v-html="formattedReminders"></span>
                 </p>
             </div>
+
 
             <!-- kapag may new requirmeents -->
 
@@ -258,12 +263,13 @@
 
             <!-- Payout History -->
             <div>
-                <div class="flex flex-row justify-between">
+                <div class="flex flex-row justify-between items-center">
                     <span class="font-semibold text-xl">Payout History</span>
                     <!-- <span class="font-normal text-base">Show all</span> -->
                 </div>
+
                 <div class="max-w-6xl mx-auto space-y-6 mt-4">
-                    <div v-if="historygrantee.length === 0">
+                    <div v-if="filteredHistoryGrantee.length === 0">
                         <div class="grid grid-cols-5 gap-4 items-center">
                             <div class="col-span-5 flex items-center justify-center text-primary font-bold">
                                 NO history yet
@@ -272,7 +278,7 @@
                     </div>
 
                     <div v-else>
-                        <div v-for="history in historygrantee" :key="history.id"
+                        <div v-for="history in filteredHistoryGrantee" :key="history.id"
                             class="grid grid-cols-5 gap-4 items-center">
                             <div class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
                                 <h3 class="font-semibold text-base text-blue-900 dark:text-white">
@@ -286,23 +292,20 @@
                             </div>
 
                             <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                                <h2 class="text-lg font-semibold">{{ new
+                                <h2 class="text-lg font-semibold">{{ history.claimed_at ? new
                                     Date(history.claimed_at).toLocaleDateString('en-US', {
-                                        year:
-                                            'numeric', month: 'long', day: 'numeric'
-                                    }) }}</h2>
-                                <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>,
+                                        year: 'numeric', month: 'long', day: 'numeric'
+                                    }) : 'Not yet claimed' }}</h2>
+                                <p class="text-gray-600" v-if="history.claimed_by">Claimed by: <span
+                                        class="font-medium">{{ history.claimed_by.first_name }}</span>,
                                     ID: URSB123</p>
-                                <p class="text-gray-600">Processed at: sa cashier</p>
+                                <p class="text-gray-600" v-if="history.claimed_at">Processed at: sa cashier</p>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-
-
             </div>
+
 
             <!-- Encouragement & Next Steps -->
             <div class="bg-white shadow-md p-6 rounded-lg text-center">
@@ -332,10 +335,6 @@
 
         </div>
     </template>
-
-
-
-
 
 </template>
 
@@ -373,6 +372,12 @@ const props = defineProps({
         required: true
     }
 });
+
+const isDashboard = ref(false); // Tracks whether the button has been clicked
+
+const goToDashboard = () => {
+  isDashboard.value = true; // Update state to show the new template
+};
 
 // Track selected files
 const selectedFiles = ref({});
@@ -438,6 +443,13 @@ const removeFile = (reqId) => {
         fileInput.value = '';
     }
 };
+
+// Create the computed property
+const filteredHistoryGrantee = computed(() => {
+    return props.historygrantee.filter(history =>
+        history.dibursement_status !== 'Pending'
+    );
+});
 
 // const handleFile = (event, requirementId, requirementName) => {
 //     const file = event.target.files[0];

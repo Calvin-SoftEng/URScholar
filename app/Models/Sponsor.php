@@ -9,10 +9,20 @@ class Sponsor extends Model
 {
 
     use HasFactory;
-    protected $fillable = ['name', 'abbreviation', 'since', 'moa_file' ,'description', 'logo', 'created_by'];
+    protected $fillable = ['name', 'created_id', 'assign_id', 'abbreviation', 'since', 'moa_file' ,'description', 'logo', 'created_by'];
 
     public function scholarship()
     {
         return $this->hasMany(Scholarship::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_id');
+    }
+
+    public function assign()
+    {
+        return $this->belongsTo(User::class, 'assign_id');
     }
 }

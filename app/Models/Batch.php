@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Batch extends Model
 {
-    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year_id', 'campus_id', 'semester' , 'total_scholars', 'read' , 'status'];
+    protected $fillable = ['scholarship_id', 'scholar_id', 'batch_no', 'school_year_id', 'campus_id', 'semester', 'total_scholars', 'read', 'status'];
 
     public function scholarship()
     {
@@ -46,5 +46,35 @@ class Batch extends Model
     public function campus()
     {
         return $this->belongsTo(Campus::class);
+    }
+
+    //chat
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'scholarship_groups')
+            ->withTimestamps();
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    // Get the latest message for the scholarship group
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class)->latest();
+    }
+
+
+    public function campuses()
+    {
+        return $this->belongsToMany(Campus::class, 'scholarship_groups')
+            ->withTimestamps();
+    }
+
+    public function scholarshipGroups()
+    {
+        return $this->hasMany(ScholarshipGroup::class);
     }
 }

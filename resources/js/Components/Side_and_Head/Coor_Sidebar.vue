@@ -37,6 +37,21 @@
               </div>
             </Link>
 
+            <Link :href="(route('sponsor.index'))">
+            <div v-tooltip.right="!dataOpenSideBar ? 'Sponsors' : ''" :class="[
+              'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
+              { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/sponsors') }
+            ]">
+              <div
+                :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
+                <font-awesome-icon class="text-[19px] py-1" :icon="['far', 'handshake']"
+                  :class="{ 'text-dtext': $page.url.startsWith('/sponsors'), 'text-[19px] py-0.5': true }" />
+                <span v-show="dataOpenSideBar"
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/sponsors') }]">Sponsor</span>
+              </div>
+            </div>
+            </Link>
+
             <Link :href="(route('scholarships.index'))" >
               <div v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''" :class="[
                 'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',

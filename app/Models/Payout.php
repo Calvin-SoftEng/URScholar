@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payout extends Model
 {
-    protected $fillable = ['scholarship_id', 'campus_id', 'total_scholars', 'sub_total', 'date_start', 'date_end', 'status'];
+    protected $fillable = ['scholarship_id', 'campus_id', 'total_scholars', 'sub_total', 'school_year_id', 'semester' , 'date_start', 'date_end', 'status'];
 
     public function scholarship()
     {
@@ -25,5 +25,10 @@ class Payout extends Model
     public function campus()
     {
         return $this->belongsTo(Campus::class);
+    }
+
+    public function school_year()
+    {
+        return $this->belongsTo(SchoolYear::class);
     }
 }

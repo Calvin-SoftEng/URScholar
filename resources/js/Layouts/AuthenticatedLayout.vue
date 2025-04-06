@@ -113,26 +113,24 @@
 
     <!-- student ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'student'">
-        <div class="w-full h-screen flex flex-col overflow-hidden">
-        <!-- Header -->
-        <ScholarHeaderNav class="w-full h-[50px]" />
+        <div class="w-full h-screen flex flex-col overflow-hidden max-w-full overflow-x-hidden">
+            <!-- Header -->
+            <ScholarHeaderNav class="w-full h-[50px]" />
 
-            <!-- Content Area -->
-            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
+            <div class="w-full max-w-full overflow-x-hidden">
+            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)] max-w-full">
                 <!-- Sidebar -->
-                <!-- <sidebar 
-                :dataOpenSideBar="openSidebar" 
-                :clickHamburger="toggleSidebar" 
-                class="lg:w-[250px] w-full lg:h-full h-auto bg-white"
-                /> -->
+                <!-- <sidebar ... /> -->
 
                 <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 bg-gray-100">
+                <div class="flex-1 h-auto lg:h-full ml-0 mr-0 px-0 bg-white max-w-full">
                 <slot></slot>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
+        </div>
+
 
 </template>
 
@@ -150,7 +148,29 @@ import MIS_Sidebar from '@/Components/MIS/MIS_Sidebar.vue';
 import MIS_Header from '@/Components/MIS/MIS_Header.vue';
 
 
-import { ref } from 'vue';
+import { ref, watch, provide } from 'vue';
+
+// Sidebar state
+// Sidebar state
+const dataOpenSideBar = ref(true);
+
+// Toggle sidebar state
+const toggleSidebar = () => {
+  dataOpenSideBar.value = !dataOpenSideBar.value;
+};
+
+// Optionally, persist the sidebar state in localStorage for page reloads
+const savedSidebarState = localStorage.getItem('sidebarState') === 'true';
+if (savedSidebarState !== null) {
+  dataOpenSideBar.value = savedSidebarState;
+}
+
+// Persist the sidebar state to localStorage when it changes
+watch(dataOpenSideBar, (newState) => {
+  localStorage.setItem('sidebarState', newState);
+});
+provide('dataOpenSideBar', dataOpenSideBar);
+
 
 
 </script>

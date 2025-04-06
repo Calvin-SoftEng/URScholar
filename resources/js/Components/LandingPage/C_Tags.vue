@@ -2,7 +2,7 @@
     <section class="relative py-10 px-6 sm:py-12 sm:px-16 md:py-20 md:px-24 lg:py-6 lg:px-20 xl:py-16 xl:px-40 h-fit my-auto items-center bg-dirtywhite">
         <div class="flex flex-col text-center sm:text-left space-y-10 sm:space-y-20 justify-center h-full max-w-8xl mx-auto">
             <div class="text-center sm:text-left flex flex-col space-y-5">
-                <span class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-4xl sm:text-7xl font-bold">
+                <span class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora lg:text-center sm:text-center sm:text-3xl lg:text-7xl font-bold">
                     Unlock Educational Success
                 </span>
                 <p class="text-xl sm:text-2xl lg:text-3xl xl:text-4lg text-primary font-medium font-albert">

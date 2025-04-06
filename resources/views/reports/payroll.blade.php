@@ -35,7 +35,7 @@
 
     <!-- Report Title -->
     <div class="text-center mb-8">
-        <h2 class="text-2xl font-bold uppercase underline">Scholarship Summary Report</h2>
+        <h2 class="text-2xl font-bold uppercase underline">Scholarship Payroll</h2>
         <p class="text-sm mt-2">Academic Year: <span class="font-semibold">2024–2025</span></p>
         <p class="text-sm">Semester: <span class="font-semibold">1st Semester</span></p>
     </div>

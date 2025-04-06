@@ -21,13 +21,30 @@
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                         <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
-                        {scholarship name} Scholars
+                        {{scholarship.name}}'s Scholars
                     </h1>
+
+                    <div>
+                    <button
+                        @click="showPayrolls = !showPayrolls"
+                        class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                        border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                        <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                        <span class="font-normal">
+                        {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                        </span>
+                    </button>
+                    </div>
                 </div>
 
                 <div class="mx-auto py-5">
-                    <div class="flex w-full flex-col gap-6">
-                        <ScholarList :scholarships="props.scholarships" :sponsors="props.sponsors" />
+                    <div v-if="showPayrolls" class="flex w-full flex-col gap-6">
+                        <PayrollList :scholarship="scholarship" :schoolyear="schoolyear" :selectedSem="selectedSem" :processedBatches="processedBatches"
+                        :requirements="requirements" :payout="payout" :processedPayouts="processedPayouts"/>
+                    </div>
+                    <div v-else class="flex w-full flex-col gap-6">
+                        <ScholarList :scholarship="scholarship" :schoolyear="schoolyear" :selectedSem="selectedSem" :processedBatches="processedBatches"
+                        :requirements="requirements" :payout="payout"/>
                     </div>
                 </div>
 
@@ -44,6 +61,7 @@ import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { useRouter, useRoute } from 'vue-router'
 import Echo from 'laravel-echo';
 import ScholarList from '@/Components/Sponsor/Scholars/ScholarList.vue';
+import PayrollList from '@/Components/Sponsor/Scholars/PayrollList.vue';
 
 import { Tooltip } from 'primevue';
 
@@ -51,40 +69,38 @@ import { Button } from '@/Components/ui/button'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
+
 const props = defineProps({
-    sponsors: {
-        type: Array,
-        required: true
-    },
-    scholarships: {
-        type: Array,
-        required: true
-    },
-    schoolyears: {
-        type: Array,
-        required: true
-    },
+  scholarship: Object,
+  schoolyear: Object,
+  selectedSem: String,
+  processedBatches: Array,
+  processedPayouts: Array,
+  requirements: Array,
+  payout: Number,
 });
 
-onMounted(() => {
-    const echo = new Echo({
-        broadcaster: 'pusher',
-        key: import.meta.env.VITE_PUSHER_APP_KEY,
-        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-        forceTLS: true,
-        authEndpoint: "/broadcasting/auth", // Required for private channels
-    });
+const showPayrolls = ref(false);
 
-    // Listen for general notifications
-    echo.channel('general-notifications')
-        .listen('GeneralNotification', (event) => {
-            // Check if this is a scholarship read notification
-            if (event.type === 'scholarship_read' &&
-                event.data.scholarship_id === scholarship.value.id) {
-                scholarship.value.read = event.data.read
-            }
-        })
-})
+// onMounted(() => {
+//     const echo = new Echo({
+//         broadcaster: 'pusher',
+//         key: import.meta.env.VITE_PUSHER_APP_KEY,
+//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//         forceTLS: true,
+//         authEndpoint: "/broadcasting/auth", // Required for private channels
+//     });
+
+//     // Listen for general notifications
+//     echo.channel('general-notifications')
+//         .listen('GeneralNotification', (event) => {
+//             // Check if this is a scholarship read notification
+//             if (event.type === 'scholarship_read' &&
+//                 event.data.scholarship_id === scholarship.value.id) {
+//                 scholarship.value.read = event.data.read
+//             }
+//         })
+// })
 
 
 const directives = {

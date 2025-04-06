@@ -102,27 +102,20 @@
             </table>
           </div>
         </div>
-        <!-- open cam -->
+        <!-- Modified QR Scanner Modal -->
         <div v-if="OpenCamera"
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
           <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-
               <div class="flex items-center gap-3">
-                <!-- Icon -->
                 <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
-
-                <!-- Title and Description -->
                 <div class="flex flex-col">
                   <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
                     Scan your QR Code here
                   </h2>
-                  <span class="text-sm text-gray-600 dark:text-gray-400">
-
-                  </span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400"></span>
                 </div>
               </div>
-
 
               <button type="button" @click="closeCamera"
                 class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -137,10 +130,25 @@
 
             <!-- QR Code Scanner -->
             <div class="p-4 flex flex-col space-y-4">
+              <!-- Error Alert - Display any errors inside the modal -->
+              <div  v-if="errorMessage" class="space-y-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                  role="alert">
+                  <strong class="font-bold">Error!</strong>
+                  <span class="block sm:inline"> {{ errorMessage }}</span>
+                </div>
+                <div class="flex justify-center">
+                  <button @click="restartScan"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">
+                    Scan Again
+                  </button>
+                </div>
+              </div>
+
               <!-- QR Code Scanner Stream with Animation -->
               <div v-if="isScanning"
                 class="relative w-full h-96 bg-gray-200 mt-4 flex items-center justify-center custom-corners">
-                <!-- Scanning Line Animation (across the full camera view) -->
+                <!-- Scanning Line Animation -->
                 <div
                   class="absolute top-0 z-20 left-0 w-full h-full border-t-4 border-dashed border-blue-500 animate-scan-line"
                   v-if="isScanning"></div>
@@ -152,9 +160,7 @@
               <!-- Result Section (Success/Failure Message) -->
               <div v-if="scannedResult && scholar" class="mt-4 flex justify-center items-center">
                 <div class="w-full max-w-lg text-center p-6">
-                  <div class="text-center text-green-500 font-medium">
-                    <InputError v-if="errors?.message" :message="errors.message" class="text-red-500" />
-
+                  <div v-if="!errorMessage" class="text-center text-green-500 font-medium">
                     <div class="flex justify-center items-center mb-6 overflow-hidden">
                       <img :src="`/storage/user/profile/${scholar.picture}`" alt="Profile Picture"
                         class="w-40 h-40 object-cover rounded-full border-2 border-primary">
@@ -175,10 +181,6 @@
                       <span class="px-2 py-1 bg-primary rounded-md text-xl text-white font-albert font-bold">@</span>
                       <span class="pl-2 text-gray-900 text-lg font-bold">{{ scholar.email }}</span>
                     </div>
-                  </div>
-
-                  <div v-if="errorMessage" class="text-red-500 font-medium mb-4">
-                    <!-- Display error message if exists -->
                   </div>
 
                   <div class="flex justify-center">
@@ -346,14 +348,14 @@ const checkDateTimeStatus = () => {
   }
 
   const currentDate = new Date();
-  
+
   // Parse the scheduled date and time from payout_schedule
   const scheduledDate = new Date(props.payout_schedule.scheduled_date);
   const [hours, minutes] = props.payout_schedule.scheduled_time.split(':').map(Number);
-  
+
   // Set the time component on the scheduled date
   scheduledDate.setHours(hours, minutes, 0, 0);
-  
+
   // Get current time in milliseconds
   const currentTime = currentDate.getTime();
   const scheduledTime = scheduledDate.getTime();
@@ -442,11 +444,8 @@ const toggleCamera = () => {
   }
 };
 
-const closeCamera = () => {
-  OpenCamera.value = false;
-};
 
-// Handle QR code detection
+// Modified onDetect function to handle errors
 const onDetect = async (detectedCodes) => {
   if (detectedCodes.length > 0) {
     scannedResult.value = detectedCodes[0].rawValue;
@@ -455,24 +454,67 @@ const onDetect = async (detectedCodes) => {
     // Send scanned QR code data to Laravel
     router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
       onSuccess: (page) => {
-        // Success handling remains the same
+        // Check if there are errors in the page object
+        if (page.props.errors && page.props.errors.message) {
+          errorMessage.value = page.props.errors.message;
+          showToast('Error', errorMessage.value);
+        } else if (page.props.flash && page.props.flash.success) {
+          // Success handling
+          successMessage.value = 'Scholar verified successfully!';
+          showToast('Success', 'Scholar verified successfully!');
+        }
       },
       onError: (errors) => {
         errorMessage.value = errors.message || 'An error occurred';
-        successMessage.value = null;
-        showToast('Error', errors.message || 'An error occurred');
+        showToast('Error', errorMessage.value);
       }
     });
   }
 };
 
-// Restart QR scanner
+// Improved restart function to clear all relevant states
 const restartScan = () => {
   scannedResult.value = null;
   isScanning.value = true;
   errorMessage.value = null;
   successMessage.value = null;
 };
+
+// Modified closeCamera function to reset error state
+const closeCamera = () => {
+  OpenCamera.value = false;
+  errorMessage.value = null;
+  successMessage.value = null;
+};
+
+// Enhanced watchEffect to also capture errors
+watchEffect(() => {
+  // Success messages
+  const flashMessage = usePage().props.flash?.success;
+  
+  // Error messages
+  const errorMsg = usePage().props.errors?.message;
+  
+  if (flashMessage) {
+    console.log("Showing success toast:", flashMessage);
+    usePage().props.scholar = flashMessage;
+    toastMessage.value = flashMessage.first_name;
+    toastVisible.value = true;
+    setTimeout(() => {
+      toastVisible.value = false;
+    }, 3000);
+  }
+  
+  if (errorMsg) {
+    console.log("Setting error message:", errorMsg);
+    errorMessage.value = errorMsg;
+    
+    // Only show toast if modal is not open
+    if (!OpenCamera.value) {
+      showToast('Error', errorMsg);
+    }
+  }
+});
 
 // Open batch report
 const openReport = () => {
