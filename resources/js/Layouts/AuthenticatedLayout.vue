@@ -127,7 +127,7 @@
                 /> -->
 
                 <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 bg-gray-100">
+                <div class="flex-1 lg:h-full h-auto lg:ml-0 bg-white">
                 <slot></slot>
                 </div>
             </div>
@@ -150,7 +150,29 @@ import MIS_Sidebar from '@/Components/MIS/MIS_Sidebar.vue';
 import MIS_Header from '@/Components/MIS/MIS_Header.vue';
 
 
-import { ref } from 'vue';
+import { ref, watch, provide } from 'vue';
+
+// Sidebar state
+// Sidebar state
+const dataOpenSideBar = ref(true);
+
+// Toggle sidebar state
+const toggleSidebar = () => {
+  dataOpenSideBar.value = !dataOpenSideBar.value;
+};
+
+// Optionally, persist the sidebar state in localStorage for page reloads
+const savedSidebarState = localStorage.getItem('sidebarState') === 'true';
+if (savedSidebarState !== null) {
+  dataOpenSideBar.value = savedSidebarState;
+}
+
+// Persist the sidebar state to localStorage when it changes
+watch(dataOpenSideBar, (newState) => {
+  localStorage.setItem('sidebarState', newState);
+});
+provide('dataOpenSideBar', dataOpenSideBar);
+
 
 
 </script>

@@ -32,71 +32,77 @@
                             Grant-Based Scholarships
                         </h2>
 
-                        <button v-for="scholarship in grantBasedScholarships" :key="scholarship.id"
-                            @click="toggleSpecification(scholarship)" class="w-full">
-
-                            <div class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
-                                hover:shadow-md transition-all duration-300 py-5 px-10 flex flex-col md:flex-row 
-                                justify-between items-start md:items-center space-y-5 md:space-y-0">
-
+                        <button
+                            v-for="scholarship in grantBasedScholarships"
+                            :key="scholarship.id"
+                            @click="toggleSpecification(scholarship)"
+                            class="w-full text-left"
+                            >
+                            <div
+                                class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+                            >
                                 <!-- Notification Badge -->
-                                <span v-if="scholarship.read !== 1"
-                                    class="absolute top-[-13px] right-2 bg-primary text-white text-sm font-bold px-5 py-1 rounded-full">
-                                    New Scholarship
+                                <span
+                                v-if="scholarship.read !== 1"
+                                class="absolute -top-3 right-4 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow"
+                                >
+                                New
                                 </span>
 
                                 <!-- Scholarship Info -->
-                                <div class="space-y-4 flex flex-col items-start justify-start">
-                                    <div class="badge badge-info text-xs badge-outline px-3 py-1">
-                                        {{ getSponsorName(scholarship.sponsor_id) }}
-                                    </div>
+                                <div class="flex-1 space-y-3">
+                                <!-- Sponsor -->
+                                <div
+                                    class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-900 text-xs font-medium px-3 py-1 rounded-full"
+                                >
+                                    {{ getSponsorName(scholarship.sponsor_id) }}
+                                </div>
 
-                                    <h2
-                                        class="w-full items-start text-3xl md:text-2xl font-semibold text-gray-900 dark:text-dtext">
-                                        {{ scholarship.name }}
-                                    </h2>
+                                <!-- Scholarship Name -->
+                                <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                                    {{ scholarship.name }}
+                                </h2>
 
-                                    <p class="flex flex-col text-sm text-gray-500 items-start space-y-1">
-                                        <span class="items-start">Created on: {{ new
-                                            Date(scholarship.created_at).toLocaleDateString() }}</span>
-                                        <span class="items-start">Sponsoring Since:
-                                            {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                year:
-                                                    'numeric', month: 'long', day: 'numeric'
-                                            }) }}
-                                        </span>
+                                <!-- Dates -->
+                                <div class="text-sm text-primary opacity-70 dark:text-gray-400 space-y-1">
+                                    <p><font-awesome-icon :icon="['far', 'calendar']"  class="mr-1" /> Created: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                    }) }}</p>
+                                    <p><font-awesome-icon :icon="['fas', 'circle-dollar-to-slot']" class="mr-1" /> Sponsoring Since:
+                                        {{ scholarship.since }}
                                     </p>
-
-                                    <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                                        <span class="font-medium">Requirements Deadline:</span>
-                                        <span
-                                            v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
-                                            {{ new
-                                                Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
-                                                    year: 'numeric', month: 'long', day: 'numeric'
-                                                }) }}
-                                        </span>
-                                        <span v-else>
-                                            No Deadline
-                                        </span>
+                                    <p>
+                                        <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span class="font-medium">Requirements Deadline: </span>
+                                    <span
+                                        v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end"
+                                    >
+                                        {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                        }) }}
+                                    </span>
+                                    <span v-else>No Deadline</span>
                                     </p>
+                                </div>
                                 </div>
 
                                 <!-- Additional Info -->
-                                <div class="flex flex-row gap-6">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-gray-500 text-sm">Batches</span>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-dtext">34</span>
-                                    </div>
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-gray-500 text-sm">Campuses</span>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-dtext">2</span>
-                                    </div>
+                                <div class="flex flex-row gap-8 text-center">
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
+                                    <p class="text-xl font-bold text-gray-800 dark:text-dtext">34</p>
                                 </div>
-
+                                <div>
+                                    <p class="text-gray-500 dark:text-gray-400 text-sm">Campuses</p>
+                                    <p class="text-xl font-bold text-gray-800 dark:text-dtext">2</p>
+                                </div>
+                                </div>
                             </div>
-
                         </button>
+
 
                         <!-- One-Time Payment Scholarships -->
                         <h2
@@ -106,69 +112,70 @@
 
                         <template v-if="oneTimeScholarships.length > 0">
                             <button v-for="scholarship in oneTimeScholarships" :key="scholarship.id"
-                                @click="toggleSpecification(scholarship)" class="w-full">
+                                @click="toggleSpecification(scholarship)" class="w-full text-left">
 
-                                <div class="relative border rounded-lg bg-white dark:bg-dcontainer dark:border-gray-600 
-                                    hover:shadow-md transition-all duration-300 py-5 px-10 flex flex-col md:flex-row 
-                                    justify-between items-start md:items-center space-y-5 md:space-y-0">
-
+                                <div
+                                    class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6"
+                                >
                                     <!-- Notification Badge -->
                                     <span
-                                        class="absolute top-[-13px] right-2 bg-primary text-white text-sm font-bold px-5 py-1 rounded-full flex items-center gap-2">
-                                        <font-awesome-icon :icon="['fas', 'bell']" class="text-base" />
-                                        New Activities
+                                   
+                                    class="absolute -top-3 right-4 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow"
+                                    >
+                                    New Activities
                                     </span>
 
-
                                     <!-- Scholarship Info -->
-                                    <div class="space-y-4 flex flex-col items-start justify-start">
-                                        <div class="badge badge-info text-xs badge-outline px-3 py-1">
-                                            {{ getSponsorName(scholarship.sponsor_id) }}
-                                        </div>
+                                    <div class="flex-1 space-y-3">
+                                    <!-- Sponsor -->
+                                    <div
+                                        class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-900 text-xs font-medium px-3 py-1 rounded-full"
+                                    >
+                                        {{ getSponsorName(scholarship.sponsor_id) }}
+                                    </div>
 
-                                        <h2
-                                            class="w-full items-start text-3xl md:text-2xl font-semibold text-gray-900 dark:text-dtext">
-                                            {{ scholarship.name }}
-                                        </h2>
+                                    <!-- Scholarship Name -->
+                                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                                        {{ scholarship.name }}
+                                    </h2>
 
-                                        <p class="flex flex-col text-sm text-gray-500 items-start space-y-1">
-                                            <span class="items-start">Created on: {{ new
-                                                Date(scholarship.created_at).toLocaleDateString() }}</span>
-                                            <span class="items-start">Sponsoring Since:
-                                                {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                    year:
-                                                        'numeric', month: 'long', day: 'numeric'
-                                                }) }}
-                                            </span>
+                                    <!-- Dates -->
+                                    <div class="text-sm text-primary opacity-70 dark:text-gray-400 space-y-1">
+                                        <p><font-awesome-icon :icon="['far', 'calendar']"  class="mr-1" /> Created: {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                        }) }}</p>
+                                        <p><font-awesome-icon :icon="['fas', 'circle-dollar-to-slot']" class="mr-1" /> Sponsoring Since:
+                                            {{ scholarship.since }}
                                         </p>
-
-                                        <p class="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">
-                                            <span class="font-medium">Requirements Deadline:</span>
-                                            <span
-                                                v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
-                                                {{ new
-                                                    Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
-                                                        year: 'numeric', month: 'long', day: 'numeric'
-                                                    }) }}
-                                            </span>
-                                            <span v-else>
-                                                No Deadline
-                                            </span>
+                                        <p>
+                                            <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span class="font-medium">Requirements Deadline: </span>
+                                        <span
+                                            v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end"
+                                        >
+                                            {{ new Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: 'numeric'
+                                            }) }}
+                                        </span>
+                                        <span v-else>No Deadline</span>
                                         </p>
+                                    </div>
                                     </div>
 
                                     <!-- Additional Info -->
-                                    <div class="flex flex-row gap-6">
-                                        <div class="flex flex-col items-center">
-                                            <span class="text-gray-500 text-sm">Batches</span>
-                                            <span class="text-lg font-semibold text-gray-800 dark:text-dtext">34</span>
-                                        </div>
-                                        <div class="flex flex-col items-center">
-                                            <span class="text-gray-500 text-sm">Campuses</span>
-                                            <span class="text-lg font-semibold text-gray-800 dark:text-dtext">2</span>
-                                        </div>
+                                    <div class="flex flex-row gap-8 text-center">
+                                    <div>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
+                                        <p class="text-xl font-bold text-gray-800 dark:text-dtext">34</p>
                                     </div>
-
+                                    <div>
+                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Campuses</p>
+                                        <p class="text-xl font-bold text-gray-800 dark:text-dtext">2</p>
+                                    </div>
+                                    </div>
                                 </div>
                             </button>
                         </template>
@@ -313,25 +320,6 @@ onMounted(() => {
         })
 })
 
-// Set up real-time messaging using Laravel Echo
-// onMounted(() => {
-
-//     const echo = new Echo({
-//         broadcaster: 'pusher',
-//         key: import.meta.env.VITE_PUSHER_APP_KEY,
-//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//         forceTLS: true,
-//         authEndpoint: "/broadcasting/auth", // Required for private channels
-//     });
-
-//     echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
-//         .listen('.message.sent', (e) => {
-//             fetchMessages(); // Fetch messages after receiving
-//             scrollToBottom();
-//             messages.value.push(e.message); // Append new message
-//         });
-// });
-
 
 const directives = {
     Tooltip,
@@ -345,8 +333,6 @@ const oneTimeScholarships = computed(() =>
     props.scholarships.filter(scholarship => scholarship.scholarshipType === 'One-time Payment')
 );
 
-const ScholarshipSpecification = ref(false);
-
 const form = ref({
     id: null,
     name: '',
@@ -359,9 +345,9 @@ const getSponsorName = (sponsorId) => {
     return sponsor ? sponsor.name : 'Unknown Sponsor';
 };
 
-const formatDate = (date) => {
-    return new Date(date).toLocaleDateString();
-};
+// const formatDate = (date) => {
+//     return new Date(date).toLocaleDateString();
+// };
 
 const selectedYear = ref("");
 const selectedSem = ref("");
@@ -372,6 +358,8 @@ const formErrors = ref({
     selectedSem: "",
     selectedYear: "",
 });
+
+const ScholarshipSpecification = ref(false);
 
 const toggleSpecification = (Scholarship) => {
     ScholarshipSpecification.value = !ScholarshipSpecification.value;

@@ -599,7 +599,7 @@
                                         <div
                                             class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
-                                                    sm:whitespace-normal md:whitespace-nowrap">
+                                                    sm:whitespace-nowrap md:whitespace-nowrap">
                                                 Junior High School
                                             </h3>
 
@@ -655,7 +655,7 @@
                                         <div
                                             class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
-                                                    sm:whitespace-normal md:whitespace-nowrap">
+                                                    sm:whitespace-nowrap md:whitespace-nowrap">
                                                 Senior High School
                                             </h3>
 
@@ -827,7 +827,7 @@
                                         <div
                                             class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
                                             <h3 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center 
-                                                    sm:whitespace-normal md:whitespace-nowrap">
+                                                    sm:whitespace-nowrap md:whitespace-nowrap">
                                                 Post Graduate
                                             </h3>
 
@@ -1279,12 +1279,12 @@
                                                     <Label for="i1">10,000 and below</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
-                                                    <RadioGroupItem id="i2" value="20,001 - 30,000" />
-                                                    <Label for="i2">20,001 - 30,000</Label>
-                                                </div>
-                                                <div class="flex items-center space-x-2">
                                                     <RadioGroupItem id="i3" value="10,001 - 20,000" />
                                                     <Label for="i3">10,001 - 20,000</Label>
+                                                </div>
+                                                <div class="flex items-center space-x-2">
+                                                    <RadioGroupItem id="i2" value="20,001 - 30,000" />
+                                                    <Label for="i2">20,001 - 30,000</Label>
                                                 </div>
                                                 <div class="flex items-center space-x-2">
                                                     <RadioGroupItem id="i4" value="30,001 and above" />
