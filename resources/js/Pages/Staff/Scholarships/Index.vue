@@ -328,12 +328,6 @@ const form = ref({
     semester: null,
     date_start: '',
     date_end: '',
-    name: '',
-    scholarshipType: '',
-    totalRecipients: 0,
-    reqs: [],
-    criteria: [],
-    amount: 0,
 });
 
 // const form = ref({
@@ -597,7 +591,7 @@ const editScholarship = (scholarship) => {
 
 
 const resetForm = () => {
-    form.value = { id: null, name: '', description: '', scholarshipType: '', school_year: '', semester: '', application: '', deadline: '' };
+    form.value = { id: null, name: '', description: '', scholarshipType: '', school_year: '', semester: '', date_end: '', date_start: '' };
 };
 
 

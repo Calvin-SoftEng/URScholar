@@ -1964,6 +1964,8 @@ const forwardBatches = async () => {
             batch_ids: batchesToForward,
             date_start: form.value.payoutStartInput,
             date_end: form.value.payoutEndInput,
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         };
 
         // Send the request only when user confirms

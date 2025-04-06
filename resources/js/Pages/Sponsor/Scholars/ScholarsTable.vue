@@ -82,25 +82,25 @@ const props = defineProps({
 
 const showPayrolls = ref(false);
 
-onMounted(() => {
-    const echo = new Echo({
-        broadcaster: 'pusher',
-        key: import.meta.env.VITE_PUSHER_APP_KEY,
-        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-        forceTLS: true,
-        authEndpoint: "/broadcasting/auth", // Required for private channels
-    });
+// onMounted(() => {
+//     const echo = new Echo({
+//         broadcaster: 'pusher',
+//         key: import.meta.env.VITE_PUSHER_APP_KEY,
+//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//         forceTLS: true,
+//         authEndpoint: "/broadcasting/auth", // Required for private channels
+//     });
 
-    // Listen for general notifications
-    echo.channel('general-notifications')
-        .listen('GeneralNotification', (event) => {
-            // Check if this is a scholarship read notification
-            if (event.type === 'scholarship_read' &&
-                event.data.scholarship_id === scholarship.value.id) {
-                scholarship.value.read = event.data.read
-            }
-        })
-})
+//     // Listen for general notifications
+//     echo.channel('general-notifications')
+//         .listen('GeneralNotification', (event) => {
+//             // Check if this is a scholarship read notification
+//             if (event.type === 'scholarship_read' &&
+//                 event.data.scholarship_id === scholarship.value.id) {
+//                 scholarship.value.read = event.data.read
+//             }
+//         })
+// })
 
 
 const directives = {

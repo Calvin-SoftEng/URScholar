@@ -137,6 +137,8 @@ class SponsorController extends Controller
 
         // Set up payout query for this scholarship, filtered by campus if needed
         $payoutsQuery = Payout::where('scholarship_id', $scholarship->id)
+            ->where('semester', $request->input('selectedSem'))
+            ->where('school_year_id', $request->input('selectedYear'))
             ->where('status', '!=', 'Inactive');
 
         if ($userCampusIds) {
@@ -286,8 +288,8 @@ class SponsorController extends Controller
                         'totalRequirements' => $totalRequirements,
                         'progress' => $progress,
                         'user' => [
-                                'picture' => $scholar->user->picture ?? null // Include user picture
-                            ],
+                            'picture' => $scholar->user->picture ?? null // Include user picture
+                        ],
                     ];
                 }
 
