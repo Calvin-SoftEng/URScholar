@@ -1205,6 +1205,8 @@ class StudentController extends Controller
                 'scholar_id' => $scholar->id,
                 'requirement_id' => $requirementId, // This now uses the correct requirement ID
                 'submitted_requirements' => $file->getClientOriginalName(),
+                'message' => null,
+                'approved_date' => now(),
                 'path' => $path,
                 'status' => 'Pending'
             ]);

@@ -1146,8 +1146,8 @@
                                                 </Label>
                                             </div>
                                             <div class="relative w-full">
-                                                <Input type="text" placeholder="Permanent Address"
-                                                    v-model="form.father.address" :disabled="form.father.isDeceased"
+                                                <Input type="text" placeholder="Permanent Address" v-model="form.father.address" 
+                                                    :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1918,7 +1918,7 @@ function handleFatherFirstNameInput(event) {
         // Only clear if they contain "N/A"
         if (form.value.father.last_name === 'N/A') form.value.father.last_name = '';
         if (form.value.father.middle_name === 'N/A') form.value.father.middle_name = '';
-        if (form.value.father.age === 'N/A') form.value.first_name.age = '';
+        if (form.value.father.age === 'N/A') form.value.father.age = '';
         if (form.value.father.address === 'N/A') form.value.father.address = '';
         if (form.value.father.citizenship === 'N/A') form.value.father.citizenship = '';
         if (form.value.father.occupation === 'N/A') form.value.father.occupation = '';

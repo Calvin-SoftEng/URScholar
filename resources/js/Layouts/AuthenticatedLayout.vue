@@ -113,26 +113,24 @@
 
     <!-- student ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'student'">
-        <div class="w-full h-screen flex flex-col overflow-hidden">
-        <!-- Header -->
-        <ScholarHeaderNav class="w-full h-[50px]" />
+        <div class="w-full h-screen flex flex-col overflow-hidden max-w-full overflow-x-hidden">
+            <!-- Header -->
+            <ScholarHeaderNav class="w-full h-[50px]" />
 
-            <!-- Content Area -->
-            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
+            <div class="w-full max-w-full overflow-x-hidden">
+            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)] max-w-full">
                 <!-- Sidebar -->
-                <!-- <sidebar 
-                :dataOpenSideBar="openSidebar" 
-                :clickHamburger="toggleSidebar" 
-                class="lg:w-[250px] w-full lg:h-full h-auto bg-white"
-                /> -->
+                <!-- <sidebar ... /> -->
 
                 <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 bg-white">
+                <div class="flex-1 h-auto lg:h-full ml-0 mr-0 px-0 bg-white max-w-full">
                 <slot></slot>
                 </div>
             </div>
+            </div>
         </div>
-    </div>
+        </div>
+
 
 </template>
 

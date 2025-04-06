@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class SubmittedRequirements extends Model
 {
-    protected $fillable = ['scholar_id', 'requirement_id', 'submitted_requirements', 'path' , 'message', 'status'];
+    protected $fillable = ['scholar_id', 'requirement_id', 'submitted_requirements', 'approved_date', 'path' , 'message', 'status'];
 
     public function scholar()
     {

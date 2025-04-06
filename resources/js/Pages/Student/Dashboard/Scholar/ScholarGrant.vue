@@ -1,53 +1,53 @@
 <template>
     <template v-if="!disbursement">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
-            <span class="text-4xl font-bold">Tulong Dunong Program</span>
+            <span class="text-4xl font-bold sm:text-center">Tulong Dunong Program</span>
             <span class="text-xl">Grantee</span>
         </div>
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
                 </div>
-                <span class="mt-2 text-sm text-gray-700">Application</span>
+                <span class="mt-2 sm:text-xs lg:text-sm text-gray-700">Application</span>
             </div>
 
             <!-- Line -->
-            <div class="w-16 h-1 bg-primary relative -top-4"></div>
+            <div class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
 
             <!-- Step 2 -->
             <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     2</div>
-                <span class="mt-2 text-sm text-gray-700">Under Review</span>
+                <span class="mt-2 sm:text-xs lg:text-sm whitespace-nowrap text-gray-700">Under Review</span>
             </div>
 
             <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
                 </div>
                 <span class="mt-2 text-sm text-gray-700">Under Review</span>
             </div>
 
             <!-- Line -->
-            <div v-if="submitReq != 0 || submitPending != 0" class="w-16 h-1 bg-gray-300 relative -top-4"></div>
-            <div v-if="submitApproved != 0" class="w-16 h-1 bg-primary relative -top-4"></div>
+            <div v-if="submitReq != 0 || submitPending != 0" class="sm:w-8 lg:w-16 h-1 bg-gray-300 relative sm:-top-3 lg:-top-4"></div>
+            <div v-if="submitApproved != 0" class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
 
             <!-- Step 3 -->
             <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     3</div>
                 <span class="mt-2 text-sm text-gray-700">Approved</span>
             </div>
 
             <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
                 <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
                 </div>
                 <span class="mt-2 text-sm text-gray-700">Approved</span>
@@ -61,6 +61,9 @@
             <p class="mt-2">
                 <p>Your application has been successfully completed.</p>
                 <p>You will be notified about the next steps soon.</p>
+                <br>
+                <p>For now kindly update and upload your grades to the system by navigativing to the profile then education section. Thankyou!</p>
+                <p></p>
             </p>
         </div>
 
