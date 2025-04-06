@@ -21,13 +21,14 @@
                 <div class="flex justify-between items-center mb-4">
                     <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                         <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
-                        {scholarship name} Scholars
+                        {{scholarship.name}}'s Scholars
                     </h1>
                 </div>
 
                 <div class="mx-auto py-5">
                     <div class="flex w-full flex-col gap-6">
-                        <ScholarList :scholarships="props.scholarships" :sponsors="props.sponsors" />
+                        <ScholarList :scholarship="scholarship" :schoolyear="schoolyear" :selectedSem="selectedSem" :processedBatches="processedBatches"
+                        :requirements="requirements" :payout="payout"/>
                     </div>
                 </div>
 
@@ -52,18 +53,12 @@ import { Button } from '@/Components/ui/button'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
 const props = defineProps({
-    sponsors: {
-        type: Array,
-        required: true
-    },
-    scholarships: {
-        type: Array,
-        required: true
-    },
-    schoolyears: {
-        type: Array,
-        required: true
-    },
+  scholarship: Object,
+  schoolyear: Object,
+  selectedSem: String,
+  processedBatches: Array,
+  requirements: Array,
+  payout: Number,
 });
 
 onMounted(() => {

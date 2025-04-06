@@ -6,8 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\Payout;
+use App\Models\SchoolYear;
+use App\Models\Requirements;
+use App\Models\SubmittedRequirements;
+use App\Models\User;
+use App\Models\Batch;
 use Illuminate\Http\Request;
 use App\Models\Sponsor;
+use App\Models\Scholarship;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Storage;
@@ -27,10 +33,13 @@ class SponsorController extends Controller
             ->with(['campus'])
             ->get();
 
+        $schoolyears = SchoolYear::all();
+
         return Inertia::render('Sponsor/Dashboard', [
             'sponsor' => $sponsor,
             'scholarships' => $scholarship,
             'payouts' => $payout,  // Don't forget to pass this to your view
+            'schoolyears' => $schoolyears,
         ]);
 
     }
@@ -112,12 +121,134 @@ class SponsorController extends Controller
         return redirect()->route('sponsor.index')->with('success', 'Sponsor added successfully!');
     }
 
-    public function view_scholars()
+    public function view_scholars(Request $request, $scholarshipId)
     {
+        // Checking if scholar's payment claimed
+        $payout = 0;
 
-        return Inertia::render('Sponsor/Scholars/ScholarsTable');
+        $scholarship = Scholarship::findOrFail($scholarshipId);
 
-        // return Inertia::render('Coordinator/Scholarships/CreateScholarships');
+        // Get all requirements for this scholarship
+        $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
+        $totalRequirements = $requirements->count();
+
+        // Get all batches for this scholarship with the selected filters
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->when($request->input('selectedYear'), function ($query, $year) {
+                return $query->where('school_year_id', $year);
+            })
+            ->when($request->input('selectedSem'), function ($query, $sem) {
+                return $query->where('semester', $sem);
+            })
+            ->orderBy('batch_no', 'desc')
+            ->with(['scholars.campus', 'scholars.course', 'scholars.user', 'school_year'])
+            ->get();
+
+        // Process all batches and their scholars
+        $processedBatches = $batches->map(function ($batch) use ($scholarship, $totalRequirements) {
+            $grantees = $scholarship->grantees()
+                ->where('batch_id', $batch->id)
+                ->with('scholar.campus', 'scholar.course', 'school_year')
+                ->get();
+
+            // Count scholars with complete submissions
+            $completeSubmissionsCount = 0;
+
+            $scholars = $grantees->map(function ($grantee) use ($totalRequirements, &$completeSubmissionsCount) {
+                // Skip if there's no related scholar
+                if (!$grantee->scholar) {
+                    return null;
+                }
+
+                $scholar = $grantee->scholar;
+
+                $userPicture = User::where('id', $scholar->user_id)
+                    ->first();
+
+                if (!$userPicture) {
+                    $userPicture = null;
+                }
+
+                // Get approved, returned, and total submitted requirements for this scholar
+                $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Approved')
+                    ->count();
+
+                $returnedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Returned')
+                    ->count();
+
+                $countRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->count();
+
+                $userVerified = User::where('id', $scholar->user_id)->first();
+
+                // Determine status
+                $status = 'No submission';
+                if ($totalRequirements > 0) {
+                    if ($countRequirements === 0) {
+                        $status = 'No submission';
+                    } elseif ($approvedRequirements === $totalRequirements) {
+                        $status = 'Complete';
+                        $completeSubmissionsCount++; // Increment counter for complete submissions
+                    } elseif ($returnedRequirements > 0) {
+                        $status = 'Returned';
+                    } elseif ($countRequirements > 0) {
+                        $status = 'Submitted';
+                    } else {
+                        $status = 'Incomplete';
+                    }
+                }
+
+                // Calculate progress percentage
+                $progress = $totalRequirements > 0
+                    ? ($approvedRequirements / $totalRequirements) * 100
+                    : 0;
+
+                return [
+                    'id' => $scholar->id,
+                    'picture' => $userPicture,
+                    'urscholar_id' => $scholar->urscholar_id,
+                    'first_name' => $scholar->first_name,
+                    'last_name' => $scholar->last_name,
+                    'middle_name' => $scholar->middle_name,
+                    'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                    'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
+                    'year_level' => $scholar->year_level,
+                    'grant' => $scholar->grant,
+                    'status' => $status,
+                    'submittedRequirements' => $approvedRequirements,
+                    'totalRequirements' => $totalRequirements,
+                    'progress' => $progress,
+                    'user' => [
+                        'picture' => $scholar->user->picture ?? null // Include user picture
+                    ],
+                    'userVerified' => $userVerified->email_verified_at,
+                ];
+            })->filter()->values();
+
+            // Update the batch to mark as read
+            $batch->update([
+                'read' => 1
+            ]);
+
+            return [
+                'batch' => $batch,
+                'scholars' => $scholars,
+                'completeSubmissionsCount' => $completeSubmissionsCount
+            ];
+        });
+
+        return Inertia::render('Sponsor/Scholars/ScholarsTable', [
+            'scholarship' => $scholarship,
+            'processedBatches' => $processedBatches,
+            'payout' => $payout,
+            'requirements' => $requirements,
+            'schoolyear' => $request->input('selectedYear')
+                ? SchoolYear::find($request->input('selectedYear'))
+                : null,
+            'selectedSem' => $request->input('selectedSem', ''),
+        ]);
     }
 
     public function scholar_description()

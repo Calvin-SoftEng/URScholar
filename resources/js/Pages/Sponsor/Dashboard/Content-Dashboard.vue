@@ -21,7 +21,7 @@
 
             <!-- Right Column (70% width) -->
             <div class="bg-white shadow-md p-6 rounded-lg flex flex-col justify-between">
-                <Scholarships :sponsor="sponsor" :scholarships="scholarships"/>
+                <Scholarships :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
             </div>
         </div>
 
@@ -54,6 +54,7 @@ const components = {
 const props = defineProps({
     sponsor: Object,
     scholarships: Array,
+    schoolyears: Array,
 });
 
 const grantBasedScholarships = computed(() =>

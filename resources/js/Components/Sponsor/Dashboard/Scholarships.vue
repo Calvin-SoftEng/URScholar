@@ -369,7 +369,7 @@ const openScholarship = () => {
     formData.append("semester", selectedSem.value); // Make sure it's being passed
 
 
-    router.visit(`/scholarships/${selectedScholarship.value.id}`, {
+    router.visit(`/sponsor/scholarships/${selectedScholarship.value.id}`, {
         data: { selectedYear: selectedYear.value, selectedSem: selectedSem.value },
         preserveState: true
     });
