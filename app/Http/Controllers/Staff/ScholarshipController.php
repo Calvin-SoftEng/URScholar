@@ -137,9 +137,6 @@ class ScholarshipController extends Controller
             }
 
 
-
-
-
             // Get approved, returned, and total submitted requirements for this scholar
             $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Approved')
@@ -151,6 +148,8 @@ class ScholarshipController extends Controller
 
             $countRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->count();
+
+                $userVerified = User::where('id', $scholar->user_id)->first();
 
             // Determine status
             $status = 'No submission';
@@ -191,7 +190,8 @@ class ScholarshipController extends Controller
                 'progress' => $progress,
                 'user' => [
                     'picture' => $scholar->user->picture ?? null // Include user picture
-                ]
+                ],
+                'userVerified' => $userVerified->email_verified_at,
             ];
         });
 
@@ -199,6 +199,7 @@ class ScholarshipController extends Controller
         $batch->update([
             'read' => 1
         ]);
+
 
         return Inertia::render('Staff/Scholarships/Scholarship_Batch', [
             'scholarship' => $scholarship,
@@ -465,9 +466,10 @@ class ScholarshipController extends Controller
         $selectedCampusBatches = $batches->filter(function ($batch) use ($request) {
             return $batch->campus_id == $request->input('selectedCampus');
         });
+        
 
         // If we have batches, check if any are not inactive
-        if ($selectedCampusBatches->count() > 0) {
+        if ($allBatches->count() > 0) {
             foreach ($selectedCampusBatches as $batch) {
                 if ($batch->status !== 'Inactive') {
                     $allBatchesInactive = false;
@@ -495,6 +497,26 @@ class ScholarshipController extends Controller
         // Get single payout record for backward compatibility
         $mainPayout = Payout::where('scholarship_id', $scholarship->id)->first();
 
+        // Count claimed and not claimed for each batch
+        $payoutBatches = $batches->map(function ($batch) {
+            $claimed = $batch->disbursement->where('status', 'Claimed')->count();
+            $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
+
+            return array_merge($batch->toArray(), [
+                'claimed_count' => $claimed,
+                'not_claimed_count' => $notClaimed
+            ]);
+        });
+
+        // Fetch grantees only if batches exist
+        $grantees = collect();
+        if ($payoutBatches->isNotEmpty()) {
+            $grantees = $scholarship->grantees()
+                ->whereIn('batch_id', $payoutBatches->pluck('id'))
+                ->with('scholar.campus', 'scholar.course')
+                ->get();
+        }
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches, // Keep original batches for backward compatibility
@@ -520,6 +542,7 @@ class ScholarshipController extends Controller
             'userCampusId' => $userType == 'coordinator' ? $user->campus_id : null,
             'allBatches' => $allBatches,
             'payouts' => $mainPayout, // Keep original payouts for backward compatibility
+            'payoutBatches' => $payoutBatches,
         ]);
     }
 

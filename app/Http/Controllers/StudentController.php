@@ -20,7 +20,7 @@ use App\Models\Eligible;
 use App\Models\Course;
 use App\Models\Batch;
 use App\Models\Message;
-use App\Models\StudentNotifier;
+use App\Models\Notifier;
 use App\Models\Notification;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
@@ -1046,7 +1046,7 @@ class StudentController extends Controller
         // Fetch the school year from the database using the calculated school year ID
         $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
 
-        $notify = StudentNotifier::where('scholar_id', $scholar->id)->first();
+        $notify = Notifier::where('user_id', $scholar->user_id)->first();
 
         if ($notify) {
             $notify->update([

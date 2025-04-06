@@ -345,6 +345,7 @@ const toggleSpecification = (Scholarship) => {
     resetForm();
 };
 
+
 const date_end = new Date(props.scholarships.date_end).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",

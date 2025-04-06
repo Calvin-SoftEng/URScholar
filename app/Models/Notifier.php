@@ -4,18 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class StudentNotifier extends Model
+class Notifier extends Model
 {
     protected $fillable = [
-        'scholar_id',
+        'user_id',
         'title',
         'message',
         'type',
         'read',
     ];
 
-    public function scholar()
+    public function user()
     {
-        return $this->belongsTo(Scholar::class);
+        return $this->belongsTo(User::class);
     }
 }

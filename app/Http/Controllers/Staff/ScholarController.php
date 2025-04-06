@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Events\NewNotification;
-use App\Models\StudentNotifier;
+use App\Models\Notifier;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -136,7 +136,7 @@ class ScholarController extends Controller
         // Get the submitted requirements for this scholar
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
 
-        $notify = StudentNotifier::where('scholar_id', $scholar->id)
+        $notify = Notifier::where('user_id', $scholar->user_id)
             ->where('read', 0)
             ->first();
 
@@ -155,12 +155,12 @@ class ScholarController extends Controller
         ]);
     }
 
-    public function scholar_notifier($scholarID)
+    public function notifier($scholarID)
     {
         $scholar = Scholar::findOrFail($scholarID);
 
-        StudentNotifier::create([
-            'scholar_id' => $scholar->id,
+        Notifier::create([
+            'user_id' => $scholar->user_id,
             'title' => 'Grade Notification',
             'message' => 'You need to update your grade.',
             'type' => 'scholarship_notification',

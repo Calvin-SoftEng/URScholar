@@ -293,6 +293,14 @@ class CashierController extends Controller
                 return back()->withErrors(['message' => 'Scholar not found']);
             }
 
+            // Get the authenticated user's campus
+            $userCampus = Auth::user()->campus_id; // Assuming users have a campus_id field
+
+            // Check if user and scholar are from the same campus
+            if ($userCampus != $scholar->campus_id) {
+                return back()->withErrors(['message' => 'You can only scan scholars from your own campus']);
+            }
+
             // Retrieve the scholar's picture
             $scholarPicture = User::where('email', $scholar->email)->first();
 

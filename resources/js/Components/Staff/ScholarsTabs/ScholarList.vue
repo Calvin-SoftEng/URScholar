@@ -107,9 +107,13 @@
                     </span>
                   </td>
                   <th>
-                    <Link :href="`/scholarships/scholar=${scholar.id}`">
-                    <button
-                      class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
+                    <Link :href="scholar.userVerified ? `/scholarships/scholar=${scholar.id}` : '#'"
+                      @click.prevent="!scholar.userVerified">
+                    <button class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm" :class="{
+                      'hover:bg-blue-200 cursor-pointer': scholar.userVerified,
+                      'opacity-50 cursor-not-allowed': !scholar.userVerified
+                    }" :disabled="!scholar.userVerified"
+                      v-tooltip.left="!scholar.userVerified ? 'Scholar has no data' : null"
                       aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>

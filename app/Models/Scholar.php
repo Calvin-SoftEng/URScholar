@@ -75,11 +75,6 @@ class Scholar extends Model
         return $this->hasMany(Grade::class);
     }
 
-    public function studentnotifier()
-    {
-        return $this->belongsTo(StudentNotifier::class);
-    }
-
     public function batch()
     {
         return $this->belongsTo(Batch::class);

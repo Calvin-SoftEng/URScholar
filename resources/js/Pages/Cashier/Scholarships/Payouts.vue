@@ -65,7 +65,7 @@
 
         
 
-        <ToastProvider>
+        <!-- <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
                 <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
@@ -73,7 +73,7 @@
             </ToastRoot>
 
             <ToastViewport class="fixed bottom-4 right-4" />
-        </ToastProvider>
+        </ToastProvider> -->
 
     </AuthenticatedLayout>
 </template>
