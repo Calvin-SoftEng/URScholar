@@ -68,7 +68,7 @@
                                                 Message
                                             </h3>
                                             <div
-                                                class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                class="block p-2.5 w-full text-base text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                                 <p>
                                                     This email message is for the distribution of accounts for students,
                                                     reminding them of their scholarship opportunities. We encourage all
@@ -76,6 +76,7 @@
                                                     provide further assistance with the application process if needed.
                                                 </p>
                                             </div>
+                                            
                                         </div>
                                         <!-- <div class="w-full">
                                                 <div class="mb-3">
@@ -256,7 +257,7 @@
                             </button>
                         </div>
 
-                        <div class="w-full h-full space-y-5 mb-3">
+                        <div class="w-6/12 mx-auto h-full space-y-5 mb-3">
                             <!-- partnership content -->
                             <div
                                 class="w-full h-[30%] px-5 py-5 bg-[white] rounded-lg shadow-md space-y-5 dark:bg-dsecondary dark:border dark:border-gray-600">
@@ -270,27 +271,91 @@
                                     </span>
                                 </div>
 
-                                <div class="relative">
-                                    <h3 class="font-semibold text-gray-900 dark:text-white">
-                                        Subject</h3>
-                                    <textarea v-model="form.subject" id="subject" rows="2"
-                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Write Title to the message"></textarea>
-                                    <InputError v-if="errors.subject" :message="errors.subject" class="mt-1" />
-                                </div>
-
                                 <div class="flex flex-col gap-2">
-                                    <div class="h-full w-full flex flex-row gap-3">
-                                        <div class="w-full">
-                                            <div class="mb-3">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Add Messages
-                                                </h3>
-                                                <textarea v-model="form.content" id="content" rows="15"
-                                                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Write additional informations here..."></textarea>
-                                                <InputError v-if="errors.content" :message="errors.content"
-                                                    class="mt-1" />
+                                    <div class="h-full w-full grid grid-cols-1 gap-5">
+                                        <!-- <div class="flex flex-col space-y-2"> -->
+                                        <div class="relative">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">
+                                                Message
+                                            </h3>
+                                            <div
+                                                class="block p-2.5 w-full text-base text-gray-900 bg-gray-50 rounded-lg border border-gray-300 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                                <p>
+                                                    This is a reminder for all students to update their grades in the system. 
+                                                    Keeping your academic records up to date is important for accurate assessment. If you need any assistance, feel free to reach out to the scholarship office.
+                                                </p>
                                             </div>
+                                        </div>
+                                        <!-- <div class="w-full">
+                                                <div class="mb-3">
+                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Add Messages
+                                                    </h3>
+                                                    <textarea v-model="form.content" id="content" rows="15"
+                                                        class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                        placeholder="Write additional informations here..."></textarea>
+                                                    <InputError v-if="errors.content" :message="errors.content"
+                                                        class="mt-1" />
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                        <div class="w-full flex flex-col space-y-7">
+                                            <div>
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Set Submission
+                                                    Timeline</h3>
+                                                <div id="date-range-picker" date-rangepicker
+                                                    class="flex items-center gap-3 w-full">
+                                                    <!-- Application Start Date -->
+                                                    <div class="flex flex-col w-full">
+                                                        <div class="relative">
+                                                            <div
+                                                                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                                    aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path
+                                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                                                </svg>
+                                                            </div>
+                                                            <input :value="selectedStart"
+                                                                @input="selectedStart = $event.target.value"
+                                                                id="datepicker-range-start" name="start" type="text"
+                                                                autocomplete="off"
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                placeholder="Submission Start Date">
+                                                        </div>
+                                                        <InputError v-if="errors.application"
+                                                            :message="errors.application" class="mt-1" />
+                                                    </div>
+
+                                                    <span class="text-gray-500">to</span>
+
+                                                    <!-- Application Deadline -->
+                                                    <div class="flex flex-col w-full">
+                                                        <div class="relative">
+                                                            <div
+                                                                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                                    aria-hidden="true"
+                                                                    xmlns="http://www.w3.org/2000/svg"
+                                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                                    <path
+                                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                                                </svg>
+                                                            </div>
+                                                            <input :value="selectedEnd"
+                                                                @input="selectedEnd = $event.target.value"
+                                                                id="datepicker-range-end" name="end" type="text"
+                                                                autocomplete="off"
+                                                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                                placeholder="Submission Deadline">
+                                                        </div>
+                                                        <InputError v-if="errors.deadline" :message="errors.deadline"
+                                                            class="mt-1" />
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
                                 </div>
