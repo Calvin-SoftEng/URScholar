@@ -34,7 +34,8 @@
             </div>
 
             <!-- Line -->
-            <div v-if="submitReq != 0 || submitPending != 0" class="sm:w-8 lg:w-16 h-1 bg-gray-300 relative sm:-top-3 lg:-top-4"></div>
+            <div v-if="submitReq != 0 || submitPending != 0"
+                class="sm:w-8 lg:w-16 h-1 bg-gray-300 relative sm:-top-3 lg:-top-4"></div>
             <div v-if="submitApproved != 0" class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
 
             <!-- Step 3 -->
@@ -59,17 +60,19 @@
         <div v-if="submitPending != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
             <h2 class="text-xl font-semibold">Congratulations!</h2>
             <p class="mt-2">
-                <p>Your application has been successfully completed.</p>
-                <p>You will be notified about the next steps soon.</p>
-                <br>
-                <p>For now kindly update and upload your grades to the system by navigativing to the profile then education section. Thankyou!</p>
-                <p></p>
+            <p>Your application has been successfully completed.</p>
+            <p>You will be notified about the next steps soon.</p>
+            <br>
+            <p>For now kindly update and upload your grades to the system by navigativing to the profile then education
+                section. Thankyou!</p>
+            <p></p>
             </p>
         </div>
 
         <!-- second stepper -->
 
-        <div v-else-if="submitReq != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
+        <div v-else-if="submitReq != 0"
+            class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
             <span>From Maam Anorn:</span>
             <span>Message</span>
             <p>It is noted, however, that among the requirements you have submittted to DBP, the
@@ -103,7 +106,7 @@
                         </p>
                     </div>
                 </div>
-                
+
 
                 <div v-if="returnedRequirements.length === 0" class="text-center py-8">
                     <p class="text-gray-500">No returned requirements to resubmit.</p>
@@ -125,8 +128,8 @@
         <div v-if="submitApproved != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
             <h2 class="text-xl font-semibold">Congratulations!</h2>
             <p class="mt-2">
-                <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
-                <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
+            <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
+            <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
             </p>
 
             <!-- Encouragement to Stay Updated -->
@@ -170,16 +173,16 @@
             </div>
 
             <!-- Payout Announcement Card (Only shown if there's a schedule) -->
-            <div v-if="!payout_schedule" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
-                <h2 class="text-lg sm:text-xl font-semibold">Upcoming Payout Schedule</h2>
+            <div v-if="!payout_schedule || disbursement.status === 'Claimed'"
+                class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+                <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
                 <p class="mt-2">
                     <span class="font-bold">Next payout schedule will be announced soon</span>.
                     Stay updated for further announcements.
                 </p>
             </div>
-
             <div v-else class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
-                <h2 class="text-lg sm:text-xl font-semibold">Payout Schedule</h2>
+                <h2 class="text-xl font-semibold">Payout Schedule</h2>
                 <p class="mt-2">
                     Your next payout is expected on
                     <span class="font-bold">{{ formattedDate }} at {{ formattedTime }}</span>.
@@ -266,17 +269,18 @@
                 </div>
 
                 <div class="max-w-6xl mx-auto space-y-6 mt-4">
-                    <div v-if="historygrantee.length === 0">
-                        <div class="grid grid-cols-1 gap-4 items-center">
-                            <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                    <div v-if="filteredHistoryGrantee.length === 0">
+                        <div class="grid grid-cols-5 gap-4 items-center">
+                            <div class="col-span-5 flex items-center justify-center text-primary font-bold">
                                 NO history yet
                             </div>
                         </div>
                     </div>
 
                     <div v-else>
-                        <div v-for="history in historygrantee" :key="history.id" class="grid grid-cols-1 sm:grid-cols-5 gap-4 items-center">
-                            <div class="col-span-1 sm:col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
+                        <div v-for="history in filteredHistoryGrantee" :key="history.id"
+                            class="grid grid-cols-5 gap-4 items-center">
+                            <div class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
                                 <h3 class="font-semibold text-base text-blue-900 dark:text-white">
                                     {{ history.semester }} Semester - {{ history.school_year }}
                                 </h3>
@@ -287,12 +291,15 @@
                                 {{ history.dibursement_status }}
                             </div>
 
-                            <div class="col-span-1 sm:col-span-4 bg-white shadow-md p-4 rounded-lg">
-                                <h2 class="text-lg font-semibold">
-                                    {{ new Date(history.claimed_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) }}
-                                </h2>
-                                <p class="text-gray-600">Claimed by: <span class="font-medium">Ako sino pa ba</span>, ID: URSB123</p>
-                                <p class="text-gray-600">Processed at: sa cashier</p>
+                            <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
+                                <h2 class="text-lg font-semibold">{{ history.claimed_at ? new
+                                    Date(history.claimed_at).toLocaleDateString('en-US', {
+                                        year: 'numeric', month: 'long', day: 'numeric'
+                                    }) : 'Not yet claimed' }}</h2>
+                                <p class="text-gray-600" v-if="history.claimed_by">Claimed by: <span
+                                        class="font-medium">{{ history.claimed_by.first_name }}</span>,
+                                    ID: URSB123</p>
+                                <p class="text-gray-600" v-if="history.claimed_at">Processed at: sa cashier</p>
                             </div>
                         </div>
                     </div>
@@ -436,6 +443,13 @@ const removeFile = (reqId) => {
         fileInput.value = '';
     }
 };
+
+// Create the computed property
+const filteredHistoryGrantee = computed(() => {
+    return props.historygrantee.filter(history =>
+        history.dibursement_status !== 'Pending'
+    );
+});
 
 // const handleFile = (event, requirementId, requirementName) => {
 //     const file = event.target.files[0];

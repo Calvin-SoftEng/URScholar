@@ -86,7 +86,7 @@
                             <span class="font-normal">Notify Payouts</span>
                         </button>
                         </Link>
-                        <Link v-else >
+                        <Link v-else>
                         <button disabled
                             class="flex items-center gap-2 bg-gray border border-gray-600 font-poppins text-primary px-4 py-2 rounded-lg hover:bg-gray-200 transition duration-200 'opacity-50 cursor-not-allowed'">
                             <font-awesome-icon :icon="['fas', 'bullhorn']" class="text-base" />
@@ -102,7 +102,16 @@
                 </div>
 
 
-                <div v-for="batch in batches" :key="batch.id"
+                <div v-if="!payout_schedule">
+                    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                        <font-awesome-icon :icon="['fas', 'user-graduate']"
+                            class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                        <p class="text-lg text-gray-700 dark:text-gray-300">
+                            Need to set a schedule
+                        </p>
+                    </div>
+                </div>
+                <div v-else v-for="batch in batches" :key="batch.id"
                     class="bg-gradient-to-r from-white to-[#D2CFFE] w-full rounded-lg p-5 shadow-sm hover:bg-lightblue">
                     <div @click="() => openBatch(batch.id)"
                         class="flex flex-row justify-between items-center cursor-pointer">
@@ -235,8 +244,7 @@
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         {{ isSubmitting ? 'Processing...' : 'Forward' }}
                                     </button>
-                                    <button v-else-if="isDateMatched && !canForward"
-                                        @click="forwardPayout"
+                                    <button v-else-if="isDateMatched && !canForward" @click="forwardPayout"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         Forward (Overdue {{ formatDate(payouts.date_end) }})
                                     </button>

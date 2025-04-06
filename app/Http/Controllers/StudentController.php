@@ -82,6 +82,8 @@ class StudentController extends Controller
                     // Get the disbursement for this scholar
                     $disbursement = $grantee->scholar->disbursements->first();
 
+                    $user = User::where('id', $disbursement->claimed_by)->first();
+
                     return [
                         'id' => $grantee->id,
                         'scholar_id' => $grantee->scholar_id,
@@ -91,6 +93,7 @@ class StudentController extends Controller
                         'batch_name' => $grantee->batch ? $grantee->batch->batch_name : 'N/A',
                         'dibursement_status' => $disbursement ? $disbursement->status : 'No Disbursement',
                         'claimed_at' => $disbursement ? $disbursement->claimed_at : null,
+                        'claimed_by' => $user ? $user : null,
                         'reasons_of_not_claimed' => $disbursement ? $disbursement->reasons_of_not_claimed : null,
                         // Add any other fields you need from grantee or disbursement
                     ];

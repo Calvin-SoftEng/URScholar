@@ -173,26 +173,51 @@ class ScholarshipController extends Controller
                 ? ($approvedRequirements / $totalRequirements) * 100
                 : 0;
 
-            return [
-                'id' => $scholar->id,
-                'picture' => $userPicture,
-                'urscholar_id' => $scholar->urscholar_id,
-                'first_name' => $scholar->first_name,
-                'last_name' => $scholar->last_name,
-                'middle_name' => $scholar->middle_name,
-                'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
-                'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
-                'year_level' => $scholar->year_level,
-                'grant' => $scholar->grant,
-                'status' => $status,
-                'submittedRequirements' => $approvedRequirements,
-                'totalRequirements' => $totalRequirements,
-                'progress' => $progress,
-                'user' => [
-                    'picture' => $scholar->user->picture ?? null // Include user picture
-                ],
-                'userVerified' => $userVerified->email_verified_at,
-            ];
+            if ($userVerified) {
+                return [
+                    'id' => $scholar->id,
+                    'picture' => $userPicture,
+                    'urscholar_id' => $scholar->urscholar_id,
+                    'first_name' => $scholar->first_name,
+                    'last_name' => $scholar->last_name,
+                    'middle_name' => $scholar->middle_name,
+                    'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                    'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
+                    'year_level' => $scholar->year_level,
+                    'grant' => $scholar->grant,
+                    'status' => $status,
+                    'submittedRequirements' => $approvedRequirements,
+                    'totalRequirements' => $totalRequirements,
+                    'progress' => $progress,
+                    'user' => [
+                        'picture' => $scholar->user->picture ?? null // Include user picture
+                    ],
+                    'userVerified' => $userVerified->email_verified_at,
+                ];
+            }
+            else {
+                return [
+                    'id' => $scholar->id,
+                    'picture' => $userPicture,
+                    'urscholar_id' => $scholar->urscholar_id,
+                    'first_name' => $scholar->first_name,
+                    'last_name' => $scholar->last_name,
+                    'middle_name' => $scholar->middle_name,
+                    'campus' => $scholar->campus->name ?? 'N/A', // Display campus name or N/A
+                    'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
+                    'year_level' => $scholar->year_level,
+                    'grant' => $scholar->grant,
+                    'status' => $status,
+                    'submittedRequirements' => $approvedRequirements,
+                    'totalRequirements' => $totalRequirements,
+                    'progress' => $progress,
+                    'user' => [
+                        'picture' => $scholar->user->picture ?? null // Include user picture
+                    ],
+                ];
+            }
+
+
         });
 
         //Update the total scholars in the batch
@@ -261,27 +286,27 @@ class ScholarshipController extends Controller
     {
         $user = Auth::user();
         $userType = $user->usertype;
-    
+
         $campuses = $userType == 'super_admin'
             ? Campus::all()
             : Campus::where('id', $user->campus_id)->get();
-    
+
         if ($userType == 'coordinator') {
             if (!$request->has('selectedCampus')) {
                 $request->merge(['selectedCampus' => $user->campus_id]);
             }
-    
+
             if ($request->input('selectedCampus') != $user->campus_id) {
                 return redirect()->back()->with('error', 'You can only view your assigned campus.');
             }
         }
-    
+
         // Filtered batch for One-time Payment redirect
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->first();
-    
+
         if ($scholarship->scholarshipType == 'One-time Payment' && $batch) {
             return redirect()->route('scholarship.onetime_list', [
                 'scholarshipId' => $scholarship->id,
@@ -289,14 +314,14 @@ class ScholarshipController extends Controller
                 'selectedSem' => $request->input('selectedSem')
             ]);
         }
-    
+
         // Total batches for selected campus
         $totalBatches = Batch::where('scholarship_id', $scholarship->id)
             ->where('campus_id', $request->input('selectedCampus'))
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->count();
-    
+
         // Batches base query
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
@@ -305,14 +330,14 @@ class ScholarshipController extends Controller
                 'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
                 'grantees.scholar.submittedRequirements'
             ]);
-    
+
         // Filtered campuses
         $filteredCampuses = $userType == 'coordinator'
             ? $campuses->where('id', $user->campus_id)
             : ($request->input('selectedCampus')
                 ? $campuses->where('id', $request->input('selectedCampus'))
                 : $campuses);
-    
+
         // Group batches by campus
         $batchesByCampus = [];
         foreach ($filteredCampuses as $campus) {
@@ -320,7 +345,7 @@ class ScholarshipController extends Controller
                 ->where('campus_id', $campus->id)
                 ->orderBy('batch_no')
                 ->get();
-    
+
             if ($campusBatches->isNotEmpty()) {
                 $batchesByCampus[$campus->id] = [
                     'campus' => $campus,
@@ -328,18 +353,18 @@ class ScholarshipController extends Controller
                 ];
             }
         }
-    
+
         // All filtered batches
         $batches = $batchesQuery->orderBy('batch_no')->get();
-    
+
         $schoolyear = $request->input('selectedYear')
             ? SchoolYear::find($request->input('selectedYear'))
             : null;
-    
+
         $courses = Course::all();
         $students = Student::all();
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-    
+
         // Grantees query
         $granteesQuery = $scholarship->grantees()
             ->whereIn('batch_id', $batches->pluck('id'))
@@ -349,42 +374,43 @@ class ScholarshipController extends Controller
                 'scholar.user',
                 'scholar.submittedRequirements' => fn($q) => $q->orderBy('created_at', 'desc')
             ]);
-    
+
         if ($userType == 'coordinator') {
             $granteesQuery->whereHas('scholar', fn($q) => $q->where('campus_id', $user->campus_id));
         } elseif ($request->input('selectedCampus')) {
             $granteesQuery->whereHas('scholar', fn($q) => $q->where('campus_id', $request->input('selectedCampus')));
         }
-    
+
         $grantees = $granteesQuery->get();
-    
+
         $total_scholars = $grantees->map(fn($grantee) => $grantee->scholar)->filter()->unique('id');
-    
+
         // Update batch status + sub_total
         foreach ($batches as $batch) {
             $batchScholars = $batch->grantees->map(fn($grantee) => $grantee->scholar)->filter()->unique('id');
-    
+
             $approvedScholarsQuery = Scholar::whereIn('id', $batchScholars->pluck('id'))
                 ->whereHas('submittedRequirements', fn($q) => $q->where('status', 'Approved'))
                 ->whereDoesntHave('submittedRequirements', fn($q) => $q->whereIn('status', ['Pending', 'Returned']));
-    
+
             if ($userType == 'coordinator') {
                 $approvedScholarsQuery->where('campus_id', $user->campus_id);
             } elseif ($request->input('selectedCampus')) {
                 $approvedScholarsQuery->where('campus_id', $request->input('selectedCampus'));
             }
-    
+
             $approvedCount = $approvedScholarsQuery->count();
-    
-            $hasCompletedRequirements = $batchScholars->contains(fn($scholar) =>
+
+            $hasCompletedRequirements = $batchScholars->contains(
+                fn($scholar) =>
                 $scholar->submittedRequirements->where('status', 'Approved')->isNotEmpty()
             );
-    
+
             $newStatus = $batch->status;
             if ($batch->status == 'Pending' && $hasCompletedRequirements && $approvedCount > 0) {
                 $newStatus = 'Active';
             }
-    
+
             Batch::where('id', $batch->id)
                 ->where('school_year_id', $request->input('selectedYear'))
                 ->where('semester', $request->input('selectedSem'))
@@ -393,62 +419,63 @@ class ScholarshipController extends Controller
                     'status' => $newStatus
                 ]);
         }
-    
+
         $completedBatches = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->whereRaw('total_scholars = sub_total')
             ->count();
-    
+
         $allBatches = Batch::where('scholarship_id', $scholarship->id)
             ->with(['grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name')])
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->orderBy('batch_no', 'desc')
             ->get();
-    
+
         $scholarship->update(['read' => 1]);
-    
+
         event(new GeneralNotification(
             'Scholarship marked as read',
             'scholarship_read',
             ['scholarship_id' => $scholarship->id, 'read' => true]
         ));
-    
+
         // Check if all batches for campus are inactive
-        $selectedCampusBatches = $batches->filter(fn($batch) =>
+        $selectedCampusBatches = $batches->filter(
+            fn($batch) =>
             $batch->campus_id == $request->input('selectedCampus')
         );
-    
+
         $allBatchesInactive = $selectedCampusBatches->isNotEmpty() &&
             $selectedCampusBatches->every(fn($batch) => $batch->status === 'Inactive');
-    
+
         // Payouts by campus
         $payoutQuery = Payout::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->with('campus');
-    
+
         if ($userType == 'coordinator') {
             $payoutQuery->where('campus_id', $user->campus_id);
         } elseif ($request->input('selectedCampus')) {
             $payoutQuery->where('campus_id', $request->input('selectedCampus'));
         }
-    
+
         $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
-    
+
         $mainPayout = Payout::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->first();
-    
+
         $payoutBatches = $batches->map(function ($batch) {
             return array_merge($batch->toArray(), [
                 'claimed_count' => $batch->disbursement->where('status', 'Claimed')->count(),
                 'not_claimed_count' => $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count()
             ]);
         });
-    
+
         $grantees = collect();
         if ($payoutBatches->isNotEmpty()) {
             $grantees = $scholarship->grantees()
@@ -456,7 +483,7 @@ class ScholarshipController extends Controller
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
         }
-    
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
@@ -485,7 +512,7 @@ class ScholarshipController extends Controller
             'payoutBatches' => $payoutBatches,
         ]);
     }
-    
+
 
     public function forward_coor($scholarshipId, Request $request)
     {
