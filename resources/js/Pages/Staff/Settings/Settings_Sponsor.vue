@@ -85,7 +85,7 @@
                                         <td class="px-6 py-4">
                                             <button @click="toggleupdateMOA(sponsor)"
                                                 class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
-                                                Update MOA
+                                                Update
                                             </button>
                                         </td>
 
@@ -233,7 +233,7 @@
                 </div>
 
                 <div v-if="UpdateMOA && !isTableVisible" class="w-full h-full space-y-5 mb-3">
-                    <!-- creating -->
+                    <!-- update -->
                     <form @submit.prevent="submitForm">
                         <div class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border">
                             <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-6 py-4">
@@ -249,120 +249,120 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2 px-5 py-2 h-full">
-                                <div class="col-span-1">
-                                    <div class="flex flex-col w-full gap-2 h-full">
+                            <div class="flex flex-col px-6 py-6 h-full">
+                                <div class="w-full">
+                                    <!-- Sponsor Image and Name Section -->
+                                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                         <div class="w-full">
-                                            <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor</h3>
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Image</h3>
+                                            <div class="mb-2 flex flex-col items-center gap-4">
+                                                <div class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                                                    <img alt="Sponsor Logo" class="object-cover w-full h-full">
+                                                </div>
+                                                <div class="w-full">
+                                                    <input type="file" accept="image/*"
+                                                        class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="w-full flex flex-col">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Background Information</h3>
+                                            <textarea v-model="form.description" id="description"
+                                                placeholder="Enter Description"
+                                                class="textarea textarea-bordered h-44 bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <!-- Abbreviation, Partnered Since, and Background Section -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div class="w-full space-y-2">
+                                        <div class="w-full">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Name</h3>
                                             <input v-model="form.name" type="text" id="name"
                                                 placeholder="Enter a Partnership or Sponsor"
                                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                         </div>
-                                        <div class="w-full grid grid-cols-2 gap-4">
-                                            <div class="w-full space-y-5">
-                                                <div class="w-full">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
-                                                    </h3>
-                                                    <input v-model="form.abbreviation" type="text" id="name"
-                                                        placeholder="e.g., CHED"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
-                                                </div>
-                                                <div class="w-full">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Partnered Since
-                                                    </h3>
-                                                    <input v-model="form.since" type="text" id="name"
-                                                        placeholder="e.g., Since 2012"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
-                                                </div>
-                                                <div class="w-full flex flex-col space-y-3">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor
-                                                        Background Information</h3>
-                                                    <textarea v-model="form.description" id="description"
-                                                        placeholder="Enter Description"
-                                                        class="textarea textarea-bordered h-64 bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
-                                                </div>
-                                            </div>
-                                            <div class="space-y-5">
-                                                <div class="w-full flex flex-col">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Attach
-                                                        Memorandum of Agreement</h3>
-                                                    <label for="dropzone-file"
-                                                        class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                                                        :class="{ 'border-blue-500 bg-blue-50': isDragging }"
-                                                        @dragover.prevent="handleFileDragOver"
-                                                        @dragleave="handleFileDragLeave" @drop.prevent="handleFileDrop">
-                                                        <div v-if="!form.file"
-                                                            class="flex flex-col items-center justify-center pt-5 pb-6">
-                                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 20 16">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                            </svg>
-                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload</span> or drag
-                                                                and drop
-                                                            </p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG,
-                                                                JPG, DOCX (MAX. 2MB-4MB)</p>
-                                                        </div>
-                                                        <div v-else class="flex flex-col items-center justify-center">
-                                                            <template v-if="form.filePreview && !form.fileName.endsWith('.docx,.doc,.pdf')">
-                                                                <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
-                                                            </template>
-                                                            <template v-else>
-                                                                <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-32 mb-2" />
-                                                            </template>
-                                                            <p class="text-sm text-gray-500">{{ form.fileName }}</p>
-                                                        </div>
-                                                        <input id="dropzone-file" type="file" class="hidden"
-                                                            accept=".svg, .png, .jpg, .docx"
-                                                            @change="(e) => handleFile(e.target.files[0])" />
-                                                    </label>
-                                                </div>
-                                                <div class="w-full flex flex-col">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Upload
-                                                        Photo (Optional for
-                                                        Displaying)</h3>
-                                                    <label for="dropzone-img"
-                                                        class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                                                        :class="{ 'border-blue-500 bg-blue-50': isDragging }"
-                                                        @dragover.prevent="handleImgDragOver"
-                                                        @dragleave="handleImgDragLeave" @drop.prevent="handleImgDrop">
-                                                        <div v-if="!form.img"
-                                                            class="flex flex-col items-center justify-center pt-5 pb-6">
-                                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 20 16">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                            </svg>
-                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload</span> or drag
-                                                                and drop
-                                                            </p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG
-                                                                (MAX. 800x400px - 2MB-4MB)</p>
-                                                        </div>
-                                                        <div v-else class="flex flex-col items-center justify-center">
-                                                            <img :src="form.imgPreview" alt="Uploaded Preview"
-                                                                class="max-h-24 mb-2 rounded-lg" />
-                                                            <p class="text-sm text-gray-500">{{ form.imgName }}</p>
-                                                        </div>
-                                                        <input id="dropzone-img" type="file" class="hidden"
-                                                            accept=".svg, .png, .jpg, .jpeg"
-                                                            @change="(e) => handleImg(e.target.files[0])" />
-                                                    </label>
-                                                </div>
-                                            </div>
+                                        <div class="w-full">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation</h3>
+                                            <input v-model="form.abbreviation" type="text" id="abbreviation"
+                                                placeholder="e.g., CHED"
+                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                         </div>
+                                        <div class="w-full">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white">Partnered Since</h3>
+                                            <input v-model="form.since" type="text" id="since"
+                                                placeholder="e.g., Since 2012"
+                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                                        </div>
+                                    </div>
 
-
+                                    <!-- Memorandum of Agreement Section -->
+                                    <div class="w-full flex flex-col">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Attach Memorandum of Agreement</h3>
+                                        <label for="dropzone-file"
+                                            class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                            :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+                                            @dragover.prevent="handleFileDragOver"
+                                            @dragleave="handleFileDragLeave" @drop.prevent="handleFileDrop">
+                                            <div v-if="!form.file"
+                                                class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="none" viewBox="0 0 20 16">
+                                                    <path stroke="currentColor" stroke-linecap="round"
+                                                        stroke-linejoin="round" stroke-width="2"
+                                                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                </svg>
+                                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                    <span class="font-semibold">Click to upload</span> or drag
+                                                    and drop
+                                                </p>
+                                                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG,
+                                                    JPG, DOCX (MAX. 2MB-4MB)</p>
+                                            </div>
+                                            <div v-else class="flex flex-col items-center justify-center">
+                                                <template v-if="form.filePreview && !form.fileName.endsWith('.docx,.doc,.pdf')">
+                                                    <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
+                                                </template>
+                                                <template v-else>
+                                                    <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-32 mb-2" />
+                                                </template>
+                                                <p class="text-sm text-gray-500">{{ form.fileName }}</p>
+                                            </div>
+                                            <input id="dropzone-file" type="file" class="hidden"
+                                                accept=".svg, .png, .jpg, .docx"
+                                                @change="(e) => handleFile(e.target.files[0])" />
+                                        </label>
                                     </div>
                                 </div>
+
+                                <div class="h-0.5 bg-gray-200 dark:bg-gray-700 my-3"></div>
+
+                                <!-- Title after the line -->
+                                <div class="pt-4 text-left text-lg font-semibold text-gray-900 dark:text-white">
+                                    Memorandum of Agreements
+                                </div>
+
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 px-6 py-4">
+                                    <!-- First Column: Date (30%) -->
+                                    <div class="w-full md:w-1/3 flex items-center">
+                                        <span class="font-semibold text-gray-900 dark:text-white">September 30, 2023</span>
+                                    </div>
+
+                                    <!-- Second Column: File Name (70%) -->
+                                    <div class="w-full md:w-2/3 flex items-center">
+                                        <span class="text-gray-700 dark:text-gray-300">ExampleFileName.pdf</span>
+                                    </div>
+                                </div>
+
+
+
+
                             </div>
+
+
                         </div>
                     </form>
                 </div>
