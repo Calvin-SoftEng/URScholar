@@ -96,6 +96,7 @@ return new class extends Migration
             $table->string('submitted_requirements');
             $table->string('path');
             $table->string('message')->nullable();
+            $table->date('approved_date');
             $table->enum('status', ['Approved', 'Pending', 'Returned'])->default('Pending');
             $table->timestamps();
         });
