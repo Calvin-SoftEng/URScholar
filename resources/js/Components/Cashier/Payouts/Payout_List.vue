@@ -131,16 +131,18 @@
             <!-- QR Code Scanner -->
             <div class="p-4 flex flex-col space-y-4">
               <!-- Error Alert - Display any errors inside the modal -->
-              <div v-if="errorMessage" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                role="alert">
-                <strong class="font-bold">Error!</strong>
-                <span class="block sm:inline"> {{ errorMessage }}</span>
+              <div  v-if="errorMessage" class="space-y-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                  role="alert">
+                  <strong class="font-bold">Error!</strong>
+                  <span class="block sm:inline"> {{ errorMessage }}</span>
+                </div>
                 <div class="flex justify-center">
-                    <button @click="restartScan"
-                      class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">
-                      Scan Again
-                    </button>
-                  </div>
+                  <button @click="restartScan"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg text-lg">
+                    Scan Again
+                  </button>
+                </div>
               </div>
 
               <!-- QR Code Scanner Stream with Animation -->

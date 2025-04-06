@@ -133,12 +133,12 @@
                   <td>{{ scholar.course }}</td>
                   <td>{{ scholar.grant }}</td>
                   <td>
-                    <!-- <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
+                    <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
                       {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
                     </span>
                     <div class="w-full bg-gray-200 rounded-full h-2">
                       <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }"></div>
-                    </div> -->1.2
+                    </div>
                   </td>
                   <td>
                     <span class="px-2 py-1 rounded-md text-xs" :class="{
@@ -163,7 +163,6 @@
             </table>
           </div>
 
-          
         </div>
 
         <!-- No batches message (outside the v-for loop) -->

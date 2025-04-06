@@ -23,10 +23,26 @@
                         <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
                         {{scholarship.name}}'s Scholars
                     </h1>
+
+                    <div>
+                    <button
+                        @click="showPayrolls = !showPayrolls"
+                        class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                        border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                        <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                        <span class="font-normal">
+                        {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                        </span>
+                    </button>
+                    </div>
                 </div>
 
                 <div class="mx-auto py-5">
-                    <div class="flex w-full flex-col gap-6">
+                    <div v-if="showPayrolls" class="flex w-full flex-col gap-6">
+                        <PayrollList :scholarship="scholarship" :schoolyear="schoolyear" :selectedSem="selectedSem" :processedBatches="processedBatches"
+                        :requirements="requirements" :payout="payout"/>
+                    </div>
+                    <div v-else class="flex w-full flex-col gap-6">
                         <ScholarList :scholarship="scholarship" :schoolyear="schoolyear" :selectedSem="selectedSem" :processedBatches="processedBatches"
                         :requirements="requirements" :payout="payout"/>
                     </div>
@@ -45,12 +61,14 @@ import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { useRouter, useRoute } from 'vue-router'
 import Echo from 'laravel-echo';
 import ScholarList from '@/Components/Sponsor/Scholars/ScholarList.vue';
+import PayrollList from '@/Components/Sponsor/Scholars/PayrollList.vue';
 
 import { Tooltip } from 'primevue';
 
 import { Button } from '@/Components/ui/button'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
+
 
 const props = defineProps({
   scholarship: Object,
@@ -60,6 +78,8 @@ const props = defineProps({
   requirements: Array,
   payout: Number,
 });
+
+const showPayrolls = ref(false);
 
 onMounted(() => {
     const echo = new Echo({

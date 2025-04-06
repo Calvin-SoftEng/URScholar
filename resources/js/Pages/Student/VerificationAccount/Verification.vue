@@ -1269,8 +1269,12 @@
 
                                         <div
                                             class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
-                                            <Label for="marital-status" class="text-gray-500">C.2 Monthly Family
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="marital-status" class="text-gray-500">C.2 Monthly Family
                                                 Income</Label>
+                                                <InputError v-if="errors?.monthly_income" :message="errors.monthly_income"
+                                                class="items-center flex text-xs" />
+                                            </div>
                                             <RadioGroup default-value="comfortable"
                                                 class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
                                                 v-model="form.monthly_income">
@@ -1291,8 +1295,6 @@
                                                     <Label for="i4">30,001 and above</Label>
                                                 </div>
                                             </RadioGroup>
-                                            <InputError v-if="errors?.monthly_income" :message="errors.monthly_income"
-                                                class="items-center flex text-xs" />
                                         </div>
 
                                         <div
