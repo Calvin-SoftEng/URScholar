@@ -103,7 +103,7 @@
                     <form @submit.prevent="submitForm">
                         <div class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border">
                             <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-6 py-4">
-                                <h2 class="text-lg font-semibold text-primary">Scholarship Information</h2>
+                                <h2 class="text-lg font-semibold text-primary">Sponsor Information</h2>
                                 <div class="flex items-center gap-2">
                                     <button @click="addingcancel"
                                         class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5">
@@ -237,7 +237,7 @@
                     <form @submit.prevent="submitForm">
                         <div class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border">
                             <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-6 py-4">
-                                <h2 class="text-base font-semibold text-primary font-quicksand">Scholarship Information</h2>
+                                <h2 class="text-lg font-semibold text-primary">Sponsor Information</h2>
                                 <div class="flex items-center gap-2">
                                     <button @click="updatecancel"
                                         class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5">
