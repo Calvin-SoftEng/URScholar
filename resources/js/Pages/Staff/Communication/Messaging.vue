@@ -193,12 +193,12 @@ const showMemberList = ref(false);
                                             <template v-if="message.user.id !== currentUser.id">
                                                 <!-- <img class="w-8 h-8 rounded-full mt-6 border"
                                                     src="/docs/images/people/profile-picture-3.jpg" alt="User image"> -->
-                                                <div v-if="$page.props.auth.user.picture">
+                                                <div v-if="message.user.picture">
                                                     <img id="avatarButton" type="button"
                                                         data-dropdown-toggle="userDropdown"
                                                         data-dropdown-placement="bottom-start"
                                                         class="w-8 h-8 rounded-full mt-6 border"
-                                                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                                        :src="`/storage/user/profile/${message.user.picture}`"
                                                         alt="picture">
                                                 </div>
                                                 <div v-else>

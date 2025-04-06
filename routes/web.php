@@ -91,7 +91,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 });
 
-Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier'])->group(function () {
+Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])->group(function () {
         // Messaging
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
     Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
@@ -282,11 +282,6 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
     Route::get('/myProfile/generate/{urscholar_id}', [StudentController::class, 'generate'])->name('qrcode.generate');
     Route::post('/myProfile/{urscholar_id}/upload-grade', [StudentController::class, 'uploadGrade'])->name('student.uploadgrade');
-
-    // Messaging
-    Route::get('/group-chat', [StudentController::class, 'messaging'])->name('student.messaging');
-    Route::post('/group-chat/message', [StudentController::class, 'oldstore'])->name('student.messaging.store');
-    Route::get('/group-chat/{batch}', [StudentController::class, 'show'])->name('student.messaging.show');
 
 
     //VerifyAccount

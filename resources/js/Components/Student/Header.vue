@@ -30,7 +30,7 @@
               </Link>
             </li>
             <li class="relative">
-                <Link :href="route('student.messaging')" class="flex items-center space-x-2">
+                <Link :href="route('messaging.index')" class="flex items-center space-x-2">
                     <p class="text-primary-foreground hover:text-primary transition">Communication</p>
 
                     <!-- Notification Badge (only shows if unreadMessages > 0) -->

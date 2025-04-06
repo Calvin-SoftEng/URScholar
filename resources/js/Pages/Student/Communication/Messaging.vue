@@ -25,7 +25,7 @@ const sendMessage = () => {
     // Get scholarship_id from selected scholarship
     form.value.batch_id = selectedData.value?.id || '';
 
-    router.post('/group-chat/message', form.value, {
+    router.post('/group-page/message', form.value, {
         preserveScroll: true,
         onSuccess: () => {
             fetchMessages(); // Fetch messages after sending
@@ -57,7 +57,7 @@ onMounted(() => {
 const scholarshipId = ref(props.selectedBatch); // Or however you're getting the ID
 
 const fetchMessages = async () => {
-    const { data } = await router.get(route("student.messaging.show", { batch: props.selectedBatch.id }));
+    const { data } = await router.get(route("messaging.show", { batch: props.selectedBatch.id }));
 
     messageData.value = data;
 };
@@ -121,7 +121,7 @@ const showMemberList = ref(false);
                         <!-- In the people/group list section -->
                         <div class="divide-y">
                             <Link class="w-full flex items-center space-x-3 mb-2 p-4" v-for="batch in batches"
-                                :key="batch.id" :href="route('student.messaging.show', batch.id)" :class="[
+                                :key="batch.id" :href="route('messaging.show', batch.id)" :class="[
                                     'hover:bg-gray-100',
                                     selectedData && selectedData.id === batch.id ? 'bg-blue-50 border-l-4 border-primary' : ''
                                 ]">
@@ -203,14 +203,11 @@ const showMemberList = ref(false);
 
                                     <!-- Other User's Message -->
                                     <template v-if="message.user.id !== currentUser.id">
-                                        <!-- <img class="w-8 h-8 rounded-full mt-6 border"
-                                                    src="/docs/images/people/profile-picture-3.jpg" alt="User image"> -->
-                                        <div v-if="$page.props.auth.user.picture">
+                                        <div v-if="message.user.picture">
                                             <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
                                                 data-dropdown-placement="bottom-start"
                                                 class="w-8 h-8 rounded-full mt-6 border"
-                                                :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
-                                                alt="picture">
+                                                :src="`/storage/user/profile/${message.user.picture}`" alt="picture">
                                         </div>
                                         <div v-else>
                                             <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
