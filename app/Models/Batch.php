@@ -49,17 +49,23 @@ class Batch extends Model
     }
 
     //chat
-    public function scholarships()
-    {
-        return $this->belongsToMany(Scholarship::class, 'scholarship_groups')
-            ->withTimestamps();
-    }
-
     public function users()
     {
         return $this->belongsToMany(User::class, 'scholarship_groups')
             ->withTimestamps();
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    // Get the latest message for the scholarship group
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class)->latest();
+    }
+
 
     public function campuses()
     {

@@ -71,7 +71,7 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'Maribujoc',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
-            'campus_id' => '1'
+            'campus_id' => '4'
         ]);
 
         //sponsor

@@ -211,6 +211,8 @@ class EmailController extends Controller
                             ScholarshipGroup::create([
                                 'user_id' => $user->id,
                                 'scholarship_id' => $scholarship->id,
+                                'batch_id' => $batch->id,
+                                'campus_id' => $batch->campus_id
                             ]);
                         }
                     } else {

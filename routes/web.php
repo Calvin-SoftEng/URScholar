@@ -91,6 +91,14 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 });
 
+Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier'])->group(function () {
+        // Messaging
+    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
+    Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
+    Route::get('/group-page/{batch}', [MessageController::class, 'show'])->name('messaging.show');
+});
+
+
 // SCHOLARSHIP STAFF -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function () {
@@ -154,11 +162,6 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     // Calendar
     Route::get('/calendar', [CalendarController::class, 'calendar'])->name('calendar.calendar');
 
-
-    // Messaging
-    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
-    Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
-    Route::get('/group-page/{scholarship}', [MessageController::class, 'show'])->name('messaging.show');
 
     // Route::get('/group-pagee', [GroupPageController::class, 'index'])->name('grouppage.index');
     // Route::get('/group-pagee/{scholarship}', [GroupPageController::class, 'show'])->name('grouppage.show');
@@ -249,11 +252,6 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
     Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
     Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/submit-reason', [CashierController::class, 'submitReason'])->name('cashier.submit-reason');
 
-    // Messaging
-    Route::get('/cashier/group-page', [CashierController::class, 'messaging'])->name('cashier.messaging');
-    Route::post('/cashier/group-page/message', [CashierController::class, 'oldstore'])->name('cashier.messaging.store');
-    Route::get('/cashier/group-page/{scholarship}', [CashierController::class, 'show'])->name('cashier.messaging.show');
-
 
 
 
@@ -288,7 +286,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     // Messaging
     Route::get('/group-chat', [StudentController::class, 'messaging'])->name('student.messaging');
     Route::post('/group-chat/message', [StudentController::class, 'oldstore'])->name('student.messaging.store');
-    Route::get('/group-chat/{scholarship}', [StudentController::class, 'show'])->name('student.messaging.show');
+    Route::get('/group-chat/{batch}', [StudentController::class, 'show'])->name('student.messaging.show');
 
 
     //VerifyAccount

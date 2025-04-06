@@ -28,7 +28,7 @@
                     </div>
 
                     <div v-if="isPMActive" class="w-[95%]">
-                        <Messaging :messages="messages" :currentUser="currentUser" :scholarships="scholarships" :selectedScholarship="selectedScholarship" :organizedScholarships="organizedScholarships"/>
+                        <Messaging :messages="messages" :currentUser="currentUser" :batches="batches" :selectedBatch="selectedBatch" :organizedScholarships="organizedScholarships"/>
                     </div>
 
                 </div>
@@ -49,8 +49,8 @@ import Messaging from './Messaging.vue';
 const props = defineProps({
     messages: Array,
     currentUser: Object,
-    scholarships: Array,
-    selectedScholarship: Object,
+    batches: Array,
+    selectedBatch: Object,
     organizedScholarships: Array,
 });
 

@@ -90,19 +90,14 @@ class Scholarship extends Model
             ->withTimestamps();
     }
 
-    public function messages()
-    {
-        return $this->hasMany(Message::class);
-    }
-
-    // Get the latest message for the scholarship group
-    public function latestMessage()
-    {
-        return $this->hasOne(Message::class)->latest();
-    }
-
     public function scholarshipGroups()
     {
         return $this->hasMany(ScholarshipGroup::class);
+    }
+
+    public function batch()
+    {
+        return $this->belongsToMany(Batch::class, 'scholarship_groups')
+            ->withTimestamps();
     }
 }

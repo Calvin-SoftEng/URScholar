@@ -1322,11 +1322,15 @@ class StudentController extends Controller
         $currentUser = Auth::user();
 
         // Get scholarships with relationships that the current user has
-        $scholarships = Scholarship::with([
+        $batches = Batch::with([
             'latestMessage.user',
             'users' => function ($query) {
                 $query->select('users.id', 'users.name');
-            }
+            },
+            'scholarshipGroups' => function ($query) use ($currentUser) {
+                $query->where('user_id', $currentUser->id);
+            },
+            'scholarshipGroups.campus'
         ])
             ->whereHas('users', function ($query) use ($currentUser) {
                 $query->where('users.id', $currentUser->id);
@@ -1338,17 +1342,17 @@ class StudentController extends Controller
         return Inertia::render('Student/Communication/Communication', [
             'messages' => [],
             'currentUser' => $currentUser,
-            'scholarships' => $scholarships,
-            'selectedScholarship' => [],
+            'batches' => $batches, // Original scholarships data
+            'selectedBatch' => [],
         ]);
     }
 
-    public function show(Scholarship $scholarship)
+    public function show(Batch $batch)
     {
 
         // Get all messages with the user who sent them (eager loading)
-        $messages = Message::with(['user', 'scholarship'])
-            ->where('scholarship_id', $scholarship->id)
+        $messages = Message::with(['user', 'batch'])
+            ->where('batch_id', $batch->id)
             ->latest()
             ->get();
 
@@ -1356,11 +1360,16 @@ class StudentController extends Controller
         $currentUser = Auth::user();
 
         // Get scholarships with relationships that the current user has
-        $scholarships = Scholarship::with([
+        $batches = Batch::with([
             'latestMessage.user',
             'users' => function ($query) {
                 $query->select('users.id', 'users.name');
-            }
+            },
+            'scholarshipGroups' => function ($query) use ($currentUser) {
+                $query->where('user_id', $currentUser->id);
+            },
+            // 'scholarshipGroups.batch',
+            // 'scholarshipGroups.campus'
         ])
             ->whereHas('users', function ($query) use ($currentUser) {
                 $query->where('users.id', $currentUser->id);
@@ -1368,15 +1377,15 @@ class StudentController extends Controller
             ->withCount('users')
             ->get();
 
-        $selectedScholarship = $scholarship;
+        $selectedBatch = $batch;
 
 
         // Return the chat page using Inertia, passing the messages and user data
-        return Inertia::render('Student/Communication/Communication', [
+        return Inertia::render('Student/Communication/Messaging', [
             'messages' => $messages,
             'currentUser' => Auth::user(),
-            'scholarships' => $scholarships,
-            'selectedScholarship' => $selectedScholarship,
+            'batches' => $batches,
+            'selectedBatch' => $selectedBatch,
         ]);
     }
 
@@ -1385,7 +1394,7 @@ class StudentController extends Controller
 
         $request->validate([
             'content' => 'required|string',
-            'scholarship_id' => 'required'
+            'batch_id' => 'required',
         ]);
 
         // dd($request);
@@ -1393,7 +1402,7 @@ class StudentController extends Controller
 
         $message = Message::create([
             'user_id' => $user,
-            'scholarship_id' => $request->scholarship_id,
+            'batch_id' => $request->batch_id,
             'content' => $request->content,
         ]);
 
