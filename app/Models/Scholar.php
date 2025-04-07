@@ -33,9 +33,11 @@ class Scholar extends Model
         'pwd_classification',
         'email',
         'status',
+        'student_status',
     ];
     protected $attributes = [
-        'status' => 'Unverified'
+        'status' => 'Unverified',
+        'student_status ' => 'Unenrolled'
     ];
 
     public function scopeMatchPotentialScholars($query, $course, $yearLevel)
