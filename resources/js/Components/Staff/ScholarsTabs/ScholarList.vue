@@ -117,7 +117,7 @@
                   </td>
                   <td>
                     <select v-model="scholar.student_status"
-                            class="text-xs font-medium px-2.5 py-1 rounded w-full border text-gray-700">
+                            class="text-xs font-medium px-2.5 py-1 rounded w-full border border-gray-300 text-gray-700">
                       <option disabled value="">-- Select Status --</option>
                       <option value="Enrolled">Enrolled</option>
                       <option value="Dropped">Dropped</option>
