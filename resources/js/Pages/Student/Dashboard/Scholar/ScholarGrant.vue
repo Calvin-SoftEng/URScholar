@@ -78,15 +78,16 @@
             <p>It is noted, however, that among the requirements you have submittted to DBP, the
                 following documents must be
                 resubmitted.</p>
-            <br>
-            <span>Message nung nasa return: Ex anlabo pre</span>
-            <br>
-            <span>Deadline</span>
+            <span>Deadline {{ new Date(reqDeadline.date_end).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            }) }}</span>
             <br>
             <form @submit.prevent="submitRequirements" class="space-y-6">
                 <div v-for="req in returnedRequirements" :key="req.id" class="bg-white border rounded-lg shadow-sm p-4">
                     <h3 class="font-medium text-gray-900">{{ req.requirement_name }}</h3>
-                    <p class="text-sm text-gray-600 mt-1">Return reason: {{ req.return_message }}</p>
+                    <p class="text-sm text-gray-600 mt-1">Return reason: {{ req.message }}</p>
 
                     <div class="mt-3">
                         <input type="file" @change="(e) => handleFile(e, req.id, req.requirement_name)"
@@ -144,7 +145,7 @@
 
 
     <!-- scholar grant kapag tapos na mag pasa requiremetns -->
-    <template v-if="isDashboard">
+    <template v-if="isDashboard || disbursement && !isDashboard">
         <div class="mb-3 p-1">
             <span class="text-2xl font-medium font-poppins">My Scholarship</span>
         </div>
@@ -155,7 +156,8 @@
             <div class="bg-white shadow-md p-6 rounded-lg text-center">
                 <div class="flex flex-col sm:flex-row items-center justify-center space-x-4">
                     <!-- Logo -->
-                    <img src="../../../../../assets/images/CHED.png" alt="CHED Logo" class="w-16 h-16 object-contain mb-4 sm:mb-0">
+                    <img src="../../../../../assets/images/CHED.png" alt="CHED Logo"
+                        class="w-16 h-16 object-contain mb-4 sm:mb-0">
 
                     <!-- Scholarship Info -->
                     <div>
@@ -167,8 +169,10 @@
                 <div class="h-0.5 bg-gray-300 my-4"></div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left text-gray-700">
-                    <p><span class="font-semibold">Current Semester:</span> {{ grantee.school_year.year }} - {{ grantee.semester }} Sem</p>
-                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">{{ grantee.status }}</span></p>
+                    <p><span class="font-semibold">Current Semester:</span> {{ grantee.school_year.year }} - {{
+                        grantee.semester }} Sem</p>
+                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">{{
+                            grantee.status }}</span></p>
                 </div>
             </div>
 
@@ -357,6 +361,7 @@ const props = defineProps({
     oldestGrantee: Object,
     historygrantee: Array,
     payout_schedule: Object,
+    reqDeadline: Object,
 
     //For non-scholars only
     sponsors: {
@@ -376,7 +381,7 @@ const props = defineProps({
 const isDashboard = ref(false); // Tracks whether the button has been clicked
 
 const goToDashboard = () => {
-  isDashboard.value = true; // Update state to show the new template
+    isDashboard.value = true; // Update state to show the new template
 };
 
 // Track selected files

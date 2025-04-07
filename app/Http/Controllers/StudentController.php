@@ -82,7 +82,11 @@ class StudentController extends Controller
                     // Get the disbursement for this scholar
                     $disbursement = $grantee->scholar->disbursements->first();
 
-                    $user = User::where('id', $disbursement->claimed_by)->first();
+                    // Fix: Add null check before accessing claimed_by property
+                    $user = null;
+                    if ($disbursement && isset($disbursement->claimed_by)) {
+                        $user = User::where('id', $disbursement->claimed_by)->first();
+                    }
 
                     return [
                         'id' => $grantee->id,
@@ -93,7 +97,7 @@ class StudentController extends Controller
                         'batch_name' => $grantee->batch ? $grantee->batch->batch_name : 'N/A',
                         'dibursement_status' => $disbursement ? $disbursement->status : 'No Disbursement',
                         'claimed_at' => $disbursement ? $disbursement->claimed_at : null,
-                        'claimed_by' => $user ? $user : null,
+                        'claimed_by' => $user,
                         'reasons_of_not_claimed' => $disbursement ? $disbursement->reasons_of_not_claimed : null,
                         // Add any other fields you need from grantee or disbursement
                     ];
@@ -107,6 +111,7 @@ class StudentController extends Controller
                 }
 
                 $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+                $reqDeadline = $requirements->first();
 
                 $requirementIds = $requirements->pluck('id')->toArray();
 
@@ -119,10 +124,13 @@ class StudentController extends Controller
                 // Map submitted requirements with their corresponding requirement details
                 $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
                     $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
+                    $subReq = SubmittedRequirements::where('requirement_id', $requirement->id)->first();
+
                     return [
                         'id' => $submitted->id,  // Submitted Requirement ID
                         'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
                         'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
+                        'message' => $subReq ? $subReq->message : 'None',
                         'status' => $submitted->status,
                     ];
                 });
@@ -137,6 +145,7 @@ class StudentController extends Controller
                     ->whereIn('requirement_id', $requirementIds)
                     ->get();
 
+
                 return Inertia::render('Student/Dashboard/Dashboard', [
                     'grantee' => $grantee,
                     'oldestGrantee' => $oldestGrantee,
@@ -148,6 +157,7 @@ class StudentController extends Controller
                     'submitPending' => $submitPending,
                     'submitApproved' => $submitApproved,
                     'payout_schedule' => $payout_schedule,
+                    'reqDeadline' => $reqDeadline,
                 ]);
             }
         }
@@ -883,10 +893,14 @@ class StudentController extends Controller
         // Map submitted requirements with their corresponding requirement details
         $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
             $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
+
+            $subReq = SubmittedRequirements::where('requirement_id', $requirement->id)->first();
+
             return [
                 'id' => $submitted->id,  // Submitted Requirement ID
                 'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
                 'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
+                'message' => $subReq ? $subReq->message : 'None',
                 'status' => $submitted->status,
             ];
         });

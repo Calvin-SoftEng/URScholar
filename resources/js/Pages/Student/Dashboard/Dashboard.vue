@@ -45,7 +45,7 @@
                     <!-- Section When Scholar Exists -->
                     <div v-if="grantee" class="w-full md:col-span-2">
                         <div class="w-full h-full bg-white shadow-md sm:p-5 lg:p-6 flex-col items-center mx-auto max-w-8xl sm:px-2 lg:px-8">
-                            <ScholarGrant :payout_schedule="payout_schedule" :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
+                            <ScholarGrant :reqDeadline="reqDeadline" :payout_schedule="payout_schedule" :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :historygrantee="historygrantee" :disbursement="disbursement" :grantee="grantee" :oldestGrantee="oldestGrantee" :submitApproved="submitApproved"/>
                         </div>
                     </div>
@@ -122,6 +122,7 @@ const props = defineProps({
     grantee: Object,
     oldestGrantee: Object,
     payout_schedule: Object,
+    reqDeadline: Object,
 
     //For non-scholars only
     sponsors: {

@@ -52,7 +52,7 @@ return new class extends Migration
             $table->string('pwd_classification')->nullable();
             $table->string('email')->nullable();
             $table->enum('status', ['Verified', 'Unverified'])->default('Unverified');
-            $table->enum('student_status', ['Graduate', 'Enrolled', 'Unenrolled', 'Dropped'])->default('Unenrolled');
+            $table->enum('student_status', ['Graduated', 'Enrolled', 'Unenrolled', 'Dropped'])->default('Unenrolled');
             $table->timestamps();
         });
 

@@ -45,7 +45,10 @@ class EmailController extends Controller
         // Loop through each batch and collect their scholars
         foreach ($batches as $batch) {
             $batchScholars = $scholarship->grantees()
+            ->whereIn('status', ['Pending', 'Active'])
                 ->where('batch_id', $batch->id)
+                ->where('school_year_id',$selectedYear)
+                ->where('semester',$selectedSem)
                 ->with('scholar.user', 'scholar.campus', 'scholar.course')
                 ->get()
                 ->map(fn($grantee) => $grantee->scholar)
@@ -173,11 +176,12 @@ class EmailController extends Controller
                 ->where('batch_id', $batch->id)
                 ->where('semester', $request->semester)
                 ->where('school_year_id', $request->school_year)
-                ->where('status', 'Active')
+                ->whereIn('status', ['Pending', 'Active'])
                 ->with('scholar.user', 'scholar.campus', 'scholar.course')
                 ->get()
                 ->map(fn($grantee) => $grantee->scholar)
                 ->filter(); // Remove null scholars (if any)
+
 
             $totalScholarsProcessed += $scholars->count();
 

@@ -287,6 +287,7 @@ class ScholarshipController extends Controller
 
     public function show(Request $request, Scholarship $scholarship)
     {
+
         $user = Auth::user();
         $userType = $user->usertype;
 
@@ -301,6 +302,59 @@ class ScholarshipController extends Controller
 
             if ($request->input('selectedCampus') != $user->campus_id) {
                 return redirect()->back()->with('error', 'You can only view your assigned campus.');
+            }
+        } else {
+            $school_year = $request->input('selectedYear');
+            $semester = $request->input('selectedSem');
+
+            if ($semester == '2nd') {
+                $semester = '1st';
+                $school_year = $request->input('selectedYear');
+
+                $oldBatch = Batch::where('scholarship_id', $scholarship->id)
+                    ->when($school_year, fn($q, $year) => $q->where('school_year_id', $year))
+                    ->when($semester, fn($q, $sem) => $q->where('semester', $sem))
+                    ->first();
+
+                // After creating the new batch, copy all grantees from old batch to new batch
+                if ($oldBatch) {
+
+                    $selectedBatch = Batch::where('scholarship_id', $scholarship->id)
+                        ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+                        ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+                        ->first();
+
+                    if (!$selectedBatch) {
+                        $newBatch = Batch::create([
+                            'scholarship_id' => $oldBatch->scholarship_id,
+                            'batch_no' => $oldBatch->batch_no,
+                            'school_year_id' => $request->input('selectedYear'),
+                            'semester' => $request->input('selectedSem'),
+                            'campus_id' => $oldBatch->campus_id,
+                        ]);
+
+                        // Find all grantees from the old batch
+                        $oldGrantees = Grantees::where('batch_id', $oldBatch->id)->get();
+
+                        // Create new grantees for each scholar in the old batch
+                        foreach ($oldGrantees as $oldGrantee) {
+                            // Get the matching scholar record
+                            $scholar = Scholar::where('id', $oldGrantee->scholar_id)->first();
+
+                            if ($scholar) {
+                                Grantees::create([
+                                    'scholarship_id' => $oldGrantee->scholarship_id,
+                                    'batch_id' => $newBatch->id, // Use the new batch
+                                    'scholar_id' => $scholar->id, // Use the matched scholar's ID
+                                    'school_year_id' => $newBatch->school_year_id, // Use the selected school year
+                                    'semester' => $newBatch->semester, // Use the selected semester
+                                    'status' => 'Active', // Set initial status as Pending
+                                ]);
+                            }
+                        }
+                    }
+
+                }
             }
         }
 
@@ -487,7 +541,7 @@ class ScholarshipController extends Controller
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
         }
-        
+
         $disableSendEmailButton = false;
         foreach ($grantees as $grantee) {
             if (
@@ -916,6 +970,11 @@ class ScholarshipController extends Controller
         // Group grantees by campus
         $granteesByCampus = [];
         foreach ($grantees as $grantee) {
+            // Skip grantees that don't have 'Active' status
+            if (!isset($grantee['status']) || $grantee['status'] !== 'Active') {
+                continue;
+            }
+
             // Get the batch to find campus_id
             $batch = Batch::find($grantee['batch_id']);
 
@@ -984,7 +1043,7 @@ class ScholarshipController extends Controller
         $activityLog = ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'Forward',
-            'description' => 'Scholars forwarded to cashiers by campus',
+            'description' => 'Active scholars forwarded to cashiers by campus',
         ]);
 
         // Get users to notify (similar to original function)
@@ -999,7 +1058,7 @@ class ScholarshipController extends Controller
         // Create Notification
         $notification = Notification::create([
             'title' => 'New Payouts Forwarded',
-            'message' => 'Scholars forwarded to cashiers by campus by ' . $user->name,
+            'message' => 'Active scholars forwarded to cashiers by campus by ' . $user->name,
             'type' => 'payout_forward',
         ]);
 
@@ -1013,7 +1072,7 @@ class ScholarshipController extends Controller
         event(new NewNotification($notification));
 
         // return response()->json([
-        //     'message' => 'Scholars successfully assigned to payouts by campus!',
+        //     'message' => 'Active scholars successfully assigned to payouts by campus!',
         //     'payouts' => $createdPayouts,
         //     'total_payouts' => count($createdPayouts),
         // ], 201);
