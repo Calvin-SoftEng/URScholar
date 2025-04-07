@@ -52,6 +52,7 @@ return new class extends Migration
             $table->string('pwd_classification')->nullable();
             $table->string('email')->nullable();
             $table->enum('status', ['Verified', 'Unverified'])->default('Unverified');
+            $table->enum('student_status', ['Graduate', 'Enrolled', 'Unenrolled', 'Dropped'])->default('Unenrolled');
             $table->timestamps();
         });
 
@@ -73,7 +74,7 @@ return new class extends Migration
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
-            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
             $table->timestamps();
         });
 
