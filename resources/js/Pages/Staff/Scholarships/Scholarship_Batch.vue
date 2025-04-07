@@ -60,9 +60,9 @@
                         <div class="flex flex-col items-start py-4 px-10">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Total Scholars</p>
+                                <p class="text-gray-500 text-sm">Total Active Scholars</p>
                             </div>
-                            <p class="text-4xl font-semibold font-kanit">{{ total_scholars }}</p>
+                            <p class="text-4xl font-semibold font-kanit">{{ totalScholars }}</p>
                         </div>
 
                     </div>
@@ -173,7 +173,8 @@ const props = defineProps({
     batches: Array,
     scholars: Array,
     requirements: Array,
-    payout: Array
+    payout: Array,
+    totalScholars: Number,
 });
 
 const total_scholars = computed(() => {
