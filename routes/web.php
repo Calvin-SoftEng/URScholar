@@ -66,6 +66,8 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
     // portal branding
     Route::get('/system_admin/univ-settings/portal-branding', [SystemAdminController::class, 'portal_branding'])->name('sa.portal_branding');
+    Route::post('/system_admin/univ-settings/portal-branding/store', [SystemAdminController::class, 'portal_branding_store'])->name('sa.portal_branding_store');
+
 
     // user settings
     Route::get('/system_admin/user-settings/system-users_roles', [SystemAdminController::class, 'system_user_roles'])->name('sa.user_roles');

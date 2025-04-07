@@ -7,6 +7,7 @@ use App\Models\Campus;
 use App\Models\Condition;
 use App\Models\Course;
 use App\Models\Eligibility;
+use App\Models\PortalBranding;
 use App\Models\Scholarship;
 use App\Models\ScholarshipForm;
 use App\Models\ScholarshipFormData;
@@ -24,6 +25,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        PortalBranding::factory()->create([
+            'logo_light' => 'main_logo_white.webp',
+            'light_path' => 'storage/branding/logos/main_logo_white.webp',
+            'logo_dark' => 'main_logo.webp',
+            'dark_path' => 'storage/branding/logos/main_logo.webp',
+            'branding_name' => 'URScholar',
+            'favicon' => 'web_logo.webp',
+            'favicon_path' => 'storage/branding/favicons/web_logo.webp',
+            'status' => 'Active',
+        ]);
 
         // User::factory(2)->create();
         //MIS

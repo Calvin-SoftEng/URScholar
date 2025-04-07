@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CampusRecipients;
 use App\Models\Criteria;
+use App\Models\PortalBranding;
 use App\Models\Requirements;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\App;
@@ -21,6 +22,8 @@ class LandingPageController extends Controller
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
 
+        $branding = PortalBranding::where('status', 'Active')->first();
+
         return Inertia::render('Welcome', [
             'canLogin' => Route::has('login'),
             'canRegister' => Route::has('register'),
@@ -29,6 +32,7 @@ class LandingPageController extends Controller
             'scholarships' => $scholarships,
             'sponsors' => $sponsors,
             'schoolyears' => $schoolyear,
+            'branding' => $branding,
         ]);
     }
     public function scholarship_apply_details(Scholarship $scholarship): Response

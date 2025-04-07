@@ -10,6 +10,19 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        Schema::create('portal_brandings', function (Blueprint $table) {
+            $table->id();
+            $table->string('logo_light')->nullable();
+            $table->string('light_path');
+            $table->string('logo_dark')->nullable();
+            $table->string('dark_path');
+            $table->string('branding_name')->nullable();
+            $table->string('favicon')->nullable();
+            $table->string('favicon_path');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->timestamps();
+        });
+        
         Schema::create('campuses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -89,5 +102,6 @@ return new class extends Migration {
         Schema::dropIfExists('school_years');
         Schema::dropIfExists('courses');
         Schema::dropIfExists('campuses');
+        Schema::dropIfExists('portal_brandings');
     }
 };
