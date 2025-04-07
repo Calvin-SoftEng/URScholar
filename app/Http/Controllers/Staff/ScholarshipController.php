@@ -185,6 +185,8 @@ class ScholarshipController extends Controller
                     'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
                     'year_level' => $scholar->year_level,
                     'grant' => $scholar->grant,
+                    'scholar_status' => $scholar->status,
+                    'student_status' => $scholar->student_status,
                     'status' => $status,
                     'submittedRequirements' => $approvedRequirements,
                     'totalRequirements' => $totalRequirements,
@@ -207,6 +209,8 @@ class ScholarshipController extends Controller
                     'course' => $scholar->course->name ?? 'N/A', // Display course name or N/A
                     'year_level' => $scholar->year_level,
                     'grant' => $scholar->grant,
+                    'scholar_status' => $scholar->status,
+                    'student_status' => $scholar->student_status,
                     'status' => $status,
                     'submittedRequirements' => $approvedRequirements,
                     'totalRequirements' => $totalRequirements,

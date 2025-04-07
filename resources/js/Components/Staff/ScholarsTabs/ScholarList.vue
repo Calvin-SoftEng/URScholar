@@ -45,8 +45,9 @@
                   <th>Scholar</th>
                   <th>Campus</th>
                   <th>Grant</th>
-                  <th>Requirements</th>
+                  <th v-if="requirements > 0">Requirements</th>
                   <th>Status</th>
+                  <th>Student Status</th>
                   <th></th>
                 </tr>
               </thead>
@@ -86,7 +87,7 @@
                   <td>
                     {{ scholar.grant }}
                   </td>
-                  <td>
+                  <td v-if="requirements > 0">
                     <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
                       {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
                     </span>
@@ -95,7 +96,7 @@
                       </div>
                     </div>
                   </td>
-                  <td>
+                  <td v-if="requirements > 0">
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
                       'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
@@ -106,6 +107,22 @@
                       {{ scholar.status }}
                     </span>
                   </td>
+                  <td v-else>
+                    <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': scholar.scholar_status === 'Verified',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.scholar_status === 'Unverified'
+                    }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
+                      {{ scholar.scholar_status }}
+                    </span>
+                  </td>
+                  <td>
+                    <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.student_status === 'Unenrolled'
+                    }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
+                      {{ scholar.student_status }}
+                    </span>
+                  </td>
                   <th>
                     <Link :href="scholar.userVerified ? `/scholarships/scholar=${scholar.id}` : '#'"
                       @click.prevent="!scholar.userVerified">
@@ -113,8 +130,7 @@
                       'hover:bg-blue-200 cursor-pointer': scholar.userVerified,
                       'opacity-50 cursor-not-allowed': !scholar.userVerified
                     }" :disabled="!scholar.userVerified"
-                      v-tooltip.left="!scholar.userVerified ? 'Scholar has no data' : null"
-                      aria-label="View Details">
+                      v-tooltip.left="!scholar.userVerified ? 'Scholar has no data' : null" aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                     </Link>
