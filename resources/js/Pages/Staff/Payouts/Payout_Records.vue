@@ -59,7 +59,15 @@
 
             <!-- Recent Payouts Section -->
             <div v-if="selectedMenu === 'recent'" class="p-6 h-full">
-                <div v-for="(scholarshipData, scholarshipId) in groupedScholarshipData" :key="scholarshipId"
+                <div v-if="groupedScholarshipData" class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                    <font-awesome-icon :icon="['fas', 'user-graduate']"
+                        class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                    <p class="text-lg text-gray-700 dark:text-gray-300">
+                        No Active Payout
+                    </p>
+                </div>
+
+                <div v-else v-for="(scholarshipData, scholarshipId) in groupedScholarshipData" :key="scholarshipId"
                     class="mb-8">
                     <!-- Scholarship Header -->
                     <div class="mb-4 bg-blue-50 p-3 rounded-lg shadow-sm">
@@ -116,7 +124,7 @@
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
                                                     <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed')
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -152,7 +160,15 @@
 
             <!-- Payout History Section -->
             <div v-if="selectedMenu === 'history'" class="h-fit">
-                <div v-for="(scholarshipData, scholarshipId) in groupedCompletedScholarshipData" :key="scholarshipId"
+                <div v-if="groupedCompletedScholarshipData" class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                    <font-awesome-icon :icon="['fas', 'user-graduate']"
+                        class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                    <p class="text-lg text-gray-700 dark:text-gray-300">
+                        No Payout History
+                    </p>
+                </div>
+
+                <div v-else v-for="(scholarshipData, scholarshipId) in groupedCompletedScholarshipData" :key="scholarshipId"
                     class="mb-2 p-2 bg-gray-100 rounded-lg">
                     <!-- Scholarship Header -->
                     <div class="mb-4 pt-2 px-5">
@@ -161,7 +177,8 @@
                     </div>
 
                     <!-- Campus Sections -->
-                    <div v-for="(campusData, campusId) in scholarshipData.campuses" :key="campusId" class="mb-5 ml-4 p-4 bg-gray-50 rounded-xl">
+                    <div v-for="(campusData, campusId) in scholarshipData.campuses" :key="campusId"
+                        class="mb-5 ml-4 p-4 bg-gray-50 rounded-xl">
                         <div class="p-2">
                             <h3 class="text-xl font-semibold text-gray-700">{{ campusData.name }} Campus</h3>
                         </div>
@@ -187,10 +204,9 @@
                                             <p class="text-base font-medium text-gray-800">
                                                 {{ formatDate(payout.date_start) }} - {{ formatDate(payout.date_end) }}
                                             </p>
-                                            <span
-                                            v-if="payout.status === 'Inactive'"
-                                            class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
-                                            Completed
+                                            <span v-if="payout.status === 'Inactive'"
+                                                class="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full">
+                                                Completed
                                             </span>
                                         </div>
 
@@ -206,7 +222,7 @@
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
                                                     <span>Claimed: {{ getClaimCount(payout.id, batch.id, 'Claimed')
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex items-center">
                                                     <div class="w-3 h-3 rounded-full bg-red-500 mr-2"></div>
@@ -237,7 +253,7 @@
                             </div>
                         </div>
 
-                        
+
                     </div>
                 </div>
             </div>
@@ -448,10 +464,10 @@ const groupedScholarshipData = computed(() => {
     // For each scholarship
     props.scholarships.forEach(scholarship => {
         const scholarshipId = scholarship.id;
-        
+
         // Get all batches for this scholarship
         const scholarshipBatches = getBatchesForScholarship(scholarshipId);
-        
+
         // If no batches, skip this scholarship
         if (scholarshipBatches.length === 0) return;
 
@@ -466,10 +482,10 @@ const groupedScholarshipData = computed(() => {
         // Group batches by campus
         scholarshipBatches.forEach(batch => {
             const campusId = batch.campus_id;
-            
+
             // Get active payouts for this batch (only Pending or Active status)
             const batchPayouts = getPayoutsForBatch(batch.id, 'active');
-            
+
             // Only process this batch if it has active payouts
             if (batchPayouts.length > 0) {
                 // Initialize campus if not exists
@@ -480,7 +496,7 @@ const groupedScholarshipData = computed(() => {
                         batches: []
                     };
                 }
-                
+
                 // Add batch with its payouts
                 result[scholarshipId].campuses[campusId].batches.push({
                     ...batch,
@@ -514,10 +530,10 @@ const groupedCompletedScholarshipData = computed(() => {
     // For each scholarship
     props.scholarships.forEach(scholarship => {
         const scholarshipId = scholarship.id;
-        
+
         // Get all batches for this scholarship
         const scholarshipBatches = getBatchesForScholarship(scholarshipId);
-        
+
         // If no batches, skip this scholarship
         if (scholarshipBatches.length === 0) return;
 
@@ -532,10 +548,10 @@ const groupedCompletedScholarshipData = computed(() => {
         // Group batches by campus
         scholarshipBatches.forEach(batch => {
             const campusId = batch.campus_id;
-            
+
             // Get completed payouts for this batch
             const batchPayouts = getPayoutsForBatch(batch.id, 'completed');
-            
+
             // Only process this batch if it has completed payouts
             if (batchPayouts.length > 0) {
                 // Initialize campus if not exists
@@ -546,7 +562,7 @@ const groupedCompletedScholarshipData = computed(() => {
                         batches: []
                     };
                 }
-                
+
                 // Add batch with its payouts
                 result[scholarshipId].campuses[campusId].batches.push({
                     ...batch,
