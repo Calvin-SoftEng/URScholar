@@ -117,13 +117,13 @@
                   </td>
                   <td>
                     <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.student_status === 'Unenrolled'
+                      'bg-green-100 text-green-800 border border-green-400': scholar.scholar_status === 'Enrolled',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.scholar_status === 'Not Enrolled'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
-                      {{ scholar.student_status }}
+                      {{ scholar.scholar_status }}
                     </span>
                   </td>
-                  <th>
+                  <th v-if="requirements > 0">
                     <Link :href="scholar.userVerified ? `/scholarships/scholar=${scholar.id}` : '#'"
                       @click.prevent="!scholar.userVerified">
                     <button class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm" :class="{
@@ -134,6 +134,11 @@
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                     </Link>
+                  </th>
+                  <th v-else>
+                    <button @click="setStatus" class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm hover:bg-gray-200" aria-label="View Details">
+                      <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
+                    </button>
                   </th>
                 </tr>
               </tbody>
@@ -179,6 +184,75 @@
       <ToastViewport class="fixed bottom-4 right-4" />
     </ToastProvider>
   </div>
+
+  <div v-if="StudentStatus"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
+        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+            <div class="flex items-center gap-3">
+                <!-- Icon -->
+                <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                    class="text-blue-600 text-2xl flex-shrink-0" />
+
+                <!-- Title and Description -->
+                <div class="flex flex-col">
+                    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                        Student Status
+                    </h2>
+                </div>
+            </div>
+            <button type="button" @click="closeModal"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="default-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+
+        <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-4 max-w-lg mx-auto">
+          <!-- Full Name -->
+          <div class="mb-2">
+            <span class="text-sm text-gray-500">Full Name:</span>
+            <p class="text-lg font-medium text-gray-900">Jaypee</p>
+          </div>
+
+          <!-- Course -->
+          <div class="mb-2">
+            <span class="text-sm text-gray-500">Course:</span>
+            <p class="text-lg font-medium text-gray-900">BSHRTAMS</p>
+          </div>
+
+          <!-- Year Level -->
+          <div class="mb-2">
+            <span class="text-sm text-gray-500">Year Level:</span>
+            <p class="text-lg font-medium text-gray-900">1</p>
+          </div>
+
+          <!-- Dropdown: Dropped or Graduated -->
+          <div class="w-full flex flex-col space-y-2 p-2">
+            <h3 class="font-semibold text-gray-900 dark:text-white">Does the Student have Dropped or Graduated?</h3>
+            <select id="scholarshipType"
+                    class="bg-gray-50 border border-gray-300 rounded-lg p-3 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+              <option value="" disabled selected>Select Status</option>
+              <option value="Dropped">Dropped</option>
+              <option value="Graduated">Graduated</option>
+            </select>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="mt-4">
+            <button type="submit"
+                    class="w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 text-white font-medium rounded-lg text-sm px-5 py-2.5 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90">
+              Set
+            </button>
+          </div>
+        </form>
+
+    </div>
+</div>
 </template>
 
 <script setup>
@@ -271,6 +345,20 @@ const prevPage = () => {
 watch(searchQuery, () => {
   currentPage.value = 1;
 });
+
+
+const StudentStatus = ref(false);
+
+const setStatus = () => {
+  StudentStatus.value = !StudentStatus.value;
+};
+
+const closeModal = () => {
+  StudentStatus.value = false;
+};
+
+
+
 
 // Fetch fresh data from the server
 const fetchScholars = async () => {
