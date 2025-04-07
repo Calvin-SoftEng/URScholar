@@ -12,56 +12,58 @@
                 </p>
             </div>
 
-            <div class="flex justify-center">
-                <!-- tags -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-10 text-primary text-center justify-items-center">
-                    <!-- Comprehensive Search -->
-                    <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
-                        <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
-                            <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-primary text-2xl" />
-                        </span>
-                        <span class="font-medium text-2xl">Comprehensive Search</span>
-                        <p class="font-light text-gray-600">Easily find scholarships that match your profile.</p>
-                    </div>
+            <div class="sm:space-y-10">
+                <div class="flex justify-center">
+                    <!-- tags -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-x-10 gap-y-10 text-primary text-center justify-items-center">
+                        <!-- Comprehensive Search -->
+                        <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
+                            <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
+                                <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-primary text-2xl" />
+                            </span>
+                            <span class="font-medium text-2xl">Comprehensive Search</span>
+                            <p class="font-light text-gray-600">Easily find scholarships that match your profile.</p>
+                        </div>
 
-                    <!-- Timely Updates -->
-                    <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
-                        <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
-                            <font-awesome-icon :icon="['fas', 'bell']" class="text-primary text-2xl" />
-                        </span>
-                        <span class="font-medium text-2xl">Timely Updates</span>
-                        <p class="font-light text-gray-600">Stay informed with the latest scholarship information and deadlines.</p>
-                    </div>
+                        <!-- Timely Updates -->
+                        <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
+                            <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
+                                <font-awesome-icon :icon="['fas', 'bell']" class="text-primary text-2xl" />
+                            </span>
+                            <span class="font-medium text-2xl">Timely Updates</span>
+                            <p class="font-light text-gray-600">Stay informed with the latest scholarship information and deadlines.</p>
+                        </div>
 
-                    <!-- Easy Online Application -->
-                    <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
-                        <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
-                            <font-awesome-icon :icon="['fas', 'file-alt']" class="text-primary text-2xl" />
-                        </span>
-                        <span class="font-medium text-2xl">Easy Online Application</span>
-                        <p class="font-light text-gray-600">Apply for scholarships online in just a few steps.</p>
+                        <!-- Easy Online Application -->
+                        <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
+                            <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
+                                <font-awesome-icon :icon="['fas', 'file-alt']" class="text-primary text-2xl" />
+                            </span>
+                            <span class="font-medium text-2xl">Easy Online Application</span>
+                            <p class="font-light text-gray-600">Apply for scholarships online in just a few steps.</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="flex justify-center">
+                <div class="flex justify-center">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10 text-primary text-center justify-items-center">
-                    <!-- Transparent Tracking -->
-                    <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
-                        <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
-                            <font-awesome-icon :icon="['fas', 'chart-line']" class="text-primary text-2xl" />
-                        </span>
-                        <span class="font-medium text-2xl">Transparent Tracking</span>
-                        <p class="font-light text-gray-600">Monitor your application progress and payout status in real time.</p>
-                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-10 text-primary text-center justify-items-center">
+                        <!-- Transparent Tracking -->
+                        <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
+                            <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
+                                <font-awesome-icon :icon="['fas', 'chart-line']" class="text-primary text-2xl" />
+                            </span>
+                            <span class="font-medium text-2xl">Transparent Tracking</span>
+                            <p class="font-light text-gray-600">Monitor your application progress and payout status in real time.</p>
+                        </div>
 
-                    <!-- Fast Payout Notifications -->
-                    <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
-                        <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
-                            <font-awesome-icon :icon="['fas', 'wallet']" class="text-primary text-2xl" />
-                        </span>
-                        <span class="font-medium text-2xl">Fast Payout Notifications</span>
-                        <p class="font-light text-gray-600">Get instant updates on your scholarship disbursements and transactions.</p>
+                        <!-- Fast Payout Notifications -->
+                        <div class="space-y-2 max-w-xs transition-all transform hover:scale-[1.02]">
+                            <span class="flex items-center justify-center w-14 h-14 bg-white border border-gray-200 rounded-md shadow-md mx-auto mb-3">
+                                <font-awesome-icon :icon="['fas', 'wallet']" class="text-primary text-2xl" />
+                            </span>
+                            <span class="font-medium text-2xl">Fast Payout Notifications</span>
+                            <p class="font-light text-gray-600">Get instant updates on your scholarship disbursements and transactions.</p>
+                        </div>
                     </div>
                 </div>
             </div>

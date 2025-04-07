@@ -53,33 +53,35 @@
             enter-to-class="opacity-100" leave-active-class="transition-opacity duration-200 ease-in"
             leave-from-class="opacity-100" leave-to-class="opacity-0">
             <div v-if="isOpen" id="menu-content"
-            class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen max-w-screen-md mx-auto bg-primary bg-opacity-95 z-50 flex flex-col items-center pt-16 overflow-auto">
-            <div class="absolute top-0 flex items-center justify-between w-full px-2 py-2">
-                <!-- Avatar (Left) -->
-                <div class="flex items-center gap-3 pl-3">
-                <img src="../../../assets/images/main_logo_white.png" alt="User Avatar" class="w-10 h-10">
+                class="fixed top-0 left-0 right-0 bottom-0 w-full h-screen max-w-screen-md mx-auto bg-primary bg-opacity-95 z-50 flex flex-col items-center justify-between pt-16 overflow-auto">
+                <div class="absolute top-0 flex items-center justify-between w-full px-2 py-2">
+                    <!-- Avatar (Left) -->
+                    <div class="flex items-center gap-3 pl-3">
+                        <img src="../../../assets/images/main_logo_white.png" alt="User Avatar" class="w-10 h-10">
+                    </div>
+                    <!-- Close Button (Right) -->
+                    <button @click="toggleMenu" class="text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
+                            aria-label="Close menu">
+                        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
-                <!-- Close Button (Right) -->
-                <button @click="toggleMenu" class="text-white p-2 rounded-full hover:bg-gray-800 transition-colors"
-                aria-label="Close menu">
-                <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-                </button>
+               <!-- Menu Links with animation -->
+                <ul class="text-white h-full text-2xl font-medium space-y-6 text-center justify-center font-poppins w-full my-auto flex flex-col items-center">
+                    <li class="transform transition-transform duration-300 hover:scale-110">
+                        <Link :href="route('login')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Login</Link>
+                    </li>
+                    <li class="transform transition-transform duration-300 hover:scale-110">
+                        <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Register</a>
+                    </li>
+                    <!-- <li class="transform transition-transform duration-300 hover:scale-110">
+                    <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</a>
+                    </li> -->
+                </ul>
+
             </div>
-            <!-- Menu Links with animation -->
-            <ul class="text-white text-2xl font-medium space-y-6 text-center font-poppins w-full pt-6">
-                <li class="transform transition-transform duration-300 hover:scale-110">
-                <Link :href="route('login')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Login</Link>
-                </li>
-                <li class="transform transition-transform duration-300 hover:scale-110">
-                <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Register</a>
-                </li>
-                <!-- <li class="transform transition-transform duration-300 hover:scale-110">
-                <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</a>
-                </li> -->
-            </ul>
-            </div>
+
         </transition>
         </nav>
 

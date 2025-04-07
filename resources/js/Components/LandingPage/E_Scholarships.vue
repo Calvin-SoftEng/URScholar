@@ -4,23 +4,15 @@
     <section class="relative py-16 px-6 sm:px-3 min-h-screen items-center bg-white">
         <div class="flex flex-col text-center space-y-8 items-center justify-start h-full">
             <!-- Header Section -->
-            <div class="text-left flex flex-col space-y-5">
+            <div class="sm:text-left lg:text-center flex flex-col space-y-5">
                 <span
-                    class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora text-xl sm:text-lg font-bold">
+                    class="bg-gradient-to-r from-[#0D3B80] to-[#296fd6] bg-clip-text text-transparent font-sora sm:text-lg lg:text-2xl font-bold">
                     Find Available and Ongoing Scholarships, Check Eligibility, and Apply
                 </span>
-                <p class="text-base sm:text-sm text-primary max-w-4xl font-medium font-albert text-center">
+                <p class="text-base sm:text-sm text-primary max-w-4xl font-medium font-albert sm:text-left lg:text-center">
                     Browse Scholarship Programs offered by the Nation’s Government and Local Governments.
                     Have a Financial Assistance Grant and aid your tuition fees and school fees.
                 </p>
-            </div>
-
-            <!-- Search Bar -->
-            <div class="flex items-center border rounded-md overflow-hidden shadow-sm w-full sm:w-10/12">
-                <span class="bg-white px-3 py-2 border-r flex items-center">
-                    <font-awesome-icon :icon="['fas', 'magnifying-glass']" class="text-blue-500 text-lg" />
-                </span>
-                <input type="text" placeholder="Search..." class="w-full px-4 py-2 border-none focus:ring-0" />
             </div>
 
             <div class="w-full h-[1px] bg-gray-200"></div>
