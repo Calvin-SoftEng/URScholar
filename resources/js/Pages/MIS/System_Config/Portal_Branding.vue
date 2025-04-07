@@ -3,10 +3,10 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full space-y-2">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <!-- Branding Header -->
             <div>
-                <h1 class="text-2xl font-bold mb-5">Portal Branding</h1>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Portal Branding</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Configure your portal branding by uploading logos, customizing colors, and setting typography.
@@ -16,9 +16,9 @@
             <!-- Branding Configuration -->
             <form @submit.prevent="">
                 <div class="w-full mt-5">
-                <div class="bg-white relative overflow-x-auto border border-gray-200 rounded-lg p-6">
+                <div class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-800 rounded-lg p-6">
                     <div class="flex flex-row justify-between w-full">
-                    <h1 class="text-xl font-semibold font-quicksand text-primary mb-4">Branding Settings</h1>
+                    <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext mb-4">Branding Settings</h1>
                     <div class="space-x-2">
                         <button @click="cancelChanges" type="button" 
                         class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
@@ -29,7 +29,7 @@
                         Save Changes
                         </button>
                         <button @click="applyChanges" type="button"
-                        class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                        class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-green-700 transition-colors">
                         Apply Changes
                         </button>
                     </div>
@@ -86,15 +86,14 @@
 
                     <!-- Preview Section -->
                     <div class="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg mt-5">
-                        <h2 class="text-lg font-semibold mb-3">Overall Preview</h2>
+                        <h2 class="text-lg font-semibold mb-3 dark:text-dtext">Overall Preview</h2>
                         <div class="flex items-center space-x-4">
                         <div class="w-16 h-16 bg-gray-200 border rounded-lg flex items-center justify-center overflow-hidden">
                             <img v-if="finalLogoLight" :src="finalLogoLight" class="w-full h-full object-contain" alt="Preview Logo">
                             <span v-else class="text-gray-500">No Logo</span>
                         </div>
                         <div>
-                            <p class="text-lg font-bold">{{ finalBrandingName || "Portal Name" }}</p>
-                            <p class="text-sm text-gray-500">Your portal branding preview.</p>
+                            <p class="text-2xl font-poppins font-bold dark:text-dtext">{{ finalBrandingName || "Portal Name" }}</p>
                         </div>
                         </div>
                     </div>

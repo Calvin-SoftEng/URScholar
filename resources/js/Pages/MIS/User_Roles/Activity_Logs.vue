@@ -3,20 +3,20 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full space-y-2">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
-                <h1 class="text-2xl font-bold mb-5">Activity Logs</h1>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Activity Logs</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of all the system activities. Listed are logs of each users.
             </p>
             <div class="w-full mt-5">
 
-                <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex w-full border-b border-gray-200 dark:border-gray-700">
                     <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)" :class="[
                         'flex-1 text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
                         selectedMenu === item.key
-                            ? 'text-blue-700 border-b-4 border-blue-700 dark:text-white dark:border-white'
+                            ? 'text-blue-700 border-b-4 border-blue-700 dark:border-dnavy dark:text-white'
                             : 'text-gray-900 border-transparent hover:border-gray-200 hover:text-blue-700 dark:text-white dark:hover:bg-gray-700'
                     ]">
                         {{ item.name }}
@@ -25,14 +25,14 @@
 
                 <!-- Content Area -->
                 <div
-                    class="bg-white relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
-                    <div class="flex items-center justify-between bg-white dark:bg-gray-900 m-5">
-                        <h1 class="text-xl font-semibold font-quicksand text-primary">
+                    class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                    <div class="flex items-center justify-between bg-white dark:bg-dcontainer m-5">
+                        <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
                             {{ getActivitiesTitle() }}
                         </h1>
                     </div>
 
-                    <div class="max-w-3xl mx-auto bg-white py-5">
+                    <div class="max-w-3xl mx-auto bg-white dark:bg-dcontainer py-5">
                         <div v-if="filteredLogs.length > 0" class="space-y-6">
                             <div v-for="(log, index) in filteredLogs" :key="index">
                                 <!-- Display Day Only Once -->
@@ -48,15 +48,15 @@
                                         </div>
 
                                         <!-- Activity Column -->
-                                        <div class="text-gray-700 break-words leading-relaxed">
+                                        <div class="text-gray-700 dark:text-gray-300 break-words leading-relaxed">
                                             <strong>{{ entry.user }}</strong> {{ entry.action }}
-                                            <span :class="entry.color">{{ entry.item }}</span>.
+                                            <span class="dark:text-gray-300" :class="entry.color">{{ entry.item }}</span>.
                                         </div>
 
                                         <!-- Restore Button Column -->
                                         <div class="flex justify-end self-start pt-1">
                                             <button @click="removeLog(log, idx)" v-tooltip.right="'Remove'"
-                                                class="p-1 rounded-lg text-primary dark:text-blue-500 hover:bg-blue-200 transition">
+                                                class="p-1 rounded-lg text-dprimary dark:text-dtext hover:bg-blue-200 transition">
                                                 <span class="material-symbols-rounded font-medium">remove</span>
                                             </button>
                                         </div>

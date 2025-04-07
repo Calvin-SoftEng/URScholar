@@ -3,16 +3,16 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full space-y-2">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
-                <h1 class="text-2xl font-bold mb-5">Archives</h1>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Archives</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of all the system activities. Listed are logs of each users.
             </p>
             <div class="w-full mt-5 space-y-5">
                 
-                <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-dprimary">
                     <a v-for="item in menuItems" :key="item.key"
                         href="#"
                         @click.prevent="selectMenu(item.key)"
@@ -28,11 +28,11 @@
                 </div>
 
                 <!-- Content Area -->
-                <div class="bg-white relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0 mt-4">
+                <div class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0 mt-4">
                     <div v-if="selectedMenu === 'stakeholders'" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                        <h3 class="text-lg font-bold p-4">Archived System Stakeholders</h3>
+                        <h3 class="text-lg font-bold p-4 dark:text-dtext">Archived System Stakeholders</h3>
                         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dnavy dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         Username
@@ -49,7 +49,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                <tr class="bg-white dark:bg-dcontainer border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Si ano
                                     </th>

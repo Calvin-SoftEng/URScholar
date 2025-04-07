@@ -3,9 +3,9 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full">
             <div class="relative">
-                <h1 class="text-2xl font-bold mb-5">Course List</h1>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Course List</h1>
                 <Link :href="route('sa.courses')">
                 <span class="absolute top-1 right-[-50px] flex flex-col items-center space-y-1">
                     <button>
@@ -25,11 +25,11 @@
             </p>
 
             <div class="w-full h-full flex flex-col px-5 mt-5">
-                <div class="bg-white w-full">
+                <div class="bg-white dark:bg-dcontainer w-full">
                     <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                         <div>
                             <img src="" alt="">
-                            <span class="font-semibold font-sora text-lg">{{ campuses.name }}</span>
+                            <span class="font-semibold font-sora text-lg dark:text-dtext">{{ campuses.name }}</span>
                         </div>
                         <div class="flex gap-1">
                             <button @click="toggleModal(campuses.id)"
@@ -37,7 +37,7 @@
                                 Add
                             </button>
                             <button
-                                class="bg-white px-3 py-1 rounded-md border-gray-100 text-primary border hover:bg-primary hover:text-dtext dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
+                                class="bg-white px-3 py-1 rounded-md border-gray-100 text-primary border hover:bg-gray-100 hover:text-dtext dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
                                 Save
                             </button>
                         </div>
@@ -48,7 +48,7 @@
                     <div class="relative overflow-x-autorounded-b-lg">
                         <table
                             class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
-                            <thead class="text-xs text-gray-700 uppercase bg-white dark:bg-gray-700 dark:text-gray-400">
+                            <thead class="text-xs text-gray-700 uppercase bg-white dark:bg-dnavy dark:text-gray-400">
                                 <tr>
                                     <th scope="col" class="px-6 py-3">
                                         Courses
@@ -60,7 +60,7 @@
                             </thead>
                             <tbody>
                                 <template v-for="course in courses" :key="course.id">
-                                    <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                    <tr class="bg-white dark:bg-dcontainer border-b  dark:border-gray-700 border-gray-200">
                                         <td class="px-6 py-4">
                                             {{ course.name }}
                                         </td>
