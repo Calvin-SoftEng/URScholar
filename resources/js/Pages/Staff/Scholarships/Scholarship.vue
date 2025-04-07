@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -76,9 +76,9 @@
                                 </button>
                             </div>
                             <div v-else>
-                                <button @click="openSendEmail"
-                                    class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
-                                        border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
+                                <button @click="openSendEmail" :disabled="disableSendEmailButton" class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
+        border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2"
+                                    :class="{ 'opacity-50 cursor-not-allowed': disableSendEmailButton }">
                                     <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
                                     <span>Send Email</span>
                                 </button>
@@ -134,7 +134,7 @@
                                 <div class="grid grid-cols-3 items-center gap-3">
                                     <!-- Scholars Length -->
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ grantees.length }}
+                                        {{ approvedCount }}
                                     </p>
 
                                     <!-- Divider -->
@@ -418,7 +418,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
                                                 </span>
@@ -429,7 +429,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -530,7 +530,7 @@
                                         <div @click="() => openPayroll(batch.id)"
                                             class="flex justify-between items-center">
                                             <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
-                                            }}</span>
+                                                }}</span>
 
                                             <div class="grid grid-cols-2">
                                                 <div class="flex flex-col items-center">
@@ -684,7 +684,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1325,7 +1325,9 @@ const props = defineProps({
     errors: Object,
     userType: String,
     userCampusId: Number,
+    approvedCount: Number,
     allBatches: Array,
+    disableSendEmailButton: Boolean,
     payouts: Object,
     payoutBatches: Array,
 });

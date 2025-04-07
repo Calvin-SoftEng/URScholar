@@ -196,8 +196,7 @@ class ScholarshipController extends Controller
                     ],
                     'userVerified' => $userVerified->email_verified_at,
                 ];
-            }
-            else {
+            } else {
                 return [
                     'id' => $scholar->id,
                     'picture' => $userPicture,
@@ -389,6 +388,7 @@ class ScholarshipController extends Controller
 
         $total_scholars = $grantees->map(fn($grantee) => $grantee->scholar)->filter()->unique('id');
 
+        $approvedCount = null;
         // Update batch status + sub_total
         foreach ($batches as $batch) {
             $batchScholars = $batch->grantees->map(fn($grantee) => $grantee->scholar)->filter()->unique('id');
@@ -487,6 +487,18 @@ class ScholarshipController extends Controller
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
         }
+        
+        $disableSendEmailButton = false;
+        foreach ($grantees as $grantee) {
+            if (
+                $grantee->scholar &&
+                $grantee->scholar->status === 'Unverified' &&
+                $grantee->scholar->student_status === 'Unenrolled'
+            ) {
+                $disableSendEmailButton = true;
+                break;
+            }
+        }
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
@@ -495,6 +507,7 @@ class ScholarshipController extends Controller
             'allBatchesInactive' => $allBatchesInactive,
             'total_scholars' => $total_scholars,
             'payoutsByCampus' => $payoutsByCampus,
+            'approvedCount' => $approvedCount,
             'requirements' => $requirements,
             'grantees' => $grantees,
             'completedBatches' => $completedBatches,
@@ -514,6 +527,7 @@ class ScholarshipController extends Controller
             'allBatches' => $allBatches,
             'payouts' => $mainPayout,
             'payoutBatches' => $payoutBatches,
+            'disableSendEmailButton' => $disableSendEmailButton,  // Add this line
         ]);
     }
 
