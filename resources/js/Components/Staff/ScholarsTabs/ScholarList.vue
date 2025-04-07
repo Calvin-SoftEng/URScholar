@@ -45,7 +45,7 @@
                   <th>Scholar</th>
                   <th>Campus</th>
                   <th>Grant</th>
-                  <th v-if="requirements > 0">Requirements</th>
+                  <th v-if="requirements.length > 0">Requirements</th>
                   <th>Status</th>
                   <th>Student Status</th>
                   <th></th>
@@ -58,8 +58,9 @@
                     No scholars found matching your search criteria
                   </td>
                 </tr>
-                <!-- Scholar rows -->
-                <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm">
+                <!-- Scholar rows - HIGHLIGHTING CHANGES START HERE -->
+                <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm"
+                  :class="{ 'bg-red-50': scholar.scholar_status === 'Unverified' || scholar.student_status === 'Unenrolled' }">
                   <td>{{ scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
@@ -87,7 +88,7 @@
                   <td>
                     {{ scholar.grant }}
                   </td>
-                  <td v-if="requirements > 0">
+                  <td v-if="requirements.length > 0">
                     <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
                       {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
                     </span>
@@ -96,7 +97,7 @@
                       </div>
                     </div>
                   </td>
-                  <td v-if="requirements > 0">
+                  <td v-if="requirements.length > 0">
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
                       'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
@@ -110,20 +111,26 @@
                   <td v-else>
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.scholar_status === 'Verified',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.scholar_status === 'Unverified'
+                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.scholar_status === 'Unverified'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
-                      {{ scholar.scholar_status }}
+                      <span v-if="scholar.scholar_status === 'Unverified'" class="inline-flex items-center">
+                        ⚠️ {{ scholar.scholar_status }}
+                      </span>
+                      <span v-else>{{ scholar.scholar_status }}</span>
                     </span>
                   </td>
                   <td>
                     <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.scholar_status === 'Enrolled',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.scholar_status === 'Not Enrolled'
+                      'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
+                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
-                      {{ scholar.scholar_status }}
+                      <span v-if="scholar.student_status === 'Unenrolled'" class="inline-flex items-center">
+                        ⚠️ {{ scholar.student_status }}
+                      </span>
+                      <span v-else>{{ scholar.student_status }}</span>
                     </span>
                   </td>
-                  <th v-if="requirements > 0">
+                  <th v-if="requirements.length > 0 && scholar.student_status == 'Enrolled'">
                     <Link :href="scholar.userVerified ? `/scholarships/scholar=${scholar.id}` : '#'"
                       @click.prevent="!scholar.userVerified">
                     <button class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm" :class="{
@@ -136,11 +143,15 @@
                     </Link>
                   </th>
                   <th v-else>
-                    <button @click="setStatus" class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm hover:bg-gray-200" aria-label="View Details">
+                    <button @click="setStatus(scholar)"
+                      class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm hover:bg-gray-200"
+                      :class="{ 'ring-2 ring-red-500 animate-pulse': scholar.scholar_status === 'Unverified' || scholar.student_status === 'Unenrolled' }"
+                      aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                   </th>
                 </tr>
+                <!-- HIGHLIGHTING CHANGES END HERE -->
               </tbody>
             </table>
           </div>
@@ -185,74 +196,72 @@
     </ToastProvider>
   </div>
 
-  <div v-if="StudentStatus"
+  <div v-if="StudentStatus && currentScholar"
     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
     <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
-        <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-            <div class="flex items-center gap-3">
-                <!-- Icon -->
-                <font-awesome-icon :icon="['fas', 'graduation-cap']"
-                    class="text-blue-600 text-2xl flex-shrink-0" />
+      <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+        <div class="flex items-center gap-3">
+          <!-- Icon -->
+          <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
 
-                <!-- Title and Description -->
-                <div class="flex flex-col">
-                    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                        Student Status
-                    </h2>
-                </div>
-            </div>
-            <button type="button" @click="closeModal"
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                data-modal-hide="default-modal">
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                    viewBox="0 0 14 14">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                </svg>
-            </button>
+          <!-- Title and Description -->
+          <div class="flex flex-col">
+            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+              Student Status
+            </h2>
+          </div>
+        </div>
+        <button type="button" @click="closeModal"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-hide="default-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+        </button>
+      </div>
+
+      <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-4 max-w-lg mx-auto">
+        <!-- Full Name -->
+        <div class="mb-2">
+          <span class="text-sm text-gray-500">Full Name:</span>
+          <p class="text-lg font-medium text-gray-900">{{ currentScholar.first_name }} {{ currentScholar.middle_name }}
+            {{ currentScholar.last_name }}</p>
         </div>
 
-        <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-4 max-w-lg mx-auto">
-          <!-- Full Name -->
-          <div class="mb-2">
-            <span class="text-sm text-gray-500">Full Name:</span>
-            <p class="text-lg font-medium text-gray-900">Jaypee</p>
-          </div>
+        <!-- Course -->
+        <div class="mb-2">
+          <span class="text-sm text-gray-500">Course:</span>
+          <p class="text-lg font-medium text-gray-900">{{ currentScholar.course }}</p>
+        </div>
 
-          <!-- Course -->
-          <div class="mb-2">
-            <span class="text-sm text-gray-500">Course:</span>
-            <p class="text-lg font-medium text-gray-900">BSHRTAMS</p>
-          </div>
+        <!-- Year Level -->
+        <div class="mb-2">
+          <span class="text-sm text-gray-500">Year Level:</span>
+          <p class="text-lg font-medium text-gray-900">{{ currentScholar.year_level }}</p>
+        </div>
 
-          <!-- Year Level -->
-          <div class="mb-2">
-            <span class="text-sm text-gray-500">Year Level:</span>
-            <p class="text-lg font-medium text-gray-900">1</p>
-          </div>
+        <!-- Dropdown: Dropped or Graduated -->
+        <div class="w-full flex flex-col space-y-2 p-2">
+          <h3 class="font-semibold text-gray-900 dark:text-white">Does the Student have Dropped or Graduated?</h3>
+          <select v-model="statusValue" id="scholarshipType"
+            class="bg-gray-50 border border-gray-300 rounded-lg p-3 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+            <option value="" disabled selected>Select Status</option>
+            <option value="Dropped">Dropped</option>
+            <option value="Graduated">Graduated</option>
+          </select>
+        </div>
 
-          <!-- Dropdown: Dropped or Graduated -->
-          <div class="w-full flex flex-col space-y-2 p-2">
-            <h3 class="font-semibold text-gray-900 dark:text-white">Does the Student have Dropped or Graduated?</h3>
-            <select id="scholarshipType"
-                    class="bg-gray-50 border border-gray-300 rounded-lg p-3 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
-              <option value="" disabled selected>Select Status</option>
-              <option value="Dropped">Dropped</option>
-              <option value="Graduated">Graduated</option>
-            </select>
-          </div>
-
-          <!-- Submit Button -->
-          <div class="mt-4">
-            <button type="submit"
-                    class="w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 text-white font-medium rounded-lg text-sm px-5 py-2.5 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90">
-              Set
-            </button>
-          </div>
-        </form>
-
+        <!-- Submit Button -->
+        <div class="mt-4">
+          <button type="submit"
+            class="w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 text-white font-medium rounded-lg text-sm px-5 py-2.5 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90">
+            Set
+          </button>
+        </div>
+      </form>
     </div>
-</div>
+  </div>
 </template>
 
 <script setup>
@@ -346,16 +355,60 @@ watch(searchQuery, () => {
   currentPage.value = 1;
 });
 
+const statusValue = ref('');
+
 
 const StudentStatus = ref(false);
 
-const setStatus = () => {
+// Handles setting the selected scholar and showing the modal
+const setStatus = (scholar) => {
+  // Set the current scholar object
+  currentScholar.value = scholar;
+
+  // Set the select input to match the current scholar's status
+  statusValue.value = scholar.student_status;
+
+  // Toggle modal visibility
   StudentStatus.value = !StudentStatus.value;
 };
 
+
+// Also update the submitForm function to use the currentScholar data
+const submitForm = () => {
+  if (!statusValue.value) {
+    showToast('Error', 'Please select a status', 'error');
+    return;
+  }
+
+  // Here you would typically send the data to your backend
+  // For example:
+  loading.value = true;
+  router.post(`/scholars/${currentScholar.value.id}/update-status`, {
+    status: statusValue.value
+  }, {
+    onSuccess: () => {
+      showToast('Success', `Scholar status updated to ${statusValue.value}`, 'success');
+      closeModal();
+      fetchScholars(); // Refresh the data
+    },
+    onError: () => {
+      showToast('Error', 'Failed to update scholar status', 'error');
+    },
+    onFinish: () => {
+      loading.value = false;
+    }
+  });
+};
+
+// Update the closeModal function to also reset the form
 const closeModal = () => {
   StudentStatus.value = false;
+  statusValue.value = '';
+  currentScholar.value = null;
 };
+
+// Add this near your other ref declarations
+const currentScholar = ref(null);
 
 
 

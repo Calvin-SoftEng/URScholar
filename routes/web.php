@@ -92,7 +92,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])->group(function () {
-        // Messaging
+    // Messaging
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
     Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
     Route::get('/group-page/{batch}', [MessageController::class, 'show'])->name('messaging.show');
@@ -151,6 +151,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 
     Route::get('/scholarships/{scholarshipId}/batch/{batchId}', [ScholarshipController::class, 'batch'])->name('scholarship.batch');
+    Route::post('/scholars/{id}/update-status', [ScholarController::class, 'updateStudent'])->name('scholars.update-status');
     Route::get('/scholarships/{scholarshipId}/batch/{batchId}/payroll', [ScholarshipController::class, 'student_payouts'])->name('scholarship.payrol');
 
 

@@ -38,15 +38,20 @@ class ScholarController extends Controller
 {
     public function scholars()
     {
-
         if (Auth::user()->usertype === 'coordinator') {
             $scholars = Scholar::with('user', 'campus', 'course', 'batch')
-                ->where('status', 'verified')
+                ->whereHas('grantees', function ($query) {
+                    $query->where('status', 'Active');
+                })
+                ->where('status', 'Verified')
                 ->where('campus_id', Auth::user()->campus_id)
                 ->get();
         } else {
             $scholars = Scholar::with('user', 'campus', 'course', 'batch')
-                ->where('status', 'verified')
+                ->whereHas('grantees', function ($query) {
+                    $query->where('status', 'Active');
+                })
+                ->where('status', 'Verified')
                 ->get();
         }
 
@@ -191,6 +196,40 @@ class ScholarController extends Controller
         ]);
     }
 
+    public function updateStudent(Request $request, $id)
+    {
+        // Validate the incoming request
+        $validated = $request->validate([
+            'status' => 'required|in:Dropped,Graduated',
+        ]);
+
+        // Find the scholar by ID
+        $scholar = Scholar::findOrFail($id);
+
+        if ($scholar->student_status == 'Unenrolled' && $validated['status'] == 'Enrolled') {
+            // Update the scholar's status
+            $scholar->student_status = $validated['status'];
+            $scholar->save();
+        } elseif ($scholar->student_status == 'Enrolled' && $validated['status'] == 'Dropped') {
+            // Update the scholar's status
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+            $grantee->status = 'Inactive';
+            $grantee->save();
+            $scholar->student_status = $validated['status'];
+            $scholar->status = 'Unverified';
+            $scholar->save();
+        }
+
+        // Update the scholar's status
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        $grantee->status = 'Inactive';
+        $grantee->save();
+        $scholar->student_status = $validated['status'];
+        $scholar->save();
+    }
+
     public function updateStatus(Request $request)
     {
         $request->validate([
@@ -213,12 +252,10 @@ class ScholarController extends Controller
 
         $scholar = Scholar::where('id', $requirement->scholar_id)->first();
 
-
         // Notify the specific user if the status is 'Returned'
         if ($request->status === 'Returned') {
             $userToNotify = $scholar->user_id; // Assuming 'user' is the relationship to fetch the user_id
 
-            // dd($userToNotify);
             $notification = Notification::create([
                 'title' => 'Requirement Returned',
                 'message' => 'Your submitted requirement has been returned.',
@@ -235,6 +272,39 @@ class ScholarController extends Controller
             event(new NewNotification($notification));
         }
 
+        // Check if all requirements are approved when a requirement is approved
+        if ($request->status === 'Approved') {
+            // Get all submitted requirements for this scholar
+            $allRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
+            $allApproved = true;
+
+            // Check if all requirements are approved
+            foreach ($allRequirements as $req) {
+                if ($req->status !== 'Approved') {
+                    $allApproved = false;
+                    break;
+                }
+            }
+
+            // If all requirements are approved, update scholar status to 'Active'
+            if ($allApproved && count($allRequirements) > 0) {
+                $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+                $grantee->status = 'Active';
+                $grantee->save();
+
+                // Optionally: Send notification about scholar status update
+                $notification = Notification::create([
+                    'title' => 'Status Update',
+                    'message' => 'Your scholarship status has been updated to Active.',
+                    'type' => 'scholar_status_update',
+                ]);
+
+                $notification->users()->attach($scholar->user_id);
+                broadcast(new NewNotification($notification))->toOthers();
+                event(new NewNotification($notification));
+            }
+        }
 
         // Define status-specific messages for the response
         $statusMessage = $request->status === 'Approved'
@@ -588,7 +658,7 @@ class ScholarController extends Controller
                     $scholarsByCompus[$campusId][] = $scholar['id'];
                 }
             }
-
+            
             // Create or find batches for each campus
             foreach ($scholarsByCompus as $campusId => $scholarIds) {
                 // Check if batch already exists for this campus
