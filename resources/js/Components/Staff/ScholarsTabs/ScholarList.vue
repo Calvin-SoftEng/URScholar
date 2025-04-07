@@ -48,7 +48,7 @@
                   <th v-if="requirements > 0">Requirements</th>
                   <th>Status</th>
                   <th>Student Status</th>
-                  <th v-if="requirements > 0"></th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -116,17 +116,14 @@
                     </span>
                   </td>
                   <td>
-                    <select v-model="scholar.student_status"
-                            class="text-xs font-medium px-2.5 py-1 rounded w-full border border-gray-300 text-gray-700">
-                      <option disabled value="">-- Select Status --</option>
-                      <option value="Enrolled">Enrolled</option>
-                      <option value="Dropped">Dropped</option>
-                      <option value="Graduated">Graduated</option>
-                    </select>
+                    <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.student_status === 'Unenrolled'
+                    }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
+                      {{ scholar.student_status }}
+                    </span>
                   </td>
-
-
-                  <th v-if="requirements > 0">
+                  <th>
                     <Link :href="scholar.userVerified ? `/scholarships/scholar=${scholar.id}` : '#'"
                       @click.prevent="!scholar.userVerified">
                     <button class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm" :class="{
