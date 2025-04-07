@@ -656,8 +656,8 @@ class ScholarController extends Controller
                 if ($matched) {
                     // Update status and copy email from matched student
                     $scholar->update([
-                        'status' => 'Verified',
                         'student_status' => 'Enrolled',
+                        'status' => 'Verified',
                         'email' => $matched->email // Copy email from matched student
                     ]);
                     $matchedCount++;
