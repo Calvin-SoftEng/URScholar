@@ -164,10 +164,31 @@ class DatabaseSeeder extends Seeder
             'logo' => 'images.png',
         ]);
 
+        Sponsor::factory()->create([
+            'name' => 'Development Bank of the Philippines',
+            'created_id' => 2,
+            'assign_id' => 5,
+            'abbreviation' => 'DBP',
+            'since' => '2001',
+            'moa_file' => 'moa1.pdf',
+            'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
+            'logo' => 'images.png',
+        ]);
+
         //scholarship
         Scholarship::factory()->create([
             'name' => 'Tulong Dunong Program',
             'sponsor_id' => 1,
+            'user_id' => 2,
+            'scholarshipType' => 'Grant-Based',
+            'status' => 'Pending',
+            'date_start' => '2025-03-15',
+            'date_end' => '2025-03-25',
+        ]);
+
+        Scholarship::factory()->create([
+            'name' => 'DBP-RISE',
+            'sponsor_id' => 2,
             'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
