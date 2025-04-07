@@ -28,7 +28,7 @@
                             </span>
                             <span v-else class="text-red-500 font-bold text-3xl">Year Not Available</span>
                             <div class="top-2 right-2">
-                                <button @click="toggleSet" class="text-white hover:text-gray-300 focus:outline-none">
+                                <button @click="toggleSet(year)" class="text-white hover:text-gray-300 focus:outline-none">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12h12M6 6h12M6 18h12" />
                                     </svg>
@@ -47,7 +47,7 @@
                             <h1 class="font-normal text-sm text-yellow-400 font-poppins">No Academic Year Available</h1>
                         </div>
 
-                        <h1 class="font-normal text-sm font-poppins">Current Academic Year</h1>
+                        <!-- <h1 class="font-normal text-sm font-poppins">Current Academic Year</h1> -->
                     </div>
                 </div>
 
@@ -142,9 +142,14 @@ const props = defineProps({
     scholar_year: Array,
 });
 
+const selectedYear = ref(null);
 const SchoolYear = ref(false);
 
-const toggleSet = () => {
+
+const toggleSet = (year) => {
+ selectedYear.value = year;
+
+
   SchoolYear.value = !SchoolYear.value;
 };
 
