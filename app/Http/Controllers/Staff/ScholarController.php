@@ -26,6 +26,7 @@ use App\Models\Requirements;
 use App\Models\ScholarshipGroup;
 use App\Models\AcademicYear;
 use App\Models\SubmittedRequirements;
+use App\Models\Page;
 use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Validator;
@@ -681,7 +682,17 @@ class ScholarController extends Controller
             foreach ($campusBatches as $campusId => $batch) {
                 // Only create if the current user's campus matches the batch campus
                 if ($currentUser->campus_id == $campusId) {
+
+                    //Create Group Chat
                     ScholarshipGroup::create([
+                        'user_id' => Auth::id(),
+                        'scholarship_id' => $scholarship->id,
+                        'batch_id' => $batch->id,
+                        'campus_id' => $campusId,
+                    ]);
+
+                    //Create Group Page
+                    Page::create([
                         'user_id' => Auth::id(),
                         'scholarship_id' => $scholarship->id,
                         'batch_id' => $batch->id,
@@ -707,6 +718,14 @@ class ScholarController extends Controller
                             'batch_id' => $batch->id,
                             'campus_id' => $campus->id,
                         ]);
+
+                        //Create Group Page
+                        Page::create([
+                            'user_id' => $coordinator->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
                     }
 
                     // Find cashier
@@ -715,6 +734,14 @@ class ScholarController extends Controller
                     // Insert records for cashier if they exist and their campus matches
                     if ($cashier && $cashier->campus_id == $campus->id) {
                         ScholarshipGroup::create([
+                            'user_id' => $cashier->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
+
+                        //Create Group Page
+                        Page::create([
                             'user_id' => $cashier->id,
                             'scholarship_id' => $scholarship->id,
                             'batch_id' => $batch->id,

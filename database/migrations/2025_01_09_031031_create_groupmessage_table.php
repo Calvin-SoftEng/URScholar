@@ -27,19 +27,22 @@ return new class extends Migration {
             $table->timestamps();
         });
 
-        // Schema::create('pages', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-        //     $table->timestamps();
-        // });
+        Schema::create('pages', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
+            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
 
-        // Schema::create('postings', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->foreignId('page_id')->constrained()->onDelete('cascade');
-        //     $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        //     $table->text('content');
-        //     $table->timestamps();
-        // });
+        Schema::create('postings', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('page_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->text('content');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -47,6 +50,8 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::dropIfExists('postings');
+        Schema::dropIfExists('pages');
         Schema::dropIfExists('messages');
         Schema::dropIfExists('scholarship_groups');
     }
