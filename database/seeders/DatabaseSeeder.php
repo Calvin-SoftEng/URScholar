@@ -196,16 +196,6 @@ class DatabaseSeeder extends Seeder
             'date_end' => '2025-03-25',
         ]);
 
-        Scholarship::factory()->create([
-            'name' => 'DBP-Rise',
-            'sponsor_id' => 1,
-            'user_id' => 2,
-            'scholarshipType' => 'One-time Payment',
-            'status' => 'Pending',
-            'date_start' => '2025-03-15',
-            'date_end' => '2025-03-25',
-        ]);
-
         //school year
         SchoolYear::factory()->create([
             'year' => '2021-2022',

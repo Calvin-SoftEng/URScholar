@@ -142,7 +142,7 @@
 
                                     <!-- Total Scholars -->
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ total_scholars }}
+                                        {{ total_approved.length }}
                                     </p>
                                 </div>
                             </div>
@@ -1319,6 +1319,7 @@ const props = defineProps({
     courses: Array,
     students: Array,
     payoutsByCampus: Array,
+    total_approved: Array,
     total_scholars: Array,
     requirements: Array,
     completedBatches: Array,
@@ -1407,6 +1408,14 @@ const total_scholars = computed(() => {
         return true; // Count all scholars by default
     }).length;
 });
+
+// const total_approved = computed(() => {
+//     return props.total_approved.filter(scholar => {
+//         // Add your conditions here, for example:
+//         // return scholar.isActive === true;
+//         return true; // Count all scholars by default
+//     }).length;
+// });
 
 
 const requirementemplates = ref(false);
