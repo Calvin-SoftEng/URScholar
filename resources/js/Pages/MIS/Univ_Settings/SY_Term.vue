@@ -88,10 +88,14 @@
                 <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-6 max-w-lg mx-auto">
 
                     <!-- School Year Input -->
-                    <div class="mb-2">
-                        <label for="schoolYear" class="text-sm text-gray-500">School Year:</label>
-                        <input type="text" id="name" placeholder="e.g, 2024-2025"
-                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                    <div class="w-full flex flex-col space-y-2 p-2">
+                    <h3 class="font-semibold text-gray-900 dark:text-white">School Year</h3>
+                    <select v-model="statusValue" id="scholarshipType"
+                        class="bg-gray-50 border border-gray-300 rounded-lg p-3 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
+                        <option value="" disabled selected>Select School Year</option>
+                        <option value="2023-2024">2023-2024</option>
+                        <option value="2022-2023">2022-2023</option>
+                    </select>
                     </div>
 
                     <!-- Semester Radio Buttons -->
