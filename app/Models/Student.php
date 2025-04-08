@@ -23,7 +23,7 @@ class Student extends Model
         'permanent_address',
         'facebook_account',
         'contact_no',
-        // 'academic_year_id',
+        'academic_year_id',
     ];
 
     public function campus()

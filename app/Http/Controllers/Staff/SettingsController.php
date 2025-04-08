@@ -35,9 +35,17 @@ class SettingsController extends Controller
 
     public function adding()
     {
+        
+        $current_year = AcademicYear::where('status', 'Active')
+        ->with('school_year')
+        ->first();
 
-        $students = Student::with('campus', 'course')->get();
-        $current_year = AcademicYear::where('status', 'Active')->first();
+        
+
+        $students = Student::with('campus', 'course')
+        ->where('academic_year_id' , $current_year->id)
+        ->get();
+
 
         return Inertia::render(
             'Staff/Settings/Adding_Students',
@@ -221,7 +229,7 @@ class SettingsController extends Controller
                     'permanent_address' => $record['permanent_address'],
                     'facebook_account' => $record['facebook_account'],
                     'contact_no' => $record['contact_no'],
-                    // 'academic_year_id' => $current_year,
+                    'academic_year_id' => $current_year->id,
                     // Add any other fields you need to import
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -229,6 +237,7 @@ class SettingsController extends Controller
 
                 $successCount++;
             }
+
 
             // Bulk insert students
             if (!empty($insertData)) {
