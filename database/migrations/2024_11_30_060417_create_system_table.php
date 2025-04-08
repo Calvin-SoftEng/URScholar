@@ -60,6 +60,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->enum('semester', ['1st', '2nd'])->default('1st');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
 

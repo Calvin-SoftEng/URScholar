@@ -1,202 +1,202 @@
 <template>
-    <SettingsLayout>
-        <div
-            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
-            <div class="w-full mx-auto space-y-3">
-                <h1 class="text-2xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Your Activities
-                </h1>
 
-                <div class="w-full mt-5 mx-auto">
-                    <div class="w-7/12 relative mx-auto overflow-x-auto rounded-lg p-5 bg-white dark:bg-dcontainer">
-                        <!-- Scholarship Forms Section -->
-                        <div class="mb-5 space-y-5">
-                            <div class="flex flex-row justify-between border-b items-center pb-3">
-                                <h2 class="text-lg font-semibold text-gray-700 dark:text-dtext">Listed are your activities </h2>
-                                <!-- <button @click="toggleNewForm" class="text-blue-600 text-sm hover:underline">Add New
-                                    Form</button> -->
-                            </div>
+    <Head title="Dashboard" />
 
-                                <!-- Content Area -->
+    <AuthenticatedLayout>
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
+            <div>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Activity Logs</h1>
+            </div>
+            <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
+                Here is the list of all the system activities. Listed are logs of each users.
+            </p>
+            <div class="w-full mt-5">
 
-                                    <div class="max-w-3xl mx-auto bg-white dark:bg-dsecondary py-5">
-                                        <!-- <div v-if="filteredLogs.length > 0" class="space-y-6">
-                                            <div v-for="(log, index) in filteredLogs" :key="index"> -->
-                                        <div class="space-y-6">
-                                            <div >
-                                                <!-- Display Day Only Once -->
-                                                <div class="text-gray-500 dark:text-gray-300 text-sm font-semibold mb-2">
-                                                    <!-- {{ log.date }} -->feafaf
-                                                </div>
+                <div class="flex w-full border-b border-gray-200 dark:border-gray-700">
+                    <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)" :class="[
+                        'flex-1 text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
+                        selectedMenu === item.key
+                            ? 'text-blue-700 border-b-4 border-blue-700 dark:border-dnavy dark:text-white'
+                            : 'text-gray-900 border-transparent hover:border-gray-200 hover:text-blue-700 dark:text-white dark:hover:bg-gray-700'
+                    ]">
+                        {{ item.name }}
+                    </a>
+                </div>
 
-                                                <!-- Log Entries -->
-                                                <div class="space-y-3">
-                                                    <div 
-                                                        class="grid grid-cols-[100px_auto_50px] gap-4">
-                                                        <!-- Time Column -->
-                                                        <div class="text-gray-500 text-sm whitespace-nowrap self-start pt-1">
-                                                            <!-- {{ entry.time }} -->feafaef
-                                                        </div>
+                <!-- Content Area -->
+                <div
+                    class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                    <div class="flex items-center justify-between bg-white dark:bg-dcontainer m-5">
+                        <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
+                            {{ getActivitiesTitle() }}
+                        </h1>
+                    </div>
 
-                                                        <!-- Activity Column -->
-                                                        <div class="text-gray-700 dark:text-dtext break-words leading-relaxed">
-                                                            <!-- <strong>{{ entry.user }}</strong> {{ entry.action }}
-                                                            <span :class="entry.color">{{ entry.item }}</span>. -->feafeafa
-                                                        </div>
+                    <div class="max-w-3xl mx-auto bg-white dark:bg-dcontainer py-5">
+                        <div v-if="filteredLogs.length > 0" class="space-y-6">
+                            <div v-for="(log, index) in filteredLogs" :key="index">
+                                <!-- Display Day Only Once -->
+                                <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 
-                                                        <!-- Restore Button Column -->
-                                                        <div class="flex justify-end self-start pt-1">
-                                                            <button @click="removeLog(log, idx)" v-tooltip.right="'Remove'"
-                                                                class="p-1 rounded-lg text-dprimary dark:text-dtext hover:bg-blue-200 transition">
-                                                                <span class="material-symbols-rounded font-medium">remove</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                <!-- Log Entries -->
+                                <div class="space-y-3">
+                                    <div v-for="(entry, idx) in log.entries" :key="idx"
+                                        class="grid grid-cols-[100px_auto_50px] gap-4">
+                                        <!-- Time Column -->
+                                        <div class="text-gray-500 text-sm whitespace-nowrap self-start pt-1">
+                                            {{ entry.time }}
                                         </div>
 
+                                        <!-- Activity Column -->
+                                        <div class="text-gray-700 dark:text-gray-300 break-words leading-relaxed">
+                                            <strong>{{ entry.user }}</strong> {{ entry.action }}
+                                            <span class="dark:text-gray-300" :class="entry.color">{{ entry.item }}</span>.
+                                        </div>
+
+                                        <!-- Restore Button Column -->
+                                        <div class="flex justify-end self-start pt-1">
+                                            <button @click="removeLog(log, idx)" v-tooltip.right="'Remove'"
+                                                class="p-1 rounded-lg text-dprimary dark:text-dtext hover:bg-blue-200 transition">
+                                                <span class="material-symbols-rounded font-medium">remove</span>
+                                            </button>
+                                        </div>
                                     </div>
-                            
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="flex justify-center items-center py-10">
+                            <div class="text-center">
+                                <span class="material-symbols-rounded text-4xl text-gray-400">
+                                    history
+                                </span>
+                                <p class="text-gray-500 mt-2">No activity logs found for this user type.</p>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-        
-    </SettingsLayout>
+    </AuthenticatedLayout>
 </template>
 
 <script setup>
-import { useForm, Link, router } from '@inertiajs/vue3';
-import { ref, computed, watch } from 'vue';
-import SettingsLayout from '@/Layouts/Settings_Layout.vue';
-import { usePage } from "@inertiajs/vue3";
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, router } from '@inertiajs/vue3';
+import { ref, computed, onMounted } from 'vue';
+import { Tooltip } from 'primevue';
+import { User } from 'lucide-vue-next';
 
 const props = defineProps({
-    scholarship_form: Array,
-    scholarship_form_data: Array,
+    activity: Array,
 });
 
-// Function to filter form data based on form ID
-const getFormData = (formId) => {
-    return props.scholarship_form_data.filter(data => data.scholarship_form_id === formId);
+// Updated menu items to match user types
+const menuItems = [
+    { name: "All User Activities", key: "all_users" },
+    { name: "Super Admin", key: "super_admin" },
+    { name: "Coordinators", key: "coordinator" },
+    { name: "Cashier", key: "cashier" },
+    { name: "Scholars", key: "student" },
+];
+
+// Track the selected menu
+const selectedMenu = ref("all_users");
+
+// Function to change the selected menu
+const selectMenu = (key) => {
+    selectedMenu.value = key;
 };
 
-// Scholarship Form modal state
-const isAddingForm = ref(false);
-const isEditingForm = ref(false);
-const formData = ref({
-    id: null,
-    name: '',
+// Format date for grouping
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const options = { weekday: 'long', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+};
+
+// Format time
+const formatTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+};
+
+
+// Process activity logs from props
+const processedLogs = ref([]);
+
+onMounted(() => {
+    if (props.activity && props.activity.length > 0) {
+        // Group logs by date
+        const groupedByDate = {};
+
+        props.activity.forEach(log => {
+            const date = formatDate(log.created_at);
+            if (!groupedByDate[date]) {
+                groupedByDate[date] = { date, entries: [] };
+            }
+
+            // Determine color based on activity type
+            let color = 'text-gray-700';
+            if (log.description.includes('created')) color = 'text-green-500';
+            if (log.description.includes('updated')) color = 'text-blue-500';
+            if (log.description.includes('deleted')) color = 'text-red-500';
+
+            groupedByDate[date].entries.push({
+                time: formatTime(log.created_at),
+                user: log.user ? `${log.user.first_name} ${log.user.last_name}` : 'System',
+                action: log.description.split(' ')[0], // Extract first word as action
+                item: log.description.substring(log.description.indexOf(' ') + 1), // Everything after first word
+                color,
+                userType: log.user ? log.user.usertype : 'system'
+            });
+        });
+
+        // Convert to array and sort by date (newest first)
+        processedLogs.value = Object.values(groupedByDate).sort((a, b) => {
+            return new Date(b.date) - new Date(a.date);
+        });
+    }
 });
 
-// Criteria modal state
-const isAddingCriteria = ref(false);
-const isEditingCriteria = ref(false);
-const criteriaData = ref({
-    id: null,
-    scholarship_form_id: null,
-    name: '',
+
+// Filtered logs based on selected menu
+const filteredLogs = computed(() => {
+    if (selectedMenu.value === 'all_users') {
+        return processedLogs.value;
+    }
+
+    // Filter logs by usertype
+    return processedLogs.value.map(dayLog => {
+        const filteredEntries = dayLog.entries.filter(entry =>
+            entry.userType === selectedMenu.value
+        );
+
+        // Only return days that have entries after filtering
+        if (filteredEntries.length > 0) {
+            return {
+                date: dayLog.date,
+                entries: filteredEntries
+            };
+        }
+        return null;
+    }).filter(log => log !== null);
 });
 
-// Toggle functions for modals
-const toggleNewForm = () => {
-    formData.value = { id: null, name: '' };
-    isAddingForm.value = true;
-    isEditingForm.value = false;
+// Get appropriate title based on selected menu
+const getActivitiesTitle = () => {
+    const menuItem = menuItems.find(item => item.key === selectedMenu.value);
+    return menuItem ? `${menuItem.name} Activities` : 'Activities';
 };
 
-const toggleEditForm = (form) => {
-    formData.value = { id: form.id, name: form.name };
-    isEditingForm.value = true;
-    isAddingForm.value = false;
-};
-
-const toggleAddCriteria = (formId) => {
-    criteriaData.value = { id: null, scholarship_form_id: formId, name: '' };
-    isAddingCriteria.value = true;
-    isEditingCriteria.value = false;
-};
-
-const toggleEditCriteria = (criteria) => {
-    criteriaData.value = {
-        id: criteria.id,
-        scholarship_form_id: criteria.scholarship_form_id,
-        name: criteria.name
-    };
-    isEditingCriteria.value = true;
-    isAddingCriteria.value = false;
-};
-
-const closeModal = () => {
-    isAddingForm.value = false;
-    isEditingForm.value = false;
-    isAddingCriteria.value = false;
-    isEditingCriteria.value = false;
-    formData.value = { id: null, name: '' };
-    criteriaData.value = { id: null, scholarship_form_id: null, name: '' };
-};
-
-// Form submission functions
-const submitFormData = () => {
-    if (isEditingForm.value) {
-        router.put(`/settings/scholarship-forms${formData.value.id}`, formData.value, {
-            preserveScroll: true,
-            onSuccess: () => {
-                closeModal();
-            },
-        });
-    } else {
-        router.post('/settings/scholarship-forms', formData.value, {
-            preserveScroll: true,
-            onSuccess: () => {
-                closeModal();
-            },
-        });
+// Remove log entry
+const removeLog = (log, entryIndex) => {
+    log.entries.splice(entryIndex, 1);
+    // If no more entries for the day, remove the day
+    if (log.entries.length === 0) {
+        const dayIndex = processedLogs.value.findIndex(day => day.date === log.date);
+        if (dayIndex !== -1) {
+            processedLogs.value.splice(dayIndex, 1);
+        }
     }
 };
-
-const submitCriteriaData = () => {
-    if (isEditingCriteria.value) {
-        router.put(`/settings/scholarship-forms/data${criteriaData.value.id}`, criteriaData.value, {
-            preserveScroll: true,
-            onSuccess: () => {
-                closeModal();
-            },
-        });
-    } else {
-        router.post('/settings/scholarship-forms/data', criteriaData.value, {
-            preserveScroll: true,
-            onSuccess: () => {
-                closeModal();
-            },
-        });
-    }
-};
-
-const deleteCriteria = (id) => {
-    if (confirm('Are you sure you want to delete this criteria?')) {
-        router.delete(`/settings/scholarship-forms${id}`, {
-            preserveScroll: true,
-        });
-    }
-};
-
-// Toast notification handling
-const toastVisible = ref(false);
-const toastMessage = ref("");
-
-// Watch for flash messages
-// watch(() => usePage().props.flash?.success, (newMessage) => {
-//     if (newMessage) {
-//         toastMessage.value = newMessage;
-//         toastVisible.value = true;
-
-//         setTimeout(() => {
-//             toastVisible.value = false;
-//         }, 3000);
-//     }
-// });
 </script>

@@ -217,6 +217,7 @@ const props = defineProps({
     sponsors: Array,
     students: Array,
     errors: Object,
+    current_year: Object,
 });
 
 const directives = {

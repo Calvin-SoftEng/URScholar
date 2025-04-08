@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Models\AcademicYear;
 use App\Models\Campus;
 use App\Models\Condition;
 use App\Models\Course;
@@ -36,9 +37,13 @@ class SettingsController extends Controller
     {
 
         $students = Student::with('campus', 'course')->get();
+        $current_year = AcademicYear::where('status', 'Active')->first();
+
         return Inertia::render(
             'Staff/Settings/Adding_Students',
-            ['students' => $students]
+              ['students' => $students, 'current_year' => $current_year,
+
+            ]
         );
     }
 
@@ -100,6 +105,7 @@ class SettingsController extends Controller
             'file.required' => 'Please upload a CSV file.',
             'file.mimes' => 'The file must be a CSV file.'
         ]);
+
 
         // Check if file exists in the request
         $file = $request->file('file');
@@ -195,6 +201,8 @@ class SettingsController extends Controller
                     continue;
                 }
 
+                $current_year = AcademicYear::where('status', 'Active')->first();
+
                 // Prepare student data
                 $insertData[] = [
                     'student_number' => $record['student_number'],
@@ -213,6 +221,7 @@ class SettingsController extends Controller
                     'permanent_address' => $record['permanent_address'],
                     'facebook_account' => $record['facebook_account'],
                     'contact_no' => $record['contact_no'],
+                    // 'academic_year_id' => $current_year,
                     // Add any other fields you need to import
                     'created_at' => now(),
                     'updated_at' => now(),
@@ -525,9 +534,13 @@ class SettingsController extends Controller
 
     public function user_activities()
     {
+        $activity = ActivityLog::where('user_id', Auth::user()->id)->get();
 
         return Inertia::render(
-            'Staff/Settings/User_Activities'
+            'Staff/Settings/User_Activities',
+            [
+                'activity' => $activity,
+            ]
         );
     }
 }

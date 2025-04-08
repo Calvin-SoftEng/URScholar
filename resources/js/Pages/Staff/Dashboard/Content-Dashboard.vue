@@ -6,7 +6,7 @@
                 <!-- Top Layer: 3 Cards -->
                 <div class="grid grid-cols-3 gap-3 flex-none h-[40%]">
                     <div class="h-full flex flex-col">
-                        <Statistics />
+                        <Statistics :scholarships="scholarships" :active_scholars="active_scholars" />
                     </div>
                     <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
                         <ScholarsStatistics />
@@ -64,6 +64,7 @@ const props = defineProps({
     scholarships: Array,
     sponsors: Array,
     scholars: Array,
+    active_scholars: Array,
 });
 
 </script>

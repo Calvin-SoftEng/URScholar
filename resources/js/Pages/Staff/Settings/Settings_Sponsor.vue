@@ -539,10 +539,6 @@ const editScholarship = (scholarship) => {
     form.value = { ...scholarship };
 };
 
-const viewApplicants = (scholarshipId) => {
-    Inertia.visit(`/scholarships/${scholarshipId}/applicants`);
-};
-
 
 const submitForm = async () => {
     try {
@@ -565,15 +561,6 @@ const formatDate = (dateString) => {
     month: "long",
     day: "numeric",
   });
-};
-
-const activeateForm = async () => {
-    try {
-        await useForm(scholarships.value).post(route('scholarships.store'));
-        closeModal();
-    } catch (error) {
-        console.error('Error submitting form:', error);
-    }
 };
 
 

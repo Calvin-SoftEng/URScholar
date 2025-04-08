@@ -351,32 +351,38 @@ class DatabaseSeeder extends Seeder
         //academic year
         AcademicYear::factory()->create([
             'school_year_id' => '1',
-            'semester' => '1st'
+            'semester' => '1st',
+            'status' => 'Inactive'
         ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '1',
-            'semester' => '2nd'
+            'semester' => '2nd',
+            'status' => 'Inactive'
         ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '2',
-            'semester' => '1st'
+            'semester' => '1st',
+            'status' => 'Inactive'
         ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '2',
-            'semester' => '2nd'
+            'semester' => '2nd',
+            'status' => 'Inactive'
         ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '3',
-            'semester' => '1st'
+            'semester' => '1st',
+            'status' => 'Inactive'
         ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '3',
-            'semester' => '2nd'
+            'semester' => '2nd',
+            'status' => 'Active'
         ]);
 
 

@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Staff;
 
 use App\Models\Sponsor;
+use App\Models\Student;
 use App\Models\SubmittedRequirements;
 use Inertia\Inertia;
 use App\Http\Controllers\Controller;
+use App\Models\Grantees;
 use App\Models\Requirements;
 use App\Models\Scholarship;
+use App\Models\Scholar;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
@@ -60,10 +63,14 @@ class StaffController extends Controller
                 ];
             });
 
+            $active_scholars = Grantees::where('status', 'Active')->get();
+            $enrolled = Student::all();
+
         return Inertia::render('Staff/Dashboard', [
             'sponsors' => $sponsor,
             'scholarships' => $activeScholarships,
-            'scholars' => $latestSubmissions
+            'scholars' => $latestSubmissions,
+            'active_scholars' => $active_scholars,
         ]);
     }
 }

@@ -36,6 +36,14 @@ return new class extends Migration {
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
+
+        Schema::create('sponsor_moas', function (Blueprint $table) {
+            $table->id();
+            $table->string('moa');
+            $table->string('moa_path');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -43,6 +51,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::dropIfExists('sponsor_moas');
         Schema::dropIfExists('sponsors');
     }
 };
