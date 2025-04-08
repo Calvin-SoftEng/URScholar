@@ -1,6 +1,6 @@
 <template>
   <div
-    class="lg:max-h-screen flex flex-col border-r border-gray-200 dark:border-r dark:border-gray-600 transition-all duration-300"
+    class="lg:max-h-screen flex-shrink-0 flex flex-col border-r border-gray-200 dark:border-r dark:border-gray-600 transition-all duration-300"
     id="side-bar" :class="{ 'side-bar-visible': dataOpenSideBar, 'side-bar-close': !dataOpenSideBar }">
     <!-- desktop -->
     <div class="hidden lg:flex flex-col justify-between h-full dark:bg-dprimary">

@@ -13,7 +13,7 @@
 
 
         <!-- Text Content -->
-        <div class="relative z-10 space-y-6 px-4">
+        <div class="relative z-10 sm:space-y-5 lg:space-y-10 px-4">
             <!-- <h1 class="sm:text-4xl md:text-6xl lg:text-7xl 2xl:text-8xl font-bold lg:font-extrabold text-myblack mb-3 md:mb-4 font-albert leading-none md:leading-snug">
                 Welcome to the <span class="bg-gradient-to-b from-[#112844] to-[#0D3B80] bg-clip-text text-transparent font-semibold">Scholarship Portal</span>
                 <span class="hidden md:inline"><br></span>
@@ -34,13 +34,13 @@
                 Let’s find out together!
             </p> -->
 
-            <p class="text-lg sm:text-2xl md:text-3xl text-gray-400 max-w-2xl font-albert font-bold">
+            <p class="sm:text-base md:text-4xl text-gray-400 max-w-2xl font-albert font-bold">
                 <span class="text-primary">Empowering</span> scholars through<br>
                 connection, and continuous support.
             </p>
-            <button class="btn bg-white shadow text-primary sm:text-sm lg:text-2xl font-bold font-sora mt-5 px-10">
+            <!-- <button class="btn bg-white shadow text-primary sm:text-sm lg:text-2xl font-bold font-sora mt-5 sm:px-5 lg:px-10">
                 Check Now
-            </button>
+            </button> -->
         </div>
 
     </section>

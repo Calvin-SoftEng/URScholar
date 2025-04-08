@@ -15,68 +15,31 @@
                 <!-- Image Container (Centered) -->
                 <div class="w-44 h-44 sm:w-20 sm:h-40 md:w-42 md:h-44 lg:w-44 lg:h-34 flex justify-center mx-auto">
                     <img 
-                        src="../../../../assets/images/qualifiedvector.png" 
+                        src="../../../../assets/images/validation.png" 
                         alt="Congrats" 
                     >
                 </div>
                 <h1 class="font-bold text-2xl font-albert text-center mt-4">
-                    Congratulations! <br>You are qualified for the {{ scholarship.name }} Scholarship!
+                    Data Validation and Document Submission for the {{ scholarship.name }} Scholarship!
                 </h1>
                 <div class="p-24 sm:p-3 sm:mt-10 font-inter text-lg">
                     <p>Dear, {{ scholar.first_name + ' ' + scholar.last_name }}</p>
                     <br>
-                    <p class="leading-loose indent-6">We are thrilled to inform you that you have been officially
-                        qualified for a scholarship under {{ scholarship.name }} in the URScholar System! Your
-                        dedication and hard work have truly paid off, and we are excited to support you on your academic
-                        journey.</p>
+                    <p class="leading-loose indent-6">Congratulations! You are in the running for the {{ scholarship.name }} Scholarship through the URScholar System. Before we proceed with finalizing your eligibility, we need to verify your information and ensure that your enrollment status is up to date. Please complete the following steps to confirm your qualification.</p>
                     <br>
-                    <h1 class="font-bold">Next Steps: Submission of Requirements</h1>
+                    <h1 class="font-bold">Next Steps: Data Validation and Document Submission</h1>
                     <br>
-                    <p class="leading-loose indent-6">To complete your scholarship application and ensure your
-                        eligibility for the grant, please submit the following required documents no later than
-                        {{ requirements.deadline }}:</p>
+                    <p class="leading-loose indent-6">To validate and finalize your scholarship application, please submit the following required documents no later than {{ requirements.deadline }}:</p>
                     <br>
 
                     <div>
                         <form @submit.prevent="submitRequirements" enctype="multipart/form-data">
-                            <div class="p-3 w-full bg-dtext rounded-lg">
+                            <div class="p-3 w-full bg-gray-100 rounded-lg">
                                 <div class="flex justify-between items-center mb-4">
                                     <h1 class="text-lg font-inter font-bold text-dsecondary text-left">
                                         Uploading Documents
                                     </h1>
                                 </div>
-
-                                <!-- Requirements upload section -->
-                                <!-- <div class="grid grid-cols-2 gap-4">
-                                    <div v-for="(requirement, index) in requirements" :key="requirement.id"
-                                        class="border rounded-md shadow p-4 bg-white">
-                                        <div class="mb-2">
-                                            <span class="font-medium text-gray-700">{{ requirement.requirements
-                                                }}</span>
-                                        </div>
-
-                                        <div class="space-y-2">
-                                            <input type="file"
-                                                @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
-                                                :id="'file_input_' + requirement.id"
-                                                class="block w-full text-sm text-blue-900 border border-gray-300 rounded-lg cursor-pointer bg-white 
-                                            dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" />
-
-                                            <div v-if="form.files[requirement.id]" class="text-sm text-gray-600">
-                                                Selected file: {{ form.files[requirement.id].name }}
-                                                <button type="button" @click="removeFile(requirement.id)"
-                                                    class="ml-2 text-red-600 hover:text-red-800">
-                                                    Remove
-                                                </button>
-                                            </div>
-
-                                            <div v-if="form.errors[`files.${requirement.id}`]"
-                                                class="text-red-500 text-sm">
-                                                {{ form.errors[`files.${requirement.id}`] }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
 
                                 <div class="col-span-1 flex flex-col space-y-3">
                                     <div v-for="(requirement, index) in requirements" :key="requirement.id"
@@ -142,33 +105,32 @@
                     </div>
                     <br>
 
-                    <h1 class="font-bold">Important Reminders:</h1>
-                    <ul class="list-disc ml-6 text-left">
-                        <li>Late or incomplete submissions may result in forfeiture of your scholarship.</li>
-                        <li>If you have any questions or need assistance, please contact [Scholarship Coordinator’s
-                            Name] at [Coordinator’s Email/Phone].</li>
-                        <li>Keep an eye on your URScholar notifications for further updates.</li>
-                    </ul>
-                    <br>
-
-                    <h1 class="font-bold">How to Submit:</h1>
+                    <!-- <h1 class="font-bold">How to Submit:</h1>
                     <ul class="list-disc ml-6 text-left">
                         <li>Log in to your URScholar account at [System URL] and navigate to the “Scholarship
                             Requirements” section.</li>
                         <li>Upload the required documents in the designated fields.</li>
                         <li>Ensure all files are clear and readable before submission.</li>
                         <li>Keep an eye on your URScholar notifications for further updates.</li>
+                    </ul> -->
+
+                    <h1 class="font-bold">Important Reminders:</h1>
+                    <ul class="list-disc ml-6 text-left">
+                        <li>Late or incomplete submissions may delay the verification of your scholarship and could affect your eligibility.</li>
+                        <li>If you have any questions or need assistance, please reach out to [Scholarship Coordinator’s Name] at [Coordinator’s Email/Phone].</li>
+                        <li>Stay updated with any notifications from URScholar for further instructions or changes.</li>
                     </ul>
+                    <br>
 
                     <br>
-                    <p>Once again, congratulations! We are proud of you and look forward to supporting your academic
-                        success.</p>
+                    <p>Once again, congratulations on reaching this stage! We look forward to finalizing your scholarship eligibility and supporting your academic journey.</p>
                     <br>
 
                     <p class="font-bold">Best regards,<br>
-                        [Your Scholarship Office Name]<br>
+                        Scholarship and Financial Assistance Unit<br>
                         University of Rizal System | URScholar Team<br>
                         [Scholarship Office Email] | [Contact Number]</p>
+
                 </div>
             </div>
             <!-- </div> -->

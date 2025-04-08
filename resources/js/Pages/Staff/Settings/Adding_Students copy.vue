@@ -1,7 +1,7 @@
 <template>
     <SettingsLayout>
         <div
-            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+            class="w-full h-full overflow-hidden flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <h1 class="text-2xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                     <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>University of Rizal
@@ -41,47 +41,152 @@
 
                 <div class="w-full mt-5">
                     <div class="relative overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg w-full">
-                        <!-- Add an enclosing div for scroll functionality -->
-                        <div class="overflow-x-auto w-full max-w-full">
-                            <table class="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary">
-                                <tr class="dark:text-dtext">
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Student Number</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Student Name</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Course</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Campus</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Year Level</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Email</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Contact Number</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Permanent Address</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Facebook Account (if any)</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Place of Birth</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Date of Birth</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Religion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template v-for="student in paginatedStudents" :key="student.id">
-                                <tr class="bg-white border-b dark:bg-dsecondary dark:border-gray-700 border-gray-200">
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.student_number }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.first_name }} {{ student.last_name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.course.name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.campus.name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.year_level }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.email }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.contact_number ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.permanent_address ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.facebook_account ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.place_of_birth ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.date_of_birth ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.religion ?? 'N/A' }}</td>
-                                </tr>
-                                </template>
-                            </tbody>
-                            </table>
+                        <div
+                            class="grid grid-cols-4 w-full py-1 items-center justify-between gap-10 bg-gray-50 dark:bg-dcontainer ">
+                            <div class="flex flex-col w-full px-14">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase ">
+                                    Name
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                                <input type="text" id="first_name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="" />
+                            </div>
+                            <div class="flex flex-col w-full px-14">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase">
+                                    Campus
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                                <input type="text" id="first_name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="" />
+                            </div>
+                            <div class="flex flex-col w-full px-14">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase">
+                                    Course
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                                <input type="text" id="first_name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="" />
+                            </div>
+                            <div class="flex flex-col w-full px-14">
+                                <span class="flex items-center text-xs font-bold text-gray-700 dark:text-dtext uppercase">
+                                    Year Level
+                                    <svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                        width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
+                                    </svg>
+                                </span>
+                                <input type="text" id="first_name"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="" />
+                            </div>
                         </div>
+                        <div class="w-full mt-5">
+  <div class="overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg">
+    <table class="min-w-full text-sm text-left text-gray-500 dark:text-gray-400 border-collapse">
+                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary">
+                                        <tr class="dark:text-dtext">
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Student Number
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Student Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Course
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Campus
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Year Level
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Email
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Contact Number
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Permanent Address
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Facebook Account (if any)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Place of Birth
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap" >
+                                            Date of Birth
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">
+                                            Religion
+                                        </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-for="student in paginatedStudents" :key="student.id">
+                                        <tr class="bg-white border-b dark:bg-dsecondary dark:border-gray-700 border-gray-200">
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.student_number }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.first_name }} {{ student.last_name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.course.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.campus.name }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.year_level }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.email }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.contact_number ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.permanent_address ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.facebook_account ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.place_of_birth ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.date_of_birth ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">
+                                            {{ student.religion ?? 'N/A' }}
+                                            </td>
+                                        </tr>
+                                        </template>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
 
+                    
+                    </div>
                     <!-- Pagination controls -->
                     <div v-if="totalStudents > itemsPerPage" class="mt-5 flex justify-between items-center">
                         <span class="text-sm text-gray-700 dark:text-gray-400">
