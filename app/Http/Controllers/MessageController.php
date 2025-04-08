@@ -126,7 +126,7 @@ class MessageController extends Controller
             ]);
         } elseif ($currentUser->usertype == 'student') {
             // Return the chat page using Inertia, passing the messages and user data
-            return Inertia::render('Student/Communication/Communication', [
+            return Inertia::render('Student/Communication/Messaging', [
                 'messages' => $messages,
                 'currentUser' => Auth::user(),
                 'batches' => $batches,

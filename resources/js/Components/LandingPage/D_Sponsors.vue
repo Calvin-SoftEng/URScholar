@@ -5,8 +5,10 @@
             <div v-for="sponsor in sponsors" :key="sponsor.id"
                 class="bg-white flex flex-col sm:flex-row items-center sm:items-start gap-4 p-6 sm:p-3 border border-gray-300 rounded-lg shadow-md hover:shadow-lg transition-all transform hover:scale-[1.02]">
                 <div class="flex flex-col items-center space-y-1">
-                    <img src="../../../assets/images/univ-seal.png" alt="Sponsor Logo" 
-                        class="w-28 h-28 sm:w-20 sm:h-20 rounded-lg border border-gray-300 shadow-sm">
+                    <div class="w-32 sm:w-20 aspect-square rounded-lg overflow-hidden">
+                        <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="Sponsor Logo"
+                            class="w-full h-full object-cover shadow-sm" />
+                    </div>
                     <span class="text-gray-600 text-sm sm:text-xs font-medium">{{sponsor.abbreviation}}</span>
                 </div>
 
@@ -19,14 +21,14 @@
         </div>
 
         <!-- Right Section (Sticky "Meet Our Sponsors") -->
-        <div class="lg:w-1/2 w-full space-y-4 text-center lg:text-left items-center justify-center flex flex-col relative z-10 lg:sticky lg:top-32 self-start">
-            <h1 class="text-4xl sm:text-2xl font-extrabold text-white drop-shadow-lg">Meet Our Scholarship Sponsors</h1>
-            <p class="text-base sm:text-sm text-gray-200 max-w-2xl leading-relaxed">
+        <div class="lg:w-1/2 w-full sm:space-y-5 lg:space-y-10 text-center lg:text-left items-center justify-center flex flex-col relative z-10 lg:sticky lg:top-32 self-start">
+            <h1 class="sm:text-3xl lg:text-6xl font-extrabold text-white drop-shadow-lg">Meet Our Scholarship Sponsors</h1>
+            <p class="sm:text-sm lg:text-xl text-gray-200 max-w-2xl leading-relaxed">
                 Our generous sponsors play a vital role in empowering students at the University of Rizal System. 
                 Their commitment provides scholarships that change lives, helping students achieve their academic dreams.
             </p>
-            <p class="text-base sm:text-sm text-gray-200 max-w-2xl leading-relaxed">
-                Below, you'll find a list of esteemed sponsors who have contributed to making education more accessible. 
+            <p class="sm:text-sm lg:text-xl text-gray-200 max-w-2xl leading-relaxed">
+                You'll find a list of esteemed sponsors who have contributed to making education more accessible. 
                 We extend our deepest gratitude to each of them.
             </p>
         </div>

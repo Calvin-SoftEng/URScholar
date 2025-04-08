@@ -4,17 +4,17 @@
 
     <AuthenticatedLayout>
         <template #default>
-            <div class="w-full h-full bg-dirtywhite">
+            <!-- <div class="w-full h-full bg-dirtywhite">
                 <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
                     <div class="bg-dirtywhite py-5 w-[5%] h-full">
                         <div class="flex flex-col items-center justify-center">
-                            <!-- pm -->
+
                             <button @click="showPMContent">
                                 <font-awesome-icon :icon="['fas', 'comment']"
                                 class="items-center justify-center w-8 h-8 text-[30px] text-primary p-3 bg-gray-200 rounded-lg" />
                             </button>
                             <span class="block w-full h-[2px] bg-gray-300 my-3"></span>
-                            <!-- feed -->
+
                             <button @click="showFeedContent">
                                 <font-awesome-icon :icon="['fab', 'google-scholar']"
                                 class="items-center justify-center w-7 h-7 text-[30px] text-primary p-3.5 bg-white rounded-lg shadow-md mb-3 hover:bg-gray-100"
@@ -32,7 +32,7 @@
                     </div>
 
                 </div>
-            </div>
+            </div> -->
         </template>
     </AuthenticatedLayout>
 </template>
