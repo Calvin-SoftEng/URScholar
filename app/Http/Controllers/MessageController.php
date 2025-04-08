@@ -144,7 +144,7 @@ class MessageController extends Controller
             'batch_id' => 'required',
         ]);
 
-        // dd($request);
+        dd($request);
         $user = Auth::user()->id;
 
         $message = Message::create([

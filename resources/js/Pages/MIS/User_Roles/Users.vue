@@ -3,9 +3,9 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full space-y-2">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
-                <h1 class="text-2xl font-bold mb-5">Stakeholders</h1>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Stakeholders</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of the University's campuses. You can add and edit campuses here, and assign
@@ -15,7 +15,7 @@
 
                 <div class="relative overflow-x-auto border border-gray-200 rounded-lg">
                     <div
-                        class="p-3 flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+                        class="p-3 flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-dcontainer">
                         <div>
                             <label for="table-search" class="sr-only">Search</label>
                             <div class="relative">
@@ -40,7 +40,7 @@
                         </div>
                     </div>
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dcontainer dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
                                     User Name
@@ -59,7 +59,7 @@
                         <tbody>
                             <template v-for="user in filteredUsers" :key="user.id">
                                 <tr
-                                    class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                    class="bg-white border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row"
                                         class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                         <div v-if="$page.props.auth.user.picture">

@@ -6,13 +6,13 @@
         <MIS_Header class="w-full h-[50px] z-50" />
 
             <!-- Content Area -->
-            <div class="pl-96 bg-white flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
+            <div class="pl-96 bg-white dark:bg-dprimary flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
                 <!-- Sidebar --> 
                 <MIS_Sidebar class="lg:w-5/12 w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
                 />
 
                 <!-- Main Content -->
-                <div class="pr-96 bg-dirtywhite flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
+                <div class="pr-96 bg-dirtywhite dark:bg-dprimary flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
                 <slot></slot>
                 </div>
             </div>

@@ -66,6 +66,8 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
     // portal branding
     Route::get('/system_admin/univ-settings/portal-branding', [SystemAdminController::class, 'portal_branding'])->name('sa.portal_branding');
+    Route::post('/system_admin/univ-settings/portal-branding/store', [SystemAdminController::class, 'portal_branding_store'])->name('sa.portal_branding_store');
+
 
     // user settings
     Route::get('/system_admin/user-settings/system-users_roles', [SystemAdminController::class, 'system_user_roles'])->name('sa.user_roles');
@@ -92,7 +94,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])->group(function () {
-        // Messaging
+    // Messaging
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
     Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
     Route::get('/group-page/{batch}', [MessageController::class, 'show'])->name('messaging.show');
@@ -151,6 +153,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
 
     Route::get('/scholarships/{scholarshipId}/batch/{batchId}', [ScholarshipController::class, 'batch'])->name('scholarship.batch');
+    Route::post('/scholars/{id}/update-status', [ScholarController::class, 'updateStudent'])->name('scholars.update-status');
     Route::get('/scholarships/{scholarshipId}/batch/{batchId}/payroll', [ScholarshipController::class, 'student_payouts'])->name('scholarship.payrol');
 
 

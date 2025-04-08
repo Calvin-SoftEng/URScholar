@@ -3,18 +3,18 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite p-6 h-full w-full space-y-2">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
-                <h1 class="text-2xl font-bold mb-5">Campus</h1>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Campus</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of the University's campuses. You can add and edit campuses here, and assign
                 stakeholders.
             </p>
             <div class="w-full mt-5">
-                <div v-if="!isTableVisible" class="bg-white relative overflow-x-auto border border-gray-200 rounded-lg">
-                    <div class="flex items-center justify-between pb-4 bg-white dark:bg-gray-900 m-5">
-                        <h1 class="text-xl font-semibold font-quicksand text-primary">
+                <div v-if="!isTableVisible" class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 rounded-lg">
+                    <div class="flex items-center justify-between pb-4 bg-white dark:bg-dcontainer m-5">
+                        <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
                             University of the Rizal System
                         </h1>
                         <button @click="toggleTable"
@@ -23,7 +23,7 @@
                         </button>
                     </div>
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dnavy dark:text-gray-400">
                             <tr>
                                 <th scope="col" class="px-6 py-3">
                                     Campus
@@ -44,7 +44,7 @@
                         </thead>
                         <tbody>
                             <template v-for="campus in campuses" :key="campus.id">
-                                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200">
+                                <tr class="bg-white border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200">
                                     <th scope="row"
                                         class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         {{ campus.name }}
@@ -82,7 +82,7 @@
                 </div>
 
                 <div v-if="isTableVisible"
-                    class="relative overflow-x-auto border bg-white border-gray-200 rounded-lg p-4">
+                    class="relative overflow-x-auto border bg-white dark:bg-dprimary border-gray-200 rounded-lg p-4">
                     <form @submit.prevent="submitForm">
                         <div class="flex w-full items-end justify-end">
                             <button type="button" @click="toggleTable"
@@ -95,7 +95,7 @@
                             </button>
                         </div>
                         <div class="flex flex-col w-full gap-4">
-                            <h1 class="text-lg font-bold font-quicksand text-primary">
+                            <h1 class="text-lg font-bold font-quicksand text-dprimary dark:text-dtext">
                                 Enter the Campus Details
                             </h1>
                             <div>

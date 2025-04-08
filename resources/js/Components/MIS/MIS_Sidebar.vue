@@ -1,5 +1,5 @@
 <template>
-    <div class="lg:max-h-screen flex flex-col border-r border-gray-200 dark:border-gray-600 transition-all duration-300" id="side-bar"
+    <div class="lg:max-h-screen flex flex-col border-r border-gray-200 dark:border-gray-800 transition-all duration-300" id="side-bar"
     :class="{'side-bar-visible': dataOpenSideBar}">
 
       <!-- desktop -->
@@ -27,7 +27,7 @@
             </Link> -->
 
 
-            <div class="h-0.5 bg-gray-100 w-full"></div>
+            <div class="h-0.5 bg-gray-100 dark:bg-gray-800 w-full"></div>
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">User and Role Management</div>
             <!-- Manage Admin and Users, Role-Based Access Controls, User Activity Logs -->
 
@@ -40,9 +40,9 @@
             </Link>
 
             <Link :href="route('sa.user_roles')">
-              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/user-roles' }">
+              <div class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md" :class="{ 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/system_admin/user-settings/system-users_roles' }">
                 <div class="flex space-x-2 font-quicksand text-[15px] font-semibold pl-1">
-                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/user-roles' }">User Roles Control</span>
+                  <span class="pl-2" :class="{ 'active text-white': $page.url === '/system_admin/user-settings/system-users_roles' }">User Roles Control</span>
                 </div>
               </div>
             </Link>
@@ -56,7 +56,7 @@
             </Link>
 
 
-            <div class="h-0.5 bg-gray-100 w-full"></div>
+            <div class="h-0.5 bg-gray-100 dark:bg-gray-800 w-full"></div>
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">University Settings</div>
             <!-- School Year and Term Management, Campus Management, Course and College Management -->
 
@@ -85,7 +85,7 @@
             </Link>
 
 
-            <div class="h-0.5 bg-gray-100 w-full"></div>
+            <div class="h-0.5 bg-gray-100 dark:bg-gray-800 w-full"></div>
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-xs font-semibold py-2 px-3 w-full uppercase">Security and Backup</div>
             <!-- System Logs and Audit Trail, Data Backup and Restore, User Access Restrictions -->
 

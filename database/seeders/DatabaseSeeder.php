@@ -7,6 +7,7 @@ use App\Models\Campus;
 use App\Models\Condition;
 use App\Models\Course;
 use App\Models\Eligibility;
+use App\Models\PortalBranding;
 use App\Models\Scholarship;
 use App\Models\ScholarshipForm;
 use App\Models\ScholarshipFormData;
@@ -24,6 +25,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+
+        PortalBranding::factory()->create([
+            'logo_light' => 'main_logo_white.webp',
+            'light_path' => 'storage/branding/logos/main_logo_white.webp',
+            'logo_dark' => 'main_logo.webp',
+            'dark_path' => 'storage/branding/logos/main_logo.webp',
+            'branding_name' => 'URScholar',
+            'favicon' => 'web_logo.webp',
+            'favicon_path' => 'storage/branding/favicons/web_logo.webp',
+            'status' => 'Active',
+        ]);
 
         // User::factory(2)->create();
         //MIS
@@ -164,6 +176,17 @@ class DatabaseSeeder extends Seeder
             'logo' => 'images.png',
         ]);
 
+        Sponsor::factory()->create([
+            'name' => 'Development Bank of the Philippines',
+            'created_id' => 2,
+            'assign_id' => 5,
+            'abbreviation' => 'DBP',
+            'since' => '2001',
+            'moa_file' => 'moa1.pdf',
+            'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
+            'logo' => 'images.png',
+        ]);
+
         //scholarship
         Scholarship::factory()->create([
             'name' => 'Tulong Dunong Program',
@@ -176,10 +199,10 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Scholarship::factory()->create([
-            'name' => 'DBP-Rise',
-            'sponsor_id' => 1,
+            'name' => 'DBP-RISE',
+            'sponsor_id' => 2,
             'user_id' => 2,
-            'scholarshipType' => 'One-time Payment',
+            'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
             'date_start' => '2025-03-15',
             'date_end' => '2025-03-25',

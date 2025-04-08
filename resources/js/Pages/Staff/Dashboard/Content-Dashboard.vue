@@ -6,7 +6,7 @@
                 <!-- Top Layer: 3 Cards -->
                 <div class="grid grid-cols-3 gap-3 flex-none h-[40%]">
                     <div class="h-full flex flex-col">
-                        <QuickPost />
+                        <Statistics />
                     </div>
                     <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
                         <ScholarsStatistics />
@@ -44,7 +44,7 @@
 import { ref } from 'vue';
 
 import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
-import QuickPost from '../../../Components/Staff/Dashboard/Statistics.vue';
+import Statistics from '../../../Components/Staff/Dashboard/Statistics.vue';
 import ScholarsStatistics from '@/Components/Staff/Dashboard/ScholarsStatistics.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
 import Messages from '@/Components/Staff/Dashboard/Messages.vue';
@@ -53,7 +53,7 @@ import Calendar_Activities from '@/Components/Staff/Dashboard/Calendar_Activitie
 
 const components = {
     ActiveScholarship,
-    QuickPost,
+    Statistics,
     Messages,
     ScholarsStatistics,
     Calendar_Activities

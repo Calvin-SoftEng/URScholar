@@ -24,7 +24,7 @@ class SponsorController extends Controller
     public function sponsor_dashboard()
     {
         //Scholarships Listing
-        $sponsor = Sponsor::where('user_id', Auth::user()->id)
+        $sponsor = Sponsor::where('assign_id', Auth::user()->id)
             ->first();
 
         $scholarship = $sponsor->scholarship;
@@ -188,6 +188,7 @@ class SponsorController extends Controller
         // Process all batches and their scholars
         $processedBatches = $batches->map(function ($batch) use ($scholarship, $totalRequirements) {
             $grantees = $scholarship->grantees()
+                ->where('status', 'Active')
                 ->where('batch_id', $batch->id)
                 ->with('scholar.campus', 'scholar.course', 'school_year')
                 ->get();

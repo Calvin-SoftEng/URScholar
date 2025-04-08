@@ -35,6 +35,10 @@ defineProps({
         type: String,
         required: true,
     },
+    branding: {
+        type: Object,
+        required: true,
+    },
 });
 
 function handleImageError() {
@@ -51,7 +55,7 @@ function handleImageError() {
     <div class="bg-[#E9F4FF] w-full">
         <!-- Sticky Navbar for Desktop and Mobile -->
         <div class="sticky xl:top-3 z-50">
-            <FloatingNav />
+            <FloatingNav :branding="branding"/>
         </div>
 
         <!-- Page Sections -->

@@ -7,6 +7,7 @@ use App\Models\ActivityLog;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\PortalBranding;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Mail\SendEmail;
@@ -16,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class SystemAdminController extends Controller
 {
@@ -28,7 +30,76 @@ class SystemAdminController extends Controller
     // system config ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public function portal_branding()
     {
+
+
         return Inertia::render('MIS/System_Config/Portal_Branding');
+    }
+
+    public function portal_branding_store(Request $request)
+    {
+        $request->validate([
+            'brandingName' => 'nullable|string|max:255',
+            'logoLight' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'logoDark' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'favicon' => 'nullable|image|mimes:jpeg,png,jpg,gif,ico|max:1024',
+            'status' => 'required|in:Active,Inactive',
+        ]);
+
+        // Find existing active branding or create new
+        $branding = PortalBranding::where('status', 'Active')->first();
+        if (!$branding) {
+            $branding = new PortalBranding();
+        }
+
+        // Update branding name
+        $branding->branding_name = $request->brandingName;
+        $branding->status = $request->status;
+
+        // Handle the light mode logo
+        if ($request->hasFile('logoLight')) {
+            if ($branding->light_path && Storage::exists('public/' . $branding->light_path)) {
+                Storage::delete('public/' . $branding->light_path);
+            }
+
+            $logoLightFile = $request->file('logoLight');
+            $logoLightOriginalName = $logoLightFile->getClientOriginalName();
+            $logoLightPath = $logoLightFile->storeAs('branding/logos', $logoLightOriginalName, 'public');
+
+            $branding->logo_light = $logoLightOriginalName;
+            $branding->light_path = $logoLightPath;
+        }
+
+
+        if ($request->hasFile('logoDark')) {
+            if ($branding->dark_path && Storage::exists('public/' . $branding->dark_path)) {
+                Storage::delete('public/' . $branding->dark_path);
+            }
+
+            $logoDarkFile = $request->file('logoDark');
+            $logoDarkOriginalName = $logoDarkFile->getClientOriginalName();
+            $logoDarkPath = $logoDarkFile->storeAs('branding/logos', $logoDarkOriginalName, 'public');
+
+            $branding->logo_dark = $logoDarkOriginalName;
+            $branding->dark_path = $logoDarkPath;
+        }
+
+        if ($request->hasFile('favicon')) {
+            if ($branding->favicon_path && Storage::exists('public/' . $branding->favicon_path)) {
+                Storage::delete('public/' . $branding->favicon_path);
+            }
+
+            $faviconFile = $request->file('favicon');
+            $faviconOriginalName = $faviconFile->getClientOriginalName();
+            $faviconPath = $faviconFile->storeAs('branding/favicons', $faviconOriginalName, 'public');
+
+            $branding->favicon = $faviconOriginalName;
+            $branding->favicon_path = $faviconPath;
+        }
+
+
+        $branding->save();
+
+        return redirect()->back()->with('success', 'Branding settings updated successfully');
     }
 
     // univ settings ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
