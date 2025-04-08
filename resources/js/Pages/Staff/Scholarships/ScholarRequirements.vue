@@ -134,8 +134,6 @@ import Button from 'primevue/button';
 import FileUpload from 'primevue/fileupload';
 
 
-import SlidingAddScholars from '../../../Components/Admin/ScholarsTabs/SlidingAddScholars.vue';
-
 // components
 
 const components = {

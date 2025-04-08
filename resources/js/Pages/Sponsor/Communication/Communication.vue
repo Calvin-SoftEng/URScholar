@@ -33,7 +33,6 @@ import { Head, router, Link } from '@inertiajs/vue3';
 import { ref, onMounted, watch } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
-import Feed from './Feed.vue';
 import Messaging from './Messaging.vue';
 
 const props = defineProps({
