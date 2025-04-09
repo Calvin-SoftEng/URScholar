@@ -148,7 +148,7 @@
                                                         placeholder="e.g., Since 2012"
                                                         class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                                 </div>
-                                                <div class="w-full flex flex-col space-y-3">
+                                                <div class="w-full flex flex-col space-y-1">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor
                                                         Background Information</h3>
                                                     <textarea v-model="form.description" id="description"
@@ -158,7 +158,7 @@
                                             </div>
                                             <div class="space-y-5">
                                                 <div class="w-full flex flex-col">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Attach
+                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Attach
                                                         Memorandum of Agreement</h3>
                                                     <label for="dropzone-file"
                                                         class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -236,6 +236,28 @@
                                                             @change="(e) => handleImg(e.target.files[0])" />
                                                     </label>
                                                 </div>
+                                            </div>
+                                            <div
+                                                class="col-span-4 gap-2 relative w-full flex items-center mt-4 whitespace-nowrap">
+                                                <h3 class="font-semibold text-sm text-blue-900 dark:text-white">
+                                                    Assigning Focal Person
+                                                </h3>
+                                                <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                            </div>
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full Name
+                                                </h3>
+                                                <input v-model="form.abbreviation" type="text" id="name"
+                                                    placeholder="e.g., CHED"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                                            </div>
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                                    Sponson Email
+                                                </h3>
+                                                <input v-model="form.since" type="email" id="name"
+                                                    placeholder="e.g., Since 2012"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                         </div>
 
@@ -359,6 +381,31 @@
                                                 accept=".svg, .png, .jpg, .docx, .doc, .pdf"
                                                 @change="(e) => handleFile(e.target.files[0])" />
                                         </label>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="col-span-4 gap-2 relative w-full flex items-center mt-5 mb-5 whitespace-nowrap">
+                                    <h3 class="font-semibold text-sm text-blue-900 dark:text-white">
+                                        Assigning Focal Person
+                                    </h3>
+                                    <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                </div>
+                                <div class="flex flex-row gap-3">
+                                    <div class="w-full">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full Name
+                                        </h3>
+                                        <input v-model="form.abbreviation" type="text" id="name"
+                                            placeholder="e.g., CHED"
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                                    </div>
+                                    <div class="w-full">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">
+                                            Sponson Email
+                                        </h3>
+                                        <input v-model="form.since" type="email" id="name"
+                                            placeholder="e.g., Since 2012"
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                     </div>
                                 </div>
 
