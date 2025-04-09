@@ -608,8 +608,25 @@
                                     class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
                                     <div class="w-full h-1/12 flex flex-col items-start gap-1 pb-4 border-b-2">
                                         <span class="text-gray-500 text-sm">Permanent Address</span>
+                                        <span class="text-gray-500 text-xs">Street</span>
                                         <div class="relative w-full">
-                                            <input v-model="form.address" type="text" placeholder="Address"
+                                            <input v-model="form.street" type="text" placeholder="Address"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                        </div>
+                                        <span class="text-gray-500 text-sm">Municipality</span>
+                                        <div class="relative w-full">
+                                            <input v-model="form.municipality" type="text" placeholder="Address"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                        </div>
+                                        <span class="text-gray-500 text-sm">Province</span>
+                                        <div class="relative w-full">
+                                            <input v-model="form.province" type="text" placeholder="Address"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -1261,8 +1278,25 @@
                             <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
                                 <span class="text-gray-500 text-sm">Permanent Address</span>
                                 <span class="text-gray-900 text-base leading-tight">
+                                    <span class="text-gray-500 text-xs">Street</span>
                                     <div class="relative w-full">
-                                        <input v-model="form.address" type="text" placeholder="Address"
+                                        <input v-model="form.street" type="text" placeholder="Address"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
+                                    <span class="text-gray-500 text-sm">Municipality</span>
+                                    <div class="relative w-full">
+                                        <input v-model="form.municipality" type="text" placeholder="Address"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
+                                    <span class="text-gray-500 text-sm">Province</span>
+                                    <div class="relative w-full">
+                                        <input v-model="form.province" type="text" placeholder="Address"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
