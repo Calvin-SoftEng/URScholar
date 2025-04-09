@@ -609,7 +609,7 @@
                                     <div class="w-full h-1/12 flex flex-col items-start gap-1 pb-4 border-b-2">
                                         <span class="text-gray-500 text-sm">Permanent Address</span>
                                         <div class="relative w-full">
-                                            <input v-model="form.age" type="text" placeholder="Address"
+                                            <input v-model="form.address" type="text" placeholder="Address"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -639,7 +639,7 @@
                                             <div class="w-full sm:w-[40%] flex flex-col items-start gap-1">
                                                 <span class="text-gray-500 text-sm">Civil Status</span>
                                                 <div class="relative w-full">
-                                                    <input v-model="form.age" type="text" placeholder="Address"
+                                                    <input v-model="form.civil" type="text" placeholder="Address"
                                                         class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                                     <!-- Icon inside input -->
                                                     <font-awesome-icon :icon="['fas', 'pen']"
@@ -1334,7 +1334,7 @@
                                     <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Place of Birth</span>
                                         <div class="relative w-full">
-                                            <input v-model="form.age" type="text" placeholder="Age"
+                                            <input v-model="form.birthplace" type="text" placeholder="Age"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -1354,7 +1354,7 @@
                                     <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Religion</span>
                                         <div class="relative w-full">
-                                            <input v-model="form.age" type="text" placeholder="Age"
+                                            <input v-model="form.religion" type="text" placeholder="Age"
                                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
@@ -1966,19 +1966,30 @@ const props = defineProps({
 });
 
 const form = ref({
-    birthdate: '',
+    email: '',
     password: '',
     confirm_password: '',
+    suffix: 'N/A',
+    birthdate: '',
+    birthplace: '',
     age: '',
-    street: '',
-    municipality: '',
-    province: '',
+    gender: '',
+    civil_status: '',
+    address: '',
     religion: '',
+    guardian_name: '',
+    relationship: '',
+    grade: '',
+    cog: '',
+    semester: '',
+    school_year: '',
     education: {
         elementary: { name: '', years: '', honors: 'N/A' },
         junior: { name: '', years: '', honors: 'N/A' },
         senior: { name: '', years: '', honors: 'N/A' },
         college: { name: '', years: '', honors: 'N/A' },
+        vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
+        postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
     },
     mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
     father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
@@ -1993,6 +2004,7 @@ const form = ref({
     imgName: null,
     imgPreview: null,
 });
+
 
 const formGrade = ref({
     grade: '',
