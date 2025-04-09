@@ -113,8 +113,8 @@
 
     <!-- Creating a post modal -->
     <div v-if="Share"
-        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-        <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+        class="fixed inset-0 flex items-center justify-center z-[999] bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+        <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12 overflow-visible relative">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <div class="flex items-center gap-3">
@@ -143,14 +143,76 @@
             </div>
 
             <!-- Modal Body -->
-            <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-7">
+            <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-3">
                 
                 <!-- User Profile Section -->
-                <div class="flex items-center gap-3 mb-5">
+                <div class="flex items-center gap-3">
                     <img src="../../../../assets/images/no_userpic.png" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
                     <div>
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">si ako</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400">taga binondo</p>
+                    </div>
+                </div>
+
+                <div
+                    class="col-span-4 gap-2 relative w-full flex items-center mt-4 whitespace-nowrap">
+                    <h3 class="font-semibold text-xs text-blue-900 dark:text-white">
+                        Who can see your post?
+                    </h3>
+                    <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                </div>
+
+                <!-- Filters -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                    <!-- Scholarship Filter -->
+                    <div class="relative">
+                    <label class="block text-xs font-medium mb-1">Scholarship</label>
+                    <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                        @click="toggleDropdown('scholarship')">
+                        {{ selectedScholarships.length ? selectedScholarships.join(', ') : 'Select Scholarships' }}
+                    </button>
+                    <div v-if="openDropdown === 'scholarship'"
+                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
+
+                        <label v-for="(item, index) in scholarshipOptions" :key="index" class="block px-4 py-2">
+                        <input type="checkbox" class="mr-2" :value="item" v-model="selectedScholarships" />
+                        {{ item }}
+                        </label>
+                    </div>
+                    </div>
+
+                    <!-- Batch Filter -->
+                    <div class="relative">
+                    <label class="block text-xs font-medium mb-1">Batch</label>
+                    <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                        @click="toggleDropdown('batch')">
+                        {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
+                    </button>
+                    <div v-if="openDropdown === 'batch'"
+     class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
+
+                        <label v-for="(item, index) in batchOptions" :key="index" class="block px-4 py-2">
+                        <input type="checkbox" class="mr-2" :value="item" v-model="selectedBatches" />
+                        {{ item }}
+                        </label>
+                    </div>
+                    </div>
+
+                    <!-- Campus Filter -->
+                    <div class="relative">
+                    <label class="block text-xs font-medium mb-1">Campus</label>
+                    <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                        @click="toggleDropdown('campus')">
+                        {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
+                    </button>
+                    <div v-if="openDropdown === 'campus'"
+     class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
+
+                        <label v-for="(item, index) in campusOptions" :key="index" class="block px-4 py-2">
+                        <input type="checkbox" class="mr-2" :value="item" v-model="selectedCampuses" />
+                        {{ item }}
+                        </label>
+                    </div>
                     </div>
                 </div>
 
@@ -162,29 +224,6 @@
 
                 </div>
 
-                <!-- Filter Section (Who to send to) -->
-                <div class="">
-                    <label class="block text-sm font-medium text-gray-900 dark:text-gray-300">Who do you want to send this to?</label>
-                    
-                    <!-- Checkboxes for selecting groups -->
-                    <div class="mt-2 flex flex-col gap-2">
-                        <label v-for="group in groups" :key="group.id" class="flex items-center space-x-2">
-                            <input type="checkbox" 
-                                :value="group.id" 
-                                v-model="selectedGroups" 
-                                class="text-blue-600 focus:ring-0 rounded">
-                            <span class="text-gray-900 dark:text-white">{{ group.name }}</span>
-                        </label>
-                        <!-- Option for selecting "Everyone" -->
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" 
-                                value="all" 
-                                v-model="selectedGroups" 
-                                class="text-blue-600 focus:ring-0 rounded">
-                            <span class="text-gray-900 dark:text-white">Everyone</span>
-                        </label>
-                    </div>
-                </div>
 
                 <!-- Post Button -->
                 <div class="mt-2">
@@ -202,9 +241,10 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, Link } from '@inertiajs/vue3';
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, onBeforeUnmount ,watch, nextTick } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import { initFlowbite } from 'flowbite';
 
 const props = defineProps({
     messages: Array,
@@ -215,9 +255,17 @@ const props = defineProps({
 
 const Share = ref(false);
 
-const toggleSharePost = () => {
+const toggleSharePost = async () => {
     Share.value = !Share.value;
     initFlowbite(); // Initialize Flowbite first
+
+    if (Share.value) {
+    await nextTick()
+    initFlowbite()
+        document.addEventListener('click', handleClickOutside)
+    } else {
+        document.removeEventListener('click', handleClickOutside)
+    }
 };
 
 
@@ -227,7 +275,6 @@ const closeModal = () => {
 };
 
 const messageData = ref(props.messages);
-
 
 const selectedData = ref(props.selectedScholarship);
 const form = ref({
@@ -248,25 +295,33 @@ const sendMessage = () => {
     });
 };
 
+const scholarshipOptions = ['CHED', 'DSWD', 'LGU']
+const batchOptions = ['2023', '2024', '2025']
+const campusOptions = ['Tanay', 'Morong', 'Antipolo']
 
-// Set up real-time messaging using Laravel Echo
-// onMounted(() => {
+const selectedScholarships = ref([])
+const selectedBatches = ref([])
+const selectedCampuses = ref([])
 
-//     const echo = new Echo({
-//         broadcaster: 'pusher',
-//         key: import.meta.env.VITE_PUSHER_APP_KEY,
-//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//         forceTLS: true,
-//         authEndpoint: "/broadcasting/auth", // Required for private channels
-//     });
+const openDropdown = ref(null)
 
-//     echo.private(`chat.${props.selectedScholarship.id}`) // Use private channel
-//         .listen('.message.sent', (e) => {
-//             fetchMessages(); // Fetch messages after receiving
-//             scrollToBottom();
-//             messages.value.push(e.message); // Append new message
-//         });
-// });
+const toggleDropdown = (dropdown) => {
+  openDropdown.value = openDropdown.value === dropdown ? null : dropdown
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
+const handleClickOutside = (event) => {
+  const modal = document.querySelector('.your-modal-class') // replace with actual class if needed
+  if (!modal.contains(event.target)) {
+    openDropdown.value = null
+  }
+}
 
 const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
 
@@ -283,11 +338,5 @@ const scrollToBottom = () => {
     }
 };
 
-// Update scroll after new message
-// watch(messageData, () => {
-//     scrollToBottom();
-// });
-
-// Add this near your other ref() declarations
 const showMemberList = ref(false);
 </script>
