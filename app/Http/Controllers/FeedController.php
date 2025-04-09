@@ -27,7 +27,7 @@ class FeedController extends Controller
         $batches = Batch::all();
         $campuses = Campus::all();
 
-        return Inertia::render('Student/Communication/Feed', [
+        return Inertia::render('Staff/Communication/Feed', [
             'scholarships' => $scholarships,
             'batches' => $batches,
             'campuses' => $campuses,

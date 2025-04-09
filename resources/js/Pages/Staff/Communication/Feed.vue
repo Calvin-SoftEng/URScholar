@@ -49,7 +49,7 @@
                                         </div>
                                         <div class="p-4">
                                             <div class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
-                                                <p>fefrgr ghthtyjyj</p>
+                                                <p>fefrgr D</p>
                                             </div>
                                         </div>
                                     </div>
@@ -172,7 +172,13 @@
                         class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
 
                         <label v-for="(item, index) in scholarshipOptions" :key="index" class="block px-4 py-2">
-                        <input type="checkbox" class="mr-2" :value="item" v-model="selectedScholarships" />
+                            <input 
+                            type="checkbox" 
+                            class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                            :value="item"
+                            v-model="selectedScholarships"
+                            />
+
                         {{ item }}
                         </label>
                     </div>
@@ -186,10 +192,16 @@
                         {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
                     </button>
                     <div v-if="openDropdown === 'batch'"
-     class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
 
                         <label v-for="(item, index) in batchOptions" :key="index" class="block px-4 py-2">
-                        <input type="checkbox" class="mr-2" :value="item" v-model="selectedBatches" />
+                            <input 
+                            type="checkbox" 
+                            class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                            :value="item"
+                            v-model="selectedBatches"
+                            />
+
                         {{ item }}
                         </label>
                     </div>
@@ -203,10 +215,16 @@
                         {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
                     </button>
                     <div v-if="openDropdown === 'campus'"
-     class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
+                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
 
                         <label v-for="(item, index) in campusOptions" :key="index" class="block px-4 py-2">
-                        <input type="checkbox" class="mr-2" :value="item" v-model="selectedCampuses" />
+                            <input 
+                            type="checkbox" 
+                            class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
+                            :value="item"
+                            v-model="selectedCampuses"
+                            />
+
                         {{ item }}
                         </label>
                     </div>
@@ -248,6 +266,63 @@ const props = defineProps({
     batches: Array,
     scholarships: Array,
 });
+
+
+const Share = ref(false);
+
+const toggleSharePost = async () => {
+    Share.value = !Share.value;
+    initFlowbite(); // Initialize Flowbite first
+
+    if (Share.value) {
+    await nextTick()
+    initFlowbite()
+        document.addEventListener('click', handleClickOutside)
+    } else {
+        document.removeEventListener('click', handleClickOutside)
+    }
+};
+
+const closeModal = () => {
+    Share.value = false;
+
+};
+
+
+const messageData = ref(props.messages);
+
+
+const selectedData = ref(props.selectedScholarship);
+
+const scholarshipOptions = ['CHED', 'DBP', 'IMEE MARCOVA']
+const batchOptions = ['Batch 1', 'Batch 2', 'Batch 3']
+const campusOptions = ['Tanay', 'Morong', 'Antipolo']
+
+// Set up real-time messaging using Laravel Echo
+// onMounted(() => {
+const selectedScholarships = ref([])
+const selectedBatches = ref([])
+const selectedCampuses = ref([])
+
+const openDropdown = ref(null)
+
+const toggleDropdown = (dropdown) => {
+  openDropdown.value = openDropdown.value === dropdown ? null : dropdown
+}
+
+onMounted(() => {
+  document.addEventListener('click', handleClickOutside)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener('click', handleClickOutside)
+})
+
+const handleClickOutside = (event) => {
+  const modal = document.querySelector('.your-modal-class') // replace with actual class if needed
+  if (!modal.contains(event.target)) {
+    openDropdown.value = null
+  }
+}
 
 
 </script>
