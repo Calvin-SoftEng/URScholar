@@ -30,7 +30,7 @@
               </Link>
             </li>
             <li class="relative">
-                <Link :href="route('messaging.index')" class="flex items-center space-x-2">
+                <Link :href="route('feed.index')" class="flex items-center space-x-2">
                     <p class="text-primary-foreground hover:text-primary transition">Feed</p>
                     <!-- Notification Badge (only shows if unreadMessages > 0) -->
                     <span 
