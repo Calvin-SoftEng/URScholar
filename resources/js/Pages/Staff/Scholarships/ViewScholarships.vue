@@ -207,6 +207,8 @@
                             Select School Year and Semester
                         </div>
                         <div class="grid grid-cols-3 justify-center items-center gap-3">
+                            <InputError v-if="errors?.selectedSem" :message="errors.selectedSem"
+                                class="text-2xs text-red-500" />
                             <div
                                 class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
                                 Academic Year:
@@ -274,6 +276,7 @@ import { ref, onMounted, computed, onUnmounted } from 'vue';
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { useRouter, useRoute } from 'vue-router'
 import Echo from 'laravel-echo';
+import InputError from '@/Components/InputError.vue';
 
 import { Tooltip } from 'primevue';
 
@@ -294,6 +297,8 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    errors: Object,
+    flash: Object,
 });
 
 onMounted(() => {
@@ -328,6 +333,8 @@ const grantBasedScholarships = computed(() =>
 const oneTimeScholarships = computed(() =>
     props.scholarships.filter(scholarship => scholarship.scholarshipType === 'One-time Payment')
 );
+
+const errorMessage = ref(null);
 
 const form = ref({
     id: null,

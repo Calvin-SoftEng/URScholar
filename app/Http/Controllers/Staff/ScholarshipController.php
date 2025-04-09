@@ -311,6 +311,15 @@ class ScholarshipController extends Controller
 
     public function show(Request $request, Scholarship $scholarship)
     {
+        $messages = [
+            'selectedSem' => 'Need to select a semester.', // Generic for all required fields
+            'selectedYear' => 'Passwords must match.',
+        ];
+
+        $request->validate([
+            'selectedSem' => 'required',
+            'selectedYear' => 'required',
+        ], $messages);
 
         $user = Auth::user();
         $userType = $user->usertype;

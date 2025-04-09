@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\MIS;
 
+use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
 use App\Models\AcademicYear;
 use App\Models\ActivityLog;
@@ -13,6 +14,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Mail\SendEmail;
 use App\Mail\SendUser;
+use App\Models\Notification;
 use App\Models\SchoolYear;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -271,6 +273,24 @@ class SystemAdminController extends Controller
                 $academicYear->status = 'Active'; // Set as active
                 $academicYear->save();
 
+                $getYear = SchoolYear::where('id', $schoolYearId);
+
+                $notification = Notification::create([
+                    'title' => 'New Academic Semester',
+                    'message' => "You can now upload a {$getYear->year} 1st semester",
+                    'type' => 'new_semester',
+                ]);
+
+                // Only get super_admin and coordinator users
+                $users = User::whereIn('usertype', ['super_admin', 'coordinator'])
+                    ->where('id', '!=', Auth::user()->id) // Exclude current user if they're an admin
+                    ->get();
+
+                // Attach users to the notification
+                $notification->users()->attach($users->pluck('id'));
+
+                event(new NewNotification($notification));
+
                 return response()->json([
                     'success' => true,
                     'message' => 'First semester created successfully and set as active',
@@ -289,6 +309,24 @@ class SystemAdminController extends Controller
                 $academicYear->semester = '2nd';
                 $academicYear->status = 'Active'; // Set as active
                 $academicYear->save();
+
+                $getYear = SchoolYear::where('id', $schoolYearId);
+
+                $notification = Notification::create([
+                    'title' => 'New Academic Semester',
+                    'message' => "You can now upload a {$getYear->year} 2nd semester",
+                    'type' => 'new_semester',
+                ]);
+
+                // Only get super_admin and coordinator users
+                $users = User::whereIn('usertype', ['super_admin', 'coordinator'])
+                    ->where('id', '!=', Auth::user()->id) // Exclude current user if they're an admin
+                    ->get();
+
+                // Attach users to the notification
+                $notification->users()->attach($users->pluck('id'));
+
+                event(new NewNotification($notification));
 
                 return response()->json([
                     'success' => true,
