@@ -70,7 +70,7 @@ class SettingsController extends Controller
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
         ]);
-        
+
 
 
 
@@ -112,6 +112,56 @@ class SettingsController extends Controller
             'activity' => 'Create',
             'description' => 'Created a new sponsor: ' . $request->name,
         ]);
+
+        return redirect()->route('sponsor.index')->with('success', 'Sponsor added successfully!');
+    }
+
+    public function sponsor_update(Request $request, $id)
+    {
+        $sponsor = Sponsor::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'abbreviation' => 'required|string|max:255',
+            'since' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'moa_file' => 'nullable|file|mimes:svg,png,jpg,jpeg,docx,doc,pdf|max:4096',
+            'logo' => 'nullable|file|mimes:svg,png,jpg,jpeg|max:4096',
+        ]);
+
+        // Update basic sponsor information
+        $sponsor->name = $validated['name'];
+        $sponsor->abbreviation = $validated['abbreviation'];
+        $sponsor->since = $validated['since'];
+        $sponsor->description = $validated['description'] ?? $sponsor->description;
+
+        // Handle MOA file upload
+        if ($request->hasFile('moa_file')) {
+            $moaFile = $request->file('moa_file');
+            $moaFileName = time() . '_' . $moaFile->getClientOriginalName();
+            $moaPath = $moaFile->storeAs('sponsor/moa', $moaFileName, 'public');
+
+            // Create new MOA record
+            SponsorMoa::create([
+                'sponsor_id' => $sponsor->id,
+                'moa' => $moaFileName,
+                'moa_path' => $moaPath,
+                'status' => 'Active'
+            ]);
+
+            // Update the sponsor's current MOA file reference
+            $sponsor->moa_file = $moaFileName;
+        }
+
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            $logoFile = $request->file('logo');
+            $logoFileName = time() . '_' . $logoFile->getClientOriginalName();
+            $logoPath = $logoFile->storeAs('sponsor/logo', $logoFileName, 'public');
+            $sponsor->logo = $logoFileName;
+        }
+
+        $sponsor->save();
 
         return redirect()->route('sponsor.index')->with('success', 'Sponsor added successfully!');
     }

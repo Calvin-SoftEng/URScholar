@@ -611,8 +611,8 @@ const updateSponsor = (sponsor) => {
 // Modify the existing submitForm function to handle updates\
 const submitForm = async () => {
     try {
-        if (isEditing.value) {
-            router.put(`/sponsors/${form.value.id}`, form.value);
+        if (UpdateMOA.value) {
+            router.put(`/settings/sponsors/${form.value.id}`, form.value);
         } else {
             router.post("/settings/sponsors/create", form.value);
         }
