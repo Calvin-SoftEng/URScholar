@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\GroupPageController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CoordinatorController;
@@ -98,6 +99,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])-
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
     Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
     Route::get('/group-page/{batch}', [MessageController::class, 'show'])->name('messaging.show');
+
+    //Feed
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');
 });
 
 
