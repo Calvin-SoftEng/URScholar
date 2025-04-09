@@ -303,8 +303,7 @@ const form = ref({
 
 const sendMessage = () => {
     // Get scholarship_id from selected scholarship
-    form.value.scholarship_id = selectedData.value?.id || '';
-    form.value.batch_id = selectedData.value?.batch_id || '';
+    form.value.batch_id = selectedData.value?.id || '';
 
     router.post('/group-page/message', form.value, {
         preserveScroll: true,

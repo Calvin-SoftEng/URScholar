@@ -88,6 +88,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     Route::post('/system_admin/univ-settings/campuses/assign', [SystemAdminController::class, 'assign_campus'])->name('sa.assign_campus');
 
     Route::get('/system_admin/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_and_term'])->name('sa.sy_term');
+    Route::post('/academic/create-semester', [SystemAdminController::class, 'createAcademicSemester'])->name('sa.create-semester');
 
     // security and backup
     Route::get('/system_admin/security-and-backup/archives', [SystemAdminController::class, 'backup_and_restore'])->name('sa.archives');
