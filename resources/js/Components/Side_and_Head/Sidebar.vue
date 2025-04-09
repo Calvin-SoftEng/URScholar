@@ -165,7 +165,7 @@
           <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
             <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/group-page') }]"
               :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/group-page') }]">
-              forum
+              contextual_token
             </span>
             <span v-show="dataOpenSideBar"
               :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Feed</span>
