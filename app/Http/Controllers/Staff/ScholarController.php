@@ -341,7 +341,6 @@ class ScholarController extends Controller
 
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $selectedYear)
-            ->where('semester', $selectedSem)
             ->get();
 
         $campuses = Campus::all();
@@ -665,7 +664,6 @@ class ScholarController extends Controller
                 $existingBatch = Batch::where('scholarship_id', $scholarship->id)
                     ->where('batch_no', $firstRecord['BATCH NO.'])
                     ->where('school_year_id', $request->schoolyear)
-                    ->where('semester', $request->semester)
                     ->where('campus_id', $campusId)
                     ->first();
 
@@ -675,7 +673,6 @@ class ScholarController extends Controller
                         'scholarship_id' => $scholarship->id,
                         'batch_no' => $firstRecord['BATCH NO.'],
                         'school_year_id' => $request->schoolyear,
-                        'semester' => $request->semester,
                         'campus_id' => $campusId,
                     ]);
                     $campusBatches[$campusId] = $batch;

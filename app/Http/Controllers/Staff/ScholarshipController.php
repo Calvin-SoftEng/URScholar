@@ -63,12 +63,14 @@ class ScholarshipController extends Controller
             ->get();
 
         $sponsors = Sponsor::all();
-        $schoolyear = SchoolYear::all();
+        $school_year = SchoolYear::with('academic_year')
+            ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
+            ->get();
 
         return inertia('Staff/Scholarships/ViewScholarships', [
             'sponsors' => $sponsors,
             'scholarships' => $scholarships,
-            'schoolyears' => $schoolyear,
+            'schoolyears' => $school_year,
         ]);
     }
 
@@ -87,9 +89,6 @@ class ScholarshipController extends Controller
             ->where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), function ($query, $year) {
                 return $query->where('school_year_id', $year);
-            })
-            ->when($request->input('selectedSem'), function ($query, $sem) {
-                return $query->where('semester', $sem);
             })
             ->orderBy('batch_no', 'desc')
             ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
@@ -121,12 +120,14 @@ class ScholarshipController extends Controller
             $grantees = $scholarship->grantees()
                 ->whereIn('status', ['Active', 'Pending'])
                 ->where('batch_id', $batch->id)
+                ->where('semester', $request->input('selectedSem')) // Add this line
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
 
         } else {
             $grantees = $scholarship->grantees()
                 ->where('batch_id', $batch->id)
+                ->where('semester', $request->input('selectedSem')) // Add this line
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
         }
@@ -134,6 +135,7 @@ class ScholarshipController extends Controller
 
         $totalScholars = $scholarship->grantees()
             ->where('status', 'Active')
+            ->where('semester', $request->input('selectedSem')) // Add this line
             ->where('batch_id', $batch->id)
             ->with('scholar.campus', 'scholar.course')
             ->count();
@@ -264,7 +266,7 @@ class ScholarshipController extends Controller
         ]);
     }
 
-    public function student_payouts($scholarshipId, $batchId)
+    public function student_payouts(Request $request, $scholarshipId, $batchId)
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
@@ -276,7 +278,7 @@ class ScholarshipController extends Controller
 
         $payout = Payout::where('scholarship_id', $scholarship->id)
             ->where('campus_id', $batch->campus_id)
-            ->where('semester', $batch->semester)
+            ->where('semester', $request->input('selectedSem', ''))
             ->where('school_year_id', $batch->school_year_id)
             ->first();
 
@@ -330,64 +332,62 @@ class ScholarshipController extends Controller
             $semester = $request->input('selectedSem');
 
             if ($semester == '2nd') {
-                $semester = '1st';
+                $semester1 = '1st';
                 $school_year = $request->input('selectedYear');
 
-                $oldBatch = Batch::where('scholarship_id', $scholarship->id)
-                    ->when($school_year, fn($q, $year) => $q->where('school_year_id', $year))
-                    ->when($semester, fn($q, $sem) => $q->where('semester', $sem))
+                $selectedBatch = Batch::where('scholarship_id', $scholarship->id)
+                    ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
                     ->first();
 
                 // After creating the new batch, copy all grantees from old batch to new batch
-                if ($oldBatch) {
+                if ($selectedBatch) {
 
-                    $selectedBatch = Batch::where('scholarship_id', $scholarship->id)
-                        ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-                        ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
-                        ->first();
+                    // Get all payouts for this scholarship, school year, and semester
+                    $payouts = Payout::where('scholarship_id', $scholarship->id)
+                        ->where('school_year_id', $selectedBatch->school_year_id)
+                        ->where('semester', $semester1)
+                        ->get();
 
-                    if (!$selectedBatch) {
 
-                        // Get all payouts for this scholarship, school year, and semester
-                        $payouts = Payout::where('scholarship_id', $scholarship->id)
-                            ->where('school_year_id', $oldBatch->school_year_id)
-                            ->where('semester', $oldBatch->semester)
+
+                    // Check if all payouts are inactive
+                    $allPayoutsInactive = $payouts->count() > 0 && $payouts->every(function ($payout) {
+                        return $payout->status === 'Inactive';
+                    });
+
+                    // Only proceed if all payouts are inactive
+                    if ($allPayoutsInactive) {
+                        // Find all grantees from the old batch
+                        $oldGrantees = Grantees::where('batch_id', $selectedBatch->id)
+                            ->where('semester', $semester1)
                             ->get();
 
-                        // Check if all payouts are inactive
-                        $allPayoutsInactive = $payouts->count() > 0 && $payouts->every(function ($payout) {
-                            return $payout->status === 'Inactive';
-                        });
+                        // Check if the first grantee has semester 2nd
+                        if ($oldGrantees->isNotEmpty()) {
 
-                        // Only proceed if all payouts are inactive
-                        if ($allPayoutsInactive) {
-                            $newBatch = Batch::create([
-                                'scholarship_id' => $oldBatch->scholarship_id,
-                                'batch_no' => $oldBatch->batch_no,
-                                'school_year_id' => $request->input('selectedYear'),
-                                'semester' => $request->input('selectedSem'),
-                                'campus_id' => $oldBatch->campus_id,
-                            ]);
+                            $grantees2 = Grantees::where('batch_id', $selectedBatch->id)
+                                ->where('semester', $request->input('selectedSem'))
+                                ->get();
 
-                            // Find all grantees from the old batch
-                            $oldGrantees = Grantees::where('batch_id', $oldBatch->id)->get();
+                            if ($grantees2->isEmpty()) {
+                                // Create new grantees for each scholar in the old batch
+                                foreach ($oldGrantees as $oldGrantee) {
+                                    // Get the matching scholar record
+                                    $scholar = Scholar::where('id', $oldGrantee->scholar_id)->first();
 
-                            // Create new grantees for each scholar in the old batch
-                            foreach ($oldGrantees as $oldGrantee) {
-                                // Get the matching scholar record
-                                $scholar = Scholar::where('id', $oldGrantee->scholar_id)->first();
-
-                                if ($scholar) {
-                                    Grantees::create([
-                                        'scholarship_id' => $oldGrantee->scholarship_id,
-                                        'batch_id' => $newBatch->id, // Use the new batch
-                                        'scholar_id' => $scholar->id, // Use the matched scholar's ID
-                                        'school_year_id' => $newBatch->school_year_id, // Use the selected school year
-                                        'semester' => $newBatch->semester, // Use the selected semester
-                                        'status' => 'Active', // Set initial status as Pending
-                                    ]);
+                                    if ($scholar) {
+                                        Grantees::create([
+                                            'scholarship_id' => $oldGrantee->scholarship_id,
+                                            'batch_id' => $selectedBatch->id, // Use the new batch
+                                            'scholar_id' => $scholar->id, // Use the matched scholar's ID
+                                            'school_year_id' => $selectedBatch->school_year_id, // Use the selected school year
+                                            'semester' => $request->input('selectedSem'), // Use the selected semester
+                                            'status' => 'Pending', // Set initial status as Active
+                                        ]);
+                                    }
                                 }
                             }
+
                         }
                     }
 
@@ -398,7 +398,6 @@ class ScholarshipController extends Controller
         // Filtered batch for One-time Payment redirect
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->first();
 
         if ($scholarship->scholarshipType == 'One-time Payment' && $batch) {
@@ -413,13 +412,11 @@ class ScholarshipController extends Controller
         $totalBatches = Batch::where('scholarship_id', $scholarship->id)
             ->where('campus_id', $request->input('selectedCampus'))
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->count();
 
         // Batches base query
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->with([
                 'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
                 'grantees.scholar.submittedRequirements'
@@ -462,6 +459,7 @@ class ScholarshipController extends Controller
         // Grantees query
         $granteesQuery = $scholarship->grantees()
             ->whereIn('batch_id', $batches->pluck('id'))
+            ->where('semester', $request->input('selectedSem')) // Add this line
             ->with([
                 'scholar.campus',
                 'scholar.course',
@@ -482,9 +480,19 @@ class ScholarshipController extends Controller
 
         $total_approved = optional($batch)->id
             ? Grantees::where('batch_id', $batch->id)
+                ->where('semester', $request->input('selectedSem')) // Add this line
                 ->whereIn('status', ['Active', 'Pending'])
                 ->get()
             : collect(); // fallback to empty if batch is null
+
+        // $hasActiveGrantees = false;
+        // $noForward = Grantees::where('batch_id', $batch->id)
+        //     ->where('status', 'Active')
+        //     ->get();
+
+        // if ($noForward->isEmpty()) {
+        //     $hasActiveGrantees = true;
+        // }
 
 
         $approvedCount = null;
@@ -516,7 +524,6 @@ class ScholarshipController extends Controller
 
             Batch::where('id', $batch->id)
                 ->where('school_year_id', $request->input('selectedYear'))
-                ->where('semester', $request->input('selectedSem'))
                 ->update([
                     'sub_total' => $approvedCount,
                     'status' => $newStatus
@@ -525,14 +532,12 @@ class ScholarshipController extends Controller
 
         $completedBatches = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->whereRaw('total_scholars = sub_total')
             ->count();
 
         $allBatches = Batch::where('scholarship_id', $scholarship->id)
             ->with(['grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name')])
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->orderBy('batch_no', 'desc')
             ->get();
 
@@ -572,17 +577,30 @@ class ScholarshipController extends Controller
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->first();
 
-        $payoutBatches = $batches->map(function ($batch) {
+        // Update payout batches with proper semester filtering
+        $payoutBatches = $batches->map(function ($batch) use ($request) {
             return array_merge($batch->toArray(), [
-                'claimed_count' => $batch->disbursement->where('status', 'Claimed')->count(),
-                'not_claimed_count' => $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count()
+                'claimed_count' => $batch->disbursement()
+                    ->whereHas('payout', function ($query) use ($request) {
+                        $query->where('semester', $request->input('selectedSem'));
+                    })
+                    ->where('status', 'Claimed')
+                    ->count(),
+                'not_claimed_count' => $batch->disbursement()
+                    ->whereHas('payout', function ($query) use ($request) {
+                        $query->where('semester', $request->input('selectedSem'));
+                    })
+                    ->whereIn('status', ['Pending', 'Not Claimed'])
+                    ->count()
             ]);
         });
 
+        // Update grantees query for payout section
         $grantees = collect();
         if ($payoutBatches->isNotEmpty()) {
             $grantees = $scholarship->grantees()
                 ->whereIn('batch_id', $payoutBatches->pluck('id'))
+                ->where('semester', $request->input('selectedSem')) // Add this line
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
         }
@@ -609,6 +627,7 @@ class ScholarshipController extends Controller
             'payoutsByCampus' => $payoutsByCampus,
             'approvedCount' => $approvedCount,
             'requirements' => $requirements,
+            // 'hasActiveGrantees' => $hasActiveGrantees,
             'grantees' => $grantees,
             'completedBatches' => $completedBatches,
             'totalBatches' => $totalBatches,

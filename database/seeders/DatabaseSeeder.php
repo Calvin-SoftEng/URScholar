@@ -387,14 +387,9 @@ class DatabaseSeeder extends Seeder
         AcademicYear::factory()->create([
             'school_year_id' => '3',
             'semester' => '1st',
-            'status' => 'Inactive'
-        ]);
-
-        AcademicYear::factory()->create([
-            'school_year_id' => '3',
-            'semester' => '2nd',
             'status' => 'Active'
         ]);
+
 
 
         //sponsor 

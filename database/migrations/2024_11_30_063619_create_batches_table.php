@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('batch_no');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
-            $table->string('semester');
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
@@ -74,7 +73,7 @@ return new class extends Migration
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
-            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->enum('status', ['Active', 'Inactive', 'Pending', 'Validated'])->default('Pending');
             $table->timestamps();
         });
 

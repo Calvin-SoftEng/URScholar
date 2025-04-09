@@ -1136,7 +1136,7 @@
                                 </div>
 
                                 <!-- Forward Button -->
-                                <div v-if="completedBatches === props.totalBatches" class="mt-4">
+                                <div v-if="props.hasActiveGrantees && completedBatches === props.totalBatches" class="mt-4">
                                     <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                         @click="forwardCoor"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1329,6 +1329,7 @@ const props = defineProps({
     approvedCount: Number,
     allBatches: Array,
     disableSendEmailButton: Boolean,
+    hasActiveGrantees: Boolean,
     payouts: Object,
     payoutBatches: Array,
 });

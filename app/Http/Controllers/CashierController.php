@@ -96,7 +96,6 @@ class CashierController extends Controller
 
         // Get batches related to the scholarship, filtered by campus if needed
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
-            ->where('semester', $payout->semester)
             ->where('school_year_id', $payout->school_year_id);
 
 

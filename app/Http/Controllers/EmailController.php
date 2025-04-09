@@ -99,7 +99,6 @@ class EmailController extends Controller
 
         // Find batches matching the specified semester and school year
         $batches = Batch::where('scholarship_id', $scholarship->id)
-            ->where('semester', $request->semester)
             ->where('school_year_id', $request->school_year)
             ->get();
 
