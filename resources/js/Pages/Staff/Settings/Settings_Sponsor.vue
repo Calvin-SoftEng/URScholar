@@ -356,13 +356,7 @@
                                         <span class="text-gray-700 dark:text-gray-300">ExampleFileName.pdf</span>
                                     </div>
                                 </div>
-
-
-
-
                             </div>
-
-
                         </div>
                     </form>
                 </div>
@@ -385,6 +379,7 @@ import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, To
 
 const props = defineProps({
     sponsors: Array,
+    moa: Array,
 });
 
 const directives = {

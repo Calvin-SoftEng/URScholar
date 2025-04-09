@@ -25,4 +25,9 @@ class Sponsor extends Model
     {
         return $this->belongsTo(User::class, 'assign_id');
     }
+
+    public function moa()
+    {
+        return $this->hasMany(SponsorMoa::class);
+    }
 }

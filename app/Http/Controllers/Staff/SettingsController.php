@@ -7,6 +7,7 @@ use App\Models\Campus;
 use App\Models\Condition;
 use App\Models\Course;
 use App\Models\Eligibility;
+use App\Models\SponsorMoa;
 use App\Models\Student;
 use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
@@ -26,10 +27,11 @@ class SettingsController extends Controller
     {
 
         $sponsors = Sponsor::all();
+        $moa = SponsorMoa::all();
 
         return Inertia::render(
             'Staff/Settings/Settings_Sponsor',
-            ['sponsors' => $sponsors]
+            ['sponsors' => $sponsors, 'moa' => $moa]
         );
     }
 
@@ -80,20 +82,30 @@ class SettingsController extends Controller
 
         Storage::disk('public')->putFileAs('sponsor/logo', $logoFile, $originalFileName);
 
+        $moaFile = $request->file('file');
+        $moa = $moaFile->getClientOriginalName();
+
         // Store the MOA file
         $filePath = $request->file('file')->store('sponsor/moa', 'public');
 
 
         // dd($originalFileName);
         // Save sponsor record in the database
-        Sponsor::create([
+        $sponsor = Sponsor::create([
             'name' => $request->name,
             'user_id' => Auth::user()->id,
             'abbreviation' => $request->abbreviation,
             'since' => $request->since,
-            'moa_file' => $filePath,
+            'moa_file' => $moa,
             'description' => $request->description,
             'logo' => $originalFileName, // Save only the filename in the database
+        ]);
+
+        SponsorMoa::create([
+            'sponsor_id' => $sponsor->id,
+            'moa' => $moa,
+            'moa_path' => $filePath,
+            'status' => 'Active',
         ]);
 
 

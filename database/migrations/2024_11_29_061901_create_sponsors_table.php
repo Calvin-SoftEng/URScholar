@@ -39,6 +39,7 @@ return new class extends Migration {
 
         Schema::create('sponsor_moas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
             $table->string('moa');
             $table->string('moa_path');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
