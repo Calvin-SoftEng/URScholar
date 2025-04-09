@@ -35,21 +35,23 @@ class SettingsController extends Controller
 
     public function adding()
     {
-        
-        $current_year = AcademicYear::where('status', 'Active')
-        ->with('school_year')
-        ->first();
 
-        
+        $current_year = AcademicYear::where('status', 'Active')
+            ->with('school_year')
+            ->first();
+
+
 
         $students = Student::with('campus', 'course')
-        ->where('academic_year_id' , $current_year->id)
-        ->get();
+            ->where('academic_year_id', $current_year->id)
+            ->get();
 
 
         return Inertia::render(
             'Staff/Settings/Adding_Students',
-              ['students' => $students, 'current_year' => $current_year,
+            [
+                'students' => $students,
+                'current_year' => $current_year,
 
             ]
         );
