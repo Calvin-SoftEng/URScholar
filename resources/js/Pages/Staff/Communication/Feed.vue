@@ -18,9 +18,6 @@
                                                 <textarea class="w-full h-full resize-none p-2 bg-transparent border-none outline-none focus:ring-0" rows="5"
                                                     placeholder="Write your announcement here..."></textarea>
                                             </div>
-
-
-
                                             <!-- Buttons Container (Stays at the Bottom) -->
                                             <div class="w-full flex flex-row justify-between items-center">
                                                 <div class="flex gap-2">
@@ -247,96 +244,10 @@ import Pusher from 'pusher-js';
 import { initFlowbite } from 'flowbite';
 
 const props = defineProps({
-    messages: Array,
-    currentUser: Object,
+    campuses: Array,
+    batches: Array,
     scholarships: Array,
-    selectedScholarship: Object,
 });
 
-const Share = ref(false);
 
-const toggleSharePost = async () => {
-    Share.value = !Share.value;
-    initFlowbite(); // Initialize Flowbite first
-
-    if (Share.value) {
-    await nextTick()
-    initFlowbite()
-        document.addEventListener('click', handleClickOutside)
-    } else {
-        document.removeEventListener('click', handleClickOutside)
-    }
-};
-
-
-const closeModal = () => {
-    Share.value = false;
-
-};
-
-const messageData = ref(props.messages);
-
-const selectedData = ref(props.selectedScholarship);
-const form = ref({
-    content: '',
-    scholarship_id: ''
-});
-
-const sendMessage = () => {
-    // Get scholarship_id from selected scholarship
-    form.value.scholarship_id = selectedData.value?.id || '';
-
-    router.post('/group-chat/message', form.value, {
-        preserveScroll: true,
-        onSuccess: () => {
-            fetchMessages(); // Fetch messages after sending
-            form.value.content = ''; // Clear input after sending
-        },
-    });
-};
-
-const scholarshipOptions = ['CHED', 'DSWD', 'LGU']
-const batchOptions = ['2023', '2024', '2025']
-const campusOptions = ['Tanay', 'Morong', 'Antipolo']
-
-const selectedScholarships = ref([])
-const selectedBatches = ref([])
-const selectedCampuses = ref([])
-
-const openDropdown = ref(null)
-
-const toggleDropdown = (dropdown) => {
-  openDropdown.value = openDropdown.value === dropdown ? null : dropdown
-}
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
-
-const handleClickOutside = (event) => {
-  const modal = document.querySelector('.your-modal-class') // replace with actual class if needed
-  if (!modal.contains(event.target)) {
-    openDropdown.value = null
-  }
-}
-
-const scholarshipId = ref(props.selectedScholarship); // Or however you're getting the ID
-
-const fetchMessages = async () => {
-    const { data } = await router.get(route("student.messaging.show", { scholarship: props.selectedScholarship.id }));
-
-    messageData.value = data;
-};
-
-const scrollToBottom = () => {
-    const chatContainer = document.querySelector('.overflow-y-auto');
-    if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-};
-
-const showMemberList = ref(false);
 </script>
