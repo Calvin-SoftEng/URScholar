@@ -44,7 +44,7 @@ class FeedController extends Controller
 
         if ($currentUser->usertype == 'super_admin' || $currentUser->usertype == 'coordinator') {
             // Return the chat page using Inertia
-            return Inertia::render('Staff/Communication/Communication', [
+            return Inertia::render('Staff/Communication/Feed', [
                 'messages' => [],
                 'currentUser' => $currentUser,
                 'batches' => $batches, // Original scholarships data
@@ -52,7 +52,7 @@ class FeedController extends Controller
             ]);
         } elseif ($currentUser->usertype == 'cashier') {
             // Return the chat page using Inertia
-            return Inertia::render('Cashier/Communication/Communication', [
+            return Inertia::render('Cashier/Communication/Feed', [
                 'messages' => [],
                 'currentUser' => $currentUser,
                 'batches' => $batches, // Original scholarships data

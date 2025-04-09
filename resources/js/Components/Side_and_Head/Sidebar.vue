@@ -60,41 +60,34 @@
         </Link>
 
         <Link :href="route('scholarships.index')">
+        <div v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''" :class="[
+          'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md relative flex justify-between items-center pr-4',
+          { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/scholarships') }
+        ]">
           <div
-            v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''"
-            :class="[
-              'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md relative flex justify-between items-center pr-4',
-              { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/scholarships') }
-            ]"
-          >
-            <div class="flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]">
-              <span
-                :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/scholarships') }]"
-                :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/scholarships') }]"
-              >
-                checkbook
-              </span>
-              <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/scholarships') }]">
-                Scholarships
-              </span>
-            </div>
-
-            <!-- Notification Badge -->
-            <span
-              v-if="dataOpenSideBar"
-              class="bg-red-600 whitespace-nowrap text-white text-xs font-bold px-2 py-0.5 rounded-full"
-            >
-              +1 New
+            class="flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]">
+            <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/scholarships') }]"
+              :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/scholarships') }]">
+              checkbook
             </span>
-
-            <!-- "1" Badge at Top-Right Corner -->
-            <span
-              v-else
-              class="absolute top-3 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full translate-x-1/2 -translate-y-1/2"
-            >
-              1
+            <span v-show="dataOpenSideBar"
+              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/scholarships') }]">
+              Scholarships
             </span>
           </div>
+
+          <!-- Notification Badge -->
+          <span v-if="dataOpenSideBar"
+            class="bg-red-600 whitespace-nowrap text-white text-xs font-bold px-2 py-0.5 rounded-full">
+            +1 New
+          </span>
+
+          <!-- "1" Badge at Top-Right Corner -->
+          <span v-else
+            class="absolute top-3 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full translate-x-1/2 -translate-y-1/2">
+            1
+          </span>
+        </div>
         </Link>
 
 
@@ -159,16 +152,16 @@
         </div>
         </Link>
 
-        <Link :href="route('messaging.index')">
+        <Link :href="route('feed.index')">
         <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''"
           :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/group-page') }]">
           <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-            <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/group-page') }]"
-              :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/group-page') }]">
+            <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/feed') }]"
+              :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/feed') }]">
               contextual_token
             </span>
             <span v-show="dataOpenSideBar"
-              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Feed</span>
+              :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/feed') }]">Feed</span>
           </div>
         </div>
         </Link>
@@ -177,17 +170,17 @@
           :class="{ 'opacity-0': !dataOpenSideBar }">Docs</div>
 
         <Link :href="route('payouts_index.payouts')">
-          <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''"
+        <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''"
           :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/payouts') }]">
-            <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-              <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/payouts') }]"
+          <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+            <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/payouts') }]"
               :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/payouts') }]">
-                price_check
-              </span>
-              <span v-show="dataOpenSideBar" 
+              price_check
+            </span>
+            <span v-show="dataOpenSideBar"
               :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/payouts') }]">Payouts</span>
-            </router-link>
-          </div>
+          </router-link>
+        </div>
         </Link>
 
         <!-- <div v-tooltip.right="!dataOpenSideBar ? 'Reports' : ''"
@@ -246,12 +239,13 @@
               </div>
               <!-- Text (displayed only when dataOpenSideBar) -->
               <div class="flex flex-col items-start text-[12px] text-blue-900 dark:text-dtext">
-                <span v-show="dataOpenSideBar">{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name }} </span>
+                <span v-show="dataOpenSideBar">{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name
+                  }} </span>
                 <span v-show="dataOpenSideBar">
                   {{
                     $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :
-                    $page.props.auth.user.usertype === 'coordinator' ? 'Coordinator' :
-                    $page.props.auth.user.usertype
+                      $page.props.auth.user.usertype === 'coordinator' ? 'Coordinator' :
+                        $page.props.auth.user.usertype
                   }}
                 </span>
 
