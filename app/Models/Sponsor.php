@@ -9,7 +9,7 @@ class Sponsor extends Model
 {
 
     use HasFactory;
-    protected $fillable = ['name', 'created_id', 'assign_id', 'abbreviation', 'since', 'moa_file' ,'description', 'logo', 'created_by'];
+    protected $fillable = ['name', 'created_id', 'assign_id', 'abbreviation', 'since', 'description', 'logo', 'created_by'];
 
     public function scholarship()
     {

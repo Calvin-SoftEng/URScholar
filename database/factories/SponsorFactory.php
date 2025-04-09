@@ -23,7 +23,6 @@ class SponsorFactory extends Factory
             'assign_id' => \App\Models\User::factory(),
             'abbreviation' => $this->faker->word(),
             'since' => $this->faker->date(),
-            'moa_file' => $this->faker->word(),
             'description' => $this->faker->sentence(),
             'logo' => $this->faker->word(),
         ];

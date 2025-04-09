@@ -14,6 +14,7 @@ use App\Models\ScholarshipFormData;
 use App\Models\ScholarshipGroup;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
+use App\Models\SponsorMoa;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -171,9 +172,14 @@ class DatabaseSeeder extends Seeder
             'assign_id' => 5,
             'abbreviation' => 'CHED',
             'since' => '2021',
-            'moa_file' => 'moa1.pdf',
             'description' => 'CHED Scholarships provide financial assistance to deserving Filipino students in higher education. These include merit-based and need-based grants covering tuition, allowances, and other school-related expenses to support academic excellence and accessibility to quality education.',
             'logo' => 'images.png',
+        ]);
+
+        SponsorMoa::factory()->create([
+            'sponsor_id' => '1',
+            'moa' => 'moa1.pdf',
+            'status' => 'Active',
         ]);
 
         Sponsor::factory()->create([
@@ -182,9 +188,14 @@ class DatabaseSeeder extends Seeder
             'assign_id' => 5,
             'abbreviation' => 'DBP',
             'since' => '2001',
-            'moa_file' => 'moa1.pdf',
             'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
             'logo' => 'images.png',
+        ]);
+
+        SponsorMoa::factory()->create([
+            'sponsor_id' => '2',
+            'moa' => 'moa1.pdf',
+            'status' => 'Active',
         ]);
 
         //scholarship

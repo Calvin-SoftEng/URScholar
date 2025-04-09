@@ -30,7 +30,6 @@ return new class extends Migration {
             $table->string('name');
             $table->string('abbreviation');
             $table->string('since');
-            $table->string('moa_file');
             $table->text('description')->nullable();
             $table->string('logo')->nullable();
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
@@ -41,7 +40,6 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
             $table->string('moa');
-            $table->string('moa_path');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });

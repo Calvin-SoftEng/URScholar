@@ -70,6 +70,7 @@ class SettingsController extends Controller
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
         ]);
+        
 
 
 
@@ -86,8 +87,7 @@ class SettingsController extends Controller
         $moa = $moaFile->getClientOriginalName();
 
         // Store the MOA file
-        $filePath = $request->file('file')->store('sponsor/moa', 'public');
-
+        $filePath = $request->file('file')->store('sponsor/moa/' . $moa, 'public');
 
         // dd($originalFileName);
         // Save sponsor record in the database
@@ -96,7 +96,6 @@ class SettingsController extends Controller
             'user_id' => Auth::user()->id,
             'abbreviation' => $request->abbreviation,
             'since' => $request->since,
-            'moa_file' => $moa,
             'description' => $request->description,
             'logo' => $originalFileName, // Save only the filename in the database
         ]);
@@ -104,7 +103,6 @@ class SettingsController extends Controller
         SponsorMoa::create([
             'sponsor_id' => $sponsor->id,
             'moa' => $moa,
-            'moa_path' => $filePath,
             'status' => 'Active',
         ]);
 
