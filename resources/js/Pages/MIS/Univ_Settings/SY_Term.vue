@@ -154,7 +154,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import CalendarPicker from "@/Components/MIS/CalendarPicker.vue";
 
@@ -217,28 +217,25 @@ const submitForm = () => {
         return;
     }
 
-    // Call the API endpoint to create the semester
-    axios.post(route('sa.create-semester'), {
+    // Use router.post instead of axios
+    router.post(route('sa.create-semester'), {
         schoolYearId: selectedYear.value?.id
-    })
-        .then(response => {
-            if (response.data.success) {
-                // Show success message
-                alert(response.data.message);
+    }, {
+        onSuccess: (response) => {
+            // Show success message
+            alert(response.props.flash.message);
 
-                // Refresh the page to show the new semester
-                window.location.reload();
-            } else {
-                alert(response.data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error creating semester:', error);
+            // Refresh or redirect using router
+            router.visit(window.location.href);
+        },
+        onError: (errors) => {
+            console.error('Error creating semester:', errors);
             alert('Failed to create semester. Please try again.');
-        })
-        .finally(() => {
+        },
+        onFinish: () => {
             closeModal();
-        });
+        }
+    });
 };
 
 // Updated toggleSet function

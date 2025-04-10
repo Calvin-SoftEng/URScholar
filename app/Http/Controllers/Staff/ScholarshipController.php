@@ -1044,10 +1044,13 @@ class ScholarshipController extends Controller
         // Group grantees by campus
         $granteesByCampus = [];
         foreach ($grantees as $grantee) {
+            dd('yes');
             // Skip grantees that don't have 'Active' status
             if (!isset($grantee['status']) || $grantee['status'] !== 'Active') {
                 continue;
             }
+
+            dd('yes');
 
             // Get the batch to find campus_id
             $batch = Batch::find($grantee['batch_id']);

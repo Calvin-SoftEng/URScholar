@@ -273,11 +273,9 @@ class SystemAdminController extends Controller
                 $academicYear->status = 'Active'; // Set as active
                 $academicYear->save();
 
-                $getYear = SchoolYear::where('id', $schoolYearId);
-
                 $notification = Notification::create([
                     'title' => 'New Academic Semester',
-                    'message' => "You can now upload a {$getYear->year} 1st semester",
+                    'message' => "You can now upload a new set of Students",
                     'type' => 'new_semester',
                 ]);
 
@@ -310,11 +308,9 @@ class SystemAdminController extends Controller
                 $academicYear->status = 'Active'; // Set as active
                 $academicYear->save();
 
-                $getYear = SchoolYear::where('id', $schoolYearId);
-
                 $notification = Notification::create([
                     'title' => 'New Academic Semester',
-                    'message' => "You can now upload a {$getYear->year} 2nd semester",
+                    'message' => "You can now upload a new set of Students",
                     'type' => 'new_semester',
                 ]);
 

@@ -189,7 +189,7 @@ class DatabaseSeeder extends Seeder
             'abbreviation' => 'DBP',
             'since' => '2001',
             'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
-            'logo' => 'images.png',
+            'logo' => 'dbp.webp',
         ]);
 
         SponsorMoa::factory()->create([
