@@ -141,8 +141,8 @@ class ScholarController extends Controller
 
         // Get the submitted requirements for this scholar
         $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
-        ->with('requirement')
-        ->get();
+            ->with('requirement')
+            ->get();
 
         $notify = Notifier::where('user_id', $scholar->user_id)
             ->where('read', 0)
@@ -748,11 +748,30 @@ class ScholarController extends Controller
             // Update for the current user - only create for matching campus/batch
             $currentUser = Auth::user();
             // Find in the upload function, where we create scholarship groups for coordinators
-// Around line 362 in your code where you're iterating through campuses
+// Find this section around line 362 where you're creating scholarship groups
             foreach ($campusesForGroups as $campus) {
                 // Only create groups for batches that exist for this campus
                 if (isset($campusBatches[$campus->id])) {
                     $batch = $campusBatches[$campus->id];
+
+                    // Check if current user's campus matches this campus
+                    if ($currentUser && $currentUser->campus_id == $campus->id) {
+                        // Create scholarship group for current user
+                        ScholarshipGroup::create([
+                            'user_id' => $currentUser->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
+
+                        // Create Group Page for current user
+                        Page::create([
+                            'user_id' => $currentUser->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
+                    }
 
                     // Find coordinator
                     $coordinator = User::find($campus->coordinator_id);
@@ -790,41 +809,6 @@ class ScholarController extends Controller
                     $cashier = User::find($campus->cashier_id);
 
                     // Insert records for cashier if they exist and their campus matches
-                    // (rest of your existing code)
-                }
-            }
-
-            // Create scholarship groups for coordinators and cashiers, only if their campus matches
-            foreach ($campusesForGroups as $campus) {
-                // Only create groups for batches that exist for this campus
-                if (isset($campusBatches[$campus->id])) {
-                    $batch = $campusBatches[$campus->id];
-
-                    // Find coordinator
-                    $coordinator = User::find($campus->coordinator_id);
-
-                    // Insert records for coordinator if they exist and their campus matches
-                    if ($coordinator && $coordinator->campus_id == $campus->id) {
-                        ScholarshipGroup::create([
-                            'user_id' => $coordinator->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
-
-                        //Create Group Page
-                        Page::create([
-                            'user_id' => $coordinator->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
-                    }
-
-                    // Find cashier
-                    $cashier = User::find($campus->cashier_id);
-
-                    // Insert records for cashier if they exist and their campus matches
                     if ($cashier && $cashier->campus_id == $campus->id) {
                         ScholarshipGroup::create([
                             'user_id' => $cashier->id,
@@ -843,6 +827,8 @@ class ScholarController extends Controller
                     }
                 }
             }
+
+            // Remove the duplicate block of code (lines ~362-410) since we're handling all users in one place
 
             $schoolyear = SchoolYear::find($request->schoolyear);
 
