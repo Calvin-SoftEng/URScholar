@@ -87,7 +87,7 @@
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.campus.name }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.year_level }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.email }}</td>
-                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.contact_number ?? 'N/A'
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.contact_no ?? 'N/A'
                                             }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.permanent_address ??
                                                 'N/A' }}</td>
