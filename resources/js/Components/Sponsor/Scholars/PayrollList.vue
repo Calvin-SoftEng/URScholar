@@ -168,7 +168,7 @@
     </div>
 
     <!-- Payout Summary Section (if payouts are available) -->
-    <div v-if="processedPayouts" class="p-4 mt-4 border-t">
+    <!-- <div v-if="processedPayouts" class="p-4 mt-4 border-t">
       <div class="bg-gray-50 p-4 rounded-lg">
         <h3 class="text-lg font-semibold mb-3">Payout Summary</h3>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -186,9 +186,7 @@
               {{ processedPayouts.canForward ? 'Ready to Forward' : 'Pending Completion' }}
             </div>
           </div>
-        </div>
-
-        <!-- Payout Schedule if available -->
+        </div> 
         <div v-if="processedPayouts.payout_schedule" class="mt-4 bg-white p-3 rounded-lg shadow-sm">
           <div class="text-sm font-medium">Payout Schedule</div>
           <div class="text-sm mt-1">
@@ -196,7 +194,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- Toast notifications -->
     <ToastProvider>
@@ -222,7 +220,6 @@ const props = defineProps({
   processedBatches: Array,
   requirements: Array,
   payout: Object,
-  processedPayouts: Object,
   user_campus_ids: Array,
   user_type: String,
   processedPayouts: Array,

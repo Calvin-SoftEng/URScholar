@@ -18,6 +18,7 @@ use App\Models\Notification;
 use App\Models\Scholar;
 use App\Models\Sponsor;
 use App\Models\User;
+use App\Models\Campus;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
@@ -104,10 +105,6 @@ class CashierController extends Controller
         }
 
         $batches = $batchesQuery->with([
-            'scholars' => function ($query) {
-                $query->orderBy('last_name')
-                    ->orderBy('first_name');
-            },
             'disbursement',
             'campus:id,name'
         ])
@@ -179,6 +176,22 @@ class CashierController extends Controller
 
         $payout->status = 'Inactive';
         $payout->save();
+
+        $currentUser = Auth::user();
+
+        $campus = Campus::where('id', $currentUser->campus_id)->first();
+
+        // Create notification for coordinator
+        $notification = Notification::create([
+            'title' => $campus->name . ' Payout forward',
+            'message' => $campus->name . ' campus, Payouts now finished',
+            'type' => 'forward_payout',
+        ]);
+
+        $super_admin = User::where('usertype', 'super_admin')->first();
+
+        // Attach the coordinator to the notification
+        $notification->users()->attach($super_admin->id);
 
         return redirect()->route('cashier.active_scholarships')->with('success', 'Forwarded Successfully');
     }

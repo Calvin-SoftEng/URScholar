@@ -145,7 +145,7 @@ class SponsorController extends Controller
         $payoutsQuery = Payout::where('scholarship_id', $scholarship->id)
             ->where('semester', $selectedSemester)
             ->where('school_year_id', $selectedYearId)
-            ->where('status', '!=', 'Inactive');
+            ->where('status', '!=', ['Active, Pending']);
 
         if ($userCampusIds) {
             $payoutsQuery->whereIn('campus_id', $userCampusIds);
@@ -184,6 +184,7 @@ class SponsorController extends Controller
             ->when($selectedYearId, function ($query, $year) {
                 return $query->where('school_year_id', $year);
             })
+            ->where('status', '!=', ['Active, Pending'])
             ->orderBy('batch_no', 'desc')
             ->with(['school_year', 'disbursement', 'campus:id,name'])
             ->get();
@@ -192,7 +193,6 @@ class SponsorController extends Controller
         $processedBatches = $batches->map(function ($batch) use ($scholarship, $totalRequirements, $selectedSemester, $selectedYearId) {
             // Get active grantees from this batch, filtered by semester
             $grantees = $scholarship->grantees()
-                ->where('status', 'Inactive')
                 ->where('batch_id', $batch->id)
                 ->when($selectedSemester, function ($query, $semester) {
                     return $query->where('semester', $semester);
@@ -328,7 +328,7 @@ class SponsorController extends Controller
                 'completeSubmissionsCount' => $completeSubmissionsCount,
                 'claimed_count' => $claimed,
                 'not_claimed_count' => $notClaimed,
-                'filtered_semester' => $selectedSemester,  // Include selected semester
+                'filtered_semester' => $selectedSemester,
             ];
         });
 

@@ -579,8 +579,23 @@ class ScholarshipController extends Controller
                 ->where('campus_id', $currentUser->campus_id)
                 ->whereRaw('total_scholars = sub_total')
                 ->count();
-
         }
+
+        $currentUser = Auth::user();
+
+        $allBatches = Batch::where('scholarship_id', $scholarship->id)->get();
+
+        $inactiveBatches = $allBatches->every(fn($batch) => $batch->status === 'Inactive');
+
+        $allPayouts = Payout::where('scholarship_id', $scholarship->id)
+        ->where('school_year_id', $request->input('selectedYear'))
+        ->where('semester', $request->input('selectedSem'))
+        ->get();
+
+        $inactivePayouts = $allPayouts->every(fn($payout) => $payout->status === 'Inactive');
+
+
+
 
         $allBatches = Batch::where('scholarship_id', $scholarship->id)
             ->with(['grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name')])
@@ -664,6 +679,7 @@ class ScholarshipController extends Controller
             }
         }
 
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
@@ -677,6 +693,8 @@ class ScholarshipController extends Controller
             'hasActiveGrantees' => $hasActiveGrantees,
             'grantees' => $grantees,
             'completedBatches' => $completedBatches,
+            'inactiveBatches' => $inactiveBatches,
+            'inactivePayouts' => $inactivePayouts,
             'totalBatches' => $totalBatches,
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
@@ -748,6 +766,34 @@ class ScholarshipController extends Controller
         // Get parameters from the request
         $selectedSem = $request->input('selectedSem');
         $schoolYearId = $request->input('school_year');
+
+        $payouts = Payout::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $schoolYearId)
+            ->where('semester', $selectedSem)
+            ->first();
+
+        if ($payouts) {
+
+            $currentUser = Auth::user();
+
+            $campus = Campus::where('id', $currentUser->campus_id)->first();
+
+            // Create notification for coordinator
+            $notification = Notification::create([
+                'title' => 'University Payout Done',
+                'message' => 'URS forwarded a list of payouts',
+                'type' => 'forward_sponsor',
+            ]);
+
+            $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
+
+            $sponsorUser = User::where('id', $sponsor->assign_id)->first();
+
+            // Attach the coordinator to the notification
+            $notification->users()->attach($sponsorUser->id);
+
+            return redirect()->back()->with('success', 'Forwarded Successfully');
+        }
 
         // Find all matching batches
         $batches = Batch::where('scholarship_id', $scholarship->id)
