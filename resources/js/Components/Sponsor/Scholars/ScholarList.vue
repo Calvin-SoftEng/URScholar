@@ -74,7 +74,7 @@
             <h3 class="text-lg font-semibold">
               Batch #{{ batch.batch.batch_no }}
               <span class="text-sm text-gray-500">
-                ({{ batch.batch.school_year.year || 'N/A' }}, {{ batch.batch.semester || 'N/A' }} Semester)
+                ({{ batch.batch.school_year.year || 'N/A' }}, {{ props.selectedSem || 'N/A' }} Semester)
               </span>
             </h3>
             <div class="text-sm text-gray-600">

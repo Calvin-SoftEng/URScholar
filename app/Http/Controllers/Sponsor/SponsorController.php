@@ -323,7 +323,7 @@ class SponsorController extends Controller
                 'completeSubmissionsCount' => $completeSubmissionsCount,
                 'claimed_count' => $claimed,
                 'not_claimed_count' => $notClaimed,
-                'filtered_semester' => $selectedSemester,  // Include selected semester
+                'selectedSem' => $selectedSemester,  // Include selected semester
             ];
         });
 

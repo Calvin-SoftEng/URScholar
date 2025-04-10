@@ -74,7 +74,7 @@
             <h3 class="text-lg font-semibold">
               Batch #{{ batch.batch.batch_no }}
               <span class="text-sm text-gray-500">
-                ({{ batch.batch.school_year.year || 'N/A' }}, {{ batch.batch.semester || 'N/A' }} Semester)
+                ({{ batch.batch.school_year.year || 'N/A' }}, {{ props.selectedSem }} Semester)
               </span>
             </h3>
             <div class="text-sm text-gray-600 flex gap-4">
@@ -216,7 +216,7 @@ import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, To
 const props = defineProps({
   scholarship: Object,
   schoolyear: Object,
-  selectedSem: String,
+  selectedSem: Object,
   processedBatches: Array,
   requirements: Array,
   payout: Object,
