@@ -34,13 +34,15 @@ class SponsorController extends Controller
             ->with(['campus'])
             ->get();
 
-        $schoolyears = SchoolYear::all();
+        $school_year = SchoolYear::with('academic_year')
+            ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
+            ->get();
 
         return Inertia::render('Sponsor/Dashboard', [
             'sponsor' => $sponsor,
             'scholarships' => $scholarship,
             'payouts' => $payout,  // Don't forget to pass this to your view
-            'schoolyears' => $schoolyears,
+            'schoolyears' => $school_year,
         ]);
 
     }
@@ -135,10 +137,14 @@ class SponsorController extends Controller
             ? null
             : [$user->campus_id]; // Convert to array for non-admin users including cashiers
 
+        // Get selected filters
+        $selectedSemester = $request->input('selectedSem');
+        $selectedYearId = $request->input('selectedYear');
+
         // Set up payout query for this scholarship, filtered by campus if needed
         $payoutsQuery = Payout::where('scholarship_id', $scholarship->id)
-            ->where('semester', $request->input('selectedSem'))
-            ->where('school_year_id', $request->input('selectedYear'))
+            ->where('semester', $selectedSemester)
+            ->where('school_year_id', $selectedYearId)
             ->where('status', '!=', 'Inactive');
 
         if ($userCampusIds) {
@@ -173,32 +179,45 @@ class SponsorController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
         $totalRequirements = $requirements->count();
 
-        // Get all batches for this scholarship with the selected filters
+        // Get all batches for this scholarship
         $batches = Batch::where('scholarship_id', $scholarship->id)
-            ->when($request->input('selectedYear'), function ($query, $year) {
+            ->when($selectedYearId, function ($query, $year) {
                 return $query->where('school_year_id', $year);
-            })
-            ->when($request->input('selectedSem'), function ($query, $sem) {
-                return $query->where('semester', $sem);
             })
             ->orderBy('batch_no', 'desc')
             ->with(['scholars.campus', 'scholars.course', 'scholars.user', 'school_year', 'disbursement', 'campus:id,name'])
             ->get();
 
         // Process all batches and their scholars
-        $processedBatches = $batches->map(function ($batch) use ($scholarship, $totalRequirements) {
+        $processedBatches = $batches->map(function ($batch) use ($scholarship, $totalRequirements, $selectedSemester, $selectedYearId) {
+            // Get active grantees from this batch, filtered by semester
             $grantees = $scholarship->grantees()
                 ->where('status', 'Active')
                 ->where('batch_id', $batch->id)
+                ->when($selectedSemester, function ($query, $semester) {
+                    return $query->where('semester', $semester);
+                })
+                ->when($selectedYearId, function ($query, $yearId) {
+                    return $query->where('school_year_id', $yearId);
+                })
                 ->with('scholar.campus', 'scholar.course', 'school_year')
                 ->get();
 
             // Count scholars with complete submissions
             $completeSubmissionsCount = 0;
 
+            // Filter disbursements by semester if needed
+            $batchDisbursements = $batch->disbursement;
+            if ($selectedSemester && $batchDisbursements) {
+                $batchDisbursements = $batchDisbursements->filter(function ($disbursement) use ($selectedSemester, $selectedYearId) {
+                    return $disbursement->semester == $selectedSemester &&
+                        (!$selectedYearId || $disbursement->school_year_id == $selectedYearId);
+                });
+            }
+
             // Add claimed and not claimed counts for each batch
-            $claimed = $batch->disbursement ? $batch->disbursement->where('status', 'Claimed')->count() : 0;
-            $notClaimed = $batch->disbursement ? $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count() : 0;
+            $claimed = $batchDisbursements ? $batchDisbursements->where('status', 'Claimed')->count() : 0;
+            $notClaimed = $batchDisbursements ? $batchDisbursements->whereIn('status', ['Pending', 'Not Claimed'])->count() : 0;
 
             $scholars = $grantees->map(function ($grantee) use ($totalRequirements, &$completeSubmissionsCount) {
                 // Skip if there's no related scholar
@@ -271,6 +290,7 @@ class SponsorController extends Controller
                             'picture' => $scholar->user->picture ?? null // Include user picture
                         ],
                         'userVerified' => $userVerified->email_verified_at,
+                        'semester' => $grantee->semester, // Include semester from grantee
                     ];
                 } else {
                     return [
@@ -291,6 +311,7 @@ class SponsorController extends Controller
                         'user' => [
                             'picture' => $scholar->user->picture ?? null // Include user picture
                         ],
+                        'semester' => $grantee->semester, // Include semester from grantee
                     ];
                 }
 
@@ -306,7 +327,8 @@ class SponsorController extends Controller
                 'scholars' => $scholars,
                 'completeSubmissionsCount' => $completeSubmissionsCount,
                 'claimed_count' => $claimed,
-                'not_claimed_count' => $notClaimed
+                'not_claimed_count' => $notClaimed,
+                'filtered_semester' => $selectedSemester,  // Include selected semester
             ];
         });
 
@@ -316,10 +338,10 @@ class SponsorController extends Controller
             'payout' => $payout,
             'processedPayouts' => $processedPayouts,
             'requirements' => $requirements,
-            'schoolyear' => $request->input('selectedYear')
-                ? SchoolYear::find($request->input('selectedYear'))
+            'schoolyear' => $selectedYearId
+                ? SchoolYear::find($selectedYearId)
                 : null,
-            'selectedSem' => $request->input('selectedSem', ''),
+            'selectedSem' => $selectedSemester,
             'user_campus_ids' => $userCampusIds ?? [],
             'user_type' => $user->usertype, // Added user type for frontend access control
         ]);

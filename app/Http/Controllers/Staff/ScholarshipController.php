@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use App\Models\ActivityLog;
 use App\Models\Applicant;
 use App\Models\Campus;
+use App\Models\AcademicYear;
 use App\Models\CampusRecipients;
 use App\Models\Criteria;
 use App\Models\Disbursement;
@@ -462,7 +463,14 @@ class ScholarshipController extends Controller
             : null;
 
         $courses = Course::all();
-        $students = Student::all();
+        $academic_year = AcademicYear::where('school_year_id', $schoolyear->id)->first();
+
+        $students = [];
+
+        if ($academic_year) {
+            $students = Student::where('academic_year_id', $academic_year->id)->get();
+        }
+
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         // Grantees query
@@ -494,14 +502,18 @@ class ScholarshipController extends Controller
                 ->get()
             : collect(); // fallback to empty if batch is null
 
-        // $hasActiveGrantees = false;
-        // $noForward = Grantees::where('batch_id', $batch->id)
-        //     ->where('status', 'Active')
-        //     ->get();
 
-        // if ($noForward->isEmpty()) {
-        //     $hasActiveGrantees = true;
-        // }
+        $hasActiveGrantees = false;
+
+        if ($batch && isset($batch->id)) {
+            $noForward = Grantees::where('batch_id', $batch->id)
+                ->where('status', 'Active')
+                ->get();
+
+            if ($noForward->isEmpty()) {
+                $hasActiveGrantees = true;
+            }
+        }
 
 
         $approvedCount = null;
@@ -636,7 +648,7 @@ class ScholarshipController extends Controller
             'payoutsByCampus' => $payoutsByCampus,
             'approvedCount' => $approvedCount,
             'requirements' => $requirements,
-            // 'hasActiveGrantees' => $hasActiveGrantees,
+            'hasActiveGrantees' => $hasActiveGrantees,
             'grantees' => $grantees,
             'completedBatches' => $completedBatches,
             'totalBatches' => $totalBatches,
@@ -1044,13 +1056,11 @@ class ScholarshipController extends Controller
         // Group grantees by campus
         $granteesByCampus = [];
         foreach ($grantees as $grantee) {
-            dd('yes');
             // Skip grantees that don't have 'Active' status
             if (!isset($grantee['status']) || $grantee['status'] !== 'Active') {
                 continue;
             }
 
-            dd('yes');
 
             // Get the batch to find campus_id
             $batch = Batch::find($grantee['batch_id']);

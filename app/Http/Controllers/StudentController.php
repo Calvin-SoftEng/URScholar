@@ -57,6 +57,7 @@ class StudentController extends Controller
             $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
 
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
+            ->where('status', 'Pending')
                 ->first() ?? null;
 
             $payout = null;

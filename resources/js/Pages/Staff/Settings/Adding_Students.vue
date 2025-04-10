@@ -329,8 +329,6 @@ const submitForm = async () => {
             onSuccess: () => {
                 closeModal();
                 usePage().props.flash = { success: "Scholars added to the scholarship!" };
-                headers.value = [];
-                previewData.value = [];
                 error.value = "";
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input
