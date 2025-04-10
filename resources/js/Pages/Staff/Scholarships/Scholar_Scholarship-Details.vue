@@ -200,7 +200,7 @@
                                                         word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                                 </span>
                                                 <span class="text-xl font-sora text-primary">
-                                                    {{ sibling.occupation }}
+                                                    - {{ sibling.occupation }}
                                                 </span>
                                             </div>
 

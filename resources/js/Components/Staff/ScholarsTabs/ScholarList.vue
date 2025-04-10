@@ -46,7 +46,8 @@
                   <th>Campus</th>
                   <th>Grant</th>
                   <th v-if="requirements.length > 0">Requirements</th>
-                  <th>Status</th>
+                  <th v-if="requirements.length < 0">Validation</th>
+                  <th v-if="requirements.length > 0">Status</th>
                   <th>Student Status</th>
                   <th></th>
                 </tr>
@@ -67,6 +68,8 @@
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
                           <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`"
+                            alt="Profile Picture">
+                            <img v-else src="../../../../assets/images/no_userpic.png"
                             alt="Profile Picture">
                         </div>
                       </div>

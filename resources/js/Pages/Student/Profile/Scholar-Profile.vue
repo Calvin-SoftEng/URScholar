@@ -968,10 +968,14 @@
                                 <div v-if="!EditProfile"
                                     class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
                                     <div v-if="scholar">
-                                        <div v-if="scholar.qr_code" class="w-20 h-20">
-                                            <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code"
-                                                class="w-full h-full">
+                                        <div v-if="scholar.qr_code" class="w-40 h-40 flex items-center justify-center mx-auto">
+                                        <img 
+                                            :src="`/storage/qr_codes/${scholar.qr_code}`" 
+                                            alt="QR Code"
+                                            class="w-full h-full object-contain"
+                                        />
                                         </div>
+
                                         <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
                                             <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
                                         </div>

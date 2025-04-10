@@ -88,7 +88,7 @@
                                 <div class="flex flex-row gap-8 text-center">
                                     <div>
                                         <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
-                                        <p class="text-xl font-bold text-gray-800 dark:text-dtext">34</p>
+                                        <p class="text-xl font-bold text-gray-800 dark:text-dtext">1</p>
                                     </div>
                                     <div>
                                         <p class="text-gray-500 dark:text-gray-400 text-sm">Campuses</p>

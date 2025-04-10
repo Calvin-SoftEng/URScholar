@@ -233,8 +233,14 @@
                     <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
                       data-dropdown-placement="bottom-start"
                       class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-                      :src="`/storage/user/profile/male.png`" alt="picture">
+                      src="../../../assets/images/no_userpic.png" alt="picture">
                   </div>
+                  <!-- <div >
+                    <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                      data-dropdown-placement="bottom-start"
+                      class="w-10 h-10 rounded-lg border object-cover border-gray-300 cursor-pointer"
+                      src="../../../assets/images/no_userpic.png" alt="picture">
+                  </div> -->
                 </div>
               </div>
               <!-- Text (displayed only when dataOpenSideBar) -->

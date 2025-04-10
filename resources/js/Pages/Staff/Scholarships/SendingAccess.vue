@@ -31,8 +31,8 @@
                             <h1
                                 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                                 <span
-                                    class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>Pending
-                                    Scholars</span>
+                                    class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>
+                                    Account and Requirement Setup</span>
                             </h1>
 
                             <button

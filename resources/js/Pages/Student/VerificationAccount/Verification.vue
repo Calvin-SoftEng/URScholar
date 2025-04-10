@@ -153,7 +153,7 @@
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="last_name" type="text" placeholder="First Name"
+                                                <Input id="last_name" type="text" placeholder="Last Name"
                                                     v-model="form.last_name" @focus="errors.last_name = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.last_name" :message="errors.last_name"
@@ -348,7 +348,7 @@
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="first_name" type="text" placeholder="First Name"
+                                                <Input id="first_name" type="text" placeholder="Street Address" 
                                                     v-model="form.street" @focus="errors.street = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.street" :message="errors.street"
@@ -365,7 +365,7 @@
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="last_name" type="text" placeholder="First Name"
+                                                <Input id="last_name" type="text" placeholder="Municipality Address"
                                                     v-model="form.municipality" @focus="errors.municipality = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.municipality" :message="errors.municipality"
@@ -382,7 +382,7 @@
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="middle_name" type="text" placeholder="Middle Name"
+                                                <Input id="middle_name" type="text" placeholder="Province"
                                                     v-model="form.province" @focus="errors.province = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.province" :message="errors.province"
@@ -468,7 +468,7 @@
                                             class="col-span-3 whitespace-nowrap gap-2 relative flex flex-row justify-center items-center mb-2">
                                             <h3
                                                 class="font-semibold whitespace-nowrap text-[12px] text-blue-900 dark:text-white text-center">
-                                                General Weighted Average
+                                                General Weighted Average <span class="italic">(you can set this up later)</span>
                                             </h3>
                                             <div
                                                 class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
@@ -477,8 +477,8 @@
                                         </div>
 
                                         <div v-if="scholar" class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
-                                            <span class="text-sm text-gray-500 italic">* You can set this up
-                                                later</span>
+                                            <!-- <span class="text-sm text-gray-500 italic">* You can set this up
+                                                later</span> -->
                                             <div
                                                 class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
                                                 <!-- GWA Input -->
