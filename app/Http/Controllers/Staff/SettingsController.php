@@ -321,7 +321,7 @@ class SettingsController extends Controller
                 foreach ($insertData as $studentData) {
                     try {
                         // Search for matching scholar
-                        $matchingScholar = Scholar::where('email', $studentData['email'])
+                        $matchingScholar = Scholar::where('first_name', $studentData['first_name'])
                             ->where('last_name', $studentData['last_name'])
                             ->where('campus_id', $studentData['campus_id'])
                             ->where('course_id', $studentData['course_id'])
