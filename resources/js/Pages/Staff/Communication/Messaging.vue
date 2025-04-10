@@ -8,6 +8,20 @@
                             <div class="w-[30%] border-r">
                                 <h3 class="text-xl text-primary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold ">
                                     Messages</h3>
+
+                                <!-- Tabs for DM and GC -->
+                                <div class="mt-4 flex border-b border-gray-100 dark:border-gray-600">
+                                <!-- DM Tab -->
+                                <button type="button" class="w-full p-2 text-center text-sm font-medium text-gray-900 dark:text-white focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg"
+                                :class="{'text-blue-600 dark:text-blue-400': selectedTab === 'dm', 'text-gray-900 dark:text-white': selectedTab !== 'dm'}"
+                                @click="selectedTab = 'dm'">Direct Messages</button>
+
+                                <!-- GC Tab -->
+                                <button type="button" class="w-full p-2 text-center text-sm font-medium text-gray-900 dark:text-white focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg"
+                                :class="{'text-blue-600 dark:text-blue-400': selectedTab === 'gc', 'text-gray-900 dark:text-white': selectedTab !== 'gc'}"
+                                @click="selectedTab = 'gc'">Group Chats</button>
+                                </div>
+
                                 <!-- search -->
                                 <form class="w-full p-3">
                                     <label for="default-search"
@@ -23,13 +37,14 @@
                                             </svg>
                                         </div>
                                         <input type="search" id="default-search"
-                                            class="block w-full p-4 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Search group chats and scholars" required />
                                     </div>
                                 </form>
+
                                 <!-- In the people/group list section -->
-                                <div class="divide-y">
-                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4"
+                                <!-- <div class="divide-y">
+                                    <Link class="w-full flex items-center space-x-3 p-4"
                                         v-for="batch in batches" :key="batch.id"
                                         :href="route('messaging.show', batch.id)" :class="[
                                             'hover:bg-gray-100',
@@ -50,8 +65,47 @@
                                         </div>
                                     </div>
                                     </Link>
+                                </div> -->
+                                <div v-if="selectedTab === 'dm'" class="divide-y">
+                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4"
+                                        >
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                        IMEE
+                                    </div>
+                                    <div class="flex flex-col space-y-1">
+                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">Imee Marcos</span>
+                                        <div class="flex-grow">
+                                            <p class="text-xs text-gray-500 truncate" >
+                                                wla pang budget beh
+                                            </p>
+                                            
+                                        </div>
+                                    </div>
+                                    </Link>
+                                </div>
+
+                                <div v-if="selectedTab === 'gc'" class="divide-y">
+                                    <Link class="w-full flex items-center space-x-3 p-4"
+                                        >
+                                    <div
+                                        class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                        1
+                                    </div>
+                                    <div class="flex flex-col space-y-1">
+                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">Batch 1 (2020-2021)</span>
+                                        <div class="flex-grow">
+                                            <p class="text-xs text-gray-500 truncate" >
+                                                payouts na bukas
+                                            </p>
+                                            
+                                        </div>
+                                    </div>
+                                    </Link>
+                                    
                                 </div>
                             </div>
+
                             <div class="w-[70%] h-full flex flex-col">
                                 <div class="shadow-sm p-4 flex justify-between items-center">
                                     <h3 class="text-lg font-bold text-primary">Conversation</h3>
@@ -289,6 +343,8 @@ const props = defineProps({
     batches: Array,
     selectedBatch: Object,
 });
+
+const selectedTab = ref('dm'); // Default to 'dm' tab
 
 const messageData = ref(props.messages);
 
