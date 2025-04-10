@@ -99,22 +99,29 @@ class CashierController extends Controller
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $payout->school_year_id);
 
-
         if ($userCampusIds) {
             $batchesQuery->whereIn('campus_id', $userCampusIds);
         }
 
         $batches = $batchesQuery->with([
-            'disbursement',
+            'disbursement' => function ($query) use ($payout) {
+                // Make sure we get disbursements for the active payout only
+                $query->where('payout_id', $payout->id);
+            },
             'campus:id,name'
         ])
             ->orderBy('batch_no')
             ->get();
 
         // Count claimed and not claimed for each batch
-        $batches = $batches->map(function ($batch) {
-            $claimed = $batch->disbursement->where('status', 'Claimed')->count();
-            $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
+        $batches = $batches->map(function ($batch) use ($payout) {
+            // Filter disbursements to only include those for the current active payout
+            $disbursements = $batch->disbursement->filter(function ($disbursement) use ($payout) {
+                return $disbursement->payout_id == $payout->id;
+            });
+
+            $claimed = $disbursements->where('status', 'Claimed')->count();
+            $notClaimed = $disbursements->whereIn('status', ['Pending', 'Not Claimed'])->count();
 
             return array_merge($batch->toArray(), [
                 'claimed_count' => $claimed,
@@ -122,44 +129,42 @@ class CashierController extends Controller
             ]);
         });
 
-        // Fetch grantees only if batches exist
-        $grantees = collect();
-        if ($batches->isNotEmpty()) {
-            $grantees = $scholarship->grantees()
-                ->whereIn('batch_id', $batches->pluck('id'))
-                ->with('scholar.campus', 'scholar.course')
-                ->get();
-        }
-
-        // Get payouts for this scholarship, filtered by campus if needed
-        $payoutsQuery = Payout::where('scholarship_id', $scholarship->id)
-            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
-            ->where('status', '!=', 'Inactive');
+        // Get active payout for this scholarship and campus
+        $activePayout = Payout::where('scholarship_id', $scholarship->id)
+            ->where('status', 'Active');
 
         if ($userCampusIds) {
-            $payoutsQuery->whereIn('campus_id', $userCampusIds);
+            $activePayout->whereIn('campus_id', $userCampusIds);
         }
 
-        $payouts = $payoutsQuery->with([
+        $activePayout = $activePayout->with([
             'campus:id,name',
-            'disbursement.scholar:id,first_name,last_name'
+            'disbursement' => function ($query) {
+                $query->with('scholar:id,first_name,last_name');
+            }
         ])
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $canForward = $payouts->total_scholars == $payouts->sub_total;
+        // If no active payout found, use the passed payout
+        if (!$activePayout) {
+            $activePayout = $payout->load([
+                'campus:id,name',
+                'disbursement.scholar:id,first_name,last_name'
+            ]);
+        }
 
-        $payout_schedule = PayoutSchedule::where('payout_id', $payouts->id)
+        $canForward = $activePayout->total_scholars == $activePayout->sub_total;
 
+        $payout_schedule = PayoutSchedule::where('payout_id', $activePayout->id)
             ->first();
 
         return Inertia::render('Cashier/Scholarships/Payout_Batches', [
             'scholarship' => $scholarship,
             'batches' => $batches,
-            'grantees' => $grantees,
-            'payouts' => $payouts,
+            'payouts' => $activePayout,
             'user_campus_ids' => $userCampusIds ?? [],
-            'user_type' => $user->usertype, // Added user type for frontend access control
+            'user_type' => $user->usertype,
             'canForward' => $canForward,
             'payout_schedule' => $payout_schedule,
         ]);

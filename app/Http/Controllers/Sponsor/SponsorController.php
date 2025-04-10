@@ -207,8 +207,15 @@ class SponsorController extends Controller
             // Count scholars with complete submissions
             $completeSubmissionsCount = 0;
 
-            // Get disbursements for this batch
-            $disbursements = Disbursement::where('batch_id', $batch->id)->get();
+            // In your view_scholars method, modify the disbursements query:
+
+            // Get disbursements for this batch, filtered by semester and school year
+            $disbursements = Disbursement::where('batch_id', $batch->id)
+                ->whereHas('payout', function ($query) use ($selectedSemester, $selectedYearId) {
+                    $query->where('semester', $selectedSemester)
+                        ->where('school_year_id', $selectedYearId);
+                })
+                ->get();
 
             // Count claimed and not claimed disbursements
             $claimed = $disbursements->where('status', 'Claimed')->count();
@@ -326,6 +333,8 @@ class SponsorController extends Controller
                 'selectedSem' => $selectedSemester,  // Include selected semester
             ];
         });
+
+
 
         return Inertia::render('Sponsor/Scholars/ScholarsTable', [
             'scholarship' => $scholarship,

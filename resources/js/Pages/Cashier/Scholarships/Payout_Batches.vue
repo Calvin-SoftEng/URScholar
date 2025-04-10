@@ -220,14 +220,13 @@
                                 </div>
 
                                 <!-- Batch List -->
-                                <!-- Batch List -->
                                 <div v-else class="flex flex-col divide-y divide-gray-300">
-                                    <div v-for="batch in batchesWithScholars" :key="batch.id"
+                                    <div v-for="batch in batches" :key="batch.id"
                                         class="py-3 px-4 flex justify-between items-center">
                                         <div>
                                             <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                                 batch.batch_no }}</p>
-                                            <p class="text-sm text-gray-500">Includes {{ batch.claimed_count }} Claimed,
+                                            <p class="text-sm text-gray-500">{{ batch.claimed_count }} Claimed,
                                                 {{ batch.not_claimed_count }} Not Claimed</p>
                                         </div>
                                         <span
@@ -454,23 +453,9 @@ const loadBatchesData = async () => {
     isLoading.value = true;
 
     try {
-        // Calculate scholar counts for each batch using the scholars prop
+        // Use the batch data directly from props since claimed/not claimed counts are already provided
         setTimeout(() => {
-            // Group scholars by batch_id and count them
-            const scholarCountsByBatch = props.grantees.reduce((counts, grant) => {
-                if (grant.batch_id) {
-                    counts[grant.batch_id] = (counts[grant.batch_id] || 0) + 1;
-                }
-                return counts;
-            }, {});
-
-            // Map batches with their scholar counts
-            batchesWithScholars.value = props.batches.map(batch => {
-                return {
-                    ...batch,
-                    scholar_count: scholarCountsByBatch[batch.id] || 0
-                };
-            });
+            batchesWithScholars.value = props.batches;
 
             // Automatically select all batches when data is loaded
             selectedBatches.value = ['all', ...batchesWithScholars.value.map(batch => batch.id)];

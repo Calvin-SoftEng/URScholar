@@ -32,71 +32,78 @@
                             Grant-Based Scholarships
                         </h2>
 
-                        <button v-for="scholarship in grantBasedScholarships" :key="scholarship.id"
-                            @click="toggleSpecification(scholarship)" class="w-full text-left">
-                            <div
-                                class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-                                <!-- Notification Badge -->
-                                <span v-if="scholarship.read !== 1"
-                                    class="absolute -top-3 right-4 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
-                                    New
-                                </span>
+                        <template v-if="grantBasedScholarships.length > 0">
+                            <button v-for="scholarship in grantBasedScholarships" :key="scholarship.id"
+                                @click="toggleSpecification(scholarship)" class="w-full text-left">
+                                <div
+                                    class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                                    <!-- Notification Badge -->
+                                    <span v-if="scholarship.read !== 1"
+                                        class="absolute -top-3 right-4 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                                        New
+                                    </span>
 
-                                <!-- Scholarship Info -->
-                                <div class="flex-1 space-y-3">
-                                    <!-- Sponsor -->
-                                    <div
-                                        class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-900 text-xs font-medium px-3 py-1 rounded-full">
-                                        {{ getSponsorName(scholarship.sponsor_id) }}
-                                    </div>
+                                    <!-- Scholarship Info -->
+                                    <div class="flex-1 space-y-3">
+                                        <!-- Sponsor -->
+                                        <div
+                                            class="inline-block bg-blue-100 text-blue-800 dark:bg-blue-200 dark:text-blue-900 text-xs font-medium px-3 py-1 rounded-full">
+                                            {{ getSponsorName(scholarship.sponsor_id) }}
+                                        </div>
 
-                                    <!-- Scholarship Name -->
-                                    <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
-                                        {{ scholarship.name }}
-                                    </h2>
+                                        <!-- Scholarship Name -->
+                                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                                            {{ scholarship.name }}
+                                        </h2>
 
-                                    <!-- Dates -->
-                                    <div class="text-sm text-primary opacity-70 dark:text-gray-400 space-y-1">
-                                        <p><font-awesome-icon :icon="['far', 'calendar']" class="mr-1" /> Created: {{
-                                            new Date(scholarship.created_at).toLocaleDateString('en-US', {
-                                                year: 'numeric',
-                                                month: 'long',
-                                                day: 'numeric'
-                                            }) }}</p>
-                                        <p><font-awesome-icon :icon="['fas', 'circle-dollar-to-slot']" class="mr-1" />
-                                            Sponsoring Since:
-                                            {{ scholarship.since }}
-                                        </p>
-                                        <p>
-                                            <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
-                                                class="font-medium">Requirements Deadline: </span>
-                                            <span
-                                                v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
-                                                {{ new
-                                                    Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US', {
+                                        <!-- Dates -->
+                                        <div class="text-sm text-primary opacity-70 dark:text-gray-400 space-y-1">
+                                            <p><font-awesome-icon :icon="['far', 'calendar']" class="mr-1" /> Created:
+                                                {{
+                                                    new Date(scholarship.created_at).toLocaleDateString('en-US', {
                                                         year: 'numeric',
                                                         month: 'long',
                                                         day: 'numeric'
+                                                }) }}</p>
+                                            <p><font-awesome-icon :icon="['fas', 'circle-dollar-to-slot']"
+                                                    class="mr-1" />
+                                                Sponsoring Since:
+                                                {{ scholarship.since }}
+                                            </p>
+                                            <p>
+                                                <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
+                                                    class="font-medium">Requirements Deadline: </span>
+                                                <span
+                                                    v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
+                                                    {{ new
+                                                        Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US',
+                                                            {
+                                                                year: 'numeric',
+                                                                month: 'long',
+                                                                day: 'numeric'
                                                     }) }}
-                                            </span>
-                                            <span v-else>No Deadline</span>
-                                        </p>
+                                                </span>
+                                                <span v-else>No Deadline</span>
+                                            </p>
+                                        </div>
                                     </div>
-                                </div>
 
-                                <!-- Additional Info -->
-                                <div class="flex flex-row gap-8 text-center">
-                                    <div>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
-                                        <p class="text-xl font-bold text-gray-800 dark:text-dtext">1</p>
-                                    </div>
-                                    <div>
-                                        <p class="text-gray-500 dark:text-gray-400 text-sm">Campuses</p>
-                                        <p class="text-xl font-bold text-gray-800 dark:text-dtext">2</p>
+                                    <!-- Additional Info -->
+                                    <div class="flex flex-row gap-8 text-center">
+                                        <div>
+                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
+                                            <p class="text-xl font-bold text-gray-800 dark:text-dtext">1</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Campuses</p>
+                                            <p class="text-xl font-bold text-gray-800 dark:text-dtext">2</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </button>
+                            </button>
+                        </template>
+                        <div v-else class="text-gray-500 text-center py-4">No available scholarships.</div>
+
 
 
                         <!-- One-Time Payment Scholarships -->

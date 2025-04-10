@@ -46,8 +46,10 @@ class SettingsController extends Controller
             ->first();
 
 
+        $currentUser = Auth::user();
 
         $students = Student::with('campus', 'course')
+            ->where('campus_id', $currentUser->campus_id)
             ->where('academic_year_id', $current_year->id)
             ->get();
 

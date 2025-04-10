@@ -140,7 +140,9 @@ class ScholarController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         // Get the submitted requirements for this scholar
-        $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
+        $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+        ->with('requirement')
+        ->get();
 
         $notify = Notifier::where('user_id', $scholar->user_id)
             ->where('read', 0)
