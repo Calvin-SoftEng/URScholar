@@ -243,6 +243,18 @@ const toast = ref({
   type: 'success'
 });
 
+const logBatchData = (batch) => {
+  console.log('Batch:', batch);
+  console.log('Claimed count:', batch.claimed_count);
+  console.log('Not claimed count:', batch.not_claimed_count);
+};
+
+onMounted(() => {
+  if (props.processedBatches && props.processedBatches.length > 0) {
+    logBatchData(props.processedBatches[0]);
+  }
+});
+
 // Updated filteredBatches computed property with merged functionality
 const filteredBatches = computed(() => {
   const query = searchQuery.value.toLowerCase();

@@ -10,6 +10,7 @@ use App\Models\SchoolYear;
 use App\Models\Requirements;
 use App\Models\SubmittedRequirements;
 use App\Models\PayoutSchedule;
+use App\Models\Disbursement;
 use App\Models\User;
 use App\Models\Batch;
 use Illuminate\Http\Request;
@@ -206,18 +207,12 @@ class SponsorController extends Controller
             // Count scholars with complete submissions
             $completeSubmissionsCount = 0;
 
-            // Filter disbursements by semester if needed
-            $batchDisbursements = $batch->disbursement;
-            if ($selectedSemester && $batchDisbursements) {
-                $batchDisbursements = $batchDisbursements->filter(function ($disbursement) use ($selectedSemester, $selectedYearId) {
-                    return $disbursement->semester == $selectedSemester &&
-                        (!$selectedYearId || $disbursement->school_year_id == $selectedYearId);
-                });
-            }
+            // Get disbursements for this batch
+            $disbursements = Disbursement::where('batch_id', $batch->id)->get();
 
-            // Add claimed and not claimed counts for each batch
-            $claimed = $batchDisbursements ? $batchDisbursements->where('status', 'Claimed')->count() : 0;
-            $notClaimed = $batchDisbursements ? $batchDisbursements->whereIn('status', ['Pending', 'Not Claimed'])->count() : 0;
+            // Count claimed and not claimed disbursements
+            $claimed = $disbursements->where('status', 'Claimed')->count();
+            $notClaimed = $disbursements->whereIn('status', ['Pending', 'Not Claimed'])->count();
 
             $scholars = $grantees->map(function ($grantee) use ($totalRequirements, &$completeSubmissionsCount) {
                 // Skip if there's no related scholar
@@ -328,7 +323,7 @@ class SponsorController extends Controller
                 'completeSubmissionsCount' => $completeSubmissionsCount,
                 'claimed_count' => $claimed,
                 'not_claimed_count' => $notClaimed,
-                'filtered_semester' => $selectedSemester,
+                'filtered_semester' => $selectedSemester,  // Include selected semester
             ];
         });
 
