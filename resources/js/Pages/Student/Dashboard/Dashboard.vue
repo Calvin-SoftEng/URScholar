@@ -51,12 +51,12 @@
                     </div>
 
                     <!-- Section When No Scholarship Exists -->
-                    <div v-else class="w-full h-full block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
+                    <div v-else class="md:col-span-2 w-full h-full block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
                         <div v-if="!applicant">
                             <Scholarships :sponsors="sponsors" :scholarships="scholarships"
                                 :schoolyears="schoolyears" :scholar="scholar" :grade="grade" />
                         </div>
-                        <div v-else>
+                        <div v-else >
                             <ScholarAppliant :sponsors="sponsors" :scholarships="scholarships"
                                 :schoolyears="schoolyears" :scholar="scholar" />
                         </div>
