@@ -1107,7 +1107,7 @@
                             <div
                                 class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
                                 <label class="block text-lg font-semibold text-gray-700 dark:text-white">
-                                    Completed Payout Batches
+                                    Binangonan
                                 </label>
 
                                 <!-- Loading Indicator -->
@@ -1136,7 +1136,7 @@
                                 </div>
 
                                 <!-- Forward Button -->
-                                <div v-if="hasActiveGrantees" class="mt-4">
+                                <div v-if="completedBatches === batches.length" class="mt-4">
                                     <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                         @click="forwardCoor" 
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1184,7 +1184,7 @@
                 </div>
 
                 <!-- Form -->
-                <form v-if="!payouts" @submit.prevent="forwardBatches">
+                <form v-if="!payouts">
                     <div class="py-4 px-8 flex flex-col gap-3">
                         <!-- Loading Indicator -->
                         <div v-if="isLoading" class="flex justify-center items-center py-4">
@@ -1215,7 +1215,7 @@
 
                         <!-- Forward Button -->
                         <div v-if="completedBatches === batches.length" class="mt-4">
-                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0" @click="forwardSponsor" 
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 {{ isSubmitting ? 'Processing...' : 'Forward' }}
                             </button>
@@ -1468,6 +1468,22 @@ const forwardCoor = () => {
     });
 };
 
+const forwardSponsor = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('scholarship.forward_sponsor', {
+        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
+        selectedCampus: props.selectedCampus
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
 
 const toggleView = () => {
     showPayrolls.value = !showPayrolls.value;

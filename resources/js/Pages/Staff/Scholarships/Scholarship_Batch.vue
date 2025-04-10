@@ -108,30 +108,8 @@
                         :requirements="requirements" @update:stats="updateStats" />
                 </div>
                 <div v-else>
-                    <div v-if="props.batches.status === 'Active'"
-                        class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
-                        <font-awesome-icon :icon="['fas', 'user-graduate']"
-                            class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
-                        <p class="text-lg text-gray-700 dark:text-gray-300">
-                            Batch still on going. Please check back later.
-                        </p>
-                    </div>
-                    <div v-else>
-                        <div v-if="props.batches.status !== 'Inactive'"
-                            class="bg-white w-full dark:bg-dsecondary p-6 rounded-lg text-center animate-fade-in">
-                            <font-awesome-icon :icon="['fas', 'user-graduate']"
-                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
-                            <p class="text-lg text-gray-700 dark:text-gray-300">
-                                This
-                            </p>
-                        </div>
-                        <div v-else>
-                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                                :requirements="requirements" @update:stats="updateStats" />
-                        </div>
-
-                    </div>
-
+                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                    :requirements="requirements" @update:stats="updateStats" />
                 </div>
 
 

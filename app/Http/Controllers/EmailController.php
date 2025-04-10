@@ -32,7 +32,6 @@ class EmailController extends Controller
     {
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course', 'scholars.user'])
             ->get();
 
         $selectedYear = $request->input('selectedYear', '');

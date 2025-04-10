@@ -92,7 +92,6 @@ class ScholarshipController extends Controller
                 return $query->where('school_year_id', $year);
             })
             ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course', 'scholars.user']) // Added user relationship
             ->first();
 
         //                 // Use relationships to get applicants and their related scholars
@@ -424,13 +423,28 @@ class ScholarshipController extends Controller
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->count();
 
-        // Batches base query
-        $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
-            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->with([
-                'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
-                'grantees.scholar.submittedRequirements'
-            ]);
+        $currentUser = Auth::user();
+        // All filtered batches
+        $batchesQuery = null;
+
+        if ($currentUser->usertype == 'super_admin') {
+            $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
+                ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+                ->with([
+                    'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
+                    'grantees.scholar.submittedRequirements'
+                ]);
+        } else {
+            $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
+                ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+                ->where('campus_id', $currentUser->campus_id)
+                ->with([
+                    'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
+                    'grantees.scholar.submittedRequirements'
+                ]);
+        }
+
+
 
         // Filtered campuses
         $filteredCampuses = $userType == 'coordinator'
@@ -551,10 +565,22 @@ class ScholarshipController extends Controller
                 ]);
         }
 
-        $completedBatches = Batch::where('scholarship_id', $scholarship->id)
-            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->whereRaw('total_scholars = sub_total')
-            ->count();
+        $completedBatches = null;
+
+        if ($currentUser->usertype == 'super_admin') {
+            $completedBatches = Batch::where('scholarship_id', $scholarship->id)
+                ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+                ->whereRaw('total_scholars = sub_total')
+                ->count();
+
+        } else {
+            $completedBatches = Batch::where('scholarship_id', $scholarship->id)
+                ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+                ->where('campus_id', $currentUser->campus_id)
+                ->whereRaw('total_scholars = sub_total')
+                ->count();
+
+        }
 
         $allBatches = Batch::where('scholarship_id', $scholarship->id)
             ->with(['grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name')])
@@ -684,7 +710,6 @@ class ScholarshipController extends Controller
 
         // Find all matching batches
         $batches = Batch::where('scholarship_id', $scholarship->id)
-            ->where('semester', $selectedSem)
             ->where('school_year_id', $schoolYearId)
             ->where('campus_id', $selectedCampus)
             ->get();
@@ -695,6 +720,64 @@ class ScholarshipController extends Controller
                 'status' => 'Inactive'
             ]);
         }
+
+        $currentUser = Auth::user();
+
+        $campus = Campus::where('id', $currentUser->campus_id)->first();
+
+        // Create notification for coordinator
+        $notification = Notification::create([
+            'title' => $campus->name . ' Batches forward',
+            'message' => $campus->name . ' campus, Batches now finished',
+            'type' => 'scholars_upload',
+        ]);
+
+        $super_admin = User::where('usertype', 'super_admin')->first();
+
+        // Attach the coordinator to the notification
+        $notification->users()->attach($super_admin->id);
+
+        return redirect()->back()->with('success', 'Forwarded Successfully');
+    }
+
+    public function forward_sponsor($scholarshipId, Request $request)
+    {
+        // Find the scholarship
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        // Get parameters from the request
+        $selectedSem = $request->input('selectedSem');
+        $schoolYearId = $request->input('school_year');
+
+        // Find all matching batches
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $schoolYearId)
+            ->get();
+
+        // Update each batch individually using the requested format
+        foreach ($batches as $batch) {
+            Batch::where('id', $batch->id)->update([
+                'status' => 'Inactive'
+            ]);
+        }
+
+        $currentUser = Auth::user();
+
+        $campus = Campus::where('id', $currentUser->campus_id)->first();
+
+        // Create notification for coordinator
+        $notification = Notification::create([
+            'title' => 'University Batch Done',
+            'message' => 'URS forwarded a list of batches',
+            'type' => 'forward_sponsor',
+        ]);
+
+        $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
+
+        $sponsorUser = User::where('id', $sponsor->assign_id)->first();
+
+        // Attach the coordinator to the notification
+        $notification->users()->attach($sponsorUser->id);
 
         return redirect()->back()->with('success', 'Forwarded Successfully');
     }

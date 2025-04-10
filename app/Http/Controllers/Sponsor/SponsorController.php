@@ -185,14 +185,14 @@ class SponsorController extends Controller
                 return $query->where('school_year_id', $year);
             })
             ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course', 'scholars.user', 'school_year', 'disbursement', 'campus:id,name'])
+            ->with(['school_year', 'disbursement', 'campus:id,name'])
             ->get();
 
         // Process all batches and their scholars
         $processedBatches = $batches->map(function ($batch) use ($scholarship, $totalRequirements, $selectedSemester, $selectedYearId) {
             // Get active grantees from this batch, filtered by semester
             $grantees = $scholarship->grantees()
-                ->where('status', 'Active')
+                ->where('status', 'Inactive')
                 ->where('batch_id', $batch->id)
                 ->when($selectedSemester, function ($query, $semester) {
                     return $query->where('semester', $semester);

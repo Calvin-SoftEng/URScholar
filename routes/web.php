@@ -154,6 +154,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
     Route::post('scholarships/{scholarshipId}/forward', [ScholarshipController::class, 'forward_coor'])->name('scholarship.forward_coor');
+    Route::post('scholarships/{scholarshipId}/forward-sponsor', [ScholarshipController::class, 'forward_sponsor'])->name('scholarship.forward_sponsor');
 
 
 
