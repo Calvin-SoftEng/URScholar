@@ -23,6 +23,7 @@ use App\Models\Disbursement;
 use App\Models\Eligible;
 use App\Models\Grade;
 use App\Models\Notification;
+use App\Models\ApplicantTrack;
 use App\Models\Requirements;
 use App\Models\Payout;
 use App\Models\Scholar;
@@ -53,12 +54,16 @@ class ScholarshipController extends Controller
 
         // Get scholarships that either:
         // 1. Have batches matching the user's campus_id, OR
-        // 2. Were created by the authenticated user
+        // 2. Have applicant_tracks matching the user's campus_id, OR
+        // 3. Were created by the authenticated user
         $scholarships = Scholarship::with('requirements')
             ->where(function ($query) use ($userId, $userCampusId) {
                 $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
                     $subQuery->where('campus_id', $userCampusId);
                 })
+                    ->orWhereHas('applicant_tracks', function ($subQuery) use ($userCampusId) {
+                        $subQuery->where('campus_id', $userCampusId);
+                    })
                     ->orWhere('user_id', $userId); // Add this condition to include scholarships created by the user
             })
             ->get();
@@ -395,12 +400,12 @@ class ScholarshipController extends Controller
                                 foreach ($oldGrantees as $oldGrantee) {
                                     // Get the matching scholar record
                                     $scholarEnrolled = Scholar::where('id', $oldGrantee->scholar_id)
-                                    ->where('status', 'Verified')
-                                    ->where('student_status', 'Enrolled')
-                                    ->first();
+                                        ->where('status', 'Verified')
+                                        ->where('student_status', 'Enrolled')
+                                        ->first();
 
                                     $scholarUnenrolled = Scholar::where('id', $oldGrantee->scholar_id)
-                                    ->first();
+                                        ->first();
 
                                     $granteeNow = Grantees::where('scholar_id', $scholarEnrolled->id)
                                         ->where('school_year_id', $school_year)
@@ -410,9 +415,9 @@ class ScholarshipController extends Controller
                                     if ($scholarEnrolled) {
 
                                         $granteeNow = Grantees::where('scholar_id', $scholarEnrolled->id)
-                                        ->where('school_year_id', $school_year)
-                                        ->where('semester', $semester1)
-                                        ->first();
+                                            ->where('school_year_id', $school_year)
+                                            ->where('semester', $semester1)
+                                            ->first();
                                         Grantees::create([
                                             'scholarship_id' => $oldGrantee->scholarship_id,
                                             'batch_id' => $granteeNow->batch_id, // Use the new batch
@@ -421,12 +426,11 @@ class ScholarshipController extends Controller
                                             'semester' => $request->input('selectedSem'), // Use the selected semester
                                             'status' => 'Active', // Set initial status as Active
                                         ]);
-                                    }
-                                    elseif ($scholarUnenrolled) {
+                                    } elseif ($scholarUnenrolled) {
                                         $granteeNow = Grantees::where('scholar_id', $scholarUnenrolled->id)
-                                        ->where('school_year_id', $school_year)
-                                        ->where('semester', $semester1)
-                                        ->first();
+                                            ->where('school_year_id', $school_year)
+                                            ->where('semester', $semester1)
+                                            ->first();
 
                                         Grantees::create([
                                             'scholarship_id' => $oldGrantee->scholarship_id,
@@ -450,11 +454,16 @@ class ScholarshipController extends Controller
         }
 
         // Filtered batch for One-time Payment redirect
+        $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem)) // Add condition for selectedSem
+            ->first();
+
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->first();
 
-        if ($scholarship->scholarshipType == 'One-time Payment' && $batch) {
+        if ($scholarship->scholarshipType == 'One-time Payment' && $applicantTrack) {
             return redirect()->route('scholarship.onetime_list', [
                 'scholarshipId' => $scholarship->id,
                 'selectedYear' => $request->input('selectedYear'),
@@ -879,9 +888,13 @@ class ScholarshipController extends Controller
         // Find the scholarship by ID
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
+        $currentUser = Auth::user();
+
         // Get the batch for the selected semester and school year
-        $batch = Batch::where('scholarship_id', $scholarship->id)
+        $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $request->input('selectedYear'))
+            ->where('semester', $request->input('selectedSem'))
+            ->where('campus_id', $currentUser->campus_id)
             ->firstOrFail();
 
         // Check if scholar's payment claimed
@@ -893,9 +906,14 @@ class ScholarshipController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
         $totalRequirements = $requirements->count();
 
+        $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
+            ->where('semester', $request->input('selectedSem'))
+            ->where('school_year_id', $request->input('selectedYear'))
+            ->first();
+
+
         // Use relationships to get applicants and their related scholars
         $applicants = $scholarship->applicants()
-            ->where('batch_id', $batch->id)
             ->with('scholar.campus', 'scholar.course')
             ->get();
 
@@ -960,7 +978,7 @@ class ScholarshipController extends Controller
                 'first_name' => $scholar->first_name,
                 'last_name' => $scholar->last_name,
                 'middle_name' => $scholar->middle_name,
-                'campus' => $scholar->campus->name ?? 'N/A',
+                'campus' => $scholar->campus->id ?? 'N/A',
                 'course' => $scholar->course->name ?? 'N/A',
                 'year_level' => $scholar->year_level,
                 'grant' => $scholar->grant,
@@ -985,10 +1003,11 @@ class ScholarshipController extends Controller
 
         return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
-            'batch' => $batch,
+            'applicantTrack' => $applicantTrack,
             'applicants' => $applicants,
             'scholars' => $scholars,
             'payout' => $payout,
+            'currentUser' => $currentUser,
             'requirements' => $requirements,
             'schoolyear' => $request->input('selectedYear')
                 ? SchoolYear::find($request->input('selectedYear'))
@@ -1085,12 +1104,21 @@ class ScholarshipController extends Controller
                 ]);
             }
 
-            Batch::create([
-                'scholarship_id' => $scholarship->id,
-                'batch_no' => '1',
-                'campus_id' => $campusRecipient['campus_id'],
-                'school_year_id' => $request->school_year,
-            ]);
+            $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
+                ->where('semester', $request->semester)
+                ->where('school_year_id', $request->school_year)
+                ->where('campus_id', $campusRecipient['campus_id'])
+                ->first();
+
+            if (!$applicantTrack) {
+                ApplicantTrack::create([
+                    'scholarship_id' => $scholarship->id,
+                    'school_year_id' => $request->school_year,
+                    'campus_id' => $campusRecipient['campus_id'],
+                    'semester' => $request->semester,
+                    'status' => 'Active',
+                ]);
+            }
         }
 
         // For requirements
@@ -1162,17 +1190,6 @@ class ScholarshipController extends Controller
             }
 
         }
-
-        // $batch = Batch::where('scholarship_id', $scholarship->id)->first();
-
-        // if (!$batch) {
-        //     Batch::create([
-        //         'scholarship_id' => $scholarship->id,
-        //         'batch_no' => '1',
-        //         'campus_id' => 2,
-        //         'school_year_id' => $request->school_year,
-        //     ]);
-        // }
 
         //Update Scholarship Status
         $scholarship->update([

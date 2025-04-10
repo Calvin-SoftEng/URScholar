@@ -9,9 +9,10 @@ class ApplicantTrack extends Model
 
     protected $fillable = [
         'scholarship_id',
-        'batch_id',
+        'campus_id',
         'school_year_id',
         'semester',
+        'school_year_id',
         'status',
     ];
 

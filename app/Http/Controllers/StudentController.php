@@ -15,6 +15,7 @@ use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
 use App\Models\Criteria;
 use App\Models\CampusRecipients;
+use App\Models\ApplicantTrack;
 use App\Models\Campus;
 use App\Models\Eligible;
 use App\Models\Course;
@@ -1313,14 +1314,17 @@ class StudentController extends Controller
 
         $reqID = $requirements->pluck('id')->first();
 
+        $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
+        ->where('status', 'Active')
+        ->first();
 
         Applicant::create([
             'scholarship_id' => $scholarship->id,
-            'batch_id' => $batch->id,
+            'applicant_track_id' => $applicantTrack->id,
             'scholar_id' => $scholar->id,
-            'school_year_id' => $batch->school_year_id,
-            // 'essay' => $request->essay,
-            'semester' => $batch->semester,
+            'school_year_id' => $applicantTrack->school_year_id,
+            'essay' => $request->essay,
+            'semester' => $applicantTrack->semester,
         ]);
 
         // Process each uploaded file
@@ -1329,7 +1333,7 @@ class StudentController extends Controller
             $path = $file->store('requirements/' . $scholar->id, 'public');
 
             // Create the submitted requirement record
-            SubmittedRequirements::create([
+            SubmittedRequirements::insert([
                 'scholar_id' => $scholar->id,
                 'requirement_id' => $requirementId, // This now uses the correct requirement ID
                 'submitted_requirements' => $file->getClientOriginalName(),

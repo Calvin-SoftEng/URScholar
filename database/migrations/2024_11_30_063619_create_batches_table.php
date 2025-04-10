@@ -79,7 +79,8 @@ return new class extends Migration
         Schema::create('applicant_tracks', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
+            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
             $table->timestamps();
@@ -88,7 +89,7 @@ return new class extends Migration
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
+            $table->foreignId('applicant_track_id')->constrained()->onDelete('cascade');
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('essay');
@@ -104,7 +105,7 @@ return new class extends Migration
             $table->string('submitted_requirements');
             $table->string('path');
             $table->string('message')->nullable();
-            $table->date('approved_date');
+            $table->date('approved_date')->nullable();
             $table->enum('status', ['Approved', 'Pending', 'Returned'])->default('Pending');
             $table->timestamps();
         });

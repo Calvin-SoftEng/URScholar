@@ -112,7 +112,7 @@
 
                 <div>
                     <!-- Scholar List -->
-                    <ApplicantList :scholarship="scholarship" :batches="batches" :applicants="applicants" :scholars="scholars"
+                    <ApplicantList :currentUser="currentUser" :scholarship="scholarship" :batches="batches" :applicants="applicants" :scholars="scholars"
                         :requirements="requirements" :campusRecipients="campusRecipients" :totalSlots="totalSlots" @update:stats="updateStats" />
                 </div>
 
@@ -149,6 +149,7 @@ const props = defineProps({
     schoolyear: Object,
     selectedSem: Object,
     batch: Object,
+    currentUser: Object,
     applicants: Array,
     scholars: Array,
     requirements: Array,
@@ -164,6 +165,8 @@ const total_applicants = computed(() => {
         return true; // Count all scholars by default
     }).length;
 });
+
+const userCampusId = computed(() => props.currentUser.campus_id);
 
 // State management
 const loading = ref(false);

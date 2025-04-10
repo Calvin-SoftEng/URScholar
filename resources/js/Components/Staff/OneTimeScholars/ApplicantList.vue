@@ -9,24 +9,7 @@
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Publish Applicant List
         </button>
         </Link>
-
       </div>
-      <!-- <form class="w-3/12">
-        <label for="default-search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-          </div>
-          <input type="search" id="default-search" v-model="searchQuery"
-            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
-        </div>
-      </form> -->
     </div>
 
     <div>
@@ -39,12 +22,12 @@
 
           <!-- table -->
           <div v-else class="overflow-x-auto font-poppins border rounded-lg">
-            <div v-if="applicants == 0"
+            <div v-if="filteredScholars.length === 0"
               class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
               <font-awesome-icon :icon="['fas', 'user-graduate']"
                 class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
               <p class="text-lg text-gray-700 dark:text-gray-300">
-                No applicants for this scholarship yet
+                No applicants for this campus yet
               </p>
             </div>
             <div v-else>
@@ -65,8 +48,7 @@
 
                 <tbody>
                   <!-- Scholars within recipient limit -->
-                  <template v-for="(scholar, index) in sortedScholars.slice(0, recipientLimit)" :key="scholar.id">
-
+                  <template v-for="(scholar, index) in scholarsWithinLimit" :key="scholar.id">
                     <tr class="text-sm">
                       <td>{{ scholar.urscholar_id }}</td>
                       <td>
@@ -127,15 +109,15 @@
                     </tr>
                   </template>
 
-                  <!-- Cut-Off Line -->
-                  <tr v-if="sortedScholars.length > recipientLimit">
+                  <!-- Cut-Off Line - Always show if there are scholars outside limit -->
+                  <tr v-if="hasScholarsOutsideLimit">
                     <td colspan="8" class="text-center font-semibold text-red-600 py-4 bg-red-50">
                       Cut-Off Line: Below applicants are NOT within the required {{ recipientLimit }} recipients.
                     </td>
                   </tr>
 
                   <!-- Scholars below recipient limit -->
-                  <template v-for="scholar in sortedScholars.slice(recipientLimit)" :key="scholar.id">
+                  <template v-for="scholar in scholarsOutsideLimit" :key="scholar.id">
                     <tr class="text-sm">
                       <td>{{ scholar.urscholar_id }}</td>
                       <td>
@@ -199,7 +181,6 @@
                 </tbody>
               </table>
             </div>
-
           </div>
           <!-- Pagination controls -->
           <div v-if="totalScholars > itemsPerPage" class="mt-5 flex justify-between items-center">
@@ -244,7 +225,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
@@ -257,7 +238,11 @@ const props = defineProps({
   requirements: Array,
   campusRecipients: Array,
   totalSlots: Number,
+  currentUser: Object,
 });
+
+// Get current user's campus ID from Inertia page props
+const page = usePage();
 
 // Data loading state
 const loading = ref(false);
@@ -275,18 +260,31 @@ const toast = ref({
   type: 'success'
 });
 
-// Computed properties for scholars filtering and pagination
-const filteredScholars = computed(() => {
-  const allScholars = props.scholars || [];
+// First filter by campus - exception for super_admin
+const filteredByCampus = computed(() => {
+  if (!props.scholars) return [];
 
+  // If user is super_admin, show all scholars across all campuses
+  if (props.currentUser && props.currentUser.usertype === 'super_admin') {
+    return props.scholars;
+  }
+
+  // Otherwise filter by campus
+  return props.scholars.filter(scholar => {
+    return scholar.campus === props.currentUser.campus_id;
+  });
+});
+
+// Then filter by search query
+const filteredScholars = computed(() => {
   if (!searchQuery.value) {
-    return [...allScholars].sort((a, b) =>
+    return [...filteredByCampus.value].sort((a, b) =>
       a.status === 'Verified' ? -1 : b.status === 'Verified' ? 1 : 0
     );
   }
 
   const query = searchQuery.value.toLowerCase();
-  return allScholars.filter(scholar =>
+  return filteredByCampus.value.filter(scholar =>
     scholar.first_name?.toLowerCase().includes(query) ||
     scholar.last_name?.toLowerCase().includes(query) ||
     scholar.middle_name?.toLowerCase().includes(query) ||
@@ -300,6 +298,47 @@ const filteredScholars = computed(() => {
   );
 });
 
+// Sort by grades (1.0 being highest)
+const sortedScholars = computed(() => {
+  return [...filteredScholars.value].sort((a, b) => {
+    // First priority: Complete vs incomplete requirements
+    if (a.status === 'Complete' && b.status !== 'Complete') return -1;
+    if (a.status !== 'Complete' && b.status === 'Complete') return 1;
+
+    // Second priority: Compare grades (lower numeric value is better in 1.0-5.0 scale)
+    const gradeA = parseFloat(a.grade) || 5.0; // Default to lowest grade if null
+    const gradeB = parseFloat(b.grade) || 5.0;
+
+    if (gradeA !== gradeB) {
+      return gradeA - gradeB; // Lower grade value first (1.0 is better than 2.0)
+    }
+
+    // If grades are equal, sort by date applied (earlier first)
+    return new Date(a.date_applied) - new Date(b.date_applied);
+  });
+});
+
+// Split scholars into within limit and outside limit
+const scholarsWithinLimit = computed(() => {
+  return sortedScholars.value.slice(0, props.totalSlots || 0);
+});
+
+const scholarsOutsideLimit = computed(() => {
+  return props.totalSlots && sortedScholars.value.length > props.totalSlots
+    ? sortedScholars.value.slice(props.totalSlots)
+    : [];
+});
+
+// Check if there are scholars outside the limit
+const hasScholarsOutsideLimit = computed(() => {
+  // Make sure the totalSlots is properly defined
+  if (!props.totalSlots) return false;
+
+  // For any user type, check if the total number of scholars for their campus
+  // exceeds the recipient limit
+  return filteredByCampus.value.length > props.totalSlots;
+});
+// Computed properties for pagination
 const totalScholars = computed(() => filteredScholars.value.length);
 const totalPages = computed(() => Math.ceil(totalScholars.value / itemsPerPage));
 
@@ -340,7 +379,6 @@ const fetchScholars = async () => {
   loading.value = true;
   try {
     // Using Inertia's router.reload() to refresh the current page data
-    // This will maintain the current URL and just refresh the data
     await router.reload({
       only: ['scholars', 'requirements'],
       onSuccess: () => {
@@ -410,7 +448,7 @@ onMounted(() => {
     fetchScholars();
   }
 
-  // Set up polling to refresh data every 5 minutes (adjust as needed)
+  // Set up polling to refresh data every 5 minutes
   const dataRefreshInterval = setInterval(() => {
     fetchScholars();
   }, 300000); // 5 minutes
@@ -421,42 +459,8 @@ onMounted(() => {
   };
 });
 
-
-
-
-
 // Replace the hard-coded recipientLimit with data from the backend
 const recipientLimit = computed(() => props.totalSlots || 0);
-
-// Update the sorted scholars logic to rank by grades (1.0 being highest)
-const sortedScholars = computed(() => {
-  if (!props.scholars) return [];
-
-  // Create a copy of the scholars array to sort
-  return [...props.scholars].sort((a, b) => {
-    // First priority: Complete vs incomplete requirements
-    if (a.status === 'Complete' && b.status !== 'Complete') return -1;
-    if (a.status !== 'Complete' && b.status === 'Complete') return 1;
-
-    // Second priority: Compare grades (lower numeric value is better in 1.0-5.0 scale)
-    const gradeA = parseFloat(a.grade) || 5.0; // Default to lowest grade if null
-    const gradeB = parseFloat(b.grade) || 5.0;
-
-    if (gradeA !== gradeB) {
-      return gradeA - gradeB; // Lower grade value first (1.0 is better than 2.0)
-    }
-
-    // If grades are equal, sort by date applied (earlier first)
-    return new Date(a.date_applied) - new Date(b.date_applied);
-  });
-});
-
-// Scholars below the cut-off
-const cutoffScholars = computed(() => {
-  return sortedScholars.value.length > recipientLimit.value
-    ? sortedScholars.value.slice(recipientLimit.value)
-    : [];
-});
 </script>
 
 <style>
