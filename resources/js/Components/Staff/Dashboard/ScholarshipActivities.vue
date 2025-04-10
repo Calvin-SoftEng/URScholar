@@ -14,7 +14,7 @@
                         @click="selectedDateFilter = filter"
                         class="px-4 py-2 text-sm font-medium border-r last:border-r-0 dark:bg-dprimary dark:text-white"
                         :class="{
-                            'bg-blue-600 dark:bg-dnavy text-white': selectedDateFilter === filter,
+                            'bg-blue-600 dark:bg-dtext text-white': selectedDateFilter === filter,
                             'hover:bg-gray-200 dark:hover:bg-dprimary': selectedDateFilter !== filter
                         }">
                         {{ filter.charAt(0).toUpperCase() + filter.slice(1) }}
@@ -30,16 +30,20 @@
         </div>
 
         <!-- Analytics Section -->
-        <div class="grid grid-cols-2 gap-4">
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-dprimary">
-                <span class="text-sm text-gray-500 dark:text-dtext">Total Applicants</span>
-                <p class="text-2xl font-semibold dark:text-dtext">{{ totalApplicants }}</p>
+        <!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+           
+            <div class="p-6 bg-white dark:bg-dcontainer rounded-lg shadow-lg flex flex-col justify-center items-center border border-gray-200 dark:border-gray-600">
+                <span class="text-sm text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Applicants</span>
+                <p class="text-3xl font-extrabold text-primary dark:text-lprimary mt-2">{{ totalApplicants }}</p>
             </div>
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-dprimary">
-                <span class="text-sm text-gray-500 dark:text-dtext">Total Verified Scholars</span>
-                <p class="text-2xl font-semibold dark:text-dtext">{{ totalVerifiedScholars }}</p>
+
+
+            <div class="p-6 bg-white dark:bg-dcontainer rounded-lg shadow-lg flex flex-col justify-center items-center border border-gray-200 dark:border-gray-600">
+                <span class="text-sm text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Verified Scholars</span>
+                <p class="text-3xl font-extrabold text-primary dark:text-lprimary mt-2">{{ totalVerifiedScholars }}</p>
             </div>
-        </div>
+        </div> -->
+
 
         <!-- Scholarship List Container -->
         <div class="flex flex-col gap-3 flex-grow relative">
@@ -48,7 +52,7 @@
             <div class="overflow-x-auto font-poppins border rounded-lg">
                 <table class="table rounded-lg w-full">
                     <!-- Head -->
-                    <thead class="bg-gray-100 dark:bg-dnavy">
+                    <thead class="bg-gray-50 dark:bg-dprimary">
                         <tr class="text-xs uppercase dark:text-dtext">
                             <th>URScholar ID</th>
                             <th>Name</th>

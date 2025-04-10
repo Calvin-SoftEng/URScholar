@@ -7,7 +7,7 @@
     <div class="flex flex-col gap-3 flex-grow relative">
         
         <!-- Show "No Active Scholarships" Card if Empty -->
-        <div v-if="scholarships.length === 0" class="flex items-center justify-center h-40 bg-gray-100 dark:bg-gray-700 rounded-xl p-4">
+        <div v-if="scholarships.length === 0" class="flex items-center justify-center h-40 bg-gray-100 dark:bg-gray-800 rounded-xl p-4">
             <span class="text-gray-500 dark:text-gray-300 text-sm">No active scholarships available.</span>
         </div>
 

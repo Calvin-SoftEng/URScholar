@@ -34,7 +34,7 @@
         </div>
        
         
-        <div class="min-h-0 flex-shrink-0 h-[300px] max-h-[300px] overflow-hidden">
+        <div class="min-h-0 flex-shrink-0 h-[300px] max-h-[260px] overflow-hidden mt-2">
             <VueApexCharts
                 :type="chartType"
                 :series="lineSeries"

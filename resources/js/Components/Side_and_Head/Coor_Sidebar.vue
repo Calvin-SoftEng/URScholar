@@ -25,14 +25,14 @@
             <Link :href="(route('staff.dashboard'))" >
               <div v-tooltip.right="!dataOpenSideBar ? 'Dashboard' : ''" :class="[
                 'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
-                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/admin/dashboard' }
+                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/staff/dashboard' }
               ]">
               <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url === '/admin/dashboard' }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url === '/admin/dashboard' }]"
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url === '/staff/dashboard' }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url === '/staff/dashboard' }]"
                 >
                 dashboard
                 </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/admin/dashboard' }]">Dashboard</span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/staff/dashboard' }]">Dashboard</span>
               </div>
               </div>
             </Link>
@@ -141,30 +141,19 @@
           
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Docs</div>
 
-              <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
-                    price_check
-                    </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Payouts</span>
-                </router-link>
-              </div>
-              <!-- <div v-tooltip.right="!dataOpenSideBar ? 'Reports' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext" >
-                    docs
-                    </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Reports</span>
-                </router-link>
-              </div> -->
-              <!-- <div v-tooltip.right="!dataOpenSideBar ? 'Archives' : ''" class="py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md">
-                <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext" >
-                    archive
-                    </span>
-                  <span v-show="dataOpenSideBar" class="pl-2">Archives</span>
-                </router-link>
-              </div> -->
+            <Link :href="route('payouts_index.payouts')">
+            <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''"
+              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/payouts') }]">
+              <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/payouts') }]"
+                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/payouts') }]">
+                  price_check
+                </span>
+                <span v-show="dataOpenSideBar"
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/payouts') }]">Payouts</span>
+              </router-link>
+            </div>
+            </Link>
 
           <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Settings</div>
 
