@@ -44,6 +44,6 @@ const activities = ref([
   { title: "Scholarship Application Deadline", date: "March 25, 2025" },
   { title: "Payout Release", date: "April 5, 2025" },
   { title: "Document Submission Deadline", date: "April 10, 2025" },
-  { title: "Final Interview for Scholars", date: "April 15, 2025" },
+
 ]);
 </script>

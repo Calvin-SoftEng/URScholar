@@ -1,89 +1,8 @@
-<script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router, Link } from '@inertiajs/vue3';
-import { ref, onMounted, watch } from 'vue';
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
-
-const props = defineProps({
-    messages: Array,
-    currentUser: Object,
-    batches: Array,
-    selectedBatch: Object,
-});
-
-const messageData = ref(props.messages);
-
-
-const selectedData = ref(props.selectedBatch);
-
-const form = ref({
-    content: '',
-    scholarship_id: '',
-    batch_id: '',
-});
-
-const sendMessage = () => {
-    // Get scholarship_id from selected scholarship
-    form.value.scholarship_id = selectedData.value?.id || '';
-    form.value.batch_id = selectedData.value?.batch_id || '';
-
-    router.post('/group-page/message', form.value, {
-        preserveScroll: true,
-        onSuccess: () => {
-            fetchMessages(); // Fetch messages after sending
-            form.value.content = ''; // Clear input after sending
-        },
-    });
-};
-
-
-// Set up real-time messaging using Laravel Echo
-onMounted(() => {
-
-    const echo = new Echo({
-        broadcaster: 'pusher',
-        key: import.meta.env.VITE_PUSHER_APP_KEY,
-        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-        forceTLS: true,
-        authEndpoint: "/broadcasting/auth", // Required for private channels
-    });
-
-    echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
-        .listen('.message.sent', (e) => {
-            fetchMessages(); // Fetch messages after receiving
-            scrollToBottom();
-            messages.value.push(e.message); // Append new message
-        });
-});
-
-const scholarshipId = ref(props.selectedBatch); // Or however you're getting the ID
-
-const fetchMessages = async () => {
-    const { data } = await router.get(route("messaging.show", { batch: props.selectedBatch.id }));
-
-    messageData.value = data;
-};
-
-const scrollToBottom = () => {
-    const chatContainer = document.querySelector('.overflow-y-auto');
-    if (chatContainer) {
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-    }
-};
-
-// Update scroll after new message
-// watch(messageData, () => {
-//     scrollToBottom();
-// });
-
-// Add this near your other ref() declarations
-const showMemberList = ref(false);
-</script>
-
-    <Head title="Chat" />
-        <template #default>
-            
+<Head title="Chat" />
+    <template #default>
+        <AuthenticatedLayout>
+            <div class="w-full h-full bg-dirtywhite">
+                <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
                     <div class="bg-dirtywhite w-[95%] p-4 h-full">
                         <div class="bg-white w-full h-full rounded-xl flex flex-row">
                             <div class="w-[30%] border-r">
@@ -351,5 +270,91 @@ const showMemberList = ref(false);
                             </div>
                         </div>
                     </div>
-        </template>
+                </div>
+            </div>
+        </AuthenticatedLayout>
+    </template>
+
+
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { Head, router, Link } from '@inertiajs/vue3';
+import { ref, onMounted, watch } from 'vue';
+import Echo from 'laravel-echo';
+import Pusher from 'pusher-js';
+
+const props = defineProps({
+    messages: Array,
+    currentUser: Object,
+    batches: Array,
+    selectedBatch: Object,
+});
+
+const messageData = ref(props.messages);
+
+
+const selectedData = ref(props.selectedBatch);
+
+const form = ref({
+    content: '',
+    scholarship_id: '',
+    batch_id: '',
+});
+
+const sendMessage = () => {
+    // Get scholarship_id from selected scholarship
+    form.value.batch_id = selectedData.value?.id || '';
+
+    router.post('/group-page/message', form.value, {
+        preserveScroll: true,
+        onSuccess: () => {
+            fetchMessages(); // Fetch messages after sending
+            form.value.content = ''; // Clear input after sending
+        },
+    });
+};
+
+
+// Set up real-time messaging using Laravel Echo
+onMounted(() => {
+
+    const echo = new Echo({
+        broadcaster: 'pusher',
+        key: import.meta.env.VITE_PUSHER_APP_KEY,
+        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+        forceTLS: true,
+        authEndpoint: "/broadcasting/auth", // Required for private channels
+    });
+
+    echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
+        .listen('.message.sent', (e) => {
+            fetchMessages(); // Fetch messages after receiving
+            scrollToBottom();
+            messages.value.push(e.message); // Append new message
+        });
+});
+
+const scholarshipId = ref(props.selectedBatch); // Or however you're getting the ID
+
+const fetchMessages = async () => {
+    const { data } = await router.get(route("messaging.show", { batch: props.selectedBatch.id }));
+
+    messageData.value = data;
+};
+
+const scrollToBottom = () => {
+    const chatContainer = document.querySelector('.overflow-y-auto');
+    if (chatContainer) {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+};
+
+// Update scroll after new message
+// watch(messageData, () => {
+//     scrollToBottom();
+// });
+
+// Add this near your other ref() declarations
+const showMemberList = ref(false);
+</script>
 

@@ -7,6 +7,10 @@
                     <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>University of Rizal
                     System Students
                 </h1>
+                <div class="text-3xl font-semibold text-gray-700">
+                    <span class="text-xl">Academic Year: {{ current_year.school_year.year || '2024' }} - {{ current_year.semester|| 'Semester'
+                    }} Semester</span>
+                </div>
 
                 <div class="flex justify-end items-center w-full gap-3">
                     <button @click="toggleCreate"
@@ -17,7 +21,7 @@
                         Import Students
                     </button>
 
-                    <div class="w-3/12">
+                    <div class="w-3/12" v-if="students && students.length > 0">
                         <form class="max-w-md mx-auto">
                             <label for="default-search"
                                 class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -40,49 +44,68 @@
                 </div>
 
                 <div class="w-full mt-5">
-                    <div class="relative overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg w-full">
+                    <!-- Empty state message when no students are available -->
+                    <div v-if="!students || students.length === 0" class="flex flex-col items-center justify-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No Students Available</h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-center max-w-md mb-6">Upload the current year's student list to start managing your university students.</p>
+                    </div>
+
+                    <!-- Student table shown only when students are available -->
+                    <div v-else class="relative overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg w-full">
                         <!-- Add an enclosing div for scroll functionality -->
                         <div class="overflow-x-auto w-full max-w-full">
-                            <table class="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary">
-                                <tr class="dark:text-dtext">
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Student Number</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Student Name</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Course</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Campus</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Year Level</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Email</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Contact Number</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Permanent Address</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Facebook Account (if any)</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Place of Birth</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Date of Birth</th>
-                                <th scope="col" class="px-6 py-3 whitespace-nowrap">Religion</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <template v-for="student in paginatedStudents" :key="student.id">
-                                <tr class="bg-white border-b dark:bg-dsecondary dark:border-gray-700 border-gray-200">
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.student_number }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.first_name }} {{ student.last_name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.course.name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.campus.name }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.year_level }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.email }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.contact_number ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.permanent_address ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.facebook_account ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.place_of_birth ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.date_of_birth ?? 'N/A' }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ student.religion ?? 'N/A' }}</td>
-                                </tr>
-                                </template>
-                            </tbody>
+                            <table
+                                class="min-w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dprimary">
+                                    <tr class="dark:text-dtext">
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Student Number</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Student Name</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Course</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Campus</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Year Level</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Email</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Contact Number</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Permanent Address</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Facebook Account (if any)
+                                        </th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Place of Birth</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Date of Birth</th>
+                                        <th scope="col" class="px-6 py-3 whitespace-nowrap">Religion</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="student in paginatedStudents" :key="student.id">
+                                        <tr
+                                            class="bg-white border-b dark:bg-dsecondary dark:border-gray-700 border-gray-200">
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.student_number }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.first_name }} {{
+                                                student.last_name }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.course.name }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.campus.name }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.year_level }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.email }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.contact_no ?? 'N/A'
+                                            }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.permanent_address ??
+                                                'N/A' }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.facebook_account ?? 'N/A'
+                                            }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.birthplace ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.birthdate ?? 'N/A' }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap">{{ student.religion ?? 'N/A' }}</td>
+                                        </tr>
+                                    </template>
+                                </tbody>
                             </table>
                         </div>
-                        </div>
+                    </div>
 
-                    <!-- Pagination controls -->
+                    <!-- Pagination controls - only shown when there are students -->
                     <div v-if="totalStudents > itemsPerPage" class="mt-5 flex justify-between items-center">
                         <span class="text-sm text-gray-700 dark:text-gray-400">
                             Showing
@@ -145,8 +168,7 @@
                 <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
                     <div class="w-full flex flex-col">
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-1">University Students current year
-                            <InputError v-if="errors?.file" :message="errors.file"
-                                class=" text-red-500" />
+                            <InputError v-if="errors?.file" :message="errors.file" class=" text-red-500" />
                         </h3>
                         <label for="dropzone-file"
                             class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
@@ -187,7 +209,6 @@
             </div>
         </div>
     </SettingsLayout>
-
 </template>
 
 <script setup>
@@ -206,17 +227,18 @@ const dataOpenSideBar = inject('dataOpenSideBar');
 
 // Add a check for undefined in case it hasn't been provided
 if (!dataOpenSideBar) {
-  console.error('Failed to inject dataOpenSideBar');
+    console.error('Failed to inject dataOpenSideBar');
 }
 
 watch(dataOpenSideBar, (newValue) => {
-  console.log('Sidebar state changed:', newValue);
+    console.log('Sidebar state changed:', newValue);
 });
 
 const props = defineProps({
     sponsors: Array,
     students: Array,
     errors: Object,
+    current_year: Object,
 });
 
 const directives = {
@@ -307,8 +329,6 @@ const submitForm = async () => {
             onSuccess: () => {
                 closeModal();
                 usePage().props.flash = { success: "Scholars added to the scholarship!" };
-                headers.value = [];
-                previewData.value = [];
                 error.value = "";
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input

@@ -20,6 +20,7 @@ class AcademicYearFactory extends Factory
         return [
             'school_year_id' => fake()->word(),
             'semester' => $this->faker->word(),
+            'status' => fake()->word(),
         ];
     }
 }

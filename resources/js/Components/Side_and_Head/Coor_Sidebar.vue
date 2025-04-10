@@ -112,14 +112,31 @@
             
             
             <Link :href="route('messaging.index')">
-              <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''" :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/group-page') }]">
-                <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                    <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/group-page') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/group-page') }]">
-                    forum
-                    </span>
-                  <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Groups</span>
-                  </div>
+            <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''"
+              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/group-page') }]">
+              <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/group-page') }]"
+                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/group-page') }]">
+                  forum
+                </span>
+                <span v-show="dataOpenSideBar"
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Messaging</span>
               </div>
+            </div>
+            </Link>
+
+            <Link :href="route('feed.index')">
+            <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''"
+              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/feed') }]">
+              <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/feed') }]"
+                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/feed') }]">
+                  contextual_token
+                </span>
+                <span v-show="dataOpenSideBar"
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/feed') }]">Feed</span>
+              </div>
+            </div>
             </Link>
           
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Docs</div>
@@ -175,10 +192,18 @@
                 <!-- Avatar (displayed only when !dataOpenSideBar) -->
                 <div class="avatar" v-show="dataOpenSideBar">
                   <div class="w-8 h-8 rounded-full ring ring-offset-2">
-                    <img
-                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                      alt="Avatar"
-                    />
+                    <div v-if="$page.props.auth.user.picture">
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                    </div>
+                    <div v-else>
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                        src="../../../assets/images/no_userpic.png" alt="picture">
+                    </div>
                   </div>
                 </div>
                   <!-- Text (displayed only when dataOpenSideBar) -->
@@ -227,10 +252,18 @@
                 <!-- Avatar (displayed only when !dataOpenSideBar) -->
                 <div class="avatar" v-show="!dataOpenSideBar">
                   <div class="w-6.5 h-6.5 rounded-full ring ring-offset-2">
-                    <img
-                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                      alt="Avatar"
-                    />
+                    <div v-if="$page.props.auth.user.picture">
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                    </div>
+                    <div v-else>
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                        src="../../../assets/images/no_userpic.png" alt="picture">
+                    </div>
                   </div>
                 </div>
               </div>

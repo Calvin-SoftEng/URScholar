@@ -117,7 +117,7 @@
                     <h1 class="font-bold">Important Reminders:</h1>
                     <ul class="list-disc ml-6 text-left">
                         <li>Late or incomplete submissions may delay the verification of your scholarship and could affect your eligibility.</li>
-                        <li>If you have any questions or need assistance, please reach out to [Scholarship Coordinator’s Name] at [Coordinator’s Email/Phone].</li>
+                        <li>If you have any questions or need assistance, please reach out to the Scholarship and Financial Assistance Unit at your campus.</li>
                         <li>Stay updated with any notifications from URScholar for further instructions or changes.</li>
                     </ul>
                     <br>
@@ -129,7 +129,7 @@
                     <p class="font-bold">Best regards,<br>
                         Scholarship and Financial Assistance Unit<br>
                         University of Rizal System | URScholar Team<br>
-                        [Scholarship Office Email] | [Contact Number]</p>
+                    </p>
 
                 </div>
             </div>

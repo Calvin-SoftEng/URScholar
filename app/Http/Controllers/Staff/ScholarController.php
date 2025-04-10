@@ -140,7 +140,9 @@ class ScholarController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
         // Get the submitted requirements for this scholar
-        $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->get();
+        $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+        ->with('requirement')
+        ->get();
 
         $notify = Notifier::where('user_id', $scholar->user_id)
             ->where('read', 0)
@@ -333,7 +335,6 @@ class ScholarController extends Controller
     public function adding(Request $request, Scholarship $scholarship)
     {
 
-        $scholars = $scholarship->scholars;
         $selectedYear = $request->input('selectedYear', '');
         $selectedSem = $request->input('selectedSem', '');
 
@@ -341,7 +342,6 @@ class ScholarController extends Controller
 
         $batch = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $selectedYear)
-            ->where('semester', $selectedSem)
             ->get();
 
         $campuses = Campus::all();
@@ -351,7 +351,7 @@ class ScholarController extends Controller
             'Staff/Scholarships/AddingScholars',
             [
                 'scholarship' => $scholarship,
-                'scholars' => $scholars,
+                // 'scholars' => $scholars,
                 'schoolyear' => $schoolyear,
                 'selectedSem' => $selectedSem,
                 'batch' => $batch,
@@ -658,14 +658,13 @@ class ScholarController extends Controller
                     $scholarsByCompus[$campusId][] = $scholar['id'];
                 }
             }
-            
+
             // Create or find batches for each campus
             foreach ($scholarsByCompus as $campusId => $scholarIds) {
                 // Check if batch already exists for this campus
                 $existingBatch = Batch::where('scholarship_id', $scholarship->id)
                     ->where('batch_no', $firstRecord['BATCH NO.'])
                     ->where('school_year_id', $request->schoolyear)
-                    ->where('semester', $request->semester)
                     ->where('campus_id', $campusId)
                     ->first();
 
@@ -675,7 +674,6 @@ class ScholarController extends Controller
                         'scholarship_id' => $scholarship->id,
                         'batch_no' => $firstRecord['BATCH NO.'],
                         'school_year_id' => $request->schoolyear,
-                        'semester' => $request->semester,
                         'campus_id' => $campusId,
                     ]);
                     $campusBatches[$campusId] = $batch;
@@ -749,25 +747,50 @@ class ScholarController extends Controller
 
             // Update for the current user - only create for matching campus/batch
             $currentUser = Auth::user();
-            foreach ($campusBatches as $campusId => $batch) {
-                // Only create if the current user's campus matches the batch campus
-                if ($currentUser->campus_id == $campusId) {
+            // Find in the upload function, where we create scholarship groups for coordinators
+// Around line 362 in your code where you're iterating through campuses
+            foreach ($campusesForGroups as $campus) {
+                // Only create groups for batches that exist for this campus
+                if (isset($campusBatches[$campus->id])) {
+                    $batch = $campusBatches[$campus->id];
 
-                    //Create Group Chat
-                    ScholarshipGroup::create([
-                        'user_id' => Auth::id(),
-                        'scholarship_id' => $scholarship->id,
-                        'batch_id' => $batch->id,
-                        'campus_id' => $campusId,
-                    ]);
+                    // Find coordinator
+                    $coordinator = User::find($campus->coordinator_id);
 
-                    //Create Group Page
-                    Page::create([
-                        'user_id' => Auth::id(),
-                        'scholarship_id' => $scholarship->id,
-                        'batch_id' => $batch->id,
-                        'campus_id' => $campusId,
-                    ]);
+                    // Insert records for coordinator if they exist and their campus matches
+                    if ($coordinator && $coordinator->campus_id == $campus->id) {
+                        ScholarshipGroup::create([
+                            'user_id' => $coordinator->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
+
+                        //Create Group Page
+                        Page::create([
+                            'user_id' => $coordinator->id,
+                            'scholarship_id' => $scholarship->id,
+                            'batch_id' => $batch->id,
+                            'campus_id' => $campus->id,
+                        ]);
+
+                        // Create notification for coordinator
+                        $notification = Notification::create([
+                            'title' => 'New Scholars Batch Uploaded',
+                            'message' => 'New scholars have been uploaded to ' . $scholarship->name . ' for ' .
+                                $campus->name . ' campus, Batch #' . $batch->batch_no,
+                            'type' => 'scholars_upload',
+                        ]);
+
+                        // Attach the coordinator to the notification
+                        $notification->users()->attach($coordinator->id);
+                    }
+
+                    // Find cashier
+                    $cashier = User::find($campus->cashier_id);
+
+                    // Insert records for cashier if they exist and their campus matches
+                    // (rest of your existing code)
                 }
             }
 

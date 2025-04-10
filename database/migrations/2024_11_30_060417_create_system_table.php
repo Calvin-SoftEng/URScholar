@@ -60,6 +60,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->enum('semester', ['1st', '2nd'])->default('1st');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
 
@@ -87,6 +88,7 @@ return new class extends Migration {
             $table->string('permanent_address')->nullable();
             $table->string('facebook_account')->nullable();
             $table->string('contact_no')->nullable();
+            $table->foreignId('academic_year_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

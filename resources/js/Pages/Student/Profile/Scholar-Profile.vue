@@ -4,82 +4,234 @@
 
     <AuthenticatedLayout class="shadow-md z-10">
         <form @submit.prevent class="w-full h-full overflow-hidden">
-            <div class="w-full bg-[#e8f0f9] shadow-sm justify-between flex flex-row px-24">
-                <h1 class="text-3xl font-bold font-sora text-left p-3">My Profile</h1>
-                <!-- Toggle Button -->
-                <!-- Buttons -->
-                <div class="flex space-x-4 p-3">
-                    <button type="button" @click="EditProfile = !EditProfile" class="text-sm font-normal text-primary">
-                        {{ EditProfile ? 'Save Updates' : 'Edit Profile' }}
+            <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row">
+                <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
+                    My Profile
+                </h1>
+                <!-- Web Version -->
+                <div class="hidden lg:flex space-x-4 p-3 mx-20">
+                    <button
+                        type="button"
+                        @click="toggleEditWebProfile"
+                        class="text-primary font-medium text-sm"
+                    >
+                        {{ EditProfileWeb ? 'Save Updates' : 'Edit Profile' }}
                     </button>
 
-                    <button v-if="EditProfile" type="button" @click="EditProfile = false"
-                        class="text-sm font-normal text-gray-500">
+                    <button
+                        v-if="EditProfileWeb"
+                        type="button"
+                        @click="EditProfileWeb = false"
+                        class="text-gray-500 font-medium text-sm"
+                    >
                         Cancel
                     </button>
                 </div>
+
+                <!-- Mobile Version -->
+                <div class="flex lg:hidden space-x-4 p-3">
+                <button
+                    type="button"
+                    @click="toggleEditMobileProfile"
+                    class="text-primary font-medium text-xs"
+                >
+                    {{ EditProfileMobile ? 'Save Updates' : 'Edit Profile' }}
+                </button>
+
+                <button
+                    v-if="EditProfileMobile"
+                    type="button"
+                    @click="EditProfileMobile = false"
+                    class="text-gray-500 font-medium text-xs"
+                >
+                    Cancel
+                </button>
+                </div>
             </div>
-            <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
-                <div class="mx-auto w-7/12 sm:px-6 lg:px-8 ">
+            <div class="pt-3 sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
+                <div class="mx-auto sm:w-11/12 lg:w-7/12 sm:px-1 lg:px-8 ">
+            
+<!-- Mobile Display------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
-                    <div v-if="!EditProfile" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                        <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
-                            <!-- pic -->
-                            <div class="border w-80 h-80 rounded-lg overflow-hidden">
-                                <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
-                                    alt="Profile Picture" class="w-full h-full object-cover">
-                            </div>
+                    <!-- Mobile Wrapper: Visible on mobile screens -->
+                    <div class="block md:hidden">
+                        <!-- Content for Mobile -->
+                        <div v-if="!EditProfileMobile" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
+                                <!-- Profile Picture -->
+                                <div class="border w-40 h-40 rounded-lg overflow-hidden">
+                                    <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                        alt="Profile Picture" class="w-full h-full object-cover">
+                                </div>
 
-                            <!-- info -->
-                            <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
-                                <span class="text-gray-500 text-sm">Permanent Address</span>
-                                <span class="text-gray-900 text-base font-semibold leading-tight">
-                                    {{ student.address }}
-                                </span>
-                                <div class="w-full flex flex-row gap-2 py-2">
-                                    <div class="w-[40%] flex flex-col items-left gap-1">
-                                        <span class="text-gray-500 text-sm">Age</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
+                                <div class="w-full text-center h-12/12">
+                                    <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
+                                    }},
+                                        {{ student.first_name }}</span>
+                                </div>
+
+                                <div
+                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.course.name
                                             }}</span>
                                     </div>
-                                    <div class="w-[60%] flex flex-col items-left gap-1">
-                                        <span class="text-gray-500 text-sm">Date of Birth</span>
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'id-card-clip']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                         <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            formattedDate }}</span>
+                                            scholar.urscholar_id }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'school']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.campus.name
+                                            }}, Campus</span>
                                     </div>
                                 </div>
-                                <div class="w-full flex flex-row gap-2 py-2">
-                                    <div class="w-[40%] flex flex-col items-left gap-1">
-                                        <span class="text-gray-500 text-sm">Civil Status</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            student.civil
+
+                                <!-- education -->
+                                <div
+                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
+                                    <h1 class="text-base">Education</h1>
+
+                                    <div v-if="latestgrade" class="space-y-2">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight mb-2">
+                                            General Weighted Average
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                latestgrade.school_year.year }} {{ latestgrade.semester }}
+                                                Semester</span>
+                                            <div class="flex flex-col items-end">
+                                                <span class="text-gray-700 text-base font-medium leading-tight">
+                                                    {{ latestgrade ? latestgrade.grade : 'N/A' }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <button class="text-sm bg-primary w-full text-center rounded-lg" @click="toggleCheck">
+                                                View Certificate of Grades
+                                            </button>
+                                        <hr class="border-gray-300">
+                                    </div>
+                                    <div v-else>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            General Weighted Average
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">Must upload
+                                                <b>{{ semesterGrade }} Semester
+                                                    {{ schoolyear_grade.year }}</b>
+                                            </span>
+                                            <div class="flex flex-col items-end">
+                                                <button class="text-sm" @click="toggleCheck">
+                                                    View
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr class="border-gray-300 my-4">
+                                    </div>
+                                    <!-- Notification Message for Stakeholder -->
+                                    <div v-if="notify && !latestgrade"
+                                        class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mt-4 flex flex-col items-left">
+                                        <span class="space-x-2">
+                                            <font-awesome-icon :icon="['fas', 'circle-exclamation']"
+                                                class="text-yellow-800" />
+                                            <span class="font-semibold">Reminder:</span>
+                                        </span>
+                                        Your grades need to be updated. Please upload your latest available Copy of Grades and General
+                                        Weighted Average (GWA).
+                                    </div>
+
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Elementary
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                elementary.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                elementary.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Junior High School
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Senior High School
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            College
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Vocational Section -->
+                                    <div v-if="vocational.name !== 'N/A' && vocational.years !== 'N/A'">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Vocational
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                vocational.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                vocational.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Post Graduate Section -->
+                                    <div v-if="postgrad.name !== 'N/A' && postgrad.years !== 'N/A'">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Post Graduate
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
                                             }}</span>
-                                    </div>
-                                    <div class="w-[60%] flex flex-col items-left gap-1">
-                                        <span class="text-gray-500 text-sm">Place of Birth</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            student.placebirth }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                postgrad.years
+                                                }}</span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-
-                            <!-- <div v-if="!EditProfile" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                                <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
-
-                                    <div class="border w-80 h-80 rounded-lg overflow-hidden">
-                                        <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
-                                            alt="Profile Picture" class="w-full h-full object-cover">
-                                    </div>
-
-
+                                <div
+                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
                                     <div class="w-full h-1/12 flex flex-col items-start gap-1 pb-4 border-b-2">
                                         <span class="text-gray-500 text-sm">Permanent Address</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">
                                             {{ student.address }}
                                         </span>
 
-
+                                        <!-- Age and Date of Birth Section -->
                                         <div class="w-full flex flex-col sm:flex-row gap-2 py-2">
                                             <div class="w-full sm:w-[40%] flex flex-col items-start gap-1">
                                                 <span class="text-gray-500 text-sm">Age</span>
@@ -91,7 +243,7 @@
                                             </div>
                                         </div>
 
-
+                                        <!-- Civil Status and Place of Birth Section -->
                                         <div class="w-full flex flex-col sm:flex-row gap-2 py-2">
                                             <div class="w-full sm:w-[40%] flex flex-col items-start gap-1">
                                                 <span class="text-gray-500 text-sm">Civil Status</span>
@@ -103,46 +255,128 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div> -->
-
-
-
-                            
-                            <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
-                                <div class="w-full flex flex-row gap-2">
-                                    <div class="w-[40%] flex flex-col items-left gap-1">
-                                        <span class="text-gray-500 text-sm">Gender</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            student.gender
-                                            }}</span>
+                                    <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
+                                        <div class="w-full flex flex-row gap-2">
+                                            <div class="w-[40%] flex flex-col items-left gap-1">
+                                                <span class="text-gray-500 text-sm">Gender</span>
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    student.gender
+                                                    }}</span>
+                                            </div>
+                                            <div class="w-[60%] flex flex-col items-left gap-1">
+                                                <span class="text-gray-500 text-sm">Religion</span>
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    student.religion }}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="w-[60%] flex flex-col items-left gap-1">
-                                        <span class="text-gray-500 text-sm">Religion</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            student.religion }}</span>
+                                    <!-- gmail -->
+                                    <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
+                                        <!-- Icon -->
+                                        <span
+                                            class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
+
+                                        <!-- Email Container -->
+                                        <div class="flex-1 min-w-0">
+                                            <span
+                                                class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
+                                                {{ $page.props.auth.user.email }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- gmail -->
-                            <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
-                                <!-- Icon -->
-                                <span
-                                    class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
 
-                                <!-- Email Container -->
-                                <div class="flex-1 min-w-0">
-                                    <span
-                                        class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
-                                        {{ $page.props.auth.user.email }}
-                                    </span>
+                                <!-- family -->
+                                <div
+                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
+                                    <h1 class="cols-span-2 text-base">Family</h1>
+                                    <div class="grid grid-cols-1 gap-4">
+                                        <div>
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'person-dress']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                    
+                                                <div v-if="mother.first_name === 'n\/a'"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span
+                                                        class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                                </div>
+                                                <div v-else class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        mother.first_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        mother.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'person']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div v-if="father.first_name === 'n\/a'"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span
+                                                        class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                                </div>
+                                                <div v-else class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        father.first_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        father.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    
+                                        <div>
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'people-roof']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div v-if="siblings.length === 0"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">N/A</span>
+                                                </div>
+                                                <div v-else v-for="sibling in siblings" :key="sibling.id"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        sibling.first_name }} {{ sibling.last_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        sibling.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left ">
+                                                <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
+                                                    Family
+                                                    Income</span>
+                                                <span
+                                                    class="text-gray-900 text-3xl font-semibold leading-tight">100,000</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left gap-1 py-1">
+                                                <span class="text-gray-500 text-base font-semibold leading-tight">Family
+                                                    Housing
+                                                    Type</span>
+                                                <span class="text-gray-900 text-lg font-semibold leading-tight">{{
+                                                    family.family_housing }}</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left gap-1 py-1">
+                                                <span class="text-gray-500 text-base font-semibold leading-tight">Other
+                                                    Sources
+                                                    of Income</span>
+                                                <span class="text-gray-900 text-lg font-semibold leading-tight">{{
+                                                    family.other_income }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- qr -->
-                            <div v-if="!EditProfile"
-                                class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
-                                <div v-if="scholar">
+                                <!-- qr -->
+                                <div
+                                    class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
                                     <div v-if="scholar.qr_code" class="w-20 h-20">
                                         <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code"
                                             class="w-full h-full">
@@ -150,268 +384,865 @@
                                     <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
                                         <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
                                     </div>
-                                    <button @click="openQRModal"
+                                    <button @click="openQRModal()"
                                         class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition">
-                                        View & Download QR Code
+                                        Download your QR Code
                                     </button>
                                 </div>
-
+                            
                             </div>
                         </div>
-                        <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
-                            <div class="w-full h-1/12">
-                                <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                                }},
-                                    {{ student.first_name }}</span>
+
+<!-- Mobile Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+                        <div v-if="EditProfileMobile" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
+                                <!-- Profile Picture -->
+                                <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
+                                    <label for="dropzone-img"
+                                        class="flex flex-col items-center justify-center w-44 h-44 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100"
+                                        :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+                                        @dragover.prevent="handleImgDragOver" @dragleave="handleImgDragLeave"
+                                        @drop.prevent="handleImgDrop">
+
+                                        <!-- Show Current or New Preview -->
+                                        <div v-if="!form.imgPreview"
+                                            class="flex flex-col items-center justify-center pt-5 pb-6">
+                                            <svg class="w-8 h-8 mb-4 text-gray-500" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                            </svg>
+                                            <p class="mb-2 text-sm text-gray-500">
+                                                <span class="font-semibold">Click to upload</span> or drag and drop
+                                            </p>
+                                            <p class="text-xs text-gray-500">PNG, JPG (MAX. 2MB-4MB)</p>
+                                        </div>
+
+                                        <!-- Show New Uploaded Image -->
+                                        <div v-else class="flex flex-col items-center justify-center">
+                                            <img :src="form.imgPreview" alt="Uploaded Preview"
+                                                class="max-h-56 mb-2 rounded-lg" />
+                                        </div>
+
+                                        <input id="dropzone-img" type="file" class="hidden" accept=".png, .jpg, .jpeg"
+                                            @change="handleImgChange" />
+                                    </label>
+                                </div>
+
+                                <div class="w-full text-center h-12/12">
+                                    <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
+                                    }},
+                                        {{ student.first_name }}</span>
+                                </div>
+
+                                <div
+                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.course.name
+                                            }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'id-card-clip']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.urscholar_id }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'school']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.campus.name
+                                            }}, Campus</span>
+                                    </div>
+                                </div>
+
+                                <!-- education -->
+                                <div
+                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
+                                    <h1 class="text-base">Education</h1>
+
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Elementary
+                                        </h3>
+                                        <div class="w-full flex flex-col justify-between items-center gap-3">
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
+                                                }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.elementary.name" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                            }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.elementary.years" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Junior High School
+                                        </h3>
+                                        <div class="w-full flex flex-col justify-between items-center gap-3">
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
+                                                }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.junior.name" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                            }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.junior.years" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Senior High School
+                                        </h3>
+                                        <div class="w-full flex flex-col justify-between items-center gap-3">
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
+                                                }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.senior.name" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                            }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.senior.years" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            College
+                                        </h3>
+                                        <div class="w-full flex flex-col justify-between items-center gap-3">
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.name
+                                                }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.college.name" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                            <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
+                                            }}</span> -->
+                                            <div class="relative w-full">
+                                                <input v-model="form.education.college.years" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Vocational Section -->
+                                    <div v-if="vocational.name !== 'N/A' && vocational.years !== 'N/A'">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Vocational
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                vocational.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                vocational.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Post Graduate Section -->
+                                    <div v-if="postgrad.name !== 'N/A' && postgrad.years !== 'N/A'">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Post Graduate
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
+                                            }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                postgrad.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div
+                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
+                                    <div class="w-full h-1/12 flex flex-col items-start gap-1 pb-4 border-b-2">
+                                        <span class="text-gray-500 text-sm">Permanent Address</span>
+                                        <span class="text-gray-500 text-xs">Street</span>
+                                        <div class="relative w-full">
+                                            <input v-model="form.street" type="text" placeholder="Address"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                        </div>
+                                        <span class="text-gray-500 text-sm">Municipality</span>
+                                        <div class="relative w-full">
+                                            <input v-model="form.municipality" type="text" placeholder="Address"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                        </div>
+                                        <span class="text-gray-500 text-sm">Province</span>
+                                        <div class="relative w-full">
+                                            <input v-model="form.province" type="text" placeholder="Address"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                        </div>
+
+                                        <!-- Age and Date of Birth Section -->
+                                        <div class="w-full flex flex-col sm:flex-row gap-2 py-2">
+                                            <div class="w-full sm:w-[40%] flex flex-col items-start gap-1">
+                                                <span class="text-gray-500 text-sm">Age</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.age" type="text" placeholder="Address"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full sm:w-[60%] flex flex-col items-start gap-1">
+                                                <span class="text-gray-500 text-sm">Date of Birth</span>
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{ formattedDate }}</span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Civil Status and Place of Birth Section -->
+                                        <div class="w-full flex flex-col sm:flex-row gap-2 py-2">
+                                            <div class="w-full sm:w-[40%] flex flex-col items-start gap-1">
+                                                <span class="text-gray-500 text-sm">Civil Status</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.civil" type="text" placeholder="Address"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                </div>
+                                            </div>
+                                            <div class="w-full sm:w-[60%] flex flex-col items-start gap-1">
+                                                <span class="text-gray-500 text-sm">Place of Birth</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.age" type="text" placeholder="Address"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
+                                            <div class="w-full flex flex-col items-left gap-1">
+                                                <span class="text-gray-500 text-sm">Gender</span>
+                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    student.gender
+                                                    }}</span>
+                                            </div>
+                                            <div class="w-full flex flex-col items-left gap-1">
+                                                <span class="text-gray-500 text-sm">Religion</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.religion" type="text" placeholder="Address"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <!-- gmail -->
+                                    <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
+                                        <!-- Icon -->
+                                        <span
+                                            class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
+
+                                        <!-- Email Container -->
+                                        <div class="flex-1 min-w-0">
+                                            <div class="relative w-full">
+                                                <input v-model="form.age" type="text" placeholder="Address"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                <!-- Icon inside input -->
+                                                <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- family -->
+                                <div
+                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
+                                    <h1 class="cols-span-2 text-base">Family</h1>
+                                    <div class="grid grid-cols-1 gap-4">
+                                        <div v-show="form.mother.first_name == 'n/a' || form.father.first_name == 'n/a'">
+                                            <!-- Mother Section -->
+                                            <div v-if="form.mother.first_name !== 'n/a'">
+                                                <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                    <font-awesome-icon :icon="['fas', 'person-dress']"
+                                                        class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                    <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                                        <div class="relative grid grid-cols-1 items-center w-full">
+                                                            <span class="text-gray-700">Mother's Name</span>
+                                                        <div class="relative w-full">
+                                                            <input v-model="form.mother.first_name" type="text"
+                                                            placeholder="Enter User ID"
+                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                        </div>
+                                                        </div>
+                                                        <div class="relative grid grid-cols-1 items-center w-full">
+                                                            <span class="text-gray-700">Occupation</span>
+                                                        <div class="relative w-full">
+                                                            <input v-model="form.mother.occupation" type="text"
+                                                            placeholder="Enter User ID"
+                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- Father Section -->
+                                            <div v-if="form.father.first_name !== 'n/a'">
+                                                <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'person']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                    <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                                        <div class="relative grid grid-cols-1 items-center w-full">
+                                                            <span class="text-gray-700">Father's Name</span>
+                                                        <div class="relative w-full">
+                                                            <input v-model="form.father.first_name" type="text"
+                                                            placeholder="Enter User ID"
+                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                        </div>
+                                                        </div>
+                                                        <div class="relative grid grid-cols-1 items-center w-full">
+                                                            <span class="text-gray-700">Occupation</span>
+                                                        <div class="relative w-full">
+                                                            <input v-model="form.father.occupation" type="text"
+                                                            placeholder="Enter User ID"
+                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                        </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                
+                                    
+                                        <div>
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'people-roof']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div v-if="siblings.length === 0"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">N/A</span>
+                                                </div>
+                                                <div v-else v-for="sibling in siblings" :key="sibling.id"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        sibling.first_name }} {{ sibling.last_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        sibling.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left ">
+                                                <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
+                                                    Family
+                                                    Income</span>
+                                                    <div
+                                                    class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
+                                                    <RadioGroup default-value="comfortable"
+                                                        class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
+                                                        v-model="form.monthly_income">
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="i1" value="below" />
+                                                            <Label for="i1">10,000 and below</Label>
+                                                        </div>
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="i2" value="mid" />
+                                                            <Label for="i2">20,001 - 30,000</Label>
+                                                        </div>
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="i3" value="average" />
+                                                            <Label for="i3">10,001 - 20,000</Label>
+                                                        </div>
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="i4" value="above" />
+                                                            <Label for="i4">30,001 and above</Label>
+                                                        </div>
+                                                    </RadioGroup>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left gap-1 py-1">
+                                                <span class="text-gray-500 text-base font-semibold leading-tight">Family
+                                                    Housing
+                                                    Type</span>
+                                                    <div
+                                                    class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
+                                                    <RadioGroup default-value="comfortable"
+                                                        class="flex sm:flex-col md:flex-row gap-2"
+                                                        v-model="form.family_housing">
+
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="h1" value="owned" />
+                                                            <Label for="h1">Owned</Label>
+                                                        </div>
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="h2" value="settler" />
+                                                            <Label for="h2">Settler</Label>
+                                                        </div>
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="h3" value="rental" />
+                                                            <Label for="h3">Rental</Label>
+                                                        </div>
+                                                        <div class="flex items-center space-x-2">
+                                                            <RadioGroupItem id="h4" value="other" />
+                                                            <Label for="h4">Others, please specify:</Label>
+                                                            <input v-if="form.family_housing === 'other'" type="text"
+                                                                v-model="otherText" placeholder="Type here..."
+                                                                class="border border-gray-200 focus:outline-none w-32 px-2 text-sm" />
+                                                        </div>
+
+                                                    </RadioGroup>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left gap-1 py-1">
+                                                <span class="text-gray-500 text-base font-semibold leading-tight">Other
+                                                    Sources
+                                                    of Income</span>
+                                                    <div class="relative w-full">
+                                                    <input v-model="family.other_income" type="text"
+                                                        placeholder="Enter User ID"
+                                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+
+                                                    <!-- Icon inside input -->
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                        class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            
                             </div>
-
-                            <div
-                                class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
-                                <div class="w-full flex flex-row items-center gap-2">
-                                    <font-awesome-icon :icon="['fas', 'graduation-cap']"
-                                        class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                        scholar.course.name
-                                        }}</span>
-                                </div>
-                                <div class="w-full flex flex-row items-center gap-2">
-                                    <font-awesome-icon :icon="['fas', 'id-card-clip']"
-                                        class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                        scholar.urscholar_id }}</span>
-                                </div>
-                                <div class="w-full flex flex-row items-center gap-2">
-                                    <font-awesome-icon :icon="['fas', 'school']"
-                                        class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                        scholar.campus.name
-                                        }}, Campus</span>
-                                </div>
-                            </div>
-
-                            <!-- education -->
-                            <div
-                                class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
-                                <h1 class="text-base">Education</h1>
-
-                                <div v-if="latestgrade">
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        General Weighted Average
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
-                                            latestgrade.school_year.year }} {{ latestgrade.semester }}
-                                            Semester</span>
-                                        <div class="flex flex-col items-end">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">
-                                                {{ latestgrade ? latestgrade.grade : 'N/A' }}
-                                            </span>
-                                            <button class="text-sm" @click="toggleCheck">
-                                                View Certificate of Grades
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <hr class="border-gray-300">
-                                </div>
-                                <div v-else>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        General Weighted Average
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">Must upload
-                                            <b>{{ semesterGrade }} Semester
-                                                {{ schoolyear_grade.year }}</b>
-                                        </span>
-                                        <div class="flex flex-col items-end">
-                                            <button class="text-sm" @click="toggleCheck">
-                                                View
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <hr class="border-gray-300 my-4">
-                                </div>
-                                <!-- Notification Message for Stakeholder -->
-                                <div v-if="notify && !latestgrade"
-                                    class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mt-4 flex flex-col items-left">
-                                    <span class="space-x-2">
-                                        <font-awesome-icon :icon="['fas', 'circle-exclamation']"
-                                            class="text-yellow-800" />
-                                        <span class="font-semibold">Reminder:</span>
-                                    </span>
-                                    Your grades need to be updated. Please upload your latest available Copy of Grades and General
-                                    Weighted Average (GWA).
-                                </div>
-
-                                <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        Elementary
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
-                                            elementary.name
-                                            }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
-                                            elementary.years
-                                            }}</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        Junior High School
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
-                                            }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
-                                            }}</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        Senior High School
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
-                                            }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
-                                            }}</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        College
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
-                                            }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
-                                            }}</span>
-                                    </div>
-                                </div>
-                                <!-- Vocational Section -->
-                                <div v-if="vocational.name !== 'N/A' && vocational.years !== 'N/A'">
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        Vocational
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
-                                            vocational.name
-                                            }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
-                                            vocational.years
-                                            }}</span>
-                                    </div>
-                                </div>
-
-                                <!-- Post Graduate Section -->
-                                <div v-if="postgrad.name !== 'N/A' && postgrad.years !== 'N/A'">
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
-                                        Post Graduate
-                                    </h3>
-                                    <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
-                                        }}</span>
-                                        <span class="text-gray-700 text-base font-medium leading-tight">{{
-                                            postgrad.years
-                                            }}</span>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <!-- family -->
-                            <div
-                                class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
-                                <h1 class="cols-span-2 text-base">Family</h1>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <div class="w-full flex flex-row items-center gap-2 py-2">
-                                            <font-awesome-icon :icon="['fas', 'person-dress']"
-                                                class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                                
-                                            <div v-if="mother.first_name === 'n\/a'"
-                                                class="flex flex-col items-left gap-1">
-                                                <span
-                                                    class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
-                                            </div>
-                                            <div v-else class="flex flex-col items-left gap-1">
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                    mother.first_name }}</span>
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                    mother.occupation }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="w-full flex flex-col items-left ">
-                                            <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
-                                                Family
-                                                Income</span>
-                                            <span
-                                                class="text-gray-900 text-3xl font-semibold leading-tight">100,000</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="w-full flex flex-row items-center gap-2 py-2">
-                                            <font-awesome-icon :icon="['fas', 'person']"
-                                                class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                            <div v-if="father.first_name === 'n\/a'"
-                                                class="flex flex-col items-left gap-1">
-                                                <span
-                                                    class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
-                                            </div>
-                                            <div v-else class="flex flex-col items-left gap-1">
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                    father.first_name }}</span>
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                    father.occupation }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="w-full flex flex-col items-left gap-1 py-1">
-                                            <span class="text-gray-500 text-base font-semibold leading-tight">Family
-                                                Housing
-                                                Type</span>
-                                            <span class="text-gray-900 text-lg font-semibold leading-tight">{{
-                                                family.family_housing }}</span>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="w-full flex flex-row items-center gap-2 py-2">
-                                            <font-awesome-icon :icon="['fas', 'people-roof']"
-                                                class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                            <div v-if="siblings.length === 0"
-                                                class="flex flex-col items-left gap-1">
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">N/A</span>
-                                            </div>
-                                            <div v-else v-for="sibling in siblings" :key="sibling.id"
-                                                class="flex flex-col items-left gap-1">
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                    sibling.first_name }} {{ sibling.last_name }}</span>
-                                                <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                    sibling.occupation }}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="w-full flex flex-col items-left gap-1 py-1">
-                                            <span class="text-gray-500 text-base font-semibold leading-tight">Other
-                                                Sources
-                                                of Income</span>
-                                            <span class="text-gray-900 text-lg font-semibold leading-tight">{{
-                                                family.other_income }}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
                         </div>
                     </div>
 
+<!-- Web------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
-                    <div v-if="EditProfile" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <!-- Web Wrapper: Visible on larger screens (md and up) -->
+                    <div class="hidden md:block">
+                        <!-- Content for Web -->
+                            <div v-if="!EditProfileWeb" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
+                                <!-- pic -->
+                                <div class="border w-80 h-80 rounded-lg overflow-hidden">
+                                    <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                        alt="Profile Picture" class="w-full h-full object-cover">
+                                </div>
+
+                                <!-- info -->
+                                <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
+                                    <span class="text-gray-500 text-sm">Permanent Address</span>
+                                    <span class="text-gray-900 text-base font-semibold leading-tight">
+                                        {{ student.address }}
+                                    </span>
+                                    <div class="w-full flex flex-row gap-2 py-2">
+                                        <div class="w-[40%] flex flex-col items-left gap-1">
+                                            <span class="text-gray-500 text-sm">Age</span>
+                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
+                                                }}</span>
+                                        </div>
+                                        <div class="w-[60%] flex flex-col items-left gap-1">
+                                            <span class="text-gray-500 text-sm">Date of Birth</span>
+                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                formattedDate }}</span>
+                                        </div>
+                                    </div>
+                                    <div class="w-full flex flex-row gap-2 py-2">
+                                        <div class="w-[40%] flex flex-col items-left gap-1">
+                                            <span class="text-gray-500 text-sm">Civil Status</span>
+                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                student.civil
+                                                }}</span>
+                                        </div>
+                                        <div class="w-[60%] flex flex-col items-left gap-1">
+                                            <span class="text-gray-500 text-sm">Place of Birth</span>
+                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                student.placebirth }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+                                <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
+                                    <div class="w-full flex flex-row gap-2">
+                                        <div class="w-[40%] flex flex-col items-left gap-1">
+                                            <span class="text-gray-500 text-sm">Gender</span>
+                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                student.gender
+                                                }}</span>
+                                        </div>
+                                        <div class="w-[60%] flex flex-col items-left gap-1">
+                                            <span class="text-gray-500 text-sm">Religion</span>
+                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                student.religion }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- gmail -->
+                                <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
+                                    <!-- Icon -->
+                                    <span
+                                        class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
+
+                                    <!-- Email Container -->
+                                    <div class="flex-1 min-w-0">
+                                        <span
+                                            class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
+                                            {{ $page.props.auth.user.email }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- qr -->
+                                <div v-if="!EditProfile"
+                                    class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
+                                    <div v-if="scholar">
+                                        <div v-if="scholar.qr_code" class="w-40 h-40 flex items-center justify-center mx-auto">
+                                        <img 
+                                            :src="`/storage/qr_codes/${scholar.qr_code}`" 
+                                            alt="QR Code"
+                                            class="w-full h-full object-contain"
+                                        />
+                                        </div>
+
+                                        <div v-else class="w-20 h-20 bg-gray-200 flex items-center justify-center">
+                                            <font-awesome-icon :icon="['fas', 'qrcode']" class="text-gray-400 text-3xl" />
+                                        </div>
+                                        <button @click="openQRModal"
+                                            class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition">
+                                            View & Download QR Code
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
+                                <div class="w-full h-1/12">
+                                    <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
+                                    }},
+                                        {{ student.first_name }}</span>
+                                </div>
+
+                                <div
+                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.course.name
+                                            }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'id-card-clip']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.urscholar_id }}</span>
+                                    </div>
+                                    <div class="w-full flex flex-row items-center gap-2">
+                                        <font-awesome-icon :icon="['fas', 'school']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            scholar.campus.name
+                                            }}, Campus</span>
+                                    </div>
+                                </div>
+
+                                <!-- education -->
+                                <div
+                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
+                                    <h1 class="text-base">Education</h1>
+
+                                    <div v-if="latestgrade">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            General Weighted Average
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                latestgrade.school_year.year }} {{ latestgrade.semester }}
+                                                Semester</span>
+                                            <div class="flex flex-col items-end">
+                                                <span class="text-gray-700 text-base font-medium leading-tight">
+                                                    {{ latestgrade ? latestgrade.grade : 'N/A' }}
+                                                </span>
+                                                <button class="text-sm" @click="toggleCheck">
+                                                    View Certificate of Grades
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr class="border-gray-300">
+                                    </div>
+                                    <div v-else>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            General Weighted Average
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">Must upload
+                                                <b>{{ semesterGrade }} Semester
+                                                    {{ schoolyear_grade.year }}</b>
+                                            </span>
+                                            <div class="flex flex-col items-end">
+                                                <button class="text-sm" @click="toggleCheck">
+                                                    View
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <hr class="border-gray-300 my-4">
+                                    </div>
+                                    <!-- Notification Message for Stakeholder -->
+                                    <div v-if="notify && !latestgrade"
+                                        class="bg-yellow-100 text-yellow-800 p-4 rounded-lg mt-4 flex flex-col items-left">
+                                        <span class="space-x-2">
+                                            <font-awesome-icon :icon="['fas', 'circle-exclamation']"
+                                                class="text-yellow-800" />
+                                            <span class="font-semibold">Reminder:</span>
+                                        </span>
+                                        Your grades need to be updated. Please upload your latest available Copy of Grades and General
+                                        Weighted Average (GWA).
+                                    </div>
+
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Elementary
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                elementary.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                elementary.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Junior High School
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ junior.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Senior High School
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ senior.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            College
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ college.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ college.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+                                    <!-- Vocational Section -->
+                                    <div v-if="vocational.name !== 'N/A' && vocational.years !== 'N/A'">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Vocational
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                vocational.name
+                                                }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                vocational.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Post Graduate Section -->
+                                    <div v-if="postgrad.name !== 'N/A' && postgrad.years !== 'N/A'">
+                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                            Post Graduate
+                                        </h3>
+                                        <div class="w-full flex flex-row justify-between items-center space-y-3">
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{ postgrad.name
+                                            }}</span>
+                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                                postgrad.years
+                                                }}</span>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- family -->
+                                <div
+                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
+                                    <h1 class="cols-span-2 text-base">Family</h1>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'person-dress']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                    
+                                                <div v-if="mother.first_name === 'n\/a'"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span
+                                                        class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                                </div>
+                                                <div v-else class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        mother.first_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        mother.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left ">
+                                                <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
+                                                    Family
+                                                    Income</span>
+                                                <span
+                                                    class="text-gray-900 text-3xl font-semibold leading-tight">100,000</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'person']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div v-if="father.first_name === 'n\/a'"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span
+                                                        class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                                </div>
+                                                <div v-else class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        father.first_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        father.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left gap-1 py-1">
+                                                <span class="text-gray-500 text-base font-semibold leading-tight">Family
+                                                    Housing
+                                                    Type</span>
+                                                <span class="text-gray-900 text-lg font-semibold leading-tight">{{
+                                                    family.family_housing }}</span>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'people-roof']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div v-if="siblings.length === 0"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">N/A</span>
+                                                </div>
+                                                <div v-else v-for="sibling in siblings" :key="sibling.id"
+                                                    class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        sibling.first_name }} {{ sibling.last_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        sibling.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="w-full flex flex-col items-left gap-1 py-1">
+                                                <span class="text-gray-500 text-base font-semibold leading-tight">Other
+                                                    Sources
+                                                    of Income</span>
+                                                <span class="text-gray-900 text-lg font-semibold leading-tight">{{
+                                                    family.other_income }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+<!-- Web Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+
+                    <div v-if="EditProfileWeb" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                             <!-- Upload & Preview Section -->
                             <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
@@ -451,8 +1282,25 @@
                             <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
                                 <span class="text-gray-500 text-sm">Permanent Address</span>
                                 <span class="text-gray-900 text-base leading-tight">
+                                    <span class="text-gray-500 text-xs">Street</span>
                                     <div class="relative w-full">
-                                        <input v-model="form.age" type="text" placeholder="Address"
+                                        <input v-model="form.street" type="text" placeholder="Address"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
+                                    <span class="text-gray-500 text-sm">Municipality</span>
+                                    <div class="relative w-full">
+                                        <input v-model="form.municipality" type="text" placeholder="Address"
+                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                        <!-- Icon inside input -->
+                                        <font-awesome-icon :icon="['fas', 'pen']"
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                    </div>
+                                    <span class="text-gray-500 text-sm">Province</span>
+                                    <div class="relative w-full">
+                                        <input v-model="form.province" type="text" placeholder="Address"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
@@ -472,38 +1320,84 @@
                                         <!-- <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
                                         }}</span> -->
                                     </div>
-                                    <div class="w-[60%] flex flex-col items-left gap-1">
+                                    <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Date of Birth</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            formattedDate }}</span>
+                                        <div class="relative max-w-sm">
+                                            <div
+                                                class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                    fill="currentColor" viewBox="0 0 20 20">
+                                                    <path
+                                                        d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                                </svg>
+                                            </div>
+                                            <input v-model="form.birthdate" id="datepicker-autohide" type="text"
+                                                autocomplete="off"
+                                                class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                placeholder="Select Birthdate" />
+
+                                            <!-- <InputError v-if="errors?.birthdate" :message="errors.birthdate"
+                                                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" /> -->
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="w-full flex flex-row gap-2 py-2">
-                                    <div class="w-[40%] flex flex-col items-left gap-1">
+                                <div class="w-full flex flex-col gap-2 py-2">
+                                    <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Civil Status</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            student.civil
-                                            }}</span>
+                                        <div class="relative w-full">
+                                            <Select v-model="form.civil_status">
+                                                <SelectTrigger id="civil_status" class="w-full border pr-10">
+                                                    <SelectValue placeholder="Select Civil Status" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                        <SelectItem value="Single">
+                                                            Single
+                                                        </SelectItem>
+                                                        <SelectItem value="Married">
+                                                            Married
+                                                        </SelectItem>
+                                                        <SelectItem value="widowed">
+                                                            Widowed
+                                                        </SelectItem>
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                            </Select>
+
+                                            <!-- <InputError v-if="errors?.civil_status" :message="errors.civil_status"
+                                                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" /> -->
+                                        </div>
                                     </div>
-                                    <div class="w-[60%] flex flex-col items-left gap-1">
+                                    <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Place of Birth</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            student.placebirth }}</span>
+                                        <div class="relative w-full">
+                                            <input v-model="form.birthplace" type="text" placeholder="Age"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
-                                <div class="w-full flex flex-row gap-2">
-                                    <div class="w-[40%] flex flex-col items-left gap-1">
+                                <div class="w-full flex flex-col gap-2">
+                                    <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Gender</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                             student.gender
                                             }}</span>
                                     </div>
-                                    <div class="w-[60%] flex flex-col items-left gap-1">
+                                    <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Religion</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                            student.religion }}</span>
+                                        <div class="relative w-full">
+                                            <input v-model="form.religion" type="text" placeholder="Age"
+                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            <!-- Icon inside input -->
+                                            <font-awesome-icon :icon="['fas', 'pen']"
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -742,83 +1636,68 @@
                                 class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                 <h1 class="cols-span-2 text-base">Family</h1>
                                 <div class="flex flex-col gap-4">
-                                    <div>
-                                        <div class="w-full flex flex-row items-center gap-2 py-2">
+                                    <div v-show="form.mother.first_name == 'n/a' || form.father.first_name == 'n/a'">
+                                        <!-- Mother Section -->
+                                        <div v-if="form.mother.first_name !== 'n/a'">
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
                                             <font-awesome-icon :icon="['fas', 'person-dress']"
                                                 class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                             <div class="w-full flex flex-col items-left gap-1 px-2 ">
                                                 <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Mothers Name</span>
-
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="form.mother.first_name" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                    </div>
+                                                <span class="text-gray-700">Mother's Name</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.mother.first_name" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
                                                 </div>
                                                 <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Occupation</span>
-
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="form.mother.occupation" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                    </div>
+                                                <span class="text-gray-700">Occupation</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.mother.occupation" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
                                                 </div>
                                             </div>
+                                            </div>
                                         </div>
-                                    </div>
 
-                                    <div>
-                                        <div class="w-full flex flex-row items-center gap-2 py-2">
+                                        <!-- Father Section -->
+                                        <div v-if="form.father.first_name !== 'n/a'">
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
                                             <font-awesome-icon :icon="['fas', 'person']"
                                                 class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                             <div class="w-full flex flex-col items-left gap-1 px-2 ">
                                                 <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Fathers Name</span>
-
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="form.father.first_name" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                    </div>
+                                                <span class="text-gray-700">Father's Name</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.father.first_name" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
                                                 </div>
                                                 <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
-                                                    <span class="text-gray-700">Occupation</span>
-
-                                                    <!-- Input Container (70%) -->
-                                                    <div class="relative w-full">
-                                                        <input v-model="form.father.occupation" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-
-                                                        <!-- Icon inside input -->
-                                                        <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                    </div>
+                                                <span class="text-gray-700">Occupation</span>
+                                                <div class="relative w-full">
+                                                    <input v-model="form.father.occupation" type="text"
+                                                    placeholder="Enter User ID"
+                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    <font-awesome-icon :icon="['fas', 'pen']"
+                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
+                                                </div>
                                                 </div>
                                             </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                        </div>
+
 
                                     <div>
                                         <div class="w-full flex flex-row items-center gap-2 py-2">
@@ -996,7 +1875,7 @@
         <div v-if="View_Grades"
             class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 dark:bg-primary dark:bg-opacity-50 z-50">
             <!-- Modal Container -->
-            <div class="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden">
+            <div class="relative w-full max-w-4xl bg-white dark:bg-gray-900 rounded-lg shadow-xl overflow-hidden max-h-screen overflow-y-auto">
                 <!-- Close Button (Positioned at Top Right) -->
                 <button @click="closeModal"
                     class="absolute top-3 right-3 text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white rounded-full p-2 transition-all">
@@ -1052,7 +1931,6 @@
                     <div v-for="grade in grades" :key="grade.id"
                         class="mb-4 overflow-y-auto max-h-[70vh] p-6 space-y-10">
                         <!-- Added scrollable body with max height -->
-
                         <div>
                             <!-- Year and Semester -->
                             <div class="flex items-center justify-between mb-2 font-poppins">
@@ -1063,7 +1941,6 @@
                                     grade.semester }}
                                 </div>
                             </div>
-
 
                             <!-- Accordion for GWA and File -->
                             <details class="mb-4">
@@ -1079,16 +1956,13 @@
                                         </a>
                                     </div>
                                 </summary>
-
                             </details>
-
                             <!-- Divider -->
                             <div class="border-t border-gray-300 dark:border-gray-600 my-2"></div>
                         </div>
                     </div>
                 </div>
                 <div v-else class="p-2">
-
                     <!-- Empty State Message -->
                     <div
                         class="flex items-center justify-center py-12 px-8 bg-gray-50 border-2 border-dashed border-gray-300 rounded-xl text-center">
@@ -1099,16 +1973,8 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
             </div>
         </div>
-        <!-- Document Viewer (iframe) -->
-        <!-- <div class="w-full h-[60vh]">
-                            <iframe :src="documentUrl" class="w-full h-full border-0"></iframe>
-                        </div> -->
 
     </AuthenticatedLayout>
 </template>
@@ -1116,9 +1982,13 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
-import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
+import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import axios from 'axios';
+import { Input } from '@/Components/ui/input'
 import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
+import InputError from '@/Components/InputError.vue';
+import { initFlowbite } from 'flowbite';
 
 const props = defineProps({
     student: Object,
@@ -1134,18 +2004,30 @@ const props = defineProps({
 });
 
 const form = ref({
+    email: '',
     password: '',
     confirm_password: '',
+    suffix: 'N/A',
+    birthdate: '',
+    birthplace: '',
     age: '',
-    street: '',
-    municipality: '',
-    province: '',
+    gender: '',
+    civil_status: '',
+    address: '',
     religion: '',
+    guardian_name: '',
+    relationship: '',
+    grade: '',
+    cog: '',
+    semester: '',
+    school_year: '',
     education: {
         elementary: { name: '', years: '', honors: 'N/A' },
         junior: { name: '', years: '', honors: 'N/A' },
         senior: { name: '', years: '', honors: 'N/A' },
         college: { name: '', years: '', honors: 'N/A' },
+        vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
+        postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
     },
     mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
     father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
@@ -1161,6 +2043,7 @@ const form = ref({
     imgPreview: null,
 });
 
+
 const formGrade = ref({
     grade: '',
     cog: '',
@@ -1168,8 +2051,25 @@ const formGrade = ref({
     school_year: '',
 });
 
-const EditProfile = ref(false);  // Toggle state
+// const EditProfile = ref(false)
+const EditProfileMobile = ref(false);  // Toggle state
+const EditProfileWeb = ref(false);  // Toggle state
 const showUpload = ref(false); // Controls visibility of the upload section
+
+const toggleEditWebProfile = async () => {
+  EditProfileWeb.value = !EditProfileWeb.value
+
+
+    await nextTick() // wait for DOM update
+    initFlowbite();
+    initDatepicker();
+}
+
+const toggleEditMobileProfile = () => {
+  EditProfileMobile.value = !EditProfileMobile.value
+  initFlowbite();
+  initDatepicker();
+}
 
 // QR Code state management
 const isQRModalOpen = ref(false);
@@ -1375,8 +2275,40 @@ const formattedDate = new Date(props.student.birthdate).toLocaleDateString("en-U
     day: "numeric"
 });
 
+const initDatepicker = () => {
+    const datepickerEl = document.getElementById("datepicker-autohide");
+
+    if (datepickerEl) {
+        if (!datepickerEl.dataset.initialized) {
+            const datepicker = new window.Datepicker(datepickerEl, {
+                autohide: true,
+                format: "yyyy-mm-dd",
+            });
+
+            datepickerEl.dataset.initialized = "true";
+
+            // Store selected date when user types or selects a date
+            datepickerEl.addEventListener("input", () => {
+                form.value.birthdate = datepickerEl.value;
+            });
+
+            datepickerEl.addEventListener("blur", () => {
+                form.value.birthdate = datepickerEl.value;
+            });
+        }
+
+        // 🔥 Restore value manually when switching steps
+        if (form.value.birthdate) {
+            datepickerEl.value = form.value.birthdate;
+        }
+    }
+};
+
+
 // Initialize QR code URL on component mount
 onMounted(() => {
+    initFlowbite();
+    initDatepicker();
     document.body.style.overflow = "hidden"; // Disable scrolling
 
     if (props.scholar && props.scholar.qr_code && props.scholar.qr_code !== 'NULL') {

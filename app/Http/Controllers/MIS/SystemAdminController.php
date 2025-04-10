@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\MIS;
 
+use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
+use App\Models\AcademicYear;
 use App\Models\ActivityLog;
 use App\Models\Campus;
 use App\Models\Course;
@@ -12,6 +14,7 @@ use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Mail\SendEmail;
 use App\Mail\SendUser;
+use App\Models\Notification;
 use App\Models\SchoolYear;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -235,6 +238,111 @@ class SystemAdminController extends Controller
         return Inertia::render('MIS/Univ_Settings/SY_Term', [
             'scholar_year' => $scholar_year,
         ]);
+    }
+
+    /**
+     * Create a new semester for the given school year and set it as active
+     * 
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function createAcademicSemester(Request $request)
+    {
+        $request->validate([
+            'schoolYearId' => 'required|exists:school_years,id',
+        ]);
+
+        $schoolYearId = $request->schoolYearId;
+        $schoolYear = SchoolYear::with('academic_year')->findOrFail($schoolYearId);
+
+        try {
+            // First, set all existing academic years to inactive
+            $activeAcademicYears = AcademicYear::where('status', 'Active')->get();
+
+            foreach ($activeAcademicYears as $activeYear) {
+                $activeYear->status = 'Inactive';
+                $activeYear->save();
+            }
+
+            // Check if academic_year is null or empty
+            if (!$schoolYear->academic_year || count($schoolYear->academic_year) === 0) {
+                // Create 1st semester if no semesters exist
+                $academicYear = new AcademicYear();
+                $academicYear->school_year_id = $schoolYearId;
+                $academicYear->semester = '1st';
+                $academicYear->status = 'Active'; // Set as active
+                $academicYear->save();
+
+                $notification = Notification::create([
+                    'title' => 'New Academic Semester',
+                    'message' => "You can now upload a new set of Students",
+                    'type' => 'new_semester',
+                ]);
+
+                // Only get super_admin and coordinator users
+                $users = User::whereIn('usertype', ['super_admin', 'coordinator'])
+                    ->where('id', '!=', Auth::user()->id) // Exclude current user if they're an admin
+                    ->get();
+
+                // Attach users to the notification
+                $notification->users()->attach($users->pluck('id'));
+
+                event(new NewNotification($notification));
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'First semester created successfully and set as active',
+                    'academic_year' => $academicYear,
+                ]);
+            }
+
+            // Check if 1st semester exists but 2nd doesn't
+            $firstSemesterExists = $schoolYear->academic_year->contains('semester', '1st');
+            $secondSemesterExists = $schoolYear->academic_year->contains('semester', '2nd');
+
+            if ($firstSemesterExists && !$secondSemesterExists) {
+                // Create 2nd semester
+                $academicYear = new AcademicYear();
+                $academicYear->school_year_id = $schoolYearId;
+                $academicYear->semester = '2nd';
+                $academicYear->status = 'Active'; // Set as active
+                $academicYear->save();
+
+                $notification = Notification::create([
+                    'title' => 'New Academic Semester',
+                    'message' => "You can now upload a new set of Students",
+                    'type' => 'new_semester',
+                ]);
+
+                // Only get super_admin and coordinator users
+                $users = User::whereIn('usertype', ['super_admin', 'coordinator'])
+                    ->where('id', '!=', Auth::user()->id) // Exclude current user if they're an admin
+                    ->get();
+
+                // Attach users to the notification
+                $notification->users()->attach($users->pluck('id'));
+
+                event(new NewNotification($notification));
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Second semester created successfully and set as active',
+                    'academic_year' => $academicYear,
+                ]);
+            }
+
+            // Both semesters already exist
+            return response()->json([
+                'success' => false,
+                'message' => 'Both semesters already exist for this school year',
+            ], 422);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create semester: ' . $e->getMessage(),
+            ], 500);
+        }
     }
     // users ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

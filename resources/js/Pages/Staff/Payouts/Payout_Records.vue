@@ -59,7 +59,7 @@
 
             <!-- Recent Payouts Section -->
             <div v-if="selectedMenu === 'recent'" class="p-6 h-full">
-                <div v-if="groupedScholarshipData" class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                <div v-if="!groupedScholarshipData" class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
                     <font-awesome-icon :icon="['fas', 'user-graduate']"
                         class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                     <p class="text-lg text-gray-700 dark:text-gray-300">
@@ -160,7 +160,7 @@
 
             <!-- Payout History Section -->
             <div v-if="selectedMenu === 'history'" class="h-fit">
-                <div v-if="groupedCompletedScholarshipData" class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                <div v-if="!groupedCompletedScholarshipData" class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
                     <font-awesome-icon :icon="['fas', 'user-graduate']"
                         class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                     <p class="text-lg text-gray-700 dark:text-gray-300">

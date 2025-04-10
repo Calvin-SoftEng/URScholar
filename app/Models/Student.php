@@ -23,6 +23,7 @@ class Student extends Model
         'permanent_address',
         'facebook_account',
         'contact_no',
+        'academic_year_id',
     ];
 
     public function campus()
@@ -33,5 +34,10 @@ class Student extends Model
     public function course()
     {
         return $this->belongsTo(Course::class);
+    }
+
+    public function academic_year()
+    {
+        return $this->belongsTo(AcademicYear::class);
     }
 }

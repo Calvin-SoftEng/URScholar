@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -279,12 +279,15 @@
                                     </div>
                                     <!-- Forward to Sponsor -->
                                     <div>
-                                        <button @click="toggleForwardSponsor"
-                                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts"
+                                            v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : ''" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+        hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                             <span class="font-normal">Forward to <span
-                                                    class="font-semibold">Sponsor</span> </span>
+                                                    class="font-semibold">Sponsor</span></span>
                                         </button>
+
                                     </div>
 
                                     <!-- Forward to Cashier -->
@@ -418,7 +421,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                }}</span>
+                                                    }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
                                                 </span>
@@ -429,7 +432,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -530,7 +533,7 @@
                                         <div @click="() => openPayroll(batch.id)"
                                             class="flex justify-between items-center">
                                             <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
-                                                }}</span>
+                                            }}</span>
 
                                             <div class="grid grid-cols-2">
                                                 <div class="flex flex-col items-center">
@@ -684,7 +687,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                                }}</div>
+                                                            }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1107,7 +1110,7 @@
                             <div
                                 class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
                                 <label class="block text-lg font-semibold text-gray-700 dark:text-white">
-                                    Completed Payout Batches
+                                    Binangonan
                                 </label>
 
                                 <!-- Loading Indicator -->
@@ -1136,7 +1139,7 @@
                                 </div>
 
                                 <!-- Forward Button -->
-                                <div v-if="completedBatches === props.totalBatches" class="mt-4">
+                                <div v-if="completedBatches === batches.length" class="mt-4">
                                     <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                         @click="forwardCoor"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1184,7 +1187,7 @@
                 </div>
 
                 <!-- Form -->
-                <form v-if="!payouts" @submit.prevent="forwardBatches">
+                <form v-if="!payouts">
                     <div class="py-4 px-8 flex flex-col gap-3">
                         <!-- Loading Indicator -->
                         <div v-if="isLoading" class="flex justify-center items-center py-4">
@@ -1216,6 +1219,7 @@
                         <!-- Forward Button -->
                         <div v-if="completedBatches === batches.length" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                                @click="forwardSponsor"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 {{ isSubmitting ? 'Processing...' : 'Forward' }}
                             </button>
@@ -1229,7 +1233,7 @@
                     </div>
                 </form>
 
-                <form v-else @submit.prevent="forwardBatches">
+                <form v-else>
                     <div class="py-4 px-8 flex flex-col gap-3">
                         <!-- Loading Indicator -->
                         <div v-if="isLoading" class="flex justify-center items-center py-4">
@@ -1237,33 +1241,41 @@
                             <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
                         </div>
 
-                        <!-- Batch List -->
-                        <div v-else v-for="batch in batchesWithScholars" :key="batch.id"
-                            class="py-3 px-4 flex justify-between items-center">
-                            <div>
-                                <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
-                                    batch.batch_no }}</p>
-                                <p class="text-sm text-gray-500">Includes {{ batch.claimed_count }} Claimed,
-                                    {{ batch.not_claimed_count }} Not Claimed</p>
+                        <!-- Batch Disbursement Status -->
+                        <div v-else>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Batch Disbursement Status
+                            </h3>
+                            <div class="space-y-3">
+                                <div v-for="batch in batchesWithScholars" :key="batch.id"
+                                    class="py-3 px-4 flex justify-between items-center bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div>
+                                        <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                            batch.batch_no
+                                        }}</p>
+                                        <p class="text-sm text-gray-500 dark:text-gray-400">
+                                            Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
+                                            Not
+                                            Claimed
+                                        </p>
+                                    </div>
+                                    <span
+                                        :class="`text-sm font-medium px-3 py-1.5 rounded-full ${batch.not_claimed_count === 0 ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                        {{ batch.not_claimed_count === 0 ? 'Ready to Send' : 'Incomplete' }}
+                                    </span>
+                                </div>
                             </div>
-                            <span
-                                :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.not_claimed_count === 0 ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                {{ batch.not_claimed_count === 0 ? 'Ready to Send' : 'Incomplete' }}
-                            </span>
                         </div>
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length" class="mt-4">
-                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                        <div class="mt-6">
+                            <button type="button" @click="forwardSponsor"
+                                :disabled="!inactivePayouts || isSubmitting"
+                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Forward to Next Semester
                             </button>
-                        </div>
-                        <div v-else class="mt-4">
-                            <button v-tooltip.left="'Complete all batches'" disabled
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                Forward
-                            </button>
+                            <p v-if="!inactivePayouts" class="text-sm text-red-500 mt-2 text-center">
+                                All payouts must be inactive to forward to the next semester.
+                            </p>
                         </div>
                     </div>
                 </form>
@@ -1329,6 +1341,9 @@ const props = defineProps({
     approvedCount: Number,
     allBatches: Array,
     disableSendEmailButton: Boolean,
+    inactiveBatches: Boolean,
+    inactivePayouts: Boolean,
+    hasActiveGrantees: Boolean,
     payouts: Object,
     payoutBatches: Array,
 });
@@ -1467,6 +1482,22 @@ const forwardCoor = () => {
     });
 };
 
+const forwardSponsor = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('scholarship.forward_sponsor', {
+        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
+        selectedCampus: props.selectedCampus
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
 
 const toggleView = () => {
     showPayrolls.value = !showPayrolls.value;
@@ -1494,6 +1525,25 @@ const toggleForwardSponsor = async () => {
     // Load batches with scholar counts
     await loadBatchesData();
 };
+
+// Check if all payouts are inactive
+const allPayoutsInactive = computed(() => {
+    if (!props.payoutsByCampus || Object.keys(props.payoutsByCampus).length === 0) {
+        return false
+    }
+
+    // Check each payout in each campus
+    for (const campusId in props.payoutsByCampus) {
+        const payouts = props.payoutsByCampus[campusId]
+        for (const payout of payouts) {
+            if (payout.status !== 'Inactive') {
+                return false
+            }
+        }
+    }
+
+    return true
+})
 
 const loadBatchesData = async () => {
     isLoading.value = true;

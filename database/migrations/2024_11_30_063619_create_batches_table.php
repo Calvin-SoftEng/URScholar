@@ -17,7 +17,6 @@ return new class extends Migration
             $table->integer('batch_no');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
-            $table->string('semester');
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
@@ -27,13 +26,11 @@ return new class extends Migration
 
         Schema::create('scholars', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('scholarship_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('hei_name');
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
             $table->foreignId('course_id')->constrained()->onDelete('cascade');
             $table->string('grant')->nullable();
-            $table->foreignId('batch_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('urscholar_id')->unique();
             $table->string('qr_code')->nullable();
             $table->string('app_no')->nullable();;
@@ -74,7 +71,7 @@ return new class extends Migration
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
-            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->enum('status', ['Active', 'Inactive', 'Pending', 'Accomplished'])->default('Pending');
             $table->timestamps();
         });
 

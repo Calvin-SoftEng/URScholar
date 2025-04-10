@@ -30,9 +30,16 @@ return new class extends Migration {
             $table->string('name');
             $table->string('abbreviation');
             $table->string('since');
-            $table->string('moa_file');
             $table->text('description')->nullable();
             $table->string('logo')->nullable();
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->timestamps();
+        });
+
+        Schema::create('sponsor_moas', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
+            $table->string('moa');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
@@ -43,6 +50,7 @@ return new class extends Migration {
      */
     public function down(): void
     {
+        Schema::dropIfExists('sponsor_moas');
         Schema::dropIfExists('sponsors');
     }
 };

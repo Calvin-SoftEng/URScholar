@@ -14,6 +14,7 @@ use App\Models\ScholarshipFormData;
 use App\Models\ScholarshipGroup;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
+use App\Models\SponsorMoa;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -171,9 +172,14 @@ class DatabaseSeeder extends Seeder
             'assign_id' => 5,
             'abbreviation' => 'CHED',
             'since' => '2021',
-            'moa_file' => 'moa1.pdf',
             'description' => 'CHED Scholarships provide financial assistance to deserving Filipino students in higher education. These include merit-based and need-based grants covering tuition, allowances, and other school-related expenses to support academic excellence and accessibility to quality education.',
             'logo' => 'images.png',
+        ]);
+
+        SponsorMoa::factory()->create([
+            'sponsor_id' => '1',
+            'moa' => 'moa1.pdf',
+            'status' => 'Active',
         ]);
 
         Sponsor::factory()->create([
@@ -182,9 +188,14 @@ class DatabaseSeeder extends Seeder
             'assign_id' => 5,
             'abbreviation' => 'DBP',
             'since' => '2001',
-            'moa_file' => 'moa1.pdf',
             'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
-            'logo' => 'images.png',
+            'logo' => 'dbp.webp',
+        ]);
+
+        SponsorMoa::factory()->create([
+            'sponsor_id' => '2',
+            'moa' => 'moa1.pdf',
+            'status' => 'Active',
         ]);
 
         //scholarship
@@ -209,13 +220,13 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //school year
-        SchoolYear::factory()->create([
-            'year' => '2021-2022',
-        ]);
+        // SchoolYear::factory()->create([
+        //     'year' => '2021-2022',
+        // ]);
 
-        SchoolYear::factory()->create([
-            'year' => '2022-2023',
-        ]);
+        // SchoolYear::factory()->create([
+        //     'year' => '2022-2023',
+        // ]);
 
         SchoolYear::factory()->create([
             'year' => '2024-2025',
@@ -349,35 +360,36 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         //academic year
-        AcademicYear::factory()->create([
-            'school_year_id' => '1',
-            'semester' => '1st'
-        ]);
+        // AcademicYear::factory()->create([
+        //     'school_year_id' => '1',
+        //     'semester' => '1st',
+        //     'status' => 'Inactive'
+        // ]);
+
+        // AcademicYear::factory()->create([
+        //     'school_year_id' => '1',
+        //     'semester' => '2nd',
+        //     'status' => 'Inactive'
+        // ]);
+
+        // AcademicYear::factory()->create([
+        //     'school_year_id' => '2',
+        //     'semester' => '1st',
+        //     'status' => 'Inactive'
+        // ]);
+
+        // AcademicYear::factory()->create([
+        //     'school_year_id' => '2',
+        //     'semester' => '2nd',
+        //     'status' => 'Inactive'
+        // ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '1',
-            'semester' => '2nd'
+            'semester' => '1st',
+            'status' => 'Active'
         ]);
 
-        AcademicYear::factory()->create([
-            'school_year_id' => '2',
-            'semester' => '1st'
-        ]);
-
-        AcademicYear::factory()->create([
-            'school_year_id' => '2',
-            'semester' => '2nd'
-        ]);
-
-        AcademicYear::factory()->create([
-            'school_year_id' => '3',
-            'semester' => '1st'
-        ]);
-
-        AcademicYear::factory()->create([
-            'school_year_id' => '3',
-            'semester' => '2nd'
-        ]);
 
 
         //sponsor 

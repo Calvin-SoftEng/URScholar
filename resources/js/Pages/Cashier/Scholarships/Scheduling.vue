@@ -192,6 +192,7 @@ const form = ref({
     scheduled_date: '',
     scheduled_time: '',
     reminders: '',
+    payout_id: props.payout.id,
 });
 
 // Helper function to get disbursements for a specific batch

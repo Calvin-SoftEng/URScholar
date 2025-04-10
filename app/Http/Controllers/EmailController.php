@@ -32,7 +32,6 @@ class EmailController extends Controller
     {
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->orderBy('batch_no', 'desc')
-            ->with(['scholars.campus', 'scholars.course', 'scholars.user'])
             ->get();
 
         $selectedYear = $request->input('selectedYear', '');
@@ -45,10 +44,10 @@ class EmailController extends Controller
         // Loop through each batch and collect their scholars
         foreach ($batches as $batch) {
             $batchScholars = $scholarship->grantees()
-            ->whereIn('status', ['Pending', 'Active'])
+                ->whereIn('status', ['Pending', 'Active'])
                 ->where('batch_id', $batch->id)
-                ->where('school_year_id',$selectedYear)
-                ->where('semester',$selectedSem)
+                ->where('school_year_id', $selectedYear)
+                ->where('semester', $selectedSem)
                 ->with('scholar.user', 'scholar.campus', 'scholar.course')
                 ->get()
                 ->map(fn($grantee) => $grantee->scholar)
@@ -99,7 +98,6 @@ class EmailController extends Controller
 
         // Find batches matching the specified semester and school year
         $batches = Batch::where('scholarship_id', $scholarship->id)
-            ->where('semester', $request->semester)
             ->where('school_year_id', $request->school_year)
             ->get();
 
@@ -298,11 +296,13 @@ class EmailController extends Controller
         $validated = $request->validate([
             'scheduled_date' => 'required|date',
             'scheduled_time' => 'required',
+            'payout_id' => 'required',
             'reminders' => 'required',
         ]);
 
         // dd($validated);
         $payout = Payout::where('scholarship_id', $scholarship->id)
+            ->where('id', $request['payout_id'])
             ->where('campus_id', Auth::user()->campus_id)
             ->first();
 
@@ -316,7 +316,7 @@ class EmailController extends Controller
         $scholars = Scholar::whereIn('id', $scholarIds)->get(); // Fetch scholars with matching IDs
 
         PayoutSchedule::create([
-            'payout_id' => $payout->id,
+            'payout_id' => $request['payout_id'],
             'scheduled_date' => $request['scheduled_date'],
             'scheduled_time' => $request['scheduled_time'],
             'reminders' => $request['reminders'],

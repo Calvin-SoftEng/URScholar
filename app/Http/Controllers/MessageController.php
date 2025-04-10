@@ -49,7 +49,7 @@ class MessageController extends Controller
 
         if ($currentUser->usertype == 'super_admin' || $currentUser->usertype == 'coordinator') {
             // Return the chat page using Inertia
-            return Inertia::render('Staff/Communication/Communication', [
+            return Inertia::render('Staff/Communication/Messaging', [
                 'messages' => [],
                 'currentUser' => $currentUser,
                 'batches' => $batches, // Original scholarships data
@@ -57,7 +57,7 @@ class MessageController extends Controller
             ]);
         } elseif ($currentUser->usertype == 'cashier') {
             // Return the chat page using Inertia
-            return Inertia::render('Cashier/Communication/Communication', [
+            return Inertia::render('Cashier/Communication/Messaging', [
                 'messages' => [],
                 'currentUser' => $currentUser,
                 'batches' => $batches, // Original scholarships data
@@ -65,7 +65,7 @@ class MessageController extends Controller
             ]);
         } elseif ($currentUser->usertype == 'student') {
             // Return the chat page using Inertia
-            return Inertia::render('Student/Communication/Communication', [
+            return Inertia::render('Student/Communication/Messaging', [
                 'messages' => [],
                 'currentUser' => $currentUser,
                 'batches' => $batches, // Original scholarships data
@@ -110,7 +110,7 @@ class MessageController extends Controller
 
         if ($currentUser->usertype == 'super_admin' || $currentUser->usertype == 'coordinator') {
             // Return the chat page using Inertia, passing the messages and user data
-            return Inertia::render('Staff/Communication/Communication', [
+            return Inertia::render('Staff/Communication/Messaging', [
                 'messages' => $messages,
                 'currentUser' => Auth::user(),
                 'batches' => $batches,
@@ -118,7 +118,7 @@ class MessageController extends Controller
             ]);
         } elseif ($currentUser->usertype == 'cashier') {
             // Return the chat page using Inertia, passing the messages and user data
-            return Inertia::render('Cashier/Communication/Communication', [
+            return Inertia::render('Cashier/Communication/Messaging', [
                 'messages' => $messages,
                 'currentUser' => Auth::user(),
                 'batches' => $batches,
@@ -143,8 +143,7 @@ class MessageController extends Controller
             'content' => 'required|string',
             'batch_id' => 'required',
         ]);
-
-        dd($request);
+        
         $user = Auth::user()->id;
 
         $message = Message::create([

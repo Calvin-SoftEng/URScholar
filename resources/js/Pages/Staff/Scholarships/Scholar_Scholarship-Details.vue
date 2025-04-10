@@ -200,7 +200,7 @@
                                                         word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                                 </span>
                                                 <span class="text-xl font-sora text-primary">
-                                                    {{ sibling.occupation }}
+                                                    - {{ sibling.occupation }}
                                                 </span>
                                             </div>
 
@@ -259,34 +259,32 @@
                                         <!-- Requirement List -->
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                             <!-- Requirement Item -->
-                                            <div v-for="requirement in requirements" :key="requirement.id">
-                                                <div v-for="req in submittedRequirements" :key="req.id"
-                                                    class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
-                                                    <div class="flex flex-col space-y-2">
-                                                        <span class="font-bold">{{ requirement.requirements }}</span>
-                                                        <div class="flex items-center gap-2 text-gray-800">
-                                                            <font-awesome-icon :icon="['fas', 'file']"
-                                                                class="text-blue-600 text-lg" />
-                                                            <span class="text-base font-medium">{{
-                                                                req.submitted_requirements }}</span>
-                                                        </div>
-
+                                            <div v-for="req in submittedRequirements" :key="req.id"
+                                                class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
+                                                <div class="flex flex-col space-y-2">
+                                                    <span class="font-bold">{{ req.requirement.requirements }}</span>
+                                                    <div class="flex items-center gap-2 text-gray-800">
+                                                        <font-awesome-icon :icon="['fas', 'file']"
+                                                            class="text-blue-600 text-lg" />
+                                                        <span class="text-base font-medium">{{
+                                                            req.submitted_requirements }}</span>
                                                     </div>
 
-                                                    <div class="flex flex-col gap-3 items-center justify-center">
-                                                        <div>
-                                                            <span :class="statusClass(req.status)"
-                                                                class="text-sm font-medium px-2.5 py-0.5 rounded border">
-                                                                {{ req.status }}
-                                                            </span>
-                                                        </div>
-                                                        <button @click="toggleCheck(req)"
-                                                            class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
-                                                            <span
-                                                                class="material-symbols-rounded text-base">open_in_full</span>
-                                                            <span class="font-medium text-sm">Check</span>
-                                                        </button>
+                                                </div>
+
+                                                <div class="flex flex-col gap-3 items-center justify-center">
+                                                    <div>
+                                                        <span :class="statusClass(req.status)"
+                                                            class="text-sm font-medium px-2.5 py-0.5 rounded border">
+                                                            {{ req.status }}
+                                                        </span>
                                                     </div>
+                                                    <button @click="toggleCheck(req)"
+                                                        class="flex items-center gap-2 px-3 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg shadow-md transition-all">
+                                                        <span
+                                                            class="material-symbols-rounded text-base">open_in_full</span>
+                                                        <span class="font-medium text-sm">Check</span>
+                                                    </button>
                                                 </div>
                                             </div>
 
@@ -363,7 +361,7 @@
                 class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{
-                        selectedRequirement?.requirement }}</h2>
+                        selectedRequirement?.requirement.requirements }}</h2>
                     <div class="flex items-center justify-between gap-10">
                         <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
                             class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
@@ -410,7 +408,8 @@
                     </div>
 
                     <!-- Close Button -->
-                    <div v-if="props.batch.status !== 'Inactive'" class="mt-2 flex flex-row justify-between">
+                    <div v-if="props.batch.status !== 'Inactive' && props.scholar.campus_id === $page.props.auth.user.campus_id"
+                        class="mt-2 flex flex-row justify-between">
                         <button type="button" @click="updateRequirementStatus('Returned')"
                             class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
                             Return

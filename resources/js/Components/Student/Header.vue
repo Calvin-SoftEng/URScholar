@@ -30,7 +30,7 @@
               </Link>
             </li>
             <li class="relative">
-                <Link :href="route('messaging.index')" class="flex items-center space-x-2">
+                <Link :href="route('feed.index')" class="flex items-center space-x-2">
                     <p class="text-primary-foreground hover:text-primary transition">Feed</p>
                     <!-- Notification Badge (only shows if unreadMessages > 0) -->
                     <span 
@@ -79,7 +79,7 @@
         </div>
 
         <!-- notification -->
-        <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification"
+        <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotificationWeb"
           class="relative border border-gray-300 inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg"
           type="button">
           <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -105,100 +105,20 @@
             </div>
         </div>
         <div v-else>
-            <div class="relative">
-                <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
-                    data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
-                <!-- Red Notification Dot -->
-                <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
-            </div>
-        </div>
-
-
-
-        <!-- Notifs Dropdown menu -->
-        <div id="dropdownNotification"
-          class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"
-          aria-labelledby="dropdownNotificationButton">
-          <div
-            class="flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
-            Notifications
-            <button v-if="filteredNotifications.length > 0 && filteredUnreadCount > 0" @click="markAllAsRead"
-              class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
-              Mark all as read
-            </button>
-          </div>
-          <div v-if="filteredNotifications.length === 0"
-            class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
-            No notifications
-          </div>
-          <div v-else
-            class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
-            <div v-for="notification in filteredNotifications" :key="notification.id"
-              class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
-              :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
-              <div class="w-full">
-                <div >{{ notification.title }}</div>
-                <div class="flex justify-between items-start mb-1.5">
-                  <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
-                  <button @click.stop="deleteNotification(notification.id)"
-                    class="ml-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                      stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-                <div class="flex justify-between items-center">
-                  <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
-                  <button v-if="!notification.read" @click="markAsRead(notification.id)"
-                    class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
-                    Mark as read
-                  </button>
-                </div>
-              </div>
-            </div>
+          <div class="relative">
+              <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+                  data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                  :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+              <!-- Red Notification Dot -->
+              <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- avatar dropdown -->
-    <!-- Dropdown menu -->
-    <div id="userDropdown" v-show="isDropdownOpen"
-      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-      <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-        <div>{{ $page.props.auth.user.name }}</div>
-        <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
-      </div>
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-          <li class="relative">
-              <Link :href="route('student.profile')"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                  Profile
-              </Link>
-              <!-- Notification Dot with FontAwesome Icon -->
-              <div class="absolute top-0 right-1 flex items-center space-x-2">
-                  <!-- Red Notification Icon with FontAwesome -->
-                  <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
-                      <font-awesome-icon :icon="['fas', 'exclamation']" />
-                  </div>
-              </div>
-          </li>
-      </ul>
-
-      <div class="py-1 text-left">
-        <Link :href="route('logout')" method="post" as="button"
-          class="w-full px-4 items-start justify-start py-2 text-sm text-gray-700 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
-        Sign out
-        </Link>
-      </div>
-    </div>
-
 
     <!-- Mobile Navbar -->
-    <nav class="border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
-      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[50px] p-2">
+    <nav class="block md:hidden border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+      <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto h-[50px] px-2">
         <div class="flex items-center space-x-4">
           <div class="pl-3">
             <div class="flex flex-row  items-center justify-center gap-2">
@@ -212,14 +132,32 @@
           </div>
         </div>
 
-        <!-- Hamburger Button -->
-        <button id="menu-button" @click="toggleMenu" aria-expanded="isOpen" aria-label="Toggle navigation menu"
-          class="inline-flex items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
-          <span class="sr-only">Toggle menu</span>
-          <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
+        <div>
+          <!-- notification -->
+          <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotificationMobile"
+            class="relative inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg"
+            type="button">
+            <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+              viewBox="0 0 14 20">
+              <path
+                d="M12.133 10.632v-1.8A5.406 5.406 0 0 0 7.979 3.57.946.946 0 0 0 8 3.464V1.1a1 1 0 0 0-2 0v2.364a.946.946 0 0 0 .021.106 5.406 5.406 0 0 0-4.154 5.262v1.8C1.867 13.018 0 13.614 0 14.807 0 15.4 0 16 .538 16h12.924C14 16 14 15.4 14 14.807c0-1.193-1.867-1.789-1.867-4.175ZM3.823 17a3.453 3.453 0 0 0 6.354 0H3.823Z" />
+            </svg>
+
+            <!-- Notification Badge -->
+            <div v-if="filteredUnreadCount > 0"
+              class="absolute block w-3.5 h-3.5 bg-red-500 border-2 border-white rounded-full -top-0.5 start-7 dark:border-gray-900">
+            </div>
+          </button>
+
+          <!-- Hamburger Button -->
+          <button id="menu-button" @click="toggleMenu" aria-expanded="isOpen" aria-label="Toggle navigation menu"
+            class="inline-flex items-center justify-center p-2 w-10 h-10 text-gray-500 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+            <span class="sr-only">Toggle menu</span>
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <transition enter-active-class="transition-opacity duration-300 ease-out" enter-from-class="opacity-0"
@@ -278,6 +216,127 @@
         </div>
       </transition>
     </nav>
+
+    <!-- Notifs Dropdown menu -->
+    <div id="dropdownNotificationMobile"
+      class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"
+      aria-labelledby="dropdownNotificationButton">
+      <div
+        class="flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
+        Notifications
+        <button v-if="filteredNotifications.length > 0 && filteredUnreadCount > 0" @click="markAllAsRead"
+          class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+          Mark all as read
+        </button>
+      </div>
+      <div v-if="filteredNotifications.length === 0"
+        class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+        No notifications
+      </div>
+      <div v-else
+        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+        <div v-for="notification in filteredNotifications" :key="notification.id"
+          class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+          :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
+          <div class="w-full">
+            <div >{{ notification.title }}</div>
+            <div class="flex justify-between items-start mb-1.5">
+              <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
+              <button @click.stop="deleteNotification(notification.id)"
+                class="ml-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div class="flex justify-between items-center">
+              <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
+              <button v-if="!notification.read" @click="markAsRead(notification.id)"
+                class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+                Mark as read
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="dropdownNotificationWeb"
+      class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"
+      aria-labelledby="dropdownNotificationButton">
+      <div
+        class="flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
+        Notifications
+        <button v-if="filteredNotifications.length > 0 && filteredUnreadCount > 0" @click="markAllAsRead"
+          class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+          Mark all as read
+        </button>
+      </div>
+      <div v-if="filteredNotifications.length === 0"
+        class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+        No notifications
+      </div>
+      <div v-else
+        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+        <div v-for="notification in filteredNotifications" :key="notification.id"
+          class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+          :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
+          <div class="w-full">
+            <div >{{ notification.title }}</div>
+            <div class="flex justify-between items-start mb-1.5">
+              <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
+              <button @click.stop="deleteNotification(notification.id)"
+                class="ml-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div class="flex justify-between items-center">
+              <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
+              <button v-if="!notification.read" @click="markAsRead(notification.id)"
+                class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+                Mark as read
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- avatar dropdown -->
+    <!-- Dropdown menu -->
+    <div id="userDropdown" v-show="isDropdownOpen"
+      class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
+      <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
+        <div>{{ $page.props.auth.user.name }}</div>
+        <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
+      </div>
+        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+          <li class="relative">
+              <Link :href="route('student.profile')"
+                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                  Profile
+              </Link>
+              <!-- Notification Dot with FontAwesome Icon -->
+              <div class="absolute top-0 right-1 flex items-center space-x-2">
+                  <!-- Red Notification Icon with FontAwesome -->
+                  <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
+                      <font-awesome-icon :icon="['fas', 'exclamation']" />
+                  </div>
+              </div>
+          </li>
+      </ul>
+
+      <div class="py-1 text-left">
+        <Link :href="route('logout')" method="post" as="button"
+          class="w-full px-4 items-start justify-start py-2 text-sm text-gray-700 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+        Sign out
+        </Link>
+      </div>
+    </div>
 
 
 
@@ -458,6 +517,10 @@ const closeDropdown = (event) => {
 // Add click listener to document to close dropdown when clicking outside
 onMounted(() => {
   initFlowbite();
+
+  import('flowbite').then(({ initDropdowns }) => {
+    initDropdowns()
+  })
 
   // Get user ID
   getCurrentUserId();

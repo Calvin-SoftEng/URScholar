@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FeedController;
 use App\Http\Controllers\GroupPageController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\CoordinatorController;
@@ -87,6 +88,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     Route::post('/system_admin/univ-settings/campuses/assign', [SystemAdminController::class, 'assign_campus'])->name('sa.assign_campus');
 
     Route::get('/system_admin/univ-settings/schoolyear-term', [SystemAdminController::class, 'sy_and_term'])->name('sa.sy_term');
+    Route::post('/academic/create-semester', [SystemAdminController::class, 'createAcademicSemester'])->name('sa.create-semester');
 
     // security and backup
     Route::get('/system_admin/security-and-backup/archives', [SystemAdminController::class, 'backup_and_restore'])->name('sa.archives');
@@ -98,6 +100,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])-
     Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
     Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
     Route::get('/group-page/{batch}', [MessageController::class, 'show'])->name('messaging.show');
+
+    //Feed
+    Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');
 });
 
 
@@ -149,6 +154,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
     Route::post('scholarships/{scholarshipId}/forward', [ScholarshipController::class, 'forward_coor'])->name('scholarship.forward_coor');
+    Route::post('scholarships/{scholarshipId}/forward-sponsor', [ScholarshipController::class, 'forward_sponsor'])->name('scholarship.forward_sponsor');
 
 
 
@@ -179,6 +185,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/sponsors/create', [SettingsController::class, 'create_sponsor'])->name('settings.sponsor');
+    Route::put('/settings/sponsors/{id}', [SettingsController::class, 'sponsor_update'])->name('settings.sponsors.update');
 
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
     Route::post('/settings/adding-students/store', [SettingsController::class, 'store_student'])->name('settings.store');

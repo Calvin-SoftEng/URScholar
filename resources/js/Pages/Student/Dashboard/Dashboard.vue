@@ -30,14 +30,14 @@
                             <span class="pl-2 font-semibold text-gray-700">Recent Activities</span>
                             <div class="w-full space-y-3 flex flex-col">
                                 <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    Last Logged In September 30, 2023
+                                    Last Logged in April 1, 2025
                                 </div>
                                 <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    Recent Payout last September 30, 2023
+                                    Submitted requirements last April 1, 2025
                                 </div>
-                                <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
+                                <!-- <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
                                     daefefafefa
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                     </div>
