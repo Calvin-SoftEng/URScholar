@@ -59,6 +59,11 @@ class User extends Authenticatable
         return $this->belongsToMany(ScholarshipGroup::class);
     }
 
+    public function staffgroups()
+    {
+        return $this->belongsToMany(StaffGroup::class);
+    }
+
     
     public function notifier()
     {

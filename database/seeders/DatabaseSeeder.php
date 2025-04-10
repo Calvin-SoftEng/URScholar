@@ -224,9 +224,9 @@ class DatabaseSeeder extends Seeder
         //     'year' => '2021-2022',
         // ]);
 
-        // SchoolYear::factory()->create([
-        //     'year' => '2022-2023',
-        // ]);
+        SchoolYear::factory()->create([
+            'year' => '2022-2023',
+        ]);
 
         SchoolYear::factory()->create([
             'year' => '2024-2025',
@@ -372,20 +372,20 @@ class DatabaseSeeder extends Seeder
         //     'status' => 'Inactive'
         // ]);
 
-        // AcademicYear::factory()->create([
-        //     'school_year_id' => '2',
-        //     'semester' => '1st',
-        //     'status' => 'Inactive'
-        // ]);
-
-        // AcademicYear::factory()->create([
-        //     'school_year_id' => '2',
-        //     'semester' => '2nd',
-        //     'status' => 'Inactive'
-        // ]);
+        AcademicYear::factory()->create([
+            'school_year_id' => '1',
+            'semester' => '1st',
+            'status' => 'Inactive'
+        ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '1',
+            'semester' => '2nd',
+            'status' => 'Inactive'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '2',
             'semester' => '1st',
             'status' => 'Active'
         ]);

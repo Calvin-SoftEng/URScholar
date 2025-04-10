@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white">
-        <FloatingNav />
+        <FloatingNav :branding="branding" />
 
         <div class="flex w-full mt-10 my-auto max-w-8xl mx-auto gap-3">
             <div class="w-3/4 p-4 flex flex-col space-y-4"> <!-- 75% width -->
@@ -64,8 +64,11 @@
             </div>
             <div class="w-1/4 bg-white flex flex-col gap-4 rounded-lg shadow-md h-fit p-4 border border-gray-50">
                 <!-- 25% width -->
+                <Link :href="(route('register'))">
                 <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Apply
                     Now</button>
+                </Link>
+
                 <div class="flex flex-col">
                     <span class="text-gray-500 text-sm">Application Deadline</span>
                     <span class="font-medium text-xl">{{ formattedDate }}</span>
@@ -137,7 +140,11 @@ const props = defineProps({
     grade: {
         type: Object,
         required: true
-    }
+    },
+    branding: {
+        type: Object,
+        required: true,
+    },
 });
 
 const parsedCourses = computed(() => {

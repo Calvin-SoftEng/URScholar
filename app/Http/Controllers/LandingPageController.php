@@ -48,6 +48,7 @@ class LandingPageController extends Controller
 
         $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
         $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
+        $branding = PortalBranding::where('status', 'Active')->first();
 
         return Inertia::render('ScholarshipApplyDetails', [
             'scholarship' => $scholarship,
@@ -57,6 +58,7 @@ class LandingPageController extends Controller
             'selectedCampus' => $selectedCampus,
             'criterias' => $criteria,
             'grade' => $grade,
+            'branding' => $branding,
         ]);
     }
 }

@@ -37,14 +37,25 @@
                                 <div v-if="activeTab === 'eligibility'">
                                     <h2 class="text-lg font-semibold mb-3">Scholarship recipients are selected on the
                                         basis of:</h2>
-                                    <p>Student General Weighted Average must be atleast <span class="font-semibold">{{
-                                        criterias.grade }}</span></p>
-                                    <p>Family income must range between <span class="font-semibold">{{
-                                        criterias.scholarship_form_data.name }}</span></p>
-                                    <!-- dito mo ilist -->
+
+                                    <!-- Grade criteria -->
+                                    <p v-if="props.criterias.find(c => c.grade)">
+                                        Student General Weighted Average must be at least
+                                        <span class="font-semibold">{{props.criterias.find(c => c.grade).grade
+                                            }}</span>
+                                    </p>
+
+                                    <!-- Income criteria -->
+                                    <p v-if="props.criterias.find(c => c.scholarship_form_data)">
+                                        Family income must range between
+                                        <span v-for="criteria in criterias" :key="criteria.id" class="font-semibold">
+                                            {{ criteria.scholarship_form_data.name }}/
+                                        </span>
+                                    </p>
+
+                                    <!-- Other eligibility criteria -->
                                     <div v-for="eligible in eligibles" :key="eligible.id">
-                                        <p><span class="font-semibold">{{ eligible.condition.name }}</span>
-                                        </p>
+                                        <p><span class="font-semibold">{{ eligible.condition.name }}</span></p>
                                     </div>
                                 </div>
                                 <div v-if="activeTab === 'requirements'">
@@ -82,12 +93,13 @@
                         <h2 class="text-lg font-semibold">Reasons you are not Eligible</h2>
                         <ul class="list-disc pl-5 mt-2 text-base">
                             <li v-if="!meetsGradeRequirement(scholarship)">
-                                Your {{ props.grade.grade }} GWA does not meet the required minimum of {{
-                                    props.criterias.grade }}.
+                                Your {{ props.grade?.grade }} GWA does not meet the required minimum of
+                                {{props.criterias.find(c => c.grade)?.grade || 'N/A'}}.
                             </li>
                             <li v-if="!meetsCriteria(scholarship)">
                                 Your family income does not match the required range of
-                                {{ props.criterias.scholarship_form_data.name }}.
+                                {{props.criterias.find(c => c.scholarship_form_data)?.scholarship_form_data?.name ||
+                                    'N/A'}}.
                             </li>
                             <li v-if="!meetsCampusRequirement(scholarship)">
                                 Your course is not eligible for this scholarship.
@@ -152,7 +164,7 @@ const props = defineProps({
         required: true
     },
     criterias: {
-        type: Object,
+        type: Array,
         required: true
     },
     eligibles: {
@@ -209,29 +221,23 @@ const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-U
     day: "numeric"
 });
 
-// Check if student meets grade requirements
+// For grade requirement check
 const meetsGradeRequirement = (scholarship) => {
-    // If no grade criteria is set, student is eligible
-    // Get the required grade from criterias
-    const gradeCriteria = props.criterias.grade;
-    console.log(gradeCriteria);
+    // If no criteria are available, student is eligible
+    if (!props.criterias || props.criterias.length === 0) return true;
+
+    // Get the first criteria with a grade requirement
+    const gradeCriteria = props.criterias.find(criteria => criteria.grade);
     if (!gradeCriteria) return true;
 
-    const requiredGrade = gradeCriteria;
-    const studentGrade = props.grade.grade;
+    const requiredGrade = gradeCriteria.grade;
+    const studentGrade = props.grade?.grade;
 
-    // Assuming lower grades are better (like GPA where 1.0 is better than 4.0)
-    // Adjust this comparison based on your grading system
-    // return studentGrade <= requiredGrade;
+    // If student has no grade, they're not eligible
+    if (!studentGrade) return false;
 
-
-    if (studentGrade <= requiredGrade) {
-        return true
-    }
-    else {
-        return false
-    }
-
+    // Compare grades (assuming lower is better)
+    return studentGrade <= requiredGrade;
 };
 
 const meetsCampusRequirement = (scholarship) => {
@@ -247,7 +253,7 @@ const meetsCampusRequirement = (scholarship) => {
     //         console.log('meron siya');
     //         return true;
     //     }
-        
+
     // }
 
     // Look for a matching campus in the selectedCampus array
@@ -268,15 +274,19 @@ const meetsCampusRequirement = (scholarship) => {
     return false;
 };
 
+// For income criteria
 const meetsCriteria = (scholarship) => {
-    // If student has no campus/course info, not eligible
-    if (props.scholar.monthly_income === props.criterias.scholarship_form_data.name) {
-        console.log('meron siya');
-        return true;
-    }
+    // If no criteria are available, student is eligible
+    if (!props.criterias || props.criterias.length === 0) return true;
 
+    // Find income criteria
+    const incomeCriteria = props.criterias.find(criteria =>
+        criteria.scholarship_form_data && criteria.scholarship_form_data.name);
 
-    return false;
+    if (!incomeCriteria) return true;
+
+    // Check if scholar's income matches the required range
+    return props.scholar.monthly_income === incomeCriteria.scholarship_form_data.name;
 };
 
 // Overall eligibility check
