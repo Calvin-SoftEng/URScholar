@@ -83,16 +83,16 @@
             </div>
             </Link>
 
-            <Link :href="route('messaging.index')">
+            <Link :href="route('feed.index')">
             <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''"
-              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/group-page') }]">
+              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/feed') }]">
               <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/group-page') }]"
-                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/group-page') }]">
-                  forum
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/feed') }]"
+                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/feed') }]">
+                  contextual_token
                 </span>
                 <span v-show="dataOpenSideBar"
-                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Feed</span>
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/feed') }]">Feed</span>
               </div>
             </div>
             </Link>
