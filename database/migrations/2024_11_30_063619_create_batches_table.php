@@ -76,12 +76,22 @@ return new class extends Migration
         });
 
         //Scholars One-Time
+        Schema::create('applicant_tracks', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
+            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
+            $table->string('semester');
+            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->timestamps();
+        });
+
         Schema::create('applicants', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->string('essay');
             $table->string('semester');
             $table->enum('status', ['Successful', 'Unsuccessful', 'Pending'])->default('Pending');
             $table->timestamps();
@@ -107,6 +117,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('submitted_requirements');
         Schema::dropIfExists('applicants');
+        Schema::dropIfExists('applicant_tracks');
         Schema::dropIfExists('grantees');
         Schema::dropIfExists('notifiers');
         Schema::dropIfExists('scholars');

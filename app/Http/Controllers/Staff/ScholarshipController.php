@@ -881,7 +881,6 @@ class ScholarshipController extends Controller
 
         // Get the batch for the selected semester and school year
         $batch = Batch::where('scholarship_id', $scholarship->id)
-            ->where('semester', $request->input('selectedSem'))
             ->where('school_year_id', $request->input('selectedYear'))
             ->firstOrFail();
 
@@ -1036,7 +1035,7 @@ class ScholarshipController extends Controller
             'total_recipients' => 'required|integer|min:1',
             'campus_recipients' => 'required|array',
             'campus_recipients.*.campus_id' => 'required|exists:campuses,id',
-            'campus_recipients.*.slots' => 'required|integer|min:1',
+            'campus_recipients.*.slots' => 'required|integer|min:0', //need palitan to ha
             'campus_recipients.*.remaining_slots' => 'required|integer|min:0',
             'campus_recipients.*.selected_campus' => 'required|json',
             'application' => 'required|date',
@@ -1085,6 +1084,13 @@ class ScholarshipController extends Controller
                     'remaining_slots' => max(0, $campusRecipient['remaining_slots'] - $campusRecipient['slots']),
                 ]);
             }
+
+            Batch::create([
+                'scholarship_id' => $scholarship->id,
+                'batch_no' => '1',
+                'campus_id' => $campusRecipient['campus_id'],
+                'school_year_id' => $request->school_year,
+            ]);
         }
 
         // For requirements
@@ -1157,17 +1163,16 @@ class ScholarshipController extends Controller
 
         }
 
-        $batch = Batch::where('scholarship_id', $scholarship->id)->first();
+        // $batch = Batch::where('scholarship_id', $scholarship->id)->first();
 
-        if (!$batch) {
-            Batch::create([
-                'scholarship_id' => $scholarship->id,
-                'batch_no' => '1',
-                'campus_id' => 2,
-                'school_year_id' => $request->school_year,
-                'semester' => $request->semester,
-            ]);
-        }
+        // if (!$batch) {
+        //     Batch::create([
+        //         'scholarship_id' => $scholarship->id,
+        //         'batch_no' => '1',
+        //         'campus_id' => 2,
+        //         'school_year_id' => $request->school_year,
+        //     ]);
+        // }
 
         //Update Scholarship Status
         $scholarship->update([
