@@ -41,7 +41,7 @@
                                     </div>
                                     <div class="flex flex-col space-y-1">
                                         <span class="text-primary-foreground font-quicksand font-semibold text-lg">{{
-                                            batch.name }}</span>
+                                            batch.scholarship.name }}</span>
                                         <div class="flex-grow">
                                             <p class="text-xs text-gray-500 truncate" v-if="batch.latest_message">
                                                 {{ batch.latest_message.content }}
