@@ -26,7 +26,7 @@
 
         <!-- Box 3: Students (Icon Left again) -->
         <div class="relative w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-3 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow overflow-hidden">
-            <p class="text-5xl font-extrabold text-dprimary dark:text-dtext z-10">12</p>
+            <p class="text-5xl font-extrabold text-dprimary dark:text-dtext z-10">{{ univ_students }}</p>
             <p class="mt-2 text-sm text-gray-500 dark:text-gray-300 tracking-wide uppercase z-10">University Students</p>
             <img src="../../../../assets/images/student_icon.png" alt="student icon"
                 class="absolute left-4 bottom-4 w-20 opacity-10 dark:opacity-20 pointer-events-none select-none" />
@@ -55,7 +55,8 @@ const props = defineProps({
     active_scholars: {
         type: Array,
         required: true
-    }
+    },
+    univ_students: Object,
 });
 
 const isCreating = ref(false);

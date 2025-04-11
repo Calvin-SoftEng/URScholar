@@ -21,7 +21,7 @@
                 </div>
                 </Link>
 
-                <Link :href="(route('settings.eligibilities_forms'))">
+                <Link v-if="$page.props.auth.user.campus_id === 'super_admin'" :href="(route('settings.eligibilities_forms'))">
                 <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/eligibilities-forms' }]" >
                     <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                         <span>Eligibility Standards</span>
@@ -29,7 +29,7 @@
                 </div>
                 </Link>
 
-                <Link :href="route('settings.verification_forms')">
+                <Link v-if="$page.props.auth.user.campus_id === 'super_admin'" :href="route('settings.verification_forms')">
                     <div class="py-3 px-3 cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer" :class="[{ 'active text-dtext dark:text-dtext dark:bg-primary font-semibold border-r-4 border-primary dark:border-dtext bg-gray-100': $page.url === '/settings/verification-forms' }]" >
                         <router-link to="/customer" class="flex space-x-2 font-quicksand font-semibold pl-2">
                             <span>Verification Forms</span>

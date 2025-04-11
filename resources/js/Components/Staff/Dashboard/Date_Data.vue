@@ -10,8 +10,8 @@
 
         <!-- Bottom Left: School Year & Semester -->
         <div class="absolute bottom-8 left-6 z-10 text-white dark:text-gray-800 text-xl font-semibold font-sora">
-        S.Y. 2024-2025<br />
-        <span class="text-3xl">2nd Semester</span>
+        S.Y. {{academic_year.school_year.year}} <br />
+        <span class="text-3xl">{{academic_year.semester}} Semester</span>
         </div>
 
         <!-- Bottom Right: Background Image -->
@@ -34,6 +34,7 @@ import { Link } from '@inertiajs/vue3';
 const props = defineProps({
     scholarships: Array,
     sponsors: Array,
+    academic_year: Object,
 });
 
 const currentDate = ref('')
