@@ -1,9 +1,9 @@
 <Head title="Chat" />
     <template #default>
         <AuthenticatedLayout>
-            <div class="w-full h-full bg-dirtywhite">
-                <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
-                    <div class="bg-dirtywhite w-[95%] p-4 h-full">
+            
+                <div class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
+                    <div class="w-[95%] p-4 h-full">
                         <div class="bg-white w-full h-full rounded-xl flex flex-row">
                             <div class="w-[30%] border-r">
                                 <h3 class="text-xl text-primary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold ">
@@ -82,7 +82,7 @@
                                     </Link>
                                 </div> -->
                                 <div v-if="selectedTab === 'dm'" class="divide-y">
-                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4 hover:bg-gray-100"
+                                    <Link class="w-full flex items-center space-x-3 p-4 hover:bg-gray-100"
                                         >
                                     <div
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
@@ -94,10 +94,10 @@
                                             <p class="text-xs text-gray-500 truncate" >
                                                 wla pang budget beh
                                             </p>
-                                            
                                         </div>
                                     </div>
                                     </Link>
+                                    
                                 </div>
 
                                 <div v-if="selectedTab === 'gc'" class="divide-y">
@@ -340,7 +340,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
         </AuthenticatedLayout>
     </template>
 
