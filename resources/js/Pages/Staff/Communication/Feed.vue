@@ -3,52 +3,65 @@
         <template #default>
             <div class="w-full h-full bg-dirtywhite">
                 <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
-                    <div class="w-[95%] pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
+                    <div
+                        class="w-[95%] pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
                         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 ">
                             <div class="rounded-lg mb-10">
                                 <div class="h-full space-y-3 flex flex-col items-center justify-start pt-2 pb-10">
-                                    
-                                    <div class="bg-white w-full h-full p-5 space-y-3 rounded-lg shadow-md dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
-                                        <span class="font-poppins font-semibold text-xl dark:text-dtext">Announce to Everyone</span>
-                                        
+
+                                    <div
+                                        class="bg-white w-full h-full p-5 space-y-3 rounded-lg shadow-md dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col">
+                                        <span class="font-poppins font-semibold text-xl dark:text-dtext">Announce to
+                                            Everyone</span>
+
                                         <!-- Card -->
                                         <div class="flex flex-col flex-grow gap-3">
                                             <!-- Message Container (Expands to fill space) -->
                                             <div class="flex-grow w-full">
-                                                <textarea class="w-full h-full resize-none p-2 bg-transparent border-none outline-none focus:ring-0" rows="5"
-                                                    placeholder="Write your announcement here..."></textarea>
+                                                <textarea
+                                                    class="w-full h-full resize-none p-2 bg-transparent border-none outline-none focus:ring-0"
+                                                    rows="5" placeholder="Write your announcement here..."></textarea>
                                             </div>
                                             <!-- Buttons Container (Stays at the Bottom) -->
                                             <div class="w-full flex flex-row justify-between items-center">
                                                 <div class="flex gap-2">
-                                                    <button type="button" class="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-xs px-3 py-1 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55">
-                                                        <span class="material-symbols-rounded text-[18px] me-2">school</span>
+                                                    <button type="button"
+                                                        class="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-xs px-3 py-1 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55">
+                                                        <span
+                                                            class="material-symbols-rounded text-[18px] me-2">school</span>
                                                         Share to University
                                                     </button>
-                                                    
-                                                    <button type="button" class="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-xs px-3 py-1 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55">
-                                                        <span class="material-symbols-rounded text-[18px] me-2">groups</span>
+
+                                                    <button type="button"
+                                                        class="text-white bg-[#3b5998] hover:bg-[#3b5998]/90 focus:ring-4 focus:outline-none focus:ring-[#3b5998]/50 font-medium rounded-lg text-xs px-3 py-1 text-center inline-flex items-center dark:focus:ring-[#3b5998]/55">
+                                                        <span
+                                                            class="material-symbols-rounded text-[18px] me-2">groups</span>
                                                         Share to Group
                                                     </button>
                                                 </div>
 
-                                                <button @click="toggleSharePost" class="text-white font-sans bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                <button @click="toggleSharePost"
+                                                    class="text-white font-sans bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                     Share a Post
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="w-full bg-white rounded-lg shadow-md">
                                         <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
+                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
+                                                alt="user-avatar" />
                                             <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM Binangonan Campus</p>
+                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
+                                                    ADMINISTRATOR</p>
+                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
+                                                    Binangonan Campus</p>
                                             </div>
                                         </div>
                                         <div class="p-4">
-                                            <div class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
+                                            <div
+                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
                                                 <p>fefrgr D</p>
                                             </div>
                                         </div>
@@ -56,10 +69,13 @@
 
                                     <div class="w-full bg-white rounded-lg shadow-md">
                                         <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
+                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
+                                                alt="user-avatar" />
                                             <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM Binangonan Campus</p>
+                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
+                                                    ADMINISTRATOR</p>
+                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
+                                                    Binangonan Campus</p>
                                             </div>
                                         </div>
                                         <div class="p-4">
@@ -71,14 +87,18 @@
 
                                     <div class="w-full bg-white rounded-lg shadow-md">
                                         <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
+                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
+                                                alt="user-avatar" />
                                             <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM Binangonan Campus</p>
+                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
+                                                    ADMINISTRATOR</p>
+                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
+                                                    Binangonan Campus</p>
                                             </div>
                                         </div>
                                         <div class="p-4">
-                                            <div class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
+                                            <div
+                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
                                                 <p>fefrgr ghthtyjyj</p>
                                             </div>
                                         </div>
@@ -86,14 +106,18 @@
 
                                     <div class="w-full bg-white rounded-lg shadow-md">
                                         <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
+                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
+                                                alt="user-avatar" />
                                             <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM Binangonan Campus</p>
+                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
+                                                    ADMINISTRATOR</p>
+                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
+                                                    Binangonan Campus</p>
                                             </div>
                                         </div>
                                         <div class="p-4">
-                                            <div class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
+                                            <div
+                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
                                                 <p>fefrgr ghthtyjyj</p>
                                             </div>
                                         </div>
@@ -111,7 +135,8 @@
     <!-- Creating a post modal -->
     <div v-if="Share"
         class="fixed inset-0 flex items-center justify-center z-[999] bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-        <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12 overflow-visible relative">
+        <div
+            class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12 overflow-visible relative">
             <!-- Modal Header -->
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                 <div class="flex items-center gap-3">
@@ -141,18 +166,18 @@
 
             <!-- Modal Body -->
             <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-3">
-                
+
                 <!-- User Profile Section -->
                 <div class="flex items-center gap-3">
-                    <img src="../../../../assets/images/no_userpic.png" alt="Profile Picture" class="w-12 h-12 rounded-full object-cover">
+                    <img src="../../../../assets/images/no_userpic.png" alt="Profile Picture"
+                        class="w-12 h-12 rounded-full object-cover">
                     <div>
                         <h3 class="text-xl font-semibold text-gray-900 dark:text-white">si ako</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400">taga binondo</p>
                     </div>
                 </div>
 
-                <div
-                    class="col-span-4 gap-2 relative w-full flex items-center mt-4 whitespace-nowrap">
+                <div class="col-span-4 gap-2 relative w-full flex items-center mt-4 whitespace-nowrap">
                     <h3 class="font-semibold text-xs text-blue-900 dark:text-white">
                         Who can see your post?
                     </h3>
@@ -162,74 +187,73 @@
                 <!-- Filters -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     <!-- Scholarship Filter -->
-<div class="relative">
-  <label class="block text-xs font-medium mb-1">Scholarship</label>
-  <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-      @click="toggleDropdown('scholarship')">
-      {{ selectedScholarships.length ? selectedScholarships.join(', ') : 'Select Scholarships' }}
-  </button>
-  <div v-if="openDropdown === 'scholarship'"
-      class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-      <label v-for="item in props.scholarships" :key="item.id" class="block px-4 py-2 hover:bg-gray-100">
-          <input 
-          type="checkbox" 
-          class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          :value="item.name"
-          v-model="selectedScholarships"
-          />
-          {{ item.name }}
-      </label>
-  </div>
-</div>
+                    <div class="relative">
+                        <label class="block text-xs font-medium mb-1">Scholarship</label>
+                        <button type="button"
+                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                            @click="toggleDropdown('scholarship')">
+                            {{ selectedScholarships.length ? selectedScholarships.join(', ') : 'Select Scholarships' }}
+                        </button>
+                        <div v-if="openDropdown === 'scholarship'"
+                            class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                            <label v-for="item in props.scholarships" :key="item.id"
+                                class="block px-4 py-2 hover:bg-gray-100">
+                                <input type="checkbox"
+                                    class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    :value="item.name" v-model="selectedScholarships" />
+                                {{ item.name }}
+                            </label>
+                        </div>
+                    </div>
 
                     <!-- Batch Filter -->
-<div class="relative">
-  <label class="block text-xs font-medium mb-1">Batch</label>
-  <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-      @click="toggleDropdown('batch')">
-      {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
-  </button>
-  <div v-if="openDropdown === 'batch'"
-      class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-      <label v-for="item in filteredBatches" :key="item.id" class="block px-4 py-2 hover:bg-gray-100">
-          <input 
-          type="checkbox" 
-          class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          :value="`Batch ${item.batch_no}`"
-          v-model="selectedBatches"
-          />
-          Batch {{ item.batch_no }} ({{ item.scholarship.name }})
-      </label>
-  </div>
-</div>
+                    <div class="relative">
+                        <label class="block text-xs font-medium mb-1">Batch</label>
+                        <button type="button"
+                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                            @click="toggleDropdown('batch')">
+                            {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
+                        </button>
+                        <div v-if="openDropdown === 'batch'"
+                            class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                            <label v-for="item in filteredBatches" :key="item.id"
+                                class="block px-4 py-2 hover:bg-gray-100">
+                                <input type="checkbox"
+                                    class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    :value="`Batch ${item.batch_no}`" v-model="selectedBatches" />
+                                Batch {{ item.batch_no }} ({{ item.scholarship.name }})
+                            </label>
+                        </div>
+                    </div>
 
-<!-- Campus Filter -->
-<div class="relative">
-  <label class="block text-xs font-medium mb-1">Campus</label>
-  <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-      @click="toggleDropdown('campus')">
-      {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
-  </button>
-  <div v-if="openDropdown === 'campus'"
-      class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-      <label v-for="item in filteredCampuses" :key="item.id" class="block px-4 py-2 hover:bg-gray-100">
-          <input 
-          type="checkbox" 
-          class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          :value="item.name"
-          v-model="selectedCampuses"
-          />
-          {{ item.name }}
-      </label>
-  </div>
-</div>
+                    <!-- Campus Filter -->
+                    <div class="relative">
+                        <label class="block text-xs font-medium mb-1">Campus</label>
+                        <button type="button"
+                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                            @click="toggleDropdown('campus')">
+                            {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
+                        </button>
+                        <div v-if="openDropdown === 'campus'"
+                            class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                            <label v-for="item in filteredCampuses" :key="item.id"
+                                class="block px-4 py-2 hover:bg-gray-100">
+                                <input type="checkbox"
+                                    class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                    :value="item.name" v-model="selectedCampuses" />
+                                {{ item.name }}
+                            </label>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Message Box (Pre-filled Message) -->
                 <div class="">
-                    <label for="message" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Announcement Message</label>
-                    <textarea class="w-full h-full resize-none p-2 bg-transparent border-gray-300 rounded-md bg-gray-200 outline-none focus:ring-0" rows="5"
-                    placeholder="Write your announcement here..."></textarea>
+                    <label for="message" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Announcement
+                        Message</label>
+                    <textarea
+                        class="w-full h-full resize-none p-2 bg-transparent border-gray-300 rounded-md bg-gray-200 outline-none focus:ring-0"
+                        rows="5" placeholder="Write your announcement here..."></textarea>
 
                 </div>
 
@@ -292,12 +316,12 @@ const filteredCampuses = computed(() => {
         const selectedBatchNumbers = selectedBatches.value.map(batchName => {
             return parseInt(batchName.replace('Batch ', ''));
         });
-        
+
         // Find campus IDs associated with these batches
         const campusIds = props.batches
             .filter(batch => selectedBatchNumbers.includes(batch.batch_no))
             .map(batch => batch.campus_id);
-        
+
         // Return campuses with these IDs
         return props.campuses.filter(campus => campusIds.includes(campus.id));
     }
@@ -317,7 +341,7 @@ watch(selectedBatches, () => {
 
 const toggleSharePost = async () => {
     Share.value = !Share.value;
-    
+
     if (Share.value) {
         await nextTick();
         initFlowbite();
@@ -343,13 +367,13 @@ const toggleDropdown = (dropdown) => {
 const handleClickOutside = (event) => {
     const dropdownElements = document.querySelectorAll('.relative');
     let clickedOutside = true;
-    
+
     dropdownElements.forEach(element => {
         if (element.contains(event.target)) {
             clickedOutside = false;
         }
     });
-    
+
     if (clickedOutside && !event.target.closest('.your-modal-class')) {
         openDropdown.value = null;
     }
@@ -362,7 +386,7 @@ const submitForm = () => {
         batches: selectedBatches.value,
         campuses: selectedCampuses.value
     });
-    
+
     closeModal();
 };
 
