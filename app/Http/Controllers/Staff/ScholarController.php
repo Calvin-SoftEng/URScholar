@@ -576,6 +576,7 @@ class ScholarController extends Controller
                     ->where('middle_name', $record['MIDDLENAME'] ?? '')
                     ->first();
 
+
                 if ($existingScholar) {
                     // Check if this scholar already has a grantee record for this batch, semester, and school year
                     $existingGrantee = Grantees::where('scholar_id', $existingScholar->id)
@@ -803,11 +804,12 @@ class ScholarController extends Controller
 
                 // Update status directly
                 if ($matched) {
-                    // Update status and copy email from matched student
+                    // Update status and copy email and student_number from matched student
                     $scholar->update([
                         'student_status' => 'Enrolled',
                         'status' => 'Verified',
-                        'email' => $matched->email // Copy email from matched student
+                        'email' => $matched->email, // Copy email from matched student
+                        'student_number' => $matched->student_number // Copy student_number from matched student
                     ]);
                     $matchedCount++;
                 } else {
@@ -844,13 +846,13 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                         ]);
 
-                        // Create Group Page for current user
-                        Page::create([
-                            'user_id' => $currentUser->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                        // // Create Group Page for current user
+                        // Page::create([
+                        //     'user_id' => $currentUser->id,
+                        //     'scholarship_id' => $scholarship->id,
+                        //     'batch_id' => $batch->id,
+                        //     'campus_id' => $campus->id,
+                        // ]);
                     }
 
                     // Find coordinator
@@ -865,13 +867,13 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                         ]);
 
-                        //Create Group Page
-                        Page::create([
-                            'user_id' => $coordinator->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                        // //Create Group Page
+                        // Page::create([
+                        //     'user_id' => $coordinator->id,
+                        //     'scholarship_id' => $scholarship->id,
+                        //     'batch_id' => $batch->id,
+                        //     'campus_id' => $campus->id,
+                        // ]);
 
                         // Create notification for coordinator
                         $notification = Notification::create([
@@ -897,13 +899,13 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                         ]);
 
-                        //Create Group Page
-                        Page::create([
-                            'user_id' => $cashier->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                        // //Create Group Page
+                        // Page::create([
+                        //     'user_id' => $cashier->id,
+                        //     'scholarship_id' => $scholarship->id,
+                        //     'batch_id' => $batch->id,
+                        //     'campus_id' => $campus->id,
+                        // ]);
                     }
                 }
             }

@@ -26,6 +26,7 @@ return new class extends Migration
 
         Schema::create('scholars', function (Blueprint $table) {
             $table->id();
+            $table->string('student_number')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('hei_name');
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
