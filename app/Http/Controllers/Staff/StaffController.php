@@ -67,6 +67,7 @@ class StaffController extends Controller
             });
 
             $active_scholars = Grantees::where('status', 'Active')->get();
+            
             $enrolled = Student::all();
 
             $activity_logs = ActivityLog::where('user_id', Auth::user()->id)->get();

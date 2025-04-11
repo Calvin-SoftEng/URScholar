@@ -10,7 +10,7 @@
                     <Statistics :univ_students="univ_students" :scholarships="scholarships" :active_scholars="active_scholars" />
                 </div>
                 <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
-                    <ScholarsStatistics />
+                    <ScholarsStatistics :active_scholars="active_scholars"/>
                 </div>
                 <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
                     <ActiveScholarship :sponsors="sponsors" :scholarships="scholarships" />
