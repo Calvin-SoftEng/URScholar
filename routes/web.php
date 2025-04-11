@@ -102,6 +102,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])-
     // Show specific batch or staff group
     Route::get('/messaging/batch/{batch}', [MessageController::class, 'showBatch'])->name('messaging.batch');
     Route::get('/messaging/staff/{staffGroup}', [MessageController::class, 'showStaffGroup'])->name('messaging.staff');
+    // Add this to your existing routes
+    Route::get('/messaging/conversation/{userId}', [MessageController::class, 'showConversation'])->name('messaging.conversation');
 
 
 

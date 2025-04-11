@@ -13,6 +13,7 @@ class Message extends Model
         'user_id',
         'batch_id',
         'staff_group_id',
+        'conversation_id',
         'content',
     ];
 
@@ -21,6 +22,11 @@ class Message extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function conversation()
+    {
+        return $this->belongsTo(Conversation::class);
     }
 
     public function scholarship()

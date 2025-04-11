@@ -49,21 +49,43 @@
 
                         <!-- Direct messages section -->
                         <div v-if="selectedTab === 'dm'" class="divide-y">
-                            <Link class="w-full flex items-center space-x-3 p-4 hover:bg-gray-100">
-                            <div
-                                class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                IMEE
-                            </div>
-                            <div class="flex flex-col space-y-1">
-                                <span class="text-primary-foreground font-quicksand font-semibold text-lg">Imee
-                                    Marcos</span>
-                                <div class="flex-grow">
-                                    <p class="text-xs text-gray-500 truncate">
-                                        wla pang budget beh
-                                    </p>
+                            <!-- Single Users List -->
+                            <div class="py-2">
+                                <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Users</h4>
+                                <Link v-for="user in filteredUsers" :key="`user-${user.id}`"
+                                    :href="route('messaging.conversation', user.id)" :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
+                                        selectedUser && selectedUser.id === user.id ? 'bg-blue-50' : '']"
+                                    @click.prevent="selectUser(user)">
+                                <div v-if="user.picture">
+                                    <img class="h-10 w-10 rounded-full" :src="`/storage/user/profile/${user.picture}`"
+                                        :alt="user.name">
                                 </div>
+                                <div v-else
+                                    class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                    {{ user.first_name ? user.first_name.charAt(0) : user.name.charAt(0) }}
+                                </div>
+                                <div class="flex flex-col space-y-1 flex-grow">
+                                    <div class="flex justify-between">
+                                        <span class="text-primary-foreground font-quicksand font-semibold">
+                                            {{ user.first_name || user.name }}
+                                        </span>
+                                        <!-- Show timestamp of latest message if exists -->
+                                        <span v-if="getUserLatestMessage(user.id)" class="text-xs text-gray-400">
+                                            {{ formatTimestamp(getUserLatestMessage(user.id).created_at) }}
+                                        </span>
+                                    </div>
+                                    <div class="flex-grow">
+                                        <!-- Show latest message content if exists -->
+                                        <p class="text-xs text-gray-500 truncate" v-if="getUserLatestMessage(user.id)">
+                                            {{ getUserLatestMessage(user.id).content }}
+                                        </p>
+                                        <p class="text-xs text-gray-500" v-else>
+                                            {{ formatUserType(user.usertype) }}
+                                        </p>
+                                    </div>
+                                </div>
+                                </Link>
                             </div>
-                            </Link>
                         </div>
 
                         <!-- Group chats section -->
@@ -74,7 +96,8 @@
                                 <Link v-for="group in filteredStaffGroups" :key="`staff-${group.id}`"
                                     :href="route('messaging.staff', group.id)"
                                     :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
-                                        selectedData && selectedData.id === group.id && groupType === 'staff' ? 'bg-blue-50' : '']">
+                                        selectedData && selectedData.id === group.id && groupType === 'staff' ? 'bg-blue-50' : '']"
+                                    @click.prevent="selectGroup(group, 'staff')">
                                 <div
                                     class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-500 font-semibold">
                                     {{ group.name.slice(0, 2).toUpperCase() }}
@@ -82,7 +105,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                            }}</span>
+                                        }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -110,7 +133,8 @@
                                 <Link v-for="batch in filteredBatches" :key="`batch-${batch.id}`"
                                     :href="route('messaging.batch', batch.id)"
                                     :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
-                                        selectedData && selectedData.id === batch.id && groupType === 'batch' ? 'bg-blue-50' : '']">
+                                        selectedData && selectedData.id === batch.id && groupType === 'batch' ? 'bg-blue-50' : '']"
+                                    @click.prevent="selectGroup(batch, 'batch')">
                                 <div
                                     class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
                                     {{ batch.batch_no || 'B' }}
@@ -249,7 +273,8 @@
                                         <!-- Group members by usertype -->
                                         <template v-for="member in members" :key="member">
                                             <div class="mb-4">
-                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">ewan ko</h5>
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">ewan ko
+                                                </h5>
                                                 <!-- <div 
                                                     class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
                                                     <div v-if="user.picture">
@@ -317,6 +342,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, Link } from '@inertiajs/vue3';
 import { ref, onMounted, watch, computed, onUnmounted } from 'vue';
+import axios from 'axios';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
@@ -325,9 +351,13 @@ const props = defineProps({
     currentUser: Object,
     staffGroups: Array,
     batches: Array,
-    members: Array,
+    users: Array,
+    conversations: Array,
     selectedGroup: Object,
     groupType: String,
+    selectedUser: Object,
+    selectedConversation: Object,
+    members: Array,
 });
 
 const selectedTab = ref('gc'); // Default to 'gc' tab for group chats
@@ -336,7 +366,9 @@ const selectedData = ref(props.selectedGroup);
 const groupType = ref(props.groupType || null);
 const searchTerm = ref('');
 const showMemberList = ref(false);
-const announcement = ref('Bukas daw sa registrar may palduhan.');
+const conversations = ref(props.conversations || []);
+const selectedUser = ref(props.selectedUser || null);
+const selectedConversation = ref(props.selectedConversation || null);
 
 // Create reactive refs for staff groups and batches
 const staffGroupsData = ref(props.staffGroups || []);
@@ -414,10 +446,106 @@ const formatTimestamp = (timestamp) => {
     }
 };
 
-// Close announcement
-const closeAnnouncement = () => {
-    announcement.value = null;
+
+// Add this to your script's computed properties
+const filteredUsers = computed(() => {
+    if (!props.users) return [];
+    if (!searchTerm.value) return props.users;
+
+    return props.users.filter(user => {
+        const fullName = `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase();
+        const userName = user.name ? user.name.toLowerCase() : '';
+        return fullName.includes(searchTerm.value.toLowerCase()) ||
+            userName.includes(searchTerm.value.toLowerCase());
+    });
+});
+
+// Add this function to handle user selection
+const selectUser = (user) => {
+    // Set the selected tab to direct messages
+    selectedTab.value = 'dm';
+
+    // Update selected user
+    selectedUser.value = user;
+
+    // Clear previous messages while loading new ones
+    messageData.value = [];
+
+    // Find existing conversation if any
+    const existingConvo = conversations.value.find(convo =>
+        convo.other_user && convo.other_user.id === user.id
+    );
+
+    if (existingConvo) {
+        selectedConversation.value = existingConvo;
+        selectedData.value = existingConvo;
+    } else {
+        // Create a temporary conversation object
+        selectedConversation.value = null;
+        selectedData.value = { id: user.id, name: user.first_name || user.name };
+    }
+
+    // Set the group type to conversation
+    groupType.value = 'conversation';
+
+    // Navigate to the conversation route
+    router.get(route('messaging.conversation', user.id), {}, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['messages', 'selectedUser', 'selectedConversation'],
+        onSuccess: (page) => {
+            if (page.props.messages) {
+                messageData.value = page.props.messages;
+                scrollToBottom();
+            }
+        }
+    });
 };
+
+// Add this function to handle group selection
+const selectGroup = (group, type) => {
+    // Set the selected tab to group chats
+    selectedTab.value = 'gc';
+
+    // Clear previous messages while loading new ones
+    messageData.value = [];
+
+    // Update selected data and group type
+    selectedData.value = group;
+    groupType.value = type;
+
+    // Clear user selection
+    selectedUser.value = null;
+    selectedConversation.value = null;
+
+    // Navigate to the appropriate route
+    const routeName = type === 'staff' ? 'messaging.staff' : 'messaging.batch';
+    router.get(route(routeName, group.id), {}, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['messages', 'selectedGroup', 'groupType'],
+        onSuccess: (page) => {
+            if (page.props.messages) {
+                messageData.value = page.props.messages;
+                scrollToBottom();
+            }
+        }
+    });
+};
+
+// Helper function to get latest message for a user
+const getUserLatestMessage = (userId) => {
+    if (!conversations.value) return null;
+
+    // Find the conversation with this user
+    const conversation = conversations.value.find(convo =>
+        convo.other_user && convo.other_user.id === userId
+    );
+
+    // Return the latest message if found
+    return conversation && conversation.latest_message ? conversation.latest_message : null;
+};
+
 
 // Toggle attachment menu (placeholder for future functionality)
 const toggleAttachmentMenu = () => {
@@ -425,7 +553,7 @@ const toggleAttachmentMenu = () => {
     // Implementation for attachment menu would go here
 };
 
-// Send message function
+// Update the sendMessage function to handle conversations
 const sendMessage = () => {
     if (!selectedData.value || !selectedData.value.id || !form.value.content.trim()) {
         return;
@@ -475,15 +603,39 @@ const setupRealTimeListeners = () => {
 
     // Listen for new messages in the active chat
     if (selectedData.value && selectedData.value.id) {
-        echo.private(`chat.${selectedData.value.id}`)
+        const channelName = groupType.value === 'conversation'
+            ? `conversation.${selectedData.value.id}`
+            : `chat.${selectedData.value.id}`;
+
+        echo.private(channelName)
             .listen('.message.sent', (e) => {
                 fetchMessages();
-                console.log('New message received in active chat:', e);
+                console.log('New message received:', e);
                 if (e.message && !messageData.value.some(m => m.id === e.message.id)) {
                     messageData.value.unshift(e.message);
                     scrollToBottom();
                 }
             });
+    }
+
+    // Listen for new messages in all conversations
+    if (conversations.value && conversations.value.length > 0) {
+        conversations.value.forEach(convo => {
+            echo.private(`chat.${convo.id}`)
+                .listen('.message.sent', (e) => {
+                    fetchMessages();
+                    console.log('New message received in conversation:', e);
+                    if (e.message) {
+                        // Update the latest message for this conversation
+                        const convoIndex = conversations.value.findIndex(c => c.id === convo.id);
+                        if (convoIndex !== -1) {
+                            conversations.value[convoIndex].latest_message = e.message;
+                            // Force Vue to recognize the change
+                            conversations.value = [...conversations.value];
+                        }
+                    }
+                });
+        });
     }
 
     // Listen for new messages in all staff groups
@@ -523,31 +675,36 @@ const setupRealTimeListeners = () => {
     });
 };
 
+// Update the fetchMessages function to handle conversations
 const fetchMessages = async () => {
     if (!selectedData.value || !selectedData.value.id) return;
-    
+
     let url;
     if (groupType.value === 'batch') {
         url = route("messaging.batch", { batch: selectedData.value.id });
-    } else {
+    } else if (groupType.value === 'staff') {
         url = route("messaging.staff", { staffGroup: selectedData.value.id });
+    } else if (groupType.value === 'conversation' && selectedUser.value) {
+        url = route("messaging.conversation", { userId: selectedUser.value.id });
+    } else {
+        return;
     }
 
     try {
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        // Update the messages
-        messageData.value = data.props.messages || [];
-        
-        // Update the group data
-        if (groupType.value === 'batch') {
-            batchesData.value = data.props.batches || [];
-        } else {
-            staffGroupsData.value = data.props.staffGroups || [];
-        }
-        
-        scrollToBottom();
+        // Use Inertia's visit method instead of direct axios call
+        router.visit(url, {
+            method: 'get',
+            preserveState: true,
+            preserveScroll: true,
+            only: ['messages'],
+            onSuccess: (page) => {
+                console.log('Page data received:', page.props);
+                if (page.props.messages) {
+                    messageData.value = page.props.messages;
+                    scrollToBottom();
+                }
+            }
+        });
     } catch (error) {
         console.error('Error fetching messages:', error);
     }
@@ -557,38 +714,76 @@ const fetchMessages = async () => {
 const cleanupListeners = () => {
     if (echo) {
         if (selectedData.value && selectedData.value.id) {
-            echo.leave(`private-chat.${selectedData.value.id}`);
+            const channelName = groupType.value === 'conversation'
+                ? `private-conversation.${selectedData.value.id}`
+                : `private-chat.${selectedData.value.id}`;
+
+            echo.leave(channelName);
         }
-        
+
+        if (conversations.value && conversations.value.length > 0) {
+            conversations.value.forEach(convo => {
+                echo.leave(`private-conversation.${convo.id}`);
+            });
+        }
+
         staffGroupsData.value.forEach(group => {
             echo.leave(`private-chat.${group.id}`);
         });
-        
+
         batchesData.value.forEach(batch => {
             echo.leave(`private-chat.${batch.id}`);
         });
     }
 };
 
+// Update the initialization to include selectedUser from props
 onMounted(() => {
     // Initial setup
     setupRealTimeListeners();
     scrollToBottom();
+
+    // Initialize selectedUser if it exists in props
+    if (props.selectedUser) {
+        selectedUser.value = props.selectedUser;
+    }
 });
 
-// Reset listeners when the selected chat changes
-watch([selectedData, groupType], ([newSelectedData, newGroupType]) => {
+watch([selectedData, groupType], ([newSelectedData, newGroupType], [oldSelectedData, oldGroupType]) => {
     if (newSelectedData && newSelectedData.id && newGroupType) {
         form.value.group_id = newSelectedData.id;
         form.value.group_type = newGroupType;
-        fetchMessages();
-        
+
+        // Only fetch messages if the selection has actually changed
+        if (!oldSelectedData || oldSelectedData.id !== newSelectedData.id || oldGroupType !== newGroupType) {
+            fetchMessages();
+        }
+
         // Reset listeners to include the new selected chat
         cleanupListeners();
         setupRealTimeListeners();
     }
 });
 
+// Add this new watch function to handle tab persistence
+watch(selectedTab, (newTab) => {
+    // When tab changes, update the visible content but don't change the selection
+    if (newTab === 'dm' && selectedUser.value) {
+        // If switching to DM tab and we already have a selected user, keep that selection
+        selectedData.value = selectedConversation.value || { id: selectedUser.value.id };
+        groupType.value = 'conversation';
+    } else if (newTab === 'gc' && selectedData.value && groupType.value === 'conversation') {
+        // If switching to GC tab and we had a conversation selected, clear it
+        // Or optionally select the first group if available
+        if (staffGroupsData.value.length > 0) {
+            selectedData.value = staffGroupsData.value[0];
+            groupType.value = 'staff';
+        } else if (batchesData.value.length > 0) {
+            selectedData.value = batchesData.value[0];
+            groupType.value = 'batch';
+        }
+    }
+});
 // Clean up when component is unmounted
 onUnmounted(() => {
     cleanupListeners();
