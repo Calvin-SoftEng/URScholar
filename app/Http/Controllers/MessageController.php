@@ -193,55 +193,6 @@ class MessageController extends Controller
         return back();
     }
 
-    // public function oldstore(Request $request)
-    // {
-
-    //     $request->validate([
-    //         'content' => 'required|string',
-    //         'batch_id' => 'required',
-    //     ]);
-
-    //     // dd($request);
-    //     $user = Auth::user()->id;
-
-    //     $message = Message::create([
-    //         'user_id' => $user,
-    //         'batch_id' => $request->batch_id,
-    //         'content' => $request->content,
-    //     ]);
-
-    //     // MessageSent::dispatch($message);
-
-    //     broadcast(new MessageSent($message))->toOthers();
-
-    //     $batch = Batch::find($request->batch_id);
-
-    //     $notification = Notification::create([
-    //         'title' => 'New Group Chat Message!',
-    //         'message' => 'You have a new message in the group chat' . $batch->name,
-    //         'type' => 'group_chat',
-    //     ]);
-
-    //     $batchID = $batch->id;
-
-    //     // Get users who belong to the specified scholarship group
-    //     $users = User::whereIn('id', function ($query) use ($batchID) {
-    //         $query->select('user_id')
-    //             ->from('scholarship_groups')
-    //             ->where('batch_id', $batchID);
-    //     })
-    //         ->where('id', '!=', Auth::user()->id) // Add this line to exclude the current user
-    //         ->get();
-
-    //     // Attach users to the notification
-    //     $notification->users()->attach($users->pluck('id'));
-
-
-    //     event(new NewNotification($notification));
-
-    //     return back();
-    // }
-
     private function getCombinedGroupsData($currentUser)
     {
         // Get staff groups

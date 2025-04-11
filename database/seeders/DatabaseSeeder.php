@@ -19,6 +19,7 @@ use App\Models\StaffGroup;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use StaffGroupUser;
 
 class DatabaseSeeder extends Seeder
 {
@@ -391,9 +392,25 @@ class DatabaseSeeder extends Seeder
             'status' => 'Active'
         ]);
 
-        // StaffGroup::factory()->create([
-        //     'name' => '',
-        // ]);
+        StaffGroup::factory()->create([
+            'name' => 'Scholarship Coordinators',
+            'user_id' => '2',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '2',
+            'staff_group_id' => '1',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '3',
+            'staff_group_id' => '1',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '4',
+            'staff_group_id' => '1',
+        ]);
 
 
         //sponsor 

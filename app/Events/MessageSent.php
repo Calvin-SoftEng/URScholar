@@ -22,7 +22,6 @@ class MessageSent implements ShouldBroadcastNow
     {
         $this->message = $message;
     }
-
     public function broadcastOn()
     {
         // Use batch_id if available, otherwise fall back to staff_group_id

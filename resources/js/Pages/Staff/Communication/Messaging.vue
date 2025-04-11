@@ -245,13 +245,12 @@
                                 <div class="p-4">
                                     <h4 class="font-bold text-primary mb-3">Members</h4>
 
-                                    <div v-if="selectedData && selectedData.users">
+                                    <div v-if="members.length > 0">
                                         <!-- Group members by usertype -->
-                                        <template v-for="(usersOfType, usertype) in groupedUsers" :key="usertype">
+                                        <template v-for="member in members" :key="member">
                                             <div class="mb-4">
-                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">{{
-                                                    formatUserType(usertype) }}</h5>
-                                                <div v-for="user in usersOfType" :key="user.id"
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">ewan ko</h5>
+                                                <!-- <div 
                                                     class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
                                                     <div v-if="user.picture">
                                                         <img class="h-8 w-8 rounded-full"
@@ -265,7 +264,7 @@
                                                     </div>
                                                     <span class="text-sm font-medium">{{ user.first_name || user.name
                                                         }}</span>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </template>
                                     </div>
@@ -317,7 +316,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, Link } from '@inertiajs/vue3';
-import { ref, onMounted, watch, computed } from 'vue';
+import { ref, onMounted, watch, computed, onUnmounted } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 
@@ -326,6 +325,7 @@ const props = defineProps({
     currentUser: Object,
     staffGroups: Array,
     batches: Array,
+    members: Array,
     selectedGroup: Object,
     groupType: String,
 });
@@ -338,6 +338,10 @@ const searchTerm = ref('');
 const showMemberList = ref(false);
 const announcement = ref('Bukas daw sa registrar may palduhan.');
 
+// Create reactive refs for staff groups and batches
+const staffGroupsData = ref(props.staffGroups || []);
+const batchesData = ref(props.batches || []);
+
 // Form data for sending messages
 const form = ref({
     content: '',
@@ -347,20 +351,20 @@ const form = ref({
 
 // Filter staff groups based on search term
 const filteredStaffGroups = computed(() => {
-    if (!props.staffGroups) return [];
-    if (!searchTerm.value) return props.staffGroups;
+    if (!staffGroupsData.value) return [];
+    if (!searchTerm.value) return staffGroupsData.value;
 
-    return props.staffGroups.filter(group =>
+    return staffGroupsData.value.filter(group =>
         group.name.toLowerCase().includes(searchTerm.value.toLowerCase())
     );
 });
 
 // Filter batches based on search term
 const filteredBatches = computed(() => {
-    if (!props.batches) return [];
-    if (!searchTerm.value) return props.batches;
+    if (!batchesData.value) return [];
+    if (!searchTerm.value) return batchesData.value;
 
-    return props.batches.filter(batch => {
+    return batchesData.value.filter(batch => {
         const batchName = batch.name || `Batch ${batch.batch_no}`;
         const scholarshipName = batch.scholarship ? batch.scholarship.name : '';
         return batchName.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
@@ -444,7 +448,6 @@ const sendMessage = () => {
     });
 };
 
-
 // Scroll to bottom of message container
 const scrollToBottom = () => {
     setTimeout(() => {
@@ -455,76 +458,139 @@ const scrollToBottom = () => {
     }, 100);
 };
 
-// In your Vue component's onMounted function
-onMounted(() => {
-    if (selectedData.value && selectedData.value.id) {
-        const echo = new Echo({
+// Initialize Echo for real-time communication
+let echo;
+
+// Set up all event listeners for real-time messaging
+const setupRealTimeListeners = () => {
+    if (!echo) {
+        echo = new Echo({
             broadcaster: 'pusher',
             key: import.meta.env.VITE_PUSHER_APP_KEY,
             cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
             forceTLS: true,
             authEndpoint: "/broadcasting/auth"
         });
+    }
 
-        // Listen on the private channel
+    // Listen for new messages in the active chat
+    if (selectedData.value && selectedData.value.id) {
         echo.private(`chat.${selectedData.value.id}`)
-            .listen('.message.sent', (e) => {  // Note the dot prefix
-                console.log('New message received:', e);
+            .listen('.message.sent', (e) => {
+                fetchMessages();
+                console.log('New message received in active chat:', e);
                 if (e.message && !messageData.value.some(m => m.id === e.message.id)) {
                     messageData.value.unshift(e.message);
                     scrollToBottom();
                 }
             });
     }
-});
 
-const fetchMessages = async () => {
-    let data;
+    // Listen for new messages in all staff groups
+    staffGroupsData.value.forEach(group => {
+        echo.private(`chat.${group.id}`)
+            .listen('.message.sent', (e) => {
+                fetchMessages();
+                console.log('New message received in staff group:', e);
+                if (e.message) {
+                    // Update the latest message for this group
+                    const groupIndex = staffGroupsData.value.findIndex(g => g.id === group.id);
+                    if (groupIndex !== -1) {
+                        staffGroupsData.value[groupIndex].latest_message = e.message;
+                        // Force Vue to recognize the change
+                        staffGroupsData.value = [...staffGroupsData.value];
+                    }
+                }
+            });
+    });
 
-    if (groupType === 'batch') {
-        const response = await router.get(route("messaging.batch", { batch: selectedData.value.id }));
-        data = response.data;
-    } else {
-        const response = await router.get(route("messaging.staff", { staffGroup: selectedData.value.id }));
-        data = response.data;
-    }
-
-    messageData.value = data;
+    // Listen for new messages in all batches
+    batchesData.value.forEach(batch => {
+        echo.private(`chat.${batch.id}`)
+            .listen('.message.sent', (e) => {
+                fetchMessages();
+                console.log('New message received in batch:', e);
+                if (e.message) {
+                    // Update the latest message for this batch
+                    const batchIndex = batchesData.value.findIndex(b => b.id === batch.id);
+                    if (batchIndex !== -1) {
+                        batchesData.value[batchIndex].latest_message = e.message;
+                        // Force Vue to recognize the change
+                        batchesData.value = [...batchesData.value];
+                    }
+                }
+            });
+    });
 };
 
-// // Set up real-time messaging using Laravel Echo
-// onMounted(() => {
+const fetchMessages = async () => {
+    if (!selectedData.value || !selectedData.value.id) return;
+    
+    let url;
+    if (groupType.value === 'batch') {
+        url = route("messaging.batch", { batch: selectedData.value.id });
+    } else {
+        url = route("messaging.staff", { staffGroup: selectedData.value.id });
+    }
 
-// const echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: import.meta.env.VITE_PUSHER_APP_KEY,
-//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//     forceTLS: true,
-//     authEndpoint: "/broadcasting/auth", // Required for private channels
-// });
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        // Update the messages
+        messageData.value = data.props.messages || [];
+        
+        // Update the group data
+        if (groupType.value === 'batch') {
+            batchesData.value = data.props.batches || [];
+        } else {
+            staffGroupsData.value = data.props.staffGroups || [];
+        }
+        
+        scrollToBottom();
+    } catch (error) {
+        console.error('Error fetching messages:', error);
+    }
+};
 
-// echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
-//     .listen('.message.sent', (e) => {
-//         fetchMessages(); // Fetch messages after receiving
-//         scrollToBottom();
-//         messages.value.push(e.message); // Append new message
-//     });
-// });
+// Clean up event listeners when component is unmounted
+const cleanupListeners = () => {
+    if (echo) {
+        if (selectedData.value && selectedData.value.id) {
+            echo.leave(`private-chat.${selectedData.value.id}`);
+        }
+        
+        staffGroupsData.value.forEach(group => {
+            echo.leave(`private-chat.${group.id}`);
+        });
+        
+        batchesData.value.forEach(batch => {
+            echo.leave(`private-chat.${batch.id}`);
+        });
+    }
+};
 
-// const scholarshipId = ref(props.selectedBatch); // Or however you're getting the ID
+onMounted(() => {
+    // Initial setup
+    setupRealTimeListeners();
+    scrollToBottom();
+});
 
-// const fetchMessages = async () => {
-// const { data } = await router.get(route("messaging.show", { batch: props.selectedBatch.id }));
-
-// messageData.value = data;
-// };
-
-// Watch for changes in selectedData and update form
+// Reset listeners when the selected chat changes
 watch([selectedData, groupType], ([newSelectedData, newGroupType]) => {
     if (newSelectedData && newSelectedData.id && newGroupType) {
         form.value.group_id = newSelectedData.id;
         form.value.group_type = newGroupType;
         fetchMessages();
+        
+        // Reset listeners to include the new selected chat
+        cleanupListeners();
+        setupRealTimeListeners();
     }
+});
+
+// Clean up when component is unmounted
+onUnmounted(() => {
+    cleanupListeners();
 });
 </script>
