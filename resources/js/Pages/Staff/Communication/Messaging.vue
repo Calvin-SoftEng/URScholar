@@ -82,7 +82,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                            }}</span>
+                                        }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -284,10 +284,10 @@
                                                     <div v-else
                                                         class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
                                                         {{ user.first_name ? user.first_name.charAt(0) :
-                                                        user.name.charAt(0) }}
+                                                            user.name.charAt(0) }}
                                                     </div>
                                                     <span class="text-sm font-medium">{{ user.first_name || user.name
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                             </div>
                                         </template>
@@ -467,27 +467,20 @@ const sendMessage = () => {
     });
 };
 
-// Fetch messages for the selected group
 const fetchMessages = async () => {
-    if (!selectedData.value || !selectedData.value.id || !groupType.value) {
-        return;
+    let data;
+
+    if (groupType === 'batch') {
+        const response = await router.get(route("messaging.batch", { batch: selectedData.value.id }));
+        data = response.data;
+    } else {
+        const response = await router.get(route("messaging.staff", { staffGroup: selectedData.value.id }));
+        data = response.data;
     }
 
-    const endpoint = groupType.value === 'batch'
-        ? route('messaging.batch', selectedData.value.id)
-        : route('messaging.staff', selectedData.value.id);
-
-    try {
-        const response = await fetch(endpoint);
-        const data = await response.json();
-        if (data.props && data.props.messages) {
-            messageData.value = data.props.messages;
-            scrollToBottom();
-        }
-    } catch (error) {
-        console.error('Error fetching messages:', error);
-    }
+    messageData.value = data;
 };
+
 
 // Scroll to bottom of message container
 const scrollToBottom = () => {
@@ -517,12 +510,13 @@ onMounted(() => {
         const channelName = groupType.value === 'batch'
             ? `batch.${selectedData.value.id}`
             : `staff.${selectedData.value.id}`;
-            
+
         console.log(channelName);
 
         // Listen for new messages
         echo.private(channelName)
             .listen('.message.sent', (e) => {
+                fetchMessages();
                 // Add new message to the list
                 if (e.message && !messageData.value.some(m => m.id === e.message.id)) {
                     messageData.value.unshift(e.message);

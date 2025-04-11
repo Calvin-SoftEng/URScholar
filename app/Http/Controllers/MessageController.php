@@ -118,6 +118,34 @@ class MessageController extends Controller
         ]);
     }
 
+    public function getBatchMessages(Batch $batch)
+    {
+        $messages = Message::with(['user', 'batch'])
+            ->where('batch_id', $batch->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'props' => [
+                'messages' => $messages
+            ]
+        ]);
+    }
+
+    public function getStaffGroupMessages(StaffGroup $staffGroup)
+    {
+        $messages = Message::with(['user', 'staffGroup'])
+            ->where('staff_group_id', $staffGroup->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return response()->json([
+            'props' => [
+                'messages' => $messages
+            ]
+        ]);
+    }
+
     public function storeMessage(Request $request)
     {
         $request->validate([
@@ -147,7 +175,7 @@ class MessageController extends Controller
             $channelName = "staff.{$request->group_id}";
             $notificationMessage = "You have a new message in the staff group: {$group->name}";
         }
-        
+
         $message = Message::create($messageData);
 
         // Load user relationship for broadcasting
@@ -168,8 +196,7 @@ class MessageController extends Controller
             $users = User::whereHas('scholarshipGroups', function ($query) use ($request) {
                 $query->where('batch_id', $request->group_id);
             })->where('id', '!=', Auth::user()->id)->get();
-        } 
-        else {
+        } else {
             $users = User::whereHas('staffGroups', function ($query) use ($request) {
                 $query->where('staff_group_id', $request->group_id);
             })->where('id', '!=', Auth::user()->id)->get();
