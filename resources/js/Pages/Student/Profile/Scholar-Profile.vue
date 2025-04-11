@@ -10,60 +10,66 @@
                 </h1>
                 <!-- Web Version -->
                 <div class="hidden lg:flex space-x-4 p-3 mx-20">
-                    <button
-                        v-if="!EditProfileWeb"
-                        type="button"
-                        @click="EditProfileWeb = true, EditProfileMobile = false"
-                        class="text-primary font-medium text-sm"
-                    >
-                        Edit Profile
-                    </button>
+                <!-- Edit Button -->
+                <button
+                    v-if="!EditProfileWeb"
+                    type="button"
+                    @click="enableWebEdit"
+                    class="text-primary font-medium text-sm"
+                >
+                    Edit Profile
+                </button>
 
-                    <button
-                        v-else
-                        type="submit"
-                        class="text-primary font-medium text-sm"
-                    >
-                        Save Updates
-                    </button>
+                <!-- Save Button -->
+                <button
+                    v-else
+                    type="submit"
+                    class="text-primary font-medium text-sm"
+                >
+                    Save Updates
+                </button>
 
-                    <button
-                        v-if="EditProfileWeb"
-                        type="button"
-                        @click="EditProfileWeb = false, EditProfileMobile = true"
-                        class="text-gray-500 font-medium text-sm"
-                    >
-                        Cancel
-                    </button>
+                <!-- Cancel Button -->
+                <button
+                    v-if="EditProfileWeb"
+                    type="button"
+                    @click="cancelWebEdit"
+                    class="text-gray-500 font-medium text-sm"
+                >
+                    Cancel
+                </button>
                 </div>
 
                 <!-- Mobile Version -->
                 <div class="flex lg:hidden space-x-4 p-3">
-                    <button
-                        v-if="!EditProfileMobile"
-                        type="button"
-                        @click="EditProfileMobile = true"
-                        class="text-primary font-medium text-xs"
-                    >
-                        Edit Profile
-                    </button>
+                <!-- Edit Button -->
+                <button
+                    v-if="!EditProfileMobile"
+                    type="button"
+                    @click="enableMobileEdit"
+                    class="text-primary font-medium text-xs"
+                >
+                    Edit Profile
+                </button>
 
-                    <button
-                        v-else
-                        type="submit"
-                        class="text-primary font-medium text-xs"
-                    >
-                        Save Updates
-                    </button>
+                <!-- Save Button -->
+                <button
+                    v-else
+                    type="submit"
+                    class="text-primary font-medium text-xs"
+                >
+                    Save Updates
+                </button>
 
-                    <button
-                        v-if="EditProfileMobile"
-                        type="button"
-                        @click="EditProfileMobile = false"
-                        class="text-gray-500 font-medium text-xs"
-                    >
-                        Cancel
-                    </button>
+                <!-- Cancel Button -->
+                <button
+                    v-if="EditProfileMobile"
+                    type="button"
+                    @click="cancelMobileEdit"
+                    class="text-gray-500 font-medium text-xs"
+                >
+                    Cancel
+                </button>
                 </div>
             </div>
             <div class="pt-3 sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
@@ -1429,7 +1435,7 @@
                                                         d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                 </svg>
                                             </div>
-                                            <input v-model="form.birthdate" id="datepicker-autohide" type="text"
+                                            <input :value="form.birthdate" id="datepicker-autohide" type="text"
                                                 autocomplete="off"
                                                 class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select Birthdate" />
@@ -2192,6 +2198,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import InputError from '@/Components/InputError.vue';
 import { initFlowbite } from 'flowbite';
 
+
 const props = defineProps({
     student: Object,
     education: Object,
@@ -2215,7 +2222,9 @@ const form = ref({
     age: '',
     gender: '',
     civil_status: '',
-    address: '',
+    municipality: '',
+    province: '',
+    street: '',
     religion: '',
     guardian_name: '',
     relationship: '',
@@ -2224,15 +2233,15 @@ const form = ref({
     semester: '',
     school_year: '',
     education: {
-        elementary: { name: '', years: '', honors: 'N/A' },
-        junior: { name: '', years: '', honors: 'N/A' },
-        senior: { name: '', years: '', honors: 'N/A' },
-        college: { name: '', years: '', honors: 'N/A' },
-        vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
-        postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
+        elementary: { name: '', years: ''},
+        junior: { name: '', years: '' },
+        senior: { name: '', years: '' },
+        college: { name: '', years: '' },
+        vocational: { name: 'N/A', years: 'N/A' },
+        postgrad: { name: 'N/A', years: 'N/A' },
     },
-    mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
-    father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
+    mother: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
+    father: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
     marital_status: '',
     monthly_income: '',
     other_income: 'N/A',
@@ -2253,25 +2262,39 @@ const formGrade = ref({
     school_year: '',
 });
 
-// const EditProfile = ref(false)
-const EditProfileMobile = ref(false);  // Toggle state
-const EditProfileWeb = ref(false);  // Toggle state
-const showUpload = ref(false); // Controls visibility of the upload section
+const EditProfileMobile = ref(false);
+const EditProfileWeb = ref(false);
+const showUpload = ref(false);
 
-const toggleEditWebProfile = async () => {
-  EditProfileWeb.value = !EditProfileWeb.value
+// Web: Enable Edit Mode
+const enableWebEdit = async () => {
+  EditProfileWeb.value = true;
+  EditProfileMobile.value = false;
 
-
-    await nextTick() // wait for DOM update
-    initFlowbite();
-    initDatepicker();
-}
-
-const toggleEditMobileProfile = () => {
-  EditProfileMobile.value = !EditProfileMobile.value
+  await nextTick();
   initFlowbite();
   initDatepicker();
-}
+};
+
+// Web: Cancel Edit
+const cancelWebEdit = () => {
+  EditProfileWeb.value = false;
+};
+
+// Mobile: Enable Edit Mode
+const enableMobileEdit = async () => {
+  EditProfileMobile.value = true;
+  EditProfileWeb.value = false;
+
+  await nextTick();
+  initFlowbite();
+  initDatepicker();
+};
+
+// Mobile: Cancel Edit
+const cancelMobileEdit = () => {
+  EditProfileMobile.value = false;
+};
 
 // QR Code state management
 const isQRModalOpen = ref(false);
@@ -2432,10 +2455,10 @@ const handleImgChange = (event) => {
 const submit = async () => {
 
     try {
-        if (props.scholar != null) {
-            form.value.semester = props.batch_semester;
-            form.value.school_year = props.school_year.year;
-        }
+        // if (props.scholar != null) {
+        //     form.value.semester = props.batch_semester;
+        //     form.value.school_year = props.school_year.year;
+        // }
 
         router.post(`/verify-account/verifying`, form.value);
         //await useForm(form.value).post(`/sponsors/create-scholarship`);
