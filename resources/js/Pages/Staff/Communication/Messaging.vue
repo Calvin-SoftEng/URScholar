@@ -82,7 +82,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                        }}</span>
+                                            }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -155,29 +155,6 @@
                             <button class="text-gray-600 hover:text-primary transition-colors"
                                 @click="showMemberList = !showMemberList">
                                 <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
-                            </button>
-                        </div>
-
-                        <div v-if="announcement"
-                            class="bg-yellow-100 shadow-sm p-4 flex justify-between items-center rounded-lg">
-                            <!-- Pinned Message Icon and Title -->
-                            <div class="flex flex-col items-start space-y-2">
-                                <!-- Icon and Title -->
-                                <div class="flex items-center space-x-2">
-                                    <span class="text-yellow-500 text-xl">📌</span>
-                                    <h3 class="text-lg font-bold text-primary">Pinned Announcement</h3>
-                                </div>
-
-                                <!-- Message Body -->
-                                <div class="text-gray-700">
-                                    <p class="text-sm">{{ announcement }}</p>
-                                </div>
-                            </div>
-
-                            <!-- Close Button -->
-                            <button class="text-gray-600 hover:text-red-600 transition-colors ml-4"
-                                @click="closeAnnouncement">
-                                <span class="text-xl">✖</span>
                             </button>
                         </div>
 
@@ -287,7 +264,7 @@
                                                             user.name.charAt(0) }}
                                                     </div>
                                                     <span class="text-sm font-medium">{{ user.first_name || user.name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                             </div>
                                         </template>
@@ -496,6 +473,7 @@ const scrollToBottom = () => {
 onMounted(() => {
     scrollToBottom();
 
+    
     // Only set up Echo if we have a selected group
     if (selectedData.value && selectedData.value.id && groupType.value) {
         const echo = new Echo({

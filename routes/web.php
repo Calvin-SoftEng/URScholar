@@ -103,8 +103,6 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])-
     Route::get('/messaging/batch/{batch}', [MessageController::class, 'showBatch'])->name('messaging.batch');
     Route::get('/messaging/staff/{staffGroup}', [MessageController::class, 'showStaffGroup'])->name('messaging.staff');
 
-    Route::get('/messages/newbatch/{batch}', [MessageController::class, 'getBatchMessages'])->name('messaging.new.batch');
-    Route::get('/messages/newstaff/{staffGroup}', [MessageController::class, 'getStaffGroupMessages'])->name('messaging.new.staff');
 
 
     // Store new message

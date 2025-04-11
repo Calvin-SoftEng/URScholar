@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Events\MessageSent;
 use App\Models\Notification;
+use StaffGroupUser;
 
 class MessageController extends Controller
 {
@@ -102,6 +103,14 @@ class MessageController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        // $members = StaffGroupUser::where('staff_group_id', $staffGroup->id)->get();
+
+        // $members = StaffGroupUser::all();
+        $members = StaffGroup::where('id', $staffGroup->id)
+        ->with('users')
+        ->get();
+
+
         // Get both staff groups and scholarship batches for the sidebar listing
         $data = $this->getCombinedGroupsData($currentUser);
 
@@ -115,34 +124,7 @@ class MessageController extends Controller
             'batches' => $data['batches'],
             'selectedGroup' => $staffGroup,
             'groupType' => 'staff',
-        ]);
-    }
-
-    public function getBatchMessages(Batch $batch)
-    {
-        $messages = Message::with(['user', 'batch'])
-            ->where('batch_id', $batch->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->json([
-            'props' => [
-                'messages' => $messages
-            ]
-        ]);
-    }
-
-    public function getStaffGroupMessages(StaffGroup $staffGroup)
-    {
-        $messages = Message::with(['user', 'staffGroup'])
-            ->where('staff_group_id', $staffGroup->id)
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        return response()->json([
-            'props' => [
-                'messages' => $messages
-            ]
+            'members' => $members,
         ]);
     }
 
