@@ -11,6 +11,8 @@
             <div
                 class="h-fit overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded">
 
+                <!-- <div v-if="activity_logs.length > 0" class="text-gray-500 text-center py-4">No available scholarships.</div> -->
+
                 <!-- People / Group Chats List -->
                 <ul class="w-full space-y-2 px-3">
                     <li v-for="(activity, index) in activity_logs" :key="index"

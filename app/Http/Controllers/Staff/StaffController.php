@@ -66,8 +66,9 @@ class StaffController extends Controller
                 ];
             });
 
-            $active_scholars = Grantees::where('status', 'Active')->get();
-            
+            $active_scholars = Grantees::where('status', 'Active')
+            ->get();
+
             $enrolled = Student::all();
 
             $activity_logs = ActivityLog::where('user_id', Auth::user()->id)->get();
@@ -76,7 +77,9 @@ class StaffController extends Controller
             ->with('school_year')
             ->first();
 
-            $univ_students = Student::where('academic_year_id', $academic_year->id)->count();
+            $univ_students = Student::where('academic_year_id', $academic_year->id)
+            ->where('campus_id', Auth::user()->campus_id)
+            ->count();
 
         return Inertia::render('Staff/Dashboard', [
             'sponsors' => $sponsor,
