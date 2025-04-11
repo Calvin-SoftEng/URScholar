@@ -166,6 +166,8 @@ class MessageController extends Controller
         // Broadcast message to the appropriate channel
         broadcast(new MessageSent($message, $channelName))->toOthers();
 
+            //broadcast(new MessageSent($message))->toOthers();
+
         // Create notification
         $notification = Notification::create([
             'title' => 'New Message',
