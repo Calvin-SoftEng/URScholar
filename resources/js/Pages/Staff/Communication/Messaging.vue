@@ -492,7 +492,7 @@ onMounted(() => {
         console.log(`Listening on private channel: ${channelName}`);
 
         // Listen for new messages
-        echo.private(channelName)
+        echo.private(`chat.${selectedData.value.id}`)
             .listen('message.sent', (e) => {
                 console.log('New message received:', e);
                 fetchMessages();
