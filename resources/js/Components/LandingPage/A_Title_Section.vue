@@ -38,11 +38,19 @@
                 <span class="text-primary">Empowering</span> scholars through<br>
                 connection, and continuous support.
             </p>
-            <!-- <button class="btn bg-white shadow text-primary sm:text-sm lg:text-2xl font-bold font-sora mt-5 sm:px-5 lg:px-10">
-                Check Now
-            </button> -->
+            <Link :href="route('login')">
+                <button class="btn bg-white shadow text-primary sm:text-sm lg:text-xl font-bold font-sora mt-5 sm:px-5 lg:px-11">
+                    Check Now
+                </button>
+            </Link>
         </div>
 
     </section>
 
 </template>
+
+<script setup>
+import { ref } from 'vue'
+import { Link } from '@inertiajs/vue3';
+
+</script>

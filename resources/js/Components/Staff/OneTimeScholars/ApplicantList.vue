@@ -2,14 +2,28 @@
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
+        <!-- Publish Button -->
         <Link :href="(route('scholarship.onetime_scholars'))">
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="generateReport">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Publish Applicant List
-        </button>
+          <button
+            @click="generateReport"
+            class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
+                  hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
+            <span class="font-normal">Publish <span class="font-semibold">Applicant List</span></span>
+          </button>
         </Link>
+
+        <!-- Forward to Sponsor -->
+        <div>
+          <button @click="toggleForwardSponsor"
+            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+                  hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+            <span class="font-normal">Forward to <span class="font-semibold">Sponsor</span></span>
+          </button>
+        </div>
       </div>
+
     </div>
 
     <div>
@@ -212,6 +226,87 @@
       </div>
     </div>
   </div>
+
+  <!-- Simplified forwarding batch list modal -->
+  <div v-if="ForwardtoSponsor"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+        <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+          <div class="flex items-center gap-3">
+                <!-- Icon -->
+                <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                    class="text-blue-600 text-2xl flex-shrink-0" />
+
+                <!-- Title and Description -->
+                <div class="flex flex-col">
+                    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                        Forward to Sponsor
+                    </h2>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">
+                        Send the applicant list to the sponsor account
+                    </span>
+                </div>
+            </div>
+            <button type="button" @click="closeModal"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="default-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Form -->
+        <form >
+            <div class="py-4 px-8 flex flex-col gap-3">
+                <!-- Loading Indicator -->
+                <!-- <div class="flex justify-center items-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                    <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                </div> -->
+
+                <!-- Batch List -->
+                <div
+                    class="flex flex-col divide-y divide-gray-300">
+                    <p>
+                        rgsrgrsg
+                    </p>
+                    <div 
+                        class="py-3 px-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch fefef</p>
+                            <p class="text-sm text-gray-500">Completed:fefefef</p>
+                        </div>
+                        <!-- <span
+                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                            {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                            }}
+                        </span> -->
+                    </div>
+                </div>
+
+                <!-- Forward Button -->
+                <!-- <div v-if="completedBatches === batches.length" class="mt-4">
+                    <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                        @click="forwardSponsor"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                    </button>
+                </div> -->
+                <div class="mt-4">
+                    <button v-tooltip.left="'Complete all batches'" disabled
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Forward
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        
+    </div>
+</div>
   <!-- Toast notifications -->
   <ToastProvider>
     <ToastRoot v-if="toast.visible"
@@ -415,6 +510,38 @@ const generateReport = async () => {
     loading.value = false;
   }
 };
+
+const ForwardtoSponsor = ref(false);
+
+const toggleForwardSponsor = async () => {
+    ForwardtoSponsor.value = true;
+
+    // Load batches with scholar counts
+    await loadBatchesData();
+};
+
+const closeModal = () => {
+    ForwardtoSponsor.value = false;
+    resetForm();
+};
+
+const forwardSponsor = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('scholarship.forward_sponsor', {
+        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
+        selectedCampus: props.selectedCampus
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
+
 
 // Toast helper function
 const showToast = (title, message, type = 'success') => {

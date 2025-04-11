@@ -59,7 +59,7 @@
 
 
                                     <!-- Active Scholarships -->
-                                    <div class="flex flex-col flex-grow mt-4 justify-end">
+                                    <div class="flex flex-col flex-grow mt-4 justify-start">
                                         <p class="text-sm text-gray-400 mb-2">Active Scholarships:</p>
 
                                         <div
