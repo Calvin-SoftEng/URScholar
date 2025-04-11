@@ -82,7 +82,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                        }}</span>
+                                            }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -264,7 +264,7 @@
                                                             user.name.charAt(0) }}
                                                     </div>
                                                     <span class="text-sm font-medium">{{ user.first_name || user.name
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                             </div>
                                         </template>
@@ -455,34 +455,27 @@ const scrollToBottom = () => {
     }, 100);
 };
 
-// Setup real-time messaging with Laravel Echo/Pusher
+// In your Vue component's onMounted function
 onMounted(() => {
-    const echo = new Echo({
-        broadcaster: 'pusher',
-        key: import.meta.env.VITE_PUSHER_APP_KEY,
-        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-        forceTLS: true,
-        authEndpoint: "/broadcasting/auth"
-    });
-
-    // Determine channel name based on group type
-    const channelName = groupType.value === 'batch'
-        ? `batch.${selectedData.value.id}`
-        : `staff.${selectedData.value.id}`;
-
-    console.log(`Listening on private channel: ${channelName}`);
-
-    // Listen for new messages
-    echo.private(`chat.${selectedData.value.id}`)
-        .listen('message.sent', (e) => {
-            console.log('New message received:', e);
-            fetchMessages();
-            // Add new message to the list
-            if (e.message && !messageData.value.some(m => m.id === e.message.id)) {
-                messageData.value.unshift(e.message);
-                scrollToBottom();
-            }
+    if (selectedData.value && selectedData.value.id) {
+        const echo = new Echo({
+            broadcaster: 'pusher',
+            key: import.meta.env.VITE_PUSHER_APP_KEY,
+            cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+            forceTLS: true,
+            authEndpoint: "/broadcasting/auth"
         });
+
+        // Listen on the private channel
+        echo.private(`chat.${selectedData.value.id}`)
+            .listen('.message.sent', (e) => {  // Note the dot prefix
+                console.log('New message received:', e);
+                if (e.message && !messageData.value.some(m => m.id === e.message.id)) {
+                    messageData.value.unshift(e.message);
+                    scrollToBottom();
+                }
+            });
+    }
 });
 
 const fetchMessages = async () => {

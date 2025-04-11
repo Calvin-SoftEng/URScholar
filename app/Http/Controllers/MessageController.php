@@ -166,8 +166,6 @@ class MessageController extends Controller
         // Broadcast message to the appropriate channel
         broadcast(new MessageSent($message))->toOthers();
 
-            //broadcast(new MessageSent($message))->toOthers();
-
         // Create notification
         $notification = Notification::create([
             'title' => 'New Message',
@@ -194,6 +192,7 @@ class MessageController extends Controller
 
         return back();
     }
+
     // public function oldstore(Request $request)
     // {
 
