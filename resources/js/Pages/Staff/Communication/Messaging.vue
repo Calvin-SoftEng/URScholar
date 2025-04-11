@@ -11,16 +11,31 @@
 
                                 <!-- Tabs for DM and GC -->
                                 <div class="mt-4 flex border-b border-gray-100 dark:border-gray-600">
-                                <!-- DM Tab -->
-                                <button type="button" class="w-full p-2 text-center text-sm font-medium text-gray-900 dark:text-white focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg"
-                                :class="{'text-blue-600 dark:text-blue-400': selectedTab === 'dm', 'text-gray-900 dark:text-white': selectedTab !== 'dm'}"
-                                @click="selectedTab = 'dm'">Direct Messages</button>
+                                    <!-- DM Tab -->
+                                    <button
+                                        type="button"
+                                        class="w-full p-2 text-center text-sm font-medium focus:outline-none transition"
+                                        :class="selectedTab === 'dm' 
+                                        ? 'text-primary border-b-2 border-primary' 
+                                        : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
+                                        @click="selectedTab = 'dm'"
+                                    >
+                                        Direct Messages
+                                    </button>
 
-                                <!-- GC Tab -->
-                                <button type="button" class="w-full p-2 text-center text-sm font-medium text-gray-900 dark:text-white focus:outline-none hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg"
-                                :class="{'text-blue-600 dark:text-blue-400': selectedTab === 'gc', 'text-gray-900 dark:text-white': selectedTab !== 'gc'}"
-                                @click="selectedTab = 'gc'">Group Chats</button>
+                                    <!-- GC Tab -->
+                                    <button
+                                        type="button"
+                                        class="w-full p-2 text-center text-sm font-medium focus:outline-none transition"
+                                        :class="selectedTab === 'gc' 
+                                        ? 'text-primary border-b-2 border-primary' 
+                                        : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
+                                        @click="selectedTab = 'gc'"
+                                    >
+                                        Group Chats
+                                    </button>
                                 </div>
+
 
                                 <!-- search -->
                                 <form class="w-full p-3">
@@ -67,7 +82,7 @@
                                     </Link>
                                 </div> -->
                                 <div v-if="selectedTab === 'dm'" class="divide-y">
-                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4"
+                                    <Link class="w-full flex items-center space-x-3 mb-2 p-4 hover:bg-gray-100"
                                         >
                                     <div
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
@@ -86,7 +101,7 @@
                                 </div>
 
                                 <div v-if="selectedTab === 'gc'" class="divide-y">
-                                    <Link class="w-full flex items-center space-x-3 p-4"
+                                    <Link class="w-full flex items-center space-x-3 p-4 hover:bg-gray-100"
                                         >
                                     <div
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
