@@ -444,6 +444,47 @@ const sendMessage = () => {
     });
 };
 
+
+// Scroll to bottom of message container
+const scrollToBottom = () => {
+    setTimeout(() => {
+        const chatContainer = document.querySelector('.overflow-y-auto');
+        if (chatContainer) {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    }, 100);
+};
+
+// Setup real-time messaging with Laravel Echo/Pusher
+onMounted(() => {
+    const echo = new Echo({
+        broadcaster: 'pusher',
+        key: import.meta.env.VITE_PUSHER_APP_KEY,
+        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+        forceTLS: true,
+        authEndpoint: "/broadcasting/auth"
+    });
+
+    // Determine channel name based on group type
+    const channelName = groupType.value === 'batch'
+        ? `batch.${selectedData.value.id}`
+        : `staff.${selectedData.value.id}`;
+
+    console.log(`Listening on private channel: ${channelName}`);
+
+    // Listen for new messages
+    echo.private(`chat.${selectedData.value.id}`)
+        .listen('message.sent', (e) => {
+            console.log('New message received:', e);
+            fetchMessages();
+            // Add new message to the list
+            if (e.message && !messageData.value.some(m => m.id === e.message.id)) {
+                messageData.value.unshift(e.message);
+                scrollToBottom();
+            }
+        });
+});
+
 const fetchMessages = async () => {
     let data;
 
@@ -458,72 +499,32 @@ const fetchMessages = async () => {
     messageData.value = data;
 };
 
-
-// Scroll to bottom of message container
-const scrollToBottom = () => {
-    setTimeout(() => {
-        const chatContainer = document.querySelector('.overflow-y-auto');
-        if (chatContainer) {
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-    }, 100);
-};
-
-// Setup real-time messaging with Laravel Echo/Pusher
-onMounted(() => {
-    scrollToBottom();
-
-
-    // Only set up Echo if we have a selected group
-    if (selectedData.value && selectedData.value.id && groupType.value) {
-        const echo = new Echo({
-            broadcaster: 'pusher',
-            key: import.meta.env.VITE_PUSHER_APP_KEY,
-            cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-            forceTLS: true,
-            authEndpoint: "/broadcasting/auth"
-        });
-
-        // Determine channel name based on group type
-        const channelName = groupType.value === 'batch'
-            ? `batch.${selectedData.value.id}`
-            : `staff.${selectedData.value.id}`;
-
-        console.log(`Listening on private channel: ${channelName}`);
-
-        // Listen for new messages
-        echo.private(`chat.${selectedData.value.id}`)
-            .listen('message.sent', (e) => {
-                console.log('New message received:', e);
-                fetchMessages();
-                // Add new message to the list
-                if (e.message && !messageData.value.some(m => m.id === e.message.id)) {
-                    messageData.value.unshift(e.message);
-                    scrollToBottom();
-                }
-            });
-    }
-});
-
 // // Set up real-time messaging using Laravel Echo
 // onMounted(() => {
 
-//     const echo = new Echo({
-//         broadcaster: 'pusher',
-//         key: import.meta.env.VITE_PUSHER_APP_KEY,
-//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//         forceTLS: true,
-//         authEndpoint: "/broadcasting/auth", // Required for private channels
-//     });
-
-//     echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
-//         .listen('.message.sent', (e) => {
-//             fetchMessages(); // Fetch messages after receiving
-//             scrollToBottom();
-//             messages.value.push(e.message); // Append new message
-//         });
-//     //broadcast(new MessageSent($message))->toOthers();
+// const echo = new Echo({
+//     broadcaster: 'pusher',
+//     key: import.meta.env.VITE_PUSHER_APP_KEY,
+//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//     forceTLS: true,
+//     authEndpoint: "/broadcasting/auth", // Required for private channels
 // });
+
+// echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
+//     .listen('.message.sent', (e) => {
+//         fetchMessages(); // Fetch messages after receiving
+//         scrollToBottom();
+//         messages.value.push(e.message); // Append new message
+//     });
+// });
+
+// const scholarshipId = ref(props.selectedBatch); // Or however you're getting the ID
+
+// const fetchMessages = async () => {
+// const { data } = await router.get(route("messaging.show", { batch: props.selectedBatch.id }));
+
+// messageData.value = data;
+// };
 
 // Watch for changes in selectedData and update form
 watch([selectedData, groupType], ([newSelectedData, newGroupType]) => {

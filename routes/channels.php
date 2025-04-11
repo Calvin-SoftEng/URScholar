@@ -18,14 +18,6 @@ Broadcast::channel('chat.{id}', function (User $user, int $scholarshipId) {
     return Auth::check();
 });
 
-Broadcast::channel('batch.{id}', function ($user, $id) {
-    return Auth::check();
-});
-
-Broadcast::channel('staff.{id}', function ($user, $id) {
-    return Auth::check();
-});
-
 Broadcast::channel('scholarship.{scholarshipId}', function ($user, $scholarshipId) {
     return $user->scholarships->contains($scholarshipId) ? ['id' => $user->id, 'name' => $user->name] : false;
 });
