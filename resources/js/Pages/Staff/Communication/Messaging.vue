@@ -4,20 +4,20 @@
             
                 <div class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
                     <div class="w-[95%] p-4 h-full">
-                        <div class="bg-white w-full h-full rounded-xl flex flex-row">
+                        <div class="bg-white dark:bg-dprimary w-full h-full rounded-xl flex flex-row">
                             <div class="w-[30%] border-r">
-                                <h3 class="text-xl text-primary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold ">
+                                <h3 class="text-xl text-dprimary dark:text-dtext mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold ">
                                     Messages</h3>
 
                                 <!-- Tabs for DM and GC -->
-                                <div class="mt-4 flex border-b border-gray-100 dark:border-gray-600">
+                                <div class="mt-4 flex border-b border-gray-100 dark:border-gray-900">
                                     <!-- DM Tab -->
                                     <button
                                         type="button"
                                         class="w-full p-2 text-center text-sm font-medium focus:outline-none transition"
                                         :class="selectedTab === 'dm' 
-                                        ? 'text-primary border-b-2 border-primary' 
-                                        : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
+                                        ? 'text-dprimary border-b-2 border-primary dark:border-dtext dark:text-dtext' 
+                                        : 'text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-600'"
                                         @click="selectedTab = 'dm'"
                                     >
                                         Direct Messages
@@ -28,8 +28,8 @@
                                         type="button"
                                         class="w-full p-2 text-center text-sm font-medium focus:outline-none transition"
                                         :class="selectedTab === 'gc' 
-                                        ? 'text-primary border-b-2 border-primary' 
-                                        : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
+                                        ? 'text-dprimary border-b-2 border-primary dark:border-dtext dark:text-dtext' 
+                                        : 'text-gray-600 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-600'"
                                         @click="selectedTab = 'gc'"
                                     >
                                         Group Chats
@@ -52,7 +52,7 @@
                                             </svg>
                                         </div>
                                         <input type="search" id="default-search"
-                                            class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Search group chats and scholars" required />
                                     </div>
                                 </form>
@@ -82,14 +82,14 @@
                                     </Link>
                                 </div> -->
                                 <div v-if="selectedTab === 'dm'" class="divide-y">
-                                    <Link class="w-full flex items-center space-x-3 p-4 hover:bg-gray-100"
+                                    <Link class="w-full flex items-center space-x-3 p-4 hover:bg-gray-100 dark:hover:bg-dnavy"
                                         >
                                     <div
                                         class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
                                         IMEE
                                     </div>
                                     <div class="flex flex-col space-y-1">
-                                        <span class="text-primary-foreground font-quicksand font-semibold text-lg">Imee Marcos</span>
+                                        <span class="text-dprimary dark:text-dtext font-quicksand font-semibold text-lg">Imee Marcos</span>
                                         <div class="flex-grow">
                                             <p class="text-xs text-gray-500 truncate" >
                                                 wla pang budget beh
@@ -123,7 +123,7 @@
 
                             <div class="w-[70%] h-full flex flex-col">
                                 <div class="shadow-sm p-4 flex justify-between items-center">
-                                    <h3 class="text-lg font-bold text-primary">Conversation</h3>
+                                    <h3 class="text-lg font-bold text-dprimary dark:text-dtext">Conversation</h3>
                                     <!-- Three dots menu aligned with conversation text -->
                                     <button class="text-gray-600 hover:text-primary transition-colors"
                                         @click="showMemberList = !showMemberList">
@@ -307,7 +307,7 @@
                                 </div>
 
                                 <div
-                                    class="flex items-center box-border p-2 bg-white z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
+                                    class="flex items-center box-border p-2 bg-white dark:bg-dcontainer z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
                                     <!-- For the circle-plus button -->
                                     <button class="px-2" @click="sendMessage"
                                         :disabled="!selectedData || !selectedData.id">
