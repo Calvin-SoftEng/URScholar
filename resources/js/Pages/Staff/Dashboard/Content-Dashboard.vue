@@ -7,7 +7,7 @@
                 <!-- Top Layer: 4 Cards -->
                 <div class="grid grid-cols-4 gap-3 flex-none h-[40%]">
                 <div class="h-full flex flex-col">
-                    <Statistics :scholarships="scholarships" :active_scholars="active_scholars" />
+                    <Statistics :univ_students="univ_students" :scholarships="scholarships" :active_scholars="active_scholars" />
                 </div>
                 <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
                     <ScholarsStatistics />
@@ -16,7 +16,7 @@
                     <ActiveScholarship :sponsors="sponsors" :scholarships="scholarships" />
                 </div>
                 <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
-                    <Date_Data />
+                    <Date_Data :academic_year="academic_year" />
                 </div>
                 </div>
 
@@ -29,7 +29,7 @@
 
                 <!-- 20% content -->
                 <div class="col-span-1 bg-white rounded-xl shadow-md dark:bg-dcontainer flex flex-col">
-                    <Calendar_Activities />
+                    <Calendar_Activities :activity_logs="activity_logs" />
                 </div>
                 </div>
             </div>
@@ -65,6 +65,9 @@ const props = defineProps({
     sponsors: Array,
     scholars: Array,
     active_scholars: Array,
+    activity_logs: Array,
+    academic_year: Object,
+    univ_students: Object,
 });
 
 </script>

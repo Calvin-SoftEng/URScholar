@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Models\AcademicYear;
+use App\Models\ActivityLog;
 use App\Models\Sponsor;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
@@ -11,6 +13,7 @@ use App\Models\Grantees;
 use App\Models\Requirements;
 use App\Models\Scholarship;
 use App\Models\Scholar;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
@@ -66,11 +69,22 @@ class StaffController extends Controller
             $active_scholars = Grantees::where('status', 'Active')->get();
             $enrolled = Student::all();
 
+            $activity_logs = ActivityLog::where('user_id', Auth::user()->id)->get();
+
+            $academic_year = AcademicYear::where('status', 'Active')
+            ->with('school_year')
+            ->first();
+
+            $univ_students = Student::where('academic_year_id', $academic_year->id)->count();
+
         return Inertia::render('Staff/Dashboard', [
             'sponsors' => $sponsor,
             'scholarships' => $activeScholarships,
             'scholars' => $latestSubmissions,
             'active_scholars' => $active_scholars,
+            'activity_logs' => $activity_logs,
+            'academic_year' => $academic_year,
+            'univ_students' => $univ_students,
         ]);
     }
 }
