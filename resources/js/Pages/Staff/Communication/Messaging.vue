@@ -50,7 +50,7 @@
                         <!-- Direct messages section -->
                         <div v-if="selectedTab === 'dm'" class="divide-y">
                             <!-- Single Users List -->
-                            <div class="py-2">
+                            <div class="">
                                 <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Sponsors</h4>
                                 <Link v-for="user in filteredUsers" :key="`user-${user.id}`"
                                     :href="route('messaging.conversation', user.id)" :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
@@ -91,7 +91,7 @@
                         <!-- Group chats section -->
                         <div v-if="selectedTab === 'gc'" class="divide-y">
                             <!-- Staff Groups Section -->
-                            <div class="py-2">
+                            <div class="">
                                 <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Staff Groups</h4>
                                 <Link v-for="group in filteredStaffGroups" :key="`staff-${group.id}`"
                                     :href="route('messaging.staff', group.id)"
@@ -119,9 +119,9 @@
                                             No messages yet
                                         </p>
                                     </div>
-                                    <div class="flex items-center">
+                                    <!-- <div class="flex items-center">
                                         <span class="text-xs text-gray-400">{{ group.users_count }} members</span>
-                                    </div>
+                                    </div> -->
                                 </div>
                                 </Link>
                             </div>
@@ -223,6 +223,9 @@
                                                 </span>
                                                 <span class="text-sm font-semibold text-gray-400 dark:text-white">
                                                     {{ message.user.usertype }}
+                                                </span>
+                                                <span class="text-sm font-normal text-gray-300 dark:text-white">
+                                                    {{ formatTimeOnly(message.user.created_at) }}
                                                 </span>
                                             </div>
                                             <div
@@ -427,6 +430,12 @@ const formatUserType = (usertype) => {
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
         .join(' ');
 };
+
+const formatTimeOnly = (datetime) => {
+  const date = new Date(datetime);
+  return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+};
+
 
 // Format timestamp for message display
 const formatTimestamp = (timestamp) => {

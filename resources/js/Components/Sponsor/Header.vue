@@ -16,7 +16,20 @@
           <!-- <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
             class="w-[180px] h-[40px] hidden dark:block"> -->
         </div>
+        <ul class="flex pl-10 space-x-10 font-inter font-semibold text-navy">
+          <li class="relative">
+            <Link :href="route('messaging.index')" class="flex items-center space-x-2">
+              <p class="text-primary-foreground hover:text-primary transition">Messaging</p>
+              <!-- Notification Badge (only shows if unreadMessages > 0) -->
+              <span 
+                class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
+                1
+              </span>
+            </Link>
+          </li>
+        </ul>
       </div>
+
 
       <!-- Theme and Notification -->
       <div class="flex items-center space-x-4 pr-5">
