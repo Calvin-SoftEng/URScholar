@@ -18,6 +18,18 @@ Broadcast::channel('chat.{scholarshipId}', function (User $user, int $scholarshi
     return Auth::check();
 });
 
+Broadcast::channel('batch.{id}', function ($user, $id) {
+    // Authorization logic for batch channels
+    // Return true if the user is authorized to listen to this batch channel
+    return $user->canAccessBatch($id); // implement this method in your User model
+});
+
+Broadcast::channel('staff.{id}', function ($user, $id) {
+    // Authorization logic for staff channels
+    // Return true if the user is authorized to listen to this staff channel
+    return $user->canAccessStaff($id); // implement this method in your User model
+});
+
 Broadcast::channel('scholarship.{scholarshipId}', function ($user, $scholarshipId) {
     return $user->scholarships->contains($scholarshipId) ? ['id' => $user->id, 'name' => $user->name] : false;
 });

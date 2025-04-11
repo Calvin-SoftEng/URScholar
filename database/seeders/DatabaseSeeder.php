@@ -15,6 +15,7 @@ use App\Models\ScholarshipGroup;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
 use App\Models\SponsorMoa;
+use App\Models\StaffGroup;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -390,6 +391,9 @@ class DatabaseSeeder extends Seeder
             'status' => 'Active'
         ]);
 
+        // StaffGroup::factory()->create([
+        //     'name' => '',
+        // ]);
 
 
         //sponsor 
