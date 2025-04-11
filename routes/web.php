@@ -96,10 +96,17 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])->group(function () {
-    // Messaging
-    Route::get('/group-page', [MessageController::class, 'index'])->name('messaging.index');
-    Route::post('/group-page/message', [MessageController::class, 'oldstore'])->name('messaging.store');
-    Route::get('/group-page/{batch}', [MessageController::class, 'show'])->name('messaging.show');
+    // Main messaging index
+    Route::get('/messaging', [MessageController::class, 'index'])->name('messaging.index');
+
+    // Show specific batch or staff group
+    Route::get('/messaging/batch/{batch}', [MessageController::class, 'showBatch'])->name('messaging.batch');
+    Route::get('/messaging/staff/{staffGroup}', [MessageController::class, 'showStaffGroup'])->name('messaging.staff');
+
+
+
+    // Store new message
+    Route::post('/messaging/send', [MessageController::class, 'storeMessage'])->name('messaging.store');
 
     //Feed
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');

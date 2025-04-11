@@ -22,10 +22,12 @@ class MessageSent implements ShouldBroadcastNow
     {
         $this->message = $message;
     }
-
     public function broadcastOn()
     {
-        return new PrivateChannel("chat.{$this->message->batch_id}"); // Use Private Channel for authenticated users
+        // Use batch_id if available, otherwise fall back to staff_group_id
+        $channelId = $this->message->batch_id ?? $this->message->staff_group_id;
+
+        return new PrivateChannel("chat.{$channelId}"); // Use Private Channel for authenticated users
     }
 
     public function broadcastAs()
@@ -33,4 +35,3 @@ class MessageSent implements ShouldBroadcastNow
         return 'message.sent';
     }
 }
-

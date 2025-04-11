@@ -3,45 +3,69 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <form @submit.prevent class="w-full h-full overflow-hidden">
+        <form @submit.prevent="submit" class="w-full h-full overflow-hidden">
             <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row">
                 <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
                     My Profile
                 </h1>
                 <!-- Web Version -->
                 <div class="hidden lg:flex space-x-4 p-3 mx-20">
-                    <button
-                        type="button"
-                        @click="toggleEditWebProfile"
-                        class="text-primary font-medium text-sm"
-                    >
-                        {{ EditProfileWeb ? 'Save Updates' : 'Edit Profile' }}
-                    </button>
+                <!-- Edit Button -->
+                <button
+                    v-if="!EditProfileWeb"
+                    type="button"
+                    @click="enableWebEdit"
+                    class="text-primary font-medium text-sm"
+                >
+                    Edit Profile
+                </button>
 
-                    <button
-                        v-if="EditProfileWeb"
-                        type="button"
-                        @click="EditProfileWeb = false"
-                        class="text-gray-500 font-medium text-sm"
-                    >
-                        Cancel
-                    </button>
+                <!-- Save Button -->
+                <button
+                    v-else
+                    type="submit"
+                    class="text-primary font-medium text-sm"
+                >
+                    Save Updates
+                </button>
+
+                <!-- Cancel Button -->
+                <button
+                    v-if="EditProfileWeb"
+                    type="button"
+                    @click="cancelWebEdit"
+                    class="text-gray-500 font-medium text-sm"
+                >
+                    Cancel
+                </button>
                 </div>
 
                 <!-- Mobile Version -->
                 <div class="flex lg:hidden space-x-4 p-3">
+                <!-- Edit Button -->
                 <button
+                    v-if="!EditProfileMobile"
                     type="button"
-                    @click="toggleEditMobileProfile"
+                    @click="enableMobileEdit"
                     class="text-primary font-medium text-xs"
                 >
-                    {{ EditProfileMobile ? 'Save Updates' : 'Edit Profile' }}
+                    Edit Profile
                 </button>
 
+                <!-- Save Button -->
+                <button
+                    v-else
+                    type="submit"
+                    class="text-primary font-medium text-xs"
+                >
+                    Save Updates
+                </button>
+
+                <!-- Cancel Button -->
                 <button
                     v-if="EditProfileMobile"
                     type="button"
-                    @click="EditProfileMobile = false"
+                    @click="cancelMobileEdit"
                     class="text-gray-500 font-medium text-xs"
                 >
                     Cancel
@@ -714,98 +738,178 @@
 
                                 <!-- family -->
                                 <div
-                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
+                                    class="w-full h-1/12 bg-white font-instrument flex flex-col items-left space-y-2 gap-2 py-5 px-5">
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-1 gap-4">
-                                        <div v-show="form.mother.first_name == 'n/a' || form.father.first_name == 'n/a'">
-                                            <!-- Mother Section -->
-                                            <div v-if="form.mother.first_name !== 'n/a'">
-                                                <div class="w-full flex flex-row items-center gap-2 py-2">
-                                                    <font-awesome-icon :icon="['fas', 'person-dress']"
-                                                        class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                                    <div class="w-full flex flex-col items-left gap-1 px-2 ">
-                                                        <div class="relative grid grid-cols-1 items-center w-full">
-                                                            <span class="text-gray-700">Mother's Name</span>
-                                                        <div class="relative w-full">
-                                                            <input v-model="form.mother.first_name" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                            <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                        </div>
-                                                        </div>
-                                                        <div class="relative grid grid-cols-1 items-center w-full">
-                                                            <span class="text-gray-700">Occupation</span>
-                                                        <div class="relative w-full">
-                                                            <input v-model="form.mother.occupation" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                            <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- Father Section -->
-                                            <div v-if="form.father.first_name !== 'n/a'">
-                                                <div class="w-full flex flex-row items-center gap-2 py-2">
-                                                <font-awesome-icon :icon="['fas', 'person']"
-                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                                    <div class="w-full flex flex-col items-left gap-1 px-2 ">
-                                                        <div class="relative grid grid-cols-1 items-center w-full">
-                                                            <span class="text-gray-700">Father's Name</span>
-                                                        <div class="relative w-full">
-                                                            <input v-model="form.father.first_name" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                            <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                        </div>
-                                                        </div>
-                                                        <div class="relative grid grid-cols-1 items-center w-full">
-                                                            <span class="text-gray-700">Occupation</span>
-                                                        <div class="relative w-full">
-                                                            <input v-model="form.father.occupation" type="text"
-                                                            placeholder="Enter User ID"
-                                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                            <font-awesome-icon :icon="['fas', 'pen']"
-                                                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                        </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                
-                                    
-                                        <div>
-                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                        <div v-show="form.mother.first_name !== 'n/a' || form.father.first_name !== 'n/a'" class="space-y-2">
+                                        <div class="col-span-4 grid w-full items-center gap-1.5">
+                                        <!-- Edit Sibling Entries -->
+                                        <div v-if="form.mother.first_name !== 'n/a'" class="border border-gray-100 px-5 py-3">
+                                            <div class="w-full flex flex-row items-center mb-2">
                                                 <font-awesome-icon :icon="['fas', 'people-roof']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                                <div v-if="siblings.length === 0"
-                                                    class="flex flex-col items-left gap-1">
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">N/A</span>
+                                                <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                                    <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                        <span class="text-gray-700">Mother</span>
+                                                    </div>
                                                 </div>
-                                                <div v-else v-for="sibling in siblings" :key="sibling.id"
-                                                    class="flex flex-col items-left gap-1">
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                        sibling.first_name }} {{ sibling.last_name }}</span>
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                        sibling.occupation }}</span>
+                                            </div>
+                                            <div v-for="(entry, index) in form.siblings" :key="index"
+                                                class="col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
+
+                                                <!-- First Name -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_first_name_' + index">First Name</Label>
+                                                    <Input :id="'edit_first_name_' + index" type="text" placeholder="First Name"
+                                                        v-model="entry.first_name" class="w-full border border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_last_name_' + index">Last Name</Label>
+                                                    <Input :id="'edit_last_name_' + index" type="text" placeholder="Last Name"
+                                                        v-model="entry.last_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_middle_name_' + index">Middle Name</Label>
+                                                    <Input :id="'edit_middle_name_' + index" type="text" placeholder="Middle Name"
+                                                        v-model="entry.middle_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Age -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_age_' + index">Age</Label>
+                                                    <Input :id="'edit_age_' + index" type="number" placeholder="Age"
+                                                        v-model="entry.age" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Occupation -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_occupation_' + index">Occupation</Label>
+                                                    <Input :id="'edit_occupation_' + index" type="text" placeholder="Occupation"
+                                                        v-model="entry.occupation" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- NO REMOVE BUTTON -->
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
-                                            <div class="w-full flex flex-col items-left ">
+                                        
+                                        <!-- Edit father Entries -->
+                                        <div v-if="form.father.first_name !== 'n/a'" class="border border-gray-100 px-5 py-3">
+                                            <div class="w-full flex flex-row items-center mb-2">
+                                                <font-awesome-icon :icon="['fas', 'people-roof']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                                    <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                        <span class="text-gray-700">Father</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div 
+                                                class="col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
+
+                                                <!-- First Name -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label >First Name</Label>
+                                                    <Input type="text" placeholder="First Name"
+                                                        v-model="form.father.first_name" class="w-full border border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label>Last Name</Label>
+                                                    <Input type="text" placeholder="Last Name"
+                                                        v-model="form.father.last_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label >Middle Name</Label>
+                                                    <Input type="text" placeholder="Middle Name"
+                                                        v-model="form.father.middle_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Age -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label>Age</Label>
+                                                    <Input type="number" placeholder="Age"
+                                                        v-model="form.father.age" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Occupation -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label>Occupation</Label>
+                                                    <Input type="text" placeholder="Occupation"
+                                                        v-model="form.father.occupation" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- NO REMOVE BUTTON -->
+                                                </div>
+                                            </div>
+                                    </div>
+
+                                    <div
+                                        class="w-full h-1/12 font-instrument flex flex-col items-left border border-gray-100 px-5 py-3">
+                                            <div class="w-full flex flex-row items-center">
+                                                <font-awesome-icon :icon="['fas', 'people-roof']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                                    <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                        <span class="text-gray-700">Siblings</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-for="(entry, index) in form.siblings" :key="index"
+                                                class="entry py-2 col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
+
+                                                <!-- First Name -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                <Label :for="'edit_first_name_' + index">First Name</Label>
+                                                <Input :id="'edit_first_name_' + index" type="text" placeholder="First Name"
+                                                    v-model="entry.first_name" class="w-full border border-gray-200" />
+                                                </div>
+
+                                                <!-- Last Name -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                <Label :for="'edit_last_name_' + index">Last Name</Label>
+                                                <Input :id="'edit_last_name_' + index" type="text" placeholder="Last Name"
+                                                    v-model="entry.last_name" class="w-full border-gray-200" />
+                                                </div>
+
+                                                <!-- Middle Name -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                <Label :for="'edit_middle_name_' + index">Middle Name</Label>
+                                                <Input :id="'edit_middle_name_' + index" type="text" placeholder="Middle Name"
+                                                    v-model="entry.middle_name" class="w-full border-gray-200" />
+                                                </div>
+
+                                                <!-- Age -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                <Label :for="'edit_age_' + index">Age</Label>
+                                                <Input :id="'edit_age_' + index" type="number" placeholder="Age"
+                                                    v-model="entry.age" class="w-full border-gray-200" />
+                                                </div>
+
+                                                <!-- Occupation -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                <Label :for="'edit_occupation_' + index">Occupation</Label>
+                                                <Input :id="'edit_occupation_' + index" type="text" placeholder="Occupation"
+                                                    v-model="entry.occupation" class="w-full border-gray-200" />
+                                                </div>
+
+                                                <!-- NO REMOVE BUTTON -->
+                                            </div>
+                                        </div>
+                                    
+                                        <div class="w-full flex flex-col items-left ">
                                                 <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
                                                     Family
                                                     Income</span>
-                                                    <div
-                                                    class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
+                                                <div
+                                                class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
                                                     <RadioGroup default-value="comfortable"
                                                         class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
                                                         v-model="form.monthly_income">
@@ -828,7 +932,6 @@
                                                     </RadioGroup>
                                                 </div>
                                             </div>
-                                        </div>
                                         <div>
                                             <div class="w-full flex flex-col items-left gap-1 py-1">
                                                 <span class="text-gray-500 text-base font-semibold leading-tight">Family
@@ -864,7 +967,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
+
                                             <div class="w-full flex flex-col items-left gap-1 py-1">
                                                 <span class="text-gray-500 text-base font-semibold leading-tight">Other
                                                     Sources
@@ -879,7 +982,7 @@
                                                         class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                                                 </div>
                                             </div>
-                                        </div>
+
                                     </div>
                                 </div>
                             
@@ -1332,7 +1435,7 @@
                                                         d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                                 </svg>
                                             </div>
-                                            <input v-model="form.birthdate" id="datepicker-autohide" type="text"
+                                            <input :value="form.birthdate" id="datepicker-autohide" type="text"
                                                 autocomplete="off"
                                                 class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select Birthdate" />
@@ -1636,106 +1739,208 @@
                                 class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                 <h1 class="cols-span-2 text-base">Family</h1>
                                 <div class="flex flex-col gap-4">
-                                    <div v-show="form.mother.first_name == 'n/a' || form.father.first_name == 'n/a'">
-                                        <!-- Mother Section -->
+                                    <div v-show="form.mother.first_name !== 'n/a' || form.father.first_name !== 'n/a'" class="space-y-2">
+                                        <div class="col-span-4 grid w-full items-center gap-1.5">
+                                        <!-- Edit Sibling Entries -->
                                         <div v-if="form.mother.first_name !== 'n/a'">
-                                            <div class="w-full flex flex-row items-center gap-2 py-2">
-                                            <font-awesome-icon :icon="['fas', 'person-dress']"
-                                                class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                            <div class="w-full flex flex-col items-left gap-1 px-2 ">
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                <span class="text-gray-700">Mother's Name</span>
-                                                <div class="relative w-full">
-                                                    <input v-model="form.mother.first_name" type="text"
-                                                    placeholder="Enter User ID"
-                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                    <font-awesome-icon :icon="['fas', 'pen']"
-                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                </div>
-                                                </div>
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                <span class="text-gray-700">Occupation</span>
-                                                <div class="relative w-full">
-                                                    <input v-model="form.mother.occupation" type="text"
-                                                    placeholder="Enter User ID"
-                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                    <font-awesome-icon :icon="['fas', 'pen']"
-                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                </div>
+                                            <div class="w-full flex flex-row items-center mb-2">
+                                                <font-awesome-icon :icon="['fas', 'people-roof']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                                    <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                        <span class="text-gray-700">Mother</span>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div v-for="(entry, index) in form.siblings" :key="index"
+                                                class="entry border border-gray-200 p-3 col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
+
+                                                <!-- First Name -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_first_name_' + index">First Name</Label>
+                                                    <Input :id="'edit_first_name_' + index" type="text" placeholder="First Name"
+                                                        v-model="entry.first_name" class="w-full border border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_last_name_' + index">Last Name</Label>
+                                                    <Input :id="'edit_last_name_' + index" type="text" placeholder="Last Name"
+                                                        v-model="entry.last_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_middle_name_' + index">Middle Name</Label>
+                                                    <Input :id="'edit_middle_name_' + index" type="text" placeholder="Middle Name"
+                                                        v-model="entry.middle_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Age -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_age_' + index">Age</Label>
+                                                    <Input :id="'edit_age_' + index" type="number" placeholder="Age"
+                                                        v-model="entry.age" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Occupation -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label :for="'edit_occupation_' + index">Occupation</Label>
+                                                    <Input :id="'edit_occupation_' + index" type="text" placeholder="Occupation"
+                                                        v-model="entry.occupation" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- NO REMOVE BUTTON -->
+                                                </div>
                                             </div>
                                         </div>
-
-                                        <!-- Father Section -->
+                                        
+                                        <!-- Edit father Entries -->
                                         <div v-if="form.father.first_name !== 'n/a'">
-                                            <div class="w-full flex flex-row items-center gap-2 py-2">
-                                            <font-awesome-icon :icon="['fas', 'person']"
-                                                class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                            <div class="w-full flex flex-col items-left gap-1 px-2 ">
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                <span class="text-gray-700">Father's Name</span>
-                                                <div class="relative w-full">
-                                                    <input v-model="form.father.first_name" type="text"
-                                                    placeholder="Enter User ID"
-                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                    <font-awesome-icon :icon="['fas', 'pen']"
-                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                </div>
-                                                </div>
-                                                <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                <span class="text-gray-700">Occupation</span>
-                                                <div class="relative w-full">
-                                                    <input v-model="form.father.occupation" type="text"
-                                                    placeholder="Enter User ID"
-                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                                    <font-awesome-icon :icon="['fas', 'pen']"
-                                                    class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
-                                                </div>
+                                            <div class="w-full flex flex-row items-center mb-2">
+                                                <font-awesome-icon :icon="['fas', 'people-roof']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                                    <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                        <span class="text-gray-700">Father</span>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div 
+                                                class="entry border border-gray-200 p-3 col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
+
+                                                <!-- First Name -->
+                                                <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label >First Name</Label>
+                                                    <Input type="text" placeholder="First Name"
+                                                        v-model="form.father.first_name" class="w-full border border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label>Last Name</Label>
+                                                    <Input type="text" placeholder="Last Name"
+                                                        v-model="form.father.last_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label >Middle Name</Label>
+                                                    <Input type="text" placeholder="Middle Name"
+                                                        v-model="form.father.middle_name" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Age -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label>Age</Label>
+                                                    <Input type="number" placeholder="Age"
+                                                        v-model="form.father.age" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- Occupation -->
+                                                    <div class="grid w-full max-w-sm items-center gap-1.5">
+                                                    <Label>Occupation</Label>
+                                                    <Input type="text" placeholder="Occupation"
+                                                        v-model="form.father.occupation" class="w-full border-gray-200" />
+                                                    </div>
+
+                                                    <!-- NO REMOVE BUTTON -->
+                                                </div>
                                             </div>
-                                        </div>
-                                        </div>
+
+                                    </div>
 
 
-                                    <div>
+                                    <!-- <div>
                                         <div class="w-full flex flex-row items-center gap-2 py-2">
                                             <font-awesome-icon :icon="['fas', 'people-roof']"
                                                 class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                             <div class="w-full flex flex-col items-left gap-1 px-2 ">
                                                 <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
+                                                   
                                                     <span class="text-gray-700">Siblings</span>
 
-                                                    <!-- Input Container (70%) -->
+                                                    
                                                     <div class="relative w-full">
                                                         <input v-model="father.first_name" type="text"
                                                             placeholder="Enter User ID"
                                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                                                        <!-- Icon inside input -->
+                                                        
                                                         <font-awesome-icon :icon="['fas', 'pen']"
                                                             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                                                     </div>
                                                 </div>
                                                 <div class="relative grid grid-cols-[30%_70%] items-center w-full">
-                                                    <!-- Label (30%) -->
+                                                    
                                                     <span class="text-gray-700">Occupation</span>
 
-                                                    <!-- Input Container (70%) -->
+                                                   
                                                     <div class="relative w-full">
                                                         <input v-model="father.occupation" type="text"
                                                             placeholder="Enter User ID"
                                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
-                                                        <!-- Icon inside input -->
+                                                       
                                                         <font-awesome-icon :icon="['fas', 'pen']"
                                                             class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div> -->
+                                    
+                                    <div class="col-span-4 grid w-full items-center gap-1.5">
+                                        <!-- Edit Sibling Entries -->
+                                    <div class="w-full flex flex-row items-center">
+                                        <font-awesome-icon :icon="['fas', 'people-roof']"
+                                            class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                        <div class="w-full flex flex-col items-left gap-1 px-2 ">
+                                            <div class="relative grid grid-cols-[30%_70%] items-center w-full">
+                                                <span class="text-gray-700">Siblings</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-for="(entry, index) in form.siblings" :key="index"
+                                        class="entry border border-gray-200 p-3 col-span-4 grid sm:grid-cols-1 md:grid-cols-3 w-full items-end gap-3 justify-end">
+
+                                        <!-- First Name -->
+                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <Label :for="'edit_first_name_' + index">First Name</Label>
+                                        <Input :id="'edit_first_name_' + index" type="text" placeholder="First Name"
+                                            v-model="entry.first_name" class="w-full border border-gray-200" />
+                                        </div>
+
+                                        <!-- Last Name -->
+                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <Label :for="'edit_last_name_' + index">Last Name</Label>
+                                        <Input :id="'edit_last_name_' + index" type="text" placeholder="Last Name"
+                                            v-model="entry.last_name" class="w-full border-gray-200" />
+                                        </div>
+
+                                        <!-- Middle Name -->
+                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <Label :for="'edit_middle_name_' + index">Middle Name</Label>
+                                        <Input :id="'edit_middle_name_' + index" type="text" placeholder="Middle Name"
+                                            v-model="entry.middle_name" class="w-full border-gray-200" />
+                                        </div>
+
+                                        <!-- Age -->
+                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <Label :for="'edit_age_' + index">Age</Label>
+                                        <Input :id="'edit_age_' + index" type="number" placeholder="Age"
+                                            v-model="entry.age" class="w-full border-gray-200" />
+                                        </div>
+
+                                        <!-- Occupation -->
+                                        <div class="grid w-full max-w-sm items-center gap-1.5">
+                                        <Label :for="'edit_occupation_' + index">Occupation</Label>
+                                        <Input :id="'edit_occupation_' + index" type="text" placeholder="Occupation"
+                                            v-model="entry.occupation" class="w-full border-gray-200" />
+                                        </div>
+
+                                        <!-- NO REMOVE BUTTON -->
+                                    </div>
                                     </div>
 
                                     <div>
@@ -1826,6 +2031,9 @@
                 </div>
             </div>
         </form>
+
+<!-- closing form ------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
+
         <!-- QR Code Modal -->
         <div v-if="isQRModalOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
             @click.self="closeQRModal">
@@ -1990,6 +2198,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import InputError from '@/Components/InputError.vue';
 import { initFlowbite } from 'flowbite';
 
+
 const props = defineProps({
     student: Object,
     education: Object,
@@ -2013,7 +2222,9 @@ const form = ref({
     age: '',
     gender: '',
     civil_status: '',
-    address: '',
+    municipality: '',
+    province: '',
+    street: '',
     religion: '',
     guardian_name: '',
     relationship: '',
@@ -2022,15 +2233,15 @@ const form = ref({
     semester: '',
     school_year: '',
     education: {
-        elementary: { name: '', years: '', honors: 'N/A' },
-        junior: { name: '', years: '', honors: 'N/A' },
-        senior: { name: '', years: '', honors: 'N/A' },
-        college: { name: '', years: '', honors: 'N/A' },
-        vocational: { name: 'N/A', years: 'N/A', honors: 'N/A' },
-        postgrad: { name: 'N/A', years: 'N/A', honors: 'N/A' },
+        elementary: { name: '', years: ''},
+        junior: { name: '', years: '' },
+        senior: { name: '', years: '' },
+        college: { name: '', years: '' },
+        vocational: { name: 'N/A', years: 'N/A' },
+        postgrad: { name: 'N/A', years: 'N/A' },
     },
-    mother: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
-    father: { first_name: '', last_name: '', middle_name: '', age: '', address: '', citizenship: '', occupation: '', education: '', batch: '', isDeceased: false },
+    mother: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
+    father: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
     marital_status: '',
     monthly_income: '',
     other_income: 'N/A',
@@ -2051,25 +2262,39 @@ const formGrade = ref({
     school_year: '',
 });
 
-// const EditProfile = ref(false)
-const EditProfileMobile = ref(false);  // Toggle state
-const EditProfileWeb = ref(false);  // Toggle state
-const showUpload = ref(false); // Controls visibility of the upload section
+const EditProfileMobile = ref(false);
+const EditProfileWeb = ref(false);
+const showUpload = ref(false);
 
-const toggleEditWebProfile = async () => {
-  EditProfileWeb.value = !EditProfileWeb.value
+// Web: Enable Edit Mode
+const enableWebEdit = async () => {
+  EditProfileWeb.value = true;
+  EditProfileMobile.value = false;
 
-
-    await nextTick() // wait for DOM update
-    initFlowbite();
-    initDatepicker();
-}
-
-const toggleEditMobileProfile = () => {
-  EditProfileMobile.value = !EditProfileMobile.value
+  await nextTick();
   initFlowbite();
   initDatepicker();
-}
+};
+
+// Web: Cancel Edit
+const cancelWebEdit = () => {
+  EditProfileWeb.value = false;
+};
+
+// Mobile: Enable Edit Mode
+const enableMobileEdit = async () => {
+  EditProfileMobile.value = true;
+  EditProfileWeb.value = false;
+
+  await nextTick();
+  initFlowbite();
+  initDatepicker();
+};
+
+// Mobile: Cancel Edit
+const cancelMobileEdit = () => {
+  EditProfileMobile.value = false;
+};
 
 // QR Code state management
 const isQRModalOpen = ref(false);
@@ -2230,10 +2455,10 @@ const handleImgChange = (event) => {
 const submit = async () => {
 
     try {
-        if (props.scholar != null) {
-            form.value.semester = props.batch_semester;
-            form.value.school_year = props.school_year.year;
-        }
+        // if (props.scholar != null) {
+        //     form.value.semester = props.batch_semester;
+        //     form.value.school_year = props.school_year.year;
+        // }
 
         router.post(`/verify-account/verifying`, form.value);
         //await useForm(form.value).post(`/sponsors/create-scholarship`);

@@ -15,6 +15,7 @@ use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
 use App\Models\Criteria;
 use App\Models\CampusRecipients;
+use App\Models\ApplicantTrack;
 use App\Models\Campus;
 use App\Models\Eligible;
 use App\Models\Course;
@@ -57,7 +58,7 @@ class StudentController extends Controller
             $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
 
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
-            ->where('status', 'Pending')
+                ->where('status', 'Pending')
                 ->first() ?? null;
 
             $payout = null;
@@ -254,7 +255,7 @@ class StudentController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
         $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
         $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->get();
-        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->first();
+        $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
         $grade = Grade::where('scholar_id', $scholar->id)
             ->orderBy('created_at', 'desc')
             ->first();
@@ -688,7 +689,8 @@ class StudentController extends Controller
             $nextId++;
 
 
-            Scholar::create([
+
+            Scholar::insert([
                 'user_id' => $user->id,
                 'hei_name' => 'University of Rizal System',
                 'campus_id' => $student->campus_id,
@@ -705,6 +707,9 @@ class StudentController extends Controller
                 'province' => $request->province,
                 'email' => $request->email,
                 'status' => 'Verified',
+                'student_status' => 'Enrolled',
+                'created_at' => now(),
+                'updated_at' => now(),
             ]);
         }
 
@@ -1028,37 +1033,37 @@ class StudentController extends Controller
                         $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
                     }
                 }
+            } else {
+                // If no scholar is found, get the most recent academic year
+                $academic_year = AcademicYear::orderBy('id', 'desc')->first();
+
+                // Apply similar logic as for scholars to determine semester and school year
+                $grantee_semester = null;
+                $grantee_school_year_id = null;
+
+                if ($academic_year) {
+                    if ($academic_year->semester == '2nd') {
+                        $grantee_semester = '1st';
+                        $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
+
+                    } elseif ($academic_year->semester == '1st') {
+                        $grantee_semester = '2nd';
+
+                        // Adjust the school year based on the current year
+                        if ($academic_year->school_year_id == 1) {
+                            $grantee_school_year_id = 1; // First school year
+                        } else {
+                            $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
+                        }
+                    }
+                }
+
+                // Fetch the school year from the database using the calculated school year ID
+                $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
             }
 
             // Fetch the school year from the database using the calculated school year ID
             $school_year = SchoolYear::where('id', $grantee_school_year_id)->first();
-        } else {
-            // If no scholar is found, get the most recent academic year
-            $academic_year = AcademicYear::orderBy('id', 'desc')->first();
-
-            // Apply similar logic as for scholars to determine semester and school year
-            $grantee_semester = null;
-            $grantee_school_year_id = null;
-
-            if ($academic_year) {
-                if ($academic_year->semester == '2nd') {
-                    $grantee_semester = '1st';
-                    $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
-
-                } elseif ($academic_year->semester == '1st') {
-                    $grantee_semester = '2nd';
-
-                    // Adjust the school year based on the current year
-                    if ($academic_year->school_year_id == 1) {
-                        $grantee_school_year_id = 1; // First school year
-                    } else {
-                        $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
-                    }
-                }
-            }
-
-            // Fetch the school year from the database using the calculated school year ID
-            $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
         }
 
         // Fetch the school year from the database using the calculated school year ID
@@ -1309,13 +1314,17 @@ class StudentController extends Controller
 
         $reqID = $requirements->pluck('id')->first();
 
+        $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
+        ->where('status', 'Active')
+        ->first();
 
         Applicant::create([
             'scholarship_id' => $scholarship->id,
-            'batch_id' => $batch->id,
+            'applicant_track_id' => $applicantTrack->id,
             'scholar_id' => $scholar->id,
-            'school_year_id' => $batch->school_year_id,
-            'semester' => $batch->semester,
+            'school_year_id' => $applicantTrack->school_year_id,
+            'essay' => $request->essay,
+            'semester' => $applicantTrack->semester,
         ]);
 
         // Process each uploaded file
@@ -1324,7 +1333,7 @@ class StudentController extends Controller
             $path = $file->store('requirements/' . $scholar->id, 'public');
 
             // Create the submitted requirement record
-            SubmittedRequirements::create([
+            SubmittedRequirements::insert([
                 'scholar_id' => $scholar->id,
                 'requirement_id' => $requirementId, // This now uses the correct requirement ID
                 'submitted_requirements' => $file->getClientOriginalName(),

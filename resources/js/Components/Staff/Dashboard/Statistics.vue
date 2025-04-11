@@ -8,34 +8,31 @@
         <!-- Statistics Grid (2x2) - Full Space Usage -->
         <div class="flex flex-wrap gap-3 w-full flex-grow">
 
-            <!-- Box 1 -->
-            <div class="w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
-                <p class="text-4xl font-bold dark:text-lprimary">{{scholarships.length}}</p>
-                <p class="text-gray-600 dark:text-gray-300">Active Scholarship Sponsors</p>
-                
-            </div>
-
-            <!-- Box 2 -->
-            <div class="w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
-                <p class="text-4xl font-bold dark:text-lprimary">{{active_scholars.length}}</p>
-                <p class="text-gray-600 dark:text-gray-300">Active Scholars</p>
-            </div>
-            
-
-            <!-- Box 3 -->
-            <div class="w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-5 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow">
-                <p class="text-4xl font-bold dark:text-lprimary">12</p>
-                <p class="text-gray-600 dark:text-gray-300">University Students</p>
-            </div>
-
-            <!-- Box 4 -->
-
+        <!-- Box 1: Sponsors (Icon Left) -->
+        <div class="relative w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-3 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow overflow-hidden">
+            <p class="text-5xl font-extrabold text-dprimary dark:text-dtext z-10">{{ scholarships.length }}</p>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-300 tracking-wide uppercase z-10">Active Scholarship Sponsors</p>
+            <img src="../../../../assets/images/sponsor_icon.png" alt="sponsor icon"
+                class="absolute left-4 bottom-4 w-20 opacity-10 dark:opacity-20 pointer-events-none select-none" />
         </div>
 
-        <!-- Buttons Container (Stays at the Bottom) -->
-        <div class="w-full flex flex-row justify-between items-center">
-            <!-- Buttons or actions go here -->
+        <!-- Box 2: Scholars (Icon Right) -->
+        <div class="relative w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-3 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow overflow-hidden">
+            <p class="text-5xl font-extrabold text-dprimary dark:text-dtext z-10">{{ active_scholars.length }}</p>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-300 tracking-wide uppercase z-10">Active Scholars</p>
+            <img src="../../../../assets/images/scholar_icon.png" alt="scholar icon"
+                class="absolute right-4 bottom-4 w-20 opacity-10 dark:opacity-20 pointer-events-none select-none" />
         </div>
+
+        <!-- Box 3: Students (Icon Left again) -->
+        <div class="relative w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 p-3 rounded-lg flex flex-col items-center justify-center shadow-md flex-grow overflow-hidden">
+            <p class="text-5xl font-extrabold text-dprimary dark:text-dtext z-10">{{ univ_students }}</p>
+            <p class="mt-2 text-sm text-gray-500 dark:text-gray-300 tracking-wide uppercase z-10">University Students</p>
+            <img src="../../../../assets/images/student_icon.png" alt="student icon"
+                class="absolute left-4 bottom-4 w-20 opacity-10 dark:opacity-20 pointer-events-none select-none" />
+        </div>
+
+    </div>
 
     </div>
 </div>
@@ -58,7 +55,8 @@ const props = defineProps({
     active_scholars: {
         type: Array,
         required: true
-    }
+    },
+    univ_students: Object,
 });
 
 const isCreating = ref(false);

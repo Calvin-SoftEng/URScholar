@@ -81,7 +81,7 @@
                 />
 
                 <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
+                <div class="flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary overflow-auto">
                 <slot></slot>
                 </div>
             </div>

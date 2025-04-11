@@ -47,6 +47,11 @@ class Scholarship extends Model
         return $this->hasMany(Batch::class);
     }
 
+    public function applicant_tracks()
+    {
+        return $this->hasMany(ApplicantTrack::class);
+    }
+
     public function scholarshipTemplates()
     {
         return $this->hasMany(ScholarshipTemplate::class);

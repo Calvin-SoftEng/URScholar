@@ -2,31 +2,28 @@
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
+        <!-- Publish Button -->
         <Link :href="(route('scholarship.onetime_scholars'))">
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="generateReport">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Publish Applicant List
-        </button>
+          <button
+            @click="generateReport"
+            class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
+                  hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
+            <span class="font-normal">Publish <span class="font-semibold">Applicant List</span></span>
+          </button>
         </Link>
 
-      </div>
-      <!-- <form class="w-3/12">
-        <label for="default-search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-          </div>
-          <input type="search" id="default-search" v-model="searchQuery"
-            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
+        <!-- Forward to Sponsor -->
+        <div>
+          <button @click="toggleForwardSponsor"
+            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+                  hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
+            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+            <span class="font-normal">Forward to <span class="font-semibold">Sponsor</span></span>
+          </button>
         </div>
-      </form> -->
+      </div>
+
     </div>
 
     <div>
@@ -39,12 +36,12 @@
 
           <!-- table -->
           <div v-else class="overflow-x-auto font-poppins border rounded-lg">
-            <div v-if="applicants == 0"
+            <div v-if="filteredScholars.length === 0"
               class="bg-white w-full dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
               <font-awesome-icon :icon="['fas', 'user-graduate']"
                 class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
               <p class="text-lg text-gray-700 dark:text-gray-300">
-                No applicants for this scholarship yet
+                No applicants for this campus yet
               </p>
             </div>
             <div v-else>
@@ -65,8 +62,7 @@
 
                 <tbody>
                   <!-- Scholars within recipient limit -->
-                  <template v-for="(scholar, index) in sortedScholars.slice(0, recipientLimit)" :key="scholar.id">
-
+                  <template v-for="(scholar, index) in scholarsWithinLimit" :key="scholar.id">
                     <tr class="text-sm">
                       <td>{{ scholar.urscholar_id }}</td>
                       <td>
@@ -127,15 +123,15 @@
                     </tr>
                   </template>
 
-                  <!-- Cut-Off Line -->
-                  <tr v-if="sortedScholars.length > recipientLimit">
+                  <!-- Cut-Off Line - Always show if there are scholars outside limit -->
+                  <tr v-if="hasScholarsOutsideLimit">
                     <td colspan="8" class="text-center font-semibold text-red-600 py-4 bg-red-50">
                       Cut-Off Line: Below applicants are NOT within the required {{ recipientLimit }} recipients.
                     </td>
                   </tr>
 
                   <!-- Scholars below recipient limit -->
-                  <template v-for="scholar in sortedScholars.slice(recipientLimit)" :key="scholar.id">
+                  <template v-for="scholar in scholarsOutsideLimit" :key="scholar.id">
                     <tr class="text-sm">
                       <td>{{ scholar.urscholar_id }}</td>
                       <td>
@@ -199,7 +195,6 @@
                 </tbody>
               </table>
             </div>
-
           </div>
           <!-- Pagination controls -->
           <div v-if="totalScholars > itemsPerPage" class="mt-5 flex justify-between items-center">
@@ -231,6 +226,87 @@
       </div>
     </div>
   </div>
+
+  <!-- Simplified forwarding batch list modal -->
+  <div v-if="ForwardtoSponsor"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+        <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+          <div class="flex items-center gap-3">
+                <!-- Icon -->
+                <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                    class="text-blue-600 text-2xl flex-shrink-0" />
+
+                <!-- Title and Description -->
+                <div class="flex flex-col">
+                    <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                        Forward to Sponsor
+                    </h2>
+                    <span class="text-sm text-gray-600 dark:text-gray-400">
+                        Send the applicant list to the sponsor account
+                    </span>
+                </div>
+            </div>
+            <button type="button" @click="closeModal"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="default-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                    viewBox="0 0 14 14">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                </svg>
+            </button>
+        </div>
+
+        <!-- Form -->
+        <form >
+            <div class="py-4 px-8 flex flex-col gap-3">
+                <!-- Loading Indicator -->
+                <!-- <div class="flex justify-center items-center py-4">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                    <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                </div> -->
+
+                <!-- Batch List -->
+                <div
+                    class="flex flex-col divide-y divide-gray-300">
+                    <p>
+                        rgsrgrsg
+                    </p>
+                    <div 
+                        class="py-3 px-4 flex justify-between items-center">
+                        <div>
+                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch fefef</p>
+                            <p class="text-sm text-gray-500">Completed:fefefef</p>
+                        </div>
+                        <!-- <span
+                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                            {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                            }}
+                        </span> -->
+                    </div>
+                </div>
+
+                <!-- Forward Button -->
+                <!-- <div v-if="completedBatches === batches.length" class="mt-4">
+                    <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                        @click="forwardSponsor"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                    </button>
+                </div> -->
+                <div class="mt-4">
+                    <button v-tooltip.left="'Complete all batches'" disabled
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                        Forward
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        
+    </div>
+</div>
   <!-- Toast notifications -->
   <ToastProvider>
     <ToastRoot v-if="toast.visible"
@@ -244,7 +320,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
@@ -257,7 +333,11 @@ const props = defineProps({
   requirements: Array,
   campusRecipients: Array,
   totalSlots: Number,
+  currentUser: Object,
 });
+
+// Get current user's campus ID from Inertia page props
+const page = usePage();
 
 // Data loading state
 const loading = ref(false);
@@ -275,18 +355,31 @@ const toast = ref({
   type: 'success'
 });
 
-// Computed properties for scholars filtering and pagination
-const filteredScholars = computed(() => {
-  const allScholars = props.scholars || [];
+// First filter by campus - exception for super_admin
+const filteredByCampus = computed(() => {
+  if (!props.scholars) return [];
 
+  // If user is super_admin, show all scholars across all campuses
+  if (props.currentUser && props.currentUser.usertype === 'super_admin') {
+    return props.scholars;
+  }
+
+  // Otherwise filter by campus
+  return props.scholars.filter(scholar => {
+    return scholar.campus === props.currentUser.campus_id;
+  });
+});
+
+// Then filter by search query
+const filteredScholars = computed(() => {
   if (!searchQuery.value) {
-    return [...allScholars].sort((a, b) =>
+    return [...filteredByCampus.value].sort((a, b) =>
       a.status === 'Verified' ? -1 : b.status === 'Verified' ? 1 : 0
     );
   }
 
   const query = searchQuery.value.toLowerCase();
-  return allScholars.filter(scholar =>
+  return filteredByCampus.value.filter(scholar =>
     scholar.first_name?.toLowerCase().includes(query) ||
     scholar.last_name?.toLowerCase().includes(query) ||
     scholar.middle_name?.toLowerCase().includes(query) ||
@@ -300,6 +393,47 @@ const filteredScholars = computed(() => {
   );
 });
 
+// Sort by grades (1.0 being highest)
+const sortedScholars = computed(() => {
+  return [...filteredScholars.value].sort((a, b) => {
+    // First priority: Complete vs incomplete requirements
+    if (a.status === 'Complete' && b.status !== 'Complete') return -1;
+    if (a.status !== 'Complete' && b.status === 'Complete') return 1;
+
+    // Second priority: Compare grades (lower numeric value is better in 1.0-5.0 scale)
+    const gradeA = parseFloat(a.grade) || 5.0; // Default to lowest grade if null
+    const gradeB = parseFloat(b.grade) || 5.0;
+
+    if (gradeA !== gradeB) {
+      return gradeA - gradeB; // Lower grade value first (1.0 is better than 2.0)
+    }
+
+    // If grades are equal, sort by date applied (earlier first)
+    return new Date(a.date_applied) - new Date(b.date_applied);
+  });
+});
+
+// Split scholars into within limit and outside limit
+const scholarsWithinLimit = computed(() => {
+  return sortedScholars.value.slice(0, props.totalSlots || 0);
+});
+
+const scholarsOutsideLimit = computed(() => {
+  return props.totalSlots && sortedScholars.value.length > props.totalSlots
+    ? sortedScholars.value.slice(props.totalSlots)
+    : [];
+});
+
+// Check if there are scholars outside the limit
+const hasScholarsOutsideLimit = computed(() => {
+  // Make sure the totalSlots is properly defined
+  if (!props.totalSlots) return false;
+
+  // For any user type, check if the total number of scholars for their campus
+  // exceeds the recipient limit
+  return filteredByCampus.value.length > props.totalSlots;
+});
+// Computed properties for pagination
 const totalScholars = computed(() => filteredScholars.value.length);
 const totalPages = computed(() => Math.ceil(totalScholars.value / itemsPerPage));
 
@@ -340,7 +474,6 @@ const fetchScholars = async () => {
   loading.value = true;
   try {
     // Using Inertia's router.reload() to refresh the current page data
-    // This will maintain the current URL and just refresh the data
     await router.reload({
       only: ['scholars', 'requirements'],
       onSuccess: () => {
@@ -378,6 +511,38 @@ const generateReport = async () => {
   }
 };
 
+const ForwardtoSponsor = ref(false);
+
+const toggleForwardSponsor = async () => {
+    ForwardtoSponsor.value = true;
+
+    // Load batches with scholar counts
+    await loadBatchesData();
+};
+
+const closeModal = () => {
+    ForwardtoSponsor.value = false;
+    resetForm();
+};
+
+const forwardSponsor = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('scholarship.forward_sponsor', {
+        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
+        selectedCampus: props.selectedCampus
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Batches forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
+
+
 // Toast helper function
 const showToast = (title, message, type = 'success') => {
   toast.value = {
@@ -410,7 +575,7 @@ onMounted(() => {
     fetchScholars();
   }
 
-  // Set up polling to refresh data every 5 minutes (adjust as needed)
+  // Set up polling to refresh data every 5 minutes
   const dataRefreshInterval = setInterval(() => {
     fetchScholars();
   }, 300000); // 5 minutes
@@ -421,42 +586,8 @@ onMounted(() => {
   };
 });
 
-
-
-
-
 // Replace the hard-coded recipientLimit with data from the backend
 const recipientLimit = computed(() => props.totalSlots || 0);
-
-// Update the sorted scholars logic to rank by grades (1.0 being highest)
-const sortedScholars = computed(() => {
-  if (!props.scholars) return [];
-
-  // Create a copy of the scholars array to sort
-  return [...props.scholars].sort((a, b) => {
-    // First priority: Complete vs incomplete requirements
-    if (a.status === 'Complete' && b.status !== 'Complete') return -1;
-    if (a.status !== 'Complete' && b.status === 'Complete') return 1;
-
-    // Second priority: Compare grades (lower numeric value is better in 1.0-5.0 scale)
-    const gradeA = parseFloat(a.grade) || 5.0; // Default to lowest grade if null
-    const gradeB = parseFloat(b.grade) || 5.0;
-
-    if (gradeA !== gradeB) {
-      return gradeA - gradeB; // Lower grade value first (1.0 is better than 2.0)
-    }
-
-    // If grades are equal, sort by date applied (earlier first)
-    return new Date(a.date_applied) - new Date(b.date_applied);
-  });
-});
-
-// Scholars below the cut-off
-const cutoffScholars = computed(() => {
-  return sortedScholars.value.length > recipientLimit.value
-    ? sortedScholars.value.slice(recipientLimit.value)
-    : [];
-});
 </script>
 
 <style>

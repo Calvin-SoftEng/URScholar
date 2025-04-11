@@ -15,9 +15,11 @@ use App\Models\ScholarshipGroup;
 use App\Models\SchoolYear;
 use App\Models\Sponsor;
 use App\Models\SponsorMoa;
+use App\Models\StaffGroup;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use StaffGroupUser;
 
 class DatabaseSeeder extends Seeder
 {
@@ -224,9 +226,9 @@ class DatabaseSeeder extends Seeder
         //     'year' => '2021-2022',
         // ]);
 
-        // SchoolYear::factory()->create([
-        //     'year' => '2022-2023',
-        // ]);
+        SchoolYear::factory()->create([
+            'year' => '2022-2023',
+        ]);
 
         SchoolYear::factory()->create([
             'year' => '2024-2025',
@@ -372,24 +374,43 @@ class DatabaseSeeder extends Seeder
         //     'status' => 'Inactive'
         // ]);
 
-        // AcademicYear::factory()->create([
-        //     'school_year_id' => '2',
-        //     'semester' => '1st',
-        //     'status' => 'Inactive'
-        // ]);
-
-        // AcademicYear::factory()->create([
-        //     'school_year_id' => '2',
-        //     'semester' => '2nd',
-        //     'status' => 'Inactive'
-        // ]);
+        AcademicYear::factory()->create([
+            'school_year_id' => '1',
+            'semester' => '1st',
+            'status' => 'Inactive'
+        ]);
 
         AcademicYear::factory()->create([
             'school_year_id' => '1',
+            'semester' => '2nd',
+            'status' => 'Inactive'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '2',
             'semester' => '1st',
             'status' => 'Active'
         ]);
 
+        StaffGroup::factory()->create([
+            'name' => 'Scholarship Coordinators',
+            'user_id' => '2',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '2',
+            'staff_group_id' => '1',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '3',
+            'staff_group_id' => '1',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '4',
+            'staff_group_id' => '1',
+        ]);
 
 
         //sponsor 

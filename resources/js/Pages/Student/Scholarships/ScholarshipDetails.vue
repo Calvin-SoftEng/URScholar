@@ -41,28 +41,41 @@
                             <!-- Tab Content -->
                             <div class="p-4 border border-gray-400">
                                 <div v-if="activeTab === 'eligibility'">
-                                    <h2 class="text-lg font-semibold">Applicant for this scholarship must:</h2>
-                                    <p>Details about the eligibility criteria go here.</p>
-                                    <p>Grade: {{ grade.grade }}</p>
-                                    <div v-for="criteria in criterias" :key="criteria.id">
+                                    <h2 class="text-lg font-semibold mb-3">Scholarship recipients are selected on the
+                                        basis of:</h2>
 
-                                        <h3 class="text-lg font-semibold">{{ criteria.scholarship_form_data.name }}</h3>
+                                    <!-- Grade criteria -->
+                                    <p v-if="props.criterias.find(c => c.grade)">
+                                        Student General Weighted Average must be at least
+                                        <span class="font-semibold">{{props.criterias.find(c => c.grade).grade
+                                            }}</span>
+                                    </p>
+
+                                    <!-- Income criteria -->
+                                    <p v-if="props.criterias.find(c => c.scholarship_form_data)">
+                                        Family income must range between
+                                        <span v-for="criteria in criterias" :key="criteria.id" class="font-semibold">
+                                            {{ criteria.scholarship_form_data.name }}/
+                                        </span>
+                                    </p>
+
+                                    <!-- Other eligibility criteria -->
+                                    <div v-for="eligible in eligibles" :key="eligible.id">
+                                        <p><span class="font-semibold">{{ eligible.condition.name }}</span></p>
                                     </div>
                                 </div>
                                 <div v-if="activeTab === 'requirements'">
-                                    <h2 class="text-lg font-semibold">Scholarship recipients are selected on the basis
-                                        of:
+                                    <h2 class="text-lg font-semibold mb-3">Applicant for this scholarship must provide
+                                        the following:
                                     </h2>
-                                    <p>Details about the required documents go here.</p>
                                     <div v-for="requirement in requirements" :key="requirement.id">
-
-                                        <h3 class="text-lg font-semibold">{{ requirement.requirements }}</h3>
+                                        <p>A copy of <span class="font-semibold">{{ requirement.requirements }}</span>
+                                        </p>
                                     </div>
                                 </div>
                                 <div v-if="activeTab === 'awards'">
-                                    <h2 class="text-lg font-semibold">As part of your application, you must upload the
-                                        following:</h2>
-                                    <p>Details about the awards and benefits go here.</p>
+                                    <h2 class="text-lg font-semibold">Announcement of qualified applicants will be
+                                        available to your Dashboard once announced</h2>
                                 </div>
                             </div>
                         </div>

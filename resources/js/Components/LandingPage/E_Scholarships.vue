@@ -67,7 +67,7 @@
                             <div class="w-full md:w-auto flex justify-center md:justify-end">
                                 <Link :href="`/applying-scholarship/${scholarship.id}`">
                                     <button
-                                        class="w-full md:w-auto text-sm sm:text-base bg-primary text-white px-6 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
+                                        class="w-full md:w-auto text-sm sm:text-base whitespace-nowrap bg-primary text-white px-6 py-2 rounded-lg shadow-md hover:bg-primary-dark transition duration-200">
                                         View More
                                     </button>
                                 </Link>
