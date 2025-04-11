@@ -412,6 +412,82 @@ class StudentController extends Controller
         ]);
     }
 
+    public function updateProfile(Request $request)
+    {
+        dd($request);
+
+        $validator = Validator::make($request->all(), [
+            //Personal Information
+            'first_name' => ['required', 'string', 'max:255'],
+            'middle_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'suffix' => ['required', 'string', 'max:255'],
+            'password' => ['required'],
+            'confirm_password' => ['required', 'same:password'],
+            'birthdate' => ['required', 'date'],
+            'birthplace' => ['required', 'string', 'max:255'],
+            'age' => ['required', 'numeric'],
+            'gender' => ['required', 'string', 'max:255'],
+            'civil_status' => ['required', 'string', 'max:255'],
+            'street' => ['required', 'string', 'max:255'],
+            'municipality' => ['required', 'string', 'max:255'],
+            'province' => ['required', 'string', 'max:255'],
+            'religion' => ['required', 'string', 'max:255'],
+            'guardian_name' => ['required', 'string', 'max:255'],
+            'relationship' => ['required', 'string', 'max:255'],
+            
+            //Educaiton Information
+            'education.elementary.name' => ['required', 'string'],
+            'education.elementary.years' => ['required', 'string'],
+            'elementary.honors' => ['string'],
+            'education.junior.name' => ['required', 'string',],
+            'education.junior.years' => ['required', 'string'],
+            'education.senior.name' => ['', 'string'],
+            'education.senior.years' => ['', 'string'],
+            'education.senior.honors' => ['string'],
+            'education.college.name' => ['', 'string'],
+            'education.college.years' => ['', 'string'],
+            'education.college.honors' => ['string'],
+            'education.vocational.name' => ['string'],
+            'education.vocational.years' => ['string'],
+            'education.vocational.honors' => ['string'],
+            'education.postgrad.name' => ['string'],
+            'education.postgrad.years' => ['string'],
+            'education.postgrad.honors' => ['string'],
+
+            //Family Information
+            'mother.first_name' => ['required', 'string'],
+            'mother.middle_name' => ['required', 'string'],
+            'mother.last_name' => ['required', 'string'],
+            'mother.age' => ['', 'string'],
+            'mother.address' => ['', 'string'],
+            'mother.citizenship' => ['', 'string'],
+            'mother.occupation' => ['', 'string'],
+            'mother.education' => ['', 'string'],
+            'mother.batch' => [''],
+
+            'father.first_name' => ['', 'string'],
+            'father.middle_name' => ['', 'string'],
+            'father.last_name' => ['', 'string'],
+            'father.age' => ['', 'string'],
+            'father.address' => ['', 'string'],
+            'father.citizenship' => ['', 'string'],
+            'father.occupation' => ['', 'string'],
+            'father.education' => ['', 'string'],
+            'father.batch' => [''],
+
+            'siblings' => [''],
+            'siblings.*' => [''],
+
+            'marital_status' => ['required', 'string'],
+            'monthly_income' => ['required', 'string'],
+            'other_income' => [''],
+            'family_housing' => ['required', 'string'],
+
+            'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'imgName' => 'required|string',
+        ]);
+    }
 
     public function verifyingAccount(Request $request)
     {
@@ -1315,8 +1391,8 @@ class StudentController extends Controller
         $reqID = $requirements->pluck('id')->first();
 
         $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
-        ->where('status', 'Active')
-        ->first();
+            ->where('status', 'Active')
+            ->first();
 
         Applicant::create([
             'scholarship_id' => $scholarship->id,

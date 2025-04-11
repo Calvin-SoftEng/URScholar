@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
 use App\Models\Scholarship;
 use App\Models\Batch;
 use App\Models\Campus;
+use App\Models\Notification;
 use App\Models\Page;
 use App\Models\Posting;
 use Illuminate\Http\Request;
@@ -50,6 +52,19 @@ class FeedController extends Controller
             'user_id' => Auth::id(),
             'content' => $request->content,
         ]);
+
+        // // Create notification
+        // $notification = Notification::create([
+        //     'title' => 'New Message',
+        //     'message' => 'New post posted',
+        //     'type' => $request->group_type . '_chat',
+        // ]);
+
+        // // Attach users to the notification
+        // $notification->users()->attach($users->pluck('id'));
+
+        // // Notify users
+        // event(new NewNotification($notification));
 
         return redirect()->back()->with('success', 'Announcement posted successfully.');
     }

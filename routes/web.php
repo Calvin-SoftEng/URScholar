@@ -300,6 +300,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
 
     //profile
     Route::get('/myProfile', [StudentController::class, 'profile'])->name('student.profile');
+    Route::post('/myProfile/update', [StudentController::class, 'updateProfile'])->name('student.updateProfile');
     Route::get('/myProfile/generate/{urscholar_id}', [StudentController::class, 'generate'])->name('qrcode.generate');
     Route::post('/myProfile/{urscholar_id}/upload-grade', [StudentController::class, 'uploadGrade'])->name('student.uploadgrade');
 
