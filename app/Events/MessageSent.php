@@ -7,57 +7,30 @@ use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageSent implements ShouldBroadcast
+class MessageSent implements ShouldBroadcastNow
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $message;
-    private $channelName;
 
-    /**
-     * Create a new event instance.
-     *
-     * @param  \App\Models\Message  $message
-     * @param  string  $channelName
-     * @return void
-     */
-    public function __construct(Message $message, $channelName)
+    public function __construct(Message $message)
     {
         $this->message = $message;
-        $this->channelName = $channelName;
     }
 
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return \Illuminate\Broadcasting\Channel|array
-     */
     public function broadcastOn()
     {
-        return new PrivateChannel($this->channelName);
+        // Use batch_id if available, otherwise fall back to staff_group_id
+        $channelId = $this->message->batch_id ?? $this->message->staff_group_id;
+
+        return new PrivateChannel("chat.{$channelId}"); // Use Private Channel for authenticated users
     }
 
-    /**
-     * Get the data to broadcast.
-     *
-     * @return array
-     */
-    public function broadcastWith()
-    {
-        return [
-            'message' => $this->message
-        ];
-    }
-
-    /**
-     * The event's broadcast name.
-     *
-     * @return string
-     */
     public function broadcastAs()
     {
         return 'message.sent';

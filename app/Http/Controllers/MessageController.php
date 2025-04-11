@@ -164,7 +164,7 @@ class MessageController extends Controller
         $message->load('user');
 
         // Broadcast message to the appropriate channel
-        broadcast(new MessageSent($message, $channelName))->toOthers();
+        broadcast(new MessageSent($message))->toOthers();
 
             //broadcast(new MessageSent($message))->toOthers();
 
