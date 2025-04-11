@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Scholar extends Model
 {
     protected $fillable = [
-        'scholarship_id',
+        'student_number',
         'user_id',
         'hei_name',
         'campus_id',
