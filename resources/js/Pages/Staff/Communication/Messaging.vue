@@ -505,6 +505,26 @@ onMounted(() => {
     }
 });
 
+// // Set up real-time messaging using Laravel Echo
+// onMounted(() => {
+
+//     const echo = new Echo({
+//         broadcaster: 'pusher',
+//         key: import.meta.env.VITE_PUSHER_APP_KEY,
+//         cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+//         forceTLS: true,
+//         authEndpoint: "/broadcasting/auth", // Required for private channels
+//     });
+
+//     echo.private(`chat.${props.selectedBatch.id}`) // Use private channel
+//         .listen('.message.sent', (e) => {
+//             fetchMessages(); // Fetch messages after receiving
+//             scrollToBottom();
+//             messages.value.push(e.message); // Append new message
+//         });
+//     //broadcast(new MessageSent($message))->toOthers();
+// });
+
 // Watch for changes in selectedData and update form
 watch([selectedData, groupType], ([newSelectedData, newGroupType]) => {
     if (newSelectedData && newSelectedData.id && newGroupType) {
