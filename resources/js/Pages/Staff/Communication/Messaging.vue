@@ -51,7 +51,7 @@
                         <div v-if="selectedTab === 'dm'" class="divide-y">
                             <!-- Single Users List -->
                             <div class="py-2">
-                                <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Users</h4>
+                                <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Sponsors</h4>
                                 <Link v-for="user in filteredUsers" :key="`user-${user.id}`"
                                     :href="route('messaging.conversation', user.id)" :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
                                         selectedUser && selectedUser.id === user.id ? 'bg-blue-50' : '']"
