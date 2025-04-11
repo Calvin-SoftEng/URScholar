@@ -105,7 +105,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                        }}</span>
+                                            }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -565,9 +565,48 @@ const sendMessage = () => {
 
     router.post('/messaging/send', form.value, {
         preserveScroll: true,
-        onSuccess: () => {
-            // Reset form and fetch new messages
+        onSuccess: (page) => {
+            // Create a temporary message object to add to the UI immediately
+            const tempMessage = {
+                id: 'temp-' + Date.now(),
+                content: form.value.content,
+                user: props.currentUser,
+                created_at: new Date().toISOString()
+            };
+
+            // Add the new message to the top of the list
+            messageData.value.unshift(tempMessage);
+
+            // Also update the latest message in the sidebar
+            if (groupType.value === 'staff' && selectedData.value) {
+                const groupIndex = staffGroupsData.value.findIndex(g => g.id === selectedData.value.id);
+                if (groupIndex !== -1) {
+                    staffGroupsData.value[groupIndex].latest_message = tempMessage;
+                    staffGroupsData.value = [...staffGroupsData.value]; // Force reactivity
+                }
+            } else if (groupType.value === 'batch' && selectedData.value) {
+                const batchIndex = batchesData.value.findIndex(b => b.id === selectedData.value.id);
+                if (batchIndex !== -1) {
+                    batchesData.value[batchIndex].latest_message = tempMessage;
+                    batchesData.value = [...batchesData.value]; // Force reactivity
+                }
+            } else if (groupType.value === 'conversation' && selectedUser.value) {
+                const convoIndex = conversations.value.findIndex(c =>
+                    c.other_user && c.other_user.id === selectedUser.value.id
+                );
+                if (convoIndex !== -1) {
+                    conversations.value[convoIndex].latest_message = tempMessage;
+                    conversations.value = [...conversations.value]; // Force reactivity
+                }
+            }
+
+            // Reset form content
             form.value.content = '';
+
+            // Scroll to bottom
+            scrollToBottom();
+
+            // Fetch messages to get the server-generated message with proper ID
             fetchMessages();
         },
         onError: (errors) => {

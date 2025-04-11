@@ -185,6 +185,7 @@ class MessageController extends Controller
             ->where('usertype', 'sponsor')
             ->get();
 
+
         $conversations = $this->getUserConversations($currentUser->id);
 
         // Return the chat page using Inertia
@@ -260,15 +261,18 @@ class MessageController extends Controller
             $users = User::whereHas('scholarshipGroups', function ($query) use ($request) {
                 $query->where('batch_id', $request->group_id);
             })->where('id', '!=', Auth::user()->id)->get();
+            $group = Batch::with('latestMessage.user')->find($request->group_id);
         } elseif ($request->group_type === 'staff') {
             $users = User::whereHas('staffGroups', function ($query) use ($request) {
                 $query->where('staff_group_id', $request->group_id);
             })->where('id', '!=', Auth::user()->id)->get();
+            $group = StaffGroup::with('latestMessage.user')->find($request->group_id);
         } elseif ($request->group_type === 'conversation') {
             // For direct messages, only notify the recipient
             $conversation = Conversation::find($request->group_id);
             $recipientId = ($conversation->sender_id == $user) ? $conversation->receiver_id : $conversation->sender_id;
             $users = User::where('id', $recipientId)->get();
+            $conversation = Conversation::with('latestMessage.user')->find($request->group_id);
         }
 
         // Attach users to the notification
@@ -277,7 +281,7 @@ class MessageController extends Controller
         // Notify users
         event(new NewNotification($notification));
 
-        return back();
+        return back()->with(['updatedGroup' => $group]);
     }
 
     // Helper method to find or create a conversation between two users
