@@ -18,7 +18,7 @@
                                         <div class="flex flex-col flex-grow gap-3">
                                             <!-- Message Container (Expands to fill space) -->
                                             <div class="flex-grow w-full">
-                                                <textarea
+                                                <textarea v-model="announcementContent"
                                                     class="w-full h-full resize-none p-2 bg-transparent border-none outline-none focus:ring-0"
                                                     rows="5" placeholder="Write your announcement here..."></textarea>
                                             </div>
@@ -48,77 +48,55 @@
                                         </div>
                                     </div>
 
-                                    <div class="w-full bg-white rounded-lg shadow-md">
+                                    <!-- Posts -->
+                                    <div v-if="isLoading" class="w-full flex justify-center py-10">
+                                        <div role="status">
+                                            <svg aria-hidden="true"
+                                                class="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+                                                viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path
+                                                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                                    fill="currentColor" />
+                                                <path
+                                                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                                    fill="currentFill" />
+                                            </svg>
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+
+                                    <div v-for="post in posts" :key="post.id"
+                                        class="w-full bg-white rounded-lg shadow-md">
                                         <div class="w-full p-4 flex items-center border-b border-gray-200">
                                             <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
                                                 alt="user-avatar" />
                                             <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
-                                                    ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
-                                                    Binangonan Campus</p>
+                                                <p class="text-primary font-semibold">{{ post.user.name }}</p>
+                                                <p class="text-sm text-gray-500">Posted {{ post.created_at }}</p>
+                                                <div v-if="post.filters.scholarships.length || post.filters.batches.length || post.filters.campuses.length"
+                                                    class="flex flex-wrap gap-1 mt-1">
+                                                    <span v-for="(scholarship, index) in post.filters.scholarships"
+                                                        :key="`s-${index}`"
+                                                        class="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">
+                                                        {{ scholarship }}
+                                                    </span>
+                                                    <span v-for="(batch, index) in post.filters.batches"
+                                                        :key="`b-${index}`"
+                                                        class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">
+                                                        {{ batch.name }}
+                                                    </span>
+                                                    <span v-for="(campus, index) in post.filters.campuses"
+                                                        :key="`c-${index}`"
+                                                        class="text-xs px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full">
+                                                        {{ campus }}
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         <div class="p-4">
                                             <div
-                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
-                                                <p>fefrgr D</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="w-full bg-white rounded-lg shadow-md">
-                                        <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
-                                                alt="user-avatar" />
-                                            <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
-                                                    ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
-                                                    Binangonan Campus</p>
-                                            </div>
-                                        </div>
-                                        <div class="p-4">
-                                            <!-- <div class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
-                                                <p>fefrgr ghthtyjyj</p>
-                                            </div> -->
-                                        </div>
-                                    </div>
-
-                                    <div class="w-full bg-white rounded-lg shadow-md">
-                                        <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
-                                                alt="user-avatar" />
-                                            <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
-                                                    ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
-                                                    Binangonan Campus</p>
-                                            </div>
-                                        </div>
-                                        <div class="p-4">
-                                            <div
-                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
-                                                <p>fefrgr ghthtyjyj</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="w-full bg-white rounded-lg shadow-md">
-                                        <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
-                                                alt="user-avatar" />
-                                            <div class="ml-4">
-                                                <p class="text-primary font-semibold">URS - HEAD SCHOLARSHIP
-                                                    ADMINISTRATOR</p>
-                                                <p class="text-sm text-gray-500">Posted NOV. 15, 2024 @ 10:30 PM
-                                                    Binangonan Campus</p>
-                                            </div>
-                                        </div>
-                                        <div class="p-4">
-                                            <div
-                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden">
-                                                <p>fefrgr ghthtyjyj</p>
+                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden p-4">
+                                                <p>{{ post.content }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -172,8 +150,10 @@
                     <img src="../../../../assets/images/no_userpic.png" alt="Profile Picture"
                         class="w-12 h-12 rounded-full object-cover">
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">si ako</h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">taga binondo</p>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ currentUser?.name || 'User'
+                        }}
+                        </h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ currentUser?.role || 'Staff' }}</p>
                     </div>
                 </div>
 
@@ -251,12 +231,10 @@
                 <div class="">
                     <label for="message" class="block text-sm font-medium text-gray-900 dark:text-gray-300">Announcement
                         Message</label>
-                    <textarea
+                    <textarea v-model="modalContent"
                         class="w-full h-full resize-none p-2 bg-transparent border-gray-300 rounded-md bg-gray-200 outline-none focus:ring-0"
                         rows="5" placeholder="Write your announcement here..."></textarea>
-
                 </div>
-
 
                 <!-- Post Button -->
                 <div class="mt-2">
@@ -267,8 +245,6 @@
             </form>
         </div>
     </div>
-
-
 </template>
 
 <script setup>
@@ -278,16 +254,27 @@ import { ref, onMounted, onBeforeUnmount, watch, nextTick, computed } from 'vue'
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import { initFlowbite } from 'flowbite';
+import axios from 'axios';
 
 // Props from controller
 const props = defineProps({
     campuses: Array,
     batches: Array,
     scholarships: Array,
+    auth: Object,
 });
+
+// Current user
+const currentUser = computed(() => props.auth?.user || null);
+
+// Posts state
+const posts = ref([]);
+const isLoading = ref(true);
 
 // Modal state
 const Share = ref(false);
+const announcementContent = ref('');
+const modalContent = ref('');
 
 // Filter selections
 const selectedScholarships = ref([]);
@@ -307,6 +294,24 @@ const filteredBatches = computed(() => {
         });
     }
 });
+
+// Format timestamp for message display
+const formatTimestamp = (timestamp) => {
+    if (!timestamp) return '';
+
+    const date = new Date(timestamp);
+    const now = new Date();
+
+    const isToday = date.getDate() === now.getDate() &&
+        date.getMonth() === now.getMonth() &&
+        date.getFullYear() === now.getFullYear();
+
+    if (isToday) {
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else {
+        return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+};
 
 const filteredCampuses = computed(() => {
     if (selectedBatches.value.length === 0) {
@@ -337,6 +342,13 @@ watch(selectedScholarships, () => {
 watch(selectedBatches, () => {
     // When batches change, reset campus selections
     selectedCampuses.value = [];
+});
+
+// Copy announcement content to modal when opening
+watch(Share, (newValue) => {
+    if (newValue) {
+        modalContent.value = announcementContent.value;
+    }
 });
 
 const toggleSharePost = async () => {
@@ -379,20 +391,53 @@ const handleClickOutside = (event) => {
     }
 };
 
-const submitForm = () => {
-    // Handle form submission logic here with the filtered selections
-    console.log({
-        scholarships: selectedScholarships.value,
-        batches: selectedBatches.value,
-        campuses: selectedCampuses.value
-    });
+const fetchPosts = async () => {
+    isLoading.value = true;
+    try {
+        const response = await axios.get('/posts');
+        posts.value = response.data.posts;
+    } catch (error) {
+        console.error('Error fetching posts:', error);
+    } finally {
+        isLoading.value = false;
+    }
+};
 
-    closeModal();
+const submitForm = () => {
+    // Prepare scholarship IDs array
+    const scholarship_ids = props.scholarships
+        .filter(scholarship => selectedScholarships.value.includes(scholarship.name))
+        .map(scholarship => scholarship.id);
+
+    // Prepare batch IDs array (extracting the number from "Batch X")
+    const batch_ids = props.batches
+        .filter(batch => selectedBatches.value.includes(`Batch ${batch.batch_no}`))
+        .map(batch => batch.id);
+
+    // Prepare campus IDs array
+    const campus_ids = props.campuses
+        .filter(campus => selectedCampuses.value.includes(campus.name))
+        .map(campus => campus.id);
+
+    // Submit the form via Inertia
+    router.post('/posts', {
+        content: modalContent.value,
+        scholarship_ids: scholarship_ids,
+        batch_ids: batch_ids,
+        campus_ids: campus_ids,
+    }, {
+        onSuccess: () => {
+            closeModal();
+            announcementContent.value = '';
+            fetchPosts(); // Refresh the posts after successful submission
+        }
+    });
 };
 
 onMounted(() => {
     document.addEventListener('click', handleClickOutside);
     initFlowbite();
+    fetchPosts();
 });
 
 onBeforeUnmount(() => {
