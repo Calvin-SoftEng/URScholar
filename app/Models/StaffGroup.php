@@ -10,9 +10,20 @@ class StaffGroup extends Model
 {
     use HasFactory, Notifiable;
     protected $fillable = ['user_id', 'name'];
-    
-    public function user()
+
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'staff_group_users');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    // Get the latest message for the scholarship group
+    public function latestMessage()
+    {
+        return $this->hasOne(Message::class)->latest();
     }
 }

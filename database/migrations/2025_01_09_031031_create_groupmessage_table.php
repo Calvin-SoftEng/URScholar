@@ -19,6 +19,13 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('scholarship_group_users', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('scholarship_group_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
         Schema::create('staff_groups', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable();
@@ -26,10 +33,21 @@ return new class extends Migration {
             $table->timestamps();
         });
 
+        Schema::create('staff_group_users', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('staff_group_id');
+            $table->unsignedBigInteger('user_id');
+            $table->timestamps();
+            
+            $table->foreign('staff_group_id')->references('id')->on('staff_groups')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('staff_group_id')->nullable()->constrained()->onDelete('cascade');
             $table->text('content');
             $table->timestamps();
         });
@@ -60,7 +78,9 @@ return new class extends Migration {
         Schema::dropIfExists('postings');
         Schema::dropIfExists('pages');
         Schema::dropIfExists('messages');
+        Schema::dropIfExists('staff_group_users');
         Schema::dropIfExists('staff_groups');
+        Schema::dropIfExists('scholarship_group_users');
         Schema::dropIfExists('scholarship_groups');
     }
 };

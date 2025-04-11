@@ -56,12 +56,12 @@ class User extends Authenticatable
 
     public function scholarshipGroups()
     {
-        return $this->belongsToMany(ScholarshipGroup::class);
+        return $this->belongsToMany(ScholarshipGroup::class, 'scholarship_group_users');
     }
 
-    public function staffgroups()
+    public function staffGroups()
     {
-        return $this->belongsToMany(StaffGroup::class);
+        return $this->belongsToMany(StaffGroup::class, 'staff_group_users');
     }
 
     
