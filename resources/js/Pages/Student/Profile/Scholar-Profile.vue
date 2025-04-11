@@ -307,7 +307,7 @@
                                     class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-1 gap-4">
-                                        <div>
+                                        <div  v-if="mother.first_name !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person-dress']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -325,7 +325,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div  v-if="father.first_name !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -339,6 +339,19 @@
                                                         father.first_name }}</span>
                                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
                                                         father.occupation }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div v-if="mother.first_name == 'n\/a' && father.first_name == 'n\/a'">
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'person']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        form.guardian_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        form.relationship }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1282,7 +1295,8 @@
                                     class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-2 gap-4">
-                                        <div>
+                                        
+                                        <div v-if="mother.first_name !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person-dress']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -1300,6 +1314,19 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div v-if="mother.first_name == 'n\/a' && father.first_name == 'n\/a'">
+                                            <div class="w-full flex flex-row items-center gap-2 py-2">
+                                                <font-awesome-icon :icon="['fas', 'person']"
+                                                    class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
+                                                <div class="flex flex-col items-left gap-1">
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        form.guardian_name }}</span>
+                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                        form.relationship }}</span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div>
                                             <div class="w-full flex flex-col items-left ">
                                                 <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
@@ -1309,7 +1336,7 @@
                                                     class="text-gray-900 text-3xl font-semibold leading-tight">100,000</span>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div v-if="father.first_name !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
