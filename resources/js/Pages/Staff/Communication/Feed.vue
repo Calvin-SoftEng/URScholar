@@ -162,73 +162,67 @@
                 <!-- Filters -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                     <!-- Scholarship Filter -->
-                    <div class="relative">
-                    <label class="block text-xs font-medium mb-1">Scholarship</label>
-                    <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                        @click="toggleDropdown('scholarship')">
-                        {{ selectedScholarships.length ? selectedScholarships.join(', ') : 'Select Scholarships' }}
-                    </button>
-                    <div v-if="openDropdown === 'scholarship'"
-                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
-
-                        <label v-for="(item, index) in scholarshipOptions" :key="index" class="block px-4 py-2">
-                            <input 
-                            type="checkbox" 
-                            class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                            :value="item"
-                            v-model="selectedScholarships"
-                            />
-
-                        {{ item }}
-                        </label>
-                    </div>
-                    </div>
+<div class="relative">
+  <label class="block text-xs font-medium mb-1">Scholarship</label>
+  <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+      @click="toggleDropdown('scholarship')">
+      {{ selectedScholarships.length ? selectedScholarships.join(', ') : 'Select Scholarships' }}
+  </button>
+  <div v-if="openDropdown === 'scholarship'"
+      class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+      <label v-for="item in props.scholarships" :key="item.id" class="block px-4 py-2 hover:bg-gray-100">
+          <input 
+          type="checkbox" 
+          class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          :value="item.name"
+          v-model="selectedScholarships"
+          />
+          {{ item.name }}
+      </label>
+  </div>
+</div>
 
                     <!-- Batch Filter -->
-                    <div class="relative">
-                    <label class="block text-xs font-medium mb-1">Batch</label>
-                    <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                        @click="toggleDropdown('batch')">
-                        {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
-                    </button>
-                    <div v-if="openDropdown === 'batch'"
-                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
+<div class="relative">
+  <label class="block text-xs font-medium mb-1">Batch</label>
+  <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+      @click="toggleDropdown('batch')">
+      {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
+  </button>
+  <div v-if="openDropdown === 'batch'"
+      class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+      <label v-for="item in filteredBatches" :key="item.id" class="block px-4 py-2 hover:bg-gray-100">
+          <input 
+          type="checkbox" 
+          class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          :value="`Batch ${item.batch_no}`"
+          v-model="selectedBatches"
+          />
+          Batch {{ item.batch_no }} ({{ item.scholarship.name }})
+      </label>
+  </div>
+</div>
 
-                        <label v-for="(item, index) in batchOptions" :key="index" class="block px-4 py-2">
-                            <input 
-                            type="checkbox" 
-                            class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                            :value="item"
-                            v-model="selectedBatches"
-                            />
-
-                        {{ item }}
-                        </label>
-                    </div>
-                    </div>
-
-                    <!-- Campus Filter -->
-                    <div class="relative">
-                    <label class="block text-xs font-medium mb-1">Campus</label>
-                    <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                        @click="toggleDropdown('campus')">
-                        {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
-                    </button>
-                    <div v-if="openDropdown === 'campus'"
-                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md">
-
-                        <label v-for="(item, index) in campusOptions" :key="index" class="block px-4 py-2">
-                            <input 
-                            type="checkbox" 
-                            class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600"
-                            :value="item"
-                            v-model="selectedCampuses"
-                            />
-
-                        {{ item }}
-                        </label>
-                    </div>
-                    </div>
+<!-- Campus Filter -->
+<div class="relative">
+  <label class="block text-xs font-medium mb-1">Campus</label>
+  <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+      @click="toggleDropdown('campus')">
+      {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
+  </button>
+  <div v-if="openDropdown === 'campus'"
+      class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+      <label v-for="item in filteredCampuses" :key="item.id" class="block px-4 py-2 hover:bg-gray-100">
+          <input 
+          type="checkbox" 
+          class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+          :value="item.name"
+          v-model="selectedCampuses"
+          />
+          {{ item.name }}
+      </label>
+  </div>
+</div>
                 </div>
 
                 <!-- Message Box (Pre-filled Message) -->
@@ -256,73 +250,128 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, Link } from '@inertiajs/vue3';
-import { ref, onMounted, onBeforeUnmount ,watch, nextTick } from 'vue';
+import { ref, onMounted, onBeforeUnmount, watch, nextTick, computed } from 'vue';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import { initFlowbite } from 'flowbite';
 
+// Props from controller
 const props = defineProps({
     campuses: Array,
     batches: Array,
     scholarships: Array,
 });
 
-
+// Modal state
 const Share = ref(false);
+
+// Filter selections
+const selectedScholarships = ref([]);
+const selectedBatches = ref([]);
+const selectedCampuses = ref([]);
+
+// Dropdown control
+const openDropdown = ref(null);
+
+// Create computed properties for filtered options based on selections
+const filteredBatches = computed(() => {
+    if (selectedScholarships.value.length === 0) {
+        return props.batches;
+    } else {
+        return props.batches.filter(batch => {
+            return selectedScholarships.value.includes(batch.scholarship.name);
+        });
+    }
+});
+
+const filteredCampuses = computed(() => {
+    if (selectedBatches.value.length === 0) {
+        return props.campuses;
+    } else {
+        // Extract batch IDs from the selected batches (format: "Batch X")
+        const selectedBatchNumbers = selectedBatches.value.map(batchName => {
+            return parseInt(batchName.replace('Batch ', ''));
+        });
+        
+        // Find campus IDs associated with these batches
+        const campusIds = props.batches
+            .filter(batch => selectedBatchNumbers.includes(batch.batch_no))
+            .map(batch => batch.campus_id);
+        
+        // Return campuses with these IDs
+        return props.campuses.filter(campus => campusIds.includes(campus.id));
+    }
+});
+
+// Reset dependent selections when parent selection changes
+watch(selectedScholarships, () => {
+    // When scholarships change, reset batch and campus selections
+    selectedBatches.value = [];
+    selectedCampuses.value = [];
+});
+
+watch(selectedBatches, () => {
+    // When batches change, reset campus selections
+    selectedCampuses.value = [];
+});
 
 const toggleSharePost = async () => {
     Share.value = !Share.value;
-    initFlowbite(); // Initialize Flowbite first
-
+    
     if (Share.value) {
-    await nextTick()
-    initFlowbite()
-        document.addEventListener('click', handleClickOutside)
+        await nextTick();
+        initFlowbite();
+        document.addEventListener('click', handleClickOutside);
     } else {
-        document.removeEventListener('click', handleClickOutside)
+        document.removeEventListener('click', handleClickOutside);
     }
 };
 
 const closeModal = () => {
     Share.value = false;
-
+    // Reset selections when closing modal
+    selectedScholarships.value = [];
+    selectedBatches.value = [];
+    selectedCampuses.value = [];
+    openDropdown.value = null;
 };
 
-
-const messageData = ref(props.messages);
-
-
-const selectedData = ref(props.selectedScholarship);
-
-const scholarshipOptions = ['CHED', 'DBP', 'IMEE MARCOVA']
-const batchOptions = ['Batch 1', 'Batch 2', 'Batch 3']
-const campusOptions = ['Tanay', 'Morong', 'Antipolo']
-
-// Set up real-time messaging using Laravel Echo
-// onMounted(() => {
-const selectedScholarships = ref([])
-const selectedBatches = ref([])
-const selectedCampuses = ref([])
-
-const openDropdown = ref(null)
-
 const toggleDropdown = (dropdown) => {
-  openDropdown.value = openDropdown.value === dropdown ? null : dropdown
-}
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+    openDropdown.value = openDropdown.value === dropdown ? null : dropdown;
+};
 
 const handleClickOutside = (event) => {
-  const modal = document.querySelector('.your-modal-class') // replace with actual class if needed
-  if (!modal.contains(event.target)) {
-    openDropdown.value = null
-  }
-}
+    const dropdownElements = document.querySelectorAll('.relative');
+    let clickedOutside = true;
+    
+    dropdownElements.forEach(element => {
+        if (element.contains(event.target)) {
+            clickedOutside = false;
+        }
+    });
+    
+    if (clickedOutside && !event.target.closest('.your-modal-class')) {
+        openDropdown.value = null;
+    }
+};
 
+const submitForm = () => {
+    // Handle form submission logic here with the filtered selections
+    console.log({
+        scholarships: selectedScholarships.value,
+        batches: selectedBatches.value,
+        campuses: selectedCampuses.value
+    });
+    
+    closeModal();
+};
 
+onMounted(() => {
+    document.addEventListener('click', handleClickOutside);
+    initFlowbite();
+});
+
+onBeforeUnmount(() => {
+    document.removeEventListener('click', handleClickOutside);
+});
 </script>

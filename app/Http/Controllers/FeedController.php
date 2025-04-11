@@ -24,7 +24,7 @@ class FeedController extends Controller
     public function index()
     {
         $scholarships = Scholarship::all();
-        $batches = Batch::all();
+        $batches = Batch::with('scholarship')->get();
         $campuses = Campus::all();
 
         return Inertia::render('Staff/Communication/Feed', [

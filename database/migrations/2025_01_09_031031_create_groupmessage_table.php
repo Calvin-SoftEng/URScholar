@@ -38,7 +38,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('staff_group_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
-            
+
             $table->foreign('staff_group_id')->references('id')->on('staff_groups')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
@@ -48,7 +48,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('sender_id');
             $table->unsignedBigInteger('receiver_id');
             $table->timestamps();
-            
+
             $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('receiver_id')->references('id')->on('users')->onDelete('cascade');
         });
@@ -66,9 +66,9 @@ return new class extends Migration {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
-            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
+            $table->json('scholarship_ids');  // Stores array of IDs
+            $table->json('batch_ids');        // Stores array of IDs
+            $table->json('campus_ids');       // Stores array of IDs
             $table->timestamps();
         });
 
