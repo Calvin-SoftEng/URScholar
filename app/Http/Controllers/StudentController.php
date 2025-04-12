@@ -14,6 +14,7 @@ use App\Models\Requirements;
 use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
 use App\Models\Criteria;
+use App\Models\ActivityLog;
 use App\Models\CampusRecipients;
 use App\Models\ApplicantTrack;
 use App\Models\Campus;
@@ -345,31 +346,6 @@ class StudentController extends Controller
             'eligibles' => $eligibles,
         ]);
     }
-
-    // public function scholarship_apply_details(Scholarship $scholarship)
-    // {
-
-    //     $sponsor = Sponsor::where('id', $scholarship->sponsor_id)->first();
-
-    //     $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-    //     $deadline = Requirements::where('scholarship_id', $scholarship->id)->first();
-
-    //     $selectedCampus = CampusRecipients::where('scholarship_id', $scholarship->id)->first();
-
-    //     $criteria = Criteria::where('scholarship_id', $scholarship->id)->with('scholarshipFormData')->get();
-    //     $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
-
-    //     return Inertia::render('Student/Scholarships/ScholarshipDetails', [
-    //         'scholarship' => $scholarship,
-    //         'sponsor' => $sponsor,
-    //         'requirements' => $requirements,
-    //         'deadline' => $deadline,
-    //         'selectedCampus' => $selectedCampus,
-    //         'criterias' => $criteria,
-    //         'grade' => $grade,
-    //     ]);
-    // }
 
     public function verifyAccount()
     {
@@ -1005,6 +981,13 @@ class StudentController extends Controller
             ]);
         }
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Verify Account',
+            'description' => 'Gumawa siya ng account para sa sarili niya',
+        ]);
+
+
         event(new Verified($user));
 
         if ($scholar) {
@@ -1345,6 +1328,13 @@ class StudentController extends Controller
             ];
         }
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Reupload Requirements',
+            'description' => 'User reuploaded their scholarship requirements for review.',
+        ]);
+
+
         if (empty($uploadedFiles)) {
             return response()->json([
                 'message' => 'No valid returned requirements found to update',
@@ -1380,6 +1370,12 @@ class StudentController extends Controller
                 'status' => 'Pending'
             ]);
         }
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Upload Requirements',
+            'description' => 'User uploaded their scholarship requirements',
+        ]);
 
         return redirect()->route('student.dashboard')->with('success', 'Requirements submitted successfully');
     }
@@ -1492,6 +1488,12 @@ class StudentController extends Controller
                 'status' => 'Pending'
             ]);
         }
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Upload Requirements',
+            'description' => 'User uploaded their scholarship requirements for the first time.',
+        ]);
 
         return redirect()->route('student.dashboard')->with('success', 'Requirements submitted successfully');
     }

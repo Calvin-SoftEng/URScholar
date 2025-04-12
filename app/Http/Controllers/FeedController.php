@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\NewNotification;
 use App\Http\Controllers\Controller;
+use App\Models\Grantees;
 use App\Models\Scholarship;
 use App\Models\Batch;
 use App\Models\Campus;
@@ -53,18 +54,62 @@ class FeedController extends Controller
             'content' => $request->content,
         ]);
 
-        // // Create notification
-        // $notification = Notification::create([
-        //     'title' => 'New Message',
-        //     'message' => 'New post posted',
-        //     'type' => $request->group_type . '_chat',
-        // ]);
+        // Query to find all relevant users based on the provided filters
+        $userIds = collect();
 
-        // // Attach users to the notification
-        // $notification->users()->attach($users->pluck('id'));
+        // If campus_ids provided, get users who are coordinators or cashiers for these campuses
+        if (!empty($request->campus_ids)) {
+            $campusStaffIds = Campus::whereIn('id', $request->campus_ids)
+                ->whereNotNull('coordinator_id')
+                ->orWhereNotNull('cashier_id')
+                ->get()
+                ->flatMap(function ($campus) {
+                    return array_filter([$campus->coordinator_id, $campus->cashier_id]);
+                });
 
-        // // Notify users
-        // event(new NewNotification($notification));
+            $userIds = $userIds->merge($campusStaffIds);
+        }
+
+        // If scholarship_ids provided, get scholars via the grantee relationship
+        if (!empty($request->scholarship_ids)) {
+            $scholarUserIds = Grantees::whereIn('scholarship_id', $request->scholarship_ids)
+                ->join('scholars', 'grantees.scholar_id', '=', 'scholars.id')
+                ->whereNotNull('scholars.user_id')
+                ->pluck('scholars.user_id')
+                ->unique();
+
+            $userIds = $userIds->merge($scholarUserIds);
+        }
+
+        // If batch_ids provided, get scholars via the grantee relationship
+        if (!empty($request->batch_ids)) {
+            $batchUserIds = Grantees::whereIn('batch_id', $request->batch_ids)
+                ->join('scholars', 'grantees.scholar_id', '=', 'scholars.id')
+                ->whereNotNull('scholars.user_id')
+                ->pluck('scholars.user_id')
+                ->unique();
+
+            $userIds = $userIds->merge($batchUserIds);
+        }
+
+        // Remove duplicates and get the actual User models
+        $userIds = $userIds->unique()->values();
+
+        // Only continue if we have users to notify
+        if ($userIds->isNotEmpty()) {
+            // Create notification
+            $notification = Notification::create([
+                'title' => 'New Message',
+                'message' => 'New post posted',
+                'type' => $request->group_type . '_chat',
+            ]);
+
+            // Attach users to the notification
+            $notification->users()->attach($userIds);
+
+            // Notify users
+            event(new NewNotification($notification));
+        }
 
         return redirect()->back()->with('success', 'Announcement posted successfully.');
     }

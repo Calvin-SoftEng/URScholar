@@ -247,16 +247,16 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full Name
                                                 </h3>
-                                                <input v-model="form.abbreviation" type="text" id="name"
-                                                    placeholder="e.g., CHED"
+                                                <input v-model="form.sponsor_name" type="text" id="name"
+                                                    placeholder="name"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">
                                                     Sponson Email
                                                 </h3>
-                                                <input v-model="form.since" type="email" id="name"
-                                                    placeholder="e.g., Since 2012"
+                                                <input v-model="form.email" type="email" id="name"
+                                                    placeholder="sponsor@test.com"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                         </div>
@@ -384,31 +384,6 @@
                                     </div>
                                 </div>
 
-                                <div
-                                    class="col-span-4 gap-2 relative w-full flex items-center mt-5 mb-5 whitespace-nowrap">
-                                    <h3 class="font-semibold text-sm text-blue-900 dark:text-white">
-                                        Assigning Focal Person
-                                    </h3>
-                                    <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
-                                </div>
-                                <div class="flex flex-row gap-3">
-                                    <div class="w-full">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full Name
-                                        </h3>
-                                        <input v-model="form.abbreviation" type="text" id="name"
-                                            placeholder="e.g., CHED"
-                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
-                                    </div>
-                                    <div class="w-full">
-                                        <h3 class="font-semibold text-gray-900 dark:text-white">
-                                            Sponson Email
-                                        </h3>
-                                        <input v-model="form.since" type="email" id="name"
-                                            placeholder="e.g., Since 2012"
-                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
-                                    </div>
-                                </div>
-
                                 <div class="h-0.5 bg-gray-200 dark:bg-gray-700 my-3"></div>
 
                                 <!-- Title after the line -->
@@ -508,6 +483,8 @@ const form = ref({
     imgPreview: null,
     abbreviation: null,
     since: null,
+    sponsor_name: null,
+    email: null,
 });
 
 const scholarships = ref({

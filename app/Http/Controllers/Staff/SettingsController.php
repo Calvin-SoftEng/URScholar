@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Mail\SendEmail;
 use App\Models\AcademicYear;
 use App\Models\Campus;
 use App\Models\Condition;
@@ -17,11 +18,14 @@ use App\Models\Sponsor;
 use App\Models\Scholar;
 use App\Models\Grantees;
 use App\Models\SchoolYear;
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use League\Csv\Reader;
+use Illuminate\Support\Str;
 
 class SettingsController extends Controller
 {
@@ -74,10 +78,9 @@ class SettingsController extends Controller
             'imgName' => 'required|string',
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
+            'sponsor_name' => 'required|string|max:255',
+            'email' => 'required|email',
         ]);
-
-
-
 
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
@@ -92,7 +95,12 @@ class SettingsController extends Controller
         $moa = $moaFile->getClientOriginalName();
 
         // Store the MOA file
-        $filePath = $request->file('file')->store('sponsor/moa/' . $moa, 'public');
+
+        $filePath = Storage::disk('public')->putFileAs(
+            'sponsor/moa',
+            $request->file('file'),
+            $moa
+        );
 
         // dd($originalFileName);
         // Save sponsor record in the database
@@ -110,6 +118,33 @@ class SettingsController extends Controller
             'moa' => $moa,
             'status' => 'Active',
         ]);
+
+        $password = Str::random(8);
+
+        $user = User::create([
+            'name' => $request->sponsor_name,
+            'email' => $request->email,
+            'password' => bcrypt($password),
+        ]);
+
+        // Sending Emails
+        $mailData = [
+            'title' => 'Welcome to the URScholar Portal',
+            'body' => "Dear " . $request->sponsor_name . ",\n\n" .
+                "Welcome to the URScholar Portal! We’re excited to have you on board as a valued sponsor in our scholarship program.\n\n" .
+                "Below are your login credentials to access the system:\n\n" .
+                "Email: " . $request->email . "\n" .
+                "Password: " . $password . "\n\n" .
+                "Please log in to your account to begin exploring the features and managing your sponsorship activities.\n\n" .
+                "If you have any questions or need assistance, feel free to reach out to our support team.\n\n" .
+                "Best regards,\n" .
+                "URScholar Team"
+        ];
+
+        // Create mailable instance
+        $email = new SendEmail($mailData);
+
+        Mail::to($request->email)->send($email);
 
 
         ActivityLog::create([

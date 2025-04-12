@@ -203,6 +203,13 @@ class CashierController extends Controller
         // Attach the coordinator to the notification
         $notification->users()->attach($super_admin->id);
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Forward Payouts',
+            'description' => 'User forwarded the payout to Head Administrator',
+        ]);
+
+
         return redirect()->route('cashier.active_scholarships')->with('success', 'Forwarded Successfully');
     }
 
@@ -287,6 +294,12 @@ class CashierController extends Controller
         $disbursement->status = 'Not Claimed';
         $disbursement->save();
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Set Reason',
+            'description' => 'User set a reason for no claim',
+        ]);
+
         return redirect()->back()->with('success', 'Reason submitted successfully');
     }
 
@@ -368,6 +381,13 @@ class CashierController extends Controller
                     'claimed_by' => Auth::user()->id,
                     'status' => 'Claimed',
                 ]);
+
+                ActivityLog::create([
+                    'user_id' => Auth::user()->id,
+                    'activity' => 'Scan QR',
+                    'description' => 'User scanned a Scholar disbursement',
+                ]);
+                
 
                 $total_claimed = Disbursement::where('payout_id', $payout->id)
                     ->where('status', 'Claimed')->count();
