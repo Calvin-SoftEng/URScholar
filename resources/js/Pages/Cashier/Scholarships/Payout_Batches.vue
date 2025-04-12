@@ -238,7 +238,7 @@
 
                                 <!-- Forward Button -->
                                 <div class="mt-4">
-                                    <button v-if="!isDateMatched && canForward" :disabled="isSubmitting"
+                                    <button v-if="!isDateMatched && canForward || AllClaimed" :disabled="isSubmitting"
                                         @click="forwardPayout"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         {{ isSubmitting ? 'Processing...' : 'Forward' }}
@@ -430,6 +430,7 @@ const props = defineProps({
     batches: Array,
     grantees: Array,
     payout_schedule: Object,
+    AllClaimed: Boolean,
 });
 
 

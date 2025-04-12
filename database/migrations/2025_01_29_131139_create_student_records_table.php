@@ -49,6 +49,7 @@ return new class extends Migration
             $table->string('path');
             $table->string('school_year_id')->nullable();
             $table->string('semester')->nullable();
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
 

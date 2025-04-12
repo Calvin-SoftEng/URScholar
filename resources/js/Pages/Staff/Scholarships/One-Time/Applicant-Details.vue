@@ -328,7 +328,7 @@
                                             <div class="flex flex-col space-y-2">
                                                 <div class="flex items-center gap-2 text-gray-900 dark:text-white">
                                                     <span class="font-medium">{{ grade.semester }} Semester -
-                                                        {{ grade.school_year }}</span>
+                                                        {{ grade.school_year.year }}</span>
                                                 </div>
                                                 <div>
                                                     <button @click="toggleMonitor(grade)"
@@ -408,7 +408,7 @@
                     </div>
 
                     <!-- Close Button -->
-                    <div v-if="props.batch.status !== 'Inactive' && props.scholar.campus_id === $page.props.auth.user.campus_id"
+                    <div v-if="props.scholar.campus_id === $page.props.auth.user.campus_id"
                         class="mt-2 flex flex-row justify-between">
                         <button type="button" @click="updateRequirementStatus('Returned')"
                             class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
@@ -439,8 +439,8 @@
             <div
                 class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{ selectedMonitor.school_year }}
-                        {{ selectedMonitor.semester }} Semester</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">
+                        {{ selectedMonitor.semester }} Semester - {{ selectedMonitor.school_year.year }}</h2>
                     <div class="flex items-center justify-between gap-10">
                         <!-- <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
                             class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">

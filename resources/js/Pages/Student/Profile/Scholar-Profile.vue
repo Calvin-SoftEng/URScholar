@@ -349,9 +349,9 @@
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                                 <div class="flex flex-col items-left gap-1">
                                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                        form.guardian_name }}</span>
+                                                        student.guardian_name }}</span>
                                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                        form.relationship }}</span>
+                                                        student.relationship }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1339,9 +1339,9 @@
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                                 <div class="flex flex-col items-left gap-1">
                                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                        form.guardian_name }}</span>
+                                                        student.guardian_name }}</span>
                                                     <span class="text-gray-900 text-base font-semibold leading-tight">{{
-                                                        form.relationship }}</span>
+                                                        student.relationship }}</span>
                                                 </div>
                                             </div>
                                         </div>

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grade extends Model
 {
-    protected $fillable = ['scholar_id', 'grade', 'cog', 'path' ,'school_year_id', 'semester'];
+    protected $fillable = ['scholar_id', 'grade', 'cog', 'path' ,'school_year_id', 'semester', 'status'];
 
     public function scholar()
     {

@@ -246,6 +246,7 @@ class ScholarController extends Controller
         }
 
         $grade = Grade::where('scholar_id', $scholar->id)
+            ->with('school_year')
             ->where('school_year_id', $grantee_school_year_id)
             ->where('semester', $grantee_semester)
             ->first();

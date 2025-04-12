@@ -931,8 +931,8 @@ class ScholarshipController extends Controller
 
             // Get the scholar's grade for the selected semester and school year
             $grade = Grade::where('scholar_id', $scholar->id)
-                ->where('semester', $request->input('selectedSem'))
-                ->where('school_year_id', $request->input('selectedYear'))
+                // ->where('semester', $request->input('selectedSem'))
+                // ->where('school_year_id', $request->input('selectedYear'))
                 ->first();
 
             $userPicture = User::where('id', $scholar->user_id)
