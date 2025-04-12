@@ -1401,6 +1401,11 @@ class StudentController extends Controller
         ]);
     }
 
+    public function account()
+    {
+        return Inertia::render('Student/Profile/Account_Settings');
+    }
+
     public function application(Request $request)
     {
         $request->validate([

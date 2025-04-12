@@ -304,6 +304,8 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::get('/myProfile/generate/{urscholar_id}', [StudentController::class, 'generate'])->name('qrcode.generate');
     Route::post('/myProfile/{urscholar_id}/upload-grade', [StudentController::class, 'uploadGrade'])->name('student.uploadgrade');
 
+    Route::get('/myAccount', [StudentController::class, 'account'])->name('student.account');
+
 
     //VerifyAccount
     Route::get('/verify-account', [StudentController::class, 'verifyAccount'])->name('student.verify-account');

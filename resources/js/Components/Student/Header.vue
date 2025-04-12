@@ -310,24 +310,26 @@
     <!-- Dropdown menu -->
     <div id="userDropdown" v-show="isDropdownOpen"
       class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-      <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-        <div>{{ $page.props.auth.user.name }}</div>
-        <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
+      <div class="py-1 text-left">
+        <Link :href="route('student.account')" as="button"
+          class="w-full px-4 items-start justify-start py-2 text-sm text-gray-700 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+        Account Settings
+        </Link>
       </div>
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-          <li class="relative">
-              <Link :href="route('student.profile')"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                  Profile
-              </Link>
-              <!-- Notification Dot with FontAwesome Icon -->
-              <div class="absolute top-0 right-1 flex items-center space-x-2">
-                  <!-- Red Notification Icon with FontAwesome -->
-                  <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
-                      <font-awesome-icon :icon="['fas', 'exclamation']" />
-                  </div>
-              </div>
-          </li>
+      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+        <li class="relative">
+            <Link :href="route('student.profile')"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                Profile
+            </Link>
+            <!-- Notification Dot with FontAwesome Icon -->
+            <div class="absolute top-0 right-1 flex items-center space-x-2">
+                <!-- Red Notification Icon with FontAwesome -->
+                <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
+                    <font-awesome-icon :icon="['fas', 'exclamation']" />
+                </div>
+            </div>
+        </li>
       </ul>
 
       <div class="py-1 text-left">
