@@ -346,12 +346,42 @@ class SettingsController extends Controller
                 return redirect()->back()->with('error', 'No valid student records found for import.');
             }
 
+            // Get the current user's campus ID
+            $userCampusId = Auth::user()->campus_id;
+
+            // Get all the student numbers we just imported
+            $importedStudentNumbers = array_column($insertData, 'student_number');
+
             // Now perform scholar matching after all students have been inserted
             $matchedScholars = 0;
             $unmatchedScholars = 0;
             $school_year = AcademicYear::where('status', 'Active')->first();
 
             if ($school_year) {
+                // First, handle the case where scholars at the current user's campus aren't matched with any students
+                if ($userCampusId) {
+                    // Find all scholars at the current user's campus who are not already Verified
+                    $unmatchedCampusScholars = Scholar::where('campus_id', $userCampusId)
+                        ->where('status', '!=', 'Verified')
+                        ->whereNull('student_number')
+                        ->orWhereNotIn('student_number', $importedStudentNumbers)
+                        ->get();
+
+                    foreach ($unmatchedCampusScholars as $scholar) {
+                        // Set them to Unverified and Unenrolled explicitly
+                        $scholar->status = 'Unverified';
+                        $scholar->student_status = 'Unenrolled';
+                        $scholar->save();
+
+                        // Set any existing grantee relationships to Pending
+                        Grantees::where('scholar_id', $scholar->id)
+                            ->where('school_year_id', $school_year->school_year_id)
+                            ->update(['status' => 'Pending']);
+
+                        $unmatchedScholars++;
+                    }
+                }
+
                 // Process each inserted student for scholar matching
                 foreach ($insertData as $studentData) {
                     try {

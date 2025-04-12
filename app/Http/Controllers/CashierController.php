@@ -160,6 +160,7 @@ class CashierController extends Controller
             return $disbursement->status === 'Not Claimed';
         });
 
+
         $payout_schedule = PayoutSchedule::where('payout_id', $activePayout->id)
             ->first();
 

@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -290,23 +290,28 @@
                                     </div>
 
                                     <!-- Forward to Cashier -->
-                                    <div v-if="!payouts">
-                                        <button @click="toggleSendBatch"
-                                            class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
-                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                            <span class="font-normal">Forward to <span
-                                                    class="font-semibold">Cashier</span></span>
-                                        </button>
+                                    <div v-if="allBatchesInactive">
+                                        <div v-if="!payouts">
+                                            <button @click="toggleSendBatch"
+                                                class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
+                                                <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                                    class="text-base" />
+                                                <span class="font-normal">Forward to <span
+                                                        class="font-semibold">Cashier</span></span>
+                                            </button>
+                                        </div>
+
+                                        <div v-else>
+                                            <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
+                                                class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                                <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                                    class="text-base" />
+                                                <span class="font-normal">Forward to Cashier</span>
+                                            </button>
+                                        </div>
                                     </div>
 
-                                    <div v-else>
-                                        <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
-                                            class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
-                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
-                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                            <span class="font-normal">Forward to Cashier</span>
-                                        </button>
-                                    </div>
                                 </div>
                                 <div v-else class="flex flex-row space-x-3 items-center">
                                     <div v-if="payouts">
@@ -420,7 +425,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
                                                 </span>
@@ -431,7 +436,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -532,7 +537,7 @@
                                         <div @click="() => openPayroll(batch.id)"
                                             class="flex justify-between items-center">
                                             <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
-                                            }}</span>
+                                                }}</span>
 
                                             <div class="grid grid-cols-2">
                                                 <div class="flex flex-col items-center">
@@ -686,7 +691,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1250,7 +1255,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not
@@ -1267,8 +1272,7 @@
 
                         <!-- Forward Button -->
                         <div class="mt-6">
-                            <button type="button" @click="forwardSponsor"
-                                :disabled="!inactivePayouts || isSubmitting"
+                            <button type="button" @click="forwardSponsor" :disabled="!inactivePayouts || isSubmitting"
                                 class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 Forward to Next Semester
                             </button>
