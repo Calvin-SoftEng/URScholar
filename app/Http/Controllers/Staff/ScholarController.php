@@ -563,6 +563,13 @@ class ScholarController extends Controller
                 }
             }
 
+            // if (!empty($duplicateStudents)) {
+            //     return back()->withErrors([
+            //         'student' => 'Uy lods, outdated na yung student info. Paki-update naman 😅',
+            //     ])->withInput();
+            // }
+
+
             // Get all campuses for efficient lookup
             $campuses = Campus::all()->mapWithKeys(function ($campus) {
                 return [strtolower($campus->name) => $campus->id];
