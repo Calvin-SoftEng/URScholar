@@ -23,8 +23,6 @@ class ScholarshipFactory extends Factory
             'user_id' => \App\Models\User::factory(),
             'scholarshipType' => $this->faker->word(),
             'status' => $this->faker->word(),
-            'date_start' => $this->faker->date(),
-            'date_end' => $this->faker->date(),
         ];
     }
 }

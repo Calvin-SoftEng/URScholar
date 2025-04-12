@@ -207,8 +207,6 @@ class DatabaseSeeder extends Seeder
             'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
-            'date_start' => '2025-03-15',
-            'date_end' => '2025-03-25',
         ]);
 
         Scholarship::factory()->create([
@@ -217,8 +215,6 @@ class DatabaseSeeder extends Seeder
             'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
-            'date_start' => '2025-03-15',
-            'date_end' => '2025-03-25',
         ]);
 
         //school year

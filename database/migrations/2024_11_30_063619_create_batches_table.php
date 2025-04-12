@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,6 +15,7 @@ return new class extends Migration
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->integer('batch_no');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->string('semester');
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();
@@ -34,8 +34,10 @@ return new class extends Migration
             $table->string('grant')->nullable();
             $table->string('urscholar_id')->unique();
             $table->string('qr_code')->nullable();
-            $table->string('app_no')->nullable();;
-            $table->string('award_no')->nullable();;
+            $table->string('app_no')->nullable();
+            ;
+            $table->string('award_no')->nullable();
+            ;
             $table->string('last_name');
             $table->string('first_name');
             $table->string('extname')->nullable();

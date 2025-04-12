@@ -99,24 +99,6 @@ class ScholarshipController extends Controller
             ->orderBy('batch_no', 'desc')
             ->first();
 
-        //                 // Use relationships to get applicants and their related scholars
-        //     $applicants = $scholarship->applicants()
-        //     ->where('batch_id', $batch->id)
-        //     ->with('scholar.campus', 'scholar.course')
-        //     ->get();
-
-        // // Count scholars with complete submissions
-        // $completeSubmissionsCount = 0;
-
-        // // Process scholars data using the relationship
-        // $scholars = $applicants->map(function ($applicant) use ($totalRequirements, &$completeSubmissionsCount , $request) {
-        //     // Skip if there's no related scholar
-        //     if (!$applicant->scholar) {
-        //         return null;
-        //     }
-
-        //     $scholar = $applicant->scholar;
-
         // Check if all payouts are inactive
         $totalRequirements = $requirements->count();
 

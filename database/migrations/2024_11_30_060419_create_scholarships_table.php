@@ -16,8 +16,6 @@ return new class extends Migration {
             $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->enum('scholarshipType', ['Grant-Based', 'One-time Payment'])->default('Grant-Based');
-            $table->date('date_start');
-            $table->date('date_end');
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
             $table->boolean('read')->default(false);
             $table->timestamps();
