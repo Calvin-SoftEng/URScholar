@@ -342,9 +342,9 @@ const total_scholars = computed(() => {
 const openBatch = () => {
     router.visit(`/scholarships/batch`, {
         data: {
-            scholarship: props.scholarship.id,
-            selectedYear: props.schoolyear.id,
-            selectedSem: props.selectedSem
+            // scholarship: props.scholarship.id,
+            // selectedYear: props.schoolyear.id,
+            // selectedSem: props.selectedSem
         },
         preserveState: true
     });
