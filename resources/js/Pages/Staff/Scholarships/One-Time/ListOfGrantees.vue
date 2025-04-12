@@ -113,29 +113,33 @@
                         </div>
 
 
-                        <div 
-                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
+                        <div class="w-full h-[1px] bg-gray-200 my-4"></div>
 
-                            <div class="flex justify-between items-center">
-
-                                <div class="flex flex-col">
-                                    <span class="text-lg font-semibold text-gray-800">DBP Rise</span>
-                                    <span class="text-gray-500">SY 2024 - Semester 1</span>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-6">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">No. of Scholars</span>
-                                        <span class="text-xl font-bold text-blue-600">200</span>
-                                    </div>
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                        <span class="text-xl font-bold text-red-500">200</span>
-                                    </div>
-                                </div>
+                        <!-- Actions bar -->
+                        <div class="flex justify-between items-center mb-4">
+                            <div class="flex gap-2">
+                                <!-- Refresh button that only appears when data has changed -->
+                                <Button v-if="dataChanged" variant="outline" @click="refreshData"
+                                    class="flex items-center gap-2">
+                                    <font-awesome-icon :icon="['fas', 'sync']" :class="{ 'animate-spin': refreshing }" />
+                                    Refresh Data
+                                </Button>
                             </div>
                         </div>
 
+
+
+                        <!-- <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
+
+                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                                :requirements="requirements" @update:stats="updateStats" />
+                        </div>
+                        <div v-else>
+                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                            :requirements="requirements" @update:stats="updateStats" />
+                        </div> -->
+                        <ListOfGrantees :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                            :requirements="requirements" @update:stats="updateStats" />
                     </div>
                 </div>
 
@@ -269,6 +273,7 @@ import { Input } from '@/Components/ui/input'
 import { initFlowbite } from 'flowbite';
 import { Tooltip } from 'primevue';
 import InputError from '@/Components/InputError.vue';
+import ListOfGrantees from '@/Components/Staff/OneTimeScholars/ListOfGrantees.vue';
 
 
 // Define props to include scholars data
