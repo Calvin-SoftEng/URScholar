@@ -256,6 +256,7 @@ class StudentController extends Controller
                     'submitReq' => $returnedRequirements,
                     'submitPending' => $submitPending,
                     'submitApproved' => $submitApproved,
+                    'reqDeadline' => $reqDeadline,
                 ]);
             }
         }
