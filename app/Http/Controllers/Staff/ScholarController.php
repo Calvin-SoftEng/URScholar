@@ -847,6 +847,7 @@ class ScholarController extends Controller
                         'scholarship_id' => $scholarship->id,
                         'batch_no' => $firstRecord['BATCH NO.'],
                         'school_year_id' => $request->schoolyear,
+                        'semester' => $request->semester,
                         'campus_id' => $campusId,
                     ]);
                     $campusBatches[$campusId] = $batch;
@@ -858,7 +859,7 @@ class ScholarController extends Controller
                 $granteesData = [];
                 foreach ($scholarIds as $scholarId) {
                     // Fetch the scholar to get their student_status
-                    $scholar = collect($allScholars)->firstWhere('id', $scholarId);
+                    $scholar = Scholar::find($scholarId);
 
                     $granteesData[] = [
                         'scholarship_id' => $scholarship->id,
