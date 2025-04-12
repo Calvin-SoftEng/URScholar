@@ -156,9 +156,11 @@ class CashierController extends Controller
 
         $canForward = $activePayout->total_scholars == $activePayout->sub_total;
 
-        $AllClaimed = $activePayout->disbursement->every(function ($disbursement) {
-            return $disbursement->status === 'Not Claimed';
+        $allDisbursementsClaimed = $activePayout->disbursement->every(function ($disbursement) {
+            return $disbursement->status === 'Claimed';
         });
+
+        
 
 
         $payout_schedule = PayoutSchedule::where('payout_id', $activePayout->id)
@@ -172,7 +174,7 @@ class CashierController extends Controller
             'user_type' => $user->usertype,
             'canForward' => $canForward,
             'payout_schedule' => $payout_schedule,
-            'AllClaimed' => $AllClaimed,
+            'AllClaimed' => $allDisbursementsClaimed,
         ]);
     }
 
@@ -282,14 +284,16 @@ class CashierController extends Controller
             $file = $request->file('document');
             $fileName = time() . '_' . $file->getClientOriginalName();
             $documentPath = $file->storeAs('disbursement-reasons', $fileName, 'public');
+
+            // If you want to store document path in database, you need to add this column
+            $disbursement->path = $documentPath;
+            $disbursement->file_name = $fileName;
         }
 
         // Update the disbursement with reason
         $disbursement->reasons_of_not_claimed = $validated['reason'];
 
-        // If you want to store document path in database, you need to add this column
-        $disbursement->path = $documentPath;
-        $disbursement->file_name = $fileName;
+
 
         // Update status to 'Not Claimed' since we now have a reason
         $disbursement->status = 'Not Claimed';
@@ -388,7 +392,7 @@ class CashierController extends Controller
                     'activity' => 'Scan QR',
                     'description' => 'User scanned a Scholar disbursement',
                 ]);
-                
+
 
                 $total_claimed = Disbursement::where('payout_id', $payout->id)
                     ->where('status', 'Claimed')->count();

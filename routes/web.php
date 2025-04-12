@@ -140,6 +140,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
 
 
+    //Scholarship One-Time
+    Route::get('/scholarships/batch', [ScholarshipController::class, 'one_timebatch'])->name('scholarships.one_timebatch');
+
     // expand
     Route::get('/scholarships/submitted-requirements', [ScholarController::class, 'expand_requirements'])->name('requirements.expand_requirements');
 

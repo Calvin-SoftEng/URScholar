@@ -214,7 +214,7 @@ class ScholarshipController extends Controller
                     'year_level' => $scholar->year_level,
                     'grant' => $scholar->grant,
                     'scholar_status' => $scholar->status,
-                    'student_status' => $scholar->student_status,
+                    'student_status' => $grantee->student_status,
                     'status' => $status,
                     'submittedRequirements' => $approvedRequirements,
                     'totalRequirements' => $totalRequirements,
@@ -237,7 +237,7 @@ class ScholarshipController extends Controller
                     'year_level' => $scholar->year_level,
                     'grant' => $scholar->grant,
                     'scholar_status' => $scholar->status,
-                    'student_status' => $scholar->student_status,
+                    'student_status' => $grantee->student_status,
                     'status' => $status,
                     'submittedRequirements' => $approvedRequirements,
                     'totalRequirements' => $totalRequirements,
@@ -400,8 +400,6 @@ class ScholarshipController extends Controller
                                 foreach ($oldGrantees as $oldGrantee) {
                                     // Get the matching scholar record
                                     $scholarEnrolled = Scholar::where('id', $oldGrantee->scholar_id)
-                                        ->where('status', 'Verified')
-                                        ->where('student_status', 'Enrolled')
                                         ->first();
 
                                     $scholarUnenrolled = Scholar::where('id', $oldGrantee->scholar_id)
@@ -1206,6 +1204,20 @@ class ScholarshipController extends Controller
 
 
         return Inertia::render('Staff/Scholarships/One-Time/One-TimeScholars', [
+            // 'scholarship' => $scholarship,
+            // 'scholars' => $scholars,
+            // 'requirements' => $requirements,
+        ]);
+    }
+
+    public function one_timebatch()
+    {
+        // $scholars = $scholarship->scholars;
+
+        // $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
+
+
+        return Inertia::render('Staff/Scholarships/One-Time/ListOFGrantees', [
             // 'scholarship' => $scholarship,
             // 'scholars' => $scholars,
             // 'requirements' => $requirements,

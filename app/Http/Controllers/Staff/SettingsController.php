@@ -409,6 +409,7 @@ class SettingsController extends Controller
                             if ($grantee) {
                                 // Update existing grantee status
                                 $grantee->status = 'Active';
+                                $grantee->student_status = 'Enrolled';
                                 $grantee->save();
                             } else {
 

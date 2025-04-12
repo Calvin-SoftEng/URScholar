@@ -61,7 +61,7 @@
                 </tr>
                 <!-- Scholar rows - HIGHLIGHTING CHANGES START HERE -->
                 <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm"
-                  :class="{ 'bg-red-50': scholar.scholar_status === 'Unverified' || scholar.student_status === 'Unenrolled' }">
+                  :class="{ 'bg-red-50': scholar.scholar_status === 'Unverified' && scholar.student_status === 'Unenrolled' }">
                   <td>{{ scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
