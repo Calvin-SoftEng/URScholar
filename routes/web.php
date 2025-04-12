@@ -192,6 +192,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/one-time/scholars', [ScholarshipController::class, 'onetime_scholars'])->name('scholarship.onetime_scholars');
 
     Route::get('/scholarships/scholar={id}/one-time', [ScholarController::class, 'scholar_onetime'])->name('scholarship.applicant_details');
+    Route::post('/scholarships/scholar/update-applicant', [ScholarController::class, 'updateApplicant'])->name('scholarships.updateApplicant');
 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');

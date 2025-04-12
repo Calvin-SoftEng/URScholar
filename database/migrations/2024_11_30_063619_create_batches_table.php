@@ -95,7 +95,8 @@ return new class extends Migration
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('essay');
             $table->string('semester');
-            $table->enum('status', ['Successful', 'Unsuccessful', 'Pending'])->default('Pending');
+            $table->datetime('validated_date')->nullable();
+            $table->enum('status', ['Approved', 'Rejected', 'Pending'])->default('Pending');
             $table->timestamps();
         });
 
@@ -106,7 +107,7 @@ return new class extends Migration
             $table->string('submitted_requirements');
             $table->string('path');
             $table->string('message')->nullable();
-            $table->datetime('approved_date')->nullable();
+            $table->datetime('validated_date')->nullable();
             $table->enum('status', ['Approved', 'Pending', 'Returned'])->default('Pending');
             $table->timestamps();
         });

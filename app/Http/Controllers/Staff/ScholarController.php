@@ -264,6 +264,12 @@ class ScholarController extends Controller
             ->where('read', 0)
             ->first();
 
+        $hasGrantee = Grantees::where('scholar_id', $scholar->id)->exists();
+
+        $applicant = Applicant::where('scholar_id', $scholar->id)
+        ->first();
+
+
         return Inertia::render('Staff/Scholarships/One-Time/Applicant-Details', [
             'scholar' => $scholar,
             'student' => $student,
@@ -276,6 +282,8 @@ class ScholarController extends Controller
             'submittedRequirements' => $submittedRequirements,
             'grade' => $grade,
             'notify' => $notify,
+            'hasGrantee' => $hasGrantee,
+            'applicant' => $applicant,
         ]);
     }
 
@@ -313,6 +321,50 @@ class ScholarController extends Controller
         $scholar->save();
     }
 
+    public function updateApplicant(Request $request)
+    {
+        $request->validate([
+            'scholar_id' => 'required|exists:scholars,id',
+            'status' => 'required|in:Approve,Reject',
+        ]);
+
+        $scholar = Scholar::where('id', $request['scholar_id'])->first();
+        $applicant = Applicant::where('scholar_id', $scholar->id)
+            ->where('status', 'Pending')
+            ->first();
+
+        $message = null;
+        if ($request['status'] == 'Approve') {
+            $applicant->status = 'Approved';
+            $applicant->validated_date = now();
+            $message = 'Approved';
+        } else {
+            $applicant->status = 'Rejected';
+            $applicant->validated_date = now();
+            $message = 'Rejected';
+        }
+        $applicant->save();
+
+        // Optionally: Send notification about scholar status update
+        $notification = Notification::create([
+            'title' => 'Status Update',
+            'message' => 'Your Applicant has been ' . $message,
+            'type' => 'scholar_status_update',
+        ]);
+
+        $notification->users()->attach($scholar->user_id);
+
+        broadcast(new NewNotification($notification))->toOthers();
+
+        event(new NewNotification($notification));
+
+        $statusMessage = $request->status === 'Approve'
+            ? 'Application approved successfully!'
+            : 'Application rejected successfully!';
+
+        return back()->with('success', $statusMessage);
+    }
+
     public function updateStatus(Request $request)
     {
         $request->validate([
@@ -323,7 +375,7 @@ class ScholarController extends Controller
 
         $requirement = SubmittedRequirements::findOrFail($request->submittedReq);
         $requirement->status = $request->status;
-        $requirement->approved_date = now();
+        $requirement->validated_date = now();
 
         // Save message for both Returned and Approved statuses
         if ($request->message) {

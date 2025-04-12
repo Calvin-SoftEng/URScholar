@@ -122,7 +122,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">General Weighted
                                                 Average</span>
-                                            <span class="text-2xl font-bold font-poppins" :class="grade ? 'text-primary' : 'text-red-500'">
+                                            <span class="text-2xl font-bold" :class="grade ? 'text-primary' : 'text-red-500'">
                                                 {{ grade ? grade.grade : 'No grade Uploaded' }}
                                             </span>
 
@@ -131,8 +131,7 @@
                                     </div>
                                 </div>
 
-                                <div
-                                    class="col-span-4 gap-2 relative w-full flex items-center mb-2 whitespace-nowrap">
+                                <div class="col-span-4 gap-2 relative w-full flex items-center mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-base text-blue-900 dark:text-white">
                                         Family Information
                                     </h3>
@@ -249,58 +248,59 @@
                         <div class="col-span-1 h-full flex flex-col space-y-3">
                             <!-- Second Layer with Single Card -->
                             <div class="flex flex-col h-full gap-2">
-                                <div
+                                <div v-if="applicant.status == 'Pending'"
                                     class="bg-white w-full p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
                                     <h1 class="text-black font-normal text-xl font-poppins">Grant History Checking
                                     </h1>
                                     <div
                                         class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
-                                        <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 mt-4 shadow-sm flex">
-                                            <svg class="w-6 h-6 mr-3 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2"
-                                                viewBox="0 0 24 24">
+                                        <div v-if="!hasGrantee"
+                                            class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 mt-4 shadow-sm flex">
+                                            <svg class="w-6 h-6 mr-3 text-blue-400 flex-shrink-0" fill="none"
+                                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
                                             </svg>
                                             <div>
                                                 <h2 class="text-xl font-semibold">This is a first-time Applicant!</h2>
                                                 <p class="mt-2">
-                                                    The system has detected that this applicant is applying for a scholarship for the first time.<br>
+                                                    The system has detected that this applicant is applying for a
+                                                    scholarship for the first time.<br>
                                                 </p>
                                             </div>
                                         </div>
 
-                                        <div class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 mt-4 shadow-sm flex">
-                                            <svg class="w-6 h-6 mr-3 text-blue-400 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2"
-                                                viewBox="0 0 24 24">
+                                        <div v-else
+                                            class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 mt-4 shadow-sm flex">
+                                            <svg class="w-6 h-6 mr-3 text-blue-400 flex-shrink-0" fill="none"
+                                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
                                             </svg>
                                             <div>
                                                 <h2 class="text-xl font-semibold">Existing Scholarship Detected</h2>
                                                 <p class="mt-2">
-                                                    Our system shows that this applicant already holds a scholarship or a similar one.<br>
+                                                    Our system shows that this applicant already holds a scholarship or
+                                                    a similar one.<br>
                                                 </p>
                                             </div>
                                         </div>
 
-
-                                        
                                     </div>
-                                    <div class="flex flex-row w-full gap-3 font-poppins">
+                                    <div class="flex flex-row w-full gap-3">
                                     <!-- Approve Button -->
-                                    <button
+                                    <button @click="updateApplicantStatus('Approve')"
                                         class="w-full px-4 py-2 border-2 border-green-600 text-green-600 font-semibold text-base rounded-md hover:bg-green-400 transition"
                                     >
                                         Approve
                                     </button>
 
-                                    <!-- Reject Button -->
-                                    <button
-                                        class="w-full px-4 py-2 border-2 border-red-600 text-red-600 font-semibold text-base rounded-md hover:bg-red-400 transition"
-                                    >
-                                        Reject
-                                    </button>
+                                        <!-- Reject Button -->
+                                        <button type="button" @click="updateApplicantStatus('Reject')"
+                                            class="w-full px-4 py-2 border-2 border-red-600 text-red-600 font-semibold text-base rounded-md hover:bg-red-400 transition">
+                                            Reject
+                                        </button>
                                     </div>
 
                                 </div>
@@ -588,6 +588,8 @@ const props = defineProps({
     notify: Object,
     submittedRequirements: Array,
     requirements: Array,
+    hasGrantee: Boolean,
+    applicant: Object,
 });
 
 const goBack = () => {
@@ -658,6 +660,28 @@ const closeModal = () => {
 };
 
 const returnMessage = ref('');
+
+const updateApplicantStatus = (status) => {
+// Send an update request to the backend
+router.post('/scholarships/scholar/update-applicant', {
+        scholar_id: props.scholar.id,
+        status: status,
+    }, {
+        onSuccess: () => {
+            closeModal();
+            toastMessage.value = `Application ${status.toLowerCase()} successfully!`;
+            toastVisible.value = true;
+
+
+            setTimeout(() => {
+                toastVisible.value = false;
+            }, 3000);
+        },
+        onError: (errors) => {
+            console.error(errors);
+        }
+    });
+};
 
 const updateRequirementStatus = (status) => {
 
