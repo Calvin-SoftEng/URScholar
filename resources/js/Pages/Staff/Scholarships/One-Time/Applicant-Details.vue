@@ -62,7 +62,7 @@
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Applicant
                                                             Name</span>
-                                                        <p class="text-lg font-sora text-primary">
+                                                        <p class="text-lg font-poppins text-primary">
                                                             {{ formatScholarName(scholar) }}
                                                         </p>
 
@@ -71,18 +71,18 @@
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Contact
                                                             No.</span>
-                                                        <p class="text-lg text-primary">43432423432423</p>
+                                                        <p class="text-lg font-poppins text-primary">43432423432423</p>
                                                     </div>
                                                     <div class="text-black">
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Email
                                                             Address</span>
-                                                        <p class="text-lg text-primary">{{ scholar.email }}</p>
+                                                        <p class="text-lg font-poppins text-primary">{{ scholar.email }}</p>
                                                     </div>
                                                     <div class="text-black">
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Address</span>
-                                                        <p class="text-lg text-primary">feafaefeaf</p>
+                                                        <p class="text-lg font-poppins text-primary">feafaefeaf</p>
                                                     </div>
                                                 </div>
 
@@ -106,24 +106,23 @@
                                         <div class="text-black">
                                             <span class="text-xs font-semibold uppercase text-gray-500">URScholar
                                                 ID</span>
-                                            <p class="text-lg text-primary">{{ scholar.urscholar_id }}</p>
+                                            <p class="text-lg font-poppins text-primary">{{ scholar.urscholar_id }}</p>
                                         </div>
                                         <div class="text-black">
                                             <span class="text-xs font-semibold uppercase text-gray-500">Campus</span>
-                                            <p class="text-lg text-primary">{{ scholar.campus.name }}</p>
+                                            <p class="text-lg font-poppins text-primary">{{ scholar.campus.name }}</p>
                                         </div>
                                     </div>
 
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <span class="text-lg text-primary">{{ scholar.course.name }}</span>
+                                            <span class="text-lg font-poppins text-primary">{{ scholar.course.name }}</span>
                                         </div>
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">General Weighted
                                                 Average</span>
-                                            <span class="text-2xl font-bold"
-                                                :class="grade ? 'text-primary' : 'text-red-500'">
+                                            <span class="text-2xl font-bold" :class="grade ? 'text-primary' : 'text-red-500'">
                                                 {{ grade ? grade.grade : 'No grade Uploaded' }}
                                             </span>
 
@@ -145,10 +144,10 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Mother's
                                                 Name</span>
                                             <span v-if="mother.first_name === 'n\/a'"
-                                                class="text-xl font-sora text-primary">
+                                                class="text-xl font-poppins text-primary">
                                                 Deceased
                                             </span>
-                                            <span v-else class="text-xl font-sora text-primary">
+                                            <span v-else class="text-xl font-poppins text-primary">
                                                 {{ mother.last_name }},
                                                 {{ mother.first_name }}
                                                 {{mother.middle_name ? mother.middle_name.split(' ').map(word =>
@@ -158,7 +157,7 @@
                                         <div v-if="mother.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl text-primary">{{ mother.occupation }}</span>
+                                            <span class="text-xl font-poppins text-primary">{{ mother.occupation }}</span>
                                         </div>
                                     </div>
 
@@ -167,10 +166,10 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Father's
                                                 Name</span>
                                             <span v-if="father.first_name === 'n\/a'"
-                                                class="text-xl font-sora text-primary">
+                                                class="text-xl font-poppins text-primary">
                                                 Deceased
                                             </span>
-                                            <span v-else class="text-xl font-sora text-primary">
+                                            <span v-else class="text-xl font-poppins text-primary">
                                                 {{ father.last_name }},
                                                 {{ father.first_name }}
                                                 {{father.middle_name ? father.middle_name.split(' ').map(word =>
@@ -180,7 +179,7 @@
                                         <div v-if="father.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl text-primary">{{ father.occupation }}</span>
+                                            <span class="text-xl font-poppins text-primary">{{ father.occupation }}</span>
                                         </div>
                                     </div>
 
@@ -188,18 +187,18 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Siblings</span>
                                             <div v-if="siblings.length === 0">
-                                                <span class="text-xl font-sora text-primary">
+                                                <span class="text-xl font-poppins text-primary">
                                                     N/A
                                                 </span>
                                             </div>
                                             <div v-else v-for="sibling in siblings" :key="sibling.id">
-                                                <span class="text-xl font-sora text-primary">
+                                                <span class="text-xl font-poppins text-primary">
                                                     {{ sibling.last_name }},
                                                     {{ sibling.first_name }}
                                                     {{sibling.middle_name ? sibling.middle_name.split(' ').map(word =>
                                                         word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                                 </span>
-                                                <span class="text-xl font-sora text-primary">
+                                                <span class="text-xl font-poppins text-primary">
                                                     - {{ sibling.occupation }}
                                                 </span>
                                             </div>
@@ -211,7 +210,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Marital Status
                                                 of Parents</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.marital_status }}
                                             </span>
                                         </div>
@@ -219,7 +218,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Monthly Family
                                                 Income</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.monthly_income }}
                                             </span>
                                         </div>
@@ -227,7 +226,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Other Source of
                                                 Income</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.other_income }}
                                             </span>
                                         </div>
@@ -235,7 +234,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Family Type of
                                                 Housing</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.family_housing }}
                                             </span>
                                         </div>
@@ -290,11 +289,12 @@
 
                                     </div>
                                     <div class="flex flex-row w-full gap-3">
-                                        <!-- Approve Button -->
-                                        <button type="button" @click="updateApplicantStatus('Approve')"
-                                            class="w-full px-4 py-2 border-2 border-green-600 text-green-600 font-semibold text-base rounded-md hover:bg-green-400 transition">
-                                            Approve
-                                        </button>
+                                    <!-- Approve Button -->
+                                    <button
+                                        class="w-full px-4 py-2 border-2 border-green-600 text-green-600 font-semibold text-base rounded-md hover:bg-green-400 transition"
+                                    >
+                                        Approve
+                                    </button>
 
                                         <!-- Reject Button -->
                                         <button type="button" @click="updateApplicantStatus('Reject')"
@@ -316,7 +316,7 @@
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                             <!-- Requirement Item -->
                                             <div v-for="req in submittedRequirements" :key="req.id"
-                                                class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
+                                                class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-poppins text-primary">
                                                 <div class="flex flex-col space-y-2">
                                                     <span class="font-bold">{{ req.requirement.requirements }}</span>
                                                     <div class="flex items-center gap-2 text-gray-800">
@@ -356,7 +356,7 @@
                                         class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
                                         <div v-if="!grade"
-                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-poppins text-primary mb-2">
 
                                             <!-- Message -->
                                             <div class="flex items-center gap-2 text-gray-900 dark:text-white">
@@ -376,7 +376,7 @@
 
                                         </div>
                                         <div v-else
-                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-poppins text-primary mb-2">
                                             <div class="flex flex-col space-y-2">
                                                 <span>General Weighted Average</span>
                                                 <span class="font-bold text-lg">{{ grade.grade }}</span>
