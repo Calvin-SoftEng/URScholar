@@ -2,7 +2,7 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <SettingsLayout>
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
                 <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Activity Logs</h1>
@@ -76,15 +76,16 @@
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </SettingsLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed, onMounted } from 'vue';
 import { Tooltip } from 'primevue';
-import { User } from 'lucide-vue-next';
+import { Settings, User } from 'lucide-vue-next';
 
 const props = defineProps({
     activity: Array,

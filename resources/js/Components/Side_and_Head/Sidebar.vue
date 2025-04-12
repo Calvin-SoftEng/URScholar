@@ -249,9 +249,9 @@
                   }} </span>
                 <span v-show="dataOpenSideBar">
                   {{
-                    $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :
-                      $page.props.auth.user.usertype === 'coordinator' ? 'Coordinator' :
-                        $page.props.auth.user.usertype
+                      $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :
+                        $page.props.auth.user.usertype === 'coordinator' ? 'Coordinator' :
+                          $page.props.auth.user.usertype
                   }}
                 </span>
 
@@ -277,7 +277,7 @@
               <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
                 person
               </span>
-              <span class="font-poppins">My Profile</span>
+              <span class="font-poppins">Account Settings</span>
               </Link>
             </li>
             <Link :href="route('logout')" method="post" as="button" class="w-full">
