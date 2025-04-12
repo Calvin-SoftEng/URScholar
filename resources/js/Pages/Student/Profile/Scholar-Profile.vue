@@ -240,7 +240,7 @@
                                     <div class="w-full h-1/12 flex flex-col items-start gap-1 pb-4 border-b-2">
                                         <span class="text-gray-500 text-sm">Permanent Address</span>
                                         <span class="text-gray-900 text-base font-semibold leading-tight">
-                                            {{ student.address }}
+                                            {{scholar.street}} {{scholar.municipality}} {{scholar.province}}
                                         </span>
 
                                         <!-- Age and Date of Birth Section -->
@@ -1054,7 +1054,7 @@
                                 <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
                                     <span class="text-gray-500 text-sm">Permanent Address</span>
                                     <span class="text-gray-900 text-base font-semibold leading-tight">
-                                        faefaefaefae
+                                        {{scholar.street}} {{scholar.municipality}} {{scholar.province}}
                                     </span>
                                     <div class="w-full flex flex-row gap-2 py-2">
                                         <div class="w-[40%] flex flex-col items-left gap-1">

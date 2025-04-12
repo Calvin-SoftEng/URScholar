@@ -74,20 +74,6 @@
                 <!-- Actions bar -->
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex gap-2">
-                        <Select v-model="selectedBatchId" @update:modelValue="changeBatch">
-                            <SelectTrigger class="w-[200px]">
-                                <SelectValue :placeholder="`Batch ${currentBatch?.batch_no || '1'}`" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Available Batches</SelectLabel>
-                                    <SelectItem v-for="batch in batches" :key="batch.id" :value="batch.id">
-                                        Batch {{ batch.batch_no }}
-                                    </SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-
                         <!-- Refresh button that only appears when data has changed -->
                         <Button v-if="dataChanged" variant="outline" @click="refreshData"
                             class="flex items-center gap-2">
@@ -95,11 +81,6 @@
                             Refresh Data
                         </Button>
                     </div>
-
-                    <Button variant="default" @click="openScholarship" class="bg-primary text-white">
-                        <font-awesome-icon :icon="['fas', 'plus']" class="mr-2" />
-                        Add Scholars
-                    </Button>
                 </div>
 
                 <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
