@@ -196,7 +196,6 @@ class StudentController extends Controller
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
         $applicant = Applicant::where('scholar_id', $scholar->id)
-            ->where('status', 'Pending')
             ->first() ?? null;
 
         if ($applicant) {
