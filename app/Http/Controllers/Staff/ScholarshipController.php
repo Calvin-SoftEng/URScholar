@@ -983,6 +983,7 @@ class ScholarshipController extends Controller
                 'year_level' => $scholar->year_level,
                 'grant' => $scholar->grant,
                 'status' => $status,
+                'applicant_status' => $applicant->status,
                 'submittedRequirements' => $approvedRequirements,
                 'totalRequirements' => $totalRequirements,
                 'progress' => $progress,

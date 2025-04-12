@@ -290,7 +290,7 @@
                                     </div>
                                     <div class="flex flex-row w-full gap-3">
                                     <!-- Approve Button -->
-                                    <button
+                                    <button @click="updateApplicantStatus('Approve')"
                                         class="w-full px-4 py-2 border-2 border-green-600 text-green-600 font-semibold text-base rounded-md hover:bg-green-400 transition"
                                     >
                                         Approve
