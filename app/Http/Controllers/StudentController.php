@@ -239,10 +239,14 @@ class StudentController extends Controller
                     ->whereIn('requirement_id', $requirementIds)
                     ->get();
 
-                $submitApproved = SubmittedRequirements::where('scholar_id', $scholar->id)
+                $approvedCount = SubmittedRequirements::where('scholar_id', $scholar->id)
                     ->where('status', 'Approved')
                     ->whereIn('requirement_id', $requirementIds)
-                    ->get();
+                    ->count();
+
+                $totalCount = count($requirementIds);
+
+                $submitApproved = $approvedCount === $totalCount;
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
                     'scholarships' => $scholarships,

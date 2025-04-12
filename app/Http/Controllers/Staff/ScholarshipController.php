@@ -978,7 +978,7 @@ class ScholarshipController extends Controller
                 'first_name' => $scholar->first_name,
                 'last_name' => $scholar->last_name,
                 'middle_name' => $scholar->middle_name,
-                'campus' => $scholar->campus->id ?? 'N/A',
+                'campus' => $scholar->campus->name ?? 'N/A',
                 'course' => $scholar->course->name ?? 'N/A',
                 'year_level' => $scholar->year_level,
                 'grant' => $scholar->grant,
