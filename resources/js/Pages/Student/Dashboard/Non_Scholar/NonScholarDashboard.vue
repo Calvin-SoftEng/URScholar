@@ -292,9 +292,9 @@
         </p>
     </div>
 
-
-
 </template>
+
+
 
 <script setup>
 import { Head, useForm, Link } from '@inertiajs/vue3';
