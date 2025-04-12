@@ -556,23 +556,6 @@ const notifyStudent = () => {
     isNotified.value = true;
 };
 
-// Submit reason form
-const forwardCoor = () => {
-    // No form data is actually being sent in your current implementation,
-    // but you're using form.post. Let's simplify this:
-    router.post(route('scholarship.forward_coor', {
-        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
-        selectedCampus: props.selectedCampus
-    }), {}, {
-        onSuccess: () => {
-            closeModal();
-            showToast('Success', 'Batches forwarded successfully');
-        },
-        onError: (errors) => {
-            console.error('Error forwarding batches:', errors);
-        }
-    });
-};
 
 
 const statusClass = (status) => {
@@ -587,18 +570,6 @@ const statusClass = (status) => {
             return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400 border-gray-400';
     }
 };
-
-// const parsedRequirements = computed(() => {
-//     try {
-//         if (Array.isArray(props.requirements.requirements)) {
-//             return props.requirements.requirements;
-//         }
-//         return JSON.parse(props.requirements.requirements);
-//     } catch (error) {
-//         console.error("Error parsing requirements JSON:", error);
-//         return [];
-//     }
-// });
 
 const formatScholarName = (scholar) => {
     const middle = scholar.middle_name

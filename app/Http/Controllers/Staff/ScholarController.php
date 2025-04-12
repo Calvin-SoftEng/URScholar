@@ -323,6 +323,7 @@ class ScholarController extends Controller
 
         $requirement = SubmittedRequirements::findOrFail($request->submittedReq);
         $requirement->status = $request->status;
+        $requirement->approved_date = now();
 
         // Save message for both Returned and Approved statuses
         if ($request->message) {
@@ -373,8 +374,12 @@ class ScholarController extends Controller
             if ($allApproved && count($allRequirements) > 0) {
                 $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
-                $grantee->status = 'Active';
-                $grantee->save();
+
+                if ($grantee) {
+                    $grantee->status = 'Active';
+                    $grantee->save();
+                }
+
 
                 // Optionally: Send notification about scholar status update
                 $notification = Notification::create([
