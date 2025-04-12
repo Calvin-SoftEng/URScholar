@@ -53,11 +53,21 @@ class MessageController extends Controller
             ->withCount('users')
             ->get();
 
-        // Get all users for direct messages (excluding current user)
-        $users = User::select('id', 'name', 'first_name', 'last_name', 'usertype', 'picture')
-            ->where('id', '!=', $currentUser->id)
-            ->where('usertype', 'sponsor')
-            ->get();
+
+        if ($currentUser->usertype === 'sponsor') {
+            // Get all users for direct messages (excluding current user)
+            $users = User::select('id', 'name', 'first_name', 'last_name', 'usertype', 'picture')
+                ->where('id', '!=', $currentUser->id)
+                ->where('usertype', 'super_admin')
+                ->get();
+        } else {
+
+            // Get all users for direct messages (excluding current user)
+            $users = User::select('id', 'name', 'first_name', 'last_name', 'usertype', 'picture')
+                ->where('id', '!=', $currentUser->id)
+                ->where('usertype', 'sponsor')
+                ->get();
+        }
 
         // Get conversations for the current user
         $conversations = $this->getUserConversations($currentUser->id);
@@ -102,10 +112,17 @@ class MessageController extends Controller
         $conversations = $this->getUserConversations($currentUser->id);
 
         // Get all users for potential new conversations
-        $users = User::select('id', 'name', 'first_name', 'last_name', 'usertype', 'picture')
-            ->where('id', '!=', $currentUser->id)
-            ->where('usertype', 'sponsor')
-            ->get();
+        if ($currentUser->usertype === 'sponsor') {
+            $users = User::select('id', 'name', 'first_name', 'last_name', 'usertype', 'picture')
+                ->where('id', '!=', $currentUser->id)
+                ->where('usertype', 'super_admin')
+                ->get();
+        } else {
+            $users = User::select('id', 'name', 'first_name', 'last_name', 'usertype', 'picture')
+                ->where('id', '!=', $currentUser->id)
+                ->where('usertype', 'sponsor')
+                ->get();
+        }
 
         // Return the chat page using Inertia
         $viewPath = $this->getViewPathByUserType($currentUser);
@@ -232,8 +249,31 @@ class MessageController extends Controller
             $notificationMessage = "You have a new message in the staff group: {$group->name}";
         } elseif ($request->group_type === 'conversation') {
             $messageData['conversation_id'] = $request->group_id;
+
+            // Find the conversation - handle case when it might not exist
             $conversation = Conversation::find($request->group_id);
-            $channelName = "conversation.{$request->group_id}";
+
+            // If conversation doesn't exist, create it
+            if (!$conversation) {
+                // Try to determine receiver_id from the request or context
+                // For now we'll use a placeholder approach
+                // You may need to adjust this based on your actual request structure
+                $receiverId = $request->receiver_id; // Assuming this is passed
+
+                if (!$receiverId) {
+                    return response()->json(['error' => 'Invalid conversation'], 400);
+                }
+
+                $conversation = Conversation::create([
+                    'sender_id' => $user,
+                    'receiver_id' => $receiverId
+                ]);
+
+                // Update the message data with the new conversation ID
+                $messageData['conversation_id'] = $conversation->id;
+            }
+
+            $channelName = "conversation.{$conversation->id}";
 
             // Determine the recipient (the user who is not the sender)
             $recipientId = ($conversation->sender_id == $user) ? $conversation->receiver_id : $conversation->sender_id;
@@ -270,9 +310,14 @@ class MessageController extends Controller
         } elseif ($request->group_type === 'conversation') {
             // For direct messages, only notify the recipient
             $conversation = Conversation::find($request->group_id);
-            $recipientId = ($conversation->sender_id == $user) ? $conversation->receiver_id : $conversation->sender_id;
-            $users = User::where('id', $recipientId)->get();
-            $conversation = Conversation::with('latestMessage.user')->find($request->group_id);
+            if ($conversation) {
+                $recipientId = ($conversation->sender_id == $user) ? $conversation->receiver_id : $conversation->sender_id;
+                $users = User::where('id', $recipientId)->get();
+                $conversation = Conversation::with('latestMessage.user')->find($request->group_id);
+            } else {
+                $users = collect();
+                $conversation = null;
+            }
         }
 
         // Attach users to the notification
@@ -281,7 +326,11 @@ class MessageController extends Controller
         // Notify users
         event(new NewNotification($notification));
 
-        return back()->with(['updatedGroup' => $group]);
+        if ($request->group_type === 'conversation') {
+            return back()->with(['updatedGroup' => $conversation]);
+        } else {
+            return back()->with(['updatedGroup' => $group]);
+        }
     }
 
     // Helper method to find or create a conversation between two users
@@ -368,6 +417,8 @@ class MessageController extends Controller
     {
         if ($user->usertype == 'super_admin' || $user->usertype == 'coordinator') {
             return 'Staff/Communication/Messaging';
+        } elseif ($user->usertype == 'sponsor') {
+            return 'Sponsor/Communication/Messaging';
         } elseif ($user->usertype == 'cashier') {
             return 'Cashier/Communication/Messaging';
         } elseif ($user->usertype == 'student') {

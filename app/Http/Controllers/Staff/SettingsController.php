@@ -331,6 +331,8 @@ class SettingsController extends Controller
                             // Update scholar status to Verified and student_status to Enrolled
                             $matchingScholar->status = 'Verified';
                             $matchingScholar->student_status = 'Enrolled';
+                            $matchingScholar->student_number = $studentData['student_number'];
+                            $matchingScholar->email = $studentData['email'];
                             $matchingScholar->save();
 
                             // Check if a grantee relationship exists

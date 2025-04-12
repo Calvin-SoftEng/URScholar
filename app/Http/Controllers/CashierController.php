@@ -156,6 +156,10 @@ class CashierController extends Controller
 
         $canForward = $activePayout->total_scholars == $activePayout->sub_total;
 
+        $AllClaimed = $activePayout->disbursement->every(function ($disbursement) {
+            return $disbursement->status === 'Not Claimed';
+        });
+
         $payout_schedule = PayoutSchedule::where('payout_id', $activePayout->id)
             ->first();
 
@@ -167,6 +171,7 @@ class CashierController extends Controller
             'user_type' => $user->usertype,
             'canForward' => $canForward,
             'payout_schedule' => $payout_schedule,
+            'AllClaimed' => $AllClaimed,
         ]);
     }
 

@@ -6,23 +6,25 @@
         <!-- <div class="w-full bg-[#e8f0f9] shadow-sm ">
             <h1 class="text-3xl text-primary font-bold font-sora text-left p-3 mx-10">My Scholarship</h1>
         </div> -->
-        <div class="pt-3 pb-3 sm:overflow-auto sm:max-h-full sm:scroll-py-2 overflow-auto h-full scroll-py-4 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
+        <div
+            class="pt-3 pb-3 sm:overflow-auto sm:max-h-full sm:scroll-py-2 overflow-auto h-full scroll-py-4 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
             <div class="mx-auto sm:w-full lg:w-10/12 lg:px-8 h-full">
                 <div class="flex flex-col md:grid md:grid-cols-2 lg:grid-cols-3 gap-3 h-full">
                     <!-- Greeting and Scholarship Section -->
                     <div class="w-full flex flex-col items-center space-y-3 sm:space-y-0 gap-3 sm:px-3">
 
                         <!-- Greeting -->
-                        <div class="bg-primary w-full text-white text-base sm:text-xl lg:text-3xl font-sans font-bold p-5 sm:p-7 rounded-lg text-center">
+                        <div
+                            class="bg-primary w-full text-white text-base sm:text-xl lg:text-3xl font-sans font-bold p-5 sm:p-7 rounded-lg text-center">
                             Greetings! {{ $page.props.auth.user.name }}
                         </div>
 
                         <!-- Scholarships -->
-                        <div 
-                            v-show="!scholar"
+                        <div v-show="!scholar"
                             class="w-full bg-white shadow-lg rounded-lg flex items-center gap-3 py-4 px-4 sm:px-6 transition-all duration-300 hover:shadow-xl hover:bg-gray-100 cursor-pointer">
                             <box-icon name="bell-ring" type="solid" class="w-6 h-6 text-primary"></box-icon>
-                            <span class="text-base sm:text-lg font-semibold text-gray-800">View Available Scholarships</span>
+                            <span class="text-base sm:text-lg font-semibold text-gray-800">View Available
+                                Scholarships</span>
                         </div>
 
                         <!-- Recent Activities Section (Hidden on Mobile) -->
@@ -44,21 +46,28 @@
 
                     <!-- Section When Scholar Exists -->
                     <div v-if="grantee" class="w-full md:col-span-2">
-                        <div class="w-full h-full bg-white shadow-md sm:p-5 lg:p-6 flex-col items-center mx-auto max-w-8xl sm:px-2 lg:px-8">
-                            <ScholarGrant :reqDeadline="reqDeadline" :payout_schedule="payout_schedule" :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
-                                :submitReq="submitReq" :submitPending="submitPending" :historygrantee="historygrantee" :disbursement="disbursement" :grantee="grantee" :oldestGrantee="oldestGrantee" :submitApproved="submitApproved"/>
+                        <div
+                            class="w-full h-full bg-white shadow-md sm:p-5 lg:p-6 flex-col items-center mx-auto max-w-8xl sm:px-2 lg:px-8">
+                            <ScholarGrant :reqDeadline="reqDeadline" :payout_schedule="payout_schedule"
+                                :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
+                                :submitReq="submitReq" :submitPending="submitPending" :historygrantee="historygrantee"
+                                :disbursement="disbursement" :grantee="grantee" :oldestGrantee="oldestGrantee"
+                                :submitApproved="submitApproved" />
                         </div>
                     </div>
 
                     <!-- Section When No Scholarship Exists -->
-                    <div v-else class="md:col-span-2 w-full h-full block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
+                    <div v-else
+                        class="md:col-span-2 w-full h-full block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
                         <div v-if="!applicant">
-                            <Scholarships :sponsors="sponsors" :scholarships="scholarships"
-                                :schoolyears="schoolyears" :scholar="scholar" :grade="grade" />
+                            <Scholarships :sponsors="sponsors" :scholarships="scholarships" :schoolyears="schoolyears"
+                                :scholar="scholar" :grade="grade" />
                         </div>
-                        <div v-else >
-                            <ScholarAppliant :sponsors="sponsors" :scholarships="scholarships"
-                                :schoolyears="schoolyears" :scholar="scholar" />
+                        <div v-else>
+                            <ScholarAppliant :reqDeadline="reqDeadline" :payout_schedule="payout_schedule"
+                                :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
+                                :submitReq="submitReq" :submitPending="submitPending" :applicant="applicant"
+                                :submitApproved="submitApproved" />
                         </div>
                     </div>
                 </div>

@@ -95,7 +95,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
 
 });
 
-Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student'])->group(function () {
+Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,sponsor'])->group(function () {
     // Main messaging index
     Route::get('/messaging', [MessageController::class, 'index'])->name('messaging.index');
 

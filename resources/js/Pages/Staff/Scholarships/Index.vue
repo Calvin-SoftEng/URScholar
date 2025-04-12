@@ -105,10 +105,8 @@
                                 </div>
 
                                 <!-- Sticky Button at the Bottom -->
-                                <div class="p-3 mt-auto flex flex-col items-end space-y-2">
-                                    <button @click="toggleCreate(sponsor.id)"
-                                        :disabled="sponsor.created_id !== $page.props.auth.user.id"
-                                        :class="{ 'opacity-50 cursor-not-allowed': sponsor.created_id !== $page.props.auth.user.id }">
+                                <div v-if="sponsor.created_id === $page.props.auth.user.id" class="p-3 mt-auto flex flex-col items-end space-y-2">
+                                    <button @click="toggleCreate(sponsor.id)">
                                         <div class="text-sm text-gray-500" v-tooltip="'Create Scholarship'">
                                             <span
                                                 class="material-symbols-rounded text-blue-900 dark:text-dtext bg-blue-100 hover:bg-gray-200 p-3 border rounded-lg dark:bg-dsecondary dark:border-gray-600 dark:hover:border-gray-300 dark:hover:bg-dsecondary">
@@ -116,13 +114,7 @@
                                             </span>
                                         </div>
                                     </button>
-
-                                    <!-- Show message if disabled -->
-                                    <p v-if="sponsor.created_id !== $page.props.auth.user.id" class="text-xs text-red-500">
-                                        Bawal ka
-                                    </p>
                                 </div>
-
                             </div>
                         </div>
                     </div>

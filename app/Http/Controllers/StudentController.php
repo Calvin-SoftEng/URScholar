@@ -52,7 +52,9 @@ class StudentController extends Controller
             ->with('campus')
             ->with('course')
             ->first();
-        $grantee = Grantees::where('scholar_id', $scholar->id)->with('school_year')->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)
+            ->with('school_year')
+            ->first();
 
         if ($grantee) {
             $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
@@ -188,13 +190,76 @@ class StudentController extends Controller
             $scholarship->campusRecipients = $campusRecipients->where('scholarship_id', $scholarship->id)->values();
         }
 
-        $sponsors = Sponsor::all();
-        $schoolyear = SchoolYear::all();
-        $applicant = Applicant::where('scholar_id', $scholar->id)->first() ?? null;
-
         // Get all campuses and courses
         $campuses = Campus::all();
         $courses = Course::all();
+        $sponsors = Sponsor::all();
+        $schoolyear = SchoolYear::all();
+        $applicant = Applicant::where('scholar_id', $scholar->id)
+            ->where('status', 'Pending')
+            ->first() ?? null;
+
+        if ($applicant) {
+            $scholarship = Scholarship::where('id', $applicant->scholarship_id)->with('sponsor')->first();
+
+            if ($scholarship) {
+                $submittedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->first();
+                if (!$submittedRequirements) {
+                    return redirect()->route('student.confirmation');
+                }
+
+                $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+                $reqDeadline = $requirements->first();
+
+                $requirementIds = $requirements->pluck('id')->toArray();
+
+                // Fetch only returned submitted requirements related to the scholarship
+                $submitReq = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Returned')
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
+
+                // Map submitted requirements with their corresponding requirement details
+                $returnedRequirements = $submitReq->map(function ($submitted) use ($requirements) {
+                    $requirement = $requirements->firstWhere('id', $submitted->requirement_id);
+                    $subReq = SubmittedRequirements::where('requirement_id', $requirement->id)->first();
+
+                    return [
+                        'id' => $submitted->id,  // Submitted Requirement ID
+                        'requirement_id' => $requirement ? $requirement->id : null, // Requirement ID
+                        'requirement_name' => $requirement ? $requirement->requirements : 'Unknown Requirement',
+                        'message' => $subReq ? $subReq->message : 'None',
+                        'status' => $submitted->status,
+                    ];
+                });
+
+                $submitPending = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Pending')
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
+
+                $submitApproved = SubmittedRequirements::where('scholar_id', $scholar->id)
+                    ->where('status', 'Approved')
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
+
+                return Inertia::render('Student/Dashboard/Dashboard', [
+                    'scholarships' => $scholarships,
+                    'sponsors' => $sponsors,
+                    'schoolyears' => $schoolyear,
+                    'scholar' => $scholar,
+                    'applicant' => $applicant,
+                    'grade' => $grade,
+                    'campuses' => $campuses,
+                    'courses' => $courses,
+                    'submitReq' => $returnedRequirements,
+                    'submitPending' => $submitPending,
+                    'submitApproved' => $submitApproved,
+                ]);
+            }
+        }
+
 
         return Inertia::render('Student/Dashboard/Dashboard', [
             'scholarships' => $scholarships,
@@ -205,6 +270,7 @@ class StudentController extends Controller
             'grade' => $grade,
             'campuses' => $campuses,
             'courses' => $courses,
+
         ]);
     }
 
@@ -435,7 +501,7 @@ class StudentController extends Controller
             'religion' => ['required', 'string', 'max:255'],
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
-            
+
             //Educaiton Information
             'education.elementary.name' => ['required', 'string'],
             'education.elementary.years' => ['required', 'string'],

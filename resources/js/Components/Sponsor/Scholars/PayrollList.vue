@@ -30,34 +30,6 @@
             <option v-for="campus in availableCampuses" :key="campus" :value="campus">{{ campus }}</option>
           </select>
         </div>
-
-        <!-- School Year Filter -->
-        <div>
-          <label class="text-sm block mb-1">Filter School Year</label>
-          <select v-model="selectedYear"
-            class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white"
-            @change="updateFilters">
-            <option value="">All Years</option>
-            <option v-for="year in availableYears" :key="year.id" :value="year.id">{{ year.school_year }}</option>
-          </select>
-        </div>
-
-        <!-- Semester Filter -->
-        <div>
-          <label class="text-sm block mb-1">Filter Semester</label>
-          <div class="flex items-center gap-4 text-sm">
-            <label class="flex items-center gap-1">
-              <input type="radio" name="semester" value="1st" v-model="selectedSemester"
-                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" @change="updateFilters" />
-              1st
-            </label>
-            <label class="flex items-center gap-1">
-              <input type="radio" name="semester" value="2nd" v-model="selectedSemester"
-                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" @change="updateFilters" />
-              2nd
-            </label>
-          </div>
-        </div>
       </div>
     </div>
 
