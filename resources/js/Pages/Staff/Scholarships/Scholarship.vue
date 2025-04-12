@@ -2106,8 +2106,8 @@ const toggleMonitoring = () => {
     activeTab.value = "monitoring";
 };
 
-const openBatch = () => {
-    router.visit(`/scholarships/batch`, {
+const openBatch = (batchId) => {
+    router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}`, {
         data: {
             scholarship: props.scholarship.id,
             selectedYear: props.schoolyear.id,

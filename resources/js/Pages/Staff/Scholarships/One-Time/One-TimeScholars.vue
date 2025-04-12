@@ -340,7 +340,7 @@ const total_scholars = computed(() => {
 });
 
 const openBatch = () => {
-    router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}`, {
+    router.visit(`/scholarships/batch`, {
         data: {
             scholarship: props.scholarship.id,
             selectedYear: props.schoolyear.id,
