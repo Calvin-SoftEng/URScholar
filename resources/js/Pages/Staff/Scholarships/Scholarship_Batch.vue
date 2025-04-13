@@ -11,7 +11,7 @@
 
             <div class="w-full mx-auto space-y-3">
                 <!-- Breadcrumbs -->
-                <div class="breadcrumbs text-sm text-gray-400 mb-2">
+                <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
                         <li class="hover:text-gray-600">
                             <Link href="/dashboard">Home</Link>
@@ -35,7 +35,8 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <Link>
-                            <button class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">
+                                <button @click="goBack"
+                                class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
                                 < </button>
                                     </Link>
                                     <span>{{ scholarship?.name }}</span>
@@ -160,6 +161,11 @@ const currentBatch = computed(() => {
 const originalScholars = ref([]);
 const originalRequirements = ref([]);
 const dataChanged = ref(false);
+
+const goBack = () => {
+    window.history.back();
+};
+
 
 // Statistics state
 const stats = ref({
