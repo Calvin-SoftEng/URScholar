@@ -1234,7 +1234,7 @@ class ScholarshipController extends Controller
         // $requirements = Requirements::where('scholarship_id', $scholarship->id)->first();
 
 
-        return Inertia::render('Staff/Scholarships/One-Time/ListOFGrantees', [
+        return Inertia::render('Staff/Scholarships/One-Time/ListOfGrantees', [
             // 'scholarship' => $scholarship,
             // 'scholars' => $scholars,
             // 'requirements' => $requirements,

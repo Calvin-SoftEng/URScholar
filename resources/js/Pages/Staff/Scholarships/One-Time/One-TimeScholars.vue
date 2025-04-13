@@ -50,7 +50,7 @@
                 </div>
 
                 <div>
-                    <div class="w-full mt-5 rounded-xl space-y-5">
+                    <div class="w-full mt-5 rounded-xl space-y-10 mb-9">
                         <!-- Stats Section -->
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
@@ -78,18 +78,6 @@
                                     <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Scholarships</p>
                                 </div>
-                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <!-- <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p> -->
-                                    <!-- <template
-                                        v-if="props.batches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
-                                        <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
-                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length}} new
-                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length === 1 ? 'Batch' : 'Batches'}}
-                                        </button>
-                                    </template> -->
-                                </div>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10">
@@ -102,6 +90,7 @@
                         </div>
 
                         <div class="w-full h-[1px] bg-gray-200"></div>
+
                         <div class="flex flex-row justify-end items-center">
                             <div class="flex flex-row space-x-3 items-center">
                                 <button
@@ -112,29 +101,69 @@
                             </div>
                         </div>
 
-
-                        <div
-                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer">
-                            
-                            <div @click="() => openBatch()" class="flex justify-between items-center">
-
-                                <div class="flex flex-col">
-                                    <span class="text-lg font-semibold text-gray-800">DBP Rise</span>
-                                    <span class="text-gray-500">SY 2024 - Semester 1</span>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-6">
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">No. of Scholars</span>
-                                        <span class="text-xl font-bold text-blue-600">200</span>
+                        <Link :href="route('scholarships.one_timebatch')" class="my-2">
+                            <div 
+                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                <div class="flex justify-between items-center">
+                                    
+                                    <!-- Batch Info -->
+                                    <div class="flex flex-col px-5">
+                                    <span class="text-lg font-semibold text-gray-800">Imee Marcos Scholarship</span>
+                                    <span class="text-md font-medium text-gray-600">
+                                        1st Semester - SY 2023-2024
+                                    </span>
                                     </div>
-                                    <div class="flex flex-col items-center">
-                                        <span class="text-sm text-gray-600">Unverified Scholars</span>
-                                        <span class="text-xl font-bold text-red-500">200</span>
+
+                                    <div class="flex flex-row gap-4">
+                                        <div>
+                                            <!-- Statistics -->
+                                            <div class="grid grid-cols-1 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+
+                                            <!-- Number of Students -->
+                                            <div class="flex flex-col items-center space-y-1">
+                                                <div class="flex items-center gap-2 text-sm text-gray-100">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                </svg>
+                                                <span class="text-primary">No. of Grantees</span>
+                                                </div>
+                                                <span class="text-xl font-bold text-primary drop-shadow">1</span>
+                                            </div>
+
+                                            <!-- Unverified Students -->
+                                            <!-- <div class="flex flex-col items-center space-y-1">
+                                                <div class="flex items-center gap-2 text-sm text-gray-100">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24"
+                                                    stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M18.364 5.636l-1.414-1.414L12 9.172 7.05 4.222 5.636 5.636 10.586 10.586 5.636 15.536l1.414 1.414L12 12.828l4.95 4.95 1.414-1.414-4.95-4.95z" />
+                                                </svg>
+                                                <span class="text-primary">Unverified Students</span>
+                                                </div>
+                                                <span class="text-xl font-bold text-primary drop-shadow">
+                                                1
+                                                </span>
+                                            </div> -->
+                                            </div>
+                                        </div>
+
+                                        <!-- Three Dots Settings -->
+                                        <div class="relative ml-3 group">
+                                            <button v-tooltip.left="'Archive'" class="p-2 rounded-full hover:bg-white/30">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700 hover:text-gray-900 transition"
+                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M12 6v.01M12 12v.01M12 18v.01" />
+                                                </svg>
+                                            </button>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
-                        </div>
+                        </Link>
 
                     </div>
                 </div>

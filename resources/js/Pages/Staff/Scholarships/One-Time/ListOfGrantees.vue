@@ -28,92 +28,12 @@
                         </h1>
                         <!-- <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span> -->
                     </div>
-                    <!--Condition for scholarship type-->
-                    <div class="flex gap-2">
-
-                        <div class="flex flex-row items-end gap-2">
-                            <!-- Active Send Email Button -->
-
-                            <div>
-                                <!-- <Link :href="`/scholarships/${props.scholarship.id}/send-access`"> -->
-                                <button @click="importScholars"
-                                    class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
-                                        border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
-                                    <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
-                                    <span>Send Email</span>
-                                </button>
-                                <!-- </Link> -->
-                            </div>
-
-                        </div>
-                    </div>
                 </div>
 
                 <div>
-                    <div class="w-full mt-5 rounded-xl space-y-5">
-                        <!-- Stats Section -->
-                        <div class="w-full h-[1px] bg-gray-200"></div>
+                    <div class="w-full rounded-xl">
 
-                        <div class="grid grid-cols-4">
-                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Total Verified Scholars</p>
-                                </div>
-                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <!-- <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p> -->
-                                </div>
-                            </div>
-
-                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Unverified Scholars</p>
-                                </div>
-                                <!-- <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p> -->
-                            </div>
-
-                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Scholarships</p>
-                                </div>
-                                <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <!-- <p class="text-4xl font-semibold font-kanit">{{ props.batches.length }}</p> -->
-                                    <!-- <template
-                                        v-if="props.batches.filter(batch => batch.read === 0 || batch.read === false).length > 0">
-                                        <button class="px-3 bg-blue-400 text-white rounded-full text-sm">
-                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length}} new
-                                            {{props.batches.filter(batch => batch.read === 0 || batch.read ===
-                                                false).length === 1 ? 'Batch' : 'Batches'}}
-                                        </button>
-                                    </template> -->
-                                </div>
-                            </div>
-
-                            <div class="flex flex-col items-start py-4 px-10">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Completed Payouts</p>
-                                </div>
-                                <!-- <p class="text-4xl font-semibold font-kanit">{{ completedBatches ?? 0 }}</p> -->
-                            </div>
-                        </div>
-
-                        <div class="w-full h-[1px] bg-gray-200"></div>
-                        <div class="flex flex-row justify-end items-center">
-                            <div class="flex flex-row space-x-3 items-center">
-                                <button
-                                    class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                                    <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                    <span class="font-normal">Forward Completed Scholars</span>
-                                </button>
-                            </div>
-                        </div>
-
-
-                        <div class="w-full h-[1px] bg-gray-200 my-4"></div>
+                        <div class="w-full h-[1px] bg-gray-200 my-2"></div>
 
                         <!-- Actions bar -->
                         <div class="flex justify-between items-center mb-4">

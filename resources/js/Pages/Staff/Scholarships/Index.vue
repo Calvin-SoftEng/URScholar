@@ -126,7 +126,7 @@
         <!-- creating a sponsor -->
         <div v-if="isCreating"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-6/12">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
 
                     <div class="flex items-center gap-3">
@@ -161,7 +161,7 @@
 
                     <!-- Page 1: Basic Information -->
                     <div>
-                        <div class="flex flex-row gap-3">
+                        <div class="flex flex-col gap-3">
                             <div class="w-full flex flex-col space-y-2">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Name</h3>
                                 <input v-model="form.name" type="text" id="name" placeholder="Enter Scholarship Name"
@@ -178,11 +178,11 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="mt-3 space-y-2">
+                        <!-- <div class="mt-3 space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">Set Scholarship
                                 Timeline</h3>
                             <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
-                                <!-- Application Start Date -->
+
                                 <div class="flex flex-col w-full">
                                     <div class="relative">
                                         <div
@@ -203,7 +203,7 @@
 
                                 <span class="text-gray-500">to</span>
 
-                                <!-- Application Deadline -->
+
                                 <div class="flex flex-col w-full">
                                     <div class="relative">
                                         <div
@@ -222,7 +222,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <!-- Buttons -->
@@ -343,8 +343,8 @@ const form = ref({
     scholarshipType: null,
     school_year: null,
     semester: null,
-    date_start: '',
-    date_end: '',
+    date_start: "2025-04-08",
+    date_end: "2025-04-08",
 });
 
 // const form = ref({

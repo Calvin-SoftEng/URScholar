@@ -1,13 +1,6 @@
 <template>
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
-      <div class="flex flex-row gap-2">
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="generateReport">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate Report
-        </button>
-      </div>
       <!-- <form class="w-3/12">
         <label for="default-search"
           class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
