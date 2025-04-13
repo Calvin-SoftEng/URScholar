@@ -447,7 +447,7 @@
                                                                     </div>
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">
-                                                                        {{ batch.validated == true ? 'Complete' :
+                                                                        {{ validationStatus == true ? 'Complete' :
                                                                             'Pending' }}
                                                                     </span>
 
@@ -1799,6 +1799,7 @@ const props = defineProps({
     valitedBatches: Boolean,
     checkValidated: Boolean,
     granteeInactive: Boolean,
+    validationStatus: Boolean,
     payouts: Object,
     payoutBatches: Array,
 });

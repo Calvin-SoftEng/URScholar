@@ -917,6 +917,18 @@ class ScholarshipController extends Controller
             }
         }
 
+        $validationStatus = false;
+
+        foreach ($grantees as $grantee) {
+            if ($grantee && $grantee->scholar && $grantee->scholar->campus_id == Auth::user()->campus_id) {
+                $status = $grantee->scholar->student_status;
+                if ($status === 'Enrolled' || $status === 'Graduated' || $status === 'Dropped') {
+                    $validationStatus = true;
+                    break; // We can exit the loop once we find a valid status
+                }
+            }
+        }
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
             'batches' => $batches,
@@ -952,6 +964,7 @@ class ScholarshipController extends Controller
             'payoutBatches' => $payoutBatches,
             'valitedScholars' => $valitedScholars,
             'valitedBatches' => $valitedBatches,
+            'validationStatus' => $validationStatus,
             'checkValidated' => $checkValidated,
             'granteeInactive' => $granteeInactive,
             'disableSendEmailButton' => $disableSendEmailButton,
