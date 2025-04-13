@@ -43,20 +43,7 @@
 
               <!-- Text Content -->
               <div class="flex flex-col">
-                <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
-                <span class="font-semibold text-xl text-gray-900">{{ props.scholars.length }}</span>
-              </div>
-            </div>
-
-            <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
-              <!-- Icon -->
-              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
-                <font-awesome-icon :icon="['fas', 'users']" class="text-2xl" />
-              </div>
-
-              <!-- Text Content -->
-              <div class="flex flex-col">
-                <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
+                <span class="font-normal text-base text-gray-600">Total Active Scholarships</span>
                 <span class="font-semibold text-xl text-gray-900">{{ props.scholars.length }}</span>
               </div>
             </div>
@@ -175,7 +162,8 @@
                           {{ scholar.status }}
                         </span>
                       </td>
-                      <td class="sticky right-0 z-20 bg-white px-6 py-2 border-gray-200 text-center">
+                      <td class="sticky right-0 z-20 bg-white px-6 py-2 border-gray-200 text-center"
+                          style="box-shadow: -4px 0 6px -2px rgba(0,0,0,1);">
                         <Link :href="route('scholars.scholar_information')">
                           <button
                             class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
