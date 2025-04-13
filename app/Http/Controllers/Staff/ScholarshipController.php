@@ -673,6 +673,76 @@ class ScholarshipController extends Controller
             ->orderBy('batch_no', 'desc')
             ->get();
 
+        $allBatcheswithoutme = Batch::where('scholarship_id', $scholarship->id)
+            ->where('campus_id', '!=', Auth::user()->campus_id) // Added this line
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->orderBy('batch_no', 'desc')
+            ->get();
+
+        $allInactivewithoutme = Batch::where('scholarship_id', $scholarship->id)
+            ->where('status', 'Inactive') // Added this line
+            ->where('campus_id', '!=', Auth::user()->campus_id) // Added this line
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->orderBy('batch_no', 'desc')
+            ->get();
+
+        $Mybatches = Batch::where('scholarship_id', $scholarship->id)
+            ->where('status', 'Inactive') // Added this line
+            ->where('campus_id', '=', Auth::user()->campus_id) // Added this line
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->orderBy('batch_no', 'desc')
+            ->get();
+
+        $myInactive = false;
+
+        foreach ($Mybatches as $batch) {
+            if (
+                $batch && $batch->status == 'Inactive'
+            ) {
+                $myInactive = true;
+                break;
+            }
+        }
+
+
+
+        $allInactive = false;
+
+        foreach ($allInactivewithoutme as $batch) {
+            if (
+                $batch && $batch->status == 'Inactive'
+            ) {
+                $allInactive = true;
+                break;
+            }
+        }
+
+        $checkValidated = false;
+
+        foreach ($allBatcheswithoutme as $batch) {
+            if (
+                $batch && $batch->validated == true
+            ) {
+                $checkValidated = true;
+                break;
+            }
+        }
+
+
+        $valitedBatches = false;
+
+        foreach ($allBatches as $batch) {
+            if (
+                $batch && $batch->validated == true
+            ) {
+                $valitedBatches = true;
+                break;
+            }
+        }
+
         $scholarship->update(['read' => 1]);
 
         event(new GeneralNotification(
@@ -751,8 +821,9 @@ class ScholarshipController extends Controller
         $valitedScholars = false;
 
         foreach ($grantees as $grantee) {
-            if ($grantee->scholar && $grantee->scholar->status === 'Verified' && $grantee->scholar->student_status === 'Enrolled' ||
-            $grantee->scholar->status === 'Unverified' && $grantee->scholar->student_status === 'Dropped' || $grantee->scholar->student_status === 'Graduated'
+            if (
+                $grantee->scholar && $grantee->scholar->status === 'Verified' && $grantee->scholar->student_status === 'Enrolled' ||
+                $grantee->scholar->status === 'Unverified' && $grantee->scholar->student_status === 'Dropped' || $grantee->scholar->student_status === 'Graduated'
             ) {
                 $valitedScholars = true;
                 break;
@@ -774,6 +845,8 @@ class ScholarshipController extends Controller
             'grantees' => $grantees,
             'completedBatches' => $completedBatches,
             'inactiveBatches' => $inactiveBatches,
+            'allInactive' => $allInactive,
+            'myInactive' => $myInactive,
             'inactivePayouts' => $inactivePayouts,
             'totalBatches' => $totalBatches,
             'schoolyear' => $schoolyear,
@@ -792,6 +865,8 @@ class ScholarshipController extends Controller
             'payouts' => $mainPayout,
             'payoutBatches' => $payoutBatches,
             'valitedScholars' => $valitedScholars,
+            'valitedBatches' => $valitedBatches,
+            'checkValidated' => $checkValidated,
             'disableSendEmailButton' => $disableSendEmailButton,  // Add this line
         ]);
     }
@@ -905,6 +980,49 @@ class ScholarshipController extends Controller
 
         // Attach the coordinator to the notification
         $notification->users()->attach($sponsorUser->id);
+
+        return redirect()->back()->with('success', 'Forwarded Successfully');
+    }
+
+    public function forward_validate($scholarshipId, Request $request)
+    {
+        // Find the scholarship
+        $scholarship = Scholarship::findOrFail($scholarshipId);
+
+        // Get parameters from the request
+        $selectedSem = $request->input('selectedSem');
+        $schoolYearId = $request->input('school_year');
+        $selectedCampus = $request->input('selectedCampus');
+
+        // Find all matching batches
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $schoolYearId)
+            ->where('campus_id', $selectedCampus)
+            ->get();
+
+        // Update each batch individually using the requested format
+        foreach ($batches as $batch) {
+            Batch::where('id', $batch->id)->update([
+                'validated' => true,
+                'status' => 'Active'
+            ]);
+        }
+
+        $currentUser = Auth::user();
+
+        $campus = Campus::where('id', $currentUser->campus_id)->first();
+
+        // Create notification for coordinator
+        $notification = Notification::create([
+            'title' => $campus->name . ' Validated forward',
+            'message' => $campus->name . ' campus, Validated now finished',
+            'type' => 'validated_forward',
+        ]);
+
+        $super_admin = User::where('usertype', 'super_admin')->first();
+
+        // Attach the coordinator to the notification
+        $notification->users()->attach($super_admin->id);
 
         return redirect()->back()->with('success', 'Forwarded Successfully');
     }

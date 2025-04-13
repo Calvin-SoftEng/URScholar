@@ -104,14 +104,7 @@
                   <td>{{ scholar.campus }}</td>
                   <td>{{ scholar.course }}</td>
                   <td>{{ scholar.grant }}</td>
-                  <td>
-                    <!-- <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
-                      {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
-                    </span>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                      <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }"></div>
-                    </div> -->1.2
-                  </td>
+                  <td>{{ scholar.grade ?? 'No Grade' }}</td>
                   <td>
                     <span class="px-2 py-1 rounded-md text-xs" :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
@@ -122,7 +115,7 @@
                     </span>
                   </td>
                   <th>
-                    <Link :href="`/scholarships/scholar=${scholar.id}`">
+                    <Link :href="route('sponsor.sponsor_scholar', scholar.id)">
                     <button
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">

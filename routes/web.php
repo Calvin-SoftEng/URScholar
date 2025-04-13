@@ -169,6 +169,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/scholarships/{scholarship}', [ScholarshipController::class, 'show'])->name('scholarship.show');
     Route::post('scholarships/{scholarshipId}/forward', [ScholarshipController::class, 'forward_coor'])->name('scholarship.forward_coor');
     Route::post('scholarships/{scholarshipId}/forward-sponsor', [ScholarshipController::class, 'forward_sponsor'])->name('scholarship.forward_sponsor');
+    Route::post('scholarships/{scholarshipId}/forward-validate', [ScholarshipController::class, 'forward_validate'])->name('scholarship.forward_validate');
 
 
 
@@ -254,7 +255,7 @@ Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
 
     // view scholars
     Route::get('/sponsor/scholarships/{scholarship}', [SponsorController::class, 'view_scholars'])->name('sponsor.scholars');
-    Route::get('/sponsor/scholarships/scholar', [SponsorController::class, 'scholar_description'])->name('sponsor.scholars-description');
+    Route::get('/sponsor/scholarships/scholar/{id}', [SponsorController::class, 'sponsor_scholar'])->name('sponsor.sponsor_scholar');
 });
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------

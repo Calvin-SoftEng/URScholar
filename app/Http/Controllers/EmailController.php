@@ -169,6 +169,10 @@ class EmailController extends Controller
 
         // Process each batch
         foreach ($batches as $batch) {
+
+            $batch->status = 'Pending';
+            $batch->save();
+
             // Retrieve scholars through grantees with necessary relationships
             $scholars = $scholarship->grantees()
                 ->where('batch_id', $batch->id)
@@ -354,7 +358,7 @@ class EmailController extends Controller
             'description' => 'Scholar has been sent an email for payouts ' . $scholarship->name,
         ]);
 
-        return back()->with('success', 'Schedule email sent successfully!');
+        return redirect()->route('cashier.payout_batches', ['payout' => $payout])->with('success', 'Schedule email sent successfully!');
     }
 
     public function store(Request $request): RedirectResponse
