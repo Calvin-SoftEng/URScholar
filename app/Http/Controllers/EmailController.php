@@ -345,7 +345,7 @@ class EmailController extends Controller
                         "*Bigayan Oras: " . $request['scheduled_time'] . "\n\n" .
                         "*Reminders be: " . $request['reminders'] . "\n\n" .
                         "Click the following link to access your portal: " .
-                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
+                        "urscholar.up.railway.app\n\n"
                 ];
 
                 Mail::to($scholar->email)->send(new SendEmail($mailData));
@@ -409,7 +409,7 @@ class EmailController extends Controller
                     " - Stay updated with announcements and notifications regarding your application status.\n\n" .
                     "*Application Deadline: " . ($request->has('deadline') ? $request['deadline'] : 'Please check the website for details') . "\n\n" .
                     "Click the following link to access your portal: " .
-                    "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
+                    "urscholar.up.railway.app\n\n"
             ];
 
             // Send email
@@ -475,7 +475,7 @@ class EmailController extends Controller
                     " - Stay updated with announcements and notifications regarding your application status.\n\n" .
                     "Application Deadline: " . ($request->has('deadline') ? $request->deadline : 'Please check the website for details') . "\n\n" .
                     "Click the following link to access your portal: " .
-                    "https://yourscholarshipportal.com/login\n\n"
+                    "urscholar.up.railway.app\n\n"
             ];
 
             // Send email
