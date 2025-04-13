@@ -3,7 +3,7 @@
 
         <!-- Header with Filter -->
         <div class="flex justify-between items-center">
-            <span class="font-poppins font-semibold text-xl dark:text-dtext">Recent Submissions</span>
+            <span class="font-poppins font-semibold text-xl dark:text-dtext">Recent Payouts</span>
 
             <!-- Scholarship Type Filter -->
             <div class="flex items-center gap-3">
@@ -29,22 +29,6 @@
             </div>
         </div>
 
-        <!-- Analytics Section -->
-        <!-- <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-           
-            <div class="p-6 bg-white dark:bg-dcontainer rounded-lg shadow-lg flex flex-col justify-center items-center border border-gray-200 dark:border-gray-600">
-                <span class="text-sm text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Applicants</span>
-                <p class="text-3xl font-extrabold text-primary dark:text-lprimary mt-2">{{ totalApplicants }}</p>
-            </div>
-
-
-            <div class="p-6 bg-white dark:bg-dcontainer rounded-lg shadow-lg flex flex-col justify-center items-center border border-gray-200 dark:border-gray-600">
-                <span class="text-sm text-gray-500 dark:text-gray-300 uppercase tracking-wider">Total Verified Scholars</span>
-                <p class="text-3xl font-extrabold text-primary dark:text-lprimary mt-2">{{ totalVerifiedScholars }}</p>
-            </div>
-        </div> -->
-
-
         <!-- Scholarship List Container -->
         <div class="flex flex-col gap-3 flex-grow relative">
 
@@ -59,7 +43,7 @@
                             <th>Scholarship</th>
                             <th v-if="selectedScholarshipType === 'Need-Based'">Submitted Requirements</th>
                             <th>Status</th>
-                            <th>Date Submitted</th>
+                            <th>Date Claimed</th>
                             <th>Remarks</th>
                             <th></th>
                         </tr>
@@ -108,7 +92,7 @@
                         </tr>
                         <tr v-if="latestSubmissions.length === 0">
                             <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7" class="text-center py-4 dark:text-dtext">No
-                                recent submissions found</td>
+                                recent payouts found</td>
                         </tr>
                     </tbody>
                 </table>

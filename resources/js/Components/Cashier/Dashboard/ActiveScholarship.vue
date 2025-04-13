@@ -4,7 +4,7 @@
     <span class="font-poppins font-semibold text-xl dark:text-dtext">Active Scholarships</span>
 
     <!-- Scholarship List Container -->
-    <!-- <div class="flex flex-col gap-3 flex-grow relative">
+    <div class="flex flex-col gap-3 flex-grow relative">
         
 
         <div v-if="scholarships.length === 0" class="flex items-center justify-center h-40 bg-gray-100 dark:bg-gray-800 rounded-xl p-4">
@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-    </div> -->
+    </div>
 
 </div>
 
