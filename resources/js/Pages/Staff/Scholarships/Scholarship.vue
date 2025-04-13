@@ -383,7 +383,7 @@
 
                                         <!-- Display scholarship status for this campus -->
 
-                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Pending') || campusData.batches?.some(batch => batch.status === 'Pending')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
+                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Pending') || campusData.batches?.some(batch => batch.status === 'Active')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
                                         " class="mb-4">
                                             <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg text-center animate-fade-in">
                                                 <font-awesome-icon :icon="['fas', 'user-graduate']" class="text-4xl text-gray-400 dark:text-gray-500 my-2" />
@@ -527,7 +527,7 @@
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">
                                                                         {{ batch.total_scholars
-                                                                            == batch.sub_total ? 'Complete' :
+                                                                            === batch.sub_total ? 'Complete' :
                                                                         'Pending' }}</span>
                                                                 </div>
 
