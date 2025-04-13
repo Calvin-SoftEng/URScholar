@@ -353,6 +353,8 @@ class EmailController extends Controller
             'activity' => 'Email',
             'description' => 'Scholar has been sent an email for payouts ' . $scholarship->name,
         ]);
+
+        return back()->with('success', 'Schedule email sent successfully!');
     }
 
     public function store(Request $request): RedirectResponse
