@@ -166,7 +166,6 @@
                                                     false).length === 1 ? 'Batch' : 'Batches'}}
                                             </button>
                                         </template>
-
                                     </div>
                                     <div v-else>
                                         <p class="text-4xl font-semibold font-kanit">{{ props.totalBatches }}</p>
@@ -177,11 +176,9 @@
                                             </button>
                                         </template>
                                     </div>
-
-
                                 </div>
                             </div>
-
+                            
                             <div class="flex flex-col items-start py-4 px-10">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
@@ -192,6 +189,10 @@
                         </div>
 
                         <div class="w-full h-[1px] bg-gray-200"></div>
+
+
+
+<!-- tablee----------------------------------------------------------------------------------------------------------- -->
 
                         <div class="flex flex-row justify-between items-center">
                             <!-- Dynamic Title -->
@@ -223,17 +224,6 @@
 
                                 <div v-if="$page.props.auth.user.usertype === 'super_admin'"
                                     class="flex flex-row space-x-3 items-center">
-                                    <!-- reports -->
-                                    <!-- <button id="dropdownDefaultButton" data-dropdown-toggle="dropdown"
-                                        class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
-                                        border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200" type="button">
-                                        <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate
-                                        Report <svg class="w-2.5 h-2.5 ms-3" aria-hidden="true"
-                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                                stroke-width="2" d="m1 1 4 4 4-4" />
-                                        </svg>
-                                    </button> -->
                                     <button @click="generateReportModal"
                                         class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
                                         border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200"
@@ -242,8 +232,12 @@
                                         Report
                                     </button>
 
-                                    <!-- Dropdown menu -->
-                                    <div id="dropdown"
+                                    <!-- @click="generateScholarsList"
+                                    @click="generateEnrolledList"
+                                    @click="generateGraduateList"
+                                    @click="generatePayroll" -->
+
+                                    <!-- <div id="dropdown"
                                         class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-48 dark:bg-gray-700">
                                         <ul class="py-2 text-base text-gray-700 dark:text-gray-200"
                                             aria-labelledby="dropdownDefaultButton">
@@ -272,7 +266,7 @@
                                                 </button>
                                             </li>
                                         </ul>
-                                    </div>
+                                    </div> -->
 
                                     <div v-if="payouts">
                                         <button @click="toggleView"
@@ -293,7 +287,22 @@
                                             <span class="font-normal">Forward to <span
                                                     class="font-semibold">Sponsor</span></span>
                                         </button>
+                                    </div>
 
+                                    <div v-if="allBatchesInactive !== true">
+                                        <button @click="toggleForwardValidation"
+                                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                            <span class="font-normal">Forward Validated Students</span>
+                                        </button>
+                                    </div>
+
+                                    <div >
+                                        <button @click="toggleForwardRequirements"
+                                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                            <span class="font-normal">Forward Requirements</span>
+                                        </button>
                                     </div>
 
                                     <!-- Forward to Cashier -->
@@ -311,7 +320,7 @@
                                         <div v-else>
                                             <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
                                                 class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
-                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                                border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
                                                 <font-awesome-icon :icon="['fas', 'share-from-square']"
                                                     class="text-base" />
                                                 <span class="font-normal">Forward to Cashier</span>
@@ -342,7 +351,7 @@
                                         <button v-tooltip.left="'Batches already submitted to Head Scholarship'"
                                             disabled
                                             class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
-                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                            border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                             <span class="font-normal">Forward to Head Scholarship</span>
                                         </button>
@@ -403,6 +412,7 @@
                                                         </span>
                                                     </div>
 
+<!--------------------------------------------------------- eto kapag validation na -->
                                                     <div class="flex flex-row gap-4">
                                                         <div>
                                                             <!-- Statistics -->
@@ -466,20 +476,52 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
 
-                                                        <!-- Three Dots Settings -->
-                                                        <div class="relative ml-3 group">
-                                                            <button v-tooltip.left="'Archive'"
-                                                                class="p-2 rounded-full hover:bg-white/30">
-                                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                                    class="w-6 h-6 text-gray-700 hover:text-gray-900 transition"
-                                                                    fill="none" viewBox="0 0 24 24"
-                                                                    stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                                        stroke-width="2"
-                                                                        d="M12 6v.01M12 12v.01M12 18v.01" />
-                                                                </svg>
-                                                            </button>
+<!--------------------------------------------------------- eto kapag requirement checking na -->
+                                                    <div class="flex flex-row gap-4">
+                                                        <div>
+                                                            <!-- Statistics -->
+                                                            <div
+                                                                class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                                <!-- Validation Status -->
+                                                                <div class="flex flex-col items-center space-y-1">
+                                                                    <div
+                                                                        class="flex items-center gap-2 text-sm text-gray-100">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-5 h-5 text-yellow-400" fill="none"
+                                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                                        </svg>
+                                                                        <span class="text-primary">Requirement
+                                                                            Submission</span>
+                                                                    </div>
+                                                                    <span
+                                                                        class="text-xl font-bold text-primary drop-shadow">Pending</span>
+                                                                </div>
+
+                                                                <!-- Number of Students -->
+                                                                <div class="flex flex-col items-center space-y-1">
+                                                                    <div
+                                                                        class="flex items-center gap-2 text-sm text-gray-100">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-5 h-5 text-blue-400" fill="none"
+                                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                                        </svg>
+                                                                        <span class="text-primary">No. of
+                                                                            Students</span>
+                                                                    </div>
+                                                                    <span
+                                                                        class="text-xl font-bold text-primary drop-shadow">{{
+                                                                        batch.grantees.length }}</span>
+                                                                </div>
+
+                                                            </div>
                                                         </div>
                                                     </div>
 
@@ -637,6 +679,51 @@
                                         </div>
                                     </div>
                                 </div>
+                                <!--------------------------------------------------------- eto kapag payouts na -->
+                                <!-- <div class="flex flex-row gap-4">
+                                    <div>
+
+                                        <div
+                                            class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+
+                                            <div class="flex flex-col items-center space-y-1">
+                                                <div
+                                                    class="flex items-center gap-2 text-sm text-gray-100">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="w-5 h-5 text-yellow-400" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="2"
+                                                            d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                    </svg>
+                                                    <span class="text-primary">Number of Payouts
+                                                        </span>
+                                                </div>
+                                                <span
+                                                    class="text-xl font-bold text-primary drop-shadow">Pending</span>
+                                            </div>
+
+                                            <div class="flex flex-col items-center space-y-1">
+                                                <div
+                                                    class="flex items-center gap-2 text-sm text-gray-100">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        class="w-5 h-5 text-blue-400" fill="none"
+                                                        viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round"
+                                                            stroke-linejoin="round" stroke-width="2"
+                                                            d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                    </svg>
+                                                    <span class="text-primary">No. of
+                                                        Students</span>
+                                                </div>
+                                                <span
+                                                    class="text-xl font-bold text-primary drop-shadow">{{
+                                                    batch.grantees.length }}</span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div> -->
                             </div>
 
                             <!-- No payouts message -->
@@ -1140,7 +1227,7 @@
         </div>
 
         <!-- Simplified forwarding batch list modal -->
-        <div v-if="ForwardCoorList"
+        <div v-if="ForwardCoorValidation"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -1152,8 +1239,11 @@
                         <!-- Title and Description -->
                         <div class="flex flex-col">
                             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Send Validated Scholars
+                                Send Validated List
                             </h2>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Forward the validated and verified students to the Head Admin
+                            </span>
                         </div>
                     </div>
                     <button type="button" @click="closeModal"
@@ -1169,7 +1259,7 @@
 
                 <div class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
                     <label class="block text-lg font-semibold text-gray-700 dark:text-white">
-                        Completed Payout Batches
+                        Validated Batch
                     </label>
 
                     <!-- Loading Indicator -->
@@ -1179,7 +1269,7 @@
                     </div>
 
                     <!-- Batch List -->
-                    <div v-if="ForwardCoorList"
+                    <div v-if="ForwardCoorValidation"
                         class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
                         <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                             <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -1219,8 +1309,7 @@
                                 </div>
 
                                 <!-- Batch List -->
-                                <!-- Batch List -->
-                                <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                                <!-- <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
                                     class="flex flex-col divide-y divide-gray-300">
                                     <div v-for="batch in campusData.batches" :key="batch.id"
                                         class="py-3 px-4 flex justify-between items-center">
@@ -1235,18 +1324,37 @@
                                             }}
                                         </span>
                                     </div>
+                                </div> -->
+
+                                <div 
+                                    class="flex flex-col divide-y divide-gray-300">
+                                    <div  
+                                        class="py-3 px-4 flex justify-between items-center">
+                                        <div>
+                                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1</p>
+                                            <p class="text-sm text-gray-500">2 Enrolled, 2 Unenrolled</p>
+                                        </div>
+                                        <!-- <span
+                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                            {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                            }}
+                                        </span> -->
+                                        <span>
+                                            Ready to Send
+                                        </span>
+                                    </div>
                                 </div>
 
                                 <!-- Forward Button -->
-                                <div v-if="completedBatches === batches.length" class="mt-4">
+                                <!-- <div v-if="completedBatches === batches.length" class="mt-4">
                                     <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                         @click="forwardCoor"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         {{ isSubmitting ? 'Processing...' : 'Forward' }}
                                     </button>
-                                </div>
-                                <div v-else class="mt-4">
-                                    <button v-tooltip.left="'Complete all batches'" disabled
+                                </div> -->
+                                <div class="mt-4">
+                                    <button v-tooltip.left="'Complete all batches'"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         Forward
                                     </button>
@@ -1264,6 +1372,101 @@
                         </button>
                     </div> -->
                 </div>
+
+            </div>
+        </div>
+
+        <!-- Simplified forwarding batch list modal -->
+        <div v-if="ForwardCoorCheckedRequirements"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Send Student Requirements
+                            </h2>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Forward the approved requirements of students to the Head Admin
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                    <!-- Loading Indicator -->
+                    <div v-if="isLoading" class="flex justify-center items-center py-4">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                        <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                    </div>
+
+                    <div
+                        class="py-4 px-8 flex flex-col gap-4 bg-white shadow-md rounded-lg border border-gray-200">
+                        <label class="block text-lg font-semibold text-gray-700 dark:text-white">
+                            Binangonan
+                        </label>
+
+                        <!-- Loading Indicator -->
+                        <div v-if="isLoading" class="flex justify-center items-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                        </div>
+
+                        <!-- Batch List -->
+                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                            class="flex flex-col divide-y divide-gray-300">
+                            <div v-for="batch in campusData.batches" :key="batch.id"
+                                class="py-3 px-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                        batch.batch_no }}</p>
+                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                </div>
+                                <span
+                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                    {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                    }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Forward Button -->
+                        <!-- <div v-if="completedBatches === batches.length" class="mt-4">
+                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                                @click="forwardCoor"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                            </button>
+                        </div> -->
+                        <div class="mt-4">
+                            <button v-tooltip.left="'Complete all batches'"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Forward
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Forward Button -->
+                    <!-- <div class="mt-4">
+                        <button :disabled="isSubmitting" @click="forwardPayout"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                        </button>
+                    </div> -->
+
 
             </div>
         </div>
@@ -1658,7 +1861,6 @@ const getFormData = (formId) => {
 
 // Forward batch modal state
 const ForwardBatchList = ref(false);
-const ForwardCoorList = ref(false);
 const selectedBatches = ref([]);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
@@ -1780,8 +1982,19 @@ const toggleSendBatch = async () => {
     await loadBatchesData();
 };
 
-const toggleForwardCoor = async () => {
-    ForwardCoorList.value = true;
+const ForwardCoorValidation = ref(false);
+
+const toggleForwardValidation = async () => {
+    ForwardCoorValidation.value = true;
+
+    // Load batches with scholar counts
+    await loadBatchesData();
+};
+
+const ForwardCoorCheckedRequirements = ref(false);
+
+const toggleForwardRequirements = async () => {
+    ForwardCoorCheckedRequirements.value = true;
 
     // Load batches with scholar counts
     await loadBatchesData();
@@ -1795,6 +2008,7 @@ const toggleForwardSponsor = async () => {
     // Load batches with scholar counts
     await loadBatchesData();
 };
+
 
 // Check if all payouts are inactive
 const allPayoutsInactive = computed(() => {
@@ -1814,6 +2028,15 @@ const allPayoutsInactive = computed(() => {
 
     return true
 })
+
+const closeModal = () => {
+    ForwardBatchList.value = false;
+    ForwardCoorValidation.value = false;
+    ForwardCoorCheckedRequirements.value = false;
+    ForwardtoSponsor.value = false;
+    GenerateReport.value = false;
+    resetForm();
+};
 
 const loadBatchesData = async () => {
     isLoading.value = true;
@@ -2330,14 +2553,6 @@ const forwardBatches = async () => {
     } finally {
         isSubmitting.value = false;
     }
-};
-
-const closeModal = () => {
-    ForwardBatchList.value = false;
-    ForwardCoorList.value = false;
-    ForwardtoSponsor.value = false;
-    GenerateReport.value = false;
-    resetForm();
 };
 
 const resetForm = () => {
