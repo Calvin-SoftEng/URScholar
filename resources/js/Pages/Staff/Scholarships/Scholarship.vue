@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -246,8 +246,10 @@
                                     </div>
                                     <!-- Forward to Sponsor -->
                                     <div>
-                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts || granteeInactive"
-                                            v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : 'Payouts sent to Sponsor'" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+                                        <button @click="toggleForwardSponsor"
+                                            :disabled="inactiveBatches && !payouts || granteeInactive"
+                                            v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : 'Payouts sent to Sponsor'"
+                                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                                             hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                             <span class="font-normal">Forward to <span
@@ -296,7 +298,7 @@
                                         </button>
                                     </div>
 
-                                    <div v-if="allBatchesInactive !== true && myInactive == false">
+                                    <div v-if="requirements != 0 && allBatchesInactive !== true && myInactive == false">
                                         <button @click="toggleForwardRequirements"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -347,19 +349,21 @@
 
                                         <!-- Display scholarship status for this campus -->
 
-                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Pending') || campusData.batches?.some(batch => batch.status === 'Active')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
+                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || campusData.batches?.some(batch => batch.status === 'Pending') && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
                                         " class="mb-4">
-                                            <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg text-center animate-fade-in">
-                                                <font-awesome-icon :icon="['fas', 'user-graduate']" class="text-4xl text-gray-400 dark:text-gray-500 my-2" />
-                                                
+                                            <div
+                                                class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg text-center animate-fade-in">
+                                                <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                                    class="text-4xl text-gray-400 dark:text-gray-500 my-2" />
+
                                                 <p class="text-lg text-gray-700 dark:text-gray-300">
-                                                Validation for this campus is still Ongoing
+                                                    Validation for this campus is still Ongoing
                                                 </p>
 
                                                 <!-- Ping Button -->
                                                 <button @click="pingCampus"
-                                                class="mt-1 btn border-2 border-yellow-400 hover:bg-yellow-200 text-yellow-500 font-semibold px-4 py-2 rounded shadow dark:text-gray-900">
-                                                Ping Campus for Submission
+                                                    class="mt-1 btn border-2 border-yellow-400 hover:bg-yellow-200 text-yellow-500 font-semibold px-4 py-2 rounded shadow dark:text-gray-900">
+                                                    Ping Campus for Submission
                                                 </button>
                                             </div>
                                         </div>
@@ -492,7 +496,7 @@
                                                                         class="text-xl font-bold text-primary drop-shadow">
                                                                         {{ batch.total_scholars
                                                                             === batch.sub_total ? 'Complete' :
-                                                                        'Pending' }}</span>
+                                                                            'Pending' }}</span>
                                                                 </div>
 
                                                                 <!-- Number of Students -->
@@ -533,7 +537,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -545,7 +549,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -648,7 +652,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -851,7 +855,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1432,7 +1436,7 @@
                         </button>
                     </div>
                     <div v-else class="mt-4">
-                        <button v-tooltip.left="'Complete all batches'"
+                        <button v-tooltip.left="'Complete all batches'" disabled
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             Forward
                         </button>
@@ -1507,7 +1511,8 @@
                                 <span
                                     :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars && (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
                                     {{batch.sub_total === batch.total_scholars && (campusData.batches?.some(batch =>
-                                        batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'Ready to Send' : 'Incomplete'
+                                        batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id)
+                                        ? 'Ready to Send' : 'Incomplete'
                                     }}
                                 </span>
                             </div>
@@ -1548,7 +1553,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not
