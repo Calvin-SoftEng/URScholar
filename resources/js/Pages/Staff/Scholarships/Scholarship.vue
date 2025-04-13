@@ -383,7 +383,7 @@
 
                                         <!-- Display scholarship status for this campus -->
 
-                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Active') || campusData.batches?.some(batch => batch.status === 'Pending')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
+                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Pending') || campusData.batches?.some(batch => batch.status === 'Active')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
                                         " class="mb-4">
                                             <div
                                                 class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
