@@ -922,6 +922,18 @@ class ScholarshipController extends Controller
             }
         }
 
+        $AllvalidationStatus = false;
+
+        foreach ($grantees as $grantee) {
+            if ($grantee && $grantee->scholar) {
+                $status = $grantee->scholar->student_status;
+                if ($status === 'Enrolled' || $status === 'Graduated' || $status === 'Dropped') {
+                    $validationStatus = true;
+                    break; // We can exit the loop once we find a valid status
+                }
+            }
+        }
+
         $total_verified_grantees = $grantees->filter(function ($grantee) {
             return $grantee && $grantee->student_status === 'Enrolled';
         })->count();
@@ -973,6 +985,7 @@ class ScholarshipController extends Controller
             'valitedScholars' => $valitedScholars,
             'valitedBatches' => $valitedBatches,
             'validationStatus' => $validationStatus,
+            'AllvalidationStatus' => $AllvalidationStatus,
             'checkValidated' => $checkValidated,
             'granteeInactive' => $granteeInactive,
             'disableSendEmailButton' => $disableSendEmailButton,
