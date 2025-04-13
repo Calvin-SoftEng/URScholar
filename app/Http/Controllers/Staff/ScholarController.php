@@ -300,7 +300,7 @@ class ScholarController extends Controller
         if ($scholar->student_status == 'Unenrolled' && $validated['status'] == 'Enrolled') {
             // Update the scholar's status
             $scholar->student_status = $validated['status'];
-            
+
             $scholar->save();
         } elseif ($scholar->student_status == 'Enrolled' && $validated['status'] == 'Dropped') {
             // Update the scholar's status
@@ -309,19 +309,23 @@ class ScholarController extends Controller
             $grantee->status = 'Inactive';
             $grantee->student_status = $validated['status'];
             $grantee->save();
-            
+
             $scholar->student_status = $validated['status'];
             $scholar->status = 'Unverified';
             $scholar->save();
         }
 
         // Update the scholar's status
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        $grantee = Grantees::where('scholar_id', $scholar->id)
+        ->where('status', 'Pending')
+        ->first();
+
 
         $grantee->status = 'Inactive';
         $grantee->student_status = $validated['status'];
-        $grantee->save();
+
         $scholar->student_status = $validated['status'];
+        $grantee->save();
         $scholar->save();
     }
 

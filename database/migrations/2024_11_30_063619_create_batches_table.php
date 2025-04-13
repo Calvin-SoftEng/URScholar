@@ -36,9 +36,7 @@ return new class extends Migration {
             $table->string('urscholar_id')->unique();
             $table->string('qr_code')->nullable();
             $table->string('app_no')->nullable();
-            ;
             $table->string('award_no')->nullable();
-            ;
             $table->string('last_name');
             $table->string('first_name');
             $table->string('extname')->nullable();

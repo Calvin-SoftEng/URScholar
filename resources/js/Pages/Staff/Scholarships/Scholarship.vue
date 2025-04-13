@@ -282,8 +282,8 @@
                                     </div>
                                     <!-- Forward to Sponsor -->
                                     <div>
-                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts"
-                                            v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : ''" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts || granteeInactive"
+                                            v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : 'Payouts sent to Sponsor'" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                                             hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                             <span class="font-normal">Forward to <span
@@ -383,7 +383,7 @@
 
                                         <!-- Display scholarship status for this campus -->
 
-                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Active') || campusData.batches?.some(batch => batch.status === 'Pending')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
+                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Pending') || campusData.batches?.some(batch => batch.status === 'Active')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
                                         " class="mb-4">
                                             <div
                                                 class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
@@ -1797,6 +1797,7 @@ const props = defineProps({
     allInactive: Boolean,
     valitedBatches: Boolean,
     checkValidated: Boolean,
+    granteeInactive: Boolean,
     payouts: Object,
     payoutBatches: Array,
 });

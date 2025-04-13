@@ -387,7 +387,7 @@ const submitForm = () => {
   // For example:
   loading.value = true;
   router.post(`/scholars/${currentScholar.value.id}/update-status`, {
-    status: statusValue.value
+    status: statusValue.value,
   }, {
     onSuccess: () => {
       showToast('Success', `Scholar status updated to ${statusValue.value}`, 'success');
