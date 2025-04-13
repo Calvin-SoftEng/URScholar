@@ -630,12 +630,10 @@ class CashierController extends Controller
         $scholarships = Scholarship::all();
 
         // Get payouts with date information
-        $payouts = Payout::where('campus_id', Auth::user()->campus_id)->get();
+        $payouts = Payout::all();
 
         // Get batches with school year and campus information
-        $batches = Batch::with(['school_year', 'campus'])
-        ->where('campus_id', Auth::user()->campus_id)
-        ->get();
+        $batches = Batch::with(['school_year', 'campus'])->get();
 
         // Get all disbursements to track claims
         $disbursements = Disbursement::all();
@@ -646,7 +644,7 @@ class CashierController extends Controller
         $academic_years = AcademicYear::all();
         $campuses = Campus::all();
 
-        return Inertia::render('Cashier/Payrolls/Payout_Records', [
+        return Inertia::render('Staff/Payouts/Payout_Records', [
             'scholarships' => $scholarships,
             'payouts' => $payouts,
             'batches' => $batches,
@@ -691,7 +689,7 @@ class CashierController extends Controller
             ->where('status', 'claimed') // Assuming 'claimed' is the status for claimed disbursements
             ->count();
 
-        return Inertia::render('Cashier/Payrolls/Payouts', [
+        return Inertia::render('Staff/Payouts/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'disbursements' => $disbursements,
