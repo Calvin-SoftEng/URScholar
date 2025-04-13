@@ -284,9 +284,6 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
 
     Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}/payroll', [CashierController::class, 'payrolls'])->name('cashier.payroll');
 
-    Route::get('/cashier/payouts', [CashierController::class, 'payouts_index'])->name('cashier.payouts_index');
-    Route::get('/cashier/payout/{scholarshipId}/batch/{batchId}', [CashierController::class, 'payouts_disbursement'])->name('cashier.payouts_disbursement');
-
 });
 
 // Staff and Cashier Profile -------------------------------------------------------------------------------------------------------------------------------------------------------
