@@ -467,6 +467,7 @@ class ScholarshipController extends Controller
             ->first();
 
         $batch = Batch::where('scholarship_id', $scholarship->id)
+            ->with('school_year')
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->first();
@@ -494,6 +495,7 @@ class ScholarshipController extends Controller
             $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
                 ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
                 ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+                ->with('school_year')
                 ->with([
                     'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
                     'grantees.scholar.submittedRequirements'
@@ -503,6 +505,7 @@ class ScholarshipController extends Controller
                 ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
                 ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
                 ->where('campus_id', $currentUser->campus_id)
+                ->with('school_year')
                 ->with([
                     'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
                     'grantees.scholar.submittedRequirements'
@@ -745,6 +748,17 @@ class ScholarshipController extends Controller
             }
         }
 
+        $valitedScholars = false;
+
+        foreach ($grantees as $grantee) {
+            if ($grantee->scholar && $grantee->scholar->status === 'Verified' && $grantee->scholar->student_status === 'Enrolled' ||
+            $grantee->scholar->status === 'Unverified' && $grantee->scholar->student_status === 'Dropped' || $grantee->scholar->student_status === 'Graduated'
+            ) {
+                $valitedScholars = true;
+                break;
+            }
+        }
+
 
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'scholarship' => $scholarship,
@@ -777,6 +791,7 @@ class ScholarshipController extends Controller
             'allBatches' => $allBatches,
             'payouts' => $mainPayout,
             'payoutBatches' => $payoutBatches,
+            'valitedScholars' => $valitedScholars,
             'disableSendEmailButton' => $disableSendEmailButton,  // Add this line
         ]);
     }

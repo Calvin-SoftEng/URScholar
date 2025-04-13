@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -236,9 +236,10 @@
                                     </button> -->
                                     <button @click="generateReportModal"
                                         class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
-                                        border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200" type="button">
+                                        border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200"
+                                        type="button">
                                         <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate
-                                        Report 
+                                        Report
                                     </button>
 
                                     <!-- Dropdown menu -->
@@ -285,7 +286,7 @@
                                     </div>
                                     <!-- Forward to Sponsor -->
                                     <div>
-                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts || inactiveBatches && payouts"
+                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts"
                                             v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : ''" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                                             hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -389,70 +390,94 @@
                                             <!-- Loop through batches for this campus -->
                                             <div v-for="batch in campusData.batches" :key="batch.id"
                                                 class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                                <div @click="() => openBatch(batch.id)" class="flex justify-between items-center">
-                                                    
+                                                <div @click="() => openBatch(batch.id)"
+                                                    class="flex justify-between items-center">
+
                                                     <!-- Batch Info -->
                                                     <div class="flex flex-col px-5">
-                                                    <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no }}</span>
-                                                    <span class="text-md font-medium text-gray-600">
-                                                        {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
-                                                    </span>
+                                                        <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                            batch.batch_no }}</span>
+                                                        <span class="text-md font-medium text-gray-600">
+                                                            {{ schoolyear ? batch.school_year.year : '' }} {{
+                                                            batch.semester }} Semester
+                                                        </span>
                                                     </div>
 
                                                     <div class="flex flex-row gap-4">
                                                         <div>
                                                             <!-- Statistics -->
-                                                            <div class="grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
-                                                            <!-- Validation Status -->
-                                                            <div class="flex flex-col items-center space-y-1">
-                                                                <div class="flex items-center gap-2 text-sm text-gray-100">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-yellow-400" fill="none" viewBox="0 0 24 24"
-                                                                    stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
-                                                                </svg>
-                                                                <span class="text-primary">Validation Status</span>
+                                                            <div
+                                                                class="grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                                <!-- Validation Status -->
+                                                                <div class="flex flex-col items-center space-y-1">
+                                                                    <div
+                                                                        class="flex items-center gap-2 text-sm text-gray-100">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-5 h-5 text-yellow-400" fill="none"
+                                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                                        </svg>
+                                                                        <span class="text-primary">Validation
+                                                                            Status</span>
+                                                                    </div>
+                                                                    <span
+                                                                        class="text-xl font-bold text-primary drop-shadow">Pending</span>
                                                                 </div>
-                                                                <span class="text-xl font-bold text-primary drop-shadow">Pending</span>
-                                                            </div>
 
-                                                            <!-- Number of Students -->
-                                                            <div class="flex flex-col items-center space-y-1">
-                                                                <div class="flex items-center gap-2 text-sm text-gray-100">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24"
-                                                                    stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
-                                                                </svg>
-                                                                <span class="text-primary">No. of Students</span>
+                                                                <!-- Number of Students -->
+                                                                <div class="flex flex-col items-center space-y-1">
+                                                                    <div
+                                                                        class="flex items-center gap-2 text-sm text-gray-100">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-5 h-5 text-blue-400" fill="none"
+                                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                                        </svg>
+                                                                        <span class="text-primary">No. of
+                                                                            Students</span>
+                                                                    </div>
+                                                                    <span
+                                                                        class="text-xl font-bold text-primary drop-shadow">{{
+                                                                        batch.grantees.length }}</span>
                                                                 </div>
-                                                                <span class="text-xl font-bold text-primary drop-shadow">{{ batch.grantees.length }}</span>
-                                                            </div>
 
-                                                            <!-- Unverified Students -->
-                                                            <div class="flex flex-col items-center space-y-1">
-                                                                <div class="flex items-center gap-2 text-sm text-gray-100">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-red-500" fill="none" viewBox="0 0 24 24"
-                                                                    stroke="currentColor">
-                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M18.364 5.636l-1.414-1.414L12 9.172 7.05 4.222 5.636 5.636 10.586 10.586 5.636 15.536l1.414 1.414L12 12.828l4.95 4.95 1.414-1.414-4.95-4.95z" />
-                                                                </svg>
-                                                                <span class="text-primary">Unverified Students</span>
+                                                                <!-- Unverified Students -->
+                                                                <div class="flex flex-col items-center space-y-1">
+                                                                    <div
+                                                                        class="flex items-center gap-2 text-sm text-gray-100">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                                            class="w-5 h-5 text-red-500" fill="none"
+                                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                                            <path stroke-linecap="round"
+                                                                                stroke-linejoin="round" stroke-width="2"
+                                                                                d="M18.364 5.636l-1.414-1.414L12 9.172 7.05 4.222 5.636 5.636 10.586 10.586 5.636 15.536l1.414 1.414L12 12.828l4.95 4.95 1.414-1.414-4.95-4.95z" />
+                                                                        </svg>
+                                                                        <span class="text-primary">Unverified
+                                                                            Students</span>
+                                                                    </div>
+                                                                    <span
+                                                                        class="text-xl font-bold text-primary drop-shadow">
+                                                                        {{ batch.grantees.filter(grantee => grantee.scholar?.status === 'Unverified').length }}
+                                                                    </span>
                                                                 </div>
-                                                                <span class="text-xl font-bold text-primary drop-shadow">
-                                                                {{ batch.grantees.filter(grantee => !grantee.scholar?.is_verified).length }}
-                                                                </span>
-                                                            </div>
                                                             </div>
                                                         </div>
 
                                                         <!-- Three Dots Settings -->
                                                         <div class="relative ml-3 group">
-                                                            <button v-tooltip.left="'Archive'" class="p-2 rounded-full hover:bg-white/30">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-gray-700 hover:text-gray-900 transition"
-                                                                fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M12 6v.01M12 12v.01M12 18v.01" />
+                                                            <button v-tooltip.left="'Archive'"
+                                                                class="p-2 rounded-full hover:bg-white/30">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                    class="w-6 h-6 text-gray-700 hover:text-gray-900 transition"
+                                                                    fill="none" viewBox="0 0 24 24"
+                                                                    stroke="currentColor">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                                        stroke-width="2"
+                                                                        d="M12 6v.01M12 12v.01M12 18v.01" />
                                                                 </svg>
                                                             </button>
                                                         </div>
@@ -474,9 +499,10 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                }}</span>
+                                                    }}</span>
                                                 <span class="text-md font-medium text-gray-600">
-                                                    {{ schoolyear ? schoolyear.school_year : '' }} {{ batch.semester }}
+                                                    {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
+                                                    Semester
                                                 </span>
                                             </div>
 
@@ -485,7 +511,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -586,10 +612,11 @@
                                         <div @click="() => openPayroll(batch.id)"
                                             class="flex justify-between items-center">
                                             <div class="felx flex-col">
-                                                <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
-                                                }}</span>
+                                                <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                    batch.batch_no
+                                                    }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
-                                                    1st Semesters (2023-2024) 
+                                                    1st Semesters (2023-2024)
                                                 </span>
                                             </div>
 
@@ -745,7 +772,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                                }}</div>
+                                                            }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -847,7 +874,7 @@
                                                         placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
                                                         class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
                                                         readonly>
-                                                    </textarea>
+                                    </textarea>
                                                 </div>
 
                                                 <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
@@ -1125,7 +1152,7 @@
                         <!-- Title and Description -->
                         <div class="flex flex-col">
                             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Send Completed Batches
+                                Send Validated Scholars
                             </h2>
                         </div>
                     </div>
@@ -1164,7 +1191,7 @@
                                     <!-- Title and Description -->
                                     <div class="flex flex-col">
                                         <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                            Send Completed Batches
+                                            Send Validated Scholars
                                         </h2>
                                     </div>
                                 </div>
@@ -1337,7 +1364,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                            }}</p>
+                                        }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not
@@ -1397,7 +1424,7 @@
                     </button>
                 </div>
 
-                
+
                 <form>
                     <div class="py-4 px-8 flex flex-col gap-3">
                         <!-- Loading Indicator -->
@@ -1414,19 +1441,20 @@
                                 <div class="relative">
                                     <label class="block text-xs font-medium mb-1">Report Type</label>
                                     <button type="button"
-                                    class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                    @click="toggleDropdown('reportType')">
-                                    {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select Report Types' }}
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        @click="toggleDropdown('reportType')">
+                                        {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select Report Types'
+                                        }}
                                     </button>
                                     <div v-if="openDropdown === 'reportType'"
-                                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                    <label v-for="type in reportTypeOptions" :key="type"
-                                        class="block px-4 py-2 hover:bg-gray-100">
-                                        <input type="checkbox"
-                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                        :value="type" v-model="selectedReportTypes" />
-                                        {{ type }}
-                                    </label>
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                                        <label v-for="type in reportTypeOptions" :key="type"
+                                            class="block px-4 py-2 hover:bg-gray-100">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :value="type" v-model="selectedReportTypes" />
+                                            {{ type }}
+                                        </label>
                                     </div>
                                 </div>
 
@@ -1434,19 +1462,19 @@
                                 <div class="relative">
                                     <label class="block text-xs font-medium mb-1">Batch</label>
                                     <button type="button"
-                                    class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                    @click="toggleDropdown('batch')">
-                                    {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        @click="toggleDropdown('batch')">
+                                        {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
                                     </button>
                                     <div v-if="openDropdown === 'batch'"
-                                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                    <label v-for="batch in batchOptions" :key="batch"
-                                        class="block px-4 py-2 hover:bg-gray-100">
-                                        <input type="checkbox"
-                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                        :value="batch" v-model="selectedBatches" />
-                                        {{ batch }}
-                                    </label>
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                                        <label v-for="batch in batchOptions" :key="batch"
+                                            class="block px-4 py-2 hover:bg-gray-100">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :value="batch" v-model="selectedBatches" />
+                                            {{ batch }}
+                                        </label>
                                     </div>
                                 </div>
 
@@ -1454,22 +1482,22 @@
                                 <div class="relative">
                                     <label class="block text-xs font-medium mb-1">Campus</label>
                                     <button type="button"
-                                    class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                    @click="toggleDropdown('campus')">
-                                    {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        @click="toggleDropdown('campus')">
+                                        {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
                                     </button>
                                     <div v-if="openDropdown === 'campus'"
-                                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                    <label v-for="campus in campusOptions" :key="campus"
-                                        class="block px-4 py-2 hover:bg-gray-100">
-                                        <input type="checkbox"
-                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                        :value="campus" v-model="selectedCampuses" />
-                                        {{ campus }}
-                                    </label>
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                                        <label v-for="campus in campusOptions" :key="campus"
+                                            class="block px-4 py-2 hover:bg-gray-100">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :value="campus" v-model="selectedCampuses" />
+                                            {{ campus }}
+                                        </label>
                                     </div>
                                 </div>
-                                </div>
+                            </div>
 
                         </div>
 
@@ -1578,14 +1606,14 @@ const toggleDropdown = (dropdown) => {
 
 // Detect outside click
 function handleClickOutside(event) {
-  const clickedOutside =
-    !reportTypeRef.value?.contains(event.target) &&
-    !batchRef.value?.contains(event.target) &&
-    !campusRef.value?.contains(event.target)
+    const clickedOutside =
+        !reportTypeRef.value?.contains(event.target) &&
+        !batchRef.value?.contains(event.target) &&
+        !campusRef.value?.contains(event.target)
 
-  if (clickedOutside) {
-    openDropdown.value = ''
-  }
+    if (clickedOutside) {
+        openDropdown.value = ''
+    }
 }
 
 // Initialize selectedCampus with the value from props

@@ -413,7 +413,7 @@ class SettingsController extends Controller
     
                                 if ($grantee) {
                                     // Update existing grantee status
-                                    $grantee->status = 'Active';
+                                    $grantee->status = 'Pending';
                                     $grantee->student_status = 'Enrolled';
                                     $grantee->save();
                                 } else {
@@ -430,7 +430,7 @@ class SettingsController extends Controller
                                             'scholar_id' => $matchingScholar->id,
                                             'school_year_id' => $school_year->school_year_id,
                                             'semester' => $school_year->semester,
-                                            'status' => 'Active'
+                                            'status' => 'Pending'
                                         ]);
                                     }
                                 }
