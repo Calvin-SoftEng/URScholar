@@ -10,7 +10,7 @@
                 dataOpenSideBar ? 'justify-between' : 'justify-center',
                 'min-h-[50px]'
               ]">
-              <span v-if="dataOpenSideBar" class="text-blue-900 opacity-90 font-poppins text-sm font-semibold dark:text-dtext">
+              <span v-if="dataOpenSideBar" class="text-blue-900 opacity-90 font-poppins text-sm font-semibold dark:text-dtext whitespace-nowrap">
                 Main Menu
               </span>
 
@@ -193,12 +193,27 @@
                         class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
                         src="../../../assets/images/no_userpic.png" alt="picture">
                     </div>
+                    <!-- <div >
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border object-cover border-gray-300 cursor-pointer"
+                        src="../../../assets/images/no_userpic.png" alt="picture">
+                    </div> -->
                   </div>
                 </div>
-                  <!-- Text (displayed only when dataOpenSideBar) -->
+                <!-- Text (displayed only when dataOpenSideBar) -->
                 <div class="flex flex-col items-start text-[12px] text-blue-900 dark:text-dtext">
-                  <span v-show="dataOpenSideBar">{{ $page.props.auth.user.email }}</span>
-                  <span v-show="dataOpenSideBar">{{ $page.props.auth.user.usertype }}</span>
+                  <span v-show="dataOpenSideBar">{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name
+                    }} </span>
+                  <span v-show="dataOpenSideBar">
+                    {{
+                        $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :
+                          $page.props.auth.user.usertype === 'coordinator' ? 'Coordinator' :
+                            $page.props.auth.user.usertype
+                    }}
+                  </span>
+
+
                 </div>
               </div>
                 <div>
@@ -213,12 +228,13 @@
           <div id="dropdownTop" class="z-10 hidden bg-gray-50 divide-y divide-gray-100 rounded-lg w-52 dark:bg-primary">
             <ul class="text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownTopButton">
-              <li class="flex items-left space-x-2 px-4 py-1 hover:bg-gray-100 hover:rounded-t-lg dark:hover:bg-dcontainer dark:hover:text-white">
-                <Link :href="route('profile.edit')" method="post" as="button" class="flex items-center justify-start space-x-2 py-2 ">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
-                    person
-                  </span>
-                  <span class="font-poppins">My Profile</span>
+              <li
+                class="flex items-left space-x-2 px-4 py-1 hover:bg-gray-100 hover:rounded-t-lg dark:hover:bg-dcontainer dark:hover:text-white">
+                <Link :href="route('view.profile')" class="flex items-center justify-start space-x-2 py-2 ">
+                <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
+                  person
+                </span>
+                <span class="font-poppins">Account Settings</span>
                 </Link>
               </li>
               <Link :href="route('logout')" method="post" as="button" class="w-full">

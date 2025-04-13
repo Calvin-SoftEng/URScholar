@@ -234,42 +234,6 @@
                                         Report
                                     </button>
 
-                                    <!-- @click="generateScholarsList"
-                                    @click="generateEnrolledList"
-                                    @click="generateGraduateList"
-                                    @click="generatePayroll" -->
-
-                                    <!-- <div id="dropdown"
-                                        class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow-sm w-48 dark:bg-gray-700">
-                                        <ul class="py-2 text-base text-gray-700 dark:text-gray-200"
-                                            aria-labelledby="dropdownDefaultButton">
-                                            <li>
-                                                <button @click="generateScholarsList"
-                                                    class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    Scholars List
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button @click="generateEnrolledList"
-                                                    class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    Enrolled List
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button @click="generateGraduateList"
-                                                    class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    Graduate List
-                                                </button>
-                                            </li>
-                                            <li>
-                                                <button @click="generatePayroll"
-                                                    class="w-full flex justify-start px-4 py-2 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                                                    Payout List
-                                                </button>
-                                            </li>
-                                        </ul>
-                                    </div> -->
-
                                     <div v-if="payouts">
                                         <button @click="toggleView"
                                             class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
@@ -1614,6 +1578,11 @@
             </div>
         </div>
 
+<!--                                @click="generateScholarsList"
+@click="generateEnrolledList"
+@click="generateGraduateList"
+@click="generatePayroll" -->
+
         <div v-if="GenerateReport"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
@@ -1643,7 +1612,6 @@
                         </svg>
                     </button>
                 </div>
-
 
                 <form>
                     <div class="py-4 px-8 flex flex-col gap-3">
@@ -1717,18 +1685,12 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-
-                        <!-- Forward Button -->
                         <div class="mt-6">
-                            <button type="button" @click="forwardSponsor"
+                            <button type="button" @click="handleGenerateReports"
                                 class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                Forward to Next Semester
+                                Generate Report
                             </button>
-                            <!-- <p v-if="!inactivePayouts" class="text-sm text-red-500 mt-2 text-center">
-                                All payouts must be inactive to forward to the next semester.
-                            </p> -->
                         </div>
                     </div>
                 </form>
@@ -1813,11 +1775,34 @@ const goBack = () => {
     window.history.back();
 };
 
-const reportTypeOptions = ['Payout Summary', 'Unverified Scholars', 'Validated Scholars'];
+const reportTypeOptions = ['Enrolled List', 'Graduate List', 'Payroll', 'Scholars List'];
 const batchOptions = ['Batch 1', 'Batch 2', 'Batch 3'];
 const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
 
 const selectedReportTypes = ref([]);
+
+const handleGenerateReports = () => {
+  if (selectedReportTypes.includes('Scholars List')) {
+    generateScholarsList();
+  }
+  if (selectedReportTypes.includes('Enrolled List')) {
+    generateEnrolledList();
+  }
+  if (selectedReportTypes.includes('Graduate List')) {
+    generateGraduateList();
+  }
+  if (selectedReportTypes.includes('Payroll')) {
+    generatePayroll();
+  }
+};
+
+
+const GenerateReport = ref(false);
+
+const generateReportModal = () => {
+    GenerateReport.value = !GenerateReport.value;
+}
+
 // const selectedBatches = ref([]);
 // const selectedCampuses = ref([]);
 const openDropdown = ref('');
@@ -2005,12 +1990,6 @@ const forwardValidate = () => {
     });
 };
 
-
-const GenerateReport = ref(false);
-
-const generateReportModal = () => {
-    GenerateReport.value = !GenerateReport.value;
-}
 
 const toggleView = () => {
     showPayrolls.value = !showPayrolls.value;

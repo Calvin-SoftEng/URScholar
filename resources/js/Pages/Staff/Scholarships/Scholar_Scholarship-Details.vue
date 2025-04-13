@@ -25,9 +25,9 @@
 
                 <div class="w-full h-full flex justify-center items-center dark:text-dprimary relative">
                     <!-- Close Button -->
-                    <button class="absolute top-4 right-10">
+                    <button @click="goBack" class="absolute top-4 right-10">
                         <span
-                            class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition">
+                            class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-200 dark:hover:bg-gray-700 transition">
                             arrow_back
                         </span>
                     </button>
@@ -534,9 +534,8 @@ const props = defineProps({
     requirements: Array,
 });
 
-const components = {
-    Button,
-    Papa,
+const goBack = () => {
+    window.history.back();
 };
 
 const isNotified = ref(false);
