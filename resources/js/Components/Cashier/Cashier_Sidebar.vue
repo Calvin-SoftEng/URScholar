@@ -99,19 +99,19 @@
           
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Docs</div>
 
-            <!-- <Link :href="route('cashier.payroll')"> -->
+            <Link :href="route('cashier.payouts_index')">
               <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''"
-              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/payouts') }]">
+              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/cashier/payouts') }]">
                 <div class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/payouts') }]"
-                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/payouts') }]">
+                  <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/cashier/payouts') }]"
+                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/cashier/payouts') }]">
                     price_check
                   </span>
                   <span v-show="dataOpenSideBar" 
-                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/payouts') }]">Payrolls</span>
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/cashier/payouts') }]">Payrolls</span>
                 </div>
               </div>
-            <!-- </Link> -->
+            </Link>
 
         
         </div>

@@ -30,7 +30,7 @@
                             <!-- <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span> <span>scholarship type</span> -->
                             {{ scholarship.name }}
                         </h1>
-                        <span class="text-xl">SY {{ batch.school_year }} - {{ batch.semester }} Semester</span>
+                        <span class="text-xl">SY {{ batch.school_year.year }} - {{ batch.semester }} Semester</span>
                     </div>
                     <div class="flex gap-2">
 
@@ -109,7 +109,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
-import Payroll_List from '@/Components/Staff/ScholarsTabs/Payroll_List.vue';
+import Payroll_List from '@/Components/Cashier/Payouts/Payout_List.vue';
 
 // components
 

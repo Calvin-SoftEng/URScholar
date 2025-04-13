@@ -74,11 +74,9 @@ const openBatchPayroll = (batchId) => {
     const scholarshipId = batch ? batch.scholarship_id : null;
 
     if (scholarshipId) {
-        router.visit(`/payouts/${scholarshipId}/batch/${batchId}`, {
+        router.visit(`/cashier/payout/${scholarshipId}/batch/${batchId}`, {
             data: {
                 scholarship: scholarshipId,
-                selectedYear: props.schoolyear.id,
-                selectedSem: props.selectedSem
             },
             preserveState: true
         });
