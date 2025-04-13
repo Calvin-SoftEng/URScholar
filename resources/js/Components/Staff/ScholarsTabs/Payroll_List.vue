@@ -76,7 +76,7 @@
                     {{ disbursement.scholar.campus.name }}
                   </td>
                   <td>
-                    {{ disbursement.scholar.campus.name }}
+                    {{ formatDate(disbursement.claimed_at) }}
                   </td>
                   <td>
                     <span :class="{
@@ -87,7 +87,7 @@
                       {{ disbursement.status }}
                     </span>
                   </td>
-                  <td>
+                  <td v-if="disbursement.status == 'Not Claimed'">
                     <button @click="toggleReason"
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">
@@ -99,23 +99,23 @@
             </table>
           </div>
         </div>
-        
+
         <!-- reasoning -->
         <div v-if="Reasoning"
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
           <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
             <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-              
-              <div class="flex items-center gap-3">
-                  <!-- Icon -->
-                  <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
 
-                  <!-- Title and Description -->
-                  <div class="flex flex-col">
-                      <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                          Reason for Not Claim
-                      </h2>
-                  </div>
+              <div class="flex items-center gap-3">
+                <!-- Icon -->
+                <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
+
+                <!-- Title and Description -->
+                <div class="flex flex-col">
+                  <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                    Reason for Not Claim
+                  </h2>
+                </div>
               </div>
 
               <button type="button" @click="closeModal"
@@ -129,33 +129,34 @@
               </button>
             </div>
 
-            
+
             <div class="p-4 flex flex-col space-y-4">
               <div class="relative space-y-3">
-                  <h3 class="font-semibold text-gray-900 dark:text-white">
-                      As per Scholar: <span>(Call mo name here)</span></h3>
-                  <textarea id="subject" rows="4"
-                      class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                      placeholder="Write a message"></textarea>
-                  <!-- <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" /> -->
+                <h3 class="font-semibold text-gray-900 dark:text-white">
+                  As per Scholar: <span>(Call mo name here)</span></h3>
+                <textarea id="subject" rows="4"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Write a message"></textarea>
+                <!-- <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" /> -->
               </div>
 
-              
+
               <div>
-                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-                      Download Additional Documents for Reason
-                  </label>
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                  Download Additional Documents for Reason
+                </label>
 
-                  <ul class="space-y-2">
-                      <li v-for="file in uploadedFiles" :key="file.name" class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700">
-                          <font-awesome-icon :icon="['fas', 'file-alt']" class="text-gray-600 dark:text-gray-300" />
-                          <a :href="file.url" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400">
-                              {{ file.name }}
-                          </a>
-                      </li>
-                  </ul>
+                <ul class="space-y-2">
+                  <li v-for="file in uploadedFiles" :key="file.name"
+                    class="flex items-center gap-2 p-2 border rounded-lg bg-gray-50 dark:bg-gray-700">
+                    <font-awesome-icon :icon="['fas', 'file-alt']" class="text-gray-600 dark:text-gray-300" />
+                    <a :href="file.url" target="_blank" class="text-blue-600 hover:underline dark:text-blue-400">
+                      {{ file.name }}
+                    </a>
+                  </li>
+                </ul>
 
-                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-300">Click a file to download.</p>
+                <p class="mt-1 text-xs text-gray-500 dark:text-gray-300">Click a file to download.</p>
               </div>
 
             </div>
@@ -246,44 +247,24 @@ const closeCamera = () => {
 
 const toggleReason = () => {
   Reasoning.value = !Reasoning.value;
-  
+
 };
 
 const closeModal = () => {
   Reasoning.value = false;
 }
 
-// Handle QR code detection
-const onDetect = async (detectedCodes) => {
-  if (detectedCodes.length > 0) {
-    scannedResult.value = detectedCodes[0].rawValue;
-    isScanning.value = false;
-
-    // Send scanned QR code data to Laravel
-    router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
-      onSuccess: (page) => {
-        // const flashMessage = page.props.flash.message;
-        // successMessage.value = flashMessage;
-        // errorMessage.value = null;
-
-        // Show toast notification
-        // showToast('Success', flashMessage);
-
-        // If successful, refresh the payouts list
-        // if (page.props.flash.type === 'success') {
-        //   router.reload();
-        // }
-      },
-      onError: (errors) => {
-        errorMessage.value = errors.message || 'An error occurred';
-        successMessage.value = null;
-
-        // Show toast notification for error
-        showToast('Error', errors.message || 'An error occurred');
-      }
-    });
-  }
-};
+function formatDate(dateString) {
+  const options = {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true,
+  };
+  return new Date(dateString).toLocaleString('en-US', options);
+}
 
 // Restart QR scanner
 const restartScan = () => {

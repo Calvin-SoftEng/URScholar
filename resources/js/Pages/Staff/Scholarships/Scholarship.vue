@@ -285,7 +285,7 @@
                                     </div>
                                     <!-- Forward to Sponsor -->
                                     <div>
-                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts"
+                                        <button @click="toggleForwardSponsor" :disabled="inactiveBatches && !payouts || inactiveBatches && payouts"
                                             v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : ''" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                                             hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />

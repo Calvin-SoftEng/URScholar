@@ -17,6 +17,7 @@ use App\Models\Batch;
 use App\Models\Notification;
 use App\Models\Scholar;
 use App\Models\Sponsor;
+use App\Models\AcademicYear;
 use App\Models\User;
 use App\Models\Campus;
 use Illuminate\Support\Facades\Hash;
@@ -51,11 +52,17 @@ class CashierController extends Controller
 
     public function scheduling(Scholarship $scholarship)
     {
+        $academic_year = AcademicYear::where('status', 'Active')->first();
+
+
         // Get batches related to the grantees for the specific scholarship
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with('grantees') // Eager load grantees for the batches
             ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+            ->where('semester', $academic_year->semester)
+            ->where('school_year_id', $academic_year->school_year_id)
             ->get();
+
 
         // Get the payout for the specific scholarship
         $payout = Payout::where('scholarship_id', $scholarship->id)
@@ -97,7 +104,8 @@ class CashierController extends Controller
 
         // Get batches related to the scholarship, filtered by campus if needed
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
-            ->where('school_year_id', $payout->school_year_id);
+            ->where('school_year_id', $payout->school_year_id)
+            ->where('semester', $payout->semester);
 
         if ($userCampusIds) {
             $batchesQuery->whereIn('campus_id', $userCampusIds);
@@ -160,7 +168,7 @@ class CashierController extends Controller
             return $disbursement->status === 'Claimed';
         });
 
-        
+
 
 
         $payout_schedule = PayoutSchedule::where('payout_id', $activePayout->id)
@@ -314,7 +322,147 @@ class CashierController extends Controller
     }
 
 
-    public function verify_qr(Request $request)
+    public function getScholarInfo(Request $request)
+    {
+        $request->validate([
+            'scholar_id' => 'required|string',
+        ]);
+
+        try {
+            // Find the scholar using the ID
+            $scholar = Scholar::where('urscholar_id', $request->scholar_id)
+                ->with('campus')
+                ->first();
+
+            if (!$scholar) {
+                return response()->json(['error' => 'Scholar not found'], 404);
+            }
+
+            // Get the authenticated user's campus
+            $userCampus = Auth::user()->campus_id;
+
+            // Check if user and scholar are from the same campus
+            if ($userCampus != $scholar->campus_id) {
+                return response()->json(['error' => 'You can only process scholars from your own campus'], 403);
+            }
+
+            // Retrieve the scholar's picture
+            $scholarPicture = User::where('email', $scholar->email)->first();
+
+            // Check if the scholar has a pending payout
+            $disbursement = Disbursement::where('scholar_id', $scholar->id)
+                ->where('status', 'Pending')
+                ->first();
+
+            if (!$disbursement) {
+                return response()->json(['error' => 'No pending payout found for this scholar'], 404);
+            }
+
+            // Map the scholar's information for the response
+            $scholarData = [
+                'id' => $scholar->id,
+                'urscholar_id' => $scholar->urscholar_id,
+                'name' => $scholar->name,
+                'last_name' => $scholar->last_name,
+                'first_name' => $scholar->first_name,
+                'email' => $scholar->email,
+                'campus' => $scholar->campus->name ?? 'N/A',
+                'picture' => $scholarPicture ? $scholarPicture->picture : null,
+                'disbursement_id' => $disbursement->id,
+            ];
+
+            return response()->json(['scholar' => $scholarData]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error retrieving scholar information: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Process the disbursement claim after confirmation
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function confirmClaim(Request $request)
+    {
+        $request->validate([
+            'disbursement_id' => 'required|integer',
+        ]);
+
+        try {
+            // Find the disbursement
+            $disbursement = Disbursement::findOrFail($request->disbursement_id);
+
+            // Get the scholar to verify permissions
+            $scholar = Scholar::findOrFail($disbursement->scholar_id);
+
+            // Check if user and scholar are from the same campus
+            if (Auth::user()->campus_id != $scholar->campus_id) {
+                return response()->json(['error' => 'You can only process scholars from your own campus'], 403);
+            }
+
+            // Check if disbursement is still pending
+            if ($disbursement->status !== 'Pending') {
+                return response()->json(['error' => 'Disbursement is not in pending status'], 400);
+            }
+
+            // Get the payout for updating totals
+            $payout = Payout::findOrFail($disbursement->payout_id);
+
+            // Update disbursement status
+            $disbursement->update([
+                'claimed_at' => now(),
+                'claimed_by' => Auth::user()->id,
+                'status' => 'Claimed',
+            ]);
+
+            // Log the activity
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Disbursement Claim',
+                'description' => 'User confirmed disbursement claim for Scholar ID: ' . $scholar->urscholar_id,
+            ]);
+
+            // Update payout total claimed count
+            $total_claimed = Disbursement::where('payout_id', $payout->id)
+                ->where('status', 'Claimed')->count();
+
+            $payout->update([
+                'sub_total' => $total_claimed,
+            ]);
+
+            // Retrieve the scholar's picture
+            $scholarPicture = User::where('email', $scholar->email)->first();
+
+            // Return success response with updated scholar data
+            return response()->json([
+                'success' => true,
+                'message' => 'Disbursement successfully claimed',
+                'scholar' => [
+                    'id' => $scholar->id,
+                    'name' => $scholar->name,
+                    'last_name' => $scholar->last_name,
+                    'first_name' => $scholar->first_name,
+                    'email' => $scholar->email,
+                    'campus' => $scholar->campus->name ?? 'N/A',
+                    'picture' => $scholarPicture ? $scholarPicture->picture : null,
+                    'status' => 'Claimed',
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Error processing claim: ' . $e->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Verify QR code and prepare for confirmation
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function verifyQr(Request $request)
     {
         $request->validate([
             'scanned_data' => 'required|string',
@@ -328,46 +476,45 @@ class CashierController extends Controller
             logger()->info("Received QR data:", $scannedData ?? ['error' => 'Invalid JSON']);
 
             if (!$scannedData || !isset($scannedData['id'], $scannedData['timestamp'])) {
-                return back()->withErrors(['message' => 'Invalid QR Code format']);
+                return response()->json(['error' => 'Invalid QR Code format'], 400);
             }
 
             // Find the scholar using the ID from the scanned QR
             $scholar = Scholar::where('urscholar_id', $scannedData['id'])->with('campus')->first();
 
             if (!$scholar) {
-                return back()->withErrors(['message' => 'Scholar not found']);
+                return response()->json(['error' => 'Scholar not found'], 404);
             }
 
             // Get the authenticated user's campus
-            $userCampus = Auth::user()->campus_id; // Assuming users have a campus_id field
+            $userCampus = Auth::user()->campus_id;
 
             // Check if user and scholar are from the same campus
             if ($userCampus != $scholar->campus_id) {
-                return back()->withErrors(['message' => 'You can only scan scholars from your own campus']);
+                return response()->json(['error' => 'You can only scan scholars from your own campus'], 403);
             }
 
             // Retrieve the scholar's picture
             $scholarPicture = User::where('email', $scholar->email)->first();
 
-
             // Check if the QR code filename matches the expected format
             $expectedQrFilename = $scholar->urscholar_id . '.png';
 
             if ($scholar->qr_code !== $expectedQrFilename) {
-                return back()->withErrors(['message' => 'QR Code does not match scholar records']);
+                return response()->json(['error' => 'QR Code does not match scholar records'], 400);
             }
 
-            // Verify the QR Code matches the stored one (no hash checking needed now)
+            // Verify the QR Code matches the stored one
             if (!Storage::disk('public')->exists('qr_codes/' . $expectedQrFilename)) {
-                return back()->withErrors(['message' => 'QR Code file not found']);
+                return response()->json(['error' => 'QR Code file not found'], 404);
             }
 
-            // Optional: Verify timestamp is not too old (e.g., 24 hours)
+            // Verify timestamp is not too old
             $qrTimestamp = Carbon::createFromTimestamp($scannedData['timestamp']);
             $currentTime = Carbon::now();
 
             if ($currentTime->diffInHours($qrTimestamp) > 24) {
-                return back()->withErrors(['message' => 'QR Code has expired']);
+                return response()->json(['error' => 'QR Code has expired'], 400);
             }
 
             // QR is valid, now check if the scholar has a pending payout
@@ -376,54 +523,31 @@ class CashierController extends Controller
                 ->first();
 
             if (!$disbursement) {
-                return back()->withErrors(['message' => 'No pending payout found for this scholar']);
-            } else {
-                $payout = Payout::where('id', $disbursement->payout_id)->first();
-
-
-                $disbursement->update([
-                    'claimed_at' => now(),
-                    'claimed_by' => Auth::user()->id,
-                    'status' => 'Claimed',
-                ]);
-
-                ActivityLog::create([
-                    'user_id' => Auth::user()->id,
-                    'activity' => 'Scan QR',
-                    'description' => 'User scanned a Scholar disbursement',
-                ]);
-
-
-                $total_claimed = Disbursement::where('payout_id', $payout->id)
-                    ->where('status', 'Claimed')->count();
-
-                $payout->update([
-                    'sub_total' => $total_claimed,
-                ]);
-
+                return response()->json(['error' => 'No pending payout found for this scholar'], 404);
             }
 
-            // Map the scholar's information for the response
+            // Return scholar data for confirmation
             $scholarData = [
                 'id' => $scholar->id,
+                'urscholar_id' => $scholar->urscholar_id,
                 'name' => $scholar->name,
                 'last_name' => $scholar->last_name,
                 'first_name' => $scholar->first_name,
                 'email' => $scholar->email,
-                'campus' => $scholar->campus->name ?? 'N/A', // Assuming campus has a 'name' attribute
-                'picture' => $scholarPicture->picture,
-                'status' => $disbursement ? $disbursement->status : 'No payout',
+                'campus' => $scholar->campus->name ?? 'N/A',
+                'picture' => $scholarPicture ? $scholarPicture->picture : null,
+                'disbursement_id' => $disbursement->id,
             ];
 
-            // Return the scholar with their picture
-            return back()->with([
-                'success' => $scholarData,
-                'scholarPicture' => $scholarPicture
+            return response()->json([
+                'success' => true,
+                'scholar' => $scholarData,
+                'require_confirmation' => true
             ]);
 
         } catch (\Exception $e) {
             logger()->error('QR verification error: ' . $e->getMessage());
-            return back()->withErrors(['message' => 'Error processing QR code: ' . $e->getMessage()]);
+            return response()->json(['error' => 'Error processing QR code: ' . $e->getMessage()], 500);
         }
     }
 
