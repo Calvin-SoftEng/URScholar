@@ -130,7 +130,7 @@
 
                     <div class="hidden md:block">
                         <!-- Content for Web -->
-                        <div v-if="!EditProfileWeb" class="mx-auto max-w-xl h-full justify-center items-center flex flex-col gap-3">
+                        <div v-if="!EditProfileWeb" class="mx-auto max-w-xl bg-white p-5 h-full justify-center items-center flex flex-col gap-3">
                             <div class="w-full space-y-6">
 
                                 <!-- Email Field -->
@@ -172,7 +172,7 @@
 
                     <div class="hidden md:block">
                         <!-- Content for Web -->
-                        <div v-if="EditProfileWeb" class="mx-auto max-w-xl h-full justify-center items-center flex flex-col gap-3">
+                        <div v-if="EditProfileWeb" class="mx-auto max-w-xl h-full bg-white p-5 justify-center items-center flex flex-col gap-3">
                             <div class="w-full h-full col-span-1 space-y-4 flex flex-col items-center">
 
                                 <!-- Email -->

@@ -1415,7 +1415,7 @@
                         </div>
                     </div>
 
-                    <!-- Web Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
+<!-- Web Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
                     <div v-if="EditProfileWeb" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
@@ -2276,7 +2276,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, usePage } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import axios from 'axios';
 import { Input } from '@/Components/ui/input'
@@ -2297,19 +2297,17 @@ const props = defineProps({
     semesterGrade: Object,
     schoolyear_grade: Object,
     notify: Object,
+    user: Object
 });
 
 const form = ref({
-    email: '',
-    password: '',
-    confirm_password: '',
     suffix: 'N/A',
-    birthdate: '',
-    birthplace: '',
-    age: '',
+    birthdate: usePage().props.scholar?.birthdate ?? '',
+    birthplace: props.studentData?.birthplace ?? '',
+    age: props.studentData?.age ?? '',
     gender: '',
-    civil_status: '',
-    municipality: '',
+    civil_status: props.studentData?.civil_status ?? '',
+    municipality: props.studentData?.municipality ?? '',
     province: '',
     street: '',
     religion: '',
