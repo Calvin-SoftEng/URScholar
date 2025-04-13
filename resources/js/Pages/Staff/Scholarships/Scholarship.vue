@@ -383,17 +383,27 @@
 
                                         <!-- Display scholarship status for this campus -->
 
-                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Active') || campusData.batches?.some(batch => batch.status === 'Pending')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
-                                        " class="mb-4">
-                                            <div
-                                                class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
-                                                <font-awesome-icon :icon="['fas', 'user-graduate']"
-                                                    class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
-                                                <p class="text-lg text-gray-700 dark:text-gray-300">
-                                                    Scholarship for this campus is still Ongoing
-                                                </p>
-                                            </div>
+                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || 
+                                            (campusData.batches?.some(batch => batch.status === 'Active') || 
+                                            campusData.batches?.some(batch => batch.status === 'Pending')) && 
+                                            campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)" 
+                                            class="mb-4">
+                                        
+                                        <div class="bg-gray-100 dark:bg-gray-800 p-2 rounded-lg text-center animate-fade-in">
+                                            <font-awesome-icon :icon="['fas', 'user-graduate']" class="text-4xl text-gray-400 dark:text-gray-500 my-2" />
+                                            
+                                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                            Validation for this campus is still Ongoing
+                                            </p>
+
+                                            <!-- Ping Button -->
+                                            <button @click="pingCampus"
+                                            class="mt-1 btn border-2 border-yellow-400 hover:bg-yellow-200 text-yellow-500 font-semibold px-4 py-2 rounded shadow dark:text-gray-900">
+                                            Ping Campus for Submission
+                                            </button>
                                         </div>
+                                        </div>
+
 
                                         <!-- <div v-if="campusData.batches?.some(batch => batch.validated === true)" class="mb-4">
                                             <div
