@@ -1311,8 +1311,6 @@ class ScholarshipController extends Controller
             'sponsor_id' => 'required|int',
             'name' => 'required|string|max:255',
             'scholarshipType' => 'required|string|max:255',
-            'date_start' => 'required|date',
-            'date_end' => 'required|date',
         ]);
 
         Scholarship::create([
@@ -1320,8 +1318,6 @@ class ScholarshipController extends Controller
             'sponsor_id' => $request->sponsor_id,
             'user_id' => Auth::user()->id,
             'scholarshipType' => $request->scholarshipType,
-            'date_start' => $request->date_start,
-            'date_end' => $request->date_end,
         ]);
 
         ActivityLog::create([
