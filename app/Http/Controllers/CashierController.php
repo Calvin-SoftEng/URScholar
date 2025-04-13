@@ -390,9 +390,9 @@ class CashierController extends Controller
         return redirect()->back()->with('success', 'Reason submitted successfully');
     }
 
-    public function payouts()
+    public function payrolls()
     {
-        return Inertia::render('Cashier/Scholarships/Payouts');
+        return Inertia::render('Cashier/Payrolls/Payout_Records');
     }
 
 

@@ -278,7 +278,7 @@
         No notifications
       </div>
       <div v-else
-        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
         <div v-for="notification in filteredNotifications" :key="notification.id"
           class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
           :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">

@@ -3,73 +3,73 @@
     <Head title="Dashboard" />
 
     <SettingsLayout>
-        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
-            <div>
-                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Activity Logs</h1>
-            </div>
-            <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
-                Here is the list of all the system activities. Listed are logs of each users.
-            </p>
-            <div class="w-full mt-5">
+        <div
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+            <div class="w-full mx-auto space-y-3">
+                <h1 class="text-2xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                    <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Activity Logs
+                </h1>
+                <div class="w-8/12 mx-auto mt-5">
 
-                <div class="flex w-full border-b border-gray-200 dark:border-gray-700">
-                    <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)" :class="[
-                        'flex-1 text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
-                        selectedMenu === item.key
-                            ? 'text-blue-700 border-b-4 border-blue-700 dark:border-dnavy dark:text-white'
-                            : 'text-gray-900 border-transparent hover:border-gray-200 hover:text-blue-700 dark:text-white dark:hover:bg-gray-700'
-                    ]">
-                        {{ item.name }}
-                    </a>
-                </div>
-
-                <!-- Content Area -->
-                <div
-                    class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
-                    <div class="flex items-center justify-between bg-white dark:bg-dcontainer m-5">
-                        <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
-                            {{ getActivitiesTitle() }}
-                        </h1>
+                    <div class="flex w-full border-b border-gray-200 dark:border-gray-700">
+                        <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)" :class="[
+                            'flex-1 text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
+                            selectedMenu === item.key
+                                ? 'text-blue-700 border-b-4 border-blue-700 dark:border-dnavy dark:text-white'
+                                : 'text-gray-900 border-transparent hover:border-gray-200 hover:text-blue-700 dark:text-white dark:hover:bg-gray-700'
+                        ]">
+                            {{ item.name }}
+                        </a>
                     </div>
 
-                    <div class="max-w-3xl mx-auto bg-white dark:bg-dcontainer py-5">
-                        <div v-if="filteredLogs.length > 0" class="space-y-6">
-                            <div v-for="(log, index) in filteredLogs" :key="index">
-                                <!-- Display Day Only Once -->
-                                <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
+                    <!-- Content Area -->
+                    <div
+                        class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                        <div class="flex items-center justify-between bg-white dark:bg-dcontainer m-5">
+                            <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
+                                {{ getActivitiesTitle() }}
+                            </h1>
+                        </div>
 
-                                <!-- Log Entries -->
-                                <div class="space-y-3">
-                                    <div v-for="(entry, idx) in log.entries" :key="idx"
-                                        class="grid grid-cols-[100px_auto_50px] gap-4">
-                                        <!-- Time Column -->
-                                        <div class="text-gray-500 text-sm whitespace-nowrap self-start pt-1">
-                                            {{ entry.time }}
-                                        </div>
+                        <div class="max-w-3xl mx-auto bg-white dark:bg-dcontainer py-5">
+                            <div v-if="filteredLogs.length > 0" class="space-y-6">
+                                <div v-for="(log, index) in filteredLogs" :key="index">
+                                    <!-- Display Day Only Once -->
+                                    <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 
-                                        <!-- Activity Column -->
-                                        <div class="text-gray-700 dark:text-gray-300 break-words leading-relaxed">
-                                            <strong>{{ entry.user }}</strong> {{ entry.action }}
-                                            <span class="dark:text-gray-300" :class="entry.color">{{ entry.item }}</span>.
-                                        </div>
+                                    <!-- Log Entries -->
+                                    <div class="space-y-3">
+                                        <div v-for="(entry, idx) in log.entries" :key="idx"
+                                            class="grid grid-cols-[100px_auto_50px] gap-4">
+                                            <!-- Time Column -->
+                                            <div class="text-gray-500 text-sm whitespace-nowrap self-start pt-1">
+                                                {{ entry.time }}
+                                            </div>
 
-                                        <!-- Restore Button Column -->
-                                        <div class="flex justify-end self-start pt-1">
-                                            <button @click="removeLog(log, idx)" v-tooltip.right="'Remove'"
-                                                class="p-1 rounded-lg text-dprimary dark:text-dtext hover:bg-blue-200 transition">
-                                                <span class="material-symbols-rounded font-medium">remove</span>
-                                            </button>
+                                            <!-- Activity Column -->
+                                            <div class="text-gray-700 dark:text-gray-300 break-words leading-relaxed">
+                                                <strong>{{ entry.user }}</strong> {{ entry.action }}
+                                                <span class="dark:text-gray-300" :class="entry.color">{{ entry.item }}</span>.
+                                            </div>
+
+                                            <!-- Restore Button Column -->
+                                            <div class="flex justify-end self-start pt-1">
+                                                <button @click="removeLog(log, idx)" v-tooltip.right="'Remove'"
+                                                    class="p-1 rounded-lg text-dprimary dark:text-dtext hover:bg-blue-200 transition">
+                                                    <span class="material-symbols-rounded font-medium">remove</span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div v-else class="flex justify-center items-center py-10">
-                            <div class="text-center">
-                                <span class="material-symbols-rounded text-4xl text-gray-400">
-                                    history
-                                </span>
-                                <p class="text-gray-500 mt-2">No activity logs found for this user type.</p>
+                            <div v-else class="flex justify-center items-center py-10">
+                                <div class="text-center">
+                                    <span class="material-symbols-rounded text-4xl text-gray-400">
+                                        history
+                                    </span>
+                                    <p class="text-gray-500 mt-2">No activity logs found for this user type.</p>
+                                </div>
                             </div>
                         </div>
                     </div>

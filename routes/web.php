@@ -282,7 +282,7 @@ Route::middleware(['auth', 'usertype:cashier'])->group(function () {
     Route::post('/cashier/confirm-claim', [CashierController::class, 'confirmClaim'])->name('cashier.confirmClaim');
     Route::post('/cashier/get-scholar-info', [CashierController::class, 'getScholarInfo'])->name('cashier.getScholarInfo');
 
-    Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}/payroll', [CashierController::class, 'payrolls'])->name('cashier.payroll');
+    Route::get('/cashier/scholarships/payroll', [CashierController::class, 'payrolls'])->name('cashier.payroll');
 
 });
 
