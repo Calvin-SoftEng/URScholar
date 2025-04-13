@@ -77,8 +77,6 @@ class EmailController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
-            'subject' => 'required|string|max:255',
-            'content' => 'required|string',
             'requirements' => 'required',
             'application' => 'required|date',
             'deadline' => 'required|date',

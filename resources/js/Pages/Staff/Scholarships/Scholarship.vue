@@ -34,59 +34,65 @@
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
                         class="flex gap-2">
-                        <div v-if="students.length === 0" class="flex flex-row items-end gap-2">
-                            <!-- Disabled Import Scholars Button -->
-                            <button v-tooltip.left="'You need to add students before importing scholars'" disabled
-                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                        <div v-if="granteeInactive != true">
+                            <div v-if="students.length === 0" class="flex flex-row items-end gap-2">
+                                <!-- Disabled Import Scholars Button -->
+                                <button v-tooltip.left="'You need to add students before importing scholars'" disabled
+                                    class="px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
                                     font-poppins flex items-center gap-2 dark:hover:bg-yellow-800">
-                                <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
-                                <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
-                                <span class="dark:text-dtext">Import Scholars</span>
-                            </button>
+                                    <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
+                                    <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
+                                    <span class="dark:text-dtext">Import Scholars</span>
+                                </button>
 
-                            <!-- Disabled Send Email Button -->
-                            <button v-tooltip.left="'You need to add scholars before sending emails'" disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                                <!-- Disabled Send Email Button -->
+                                <button v-tooltip.left="'You need to add scholars before sending emails'" disabled
+                                    class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                     border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
                                     font-poppins flex items-center gap-2 dark:hover:bg-yellow-800">
-                                <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
-                                <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext " />
-                                <span class="dark:text-dtext ">Send Email</span>
-                            </button>
-                        </div>
-
-                        <div v-else class="flex flex-row items-end gap-2">
-                            <!-- Active Import Scholars Button -->
-                            <button @click="openScholarship"
-                                class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
+                                    <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
+                                    <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext " />
+                                    <span class="dark:text-dtext ">Send Email</span>
+                                </button>
+                            </div>
+                            <div v-else class="flex flex-row items-end gap-2">
+                                <!-- Active Import Scholars Button -->
+                                <button @click="openScholarship"
+                                    class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
                                     border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2">
-                                <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
-                                <span>Import Scholars</span>
-                            </button>
+                                    <font-awesome-icon :icon="['fas', 'user-plus']" class="text-sm dark:text-dtext" />
+                                    <span>Import Scholars</span>
+                                </button>
 
-                            <!-- Active Send Email Button -->
-                            <div v-if="batches.length === 0 || checkValidated == false"
-                                class="flex flex-row items-end gap-2">
-                                <button
-                                    v-tooltip.left="batches.length === 0 ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
-                                    disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+                                <!-- Active Send Email Button -->
+                                <div v-if="batches.length === 0 || checkValidated == false"
+                                    class="flex flex-row items-end gap-2">
+                                    <button
+                                        v-tooltip.left="batches.length === 0 ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
+                                        disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
         border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
         font-poppins flex items-center gap-2">
-                                    <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
-                                    <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
-                                    <span>Send Email</span>
-                                </button>
-                            </div>
-                            <div v-else>
-                                <button @click="openSendEmail" :disabled="disableSendEmailButton" class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
+                                        <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
+                                        <font-awesome-icon :icon="['far', 'envelope']"
+                                            class="text-sm dark:text-dtext" />
+                                        <span>Send Email</span>
+                                    </button>
+                                </div>
+                                <div v-else>
+                                    <button @click="openSendEmail" :disabled="disableSendEmailButton" class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
         border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2"
-                                    :class="{ 'opacity-50 cursor-not-allowed': disableSendEmailButton }">
-                                    <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
-                                    <span>Send Email</span>
-                                </button>
+                                        :class="{ 'opacity-50 cursor-not-allowed': disableSendEmailButton }">
+                                        <font-awesome-icon :icon="['far', 'envelope']"
+                                            class="text-sm dark:text-dtext" />
+                                        <span>Send Email</span>
+                                    </button>
+                                </div>
                             </div>
-
                         </div>
+
+
+
                     </div>
                 </div>
 
@@ -116,7 +122,7 @@
                                     <p class="text-gray-500 text-sm">Total Verified Scholars</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p>
+                                    <p class="text-4xl font-semibold font-kanit">{{ total_verified_grantees }}</p>
                                 </div>
                             </div>
 
@@ -125,7 +131,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Unverified Scholars</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ total_unverified_grantees }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
@@ -298,7 +304,8 @@
                                         </button>
                                     </div>
 
-                                    <div v-if="requirements != 0 && allBatchesInactive !== true && myInactive == false">
+                                    <div
+                                        v-if="requirements != 0 && allBatchesInactive === false && myInactive == false">
                                         <button @click="toggleForwardRequirements"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -1583,7 +1590,7 @@
             </div>
         </div>
 
-<!--                                @click="generateScholarsList"
+        <!--                                @click="generateScholarsList"
 @click="generateEnrolledList"
 @click="generateGraduateList"
 @click="generatePayroll" -->
@@ -1772,6 +1779,8 @@ const props = defineProps({
     checkValidated: Boolean,
     granteeInactive: Boolean,
     validationStatus: Boolean,
+    total_verified_grantees: Object,
+    total_unverified_grantees: Object,
     payouts: Object,
     payoutBatches: Array,
 });
@@ -1787,18 +1796,18 @@ const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
 const selectedReportTypes = ref([]);
 
 const handleGenerateReports = () => {
-  if (selectedReportTypes.includes('Scholars List')) {
-    generateScholarsList();
-  }
-  if (selectedReportTypes.includes('Enrolled List')) {
-    generateEnrolledList();
-  }
-  if (selectedReportTypes.includes('Graduate List')) {
-    generateGraduateList();
-  }
-  if (selectedReportTypes.includes('Payroll')) {
-    generatePayroll();
-  }
+    if (selectedReportTypes.includes('Scholars List')) {
+        generateScholarsList();
+    }
+    if (selectedReportTypes.includes('Enrolled List')) {
+        generateEnrolledList();
+    }
+    if (selectedReportTypes.includes('Graduate List')) {
+        generateGraduateList();
+    }
+    if (selectedReportTypes.includes('Payroll')) {
+        generatePayroll();
+    }
 };
 
 

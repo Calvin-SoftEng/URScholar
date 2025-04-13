@@ -773,7 +773,7 @@
                                             class="space-y-2">
                                             <div class="col-span-4 grid w-full items-center gap-1.5">
                                                 <!-- Edit Sibling Entries -->
-                                                <div v-if="form.mother.first_name === 'n/a'"
+                                                <div v-if="mother === 'n/a'"
                                                     class="border border-gray-100 px-5 py-3">
                                                     <div class="w-full flex flex-row items-center mb-2">
                                                         <font-awesome-icon :icon="['fas', 'people-roof']"
@@ -835,7 +835,7 @@
                                             </div>
 
                                             <!-- Edit father Entries -->
-                                            <div v-if="form.father.first_name === 'n/a'"
+                                            <div v-if="father === 'n/a'"
                                                 class="border border-gray-100 px-5 py-3">
                                                 <div class="w-full flex flex-row items-center mb-2">
                                                     <font-awesome-icon :icon="['fas', 'people-roof']"
@@ -1314,7 +1314,7 @@
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-2 gap-4">
                                         
-                                        <div v-if="mother.first_name !== 'n\/a'">
+                                        <div v-if="mother !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person-dress']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -1815,7 +1815,7 @@
                                         class="space-y-2">
                                         <div class="col-span-4 grid w-full items-center gap-1.5">
                                             <!-- Edit Sibling Entries -->
-                                            <div v-if="form.mother.first_name === 'n/a'">
+                                            <div v-if="mother === 'n/a'">
                                                 <div class="w-full flex flex-row items-center mb-2">
                                                     <font-awesome-icon :icon="['fas', 'people-roof']"
                                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -1874,7 +1874,7 @@
                                         </div>
 
                                         <!-- Edit father Entries -->
-                                        <div v-if="form.father.first_name === 'n/a'">
+                                        <div v-if="father === 'n/a'">
                                             <div class="w-full flex flex-row items-center mb-2">
                                                 <font-awesome-icon :icon="['fas', 'people-roof']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -2300,43 +2300,172 @@ const props = defineProps({
     user: Object
 });
 
+
+const elementary = computed(() => {
+    try {
+        return JSON.parse(props.education.elementary);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const junior = computed(() => {
+    try {
+        return JSON.parse(props.education.junior);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const senior = computed(() => {
+    try {
+        return JSON.parse(props.education.senior);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const college = computed(() => {
+    try {
+        return JSON.parse(props.education.college);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const vocational = computed(() => {
+    try {
+        return JSON.parse(props.education.vocational);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const postgrad = computed(() => {
+    try {
+        return JSON.parse(props.education.postgrad);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const mother = computed(() => {
+    try {
+        return JSON.parse(props.family.mother);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const father = computed(() => {
+    try {
+        return JSON.parse(props.family.father);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
 const form = ref({
-    suffix: 'N/A',
-    birthdate: usePage().props.scholar?.birthdate ?? '',
-    birthplace: props.studentData?.birthplace ?? '',
-    age: props.studentData?.age ?? '',
-    gender: '',
-    civil_status: props.studentData?.civil_status ?? '',
-    municipality: props.studentData?.municipality ?? '',
-    province: '',
-    street: '',
-    religion: '',
-    guardian_name: '',
-    relationship: '',
-    grade: '',
-    cog: '',
-    semester: '',
-    school_year: '',
+    // Student record fields
+    suffix: props.student?.suffix_name ?? 'N/A',
+    birthdate: props.student?.birthdate ?? '',
+    birthplace: props.student?.placebirth ?? '',
+    age: props.student?.age ?? '',
+    gender: props.student?.gender ?? '',
+    civil_status: props.student?.civil ?? '',
+    religion: props.student?.religion ?? '',
+    guardian_name: props.student?.guardian ?? '',
+    relationship: props.student?.relationship ?? '',
+    street: props.scholar?.street ?? '',
+    municipality: props.scholar?.municipality ?? '',
+    province: props.scholar?.province ?? '',
+    
+    // Grade information
+    grade: props.latestgrade?.grade ?? '',
+    cog: props.latestgrade?.cog ?? '',
+    semester: props.semesterGrade ?? props.latestgrade?.semester ?? '',
+    school_year: props.schoolyear_grade?.school_year ?? '',
+    
+    // Education records using the computed properties
     education: {
-        elementary: { name: '', years: '' },
-        junior: { name: '', years: '' },
-        senior: { name: '', years: '' },
-        college: { name: '', years: '' },
-        vocational: { name: 'N/A', years: 'N/A' },
-        postgrad: { name: 'N/A', years: 'N/A' },
+        elementary: { 
+            name: elementary.value?.name ?? '', 
+            years: elementary.value?.years ?? '' 
+        },
+        junior: { 
+            name: junior.value?.name ?? '', 
+            years: junior.value?.years ?? '' 
+        },
+        senior: { 
+            name: senior.value?.name ?? '', 
+            years: senior.value?.years ?? '' 
+        },
+        college: { 
+            name: college.value?.name ?? '', 
+            years: college.value?.years ?? '' 
+        },
+        vocational: { 
+            name: vocational.value?.name ?? 'N/A', 
+            years: vocational.value?.years ?? 'N/A' 
+        },
+        postgrad: { 
+            name: postgrad.value?.name ?? 'N/A', 
+            years: postgrad.value?.years ?? 'N/A' 
+        },
     },
-    mother: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
-    father: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
-    marital_status: '',
-    monthly_income: '',
-    other_income: 'N/A',
-    family_housing: '',
-    otherText: '',
-    siblings: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
-    organizations: [{ name: '', membership_dates: '', position: '' }],
-    img: null,
-    imgName: null,
-    imgPreview: null,
+    
+    // Family information using the computed properties
+    mother: { 
+        first_name: mother.value?.first_name ?? '', 
+        last_name: mother.value?.last_name ?? '', 
+        middle_name: mother.value?.middle_name ?? '', 
+        age: mother.value?.age ?? '', 
+        occupation: mother.value?.occupation ?? '', 
+        isDeceased: mother.value?.isDeceased ?? false 
+    },
+    father: { 
+        first_name: father.value?.first_name ?? '', 
+        last_name: father.value?.last_name ?? '', 
+        middle_name: father.value?.middle_name ?? '', 
+        age: father.value?.age ?? '', 
+        occupation: father.value?.occupation ?? '', 
+        isDeceased: father.value?.isDeceased ?? false 
+    },
+    
+    // Family status fields
+    marital_status: props.family?.marital_status ?? '',
+    monthly_income: props.family?.monthly_income ?? '',
+    other_income: props.family?.other_income ?? 'N/A',
+    family_housing: props.family?.family_housing ?? '',
+    
+    // Siblings array from siblings collection
+    siblings: props.siblings?.map(sibling => ({
+        first_name: sibling.first_name ?? '',
+        last_name: sibling.last_name ?? '',
+        middle_name: sibling.middle_name ?? '',
+        age: sibling.age ?? '',
+        occupation: sibling.occupation ?? ''
+    })) ?? [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
+    
+    // Organizations array
+    organizations: props.organizations?.map(org => ({
+        name: org.name ?? '',
+        membership_dates: org.year ?? '',
+        position: org.position ?? ''
+    })) ?? [{ name: '', membership_dates: '', position: '' }],
+    
+    // Image data
+    img: props.scholar?.profile_pic ?? null,
+    imgName: props.scholar?.profile_pic_name ?? null,
+    imgPreview: props.scholar?.profile_pic ? `/storage/profile_pics/${props.scholar.profile_pic}` : null,
 });
 
 
@@ -2630,75 +2759,5 @@ onUnmounted(() => {
     document.body.style.overflow = ""; // Reset when the component is unmounted
 });
 
-const elementary = computed(() => {
-    try {
-        return JSON.parse(props.education.elementary);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
 
-const junior = computed(() => {
-    try {
-        return JSON.parse(props.education.junior);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const senior = computed(() => {
-    try {
-        return JSON.parse(props.education.senior);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const college = computed(() => {
-    try {
-        return JSON.parse(props.education.college);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const vocational = computed(() => {
-    try {
-        return JSON.parse(props.education.vocational);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const postgrad = computed(() => {
-    try {
-        return JSON.parse(props.education.postgrad);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const mother = computed(() => {
-    try {
-        return JSON.parse(props.family.mother);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const father = computed(() => {
-    try {
-        return JSON.parse(props.family.father);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
 </script>
