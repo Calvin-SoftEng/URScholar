@@ -251,7 +251,7 @@
                             <div class="flex flex-col h-full gap-2">
                                 <div
                                     class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
-                                    <h1 class="text-black font-normal text-xl font-poppins">Application Requirements
+                                    <h1 class="font-semibold text-lg text-blue-900 dark:text-white">Application Requirements
                                     </h1>
                                     <div
                                         class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
@@ -295,7 +295,7 @@
 
                                 <div
                                     class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
-                                    <h1 class="text-black font-normal text-xl font-poppins">Monitoring</h1>
+                                    <h1 class="font-semibold text-lg text-blue-900 dark:text-white">Monitoring</h1>
                                     <div
                                         class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 

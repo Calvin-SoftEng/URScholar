@@ -46,9 +46,9 @@
                   <th>Campus</th>
                   <th>Grant</th>
                   <th v-if="requirements.length > 0">Requirements</th>
-                  <th v-if="requirements.length < 0">Validation</th>
                   <th v-if="requirements.length > 0">Status</th>
                   <th>Student Status</th>
+                  <th v-if="requirements.length < 0">Validation</th>
                   <th></th>
                 </tr>
               </thead>
