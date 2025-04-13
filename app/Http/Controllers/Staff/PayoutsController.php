@@ -48,12 +48,17 @@ class PayoutsController extends Controller
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
-        $payout = Payout::where('scholarship_id', $scholarship->id)->first();
-
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
             ->orderBy('batch_no', 'desc')
             ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
+
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+        ->where('school_year_id', $batch->school_year_id)
+        ->where('semester', $batch->semester)
+        ->where('campus_id', $batch->campus_id)
+        ->first();
+
 
         // Optimize query to reduce N+1 problem
         $disbursements = Disbursement::where('payout_id', $payout->id)
@@ -64,6 +69,7 @@ class PayoutsController extends Controller
                 }
             ])
             ->get();
+
 
         // Count total claimed disbursements
         $totalClaimed = Disbursement::where('payout_id', $payout->id)
