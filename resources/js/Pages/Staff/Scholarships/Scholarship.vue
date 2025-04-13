@@ -65,11 +65,13 @@
                             </button>
 
                             <!-- Active Send Email Button -->
-                            <div v-if="batches.length === 0" class="flex flex-row items-end gap-2">
-                                <button v-tooltip.left="'You need to add scholars before sending emails'" disabled
-                                    class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
-                                    border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                    font-poppins flex items-center gap-2">
+                            <div v-if="batches.length === 0 || checkValidated == false"
+                                class="flex flex-row items-end gap-2">
+                                <button
+                                    v-tooltip.left="batches.length === 0 ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
+                                    disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+        border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
+        font-poppins flex items-center gap-2">
                                     <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
                                     <font-awesome-icon :icon="['far', 'envelope']" class="text-sm dark:text-dtext" />
                                     <span>Send Email</span>
@@ -313,7 +315,7 @@
 
                                 </div>
                                 <div v-else class="flex flex-row space-x-3 items-center">
-                                    <div v-if="allBatchesInactive !== true">
+                                    <div v-if="valitedBatches !== true">
                                         <button @click="toggleForwardValidation"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -321,9 +323,26 @@
                                         </button>
                                     </div>
 
-                                    <div>
+                                    <div v-else>
+                                        <button v-tooltip.left="'Validated already submitted'" disabled
+                                            class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                                border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                            <span class="font-normal">Forward Validated Students</span>
+                                        </button>
+                                    </div>
+
+                                    <div v-if="allBatchesInactive !== true && myInactive == false">
                                         <button @click="toggleForwardRequirements"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                            <span class="font-normal">Forward Requirements</span>
+                                        </button>
+                                    </div>
+                                    <div v-else>
+                                        <button v-tooltip.left="'Scholars already submitted'" disabled
+                                            class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                                border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                             <span class="font-normal">Forward Requirements</span>
                                         </button>
@@ -363,8 +382,9 @@
                                             Campus</h3>
 
                                         <!-- Display scholarship status for this campus -->
-                                        <div v-if="campusData.batches?.some(batch => batch.status === 'Pending') && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)"
-                                            class="mb-4">
+
+                                        <div v-if="campusData.batches?.some(batch => batch.validated === false) || (campusData.batches?.some(batch => batch.status === 'Active') || campusData.batches?.some(batch => batch.status === 'Pending')) && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
+                                        " class="mb-4">
                                             <div
                                                 class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
                                                 <font-awesome-icon :icon="['fas', 'user-graduate']"
@@ -374,6 +394,17 @@
                                                 </p>
                                             </div>
                                         </div>
+
+                                        <!-- <div v-if="campusData.batches?.some(batch => batch.validated === true)" class="mb-4">
+                                            <div
+                                                class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                                <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                                    class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                                <p class="text-lg text-gray-700 dark:text-gray-300">
+                                                    Validating for this campus is still Ongoing
+                                                </p>
+                                            </div>
+                                        </div> -->
 
                                         <!-- If not ongoing, show batches for this campus -->
                                         <div v-else>
@@ -414,7 +445,11 @@
                                                                             Status</span>
                                                                     </div>
                                                                     <span
-                                                                        class="text-xl font-bold text-primary drop-shadow">Pending</span>
+                                                                        class="text-xl font-bold text-primary drop-shadow">
+                                                                        {{ batch.validated == true ? 'Complete' :
+                                                                            'Pending' }}
+                                                                    </span>
+
                                                                 </div>
 
                                                                 <!-- Number of Students -->
@@ -484,7 +519,10 @@
                                                                             Submission</span>
                                                                     </div>
                                                                     <span
-                                                                        class="text-xl font-bold text-primary drop-shadow">Pending</span>
+                                                                        class="text-xl font-bold text-primary drop-shadow">
+                                                                        {{ batch.total_scholars
+                                                                            == batch.sub_total ? 'Complete' :
+                                                                        'Pending' }}</span>
                                                                 </div>
 
                                                                 <!-- Number of Students -->
@@ -1253,6 +1291,7 @@
                     </div>
 
                     <!-- Batch List -->
+
                     <div v-if="ForwardCoorValidation"
                         class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
                         <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
@@ -1293,50 +1332,40 @@
                                 </div>
 
                                 <!-- Batch List -->
-                                <!-- <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                                <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
                                     class="flex flex-col divide-y divide-gray-300">
                                     <div v-for="batch in campusData.batches" :key="batch.id"
                                         class="py-3 px-4 flex justify-between items-center">
                                         <div>
-                                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
-                                                batch.batch_no }}</p>
-                                            <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                            <div>
+                                                <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1
+                                                </p>
+                                                <p class="text-sm text-gray-500"> {{batch.grantees.filter(grantee =>
+                                                    grantee.scholar?.status ===
+                                                    'Verified').length}} Enrolled, {{batch.grantees.filter(grantee =>
+                                                        grantee.scholar?.status ===
+                                                        'Unverified').length}} Unenrolled</p>
+                                            </div>
                                         </div>
                                         <span
-                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                            {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${valitedScholars == true ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                            {{ valitedScholars == true ? 'Ready to Send' : 'Incomplete'
                                             }}
-                                        </span>
-                                    </div>
-                                </div> -->
-
-                                <div class="flex flex-col divide-y divide-gray-300">
-                                    <div class="py-3 px-4 flex justify-between items-center">
-                                        <div>
-                                            <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1</p>
-                                            <p class="text-sm text-gray-500">2 Enrolled, 2 Unenrolled</p>
-                                        </div>
-                                        <!-- <span
-                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                            {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
-                                            }}
-                                        </span> -->
-                                        <span>
-                                            Ready to Send
                                         </span>
                                     </div>
                                 </div>
 
+
                                 <!-- Forward Button -->
-                                <!-- <div v-if="completedBatches === batches.length" class="mt-4">
+                                <div v-if="valitedScholars == true" class="mt-4">
                                     <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
-                                        @click="forwardCoor"
+                                        @click="forwardValidate"
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         {{ isSubmitting ? 'Processing...' : 'Forward' }}
                                     </button>
-                                </div> -->
-                                <div class="mt-4">
-                                    <button v-tooltip.left="'Complete all batches'"
+                                </div>
+                                <div v-else class="mt-4">
+                                    <button v-tooltip.left="'Validate all students'" disabled
                                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                         Forward
                                     </button>
@@ -1425,14 +1454,14 @@
                     </div>
 
                     <!-- Forward Button -->
-                    <!-- <div v-if="completedBatches === batches.length" class="mt-4">
-                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
-                                @click="forwardCoor"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                {{ isSubmitting ? 'Processing...' : 'Forward' }}
-                            </button>
-                        </div> -->
-                    <div class="mt-4">
+                    <div v-if="completedBatches === batches.length" class="mt-4">
+                        <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                            @click="forwardCoor"
+                            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                            {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                        </button>
+                    </div>
+                    <div v-else class="mt-4">
                         <button v-tooltip.left="'Complete all batches'"
                             class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             Forward
@@ -1506,15 +1535,16 @@
                                     <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
                                 </div>
                                 <span
-                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                    {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars && (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                    {{batch.sub_total === batch.total_scholars && (campusData.batches?.some(batch =>
+                                        batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'Ready to Send' : 'Incomplete'
                                     }}
                                 </span>
                             </div>
                         </div>
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length" class="mt-4">
+                        <div v-if="completedBatches === batches.length && allInactive" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 @click="forwardSponsor"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1762,6 +1792,11 @@ const props = defineProps({
     inactiveBatches: Boolean,
     inactivePayouts: Boolean,
     hasActiveGrantees: Boolean,
+    valitedScholars: Boolean,
+    myInactive: Boolean,
+    allInactive: Boolean,
+    valitedBatches: Boolean,
+    checkValidated: Boolean,
     payouts: Object,
     payoutBatches: Array,
 });
@@ -1944,6 +1979,24 @@ const forwardSponsor = () => {
         }
     });
 };
+
+const forwardValidate = () => {
+    // No form data is actually being sent in your current implementation,
+    // but you're using form.post. Let's simplify this:
+    router.post(route('scholarship.forward_validate', {
+        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
+        selectedCampus: props.selectedCampus
+    }), {}, {
+        onSuccess: () => {
+            closeModal();
+            showToast('Success', 'Validated forwarded successfully');
+        },
+        onError: (errors) => {
+            console.error('Error forwarding batches:', errors);
+        }
+    });
+};
+
 
 const GenerateReport = ref(false);
 

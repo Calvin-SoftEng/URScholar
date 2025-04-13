@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->boolean('validated')->default(false);
             $table->boolean('read')->default(false);
             $table->timestamps();
         });
