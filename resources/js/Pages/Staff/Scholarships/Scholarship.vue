@@ -1761,6 +1761,7 @@ const props = defineProps({
     checkValidated: Boolean,
     granteeInactive: Boolean,
     validationStatus: Boolean,
+    AllvalidationStatus: Boolean,
     total_verified_grantees: Object,
     total_unverified_grantees: Object,
     payouts: Object,
