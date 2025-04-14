@@ -52,7 +52,7 @@
                                 :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :historygrantee="historygrantee"
                                 :disbursement="disbursement" :grantee="grantee" :oldestGrantee="oldestGrantee"
-                                :submitApproved="submitApproved" />
+                                :submitApproved="submitApproved" :total_subreq="total_subreq"/>
                         </div>
                     </div>
 
@@ -127,6 +127,7 @@ const props = defineProps({
     submitPending: Array,
     submitApproved: Array,
     historygrantee: Array,
+    total_subreq: Array,
     disbursement: Object,
     grantee: Object,
     oldestGrantee: Object,

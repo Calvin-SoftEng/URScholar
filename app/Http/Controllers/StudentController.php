@@ -150,6 +150,10 @@ class StudentController extends Controller
                     ->whereIn('requirement_id', $requirementIds)
                     ->get();
 
+                $total_subreq = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->whereIn('requirement_id', $requirementIds)
+                ->get();
+
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
                     'grantee' => $grantee,
@@ -161,6 +165,7 @@ class StudentController extends Controller
                     'submitReq' => $returnedRequirements,
                     'submitPending' => $submitPending,
                     'submitApproved' => $submitApproved,
+                    'total_subreq' => $total_subreq,
                     'payout_schedule' => $payout_schedule,
                     'reqDeadline' => $reqDeadline,
                 ]);

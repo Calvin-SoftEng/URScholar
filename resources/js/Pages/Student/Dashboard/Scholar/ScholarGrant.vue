@@ -6,7 +6,7 @@
         </div>
 
         <!-- done application -->
-        <div v-if="submitReq != 0 || submitPending != 0">
+        <div v-if="submitPending.length == total_subreq.length || (submitReq.length <= 0 && submitApproved.length != total_subreq.length)">
             <div class="flex items-center justify-center my-8 ">
                 <!-- Step 1 -->
                 <div class="relative flex flex-col items-center">
@@ -149,7 +149,7 @@
 
 
         <!-- approved reqs -->
-        <div v-if="submitApproved != 0">
+        <div v-if="submitApproved.length == total_subreq.length">
             <div class="flex items-center justify-center my-8 ">
                 <!-- Step 1 -->
                 <div class="relative flex flex-col items-center">
@@ -424,6 +424,7 @@ const props = defineProps({
     historygrantee: Array,
     payout_schedule: Object,
     reqDeadline: Object,
+    total_subreq: Array,
 
     //For non-scholars only
     sponsors: {
