@@ -66,7 +66,7 @@
                                 </button>
 
                                 <!-- Active Send Email Button -->
-                                <div v-if="batches.length === 0 || checkValidated == false"
+                                <div v-if="batches.length === 0 && checkValidated == true"
                                     class="flex flex-row items-end gap-2">
                                     <button
                                         v-tooltip.left="batches.length === 0 ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
@@ -1510,9 +1510,13 @@
                             <div v-for="batch in campusData.batches" :key="batch.id"
                                 class="py-3 px-4 flex justify-between items-center">
                                 <div>
-                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
-                                        batch.batch_no }}</p>
-                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total  }}</p>
+                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1
+                                    </p>
+                                    <p class="text-sm text-gray-500"> {{batch.grantees.filter(grantee =>
+                                        grantee.scholar?.status ===
+                                        'Verified').length}} Enrolled, {{batch.grantees.filter(grantee =>
+                                            grantee.scholar?.status ===
+                                            'Unverified').length}} Unenrolled</p>
                                 </div>
                                 <span
                                     :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
@@ -1523,6 +1527,29 @@
                                 </span>
                             </div>
                         </div>
+
+                        <!-- <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                            class="flex flex-col divide-y divide-gray-300">
+                            <div v-for="batch in campusData.batches" :key="batch.id"
+                                class="py-3 px-4 flex justify-between items-center">
+                                <div>
+                                    <div>
+                                        <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1
+                                        </p>
+                                        <p class="text-sm text-gray-500"> {{batch.grantees.filter(grantee =>
+                                            grantee.scholar?.status ===
+                                            'Verified').length}} Enrolled, {{batch.grantees.filter(grantee =>
+                                                grantee.scholar?.status ===
+                                                'Unverified').length}} Unenrolled</p>
+                                    </div>
+                                </div>
+                                <span
+                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${valitedScholars == true ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                    {{ valitedScholars == true ? 'Ready to Send' : 'Incomplete'
+                                    }}
+                                </span>
+                            </div>
+                        </div> -->
 
                         <!-- Forward Button -->
                         <div v-if="completedBatches === batches.length || allInactive" class="mt-4">

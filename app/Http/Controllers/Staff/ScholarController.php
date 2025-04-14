@@ -300,7 +300,6 @@ class ScholarController extends Controller
         if ($scholar->student_status == 'Unenrolled' && $validated['status'] == 'Enrolled') {
             // Update the scholar's status
             $scholar->student_status = $validated['status'];
-
             $scholar->save();
         } elseif ($scholar->student_status == 'Enrolled' && $validated['status'] == 'Dropped') {
             // Update the scholar's status
@@ -313,20 +312,62 @@ class ScholarController extends Controller
             $scholar->student_status = $validated['status'];
             $scholar->status = 'Unverified';
             $scholar->save();
+        } else {
+            // Update the scholar's status for other cases
+            $grantee = Grantees::where('scholar_id', $scholar->id)
+                ->where('status', 'Pending')
+                ->first();
+
+            if ($grantee) {
+                $grantee->status = 'Inactive';
+                $grantee->student_status = $validated['status'];
+                $grantee->save();
+            }
+
+            $scholar->student_status = $validated['status'];
+            $scholar->save();
         }
 
-        // Update the scholar's status
-        $grantee = Grantees::where('scholar_id', $scholar->id)
-        ->where('status', 'Pending')
-        ->first();
+        // Get the grantee record if it wasn't retrieved earlier
+        if (!isset($grantee)) {
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        }
 
+        // Skip batch checks if no grantee is found
+        if (!$grantee) {
+            return response()->json(['message' => 'Student status updated successfully']);
+        }
 
-        $grantee->status = 'Inactive';
-        $grantee->student_status = $validated['status'];
+        // Check batch status conditions
+        $batch = Batch::find($grantee->batch_id);
 
-        $scholar->student_status = $validated['status'];
-        $grantee->save();
-        $scholar->save();
+        if ($batch) {
+            $totalGranteesInBatch = Grantees::where('batch_id', $batch->id)->count();
+
+            // Check for "Inactive" condition - all grantees are either 'Graduated' or 'Dropped'
+            $completedGrantees = Grantees::where('batch_id', $batch->id)
+                ->whereIn('student_status', ['Graduated', 'Dropped'])
+                ->count();
+
+            // Check for "validated" condition - all grantees are 'Graduated', 'Dropped', or 'Enrolled'
+            $validatedGrantees = Grantees::where('batch_id', $batch->id)
+                ->whereIn('student_status', ['Graduated', 'Dropped', 'Enrolled'])
+                ->count();
+
+            // If all grantees have either 'Graduated' or 'Dropped' status, set batch status to 'Inactive'
+            if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $completedGrantees) {
+                $batch->status = 'Inactive';
+            }
+
+            // If all grantees have 'Graduated', 'Dropped', or 'Enrolled' status, set validated to true
+            if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $validatedGrantees) {
+                $batch->validated = true;
+            }
+
+            $batch->save();
+        }
+
+        return response()->json(['message' => 'Student status updated successfully']);
     }
 
     public function updateApplicant(Request $request)
