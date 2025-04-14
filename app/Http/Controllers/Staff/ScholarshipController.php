@@ -749,12 +749,13 @@ class ScholarshipController extends Controller
             }
         }
 
-        $AllvalidationStatus = false;  // Start with true assumption
+        // Change the logic to check if all batches are validated
+        $AllvalidationStatus = true; // Start by assuming all are validated
 
         foreach ($allBatches as $batch) {
-            if ($batch && $batch->validated !== true) {  // If any batch is not validated
-                $AllvalidationStatus = true;  // Set to false
-                break;  // No need to check further batches
+            if ($batch->validated == false) {
+                $AllvalidationStatus = false; // If any batch is not validated, set to false
+                break; // No need to continue checking
             }
         }
 
@@ -1038,7 +1039,8 @@ class ScholarshipController extends Controller
         foreach ($batches as $batch) {
             // Update batch status
             Batch::where('id', $batch->id)->update([
-                'status' => 'Inactive'
+                'status' => 'Inactive',
+                'validated' => true
             ]);
 
             Grantees::where('batch_id', $batch->id)

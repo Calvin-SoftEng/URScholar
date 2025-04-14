@@ -66,13 +66,15 @@
                                 </button>
 
                                 <!-- Active Send Email Button -->
-                                <div v-if="AllvalidationStatus == true"
-                                    class="flex flex-row items-end gap-2">
-                                    <button
-                                        v-tooltip.left="AllvalidationStatus ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
-                                        disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
-                                        border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-                                        font-poppins flex items-center gap-2">
+                                <div v-if="batches.length === 0 ||!AllvalidationStatus" class="flex flex-row items-end gap-2">
+                                    <button v-tooltip.left="students.length === 0
+                                        ? 'You need to add scholars before sending emails'
+                                        : (!AllvalidationStatus
+                                            ? 'Please validate all scholars before sending emails'
+                                            : 'Send emails to validated scholars')" :disabled="students.length === 0"
+                                        class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
+           border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
+           font-poppins flex items-center gap-2">
                                         <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
                                         <font-awesome-icon :icon="['far', 'envelope']"
                                             class="text-sm dark:text-dtext" />
@@ -1677,7 +1679,7 @@
                                     </div>
                                 </div>
 
-                               
+
                             </div>
                         </div>
                         <div class="mt-6">
@@ -2644,7 +2646,7 @@ onUnmounted(() => {
 const openDropdown = ref('');
 
 const toggleDropdown = (dropdownName) => {
-  openDropdown.value = openDropdown.value === dropdownName ? null : dropdownName
+    openDropdown.value = openDropdown.value === dropdownName ? null : dropdownName
 }
 
 // Detect outside click
@@ -2667,18 +2669,18 @@ const selectedReportTypes = ref([]);
 
 // Generate Reports handler
 const handleGenerateReports = () => {
-  if (selectedReportTypes.value.includes('Scholars List')) {
-    generateScholarsList()
-  }
-  if (selectedReportTypes.value.includes('Enrolled List')) {
-    generateEnrolledList()
-  }
-  if (selectedReportTypes.value.includes('Graduate List')) {
-    generateGraduateList()
-  }
-  if (selectedReportTypes.value.includes('Payroll')) {
-    generatePayroll()
-  }
+    if (selectedReportTypes.value.includes('Scholars List')) {
+        generateScholarsList()
+    }
+    if (selectedReportTypes.value.includes('Enrolled List')) {
+        generateEnrolledList()
+    }
+    if (selectedReportTypes.value.includes('Graduate List')) {
+        generateGraduateList()
+    }
+    if (selectedReportTypes.value.includes('Payroll')) {
+        generatePayroll()
+    }
 }
 
 

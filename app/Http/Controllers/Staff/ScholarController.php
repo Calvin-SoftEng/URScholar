@@ -359,13 +359,13 @@ class ScholarController extends Controller
                 $batch->status = 'Inactive';
             }
 
-            if (Auth::user()->usertype == 'super_admin') {
-                // If all grantees have 'Graduated', 'Dropped', or 'Enrolled' status, set validated to true
-                if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $validatedGrantees) {
-                    $batch->validated = true;
-                }
+            // if (Auth::user()->usertype == 'super_admin') {
+            //     // If all grantees have 'Graduated', 'Dropped', or 'Enrolled' status, set validated to true
+            //     if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $validatedGrantees) {
+            //         $batch->validated = true;
+            //     }
 
-            }
+            // }
 
             $batch->save();
         }
