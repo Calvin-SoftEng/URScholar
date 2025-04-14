@@ -111,7 +111,33 @@ class CashierController extends Controller
         ]);
     }
 
-    public function view_scholarship(Sponsor $sponsors)
+    public function scholarships()
+    {
+        // Check if the user is a university cashier
+        if (Auth::user()->usertype === 'head_cashier') {
+            // Get the appropriate scholarship to show
+            // You might need to adjust this logic based on your requirements
+
+            // Redirect to the show method instead
+            return $this->view_scholarship();
+
+        }
+
+        // Original code for other user types
+        $scholarships = Scholarship::all();
+        $sponsors = Sponsor::all();
+        $payouts = Payout::where('campus_id', Auth::user()->campus_id)
+            ->where('status', '!=', 'Inactive')
+            ->get();
+
+        return Inertia::render('Cashier/Scholarships/Active_Scholarships', [
+            'scholarships' => $scholarships,
+            'sponsors' => $sponsors,
+            'payouts' => $payouts
+        ]);
+    }
+
+    public function view_scholarship()
     {
         // Get the authenticated user's ID and campus_id
         $userId = Auth::user()->id;
@@ -142,32 +168,6 @@ class CashierController extends Controller
             'sponsors' => $sponsors,
             'scholarships' => $scholarships,
             'schoolyears' => $school_year,
-        ]);
-    }
-
-    public function scholarships()
-    {
-        // Check if the user is a university cashier
-        if (Auth::user()->usertype === 'univ_cashier') {
-            // Get the appropriate scholarship to show
-            // You might need to adjust this logic based on your requirements
-
-            // Redirect to the show method instead
-            // return $this->all_payouts();
-
-        }
-
-        // Original code for other user types
-        $scholarships = Scholarship::all();
-        $sponsors = Sponsor::all();
-        $payouts = Payout::where('campus_id', Auth::user()->campus_id)
-            ->where('status', '!=', 'Inactive')
-            ->get();
-
-        return Inertia::render('Cashier/Scholarships/Active_Scholarships', [
-            'scholarships' => $scholarships,
-            'sponsors' => $sponsors,
-            'payouts' => $payouts
         ]);
     }
 

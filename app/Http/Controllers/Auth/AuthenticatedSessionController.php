@@ -39,7 +39,7 @@ class AuthenticatedSessionController extends Controller
                 return redirect()->route('staff.dashboard');
             case 'sponsor':
                 return redirect()->route('sponsor.dashboard');
-            case 'main_cashier':
+            case 'head_cashier':
                 return redirect()->route('cashier.dashboard');
             case 'cashier':
                 return redirect()->route('cashier.dashboard');

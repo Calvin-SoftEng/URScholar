@@ -93,7 +93,7 @@
     </div>
 
     <!-- cashier ---------------------------------------------------------------------------------------------------------------------------------------- -->
-    <div v-if="$page.props.auth.user.usertype == 'cashier'">
+    <div v-if="$page.props.auth.user.usertype == 'cashier' || $page.props.auth.user.usertype == 'head_cashier'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
         <headerTop class="w-full h-[50px]" />

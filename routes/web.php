@@ -260,7 +260,7 @@ Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Route::middleware(['auth', 'usertype:cashier'])->group(function () {
+Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () {
 
     Route::get('/cashier/dashboard', [CashierController::class, 'dashboard'])->name('cashier.dashboard');
 
