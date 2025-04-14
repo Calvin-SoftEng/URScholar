@@ -67,7 +67,7 @@
                             <ScholarAppliant :reqDeadline="reqDeadline" :payout_schedule="payout_schedule"
                                 :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :applicant="applicant"
-                                :submitApproved="submitApproved" />
+                                :submitApproved="submitApproved" :total_subreq="total_subreq" />
                         </div>
                     </div>
                 </div>

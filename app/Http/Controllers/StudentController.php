@@ -253,6 +253,11 @@ class StudentController extends Controller
 
                 $submitApproved = $approvedCount === $totalCount;
 
+                $total_subreq = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->whereIn('requirement_id', $requirementIds)
+                ->get();
+
+
                 return Inertia::render('Student/Dashboard/Dashboard', [
                     'scholarships' => $scholarships,
                     'sponsors' => $sponsors,
@@ -266,6 +271,7 @@ class StudentController extends Controller
                     'submitPending' => $submitPending,
                     'submitApproved' => $submitApproved,
                     'reqDeadline' => $reqDeadline,
+                    'total_subreq' => $total_subreq,
                 ]);
             }
         }

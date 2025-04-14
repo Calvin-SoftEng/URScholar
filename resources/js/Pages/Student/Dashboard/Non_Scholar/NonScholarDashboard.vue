@@ -5,7 +5,7 @@
     </div>
     <!--Pending Req-->
 
-    <div v-if="submitPending != 0 || submitApproved == 'false'">
+    <div v-if="submitPending.length == total_subreq.length || (submitReq.length <= 0 &&  submitApproved == false)">
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">
@@ -313,6 +313,7 @@ const props = defineProps({
     submitApproved: Array,
     reqDeadline: Object,
     applicant: Object,
+    total_subreq: Array,
 
     //For non-scholars only
     sponsors: {
