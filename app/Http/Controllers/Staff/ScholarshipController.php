@@ -732,7 +732,7 @@ class ScholarshipController extends Controller
             ->get();
 
         // Filter out batches where all grantees are dropped or graduated
-        $allInactivewithoutme = $allInactivewithoutme->filter(function ($batch) {
+        $allInactivewithoutmeeee = $allInactivewithoutme->filter(function ($batch) {
             $totalGrantees = Grantees::where('batch_id', $batch->id)->count();
             if ($totalGrantees === 0)
                 return true;
@@ -741,7 +741,7 @@ class ScholarshipController extends Controller
                 ->whereIn('student_status', ['Dropped', 'Graduated'])
                 ->count();
 
-            return $droppedOrGraduatedGrantees < $totalGrantees;
+            return $droppedOrGraduatedGrantees <= $totalGrantees;
         });
 
         $MybatchesUnfiltered = Batch::where('scholarship_id', $scholarship->id)
@@ -778,7 +778,7 @@ class ScholarshipController extends Controller
 
         $allInactive = false;
 
-        foreach ($allInactivewithoutme as $batch) {
+        foreach ($allInactivewithoutmeeee as $batch) {
             if (
                 $batch && $batch->status == 'Inactive'
             ) {
@@ -1094,11 +1094,11 @@ class ScholarshipController extends Controller
             ]);
 
             Grantees::where('batch_id', $batch->id)
-            ->where('school_year_id', $schoolYearId)
-            ->where('semester', $selectedSem)
-            ->update([
-                'status' => 'Active'
-            ]);
+                ->where('school_year_id', $schoolYearId)
+                ->where('semester', $selectedSem)
+                ->update([
+                    'status' => 'Active'
+                ]);
         }
 
 

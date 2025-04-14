@@ -18,6 +18,8 @@ use App\Models\Notification;
 use App\Models\Scholar;
 use App\Models\Sponsor;
 use App\Models\AcademicYear;
+use App\Models\SchoolYear;
+use App\Models\Course;
 use App\Models\User;
 use App\Models\Campus;
 use App\Models\Student;
@@ -109,8 +111,53 @@ class CashierController extends Controller
         ]);
     }
 
+    public function view_scholarship(Sponsor $sponsors)
+    {
+        // Get the authenticated user's ID and campus_id
+        $userId = Auth::user()->id;
+        $userCampusId = Auth::user()->campus_id;
+
+        // Get scholarships that either:
+        // 1. Have batches matching the user's campus_id, OR
+        // 2. Have applicant_tracks matching the user's campus_id, OR
+        // 3. Were created by the authenticated user
+        $scholarships = Scholarship::with('requirements')
+            ->where(function ($query) use ($userId, $userCampusId) {
+                $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
+                    $subQuery->where('campus_id', $userCampusId);
+                })
+                    ->orWhereHas('applicant_tracks', function ($subQuery) use ($userCampusId) {
+                        $subQuery->where('campus_id', $userCampusId);
+                    })
+                    ->orWhere('user_id', $userId); // Add this condition to include scholarships created by the user
+            })
+            ->get();
+
+        $sponsors = Sponsor::all();
+        $school_year = SchoolYear::with('academic_year')
+            ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
+            ->get();
+
+        return inertia('Cashier/Scholarships/ViewScholarships', [
+            'sponsors' => $sponsors,
+            'scholarships' => $scholarships,
+            'schoolyears' => $school_year,
+        ]);
+    }
+
     public function scholarships()
     {
+        // Check if the user is a university cashier
+        if (Auth::user()->usertype === 'univ_cashier') {
+            // Get the appropriate scholarship to show
+            // You might need to adjust this logic based on your requirements
+
+            // Redirect to the show method instead
+            // return $this->all_payouts();
+
+        }
+
+        // Original code for other user types
         $scholarships = Scholarship::all();
         $sponsors = Sponsor::all();
         $payouts = Payout::where('campus_id', Auth::user()->campus_id)
@@ -121,6 +168,100 @@ class CashierController extends Controller
             'scholarships' => $scholarships,
             'sponsors' => $sponsors,
             'payouts' => $payouts
+        ]);
+    }
+
+    public function all_payouts(Request $request, Scholarship $scholarship)
+    {
+        $messages = [
+            'selectedSem' => 'Need to select a semester.',
+            'selectedYear' => 'Passwords must match.',
+        ];
+        $request->validate([
+            'selectedSem' => 'required',
+            'selectedYear' => 'required',
+        ], $messages);
+
+
+        $campuses = Campus::orderBy('name')->get();
+        $schoolyear = $request->input('selectedYear')
+            ? SchoolYear::find($request->input('selectedYear'))
+            : null;
+
+        $currentUser = Auth::user();
+
+        // Get batches for all campuses that match the criteria
+        $batches = Batch::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $schoolyear->id)
+            ->where('semester', $request->input('selectedSem'))
+            ->with('campus') // eager load the campus relation
+            ->get();
+
+
+        // Get all payouts for this scholarship, school year, and semester
+        $payouts = Payout::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $schoolyear->id)
+            ->where('semester', $request->input('selectedYear'))
+            ->with([
+                'campus:id,name',
+                'disbursement.scholar:id,first_name,last_name'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Get all batches for the same scope
+        $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $schoolyear->id)
+            ->where('semester', $request->input('selectedSem'));
+            
+        $batches = $batchesQuery->with([
+            'disbursement',
+            'campus:id,name'
+        ])
+            ->orderBy('batch_no')
+            ->get();
+
+        // Compute claimed and not claimed for each batch
+        $batches = $batches->map(function ($batch) {
+            $claimed = $batch->disbursement->where('status', 'Claimed')->count();
+            $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
+
+            return array_merge($batch->toArray(), [
+                'claimed_count' => $claimed,
+                'not_claimed_count' => $notClaimed
+            ]);
+        });
+
+        // Use the latest payout (if any) for schedule/checking
+        $latestPayout = $payouts->first();
+
+        $canForward = $latestPayout && $latestPayout->total_scholars == $latestPayout->sub_total;
+
+        $allDisbursementsClaimed = $latestPayout && $latestPayout->disbursement->every(function ($disbursement) {
+            return $disbursement->status === 'Claimed';
+        });
+
+        $payout_schedule = $latestPayout
+            ? PayoutSchedule::where('payout_id', $latestPayout->id)->first()
+            : null;
+
+
+        $payouts = Payout::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $schoolyear->id)
+            ->where('semester', $request->input('selectedSem'))
+            ->with('campus') // eager load the campus relation
+            ->get();
+
+
+        // Check if any batches are forwardable
+        return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
+            'scholarship' => $scholarship,
+            'schoolyear' => $schoolyear,
+            'selectedSem' => $request->input('selectedSem', ''),
+            'batches' => $batches,
+            'campuses' => $campuses,
+            'currentUser' => $currentUser,
+            'payouts' => $payouts,
         ]);
     }
 
@@ -634,8 +775,8 @@ class CashierController extends Controller
 
         // Get batches with school year and campus information
         $batches = Batch::with(['school_year', 'campus'])
-        ->where('campus_id', Auth::user()->campus_id)
-        ->get();
+            ->where('campus_id', Auth::user()->campus_id)
+            ->get();
 
         // Get all disbursements to track claims
         $disbursements = Disbursement::all();

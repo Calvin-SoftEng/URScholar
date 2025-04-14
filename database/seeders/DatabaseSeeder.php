@@ -103,6 +103,17 @@ class DatabaseSeeder extends Seeder
 
         //cashier
         User::factory()->create([
+            'name' => 'UnivCashier1',
+            'email' => 'univ_cashier1@gmail.com',
+            'first_name' => 'Eva',
+            'last_name' => 'Natividad',
+            'middle_name' => 'N/A',
+            'password' => bcrypt('password'),
+            'usertype' => 'ayawe',
+            'campus_id' => '1'
+        ]);
+
+        User::factory()->create([
             'name' => 'cashier1',
             'email' => 'cashier1@gmail.com',
             'first_name' => 'Denise Ann',
@@ -121,7 +132,7 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
-            'campus_id' => '1'
+            'campus_id' => '3'
         ]);
 
         //student

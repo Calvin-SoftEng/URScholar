@@ -1212,7 +1212,7 @@
                         </div>
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length" class="mt-4">
+                        <div v-if="completedBatches === batches.length || allInactive" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 {{ isSubmitting ? 'Processing...' : 'Forward' }}
@@ -1513,11 +1513,11 @@
                                 <div>
                                     <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                         batch.batch_no }}</p>
-                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total  }}</p>
                                 </div>
                                 <span
-                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars && (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                    {{batch.sub_total === batch.total_scholars && (campusData.batches?.some(batch =>
+                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                    {{batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch =>
                                         batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id)
                                         ? 'Ready to Send' : 'Incomplete'
                                     }}
@@ -1526,7 +1526,7 @@
                         </div>
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length && allInactive" class="mt-4">
+                        <div v-if="completedBatches === batches.length || allInactive" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 @click="forwardSponsor"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
