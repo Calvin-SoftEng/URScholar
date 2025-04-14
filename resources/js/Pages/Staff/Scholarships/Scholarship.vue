@@ -66,10 +66,10 @@
                                 </button>
 
                                 <!-- Active Send Email Button -->
-                                <div v-if="batches.length === 0 && checkValidated == true"
+                                <div v-if="AllvalidationStatus == true"
                                     class="flex flex-row items-end gap-2">
                                     <button
-                                        v-tooltip.left="batches.length === 0 ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
+                                        v-tooltip.left="AllvalidationStatus ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
                                         disabled class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
                                         border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
                                         font-poppins flex items-center gap-2">

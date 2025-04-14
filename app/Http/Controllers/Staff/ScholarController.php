@@ -928,6 +928,28 @@ class ScholarController extends Controller
                 $campusBatches[$campusId]->update([
                     'total_scholars' => count($scholarIds)
                 ]);
+
+                // CHECK IF ALL GRANTEES IN THIS BATCH HAVE ENROLLED STATUS
+// Only proceed with validation if the batch's campus matches the authenticated user's campus
+                if ($campusId == Auth::user()->campus_id) {
+                    // Get all grantees for this batch
+                    $batchGrantees = Grantees::where('batch_id', $campusBatches[$campusId]->id)->get();
+                    $allEnrolled = true;
+
+                    foreach ($batchGrantees as $grantee) {
+                        if ($grantee->student_status !== 'Enrolled') {
+                            $allEnrolled = false;
+                            break;
+                        }
+                    }
+
+                    // If all grantees are enrolled, mark the batch as validated
+                    if ($allEnrolled && count($batchGrantees) > 0) {
+                        $campusBatches[$campusId]->update([
+                            'validated' => true
+                        ]);
+                    }
+                }
             }
 
             // Update Scholarship Status
