@@ -213,7 +213,7 @@ class CashierController extends Controller
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $schoolyear->id)
             ->where('semester', $request->input('selectedSem'));
-            
+
         $batches = $batchesQuery->with([
             'disbursement',
             'campus:id,name'
@@ -252,6 +252,13 @@ class CashierController extends Controller
             ->with('campus') // eager load the campus relation
             ->get();
 
+        $payoutQuery = Payout::where('scholarship_id', $scholarship->id)
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->with('campus');
+
+        $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
+
 
         // Check if any batches are forwardable
         return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
@@ -262,6 +269,7 @@ class CashierController extends Controller
             'campuses' => $campuses,
             'currentUser' => $currentUser,
             'payouts' => $payouts,
+            'payoutsByCampus' => $payoutsByCampus,
         ]);
     }
 

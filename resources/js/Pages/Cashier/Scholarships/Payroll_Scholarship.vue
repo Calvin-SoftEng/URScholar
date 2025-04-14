@@ -40,11 +40,11 @@
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['fas', 'receipt']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Total Payouts</p>
+                                    <p class="text-gray-500 text-sm">Total Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
                                     <div class="w-full flex flex-row justify-between items-end">
-                                        <p class="text-4xl font-semibold font-kanit">{{ totalPayouts }}</p>
+                                        <p class="text-4xl font-semibold font-kanit">{{ totalBatches }}</p>
                                         <button v-if="forwardableBatchesCount > 0"
                                             class="h-5 px-3 py-1 bg-blue-400 text-white rounded-full text-sm inline-flex items-center justify-center">
                                             {{ forwardableBatchesCount }} forwardable batches
@@ -56,19 +56,36 @@
                             <div class="flex flex-col items-start py-4 px-10">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Completed Payouts</p>
+                                    <p class="text-gray-500 text-sm">Total Scholars</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ completedPayoutsCount }}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ totalScholars }}</p>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'sack-dollar']"
+                                        class="text-green-500 text-base" />
+                                    <p class="text-gray-500 text-sm">Claimed</p>
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit text-green-600">{{ totalClaimed }}</p>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'clock']" class="text-yellow-500 text-base" />
+                                    <p class="text-gray-500 text-sm">Pending Claims</p>
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit text-yellow-600">{{ totalPending }}</p>
                             </div>
                         </div>
 
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
-                        <!-- Payouts List Section -->
+                        <!-- Batch List Section -->
                         <div class="flex flex-row justify-between items-center">
                             <!-- Dynamic Title -->
                             <h2 class="text-lg font-semibold text-gray-800 mt-4">
-                                List of Payouts
+                                List of Batches by Campus
                             </h2>
 
                             <div class="flex flex-row space-x-3 items-center">
@@ -101,42 +118,54 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Payouts List by Campus -->
+                        <!-- Batches List by Campus -->
                         <div>
-                            <!-- First show current user's campus payouts -->
-                            <div v-if="filteredPayoutsByCurrentUserCampus.length > 0" class="mb-6">
+                            <!-- First show current user's campus batches -->
+                            <div v-if="payoutsByCampus && payoutsByCampus[currentUser.campus_id]?.length > 0"
+                                class="mb-6">
                                 <h3 class="text-xl font-bold text-gray-800 mb-3">
                                     {{ currentUserCampus.name }} <span class="text-sm font-medium text-blue-500">(Your
                                         Campus)</span>
                                 </h3>
 
-                                <!-- Display payouts for current user's campus -->
+                                <!-- Display batches for current user's campus -->
                                 <div>
-                                    <div v-for="payout in filteredPayoutsByCurrentUserCampus" :key="payout.id"
-                                        class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3 payout-card"
-                                        @click="openPayout(payout)">
+                                    <!-- Filter batches that belong to this campus -->
+                                    <div v-for="batch in batches.filter(b => b.campus_id === currentUser.campus_id)"
+                                        :key="batch.id"
+                                        class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3"
+                                        @click="viewBatchDetails(batch)">
                                         <div class="flex justify-between items-center">
                                             <div class="flex items-center space-x-3">
-                                                <span class="text-lg font-semibold text-gray-800">Payout #{{
-                                                    payout.id }}</span>
+                                                <span class="text-lg font-semibold text-gray-800">Batch #{{
+                                                    batch.batch_no }}</span>
                                                 <span :class="{
-                                                    'status-badge completed': payout.status === 'Completed',
-                                                    'status-badge pending': payout.status === 'Pending',
-                                                    'status-badge processing': payout.status === 'Processing'
-                                                }">{{ payout.status }}</span>
+                                                    'status-badge completed': batch.status === 'Completed',
+                                                    'status-badge pending': batch.status === 'Pending',
+                                                    'status-badge processing': batch.status === 'Processing'
+                                                }">{{ batch.status || 'Pending' }}</span>
                                             </div>
 
-                                            <div class="grid grid-cols-3 gap-6">
+                                            <div class="grid grid-cols-4 gap-6">
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Total Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
-                                                        payout.total_scholars }}</span>
+                                                        batch.claimed_count + batch.not_claimed_count }}</span>
+                                                </div>
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">Claimed</span>
+                                                    <span class="text-xl font-bold text-green-600">{{
+                                                        batch.claimed_count }}</span>
+                                                </div>
+                                                <div class="flex flex-col items-center">
+                                                    <span class="text-sm text-gray-600">Pending</span>
+                                                    <span class="text-xl font-bold text-yellow-600">{{
+                                                        batch.not_claimed_count }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Date Created</span>
                                                     <span class="text-base text-gray-700">{{
-                                                        formatDate(payout.created_at) }}</span>
+                                                        formatDate(batch.created_at) }}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,52 +173,62 @@
                                 </div>
                             </div>
 
-                            <!-- Then show other campuses' payouts -->
-                            <div v-for="campus in filteredOtherCampuses" :key="campus.id" class="mb-6">
-                                <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campus.name }}</h3>
+                            <!-- Then show other campuses' batches -->
+                            <div v-if="payoutsByCampus && Object.keys(payoutsByCampus).length > 0">
+                                <!-- Loop through each campus in the payouts -->
+                                <div v-for="(campusData, campusId) in payoutsByCampus" :key="campusId" class="mb-6"
+                                    v-show="campusId != currentUser.campus_id">
+                                    <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campusData[0].campus.name }}
+                                        Campus</h3>
 
-                                <!-- Display payouts for this campus -->
-                                <div
-                                    v-if="filteredPayoutsByCampus[campus.id] && filteredPayoutsByCampus[campus.id].length > 0">
-                                    <div v-for="payout in filteredPayoutsByCampus[campus.id]" :key="payout.id"
-                                        class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3 payout-card"
-                                        @click="viewPayoutDetails(payout)">
-                                        <div class="flex justify-between items-center">
-                                            <div class="flex items-center space-x-3">
-                                                <span class="text-lg font-semibold text-gray-800">Payout #{{
-                                                    payout.id }}</span>
-                                                <span :class="{
-                                                    'status-badge completed': payout.status === 'Completed',
-                                                    'status-badge pending': payout.status === 'Pending',
-                                                    'status-badge processing': payout.status === 'Processing'
-                                                }">{{ payout.status }}</span>
-                                            </div>
+                                    <!-- Display payout status for this campus - Only for other campuses -->
+                                    <div v-if="(campusData[0].status == 'Pending' || campusData[0].status == 'Active')"
+                                        class="mb-4">
+                                        <div
+                                            class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                            <font-awesome-icon :icon="['fas', 'user-graduate']"
+                                                class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
+                                            <p class="text-lg text-gray-700 dark:text-gray-300">
+                                                Payout for this campus is still Ongoing
+                                            </p>
+                                        </div>
+                                    </div>
 
-                                            <div class="grid grid-cols-3 gap-6">
-                                                <div class="flex flex-col items-center">
-                                                    <span class="text-sm text-gray-600">Total Scholars</span>
-                                                    <span class="text-xl font-bold text-blue-600">{{
-                                                        payout.total_scholars }}</span>
-                                                </div>
-                                                <div class="flex flex-col items-center">
-                                                    <span class="text-sm text-gray-600">Date Created</span>
-                                                    <span class="text-base text-gray-700">{{
-                                                        formatDate(payout.created_at) }}</span>
+                                    <!-- If not pending, show batches for this campus -->
+                                    <div v-else>
+                                        <!-- Filter batches that belong to this campus -->
+                                        <div v-for="batch in batches.filter(b => b.campus_id.toString() === campusId)"
+                                            :key="batch.id"
+                                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                            <div @click="() => openPayroll(batch.id)"
+                                                class="flex justify-between items-center">
+                                                <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                    batch.batch_no }}</span>
+
+                                                <div class="grid grid-cols-2">
+                                                    <div class="flex flex-col items-center">
+                                                        <span class="text-sm text-gray-600">Completed Payouts</span>
+                                                        <span class="text-xl font-bold text-blue-600">{{
+                                                            batch.disbursement?.length || 0 }}</span>
+                                                    </div>
+                                                    <div class="flex flex-col items-center">
+                                                        <span class="text-sm text-gray-600">Missed Payouts</span>
+                                                        <span class="text-xl font-bold text-red-500">
+                                                            {{ batch.not_claimed_count || 0 }}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div v-else class="text-gray-500 italic p-4 bg-gray-50 rounded-lg">
-                                    No payouts available for this campus.
-                                </div>
                             </div>
 
-                            <!-- No payouts message -->
-                            <div v-if="!hasAnyPayouts" class="text-center py-8">
+                            <!-- No batches message -->
+                            <!-- <div v-if="!hasAnyBatches" class="text-center py-8">
                                 <font-awesome-icon :icon="['far', 'folder-open']" class="text-gray-400 text-5xl mb-3" />
-                                <p class="text-gray-500 text-lg">No payouts found for any campus.</p>
-                            </div>
+                                <p class="text-gray-500 text-lg">No batches found for any campus.</p>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -293,20 +332,20 @@
                             </label>
 
                             <!-- If there are forwardable batches -->
-                            <div v-if="props.forwardableBatches.length > 0" class="flex flex-col gap-2">
+                            <div v-if="forwardableBatches.length > 0" class="flex flex-col gap-2">
                                 <!-- Batch Summary -->
                                 <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 mb-2">
                                     <div class="flex justify-between items-center">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Total Batches</p>
                                             <p class="text-xl font-semibold text-gray-900 dark:text-white">{{
-                                                props.forwardableBatches.length }}</p>
+                                                forwardableBatches.length }}</p>
                                         </div>
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Total Scholars</p>
                                             <p class="text-xl font-semibold text-gray-900 dark:text-white">
-                                                {{props.forwardableBatches.reduce((sum, batch) => sum +
-                                                    batch.total_scholars, 0)}}
+                                                {{forwardableBatches.reduce((sum, batch) => sum +
+                                                    (batch.claimed_count + batch.not_claimed_count), 0)}}
                                             </p>
                                         </div>
                                     </div>
@@ -314,15 +353,16 @@
 
                                 <!-- Batch List -->
                                 <div class="max-h-64 overflow-y-auto rounded-lg border border-gray-200">
-                                    <div v-for="batch in props.forwardableBatches" :key="batch.id"
+                                    <div v-for="batch in forwardableBatches" :key="batch.id"
                                         class="py-3 px-4 flex justify-between items-center border-b last:border-b-0">
                                         <div>
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
                                                 Batch {{ batch.batch_no }}
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
-                                                    }})</span>
+                                                }})</span>
                                             </p>
-                                            <p class="text-sm text-gray-500">Scholars: {{ batch.total_scholars }}</p>
+                                            <p class="text-sm text-gray-500">Scholars: {{ batch.claimed_count +
+                                                batch.not_claimed_count }}</p>
                                         </div>
                                         <span
                                             class="text-sm font-medium px-3 py-1 rounded-full text-green-700 bg-green-100">
@@ -332,10 +372,10 @@
                                 </div>
                             </div>
 
-                            <!-- No payouts message -->
+                            <!-- No batches message -->
                             <div v-else class="py-6 text-center">
                                 <font-awesome-icon :icon="['far', 'folder-open']" class="text-gray-400 text-4xl mb-3" />
-                                <p class="text-gray-500 text-lg font-medium">No payouts available</p>
+                                <p class="text-gray-500 text-lg font-medium">No batches available</p>
                                 <p class="text-gray-400 text-sm">There are no batches ready to be forwarded at this
                                     time.</p>
                             </div>
@@ -345,8 +385,8 @@
                         <div class="mt-4">
                             <button type="submit"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200"
-                                :disabled="props.forwardableBatches.length === 0 || isSubmitting"
-                                :class="{ 'opacity-50 cursor-not-allowed': props.forwardableBatches.length === 0 || isSubmitting }">
+                                :disabled="forwardableBatches.length === 0 || isSubmitting"
+                                :class="{ 'opacity-50 cursor-not-allowed': forwardableBatches.length === 0 || isSubmitting }">
                                 <span v-if="isSubmitting" class="flex items-center justify-center">
                                     <div
                                         class="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent mr-2">
@@ -385,29 +425,29 @@ import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport }
 import InputError from '@/Components/InputError.vue';
 import { initFlowbite } from 'flowbite';
 
+
 const props = defineProps({
     scholarship: Object,
     schoolyear: Object,
     selectedSem: String,
     batches: Array,
-    batchesByCampus: Object,
-    hasForwardableBatches: Boolean,
-    forwardableBatches: Array,
     campuses: Array,
     currentUser: Object,
-    payouts: Array
+    payouts: Array,
+    payoutsByCampus: Array,
 });
 
-// State variables
-const ForwardBatchList = ref(false);
-const selectedCampus = ref('');
-const isLoading = ref(false);
-const isSubmitting = ref(false);
+// Toast notification
 const toastVisible = ref(false);
 const toastMessage = ref({ title: '', description: '' });
-const forwardableBatchesCount = computed(() => props.forwardableBatches?.length || 0);
-const completedPayoutsCount = computed(() => props.payouts?.filter(p => p.status === 'Completed').length || 0);
-const totalPayouts = computed(() => props.payouts?.length || 0);
+
+// Campus filter
+const selectedCampus = ref('');
+
+// Modal state
+const ForwardBatchList = ref(false);
+const isLoading = ref(false);
+const isSubmitting = ref(false);
 
 // Date range for forwarding batches
 const dateRange = ref({
@@ -415,150 +455,176 @@ const dateRange = ref({
     end: ''
 });
 
-// Form for errors
-const form = useForm({
-    date_start: '',
-    date_end: '',
-    batches: []
-});
+const errors = ref({});
 
-// Function to open payroll for a specific batch
-const openPayroll = (batchId) => {
-    // Find the scholarship ID associated with this batch
-    const batch = props.batches.find(b => b.id === batchId);
-    const scholarshipId = batch ? batch.scholarship_id : null;
-
-    if (scholarshipId) {
-        router.visit(`/cashier/payout/${scholarshipId}/batch/${batchId}`, {
-            data: {
-                scholarship: scholarshipId,
-                selectedYear: props.schoolyear.id,
-                selectedSem: props.selectedSem
-            },
-            preserveState: true
-        });
-    } else {
-        console.error('Scholarship ID not found for batch:', batchId);
-    }
-};
-
-const errors = computed(() => form.errors);
-
-// Campus related computed properties
+// Get current user's campus
 const currentUserCampus = computed(() => {
     return props.campuses.find(campus => campus.id === props.currentUser.campus_id) || {};
 });
 
-const filteredPayoutsByCurrentUserCampus = computed(() => {
-    if (!selectedCampus.value || selectedCampus.value === currentUserCampus.value.id.toString()) {
-        return props.payouts.filter(payout => payout.campus_id === currentUserCampus.value.id);
-    }
-    return [];
-});
+// Filter batches by campus
+const filteredBatchesByCampus = computed(() => {
+    const campusGroups = {};
 
-const filteredPayoutsByCampus = computed(() => {
-    const result = {};
-
-    props.campuses.forEach(campus => {
-        if (!selectedCampus.value || selectedCampus.value === campus.id.toString()) {
-            result[campus.id] = props.payouts.filter(payout => payout.campus_id === campus.id);
-        } else {
-            result[campus.id] = [];
+    props.batches.forEach(batch => {
+        if (!campusGroups[batch.campus_id]) {
+            campusGroups[batch.campus_id] = [];
         }
+        campusGroups[batch.campus_id].push(batch);
     });
 
-    return result;
+    return campusGroups;
 });
 
+// Get batches for user's campus
+const filteredBatchesByCurrentUserCampus = computed(() => {
+    if (!selectedCampus.value || selectedCampus.value === '') {
+        return props.batches.filter(batch => batch.campus_id === props.currentUser.campus_id);
+    }
+
+    return selectedCampus.value === props.currentUser.campus_id.toString()
+        ? props.batches.filter(batch => batch.campus_id === props.currentUser.campus_id)
+        : [];
+});
+
+// Change this computed property
 const filteredOtherCampuses = computed(() => {
-    return props.campuses.filter(campus => {
-        return campus.id !== currentUserCampus.value.id &&
-            (!selectedCampus.value || selectedCampus.value === campus.id.toString()) &&
-            filteredPayoutsByCampus.value[campus.id]?.length > 0;
-    });
+    if (!selectedCampus.value || selectedCampus.value === '') {
+        // Only return campuses that have batches
+        return props.campuses.filter(campus => {
+            return campus.id !== props.currentUser.campus_id &&
+                filteredBatchesByCampus.value[campus.id]?.length > 0;
+        });
+    }
+
+    return selectedCampus.value !== props.currentUser.campus_id.toString()
+        ? props.campuses.filter(campus =>
+            campus.id.toString() === selectedCampus.value &&
+            filteredBatchesByCampus.value[campus.id]?.length > 0)
+        : [];
 });
 
-const hasAnyPayouts = computed(() => {
-    if (filteredPayoutsByCurrentUserCampus.value.length > 0) return true;
 
-    return filteredOtherCampuses.value.some(campus =>
-        filteredPayoutsByCampus.value[campus.id] &&
-        filteredPayoutsByCampus.value[campus.id].length > 0
+// Check if there are any batches after filtering
+const hasAnyBatches = computed(() => {
+    // Check if there are batches for the current user's campus
+    const hasCurrentUserCampusBatches = 
+        batches.value && batches.value.some(batch => batch.campus_id === currentUser.value.campus_id);
+    
+    // Check if there are batches for other campuses through payouts
+    const hasOtherCampusBatches = 
+        payoutsByCampus.value && Object.keys(payoutsByCampus.value).length > 0;
+    
+    return hasCurrentUserCampusBatches || hasOtherCampusBatches;
+});
+
+// Calculate statistics
+const totalBatches = computed(() => props.batches.length);
+const totalScholars = computed(() => {
+    return props.batches.reduce((total, batch) => {
+        return total + batch.claimed_count + batch.not_claimed_count;
+    }, 0);
+});
+const totalClaimed = computed(() => {
+    return props.batches.reduce((total, batch) => {
+        return total + batch.claimed_count;
+    }, 0);
+});
+const totalPending = computed(() => {
+    return props.batches.reduce((total, batch) => {
+        return total + batch.not_claimed_count;
+    }, 0);
+});
+
+// Forwardable batches
+const forwardableBatches = computed(() => {
+    return props.batches.filter(batch =>
+        batch.status === 'Completed' && batch.not_claimed_count === 0
     );
 });
 
-// Methods
-const toggleSendBatch = () => {
-    ForwardBatchList.value = !ForwardBatchList.value;
-};
+const forwardableBatchesCount = computed(() => forwardableBatches.value.length);
 
-const closeModal = () => {
-    ForwardBatchList.value = false;
-};
+const hasForwardableBatches = computed(() => forwardableBatchesCount.value > 0);
 
-const viewPayoutDetails = (payout) => {
-    window.location.href = route('view.scholarship.batch', {
-        scholarship: props.scholarship.id,
-        batch: payout.id
-    });
-};
-
+// Navigate back
 const goBack = () => {
     window.history.back();
 };
 
+// Format date
+const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+    }).format(date);
+};
+
+// Get campus name by ID
 const getCampusName = (campusId) => {
     const campus = props.campuses.find(c => c.id === campusId);
     return campus ? campus.name : 'Unknown Campus';
 };
 
-const formatDate = (dateString) => {
-    if (!dateString) return '';
-
-    const date = new Date(dateString);
-    return new Intl.DateTimeFormat('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    }).format(date);
+// Open/close forward batch modal
+const toggleSendBatch = () => {
+    ForwardBatchList.value = true;
 };
 
-const forwardBatches = () => {
-    if (props.forwardableBatches.length === 0) return;
+const closeModal = () => {
+    ForwardBatchList.value = false;
+    dateRange.value = { start: '', end: '' };
+    errors.value = {};
+};
 
+// View batch details
+const viewBatchDetails = (batch) => {
+    router.visit(route('scholarships.batch.show', {
+        scholarship: props.scholarship.id,
+        batch: batch.id
+    }));
+};
+
+// Forward batches to cashier
+const forwardBatches = async () => {
     isSubmitting.value = true;
+    errors.value = {};
 
-    form.date_start = dateRange.value.start;
-    form.date_end = dateRange.value.end;
-    form.batches = props.forwardableBatches.map(batch => batch.id);
+    try {
+        // Call to backend to forward batches
+        await router.post(route('scholarships.batches.forward', props.scholarship.id), {
+            batches: forwardableBatches.value.map(batch => batch.id),
+            date_start: dateRange.value.start,
+            date_end: dateRange.value.end
+        }, {
+            onSuccess: () => {
+                // Show success toast
+                toastMessage.value = {
+                    title: 'Success!',
+                    description: 'Batches have been forwarded to the cashier.'
+                };
+                toastVisible.value = true;
 
-    form.post(route('forward.batches', { scholarship: props.scholarship.id }), {
-        onSuccess: () => {
-            isSubmitting.value = false;
-            closeModal();
-            showToast('Success!', 'Batches have been forwarded to Cashier.');
+                // Close modal
+                closeModal();
 
-            // Refresh the page after a short delay
-            setTimeout(() => {
-                window.location.reload();
-            }, 2000);
-        },
-        onError: () => {
-            isSubmitting.value = false;
-            showToast('Error', 'Failed to forward batches. Please try again.');
-        }
-    });
+                // Hide toast after 3 seconds
+                setTimeout(() => {
+                    toastVisible.value = false;
+                }, 3000);
+            },
+            onError: (err) => {
+                errors.value = err;
+            }
+        });
+    } catch (error) {
+        console.error('Error forwarding batches:', error);
+    } finally {
+        isSubmitting.value = false;
+    }
 };
-
-const showToast = (title, description) => {
-    toastMessage.value = { title, description };
-    toastVisible.value = true;
-
-    setTimeout(() => {
-        toastVisible.value = false;
-    }, 5000);
-};
-
 // Initialize datepicker on mount
 // onMounted(() => {
 //     // Integration with Flowbite Datepicker or other library would go here
