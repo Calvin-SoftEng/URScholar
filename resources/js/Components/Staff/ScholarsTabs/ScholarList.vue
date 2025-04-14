@@ -39,7 +39,7 @@
           <div v-else class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <!-- head -->
-              <thead class="justify-center items-center bg-gray-100">
+              <thead class="justify-center items-center bg-gray-50">
                 <tr class="text-xs uppercase">
                   <th>URScholar ID</th>
                   <th>Scholar</th>

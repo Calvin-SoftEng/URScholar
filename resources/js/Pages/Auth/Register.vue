@@ -88,7 +88,7 @@ const resendEmail = async () => {
 
                 <div>
                     <InputLabel for="email" value="Email" class="font-poppins font-semibold text-md mb-2" />
-                    <Input type="text" placeholder="Enter Email" v-model="form.email"
+                    <Input type="text" placeholder="Enter Email" v-model="form.email" autocomplete="off"
                         class="w-full h-[43px] bg-gray-50 border border-gray-300" />
                     <InputError v-if="errors?.email" :message="errors.email" class="mt-1" />
                 </div>

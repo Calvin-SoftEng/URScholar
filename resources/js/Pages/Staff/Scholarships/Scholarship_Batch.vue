@@ -52,7 +52,7 @@
                         <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
-                                <p class="text-gray-500 text-sm">Completed Scholars</p>
+                                <p class="text-gray-500 text-sm">Completed Validation</p>
                             </div>
                             <p class="text-4xl font-semibold font-kanit text-green-600">{{ stats.completedCount }}</p>
                         </div>
@@ -61,7 +61,7 @@
                         <div class="flex flex-col items-start py-4 px-10">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Total Active Scholars</p>
+                                <p class="text-gray-500 text-sm">Total Students</p>
                             </div>
                             <p class="text-4xl font-semibold font-kanit">{{ totalScholars }}</p>
                         </div>

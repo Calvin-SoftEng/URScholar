@@ -150,7 +150,7 @@ const unblockUser = () => {
                         v-model="form.email" 
                         required 
                         autofocus 
-                        autocomplete="username"
+                        autocomplete="email"
                         class="w-full h-12 bg-[#f1f1f1] border-0 border-b-2 border-gray-400 focus:outline-none focus:border-blue-500 text-primary"
                     />
                 </div>

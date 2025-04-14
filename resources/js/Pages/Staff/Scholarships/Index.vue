@@ -164,7 +164,7 @@
                         <div class="flex flex-col gap-3">
                             <div class="w-full flex flex-col space-y-2">
                                 <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Name</h3>
-                                <input v-model="form.name" type="text" id="name" placeholder="Enter Scholarship Name"
+                                <input v-model="form.name" type="text" id="name" placeholder="Enter Scholarship Name" autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                             </div>
                             <div class="w-full flex flex-col space-y-2">
