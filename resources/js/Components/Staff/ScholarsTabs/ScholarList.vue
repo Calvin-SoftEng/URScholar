@@ -69,8 +69,7 @@
                         <div class="mask rounded-full h-10 w-10">
                           <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`"
                             alt="Profile Picture">
-                            <img v-else src="../../../../assets/images/no_userpic.png"
-                            alt="Profile Picture">
+                          <img v-else src="../../../../assets/images/no_userpic.png" alt="Profile Picture">
                         </div>
                       </div>
                       <div>
@@ -80,7 +79,8 @@
                             class="material-symbols-rounded text-sm text-blue-600">verified</span>
                         </div>
                         <div class="text-sm text-gray-400">
-                          <span class="text-gray-500">{{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year</span>, {{ scholar.course }}
+                          <span class="text-gray-500">{{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }}
+                            year</span>, {{ scholar.course }}
                         </div>
                       </div>
                     </div>
@@ -125,7 +125,9 @@
                   <td>
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
-                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled'
+                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Dropped',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Graduated'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       <span v-if="scholar.student_status === 'Unenrolled'" class="inline-flex items-center">
                         {{ scholar.student_status }}
