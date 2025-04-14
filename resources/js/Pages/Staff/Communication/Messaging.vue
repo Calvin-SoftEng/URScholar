@@ -1,7 +1,7 @@
 <template #default>
     <AuthenticatedLayout>
         <div
-            class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
+            class=" border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
             <div class="w-[95%] p-4 h-full">
                 <div class="bg-white w-full h-full rounded-xl flex flex-row">
                     <div class="w-[30%] border-r">

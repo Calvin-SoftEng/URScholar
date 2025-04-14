@@ -82,8 +82,8 @@ const showMemberList = ref(false);
     <AuthenticatedLayout>
         <template #default>
             <div class="w-full h-full bg-dirtywhite">
-                <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
-                    <div class="w-[95%] pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
+                <div class="border-box w-full h-full flex flex-row bg-dirtywhite">
+                    <div class="w-full pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
                         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 ">
                             <div class="rounded-lg mb-10">
                                 <div class="h-full space-y-3 flex flex-col items-center justify-start pt-2 pb-10">

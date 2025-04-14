@@ -12,7 +12,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">{{ scholarship.name }}</span>
+                            <span class="text-blue-400 font-semibold">{{ scholarship.name }} </span>
                         </li>
                     </ul>
                 </div>
@@ -36,46 +36,65 @@
                         <!-- Stats Section -->
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
-                        <div class="grid grid-cols-5">
+                        <div class="grid grid-cols-4">
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'receipt']" class="text-primary text-base" />
+                                    <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Total Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <div class="w-full flex flex-row justify-between items-end">
-                                        <p class="text-4xl font-semibold font-kanit">{{ totalBatches }}</p>
-                                        <button v-if="forwardableBatchesCount > 0"
-                                            class="h-5 px-3 py-1 bg-blue-400 text-white rounded-full text-sm inline-flex items-center justify-center">
-                                            {{ forwardableBatchesCount }} forwardable batches
-                                        </button>
-                                    </div>
+                                    <p class="text-4xl font-semibold font-kanit">fefef</p>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Total Grantees</p>
+                                </div>
+                                <p class="text-4xl font-semibold font-kanit">{{ totalScholars }}</p>
+                            </div>
+
+                            <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                                <div class="flex flex-row space-x-3 items-center">
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+                                    <p class="text-gray-500 text-sm">Payouts</p>
+                                </div>
+                                <div class="grid grid-cols-3 items-center gap-3">
+                                    <!-- Scholars Length -->
+                                    <p class="text-4xl font-semibold font-kanit text-center">
+                                        {{ totalClaimed }}
+                                    </p>
+
+                                    <!-- Divider -->
+                                    <div class="h-5 w-[2px] bg-gray-400 mx-auto"></div>
+
+                                    <!-- Total Scholars -->
+                                    <p class="text-4xl font-semibold font-kanit text-center">
+                                        {{ totalPending }}
+                                    </p>
                                 </div>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10">
                                 <div class="flex flex-row space-x-3 items-center">
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
-                                    <p class="text-gray-500 text-sm">Total Scholars</p>
+                                    <p class="text-gray-500 text-sm">Completed Batches</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ totalScholars }}</p>
-                            </div>
+                                <div class="grid grid-cols-3 items-center gap-3">
+                                    <!-- Scholars Length -->
+                                    <p class="text-4xl font-semibold font-kanit text-center">
+                                        2
+                                    </p>
 
-                            <div class="flex flex-col items-start py-4 px-10">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'sack-dollar']"
-                                        class="text-green-500 text-base" />
-                                    <p class="text-gray-500 text-sm">Claimed</p>
-                                </div>
-                                <p class="text-4xl font-semibold font-kanit text-green-600">{{ totalClaimed }}</p>
-                            </div>
+                                    <!-- Divider -->
+                                    <div class="h-5 w-[2px] bg-gray-400 mx-auto"></div>
 
-                            <div class="flex flex-col items-start py-4 px-10">
-                                <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'clock']" class="text-yellow-500 text-base" />
-                                    <p class="text-gray-500 text-sm">Pending Claims</p>
+                                    <!-- Total Scholars -->
+                                    <p class="text-4xl font-semibold font-kanit text-center">
+                                        4
+                                    </p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit text-yellow-600">{{ totalPending }}</p>
                             </div>
                         </div>
 
@@ -100,37 +119,36 @@
                                 </select>
 
                                 <!-- Forward to Cashier -->
-                                <div v-if="hasForwardableBatches">
+                                <!-- <div v-if="hasForwardableBatches">
                                     <button @click="toggleSendBatch"
                                         class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                         <span class="font-normal">Forward to <span
-                                                class="font-semibold">Cashier</span></span>
+                                                class="font-semibold">Cashiers</span></span>
                                     </button>
-                                </div>
-                                <div v-else>
-                                    <button v-tooltip.left="'All batches must be inactive and complete'" disabled
+                                </div> -->
+                                <div>
+                                    <button v-tooltip.left="'All batches must be inactive and complete'" @click="toggleSendBatch"
                                         class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
                                                 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 px-4 py-2 rounded-lg transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                        <span class="font-normal">Forward to Cashier</span>
+                                        <span class="font-normal">Forward to Cashiers</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <!-- Batches List by Campus -->
+
                         <div>
-                            <!-- First show current user's campus batches -->
-                            <div v-if="payoutsByCampus && payoutsByCampus[currentUser.campus_id]?.length > 0"
+                            <!-- <div v-if="payoutsByCampus && payoutsByCampus[currentUser.campus_id]?.length > 0"
                                 class="mb-6">
                                 <h3 class="text-xl font-bold text-gray-800 mb-3">
                                     {{ currentUserCampus.name }} <span class="text-sm font-medium text-blue-500">(Your
                                         Campus)</span>
                                 </h3>
 
-                                <!-- Display batches for current user's campus -->
+
                                 <div>
-                                    <!-- Filter batches that belong to this campus -->
+
                                     <div v-for="batch in batches.filter(b => b.campus_id === currentUser.campus_id)"
                                         :key="batch.id"
                                         class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3"
@@ -171,17 +189,84 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div> -->
+
+                            <div
+                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                <div 
+                                    class="flex justify-between items-center">
+
+                                    <!-- Batch Info -->
+                                    <div class="flex flex-col px-5">
+                                        <span class="text-lg font-semibold text-gray-800">Batch 
+                                           </span>
+                                        <span class="text-md font-medium text-gray-600">
+                                           gsrgrs
+                                        </span>
+                                    </div>
+
+                                    <!--------------------------------------------------------- eto kapag validation na -->
+                                    <div class="flex flex-row gap-4">
+                                        <div>
+                                            <!-- Statistics -->
+                                            <div
+                                                class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                <!-- Validation Status -->
+                                                <div class="flex flex-col items-center space-y-1">
+                                                    <div
+                                                        class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-yellow-400" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                        </svg>
+                                                        <span class="text-primary">
+                                                        Disbursement Status
+                                                        </span>
+                                                    </div>
+                                                    <span
+                                                        class="text-xl font-bold text-primary drop-shadow">
+                                                        feff
+                                                    </span>
+
+                                                </div>
+
+                                                <!-- Number of Students -->
+                                                <div class="flex flex-col items-center space-y-1">
+                                                    <div
+                                                        class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-blue-400" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                        </svg>
+                                                        <span class="text-primary">
+                                                            Grantees
+                                                        </span>
+                                                    </div>
+                                                    <span
+                                                        class="text-xl font-bold text-primary drop-shadow">fefaef
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Then show other campuses' batches -->
                             <div v-if="payoutsByCampus && Object.keys(payoutsByCampus).length > 0">
-                                <!-- Loop through each campus in the payouts -->
+
                                 <div v-for="(campusData, campusId) in payoutsByCampus" :key="campusId" class="mb-6"
                                     v-show="campusId != currentUser.campus_id">
                                     <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campusData[0].campus.name }}
                                         Campus</h3>
 
-                                    <!-- Display payout status for this campus - Only for other campuses -->
+
                                     <div v-if="(campusData[0].status == 'Pending' || campusData[0].status == 'Active')"
                                         class="mb-4">
                                         <div

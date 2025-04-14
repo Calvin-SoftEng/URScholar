@@ -157,6 +157,7 @@
                         $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :
                           $page.props.auth.user.usertype === 'coordinator' ? 'Scholarship Coordinator' :
                             $page.props.auth.user.usertype === 'cashier' ? 'Campus Cashier' :
+                            $page.props.auth.user.usertype === 'head_cashier' ? 'University Cashier' :
                             $page.props.auth.user.usertype
                     }}
                   </span>
