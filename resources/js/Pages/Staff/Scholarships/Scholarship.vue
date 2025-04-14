@@ -106,7 +106,7 @@
                             <font-awesome-icon :icon="['fas', 'user-graduate']"
                                 class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                             <p class="text-lg text-gray-700 dark:text-gray-300">
-                                No scholars added yet
+                                No students added yet
                             </p>
                         </div>
                     </div>
@@ -1104,7 +1104,7 @@
                         <!-- Title and Description -->
                         <div class="flex flex-col">
                             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Forward the Batch List
+                                Forward the list for Payouts
                             </h2>
                             <!-- <span class="text-sm text-gray-600 dark:text-gray-400">
                                 Provide the necessary details to set up a scholarship.
@@ -1125,14 +1125,14 @@
                 <!-- Form -->
                 <form @submit.prevent="forwardBatches">
                     <div class="py-4 px-8 flex flex-col gap-3">
-                        <div class="mb-4">
+                        <!-- <div class="mb-4">
                             <label for="batchSelection"
                                 class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
                                 Select a Date:
                             </label>
 
                             <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
-                                <!-- Application Start Date -->
+
                                 <div class="flex flex-col w-full">
                                     <div class="relative">
                                         <div
@@ -1155,7 +1155,6 @@
 
                                 <span class="text-gray-500">to</span>
 
-                                <!-- Application Deadline -->
                                 <div class="flex flex-col w-full">
                                     <div class="relative">
                                         <div
@@ -1176,11 +1175,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
 
                         <label for="batchSelection"
                             class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                            Select a Batch to Forward:
+                            Pending Disbursement Batches:
                         </label>
 
                         <!-- Loading Indicator -->

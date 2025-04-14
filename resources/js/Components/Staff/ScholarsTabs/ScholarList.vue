@@ -79,8 +79,8 @@
                           <span v-if="scholar.status === 'Verified'"
                             class="material-symbols-rounded text-sm text-blue-600">verified</span>
                         </div>
-                        <div class="text-sm opacity-50">
-                          {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
+                        <div class="text-sm text-gray-400">
+                          <span class="text-gray-500">{{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year</span>, {{ scholar.course }}
                         </div>
                       </div>
                     </div>
@@ -114,10 +114,10 @@
                   <td v-else>
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.scholar_status === 'Verified',
-                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.scholar_status === 'Unverified'
+                      'bg-red-200 text-red-800 border border-red-500 font-bold': scholar.scholar_status === 'Unverified'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       <span v-if="scholar.scholar_status === 'Unverified'" class="inline-flex items-center">
-                        ⚠️ {{ scholar.scholar_status }}
+                        {{ scholar.scholar_status }}
                       </span>
                       <span v-else>{{ scholar.scholar_status }}</span>
                     </span>
@@ -128,7 +128,7 @@
                       'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       <span v-if="scholar.student_status === 'Unenrolled'" class="inline-flex items-center">
-                        ⚠️ {{ scholar.student_status }}
+                        {{ scholar.student_status }}
                       </span>
                       <span v-else>{{ scholar.student_status }}</span>
                     </span>

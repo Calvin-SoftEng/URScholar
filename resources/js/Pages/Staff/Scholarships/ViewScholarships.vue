@@ -215,7 +215,7 @@
                         </div>
                         <div class="grid grid-cols-3 justify-center items-center gap-3">
                             <InputError v-if="errors?.selectedSem" :message="errors.selectedSem"
-                                class="text-2xs text-red-500" />
+                                class="text-2xs text-red-500 col-span-3 flex justify-center items-center" />
                             <div
                                 class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
                                 Academic Year:

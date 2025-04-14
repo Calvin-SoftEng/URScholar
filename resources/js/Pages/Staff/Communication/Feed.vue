@@ -1,8 +1,9 @@
 <template>
     <AuthenticatedLayout>
         <template #default>
-            <div class="w-full h-full bg-dirtywhite">
-                <div class="px-48 border-box w-full h-full flex flex-row bg-dirtywhite">
+            <div
+            class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
+                <div class="w-[95%] p-4 h-full">
                     <div
                         class="w-[95%] pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
                         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 ">
