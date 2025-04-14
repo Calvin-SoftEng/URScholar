@@ -40,14 +40,13 @@
             <Link :href="(route('cashier.active_scholarships'))" >
               <div v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''" :class="[
                 'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
-                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/cashier/scholarships') }
-              ]">
+                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]">
               <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/cashier/scholarships') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/cashier/scholarships') }]"
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]"
                 >
                 checkbook
                 </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/cashier/scholarships') }]">Payouts</span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]">Payouts</span>
               </div>
               </div>
             </Link>

@@ -849,5 +849,10 @@ class CashierController extends Controller
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
         ]);
     }
+
+    public function pending_payouts()
+    {
+        return Inertia::render('Cashier/Scholarships/Payouts');
+    }
 }
 

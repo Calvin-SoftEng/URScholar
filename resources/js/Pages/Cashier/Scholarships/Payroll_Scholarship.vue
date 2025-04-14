@@ -191,73 +191,75 @@
                                 </div>
                             </div> -->
 
-                            <div
-                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                <div 
-                                    class="flex justify-between items-center">
+                            <Link :href="route('cashier.pending_payouts')">
+                                <div
+                                    class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                    <div 
+                                        class="flex justify-between items-center">
 
-                                    <!-- Batch Info -->
-                                    <div class="flex flex-col px-5">
-                                        <span class="text-lg font-semibold text-gray-800">Batch 
-                                           </span>
-                                        <span class="text-md font-medium text-gray-600">
-                                           gsrgrs
-                                        </span>
-                                    </div>
+                                        <!-- Batch Info -->
+                                        <div class="flex flex-col px-5">
+                                            <span class="text-lg font-semibold text-gray-800">Batch 
+                                            </span>
+                                            <span class="text-md font-medium text-gray-600">
+                                            gsrgrs
+                                            </span>
+                                        </div>
 
-                                    <!--------------------------------------------------------- eto kapag validation na -->
-                                    <div class="flex flex-row gap-4">
-                                        <div>
-                                            <!-- Statistics -->
-                                            <div
-                                                class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
-                                                <!-- Validation Status -->
-                                                <div class="flex flex-col items-center space-y-1">
-                                                    <div
-                                                        class="flex items-center gap-2 text-sm text-gray-100">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-yellow-400" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
-                                                        </svg>
-                                                        <span class="text-primary">
-                                                        Disbursement Status
+                                        <!--------------------------------------------------------- eto kapag validation na -->
+                                        <div class="flex flex-row gap-4">
+                                            <div>
+                                                <!-- Statistics -->
+                                                <div
+                                                    class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                    <!-- Validation Status -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-yellow-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                            </svg>
+                                                            <span class="text-primary">
+                                                            Disbursement Status
+                                                            </span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                            feff
+                                                        </span>
+
+                                                    </div>
+
+                                                    <!-- Number of Students -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-blue-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                            </svg>
+                                                            <span class="text-primary">
+                                                                Grantees
+                                                            </span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">fefaef
                                                         </span>
                                                     </div>
-                                                    <span
-                                                        class="text-xl font-bold text-primary drop-shadow">
-                                                        feff
-                                                    </span>
 
                                                 </div>
-
-                                                <!-- Number of Students -->
-                                                <div class="flex flex-col items-center space-y-1">
-                                                    <div
-                                                        class="flex items-center gap-2 text-sm text-gray-100">
-                                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                                            class="w-5 h-5 text-blue-400" fill="none"
-                                                            viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path stroke-linecap="round"
-                                                                stroke-linejoin="round" stroke-width="2"
-                                                                d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
-                                                        </svg>
-                                                        <span class="text-primary">
-                                                            Grantees
-                                                        </span>
-                                                    </div>
-                                                    <span
-                                                        class="text-xl font-bold text-primary drop-shadow">fefaef
-                                                    </span>
-                                                </div>
-
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
 
                             <div v-if="payoutsByCampus && Object.keys(payoutsByCampus).length > 0">
 
@@ -503,7 +505,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport } from 'radix-vue';

@@ -21,7 +21,7 @@
           </div>
           <input type="search" id="default-search" v-model="searchQuery"
             class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
+            placeholder="Search Grantee" required />
         </div>
       </form>
     </div>
@@ -29,11 +29,8 @@
     <div>
       <div>
         <div class="w-full bg-white h-full p-4">
-
-          <!-- table -->
-          <div v-show="!showRequirements" class="overflow-x-auto font-poppins border rounded-lg">
+          <!-- <div v-show="!showRequirements" class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
-              <!-- head -->
               <thead class="justify-center items-center bg-gray-100">
                 <tr class="text-xs uppercase">
                   <th>URScholar ID</th>
@@ -94,6 +91,68 @@
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                   </td>
+                </tr>
+              </tbody>
+            </table>
+          </div> -->
+          <div class="overflow-x-auto font-poppins border rounded-lg">
+            <table class="table rounded-lg">
+              <thead class="justify-center items-center bg-gray-50">
+                <tr class="text-xs uppercase">
+                  <th>URScholar ID</th>
+                  <th>Scholar</th>
+                  <th>Grant</th>
+                  <th>Campus</th>
+                  <th>Time Claimed</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr  class="text-sm">
+                  <td>URs-id</td>
+                  <td>
+                    <div class="flex items-center gap-3">
+                      <div class="avatar">
+                        <div class="mask rounded-full h-10 w-10">
+                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                        </div>
+                      </div>
+                      <div>
+                        <div class="font-normal">
+                         name
+                        </div>
+                        <div class="text-sm opacity-50">
+                         bsit
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td>
+                   listahamn
+                  </td>
+                  <td>
+                    morong
+                  </td>
+                  <td>
+                   time
+                  </td>
+                  <td>
+                    <!-- <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': disbursement.status === 'Claimed',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending',
+                      'bg-red-100 text-red-800 border border-red-400': disbursement.status === 'Not Claimed'
+                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
+                      {{ disbursement.status }}
+                    </span> -->status
+                  </td>
+                  <!-- <td v-if="disbursement.status == 'Not Claimed'">
+                    <button @click="toggleReason"
+                      class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
+                      aria-label="View Details">
+                      <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
+                    </button>
+                  </td> -->
                 </tr>
               </tbody>
             </table>

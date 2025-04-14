@@ -270,7 +270,7 @@
                                                 <font-awesome-icon :icon="['fas', 'share-from-square']"
                                                     class="text-base" />
                                                 <span class="font-normal">Forward to <span
-                                                        class="font-semibold">Cashier</span></span>
+                                                        class="font-semibold">University Cashier</span></span>
                                             </button>
                                         </div>
 
@@ -280,7 +280,7 @@
                                                 border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
                                                 <font-awesome-icon :icon="['fas', 'share-from-square']"
                                                     class="text-base" />
-                                                <span class="font-normal">Forward to Cashier</span>
+                                                <span class="font-normal">Forward to University Cashier</span>
                                             </button>
                                         </div>
                                     </div>

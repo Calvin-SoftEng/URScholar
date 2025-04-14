@@ -110,7 +110,7 @@ class ReportsController extends Controller
         ]);
 
         // Set paper size and orientation
-        $pdf->setPaper('letter', 'portrait');
+        $pdf->setPaper([0, 0, 612, 936], 'portrait');
 
         // Stream the PDF
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
