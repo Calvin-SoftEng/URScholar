@@ -741,9 +741,7 @@ class ScholarshipController extends Controller
         $valitedBatches = false;
 
         foreach ($MybatchesUnfiltered as $batch) {
-            if (
-                $batch && $batch->validated == true
-            ) {
+            if ($batch->validated == false) {
                 $valitedBatches = true;
                 break;
             }

@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -66,7 +66,8 @@
                                 </button>
 
                                 <!-- Active Send Email Button -->
-                                <div v-if="batches.length === 0 ||!AllvalidationStatus" class="flex flex-row items-end gap-2">
+                                <div v-if="batches.length === 0 || !AllvalidationStatus"
+                                    class="flex flex-row items-end gap-2">
                                     <button v-tooltip.left="students.length === 0
                                         ? 'You need to add scholars before sending emails'
                                         : (!AllvalidationStatus
@@ -266,18 +267,19 @@
                                     </div>
                                     <!-- Forward to Cashier -->
                                     <div v-if="allBatchesInactive">
-                                        <div v-if="!payouts">
+                                        <div v-if="completedBatches == batches.length">
                                             <button @click="toggleSendBatch"
                                                 class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                                 <font-awesome-icon :icon="['fas', 'share-from-square']"
                                                     class="text-base" />
                                                 <span class="font-normal">Forward to <span
-                                                        class="font-semibold">University Cashier</span></span>
+                                                        class="font-semibold">University
+                                                        Cashier</span></span>
                                             </button>
                                         </div>
 
                                         <div v-else>
-                                            <button v-tooltip.left="'Scholars already submitted to Cashier'" disabled
+                                            <button v-tooltip.left="'Complete all batches first'" disabled
                                                 class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
                                                 border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
                                                 <font-awesome-icon :icon="['fas', 'share-from-square']"
@@ -289,7 +291,7 @@
 
                                 </div>
                                 <div v-else class="flex flex-row space-x-3 items-center">
-                                    <div v-if="valitedBatches !== true">
+                                    <div v-if="valitedBatches">
                                         <button @click="toggleForwardValidation"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -546,7 +548,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                }}</span>
+                                                    }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -558,7 +560,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -661,7 +663,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                }}</span>
+                                                    }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -864,7 +866,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                                }}</div>
+                                                            }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1514,11 +1516,17 @@
                                 <div>
                                     <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1
                                     </p>
-                                    <p class="text-sm text-gray-500"> {{batch.grantees.filter(grantee =>
-                                        grantee.scholar?.status ===
-                                        'Verified').length}} Enrolled, {{batch.grantees.filter(grantee =>
-                                            grantee.scholar?.status ===
-                                            'Unverified').length}} Unenrolled</p>
+                                    <p v-if="batch.validated" class="text-sm text-gray-500">
+                                        {{batch.grantees.filter(grantee => grantee.scholar?.status ===
+                                        'Verified').length }}
+                                        Enrolled,
+                                        {{batch.grantees.filter(grantee => grantee.scholar?.status ===
+                                        'Unverified').length }}
+                                        Unenrolled
+                                    </p>
+                                    <p v-else class="text-sm text-gray-500">
+                                        Validating...
+                                    </p>
                                 </div>
                                 <span
                                     :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
@@ -1554,7 +1562,7 @@
                         </div> -->
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length || allInactive" class="mt-4">
+                        <div v-if="completedBatches === batches.length && allInactive" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 @click="forwardSponsor"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1588,7 +1596,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                            }}</p>
+                                        }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not

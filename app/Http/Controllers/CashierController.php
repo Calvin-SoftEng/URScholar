@@ -274,6 +274,136 @@ class CashierController extends Controller
         ]);
     }
 
+    public function forward(Request $request)
+    {
+        $request->validate([
+            'scholarship_id' => 'required|integer',
+            'grantees' => 'required|array',
+            'batch_ids' => 'required|array',
+            'batch_ids.*' => 'integer',
+            'date_start' => 'required|date',
+            'date_end' => 'required|date',
+            'school_year_id' => 'required',
+            'semester' => 'required',
+        ], [
+            'date_start.required' => 'Set a Date start',
+            'date_end.required' => 'Set a Date end',
+        ]);
+
+        dd($request);
+
+        $scholarshipId = $request->input('scholarship_id');
+        $grantees = $request->input('grantees');
+        $batchIds = $request->input('batch_ids');
+        $user = Auth::user();
+
+        // Group grantees by campus
+        $granteesByCampus = [];
+        foreach ($grantees as $grantee) {
+            // Skip grantees that don't have 'Active' status
+            // if (!isset($grantee['status']) || $grantee['status'] !== 'Active') {
+            //     continue;
+            // }
+
+
+            // Get the batch to find campus_id
+            $batch = Batch::find($grantee['batch_id']);
+
+            if (!$batch) {
+                continue;
+            }
+
+            $campusId = $batch->campus_id;
+
+            if (!isset($granteesByCampus[$campusId])) {
+                $granteesByCampus[$campusId] = [];
+            }
+
+            $granteesByCampus[$campusId][] = $grantee;
+        }
+
+        // Create payouts for each campus and process disbursements
+        $createdPayouts = [];
+
+        foreach ($granteesByCampus as $campusId => $campusGrantees) {
+            // Create payout for this campus
+            $payout = Payout::create([
+                'scholarship_id' => $scholarshipId,
+                'campus_id' => $campusId,
+                'date_start' => $request->input('date_start'),
+                'date_end' => $request->input('date_end'),
+                'school_year_id' => $request->input('school_year_id'),
+                'semester' => $request->input('semester'),
+                'status' => 'Pending',
+            ]);
+
+            // Prepare disbursement data for this campus
+            $dataToInsert = [];
+            foreach ($campusGrantees as $grantee) {
+                $dataToInsert[] = [
+                    'payout_id' => $payout->id,
+                    'batch_id' => $grantee['batch_id'],
+                    'scholar_id' => $grantee['scholar']['id'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+
+            // Bulk insert disbursements
+            Disbursement::insert($dataToInsert);
+
+            // Update payout with total scholars count
+            $totalDisbursement = count($dataToInsert);
+
+            // Calculate sub_total based on scholarship amount if available
+            $subTotal = null;
+            $scholarship = Scholarship::find($scholarshipId);
+            if ($scholarship && isset($scholarship->amount)) {
+                $subTotal = $scholarship->amount * $totalDisbursement;
+            }
+
+            $payout->update([
+                'total_scholars' => $totalDisbursement,
+                'sub_total' => $subTotal
+            ]);
+
+            $createdPayouts[] = $payout;
+        }
+
+        // Create Activity Log
+        $activityLog = ActivityLog::create([
+            'user_id' => $user->id,
+            'activity' => 'Forward',
+            'description' => 'Active scholars forwarded to cashiers by campus',
+        ]);
+
+        // Get users to notify (similar to original function)
+        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
+            $query->select('user_id')
+                ->from('scholarship_groups')
+                ->where('scholarship_id', $scholarshipId);
+        })
+            ->where('id', '!=', Auth::user()->id)
+            ->get();
+
+        // Create Notification
+        $notification = Notification::create([
+            'title' => 'New Payouts Forwarded',
+            'message' => 'Active scholars forwarded to cashiers by campus by ' . $user->name,
+            'type' => 'payout_forward',
+        ]);
+
+        // Attach users to the notification
+        $notification->users()->attach($users->pluck('id'));
+
+        // Broadcast the notification
+        broadcast(new NewNotification($notification))->toOthers();
+
+        // Trigger event for new notification
+        event(new NewNotification($notification));
+
+    }
+
     public function scheduling(Scholarship $scholarship)
     {
         $academic_year = AcademicYear::where('status', 'Active')->first();

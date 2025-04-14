@@ -419,19 +419,19 @@
                             </label>
 
                             <!-- If there are forwardable batches -->
-                            <div v-if="forwardableBatches.length > 0" class="flex flex-col gap-2">
+                            <div v-if="batches.length > 0" class="flex flex-col gap-2">
                                 <!-- Batch Summary -->
                                 <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 mb-2">
                                     <div class="flex justify-between items-center">
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Total Batches</p>
                                             <p class="text-xl font-semibold text-gray-900 dark:text-white">{{
-                                                forwardableBatches.length }}</p>
+                                                batches.length }}</p>
                                         </div>
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Total Scholars</p>
                                             <p class="text-xl font-semibold text-gray-900 dark:text-white">
-                                                {{forwardableBatches.reduce((sum, batch) => sum +
+                                                {{batches.reduce((sum, batch) => sum +
                                                     (batch.claimed_count + batch.not_claimed_count), 0)}}
                                             </p>
                                         </div>
@@ -440,7 +440,7 @@
 
                                 <!-- Batch List -->
                                 <div class="max-h-64 overflow-y-auto rounded-lg border border-gray-200">
-                                    <div v-for="batch in forwardableBatches" :key="batch.id"
+                                    <div v-for="batch in batches" :key="batch.id"
                                         class="py-3 px-4 flex justify-between items-center border-b last:border-b-0">
                                         <div>
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
@@ -448,8 +448,7 @@
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
                                                 }})</span>
                                             </p>
-                                            <p class="text-sm text-gray-500">Scholars: {{ batch.claimed_count +
-                                                batch.not_claimed_count }}</p>
+                                            <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
                                         </div>
                                         <span
                                             class="text-sm font-medium px-3 py-1 rounded-full text-green-700 bg-green-100">
@@ -505,7 +504,7 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport } from 'radix-vue';
@@ -626,7 +625,7 @@ const totalPending = computed(() => {
 // Forwardable batches
 const forwardableBatches = computed(() => {
     return props.batches.filter(batch =>
-        batch.status === 'Completed' && batch.not_claimed_count === 0
+        batch.status === 'Inactive' && batch.not_claimed_count === 0
     );
 });
 
@@ -681,7 +680,7 @@ const forwardBatches = async () => {
 
     try {
         // Call to backend to forward batches
-        await router.post(route('scholarships.batches.forward', props.scholarship.id), {
+        await router.post(route('cashier.forward', props.scholarship.id), {
             batches: forwardableBatches.value.map(batch => batch.id),
             date_start: dateRange.value.start,
             date_end: dateRange.value.end

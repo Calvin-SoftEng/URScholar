@@ -274,6 +274,7 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
 
     Route::get('/cashier/scholarships', [CashierController::class, 'view_scholarship'])->name('cashier.view_scholarship');
     Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'all_payouts'])->name('cashier.all_payouts');
+    Route::post('/cashier/scholarship/forward-batches', [CashierController::class, 'forward'])->name('cashier.forward');
 
     Route::get('/cashier/scholarships/{payout}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
     Route::post('/cashier/scholarships/{scholarshipId}/forward', [CashierController::class, 'forward_payout'])->name('cashier.forward_payout');
