@@ -5,7 +5,7 @@
     </div>
     <!--Pending Req-->
 
-    <div v-if="submitPending.length == total_subreq.length || (submitReq.length <= 0 &&  submitApproved == false)">
+    <div v-if="submitPending.length == total_subreq.length || (submitReq.length <= 0 && submitApproved == false)">
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">
@@ -172,7 +172,7 @@
 
     <!--Approved-->
 
-    <div v-if="applicant.status == 'Approved'">
+    <div v-if="submitApproved != 0 && applicant.status == 'Pending'">
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">
@@ -236,66 +236,65 @@
 
 
     <!--Isa ka ng ganap na grantee-->
-    <div v-if="submitApproved != 0" class="flex items-center justify-center my-8 ">
-        <!-- Step 1 -->
-        <div class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+    <div v-if="applicant.status == 'Approved'">
+        <div class="flex items-center justify-center my-8 ">
+            <!-- Step 1 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Application</span>
             </div>
-            <span class="mt-2 text-sm text-gray-700">Application</span>
+
+            <!-- Line -->
+            <div class="w-16 h-1 bg-primary relative -top-4"></div>
+
+            <!-- Step 2 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Under Review</span>
+            </div>
+
+
+            <!-- Line -->
+            <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+
+            <!-- Step 3 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Approved</span>
+            </div>
+
+
+            <!-- Line -->
+            <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+
+            <!-- Step 4 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Qualification</span>
+            </div>
         </div>
-
-        <!-- Line -->
-        <div class="w-16 h-1 bg-primary relative -top-4"></div>
-
-        <!-- Step 2 -->
-        <div class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
-            </div>
-            <span class="mt-2 text-sm text-gray-700">Under Review</span>
-        </div>
-
-
-        <!-- Line -->
-        <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
-
-        <!-- Step 3 -->
-        <div class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
-            </div>
-            <span class="mt-2 text-sm text-gray-700">Approved</span>
-        </div>
-
-
-        <!-- Line -->
-        <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
-
-        <!-- Step 4 -->
-        <div class="relative flex flex-col items-center">
-            <div
-                class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
-            </div>
-            <span class="mt-2 text-sm text-gray-700">Qualification</span>
+        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 p-4 mt-4 shadow-sm">
+            <h2 class="text-xl font-semibold">You're Qualified!</h2>
+            <p class="mt-2">
+            <p>Congratulations! You have officially qualified for the scholarship.</p>
+            <p>Your application and documents have been verified and approved.</p>
+            <p>Please wait for further announcements regarding the schedule and process of the payout.</p>
+            <p>Make sure to download your qr code to avoid delays in claiming your grant.</p>
+            </p>
         </div>
     </div>
-
-    <div v-if="submitApproved != 0"
-        class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 p-4 mt-4 shadow-sm">
-        <h2 class="text-xl font-semibold">You're Qualified!</h2>
-        <p class="mt-2">
-        <p>Congratulations! You have officially qualified for the scholarship.</p>
-        <p>Your application and documents have been verified and approved.</p>
-        <p>Please wait for further announcements regarding the schedule and process of the payout.</p>
-        <p>Make sure to download your qr code to avoid delays in claiming your grant.</p>
-        </p>
-    </div>
-
 </template>
 
 
