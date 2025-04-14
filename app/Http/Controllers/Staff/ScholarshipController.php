@@ -749,11 +749,11 @@ class ScholarshipController extends Controller
             }
         }
 
-        $AllvalidationStatus = true;  // Start with true assumption
+        $AllvalidationStatus = false;  // Start with true assumption
 
         foreach ($allBatches as $batch) {
             if ($batch && $batch->validated !== true) {  // If any batch is not validated
-                $AllvalidationStatus = false;  // Set to false
+                $AllvalidationStatus = true;  // Set to false
                 break;  // No need to check further batches
             }
         }
