@@ -460,39 +460,36 @@ class StudentController extends Controller
 
     public function updateProfile(Request $request)
     {
-        dd($request);
 
         $validator = Validator::make($request->all(), [
-            //Personal Information
-            'first_name' => ['required', 'string', 'max:255'],
-            'middle_name' => ['required', 'string', 'max:255'],
-            'last_name' => ['required', 'string', 'max:255'],
-            'suffix' => ['required', 'string', 'max:255'],
-            'password' => ['required'],
-            'confirm_password' => ['required', 'same:password'],
-            'birthdate' => ['required', 'date'],
-            'birthplace' => ['required', 'string', 'max:255'],
-            'age' => ['required', 'numeric'],
-            'gender' => ['required', 'string', 'max:255'],
-            'civil_status' => ['required', 'string', 'max:255'],
-            'street' => ['required', 'string', 'max:255'],
-            'municipality' => ['required', 'string', 'max:255'],
-            'province' => ['required', 'string', 'max:255'],
-            'religion' => ['required', 'string', 'max:255'],
-            'guardian_name' => ['required', 'string', 'max:255'],
-            'relationship' => ['required', 'string', 'max:255'],
+            // Personal Information
+            'first_name' => ['string', 'max:255'],
+            'middle_name' => ['string', 'max:255'],
+            'last_name' => ['string', 'max:255'],
+            'suffix' => ['string', 'max:255'],
+            'birthdate' => ['date'],
+            'birthplace' => ['string', 'max:255'],
+            'age' => ['numeric'],
+            'gender' => ['string', 'max:255'],
+            'civil_status' => ['string', 'max:255'],
+            'street' => ['string', 'max:255'],
+            'municipality' => ['string', 'max:255'],
+            'province' => ['string', 'max:255'],
+            'religion' => ['string', 'max:255'],
+            'guardian_name' => ['string', 'max:255'],
+            'relationship' => ['string', 'max:255'],
 
-            //Educaiton Information
-            'education.elementary.name' => ['required', 'string'],
-            'education.elementary.years' => ['required', 'string'],
+            // Education Information
+            'education.elementary.name' => ['string'],
+            'education.elementary.years' => ['string'],
             'elementary.honors' => ['string'],
-            'education.junior.name' => ['required', 'string',],
-            'education.junior.years' => ['required', 'string'],
-            'education.senior.name' => ['', 'string'],
-            'education.senior.years' => ['', 'string'],
+            'education.junior.name' => ['string'],
+            'education.junior.years' => ['string'],
+            'education.senior.name' => ['string'],
+            'education.senior.years' => ['string'],
             'education.senior.honors' => ['string'],
-            'education.college.name' => ['', 'string'],
-            'education.college.years' => ['', 'string'],
+            'education.college.name' => ['string'],
+            'education.college.years' => ['string'],
             'education.college.honors' => ['string'],
             'education.vocational.name' => ['string'],
             'education.vocational.years' => ['string'],
@@ -501,38 +498,177 @@ class StudentController extends Controller
             'education.postgrad.years' => ['string'],
             'education.postgrad.honors' => ['string'],
 
-            //Family Information
-            'mother.first_name' => ['required', 'string'],
-            'mother.middle_name' => ['required', 'string'],
-            'mother.last_name' => ['required', 'string'],
-            'mother.age' => ['', 'string'],
-            'mother.address' => ['', 'string'],
-            'mother.citizenship' => ['', 'string'],
-            'mother.occupation' => ['', 'string'],
-            'mother.education' => ['', 'string'],
-            'mother.batch' => [''],
+            // Family Information
+            'mother.first_name' => ['string'],
+            'mother.middle_name' => ['string'],
+            'mother.last_name' => ['string'],
+            'mother.age' => ['string'],
+            'mother.address' => ['string'],
+            'mother.citizenship' => ['string'],
+            'mother.occupation' => ['string'],
+            'mother.education' => ['string'],
+            'mother.batch' => [],
 
-            'father.first_name' => ['', 'string'],
-            'father.middle_name' => ['', 'string'],
-            'father.last_name' => ['', 'string'],
-            'father.age' => ['', 'string'],
-            'father.address' => ['', 'string'],
-            'father.citizenship' => ['', 'string'],
-            'father.occupation' => ['', 'string'],
-            'father.education' => ['', 'string'],
-            'father.batch' => [''],
+            'father.first_name' => ['string'],
+            'father.middle_name' => ['string'],
+            'father.last_name' => ['string'],
+            'father.age' => ['string'],
+            'father.address' => ['string'],
+            'father.citizenship' => ['string'],
+            'father.occupation' => ['string'],
+            'father.education' => ['string'],
+            'father.batch' => [],
 
-            'siblings' => [''],
-            'siblings.*' => [''],
+            'siblings' => [],
+            'siblings.*' => [],
 
-            'marital_status' => ['required', 'string'],
-            'monthly_income' => ['required', 'string'],
-            'other_income' => [''],
-            'family_housing' => ['required', 'string'],
+            'marital_status' => ['string'],
+            'monthly_income' => ['string'],
+            'other_income' => [],
+            'family_housing' => ['string'],
 
-            'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'imgName' => 'required|string',
+            'img' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'imgName' => 'string',
         ]);
+
+        // Get the authenticated user's scholar record
+        $scholar = Scholar::where('user_id', Auth::user()->id)->first();
+
+        $scholar->update([
+            'street' => $request->input('street'),
+            'municipality' => $request->input('municipality'),
+            'province' => $request->input('province'),
+        ]);
+
+        // Update or create student record
+        $studentRecord = StudentRecord::updateOrCreate(
+            ['scholar_id' => $scholar->id],
+            [
+                'first_name' => $request->input('first_name'),
+                'middle_name' => $request->input('middle_name'),
+                'last_name' => $request->input('last_name'),
+                'suffix_name' => $request->input('suffix'),
+                'birthdate' => $request->input('birthdate'),
+                'placebirth' => $request->input('birthplace'),
+                'age' => $request->input('age'),
+                'gender' => $request->input('gender'),
+                'civil' => $request->input('civil_status'),
+                'religion' => $request->input('religion'),
+                'guardian' => $request->input('guardian_name'),
+                'relationship' => $request->input('relationship')
+            ]
+        );
+
+        // Update or create education record
+        $educationData = [
+            'elementary' => [
+                'name' => $request->input('education.elementary.name'),
+                'years' => $request->input('education.elementary.years'),
+                'honors' => $request->input('education.elementary.honors')
+            ],
+            'junior' => [
+                'name' => $request->input('education.junior.name'),
+                'years' => $request->input('education.junior.years'),
+                'honors' => $request->input('education.junior.honors')
+            ],
+            'senior' => [
+                'name' => $request->input('education.senior.name'),
+                'years' => $request->input('education.senior.years'),
+                'honors' => $request->input('education.senior.honors')
+            ],
+            'college' => [
+                'name' => $request->input('education.college.name'),
+                'years' => $request->input('education.college.years'),
+                'honors' => $request->input('education.college.honors')
+            ],
+            'vocational' => [
+                'name' => $request->input('education.vocational.name'),
+                'years' => $request->input('education.vocational.years'),
+                'honors' => $request->input('education.vocational.honors')
+            ],
+            'postgrad' => [
+                'name' => $request->input('education.postgrad.name'),
+                'years' => $request->input('education.postgrad.years'),
+                'honors' => $request->input('education.postgrad.honors')
+            ]
+        ];
+
+        EducationRecord::updateOrCreate(
+            ['student_record_id' => $studentRecord->id],
+            [
+                'elementary' => json_encode($educationData['elementary']),
+                'junior' => json_encode($educationData['junior']),
+                'senior' => json_encode($educationData['senior']),
+                'college' => json_encode($educationData['college']),
+                'vocational' => json_encode($educationData['vocational']),
+                'postgrad' => json_encode($educationData['postgrad'])
+            ]
+        );
+
+        // Update or create family record
+        $familyRecord = FamilyRecord::updateOrCreate(
+            ['student_record_id' => $studentRecord->id],
+            [
+                'mother' => json_encode($request->input('mother')),
+                'father' => json_encode($request->input('father')),
+                'marital_status' => $request->input('marital_status'),
+                'monthly_income' => $request->input('monthly_income'),
+                'other_income' => $request->input('other_income'),
+                'family_housing' => $request->input('family_housing')
+            ]
+        );
+
+        // Update siblings
+        if ($request->has('siblings')) {
+            // First remove existing siblings
+            SiblingRecord::where('family_record_id', $familyRecord->id)->delete();
+
+            // Then add new siblings
+            foreach ($request->input('siblings') as $sibling) {
+                SiblingRecord::create([
+                    'family_record_id' => $familyRecord->id,
+                    'first_name' => $sibling['first_name'] ?? null,
+                    'middle_name' => $sibling['middle_name'] ?? null,
+                    'last_name' => $sibling['last_name'] ?? null,
+                    'age' => $sibling['age'] ?? null,
+                    'occupation' => $sibling['occupation'] ?? null
+                ]);
+            }
+        }
+
+        // Update organization records
+        if ($request->has('org_records')) {
+            // First remove existing org records
+            OrgRecord::where('student_record_id', $studentRecord->id)->delete();
+
+            // Then add new org records
+            foreach ($request->input('org_records') as $org) {
+                OrgRecord::create([
+                    'student_record_id' => $studentRecord->id,
+                    'name' => $org['name'] ?? null,
+                    'year' => $org['year'] ?? null,
+                    'position' => $org['position'] ?? null
+                ]);
+            }
+        }
+
+        // Handle profile image upload if present
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->storeAs('public/profile_images', $imageName);
+
+            // Update user's profile image
+
+            $originalFileName = $request->file('img')->getClientOriginalName();
+            $user = User::where('id', Auth::user()->id)->first();
+
+            $user->update([
+                'picture' => $originalFileName,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Profile Updated Successfully');
     }
 
     public function verifyingAccount(Request $request)
@@ -1141,7 +1277,9 @@ class StudentController extends Controller
         }
 
         if ($scholar) {
-            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+            $grantee = Grantees::where('scholar_id', $scholar->id)
+            ->where('status', '!=' ,'Inactive')
+            ->first();
 
             // Get the batch semester logic
             $grantee_semester = null;

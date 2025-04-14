@@ -266,10 +266,10 @@ class SponsorController extends Controller
 
                 $userVerified = User::where('id', $scholar->user_id)->first();
 
-                $grade = Grade::where('id', $scholar->user_id)
+                $grade = Grade::where('scholar_id', $scholar->id)
                 ->where('status', 'Active')
                 ->first();
-
+                
                 // Determine status
                 $status = 'No submission';
                 if ($totalRequirements > 0) {

@@ -307,7 +307,7 @@
                                     class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-1 gap-4">
-                                        <div  v-if="mother.first_name !== 'n\/a'">
+                                        <div>
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person-dress']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -325,7 +325,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div  v-if="father.first_name !== 'n\/a'">
+                                        <div>
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -2388,12 +2388,6 @@ const form = ref({
     municipality: props.scholar?.municipality ?? '',
     province: props.scholar?.province ?? '',
     
-    // Grade information
-    grade: props.latestgrade?.grade ?? '',
-    cog: props.latestgrade?.cog ?? '',
-    semester: props.semesterGrade ?? props.latestgrade?.semester ?? '',
-    school_year: props.schoolyear_grade?.school_year ?? '',
-    
     // Education records using the computed properties
     education: {
         elementary: { 
@@ -2554,6 +2548,7 @@ const submitGrade = async () => {
         router.post(`/myProfile/${props.scholar.id}/upload-grade`, formGrade.value);
         //await useForm(form.value).post(`/sponsors/create-scholarship`);
         // await form.post(`/sponsors/${props.sponsor.id}/create`)
+        View_Grades.value = false;
         resetForm();
     } catch (error) {
         console.error('Error submitting form:', error);
@@ -2673,6 +2668,8 @@ const submit = async () => {
         //await useForm(form.value).post(`/sponsors/create-scholarship`);
         // await form.post(`/sponsors/${props.sponsor.id}/create`)
         // resetForm();
+        EditProfileMobile.value = false;
+        EditProfileWeb.value = false;
     } catch (error) {
         console.error('Error submitting form:', error);
     }

@@ -66,7 +66,7 @@
                                 </button>
 
                                 <!-- Active Send Email Button -->
-                                <div v-if="batches.length === 0 || checkValidated == false"
+                                <div v-if="  batches.length === 0 || checkValidated == true"
                                     class="flex flex-row items-end gap-2">
                                     <button
                                         v-tooltip.left="batches.length === 0 ? 'You need to add scholars before sending emails' : 'Please validate all scholars before sending emails'"
