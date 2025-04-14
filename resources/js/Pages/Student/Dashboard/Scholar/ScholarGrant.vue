@@ -18,14 +18,14 @@
             <div class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
 
             <!-- Step 2 -->
-            <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
+            <div class="relative flex flex-col items-center">
                 <div
                     class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     2</div>
                 <span class="mt-2 sm:text-xs lg:text-sm whitespace-nowrap text-gray-700">Under Review</span>
             </div>
 
-            <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
+            <div class="relative flex flex-col items-center">
                 <div
                     class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
@@ -34,19 +34,19 @@
             </div>
 
             <!-- Line -->
-            <div v-if="submitReq != 0 || submitPending != 0"
+            <div
                 class="sm:w-8 lg:w-16 h-1 bg-gray-300 relative sm:-top-3 lg:-top-4"></div>
-            <div v-if="submitApproved != 0" class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
+            <div class="sm:w-8 lg:w-16 h-1 bg-primary relative sm:-top-3 lg:-top-4"></div>
 
             <!-- Step 3 -->
-            <div v-if="submitReq != 0 || submitPending != 0" class="relative flex flex-col items-center">
+            <div class="relative flex flex-col items-center">
                 <div
                     class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     3</div>
                 <span class="mt-2 sm:text-xs lg:text-sm whitespace-nowrap text-gray-700">Approved</span>
             </div>
 
-            <div v-if="submitApproved != 0" class="relative flex flex-col items-center">
+            <div class="relative flex flex-col items-center">
                 <div
                     class="sm:w-8 sm:h-8 lg:w-10 lg:h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold sm:text-sm lg:text-lg">
                     <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
@@ -57,7 +57,7 @@
 
         <!-- first stepper -->
 
-        <div v-if="submitPending != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
             <h2 class="text-xl font-semibold">Congratulations!</h2>
             <p class="mt-2">
             <p>Your application has been successfully completed.</p>
@@ -71,7 +71,7 @@
 
         <!-- second stepper -->
 
-        <div v-else-if="submitReq != 0"
+        <div v-if="submitReq != 0"
             class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
             <span>From Maam Anorn:</span>
             <span>Message</span>
@@ -126,7 +126,7 @@
 
         <!-- third stepper -->
 
-        <div v-if="submitApproved != 0" class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+        <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
             <h2 class="text-xl font-semibold">Congratulations!</h2>
             <p class="mt-2">
             <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
