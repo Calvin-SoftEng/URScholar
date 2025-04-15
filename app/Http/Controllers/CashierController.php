@@ -650,6 +650,21 @@ class CashierController extends Controller
         return redirect()->back()->with('success', 'Reason submitted successfully');
     }
 
+    public function manualClaim(Request $request, $scholarshipId, $batchId)
+    {
+        $validated = $request->validate([
+            'disbursement_id' => 'required|exists:disbursements,id',
+        ]);
+
+        $disbursement = Disbursement::findOrFail($validated['disbursement_id']);
+        $disbursement->status = 'Claimed';
+        $disbursement->claimed_at = now();
+        $disbursement->claimed_by = Auth::id();
+        $disbursement->save();
+
+        return back()->with('success', 'Disbursement manually claimed successfully.');
+    }
+
     public function payrolls()
     {
         return Inertia::render('Cashier/Payrolls/Payout_Records');

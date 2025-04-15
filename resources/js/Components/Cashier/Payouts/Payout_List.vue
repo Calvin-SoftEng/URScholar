@@ -235,131 +235,127 @@
         <!-- Modified Reasoning modal to submit data -->
         <div v-if="Reasoning"
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity ease-in duration-300">
-  
-            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-11/12 md:w-7/12 lg:w-5/12 lg:h-3/6">
-              
-              <!-- Header -->
-              <div class="flex items-center justify-between p-4 md:p-5 border-b dark:border-gray-600">
-                <div class="flex items-center gap-3">
-                  <font-awesome-icon :icon="['fas', activeTab === 'reason' ? 'exclamation-circle' : 'check-circle']"
-                    class="text-blue-600 text-2xl" />
 
-                  <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                    {{ activeTab === 'reason' ? 'Reason for Not Claim' : 'Confirm Manual Claim' }}
-                  </h2>
-                </div>
+          <div
+            class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-11/12 md:w-7/12 lg:w-5/12 lg:h-3/6">
 
-                <button @click="closeModal"
-                  class="text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white rounded-lg p-1.5">
-                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
+            <!-- Header -->
+            <div class="flex items-center justify-between p-4 md:p-5 border-b dark:border-gray-600">
+              <div class="flex items-center gap-3">
+                <font-awesome-icon :icon="['fas', activeTab === 'reason' ? 'exclamation-circle' : 'check-circle']"
+                  class="text-blue-600 text-2xl" />
+
+                <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                  {{ activeTab === 'reason' ? 'Reason for Not Claim' : 'Confirm Manual Claim' }}
+                </h2>
               </div>
 
-              <!-- Tab Selector -->
-              <div class="flex justify-center mx-auto w-[50%] pt-2">
-                <button @click="activeTab = 'claim'"
-                  :class="activeTab === 'claim' ? activeTabClass : inactiveTabClass">
-                  Manual Claim
-                </button>
-                <button @click="activeTab = 'reason'"
-                  :class="activeTab === 'reason' ? activeTabClass : inactiveTabClass">
-                  Not Claimed Reason
-                </button>
-              </div>
-
-              <!-- Modal Content -->
-              <div class="p-4 space-y-4">
-                
-                <!-- Claim Section -->
-                <div v-if="activeTab === 'claim'" class="h-full flex flex-col justify-between space-y-4">
-                  <!-- Scholar Profile -->
-                  <div class="h-full flex flex-col items-center">
-                    <div class="w-24 h-24 bg-gray-300 rounded-full overflow-hidden mb-3">
-                      <img
-                        v-if="pendingScholar && pendingScholar.picture"
-                        :src="`/storage/user/profile/${pendingScholar.picture}`"
-                        alt="Scholar Profile"
-                        class="w-full h-full object-cover"
-                      />
-                      <div v-else class="w-full h-full flex items-center justify-center bg-gray-200">
-                        <font-awesome-icon :icon="['fas', 'user']" class="text-gray-400 text-4xl" />
-                      </div>
-                    </div>
-
-                    <div class="text-center">
-                      <p class="font-semibold text-lg">
-                        {{ pendingScholar ? `${pendingScholar.first_name} ${pendingScholar.last_name}` : 'Name, Name' }}
-                      </p>
-                      <p class="text-gray-600 text-sm">{{ pendingScholar?.email || 'email' }}</p>
-                      <p class="text-gray-600 text-sm">{{ pendingScholar?.campus || 'campus' }}</p>
-                    </div>
-                  </div>
-
-                  <!-- Confirmation Message -->
-                  <div>
-                    <h3 class="font-medium text-gray-900 dark:text-white text-center">
-                      Are you sure you want to manually tag this scholar as
-                      <span class="text-green-600">Claimed</span>?
-                    </h3>
-                  </div>
-
-                  <!-- Action Buttons -->
-                  <div class="flex justify-end gap-3 pt-4 w-full">
-                    <button
-                      type="submit"
-                      class="w-full text-white font-sans bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-                      :disabled="form.processing"
-                    >
-                      {{ form.processing ? 'Confirming...' : 'Confirm' }}
-                    </button>
-
-                    <button
-                      @click="closeModal"
-                      class="w-full bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Reason Section -->
-                <div v-if="activeTab === 'reason'" class="space-y-4">
-                  <h3 class="font-semibold text-gray-900 dark:text-white">
-                    As per Scholar:
-                    <span>{{ selectedScholar ? `${selectedScholar.first_name} ${selectedScholar.last_name}` : '' }}</span>
-                  </h3>
-                  <textarea id="reason" v-model="form.reason" rows="4"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Write a message"></textarea>
-                  <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" />
-
-                  <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                      for="file_input">Additional
-                      Document for reason</label>
-                    <input
-                      class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                      aria-describedby="file_input_help" id="file_input" type="file"
-                      @input="form.document = $event.target.files[0]">
-                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">DOCX, PNG, JPG, or PDF.
-                    </p>
-                    <InputError v-if="errors.document" :message="errors.document" class="mt-1" />
-                  </div>
-
-                  <div class="mt-2 p-4">
-                    <button type="submit"
-                      class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 "
-                      :disabled="form.processing">
-                      {{ form.processing ? 'Submitting...' : 'Submit' }}
-                    </button>
-                  </div>
-                </div>
-
-              </div>
+              <button @click="closeModal"
+                class="text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white rounded-lg p-1.5">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
+
+            <!-- Tab Selector -->
+            <div class="flex justify-center mx-auto w-[50%] pt-2">
+              <button @click="activeTab = 'claim'" :class="activeTab === 'claim' ? activeTabClass : inactiveTabClass">
+                Manual Claim
+              </button>
+              <button @click="activeTab = 'reason'" :class="activeTab === 'reason' ? activeTabClass : inactiveTabClass">
+                Not Claimed Reason
+              </button>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="p-4 space-y-4">
+
+              <!-- Update the claim section to properly handle form submission -->
+              <div v-if="activeTab === 'claim'" class="h-full flex flex-col justify-between space-y-4">
+                <!-- Scholar Profile -->
+                <div class="h-full flex flex-col items-center">
+                  <div class="w-24 h-24 bg-gray-300 rounded-full overflow-hidden mb-3">
+                    <img v-if="pendingScholar && pendingScholar.picture"
+                      :src="`/storage/user/profile/${pendingScholar.picture}`" alt="Scholar Profile"
+                      class="w-full h-full object-cover" />
+                    <div v-else class="w-full h-full flex items-center justify-center bg-gray-200">
+                      <font-awesome-icon :icon="['fas', 'user']" class="text-gray-400 text-4xl" />
+                    </div>
+                  </div>
+
+                  <div class="text-center" v-if="pendingScholar">
+                    <p class="font-semibold text-lg">
+                      {{ pendingScholar.last_name }}, {{ pendingScholar.first_name }} {{ pendingScholar.middle_name }}
+                    </p>
+                    <p class="text-gray-600 text-sm">{{ pendingScholar.email }}</p>
+                    <p class="text-gray-600 text-sm">{{ pendingScholar.campus?.name }}</p>
+                    <p class="text-gray-600 text-sm">{{ pendingScholar.course?.name }}</p>
+                    <p class="text-gray-600 text-sm">{{ pendingScholar.year_level }}{{
+                      getYearSuffix(pendingScholar.year_level) }} year</p>
+                    <p class="text-gray-600 text-sm mt-2">Grant: {{ pendingScholar.grant }}</p>
+                    <p class="text-gray-600 text-sm">Scholar ID: {{ pendingScholar.urscholar_id }}</p>
+                  </div>
+                </div>
+
+                <!-- Confirmation Message -->
+                <div>
+                  <h3 class="font-medium text-gray-900 dark:text-white text-center">
+                    Are you sure you want to manually tag this scholar as
+                    <span class="text-green-600">Claimed</span>?
+                  </h3>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end gap-3 pt-4 w-full">
+                  <button @click="submitManualClaim(pendingScholar.id)" type="button"
+                    class="w-full text-white font-sans bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    :disabled="form.processing">
+                    {{ form.processing ? 'Confirming...' : 'Confirm' }}
+                  </button>
+
+                  <button @click="closeModal"
+                    class="w-full bg-gray-300 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded hover:bg-gray-400 dark:hover:bg-gray-600 transition">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+
+              <!-- Reason Section -->
+              <div v-if="activeTab === 'reason'" class="space-y-4">
+                <h3 class="font-semibold text-gray-900 dark:text-white">
+                  As per Scholar:
+                  <span>{{ selectedScholar ? `${selectedScholar.first_name} ${selectedScholar.last_name}` : '' }}</span>
+                </h3>
+                <textarea id="reason" v-model="form.reason" rows="4"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="Write a message"></textarea>
+                <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" />
+
+                <div>
+                  <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    for="file_input">Additional
+                    Document for reason</label>
+                  <input
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    aria-describedby="file_input_help" id="file_input" type="file"
+                    @input="form.document = $event.target.files[0]">
+                  <p class="mt-1 text-xs text-gray-500 dark:text-gray-300" id="file_input_help">DOCX, PNG, JPG, or PDF.
+                  </p>
+                  <InputError v-if="errors.document" :message="errors.document" class="mt-1" />
+                </div>
+
+                <div class="mt-2 p-4">
+                  <button type="submit" @click="submitReason"
+                    class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 "
+                    :disabled="form.processing">
+                    {{ form.processing ? 'Submitting...' : 'Submit' }}
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -507,16 +503,19 @@ const inactiveTabClass = computed(() =>
   'text-gray-500 hover:text-blue-600 hover:border-blue-600 px-4 py-2 border-b-2 border-transparent'
 )
 
-// Modified toggleReason function with date check
+// Modified checkAndToggleReason function to properly set the pendingScholar data
 const checkAndToggleReason = (disbursement) => {
   if (dateCheckResult.value) {
     currentDisbursement.value = disbursement;
+    pendingScholar.value = disbursement.scholar; // Set the pendingScholar to the selected disbursement's scholar
     form.disbursement_id = disbursement.id;
     form.reason = '';
     form.document = null;
     Reasoning.value = true;
+
+    // Also set the selectedScholar for the reason tab
+    selectedScholar.value = disbursement.scholar;
   } else {
-    // Show a toast message explaining why the action is disabled
     showToast('Not Available', 'Reason can only be provided on or after the end date of the payout period.');
   }
 };
@@ -530,6 +529,21 @@ const submitReason = () => {
     },
     onError: (errors) => {
       console.error('Error submitting reason:', errors);
+    }
+  });
+};
+
+// Add a function to handle manual claim submission
+const submitManualClaim = () => {
+  form.post(route('cashier.manual-claim', { scholarshipId: props.scholarship.id, batchId: props.batch.id }), {
+    onSuccess: () => {
+      closeModal();
+      showToast('Success', 'Disbursement manually claimed successfully');
+      // Optionally reload data
+      router.reload({ only: ['disbursements'] });
+    },
+    onError: (errors) => {
+      console.error('Error submitting claim:', errors);
     }
   });
 };

@@ -284,6 +284,7 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
 
     Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
     Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/submit-reason', [CashierController::class, 'submitReason'])->name('cashier.submit-reason');
+    Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/manual-claim', [CashierController::class, 'manualClaim'])->name('cashier.manual-claim');
 
     Route::post('/cashier/verify-qr', [CashierController::class, 'verifyQr'])->name('cashier.verify_qr');
     Route::post('/cashier/confirm-claim', [CashierController::class, 'confirmClaim'])->name('cashier.confirmClaim');
