@@ -191,7 +191,164 @@
         <!-- Forward batch list modal - Keep as is -->
         <div v-if="ForwardBatchList"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-            <!-- Modal content - Keep as is -->
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Forward the Batch List
+                            </h2>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form @submit.prevent="forwardBatches">
+                    <div class="py-4 px-8 flex flex-col gap-3">
+                        <div class="mb-4">
+                            <label for="dateRangePicker"
+                                class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                                Select a Date Range:
+                            </label>
+
+                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
+                                <!-- Application Start Date -->
+                                <div class="flex flex-col w-full">
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                            </svg>
+                                        </div>
+                                        <InputError v-if="errors?.date_start" :message="errors.date_start"
+                                            class="text-red-500" />
+                                        <input id="datepicker-range-start" name="start" type="text" autocomplete="off"
+                                            lang="en" v-model="dateRange.start"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="Submission Start Date">
+                                    </div>
+                                </div>
+
+                                <span class="text-gray-500">to</span>
+
+                                <!-- Application Deadline -->
+                                <div class="flex flex-col w-full">
+                                    <div class="relative">
+                                        <div
+                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
+                                                <path
+                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                            </svg>
+                                        </div>
+                                        <InputError v-if="errors?.date_end" :message="errors.date_end"
+                                            class="text-red-500" />
+                                        <input id="datepicker-range-end" name="end" type="text" autocomplete="off"
+                                            lang="en" v-model="dateRange.end"
+                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                            placeholder="Submission End Date">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Loading Indicator -->
+                        <div v-if="isLoading" class="flex justify-center items-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                        </div>
+
+                        <!-- Batches to be forwarded -->
+                        <div v-else>
+                            <label class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                                Batches to Forward:
+                            </label>
+
+                            <!-- If there are forwardable batches -->
+                            <div v-if="batches.length > 0" class="flex flex-col gap-2">
+                                <!-- Batch Summary -->
+                                <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-3 mb-2">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Total Batches</p>
+                                            <p class="text-xl font-semibold text-gray-900 dark:text-white">{{
+                                                batches.length }}</p>
+                                        </div>
+                                        <div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Total Scholars</p>
+                                            <p class="text-xl font-semibold text-gray-900 dark:text-white">
+                                                {{batches.reduce((sum, batch) => sum +
+                                                    (batch.claimed_count + batch.not_claimed_count), 0)}}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Batch List -->
+                                <div class="max-h-64 overflow-y-auto rounded-lg border border-gray-200">
+                                    <div v-for="batch in batches" :key="batch.id"
+                                        class="py-3 px-4 flex justify-between items-center border-b last:border-b-0">
+                                        <div>
+                                            <p class="text-base font-medium text-gray-900 dark:text-white">
+                                                Batch {{ batch.batch_no }}
+                                                <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
+                                                }})</span>
+                                            </p>
+                                            <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
+                                        </div>
+                                        <span
+                                            class="text-sm font-medium px-3 py-1 rounded-full text-green-700 bg-green-100">
+                                            Ready
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- No batches message -->
+                            <div v-else class="py-6 text-center">
+                                <font-awesome-icon :icon="['far', 'folder-open']" class="text-gray-400 text-4xl mb-3" />
+                                <p class="text-gray-500 text-lg font-medium">No batches available</p>
+                                <p class="text-gray-400 text-sm">There are no batches ready to be forwarded at this
+                                    time.</p>
+                            </div>
+                        </div>
+
+                        <!-- Forward Button -->
+                        <div class="mt-4">
+                            <button type="submit"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200">
+                                <span v-if="isSubmitting" class="flex items-center justify-center">
+                                    <div
+                                        class="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent mr-2">
+                                    </div>
+                                    Processing...
+                                </span>
+                                <span v-else>Forward All Batches</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- Toast notifications - Keep as is -->
