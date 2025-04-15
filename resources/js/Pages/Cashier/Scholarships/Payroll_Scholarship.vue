@@ -334,8 +334,7 @@
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Total Scholars</p>
                                             <p class="text-xl font-semibold text-gray-900 dark:text-white">
-                                                {{batches.reduce((sum, batch) => sum +
-                                                    (batch.claimed_count + batch.not_claimed_count), 0)}}
+                                                {{batches.reduce((sum, batch) => sum + parseInt(batch.sub_total), 0)}}
                                             </p>
                                         </div>
                                     </div>
@@ -349,7 +348,7 @@
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
                                                 Batch {{ batch.batch_no }}
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
-                                                }})</span>
+                                                    }})</span>
                                             </p>
                                             <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
                                         </div>

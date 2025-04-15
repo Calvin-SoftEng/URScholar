@@ -40,7 +40,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ payout?.total_scholars ?? 0}}</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ batch?.total_scholars ?? 0}}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
