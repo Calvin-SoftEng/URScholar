@@ -102,19 +102,16 @@
                                 </select>
 
                                 <!-- Forward to Cashier Button -->
-                                <button @click="toggleSendBatch" >
+                                <button v-if="payouts >= 0" @click="toggleSendBatch"
+                                    class="bg-green-500 hover:bg-green-700 text-white flex items-center gap-2 font-poppins px-4 py-2 rounded-lg transition duration-200">
                                     <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                     <span class="font-normal">Forward to <span
                                             class="font-semibold">Cashiers</span></span>
                                 </button>
 
-                                <button :class="[
-                                    payouts
-                                        ? 'bg-green-500 hover:bg-green-700 text-white'
-                                        : 'bg-blue-100 dark:bg-blue-800 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 dark:text-dtext',
-                                    'flex items-center gap-2 font-poppins px-4 py-2 rounded-lg transition duration-200'
-                                ]" :disabled="payouts"
-                                    v-tooltip.left="payouts ? 'All batches must be inactive and complete' : ''">
+                                <button v-else
+                                    class="flex items-center gap-2 font-poppins px-4 py-2 rounded-lg transition duration-200 bg-blue-100 dark:bg-blue-800 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 dark:text-dtext"
+                                    disabled v-tooltip.left="'All batches must be inactive and complete'">
                                     <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                     <span class="font-normal">Forward to <span
                                             class="font-semibold">Cashiers</span></span>
@@ -352,7 +349,7 @@
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
                                                 Batch {{ batch.batch_no }}
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
-                                                    }})</span>
+                                                }})</span>
                                             </p>
                                             <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
                                         </div>
