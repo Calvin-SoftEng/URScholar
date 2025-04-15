@@ -862,31 +862,26 @@ class ScholarshipController extends Controller
 
         $validationStatus = false;
 
-        if (Auth::user()->usertype == 'super_admin') {
-            foreach ($grantees as $grantee) {
-                if ($grantee && $grantee->scholar && $grantee->scholar->campus_id == Auth::user()->campus_id) {
-                    $status = $grantee->scholar->student_status;
-                    if ($status === 'Unenrolled') {
-                        $validationStatus = true;
-                        break; // We can exit the loop once we find a valid status
-                    }
-                }
-            }
-        } else {
-            foreach ($grantees as $grantee) {
-                if ($grantee && $grantee->scholar) {
-                    $status = $grantee->scholar->student_status;
-                    if ($status === 'Unenrolled') {
-                        $validationStatus = true;
-                        break; // We can exit the loop once we find a valid status
-                    }
+        foreach ($grantees as $grantee) {
+            if ($grantee && $grantee->scholar && $grantee->scholar->campus_id == Auth::user()->campus_id) {
+                $status = $grantee->scholar->student_status;
+                if ($status === 'Enrolled' || $status === 'Graduated' || $status === 'Dropped') {
+                    $validationStatus = true;
+                    break; // We can exit the loop once we find a valid status
                 }
             }
         }
 
 
-
-
+        foreach ($grantees as $grantee) {
+            if ($grantee && $grantee->scholar) {
+                $status = $grantee->scholar->student_status;
+                if ($status === 'Enrolled' || $status === 'Graduated' || $status === 'Dropped') {
+                    $validationStatus = true;
+                    break; // We can exit the loop once we find a valid status
+                }
+            }
+        }
 
         $total_verified_grantees = $grantees->filter(function ($grantee) {
             return $grantee && $grantee->student_status === 'Enrolled';
@@ -1021,8 +1016,8 @@ class ScholarshipController extends Controller
                     ->where('school_year_id', $schoolYearId)
                     ->where('semester', $selectedSem)
                     ->update([
-                            'status' => 'Inactive'
-                        ]);
+                        'status' => 'Inactive'
+                    ]);
             }
 
             // Create notification for coordinator
@@ -1063,8 +1058,8 @@ class ScholarshipController extends Controller
                     ->where('school_year_id', $schoolYearId)
                     ->where('semester', $selectedSem)
                     ->update([
-                            'status' => 'Active'
-                        ]);
+                        'status' => 'Active'
+                    ]);
             }
         } else {
 
@@ -1080,8 +1075,8 @@ class ScholarshipController extends Controller
                     ->where('school_year_id', $schoolYearId)
                     ->where('semester', $selectedSem)
                     ->update([
-                            'status' => 'Active'
-                        ]);
+                        'status' => 'Active'
+                    ]);
             }
         }
 
