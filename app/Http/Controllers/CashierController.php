@@ -248,7 +248,7 @@ class CashierController extends Controller
 
         $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
 
-        
+
 
 
         // Check if any batches are forwardable
@@ -1042,14 +1042,18 @@ class CashierController extends Controller
             ->with('school_year')
             ->first();
 
-        // Count total claimed disbursements
-        $totalClaimed = Disbursement::where('payout_id', $payout->id)
-            ->where('batch_id', $batchId)
-            ->where('status', 'Claimed') // Assuming 'claimed' is the status for claimed disbursements
-            ->count();
+        if ($payout) {
+            // Count total claimed disbursements
+            $totalClaimed = Disbursement::where('payout_id', $payout->id)
+                ->where('batch_id', $batchId)
+                ->where('status', 'Claimed') // Assuming 'claimed' is the status for claimed disbursements
+                ->count();
 
-        $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
-            ->first();
+            $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
+                ->first();
+        }
+
+
 
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
