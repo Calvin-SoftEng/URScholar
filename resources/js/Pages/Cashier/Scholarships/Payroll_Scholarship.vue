@@ -332,7 +332,7 @@
                                                 batches.length }}</p>
                                         </div>
                                         <div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">Total Scholars</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Total Grantees</p>
                                             <p class="text-xl font-semibold text-gray-900 dark:text-white">
                                                 {{batches.reduce((sum, batch) => sum +
                                                     (batch.claimed_count + batch.not_claimed_count), 0)}}
