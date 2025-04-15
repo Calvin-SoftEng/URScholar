@@ -133,6 +133,9 @@ const weekdays = ref([
 ]);
 
 
+// Define events reactive variable
+const events = ref([]);
+
 // Calendar reference
 const calendar = ref(null);
 
@@ -169,6 +172,12 @@ const showEventDetails = (event) => {
     }, 3000);
 };
 
+// Watch for changes in scholarships prop
+watch(() => props.scholarships, () => {
+    getScholarshipEvents();
+}, { immediate: true });
+
+
 // Add these reactive variables if not already present
 const toastVisible = ref(false);
 const toastMessage = ref('');
@@ -182,10 +191,6 @@ onMounted(() => {
     getScholarshipEvents();
 });
 
-// Add this after your onMounted hook
-watch(() => props.scholarships, () => {
-    getScholarshipEvents();
-}, { deep: true });
 
 </script>
 
