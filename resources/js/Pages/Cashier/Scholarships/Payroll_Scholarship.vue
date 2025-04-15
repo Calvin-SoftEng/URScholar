@@ -122,53 +122,92 @@
                             <div v-for="campus in campusesWithBatches" :key="campus.id" class="mb-8">
                                 <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campus.name }} Campus</h3>
 
-                                <!-- List of batches for this campus -->
                                 <div v-for="batch in getBatchesForCampus(campus.id)" :key="batch.id"
-                                    class="bg-gradient-to-r from-[#F0F4FF] to-[#E6E9FD] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3"
-                                    @click="viewBatchDetails(batch)">
-                                    <div class="flex flex-col space-y-3">
-                                        <!-- Batch header -->
-                                        <div class="flex justify-between items-center">
-                                            <div class="flex items-center space-x-3">
-                                                <span class="text-lg font-semibold text-gray-800">Batch #{{
-                                                    batch.batch_no }}</span>
-                                                <span :class="{
-                                                    'status-badge completed': batch.status === 'Completed',
-                                                    'status-badge pending': batch.status === 'Pending',
-                                                    'status-badge processing': batch.status === 'Processing'
-                                                }">{{ batch.status || 'Pending' }}</span>
-                                            </div>
-                                            <span class="text-sm text-gray-600">{{ formatDate(batch.created_at)
-                                                }}</span>
+                                    class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                    <div @click="viewBatchDetails(batch)"
+                                        class="flex justify-between items-center">
+
+                                        <!-- Batch Info -->
+                                        <div class="flex flex-col px-5">
+                                            <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                batch.batch_no }}</span>
+                                            <span class="text-md font-medium text-gray-600">
+                                                {{ schoolyear.year }} - {{ selectedSem }} Semester
+                                            </span>
                                         </div>
 
-                                        <!-- Batch details -->
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center space-x-8">
-                                                <div class="flex flex-col">
-                                                    <span class="text-xs text-gray-500">School Year</span>
-                                                    <span class="text-sm font-medium">{{ schoolyear.year }}</span>
-                                                </div>
-                                                <div class="flex flex-col">
-                                                    <span class="text-xs text-gray-500">Semester</span>
-                                                    <span class="text-sm font-medium">{{ selectedSem }}</span>
-                                                </div>
-                                            </div>
+                                        <!--------------------------------------------------------- eto kapag validation na -->
+                                        <div class="flex flex-row gap-4">
+                                            <div>
+                                                <!-- Statistics -->
+                                                <div
+                                                    class="grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                    <!-- Validation Status -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-yellow-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                            </svg>
+                                                            <span class="text-primary">
+                                                                Disbursement</span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                            {{ batch.status == true ? 'Complete' :
+                                                                'Pending' }}
+                                                        </span>
 
-                                            <div class="flex items-center space-x-6">
-                                                <div class="flex flex-col items-center">
-                                                    <div class="flex items-center">
-                                                        <font-awesome-icon :icon="['fas', 'users']"
-                                                            class="text-primary text-sm mr-1" />
-                                                        <span class="text-xs text-gray-500">No. of Students</span>
                                                     </div>
-                                                    <span class="text-sm font-semibold text-blue-600">{{
-                                                        batch.sub_total}}</span>
+
+                                                    <!-- Number of Students -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-blue-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                            </svg>
+                                                            <span class="text-primary">
+                                                                Claimed</span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">{{
+                                                                batch.grantees.filter(grantee =>
+                                                                    grantee.scholar?.status ===
+                                                                    'Verified').length}}</span>
+                                                    </div>
+
+                                                    <!-- Unverified Students -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                    d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87M12 11a4 4 0 100-8 4 4 0 000 8zm6 4a4 4 0 00-3-3.87" />
+                                                            </svg>
+                                                            <span class="text-primary">
+                                                                Students</span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                            {{
+                                                        batch.sub_total}}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div>  
 
                                 <!-- No batches message -->
                                 <div v-if="getBatchesForCampus(campus.id).length === 0"
@@ -369,6 +408,15 @@ import { initFlowbite } from 'flowbite';
 
 // Props and initial setup
 const props = defineProps({
+    // scholarship: Object,
+    // schoolyear: Object,
+    // selectedSem: String,
+    // batches: Array,
+    // campuses: Array,
+    // currentUser: Object,
+    // payouts: Array,
+    // payoutsByCampus: Array,
+    // Other props
     scholarship: Object,
     schoolyear: Object,
     selectedSem: String,
@@ -377,7 +425,52 @@ const props = defineProps({
     currentUser: Object,
     payouts: Array,
     payoutsByCampus: Array,
-    // Other props
+
+
+
+
+
+    totalBatches: Number,
+    scholarship_form: Object,
+    scholarship_form_data: Array,
+    eligibilities: Array,
+    conditions: Array,
+    batches: Array,
+    batchesByCampus: Array, // New prop with batches organized by campus
+    scholarship: Object,
+    schoolyear: Object,
+    selectedYear: String,
+    selectedSem: String,
+    selectedCampus: String,
+    allBatchesInactive: Object,
+    grantees: Array,
+    campuses: Array,
+    courses: Array,
+    students: Array,
+    total_approved: Array,
+    total_scholars: Array,
+    requirements: Array,
+    completedBatches: Array,
+    errors: Object,
+    userType: String,
+    userCampusId: Number,
+    approvedCount: Number,
+    allBatches: Array,
+    disableSendEmailButton: Boolean,
+    inactiveBatches: Boolean,
+    inactivePayouts: Boolean,
+    hasActiveGrantees: Boolean,
+    valitedScholars: Boolean,
+    myInactive: Boolean,
+    allInactive: Boolean,
+    valitedBatches: Boolean,
+    checkValidated: Boolean,
+    granteeInactive: Boolean,
+    validationStatus: Boolean,
+    AllvalidationStatus: Boolean,
+    total_verified_grantees: Object,
+    total_unverified_grantees: Object,
+    payoutBatches: Array,
 });
 
 // State
@@ -394,6 +487,12 @@ const form = ref({
     payoutStartInput: '',
     payoutEndInput: '',
 });
+
+const selectedStart = ref(""); // Stores the selected start date
+const selectedEnd = ref("");   // Stores the selected end date
+
+const StartPayout = ref(""); // Stores the selected start date
+const EndPayout = ref("");   // Stores the selected end date
 
 // Computed properties
 const campusesWithBatches = computed(() => {
@@ -522,17 +621,145 @@ const goBack = () => {
     window.history.back();
 };
 
-// Lifecycle hooks
+// Initialize campus data from props
 onMounted(() => {
     initFlowbite();
-    // Additional initialization code as needed
+
+    // Transform props.campuses into the format we need
+    // if (props.campuses && props.campuses.length > 0) {
+    //     campusesData.value = props.campuses.map(campus => ({
+    //         id: campus.id,
+    //         name: campus.name,
+    //         selected: false,
+    //         recipients: 0,
+    //         // Get courses associated with this campus
+    //         courses: props.courses
+    //             ? props.courses.filter(course => course.campus_id === campus.id)
+    //                 .map(course => course.name)
+    //             : []
+    //     }));
+    // }
+
+    // if (props.batches && props.batches.length > 0) {
+    //     expandedBatches.value = props.batches[0].id;
+    // }
+
+    // Initialize Flowbite Datepicker
+    const dateInput = document.getElementById("datepicker-autohide");
+    if (dateInput) {
+        const datepicker = new Datepicker(dateInput, {
+            autohide: true,
+            format: "yyyy-mm-dd", // Adjust format as needed
+        });
+
+        dateInput.addEventListener("changeDate", (event) => {
+            form.value.birthdate = event.target.value;
+        });
+    }
+
+    const startInput = document.getElementById("datepicker-range-start");
+    if (startInput) {
+        startInput.value = selectedStart.value; // Keep the previous value
+        startInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value);
+
+            // Correct for time zone issues
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+            form.value.application = date.toISOString().split("T")[0]; // Keeps the correct local date
+            console.log("Application:", form.value.application);
+            selectedStart.value = event.target.value;
+        });
+    }
+
+    const endInput = document.getElementById("datepicker-range-end");
+    if (endInput) {
+        endInput.value = selectedEnd.value; // Keep the previous value
+        endInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value);
+
+            // Correct for time zone issues
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+            form.value.deadline = date.toISOString().split("T")[0]; // Keeps the correct local date
+            selectedEnd.value = event.target.value;
+        });
+    }
+
+    watch(ForwardBatchList, (newValue) => {
+        if (newValue) {
+            setTimeout(() => {
+                initFlowbite(); // Initialize Flowbite when modal is accessed
+
+                const startInput = document.getElementById("datepicker-range-start");
+                if (startInput) {
+                    startInput.value = StartPayout.value; // Keep the previous value
+                    startInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.payoutStartInput = date.toISOString().split("T")[0];
+                        console.log("Application:", form.value.payoutStartInput);
+                        StartPayout.value = event.target.value;
+                    });
+                } else {
+                    console.warn("Start datepicker not found.");
+                }
+
+                const endInput = document.getElementById("datepicker-range-end");
+                if (endInput) {
+                    endInput.value = EndPayout.value; // Keep the previous value
+                    endInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.payoutEndInput = date.toISOString().split("T")[0];
+                        EndPayout.value = event.target.value;
+                    });
+                } else {
+                    console.warn("End datepicker not found.");
+                }
+
+                // // Initial distribution
+                // distributeRecipients();
+
+            }, 200); // Small delay to ensure modal is in the DOM
+        }
+    });
+
+
+    // // Initial distribution
+    // distributeRecipients();
 });
+
+// Watch errors.date_start and open the modal if an error exists
+watch(() => props.errors.date_start, (newError) => {
+    if (newError) {
+        ForwardBatchList.value = true; // Show modal
+        setTimeout(() => initFlowbite(), 200); // Initialize Flowbite modal
+    }
+});
+
+watch(selectedStart, (newVal) => {
+    document.getElementById("datepicker-range-start").value = newVal;
+});
+
+watch(selectedEnd, (newVal) => {
+    document.getElementById("datepicker-range-end").value = newVal;
+});
+
+// 🎯 Sync Input Values
+watch(() => StartPayout.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-start");
+    if (input) input.value = newVal;
+});
+
+watch(() => EndPayout.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-end");
+    if (input) input.value = newVal;
+});
+
 
 watch(ForwardBatchList, (newValue) => {
     if (newValue) {
         setTimeout(() => {
-            initFlowbite();
-            // Initialize datepickers and other modal components
+            initFlowbite(); // Initialize the modal components
         }, 200);
     }
 });
