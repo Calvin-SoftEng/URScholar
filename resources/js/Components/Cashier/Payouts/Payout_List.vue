@@ -245,15 +245,18 @@
                 <font-awesome-icon :icon="['fas', activeTab === 'reason' ? 'exclamation-circle' : 'check-circle']"
                   class="text-blue-600 text-2xl" />
 
-                <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                <h2 class="text-2xl md:text-2xl font-semibold text-gray-900 dark:text-white">
                   {{ activeTab === 'reason' ? 'Reason for Not Claim' : 'Confirm Manual Claim' }}
                 </h2>
               </div>
 
-              <button @click="closeModal"
-                class="text-gray-400 hover:text-gray-900 hover:bg-gray-200 dark:hover:bg-gray-600 dark:hover:text-white rounded-lg p-1.5">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              <button type="button" @click="closeModal"
+                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                data-modal-hide="default-modal">
+                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                  viewBox="0 0 14 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                 </svg>
               </button>
             </div>
@@ -269,13 +272,13 @@
             </div>
 
             <!-- Modal Content -->
-            <div class="p-4 space-y-4">
+            <div class="p-4 space-y-4 ">
 
               <!-- Update the claim section to properly handle form submission -->
               <div v-if="activeTab === 'claim'" class="h-full flex flex-col justify-between space-y-4">
                 <!-- Scholar Profile -->
-                <div class="h-full flex flex-col items-center">
-                  <div class="w-24 h-24 bg-gray-300 rounded-full overflow-hidden mb-3">
+                <div class="h-full flex flex-row justify-center items-center gap-5">
+                  <div class="w-44 h-44 bg-gray-300 rounded-full overflow-hidden mb-3">
                     <img v-if="pendingScholar && pendingScholar.picture"
                       :src="`/storage/user/profile/${pendingScholar.picture}`" alt="Scholar Profile"
                       class="w-full h-full object-cover" />
@@ -284,25 +287,22 @@
                     </div>
                   </div>
 
-                  <div class="text-center" v-if="pendingScholar">
-                    <p class="font-semibold text-lg">
+                  <div class="text-left font-poppins" v-if="pendingScholar">
+                    <p class="font-semibold text-3xl">
                       {{ pendingScholar.last_name }}, {{ pendingScholar.first_name }} {{ pendingScholar.middle_name }}
                     </p>
-                    <p class="text-gray-600 text-sm">{{ pendingScholar.email }}</p>
-                    <p class="text-gray-600 text-sm">{{ pendingScholar.campus?.name }}</p>
-                    <p class="text-gray-600 text-sm">{{ pendingScholar.course?.name }}</p>
-                    <p class="text-gray-600 text-sm">{{ pendingScholar.year_level }}{{
-                      getYearSuffix(pendingScholar.year_level) }} year</p>
-                    <p class="text-gray-600 text-sm mt-2">Grant: {{ pendingScholar.grant }}</p>
-                    <p class="text-gray-600 text-sm">Scholar ID: {{ pendingScholar.urscholar_id }}</p>
+                    <p class="text-gray-600 text-xl">{{ pendingScholar.course?.name }}</p>
+                    <p class="text-gray-600 text-xl">{{ pendingScholar.year_level }}{{
+                      getYearSuffix(pendingScholar.year_level) }} Year - {{ pendingScholar.campus?.name }}</p>
+                    <p class="text-gray-600 text-xl">Scholar ID: <span class="font-semibold">{{ pendingScholar.urscholar_id }}</span></p>
                   </div>
                 </div>
 
                 <!-- Confirmation Message -->
                 <div>
-                  <h3 class="font-medium text-gray-900 dark:text-white text-center">
+                  <h3 class="font-medium font-poppins text-lg text-gray-900 dark:text-white text-center">
                     Are you sure you want to manually tag this scholar as
-                    <span class="text-green-600">Claimed</span>?
+                    <span class="text-green-600">Claimed</span> for {{ pendingScholar.grant }}?
                   </h3>
                 </div>
 
@@ -324,12 +324,12 @@
               <!-- Reason Section -->
               <div v-if="activeTab === 'reason'" class="space-y-4">
                 <h3 class="font-semibold text-gray-900 dark:text-white">
-                  As per Scholar:
+                  As per Grantee:
                   <span>{{ selectedScholar ? `${selectedScholar.first_name} ${selectedScholar.last_name}` : '' }}</span>
                 </h3>
                 <textarea id="reason" v-model="form.reason" rows="4"
                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  placeholder="Write a message"></textarea>
+                  placeholder="Write the reason"></textarea>
                 <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" />
 
                 <div>

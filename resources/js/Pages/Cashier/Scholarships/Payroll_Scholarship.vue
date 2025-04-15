@@ -102,7 +102,13 @@
                                 </select>
 
                                 <!-- Forward to Cashier Button -->
-                                <button @click="toggleSendBatch" :class="[
+                                <button @click="toggleSendBatch" >
+                                    <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                    <span class="font-normal">Forward to <span
+                                            class="font-semibold">Cashiers</span></span>
+                                </button>
+
+                                <button :class="[
                                     payouts
                                         ? 'bg-green-500 hover:bg-green-700 text-white'
                                         : 'bg-blue-100 dark:bg-blue-800 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 dark:text-dtext',
