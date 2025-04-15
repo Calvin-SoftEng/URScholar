@@ -566,6 +566,7 @@ class CashierController extends Controller
             ->with('school_year')
             ->first();
 
+
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
             ->where('campus_id', Auth::user()->campus_id) // Filter by campus
@@ -586,7 +587,7 @@ class CashierController extends Controller
         // Count total claimed disbursements
         $totalClaimed = Disbursement::where('payout_id', $payout->id)
             ->where('batch_id', $batchId)
-            ->where('status', 'claimed') // Assuming 'claimed' is the status for claimed disbursements
+            ->where('status', 'Claimed') // Assuming 'claimed' is the status for claimed disbursements
             ->count();
 
         $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
@@ -986,6 +987,7 @@ class CashierController extends Controller
             })
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->orderBy('batch_no', 'desc')
+            ->with('school_year')
             ->first();
 
         $grantees = $scholarship->grantees()
@@ -1032,10 +1034,28 @@ class CashierController extends Controller
             ];
         });
 
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+            ->where('campus_id', $batch->campus_id) // Filter by campus
+            ->where('status', '!=', 'Inactive')
+            ->with('school_year')
+            ->first();
+
+        // Count total claimed disbursements
+        $totalClaimed = Disbursement::where('payout_id', $payout->id)
+            ->where('batch_id', $batchId)
+            ->where('status', 'Claimed') // Assuming 'claimed' is the status for claimed disbursements
+            ->count();
+
+        $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
+            ->first();
+
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars,
+            'payout' => $payout,
+            'totalClaimed' => $totalClaimed,
+            'payout_schedule' => $payout_schedule,
         ]);
     }
 }

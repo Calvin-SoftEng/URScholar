@@ -30,7 +30,7 @@
                                 class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span>
                             <span>Grant</span>
                         </h1>
-                        <span class="text-xl">SY feafaefe Semester</span>
+                        <span class="text-xl">SY {{ batch.school_year.year }} - {{ batch.semester }} Semester</span>
                     </div>
                     <div class="flex gap-2">
                         <!-- Stats Section -->
@@ -40,7 +40,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">222</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ payout.total_scholars }}</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
@@ -48,7 +48,7 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">2</p>
+                                <p class="text-4xl font-semibold font-kanit">{{ totalClaimed }}</p>
                             </div>
                         </div>
                     </div>
