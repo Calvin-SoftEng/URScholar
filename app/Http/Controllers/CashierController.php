@@ -248,6 +248,8 @@ class CashierController extends Controller
 
         $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
 
+        
+
 
         // Check if any batches are forwardable
         return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
@@ -540,7 +542,7 @@ class CashierController extends Controller
             'type' => 'forward_payout',
         ]);
 
-        $super_admin = User::where('usertype', 'super_admin')->first();
+        $super_admin = User::where('usertype', 'head_cashier')->first();
 
         // Attach the coordinator to the notification
         $notification->users()->attach($super_admin->id);
@@ -548,7 +550,7 @@ class CashierController extends Controller
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Forward Payouts',
-            'description' => 'User forwarded the payout to Head Administrator',
+            'description' => 'User forwarded the payout to University Cashier',
         ]);
 
 

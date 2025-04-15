@@ -103,12 +103,12 @@
 
                                 <!-- Forward to Cashier Button -->
                                 <button @click="toggleSendBatch" :class="[
-                                    hasForwardableBatches
+                                    payouts
                                         ? 'bg-green-500 hover:bg-green-700 text-white'
                                         : 'bg-blue-100 dark:bg-blue-800 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 dark:text-dtext',
                                     'flex items-center gap-2 font-poppins px-4 py-2 rounded-lg transition duration-200'
-                                ]" :disabled="!hasForwardableBatches"
-                                    v-tooltip.left="!hasForwardableBatches ? 'All batches must be inactive and complete' : ''">
+                                ]" :disabled="payouts"
+                                    v-tooltip.left="payouts ? 'All batches must be inactive and complete' : ''">
                                     <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                     <span class="font-normal">Forward to <span
                                             class="font-semibold">Cashiers</span></span>
@@ -124,8 +124,7 @@
 
                                 <div v-for="batch in getBatchesForCampus(campus.id)" :key="batch.id"
                                     class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                    <div @click="viewBatchDetails(batch)"
-                                        class="flex justify-between items-center">
+                                    <div @click="viewBatchDetails(batch)" class="flex justify-between items-center">
 
                                         <!-- Batch Info -->
                                         <div class="flex flex-col px-5">
@@ -144,20 +143,18 @@
                                                     class="grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
                                                     <!-- Validation Status -->
                                                     <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="w-5 h-5 text-yellow-400" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
                                                                     d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
                                                             </svg>
                                                             <span class="text-primary">
                                                                 Disbursement</span>
                                                         </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                        <span class="text-xl font-bold text-primary drop-shadow">
                                                             {{ batch.status == true ? 'Complete' :
                                                                 'Pending' }}
                                                         </span>
@@ -166,48 +163,46 @@
 
                                                     <!-- Number of Students -->
                                                     <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="w-5 h-5 text-blue-400" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
                                                                     d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                                             </svg>
                                                             <span class="text-primary">
                                                                 Claimed</span>
                                                         </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">{{
-                                                                batch.grantees.filter(grantee =>
-                                                                    grantee.scholar?.status ===
-                                                                    'Verified').length}}</span>
+                                                        <span class="text-xl font-bold text-primary drop-shadow">{{
+                                                            batch.grantees.filter(grantee =>
+                                                                grantee.scholar?.status ===
+                                                                'Verified').length}}</span>
                                                     </div>
 
                                                     <!-- Unverified Students -->
                                                     <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" fill="none"
+                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-4 h-4 text-primary" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
                                                                     d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87M12 11a4 4 0 100-8 4 4 0 000 8zm6 4a4 4 0 00-3-3.87" />
                                                             </svg>
                                                             <span class="text-primary">
                                                                 Students</span>
                                                         </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                        <span class="text-xl font-bold text-primary drop-shadow">
                                                             {{
-                                                        batch.sub_total}}
+                                                                batch.sub_total }}
                                                         </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>  
+                                </div>
 
                                 <!-- No batches message -->
                                 <div v-if="getBatchesForCampus(campus.id).length === 0"
@@ -351,7 +346,7 @@
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
                                                 Batch {{ batch.batch_no }}
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
-                                                }})</span>
+                                                    }})</span>
                                             </p>
                                             <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
                                         </div>
