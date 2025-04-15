@@ -346,7 +346,7 @@ class ScholarController extends Controller
 
             // Check for "Inactive" condition - all grantees are either 'Graduated' or 'Dropped'
             $completedGrantees = Grantees::where('batch_id', $batch->id)
-                ->whereIn('student_status', ['Graduated', 'Dropped'])
+                ->whereIn('student_status', ['Graduated', 'Dropped', 'Enrolled'])
                 ->count();
 
             // Check for "validated" condition - all grantees are 'Graduated', 'Dropped', or 'Enrolled'
