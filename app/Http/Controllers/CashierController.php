@@ -129,7 +129,7 @@ class CashierController extends Controller
         // 1. Have batches matching the user's campus_id, OR
         // 2. Have applicant_tracks matching the user's campus_id, OR
         // 3. Were created by the authenticated user
-        $scholarships = Scholarship::all();
+        $scholarships = Scholarship::where('status', 'Active')->get();
 
         // $scholarships = Scholarship::where(function ($query) use ($userId, $userCampusId) {
         //     $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
