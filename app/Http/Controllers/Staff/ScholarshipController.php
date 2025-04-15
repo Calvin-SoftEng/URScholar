@@ -1492,13 +1492,8 @@ class ScholarshipController extends Controller
             'grantees' => 'required|array',
             'batch_ids' => 'required|array',
             'batch_ids.*' => 'integer',
-            'date_start' => 'required|date',
-            'date_end' => 'required|date',
             'school_year_id' => 'required',
             'semester' => 'required',
-        ], [
-            'date_start.required' => 'Set a Date start',
-            'date_end.required' => 'Set a Date end',
         ]);
 
         $scholarshipId = $request->input('scholarship_id');
@@ -1509,12 +1504,6 @@ class ScholarshipController extends Controller
         // Group grantees by campus
         $granteesByCampus = [];
         foreach ($grantees as $grantee) {
-            // Skip grantees that don't have 'Active' status
-            // if (!isset($grantee['status']) || $grantee['status'] !== 'Active') {
-            //     continue;
-            // }
-
-
             // Get the batch to find campus_id
             $batch = Batch::find($grantee['batch_id']);
 

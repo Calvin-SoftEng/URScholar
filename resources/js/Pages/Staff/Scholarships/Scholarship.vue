@@ -1108,7 +1108,7 @@
                         <!-- Title and Description -->
                         <div class="flex flex-col">
                             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Forward the list for Payouts
+                                Forward 
                             </h2>
                             <!-- <span class="text-sm text-gray-600 dark:text-gray-400">
                                 Provide the necessary details to set up a scholarship.
@@ -1129,57 +1129,6 @@
                 <!-- Form -->
                 <form @submit.prevent="forwardBatches">
                     <div class="py-4 px-8 flex flex-col gap-3">
-                        <div class="mb-4">
-                            <label for="batchSelection"
-                                class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                                Select a Date:
-                            </label>
-
-                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
-
-                                <div class="flex flex-col w-full">
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                viewBox="0 0 20 20">
-                                                <path
-                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                            </svg>
-                                        </div>
-                                        <InputError v-if="errors?.date_start" :message="errors.date_start"
-                                            class=" text-red-500" />
-                                        <input v-model="StartPayout" id="datepicker-range-start" name="start"
-                                            type="text" autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Submission Start Date">
-                                    </div>
-                                </div>
-
-                                <span class="text-gray-500">to</span>
-
-                                <div class="flex flex-col w-full">
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                viewBox="0 0 20 20">
-                                                <path
-                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                            </svg>
-                                        </div>
-                                        <InputError v-if="errors?.date_end" :message="errors.date_end"
-                                            class=" text-red-500" />
-                                        <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text"
-                                            autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Submission Start Date">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <label for="batchSelection"
                             class="block mb-2 text-base font-medium text-gray-500 dark:text-white">

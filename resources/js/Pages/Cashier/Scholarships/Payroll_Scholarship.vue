@@ -1,6 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
@@ -117,16 +118,17 @@
                                 </select>
 
                                 <!-- Forward to Cashier -->
-                                <!-- <div v-if="hasForwardableBatches">
+                                <div v-if="hasForwardableBatches">
                                     <button @click="toggleSendBatch"
                                         class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                         <span class="font-normal">Forward to <span
                                                 class="font-semibold">Cashiers</span></span>
                                     </button>
-                                </div> -->
-                                <div>
-                                    <button v-tooltip.left="'All batches must be inactive and complete'" @click="toggleSendBatch"
+                                </div>
+                                <div v-else>
+                                    <button v-tooltip.left="'All batches must be inactive and complete'"
+                                        @click="toggleSendBatch"
                                         class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
                                                 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 px-4 py-2 rounded-lg transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -190,73 +192,68 @@
                             </div> -->
 
                             <Link :href="route('cashier.pending_payouts')">
-                                <div
-                                    class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                    <div 
-                                        class="flex justify-between items-center">
+                            <div
+                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                <div class="flex justify-between items-center">
 
-                                        <!-- Batch Info -->
-                                        <div class="flex flex-col px-5">
-                                            <span class="text-lg font-semibold text-gray-800">Batch 
-                                            </span>
-                                            <span class="text-md font-medium text-gray-600">
+                                    <!-- Batch Info -->
+                                    <div class="flex flex-col px-5">
+                                        <span class="text-lg font-semibold text-gray-800">Batch
+                                        </span>
+                                        <span class="text-md font-medium text-gray-600">
                                             1st Semester - SY 2023-2024
-                                            </span>
-                                        </div>
+                                        </span>
+                                    </div>
 
-                                        <!--------------------------------------------------------- eto kapag validation na -->
-                                        <div class="flex flex-row gap-4">
-                                            <div>
-                                                <!-- Statistics -->
-                                                <div
-                                                    class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
-                                                    <!-- Validation Status -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-5 h-5 text-yellow-400" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
-                                                            </svg>
-                                                            <span class="text-primary">
+                                    <!--------------------------------------------------------- eto kapag validation na -->
+                                    <div class="flex flex-row gap-4">
+                                        <div>
+                                            <!-- Statistics -->
+                                            <div
+                                                class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                <!-- Validation Status -->
+                                                <div class="flex flex-col items-center space-y-1">
+                                                    <div class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-yellow-400" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                        </svg>
+                                                        <span class="text-primary">
                                                             Disbursement Status
-                                                            </span>
-                                                        </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">
-                                                            feff
-                                                        </span>
-
-                                                    </div>
-
-                                                    <!-- Number of Students -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-5 h-5 text-blue-400" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
-                                                            </svg>
-                                                            <span class="text-primary">
-                                                                Grantees
-                                                            </span>
-                                                        </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">fefaef
                                                         </span>
                                                     </div>
+                                                    <span class="text-xl font-bold text-primary drop-shadow">
+                                                        feff
+                                                    </span>
 
                                                 </div>
+
+                                                <!-- Number of Students -->
+                                                <div class="flex flex-col items-center space-y-1">
+                                                    <div class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                                            class="w-5 h-5 text-blue-400" fill="none"
+                                                            viewBox="0 0 24 24" stroke="currentColor">
+                                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                                stroke-width="2"
+                                                                d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                        </svg>
+                                                        <span class="text-primary">
+                                                            Grantees
+                                                        </span>
+                                                    </div>
+                                                    <span class="text-xl font-bold text-primary drop-shadow">fefaef
+                                                    </span>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
                             </Link>
 
                             <div v-if="payoutsByCampus && Object.keys(payoutsByCampus).length > 0">
@@ -653,13 +650,13 @@ const filteredOtherCampuses = computed(() => {
 // Check if there are any batches after filtering
 const hasAnyBatches = computed(() => {
     // Check if there are batches for the current user's campus
-    const hasCurrentUserCampusBatches = 
+    const hasCurrentUserCampusBatches =
         batches.value && batches.value.some(batch => batch.campus_id === currentUser.value.campus_id);
-    
+
     // Check if there are batches for other campuses through payouts
-    const hasOtherCampusBatches = 
+    const hasOtherCampusBatches =
         payoutsByCampus.value && Object.keys(payoutsByCampus.value).length > 0;
-    
+
     return hasCurrentUserCampusBatches || hasOtherCampusBatches;
 });
 
@@ -732,17 +729,37 @@ const viewBatchDetails = (batch) => {
     }));
 };
 
-// Forward batches to cashier
 const forwardBatches = async () => {
     isSubmitting.value = true;
     errors.value = {};
 
     try {
+        // Collect all the grantees from the selected batches
+        const grantees = [];
+        forwardableBatches.value.forEach(batch => {
+            // We need to include relevant scholar data for each batch
+            // Assuming each batch contains scholar information or references
+            const batchScholars = [];
+            // You'll need to adapt this part based on your data structure
+            // This is a placeholder for the scholars in each batch
+            for (let i = 0; i < batch.claimed_count + batch.not_claimed_count; i++) {
+                batchScholars.push({
+                    batch_id: batch.id,
+                    scholar: { id: i } // Placeholder - you need to get actual scholar IDs
+                });
+            }
+            grantees.push(...batchScholars);
+        });
+
         // Call to backend to forward batches
-        await router.post(route('cashier.forward', props.scholarship.id), {
-            batches: forwardableBatches.value.map(batch => batch.id),
+        await router.post(route('cashier.forward'), {
+            scholarship_id: props.scholarship.id,
+            batch_ids: forwardableBatches.value.map(batch => batch.id),
+            grantees: grantees,
             date_start: dateRange.value.start,
-            date_end: dateRange.value.end
+            date_end: dateRange.value.end,
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         }, {
             onSuccess: () => {
                 // Show success toast
@@ -777,6 +794,19 @@ const selectedEnd = ref("");   // Stores the selected end date
 const StartPayout = ref(""); // Stores the selected start date
 const EndPayout = ref("");   // Stores the selected end date
 
+// Detect outside click
+function handleClickOutside(event) {
+    const clickedOutside =
+        !reportTypeRef.value?.contains(event.target) &&
+        !batchRef.value?.contains(event.target) &&
+        !campusRef.value?.contains(event.target)
+
+    if (clickedOutside) {
+        openDropdown.value = ''
+    }
+}
+
+
 // Initialize campus data from props
 onMounted(() => {
     initFlowbite();
@@ -787,23 +817,23 @@ onMounted(() => {
     }
 
     // Transform props.campuses into the format we need
-    if (props.campuses && props.campuses.length > 0) {
-        campusesData.value = props.campuses.map(campus => ({
-            id: campus.id,
-            name: campus.name,
-            selected: false,
-            recipients: 0,
-            // Get courses associated with this campus
-            courses: props.courses
-                ? props.courses.filter(course => course.campus_id === campus.id)
-                    .map(course => course.name)
-                : []
-        }));
-    }
+    // if (props.campuses && props.campuses.length > 0) {
+    //     campusesData.value = props.campuses.map(campus => ({
+    //         id: campus.id,
+    //         name: campus.name,
+    //         selected: false,
+    //         recipients: 0,
+    //         // Get courses associated with this campus
+    //         courses: props.courses
+    //             ? props.courses.filter(course => course.campus_id === campus.id)
+    //                 .map(course => course.name)
+    //             : []
+    //     }));
+    // }
 
-    if (props.batches && props.batches.length > 0) {
-        expandedBatches.value = props.batches[0].id;
-    }
+    // if (props.batches && props.batches.length > 0) {
+    //     expandedBatches.value = props.batches[0].id;
+    // }
 
     // Initialize Flowbite Datepicker
     const dateInput = document.getElementById("datepicker-autohide");
@@ -877,16 +907,16 @@ onMounted(() => {
                     console.warn("End datepicker not found.");
                 }
 
-                // Initial distribution
-                distributeRecipients();
+                // // Initial distribution
+                // distributeRecipients();
 
             }, 200); // Small delay to ensure modal is in the DOM
         }
     });
 
 
-    // Initial distribution
-    distributeRecipients();
+    // // Initial distribution
+    // distributeRecipients();
 });
 
 // Watch errors.date_start and open the modal if an error exists
