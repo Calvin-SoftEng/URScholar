@@ -203,8 +203,13 @@
                 </div>
                 <!-- Text (displayed only when dataOpenSideBar) -->
                 <div class="flex flex-col items-start text-[12px] text-blue-900 dark:text-dtext">
-                  <span v-show="dataOpenSideBar">{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name
-                    }} </span>
+                  <span
+                    v-show="dataOpenSideBar"
+                    class="truncate max-w-[120px] overflow-hidden whitespace-nowrap block"
+                  >
+                    {{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name }}
+                  </span>
+
                   <span v-show="dataOpenSideBar">
                     {{
                         $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :

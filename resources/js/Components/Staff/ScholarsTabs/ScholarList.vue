@@ -22,7 +22,7 @@
           </div>
           <input type="search" id="default-search" v-model="searchQuery"
             class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
+            placeholder="Search Grantee" required />
         </div>
       </form>
     </div>
@@ -42,7 +42,7 @@
               <thead class="justify-center items-center bg-gray-50">
                 <tr class="text-xs uppercase">
                   <th>URScholar ID</th>
-                  <th>Scholar</th>
+                  <th>Grantee</th>
                   <th>Campus</th>
                   <th>Grant</th>
                   <th v-if="requirements.length > 0">Requirements</th>

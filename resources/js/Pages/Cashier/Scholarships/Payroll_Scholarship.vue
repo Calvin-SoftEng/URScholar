@@ -1,7 +1,6 @@
 <template>
     <AuthenticatedLayout>
-        <div
-            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
@@ -24,8 +23,7 @@
                             <button @click="goBack"
                                 class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
                                 < </button>
-                                    <span>{{ scholarship.name }}</span>
-                                    <span>{{ scholarship.scholarshipType }}</span>
+                                    <span>{{ scholarship.name }} {{ scholarship.scholarshipType }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear.year }} - {{ selectedSem }} Semester</span>
                     </div>
@@ -43,7 +41,7 @@
                                     <p class="text-gray-500 text-sm">Total Batches</p>
                                 </div>
                                 <div class="w-full flex flex-row justify-between space-x-3 items-end">
-                                    <p class="text-4xl font-semibold font-kanit">fefef</p>
+                                    <p class="text-4xl font-semibold font-kanit">1</p>
                                 </div>
                             </div>
 
@@ -202,7 +200,7 @@
                                             <span class="text-lg font-semibold text-gray-800">Batch 
                                             </span>
                                             <span class="text-md font-medium text-gray-600">
-                                            gsrgrs
+                                            1st Semester - SY 2023-2024
                                             </span>
                                         </div>
 
@@ -521,6 +519,67 @@ const props = defineProps({
     currentUser: Object,
     payouts: Array,
     payoutsByCampus: Array,
+
+
+
+
+
+    totalBatches: Number,
+    scholarship_form: Object,
+    scholarship_form_data: Array,
+    eligibilities: Array,
+    conditions: Array,
+    batches: Array,
+    batchesByCampus: Array, // New prop with batches organized by campus
+    scholarship: Object,
+    schoolyear: Object,
+    selectedYear: String,
+    selectedSem: String,
+    selectedCampus: String,
+    allBatchesInactive: Object,
+    grantees: Array,
+    campuses: Array,
+    courses: Array,
+    students: Array,
+    total_approved: Array,
+    total_scholars: Array,
+    requirements: Array,
+    completedBatches: Array,
+    errors: Object,
+    userType: String,
+    userCampusId: Number,
+    approvedCount: Number,
+    allBatches: Array,
+    disableSendEmailButton: Boolean,
+    inactiveBatches: Boolean,
+    inactivePayouts: Boolean,
+    hasActiveGrantees: Boolean,
+    valitedScholars: Boolean,
+    myInactive: Boolean,
+    allInactive: Boolean,
+    valitedBatches: Boolean,
+    checkValidated: Boolean,
+    granteeInactive: Boolean,
+    validationStatus: Boolean,
+    AllvalidationStatus: Boolean,
+    total_verified_grantees: Object,
+    total_unverified_grantees: Object,
+    payoutBatches: Array,
+});
+
+const form = ref({
+    name: '',
+    scholarshipType: '',
+    totalRecipients: 0,
+    requirements: [],
+    criteria: [],
+    conditions: [],
+    grade: 0.0,
+    amount: 0,
+    application: '',
+    deadline: '',
+    payoutStartInput: '',
+    payoutEndInput: '',
 });
 
 // Toast notification
@@ -711,6 +770,160 @@ const forwardBatches = async () => {
         isSubmitting.value = false;
     }
 };
+
+const selectedStart = ref(""); // Stores the selected start date
+const selectedEnd = ref("");   // Stores the selected end date
+
+const StartPayout = ref(""); // Stores the selected start date
+const EndPayout = ref("");   // Stores the selected end date
+
+// Initialize campus data from props
+onMounted(() => {
+    initFlowbite();
+    document.addEventListener('click', handleClickOutside)
+    // Make sure form.criteria is initialized
+    if (!form.value.criteria) {
+        form.value.criteria = [];
+    }
+
+    // Transform props.campuses into the format we need
+    if (props.campuses && props.campuses.length > 0) {
+        campusesData.value = props.campuses.map(campus => ({
+            id: campus.id,
+            name: campus.name,
+            selected: false,
+            recipients: 0,
+            // Get courses associated with this campus
+            courses: props.courses
+                ? props.courses.filter(course => course.campus_id === campus.id)
+                    .map(course => course.name)
+                : []
+        }));
+    }
+
+    if (props.batches && props.batches.length > 0) {
+        expandedBatches.value = props.batches[0].id;
+    }
+
+    // Initialize Flowbite Datepicker
+    const dateInput = document.getElementById("datepicker-autohide");
+    if (dateInput) {
+        const datepicker = new Datepicker(dateInput, {
+            autohide: true,
+            format: "yyyy-mm-dd", // Adjust format as needed
+        });
+
+        dateInput.addEventListener("changeDate", (event) => {
+            form.value.birthdate = event.target.value;
+        });
+    }
+
+    const startInput = document.getElementById("datepicker-range-start");
+    if (startInput) {
+        startInput.value = selectedStart.value; // Keep the previous value
+        startInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value);
+
+            // Correct for time zone issues
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+            form.value.application = date.toISOString().split("T")[0]; // Keeps the correct local date
+            console.log("Application:", form.value.application);
+            selectedStart.value = event.target.value;
+        });
+    }
+
+    const endInput = document.getElementById("datepicker-range-end");
+    if (endInput) {
+        endInput.value = selectedEnd.value; // Keep the previous value
+        endInput.addEventListener("changeDate", (event) => {
+            const date = new Date(event.target.value);
+
+            // Correct for time zone issues
+            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+            form.value.deadline = date.toISOString().split("T")[0]; // Keeps the correct local date
+            selectedEnd.value = event.target.value;
+        });
+    }
+
+    watch(ForwardBatchList, (newValue) => {
+        if (newValue) {
+            setTimeout(() => {
+                initFlowbite(); // Initialize Flowbite when modal is accessed
+
+                const startInput = document.getElementById("datepicker-range-start");
+                if (startInput) {
+                    startInput.value = StartPayout.value; // Keep the previous value
+                    startInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.payoutStartInput = date.toISOString().split("T")[0];
+                        console.log("Application:", form.value.payoutStartInput);
+                        StartPayout.value = event.target.value;
+                    });
+                } else {
+                    console.warn("Start datepicker not found.");
+                }
+
+                const endInput = document.getElementById("datepicker-range-end");
+                if (endInput) {
+                    endInput.value = EndPayout.value; // Keep the previous value
+                    endInput.addEventListener("changeDate", (event) => {
+                        const date = new Date(event.target.value); // ✅ Get selected date
+                        form.value.payoutEndInput = date.toISOString().split("T")[0];
+                        EndPayout.value = event.target.value;
+                    });
+                } else {
+                    console.warn("End datepicker not found.");
+                }
+
+                // Initial distribution
+                distributeRecipients();
+
+            }, 200); // Small delay to ensure modal is in the DOM
+        }
+    });
+
+
+    // Initial distribution
+    distributeRecipients();
+});
+
+// Watch errors.date_start and open the modal if an error exists
+watch(() => props.errors.date_start, (newError) => {
+    if (newError) {
+        ForwardBatchList.value = true; // Show modal
+        setTimeout(() => initFlowbite(), 200); // Initialize Flowbite modal
+    }
+});
+
+watch(selectedStart, (newVal) => {
+    document.getElementById("datepicker-range-start").value = newVal;
+});
+
+watch(selectedEnd, (newVal) => {
+    document.getElementById("datepicker-range-end").value = newVal;
+});
+
+// 🎯 Sync Input Values
+watch(() => StartPayout.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-start");
+    if (input) input.value = newVal;
+});
+
+watch(() => EndPayout.value, (newVal) => {
+    const input = document.getElementById("datepicker-range-end");
+    if (input) input.value = newVal;
+});
+
+
+watch(ForwardBatchList, (newValue) => {
+    if (newValue) {
+        setTimeout(() => {
+            initFlowbite(); // Initialize the modal components
+        }, 200);
+    }
+});
 // Initialize datepicker on mount
 // onMounted(() => {
 //     // Integration with Flowbite Datepicker or other library would go here
