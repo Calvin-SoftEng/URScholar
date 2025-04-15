@@ -158,8 +158,7 @@
                                                                 Disbursement</span>
                                                         </div>
                                                         <span class="text-xl font-bold text-primary drop-shadow">
-                                                            {{ batch.status == true ? 'Complete' :
-                                                                'Pending' }}
+                                                            {{ getPayoutStatus(batch)}}
                                                         </span>
 
                                                     </div>
@@ -531,6 +530,21 @@ const getPayoutSubTotal = (batch) => {
   
   // Fall back to batch's own sub_total
   return 0;
+};
+
+const getPayoutStatus = (batch) => {
+  // Find a payout that matches this batch's campus_id
+  const matchingPayout = props.payouts.find(payout => 
+    payout.campus_id === batch.campus_id
+  );
+  
+  // If we found a matching payout, return its sub_total
+  if (matchingPayout) {
+    return matchingPayout.sub_total == matchingPayout.total_scholars;
+  }
+  
+  // Fall back to batch's own sub_total
+  return 'Pending';
 };
 
 // Stats calculations
