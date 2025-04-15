@@ -1060,8 +1060,8 @@ class CashierController extends Controller
             'batch' => $batch,
             'scholars' => $scholars,
             'payout' => $payout,
-            'totalClaimed' => $totalClaimed,
-            'payout_schedule' => $payout_schedule,
+            'totalClaimed' => $totalClaimed ?? null,
+            'payout_schedule' => $payout_schedule ?? null,
         ]);
     }
 }
