@@ -2289,7 +2289,8 @@ const props = defineProps({
     semesterGrade: Object,
     schoolyear_grade: Object,
     notify: Object,
-    user: Object
+    user: Object,
+    academic_year: Object
 });
 
 

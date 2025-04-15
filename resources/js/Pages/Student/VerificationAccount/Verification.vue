@@ -1779,7 +1779,7 @@ const form = ref({
     first_name: user.first_name,
     middle_name: usePage().props.scholar?.middle_name ?? '',
     last_name: user.last_name,
-    student_number: props.scholar.student_number ?? '',
+    student_number: props.scholar?.student_number ?? '',
     password: '',
     confirm_password: '',
     suffix: 'N/A',
