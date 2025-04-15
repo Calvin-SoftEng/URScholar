@@ -370,7 +370,7 @@ class ScholarController extends Controller
             $batch->save();
         }
 
-        return response()->json(['message' => 'Student status updated successfully']);
+        return back()->with(['message' => 'Student status updated successfully']);
     }
 
     public function updateApplicant(Request $request)
