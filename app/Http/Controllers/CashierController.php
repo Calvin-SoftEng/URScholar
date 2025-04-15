@@ -406,7 +406,10 @@ class CashierController extends Controller
 
         // Get disbursements related to the payout, with scholars and their grantees
         $disbursements = Disbursement::where('payout_id', $payout->id)
-            ->with('scholar.grantees.batch') // Eager load grantees and their batch for each scholar
+            ->whereHas('scholar', function ($query) {
+                $query->where('student_status', 'Enrolled');
+            })
+            ->with('scholar.grantees.batch')
             ->get();
 
         return Inertia::render('Cashier/Scholarships/Scheduling', [
