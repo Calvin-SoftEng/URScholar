@@ -30,6 +30,19 @@ class FeedController extends Controller
         ]);
     }
 
+    public function grantee_feed()
+    {
+        $scholarships = Scholarship::all();
+        $batches = Batch::with('scholarship')->get();
+        $campuses = Campus::all();
+
+        return Inertia::render('Student/Communication/Feed', [
+            'scholarships' => $scholarships,
+            'batches' => $batches,
+            'campuses' => $campuses,
+        ]);
+    }
+
     public function createPost(Request $request)
     {
         $request->validate([

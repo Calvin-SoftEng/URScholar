@@ -112,6 +112,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,spo
 
     //Feed
     Route::get('/feed', [FeedController::class, 'index'])->name('feed.index');
+
+    Route::get('/student/feed', [FeedController::class, 'grantee_feed'])->name('feed.grantee_feed');
+
     Route::post('/posts', [FeedController::class, 'createPost'])->name('posts.create');
     Route::get('/posts', [FeedController::class, 'getPosts']);
 });
