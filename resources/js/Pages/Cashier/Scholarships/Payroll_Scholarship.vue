@@ -158,7 +158,7 @@
                                                                 Disbursement</span>
                                                         </div>
                                                         <span class="text-xl font-bold text-primary drop-shadow">
-                                                            {{ getPayoutStatus(batch)}}
+                                                            {{ getPayoutStatus(batch) }}
                                                         </span>
 
                                                     </div>
@@ -177,7 +177,7 @@
                                                                 Claimed</span>
                                                         </div>
                                                         <span class="text-xl font-bold text-primary drop-shadow"> {{
-                                                            getPayoutSubTotal(batch) ?? 0}}</span>
+                                                            getPayoutSubTotal(batch) ?? 0 }}</span>
                                                     </div>
 
                                                     <!-- Unverified Students -->
@@ -518,33 +518,36 @@ const getPayoutForCampus = (campusId) => {
 
 // Add this function to get the payout sub_total for a batch
 const getPayoutSubTotal = (batch) => {
-  // Find a payout that matches this batch's campus_id
-  const matchingPayout = props.payouts.find(payout => 
-    payout.campus_id === batch.campus_id
-  );
-  
-  // If we found a matching payout, return its sub_total
-  if (matchingPayout) {
-    return matchingPayout.sub_total;
-  }
-  
-  // Fall back to batch's own sub_total
-  return 0;
+    // Find a payout that matches this batch's campus_id
+    const matchingPayout = props.payouts.find(payout =>
+        payout.campus_id === batch.campus_id
+    );
+
+    // If we found a matching payout, return its sub_total
+    if (matchingPayout) {
+        return matchingPayout.sub_total;
+    }
+
+    // Fall back to batch's own sub_total
+    return 0;
 };
 
 const getPayoutStatus = (batch) => {
-  // Find a payout that matches this batch's campus_id
-  const matchingPayout = props.payouts.find(payout => 
-    payout.campus_id === batch.campus_id
-  );
-  
-  // If we found a matching payout, return its sub_total
-  if (matchingPayout) {
-    return matchingPayout.sub_total == matchingPayout.total_scholars;
-  }
-  
-  // Fall back to batch's own sub_total
-  return 'Pending';
+    // Find a payout that matches this batch's campus_id
+    const matchingPayout = props.payouts.find(payout =>
+        payout.campus_id === batch.campus_id
+    );
+
+    // If we found a matching payout, return its sub_total
+    if (matchingPayout) {
+        return Number(matchingPayout.sub_total) > 0 &&
+            Number(matchingPayout.total_scholars) > 0
+            ? 'Complete'
+            : 'Incomplete';
+    }
+
+    // Fall back to batch's own sub_total
+    return 'Pending';
 };
 
 // Stats calculations
