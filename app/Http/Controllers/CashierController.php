@@ -621,7 +621,7 @@ class CashierController extends Controller
         $documentPath = null;
         if ($request->hasFile('document')) {
             $file = $request->file('document');
-            $fileName = time() . '_' . $file->getClientOriginalName();
+            $fileName = $file->getClientOriginalName();
             $documentPath = $file->storeAs('disbursement-reasons', $fileName, 'public');
 
             // If you want to store document path in database, you need to add this column
