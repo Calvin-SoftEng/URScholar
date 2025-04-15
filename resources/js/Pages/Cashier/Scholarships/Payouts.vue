@@ -1,6 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
@@ -10,7 +11,7 @@
                         <li class="hover:text-gray-600">
                             <span>Scholarships</span>
                         </li>
-                        <li class="hover:text-gray-600"> 
+                        <li class="hover:text-gray-600">
                             <!-- <span>{{ scholarship.name  }}</span> -->
                             Pending Payouts
                         </li>
@@ -23,9 +24,12 @@
                 <div class="flex justify-between">
                     <div class="text-3xl font-semibold text-gray-700 flex flex-col gap-2">
                         <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
-                        
-                        <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>fefefafe</span> <span>Grant</span>
+
+                        <h1
+                            class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                            <span
+                                class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>fefefafe</span>
+                            <span>Grant</span>
                         </h1>
                         <span class="text-xl">SY feafaefe Semester</span>
                     </div>
@@ -38,7 +42,7 @@
                         <div class="grid grid-cols-2">
                             <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
+                                    <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">222</p>
@@ -46,7 +50,7 @@
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
                                 <div class="flex flex-row space-x-3 items-center">
-                                    <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
+                                    <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
                                 <p class="text-4xl font-semibold font-kanit">2</p>
@@ -57,12 +61,22 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payroll_List :payout_schedule="payout_schedule"  :scholarship="scholarship" :batch="batch" :scholars="scholars" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
+                <div v-if="$page.props.auth.user.usertype == 'head_cashier'">
+                    <Payroll_List :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
+                        :scholars="scholars" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout" />
+                </div>
+                <div v-else>
+                    <Payout_List :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
+                        :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash"
+                        :payout="payout" />
+                </div>
+
+
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
 
-        
+
 
         <!-- <ToastProvider>
             <ToastRoot v-if="toastVisible"
@@ -93,6 +107,7 @@ import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
 import Payroll_List from '../../../Components/Cashier/Payouts/Payroll_List.vue';
+import Payout_List from '../../../Components/Cashier/Payouts/Payout_List.vue';
 
 // components
 
@@ -132,6 +147,7 @@ const props = defineProps({
     scholarship: Object,
     batch: Object,
     scholars: Array,
+    disbursements: Array,
     payout: Object,
     scholar: Object,
     errors: Object,
@@ -147,7 +163,7 @@ const selectedSem = ref("");
 
 const openScholarship = () => {
     router.visit(`/scholarships/${props.scholarship.id}/adding-scholars`, {
-        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem, scholarship: props.scholarship.id},
+        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem, scholarship: props.scholarship.id },
         preserveState: true
     });
 };
