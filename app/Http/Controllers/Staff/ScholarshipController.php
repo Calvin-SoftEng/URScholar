@@ -876,7 +876,7 @@ class ScholarshipController extends Controller
             foreach ($grantees as $grantee) {
                 if ($grantee && $grantee->scholar) {
                     $status = $grantee->scholar->student_status;
-                    if ($status === 'Enrolled' || $status === 'Graduated' || $status === 'Dropped') {
+                    if ($status === 'Unenrolled') {
                         $validationStatus = true;
                         break; // We can exit the loop once we find a valid status
                     }
