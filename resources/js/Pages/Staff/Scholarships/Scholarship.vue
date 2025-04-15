@@ -256,7 +256,7 @@
                                     <!-- Forward to Sponsor -->
                                     <div>
                                         <button @click="toggleForwardSponsor"
-                                            :disabled="accomplishedBatches || inactiveBatches && !payouts || granteeInactive"
+                                            :disabled="accomplishedBatches  && !payouts"
                                             v-tooltip.left="accomplishedBatches ? 'Batches sent to Sponsor' : 'Payouts sent to Sponsor'"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                                             hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -266,8 +266,8 @@
                                         </button>
                                     </div>
                                     <!-- Forward to Cashier -->
-                                    <div v-if="allBatchesInactive">
-                                        <div v-if="completedBatches == batches.length">
+                                    <div v-if="accomplishedBatches">
+                                        <div v-if="accomplishedBatches">
                                             <button @click="toggleSendBatch"
                                                 class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                                 <font-awesome-icon :icon="['fas', 'share-from-square']"

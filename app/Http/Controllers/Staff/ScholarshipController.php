@@ -710,7 +710,7 @@ class ScholarshipController extends Controller
 
         foreach ($Mybatches as $batch) {
             if (
-                $batch && $batch->status == 'Accomplished'
+                $batch && $batch->status == 'Inactive' || $batch->status == 'Accomplished'
             ) {
                 $myInactive = true;
                 break;
@@ -774,7 +774,8 @@ class ScholarshipController extends Controller
             $batch->campus_id == $request->input('selectedCampus')
         );
 
-        $allBatchesInactive = $allBatches->every(fn($batch) => $batch->status === 'Accomplished');
+        $allBatchesInactive = $allBatches->every(fn($batch) => in_array($batch->status, ['Inactive', 'Accomplished']));
+
 
         // Payouts by campus
         $payoutQuery = Payout::where('scholarship_id', $scholarship->id)
@@ -961,7 +962,7 @@ class ScholarshipController extends Controller
         // Update each batch individually using the requested format
         foreach ($batches as $batch) {
             Batch::where('id', $batch->id)->update([
-                'status' => 'Accomplished'
+                'status' => 'Inactive'
             ]);
         }
 
@@ -1074,8 +1075,8 @@ class ScholarshipController extends Controller
                     ->where('school_year_id', $schoolYearId)
                     ->where('semester', $selectedSem)
                     ->update([
-                            'status' => 'Active'
-                        ]);
+                        'status' => 'Active'
+                    ]);
             }
         }
 
