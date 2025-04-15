@@ -312,6 +312,7 @@ class CashierController extends Controller
                 // Find active grantees for this batch
                 $grantees = Grantees::where('batch_id', $batch->id)
                     ->where('scholarship_id', $scholarshipId)
+                    ->where('student_status', 'Enrolled')
                     ->where('status', 'Active')
                     ->get();
 
@@ -582,6 +583,9 @@ class CashierController extends Controller
         // Optimize query to reduce N+1 problem
         $disbursements = Disbursement::where('payout_id', $payout->id)
             ->where('batch_id', $batchId)
+            ->whereHas('scholar', function ($query) {
+                $query->where('student_status', 'Enrolled');
+            })
             ->with([
                 'scholar' => function ($subQuery) {
                     $subQuery->with(['course', 'campus']);
