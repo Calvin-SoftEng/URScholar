@@ -68,9 +68,9 @@
 
                                 <div class="w-full text-center h-12/12">
                                     <span class="font-italic font-sora text-3xl font-bold uppercase">{{
-                                        student.last_name
+                                        scholar.last_name
                                         }},
-                                        {{ student.first_name }}</span>
+                                        {{ scholar.first_name }}</span>
                                 </div>
 
                                 <div
@@ -1141,9 +1141,9 @@
                                 class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                                 <div class="w-full h-1/12">
                                     <span class="font-italic font-sora text-3xl font-bold uppercase">{{
-                                        student.last_name
+                                        scholar.last_name
                                         }},
-                                        {{ student.first_name }}</span>
+                                        {{ scholar.first_name }}</span>
                                 </div>
 
                                 <div
@@ -1577,21 +1577,19 @@
                                 </div>
                             </div>
                             <!-- gmail -->
-                            <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
+                            <!-- <div class="w-full h-1/12 flex items-center gap-2 p-1 pb-4 border-b-2">
                                 <span
                                     class="p-2 bg-primary rounded-md text-2xl text-white font-albert font-bold">@</span>
-                                <!-- <span class="pl-2 text-gray-900 text-base font-bold">{{ $page.props.auth.user.email
-                                    }}</span> -->
                                 <div class="relative w-full">
                                     <input type="text" placeholder="Email" v-model="form.email"
                                         class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                                    <!-- Icon inside input -->
+
                                     <font-awesome-icon :icon="['fas', 'pen']"
                                         class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
                                 </div>
-                            </div>
+                            </div> -->
                             <!-- qr -->
-                            <div
+                            <!-- <div
                                 class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
                                 <div v-if="scholar.qr_code" class="w-20 h-20">
                                     <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code"
@@ -1604,15 +1602,9 @@
                                     class="bg-primary text-white px-4 py-2 rounded-md hover:bg-primary/80 transition">
                                     View & Download QR Code
                                 </button>
-                            </div>
+                            </div> -->
                         </div>
                         <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
-                            <div class="w-full h-1/12">
-                                <span class="font-italic font-sora text-3xl font-bold uppercase">{{ student.last_name
-                                }},
-                                    {{ student.first_name }}</span>
-                            </div>
-
                             <div
                                 class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
                                 <div class="w-full flex flex-row items-center gap-2">

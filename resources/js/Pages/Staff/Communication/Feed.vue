@@ -51,40 +51,46 @@
                                         </div>
                                     </div>
 
-                                    <div v-for="post in posts" :key="post.id"
-                                        class="w-full bg-white rounded-lg shadow-md">
-                                        <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                            <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
-                                                alt="user-avatar" />
-                                            <div class="ml-4">
-                                                <p class="text-primary font-semibold">{{ post.user.name }}</p>
-                                                <p class="text-sm text-gray-500">Posted {{ post.created_at }}</p>
-                                                <div v-if="post.filters.scholarships.length || post.filters.batches.length || post.filters.campuses.length"
-                                                    class="flex flex-wrap gap-1 mt-1">
-                                                    <span v-for="(scholarship, index) in post.filters.scholarships"
-                                                        :key="`s-${index}`"
-                                                        class="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">
-                                                        {{ scholarship }}
-                                                    </span>
-                                                    <span v-for="(batch, index) in post.filters.batches"
-                                                        :key="`b-${index}`"
-                                                        class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">
-                                                        {{ batch.name }}
-                                                    </span>
-                                                    <span v-for="(campus, index) in post.filters.campuses"
-                                                        :key="`c-${index}`"
-                                                        class="text-xs px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full">
-                                                        {{ campus }}
-                                                    </span>
+                                    <!-- Check if there are any posts -->
+                                    <div v-if="posts.length">
+                                        <div v-for="post in posts" :key="post.id" class="w-full bg-white rounded-lg shadow-md">
+                                            <div class="w-full p-4 flex items-center border-b border-gray-200">
+                                                <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
+                                                <div class="ml-4">
+                                                    <p class="text-primary font-semibold">{{ post.user.name }}</p>
+                                                    <p class="text-sm text-gray-500">Posted {{ post.created_at }}</p>
+                                                    <div v-if="post.filters.scholarships.length || post.filters.batches.length || post.filters.campuses.length"
+                                                        class="flex flex-wrap gap-1 mt-1">
+                                                        <span v-for="(scholarship, index) in post.filters.scholarships"
+                                                            :key="`s-${index}`"
+                                                            class="text-xs px-2 py-0.5 bg-blue-100 text-blue-800 rounded-full">
+                                                            {{ scholarship }}
+                                                        </span>
+                                                        <span v-for="(batch, index) in post.filters.batches"
+                                                            :key="`b-${index}`"
+                                                            class="text-xs px-2 py-0.5 bg-green-100 text-green-800 rounded-full">
+                                                            {{ batch.name }}
+                                                        </span>
+                                                        <span v-for="(campus, index) in post.filters.campuses"
+                                                            :key="`c-${index}`"
+                                                            class="text-xs px-2 py-0.5 bg-purple-100 text-purple-800 rounded-full">
+                                                            {{ campus }}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="p-4">
+                                                <div
+                                                    class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden p-4">
+                                                    <p>{{ post.content }}</p>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="p-4">
-                                            <div
-                                                class="bg-gradient-to-t from-blue-900 via-blue-800 to-blue-700 h-96 flex items-center justify-center text-white text-xl text-center font-onest text-bold break-words overflow-hidden p-4">
-                                                <p>{{ post.content }}</p>
-                                            </div>
-                                        </div>
+                                    </div>
+
+                                    <!-- Show this if no posts -->
+                                    <div v-else class="w-full bg-white rounded-lg shadow-md text-center text-gray-500 py-10">
+                                        <p class="text-lg font-medium">No posts or announcements yet.</p>
                                     </div>
 
                                 </div>
