@@ -174,7 +174,7 @@
 
                             <!-- Check if payouts for this campus are pending/active -->
                             <div v-if="isCampusPayoutActive(campusId)" class="mb-4">
-                                <div class="bg-white dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
+                                <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
                                     <font-awesome-icon :icon="['fas', 'user-graduate']"
                                         class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
                                     <p class="text-lg text-gray-700 dark:text-gray-300">
@@ -186,32 +186,88 @@
                             <!-- Show completed batches for this campus -->
                             <div v-else>
                                 <div v-for="batch in getCampusBatches(campusId)" :key="batch.id"
-                                    class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3"
-                                    @click="viewBatchDetails(batch)">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-lg font-semibold text-gray-800">Batch {{ batch.batch_no
-                                        }}</span>
+                                    @click="viewBatchDetails(batch)" class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                    <div 
+                                        class="flex justify-between items-center">
 
-                                        <div class="grid grid-cols-4 gap-6">
-                                            <div class="flex flex-col items-center">
-                                                <span class="text-sm text-gray-600">Total Scholars</span>
-                                                <span class="text-xl font-bold text-blue-600">{{ batch.claimed_count +
-                                                    batch.not_claimed_count }}</span>
-                                            </div>
-                                            <div class="flex flex-col items-center">
-                                                <span class="text-sm text-gray-600">Claimed</span>
-                                                <span class="text-xl font-bold text-green-600">{{ batch.claimed_count
-                                                }}</span>
-                                            </div>
-                                            <div class="flex flex-col items-center">
-                                                <span class="text-sm text-gray-600">Pending</span>
-                                                <span class="text-xl font-bold text-yellow-600">{{
-                                                    batch.not_claimed_count }}</span>
-                                            </div>
-                                            <div class="flex flex-col items-center">
-                                                <span class="text-sm text-gray-600">Date Created</span>
-                                                <span class="text-base text-gray-700">{{ formatDate(batch.created_at)
-                                                }}</span>
+                                        <!-- Batch Info -->
+                                        <div class="flex flex-col px-5">
+                                            <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                batch.batch_no }}</span>
+                                            <span class="text-md font-medium text-gray-600">
+                                                <!-- {{ schoolyear ? batch.school_year.year : '' }} {{
+                                                    batch.semester }} Semester -->
+                                            </span>
+                                        </div>
+
+                                        <!--------------------------------------------------------- eto kapag validation na -->
+                                        <div class="flex flex-row gap-4">
+                                            <div>
+                                                <!-- Statistics -->
+                                                <div
+                                                    class="grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                    <!-- Validation Status -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-yellow-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                            </svg>
+                                                            <span class="text-primary">Disbursement
+                                                            </span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                            {{ validationStatus == true ? 'Complete' :
+                                                                'Pending' }}
+                                                        </span>
+
+                                                    </div>
+
+                                                    <!-- Number of Students -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-blue-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round"
+                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                            </svg>
+                                                            <span class="text-primary">Claimed
+                                                                </span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                            {{ batch.claimed_count
+                                                            }}</span>
+                                                    </div>
+
+                                                    <!-- Unverified Students -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div
+                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                                    d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87M12 11a4 4 0 100-8 4 4 0 000 8zm6 4a4 4 0 00-3-3.87" />
+                                                            </svg>
+                                                            <span class="text-primary">
+                                                                Grantees
+                                                            </span>
+                                                        </div>
+                                                        <span
+                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                            {{
+                                                            batch.not_claimed_count }}
+                                                        </span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -242,7 +298,7 @@
                         <!-- Title and Description -->
                         <div class="flex flex-col">
                             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Forward the Batch List
+                                Forward to Campus Cashiers
                             </h2>
                         </div>
                     </div>

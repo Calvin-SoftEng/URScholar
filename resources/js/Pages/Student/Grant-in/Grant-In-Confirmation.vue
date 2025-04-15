@@ -90,7 +90,7 @@
                                 </div>
 
                                 <div class="flex flex-col space-y-3 pt-5">
-                                    <span class="text-lg font-inter font-normal text-dsecondary text-left">For the other documents, you can download them below</span>
+                                    <span v-if="templates.length > 0" class="text-lg font-inter font-normal text-dsecondary text-left">For the other documents, you can download them below</span>
 
                                     <div class="col-span-1 flex flex-col space-y-3">
                                         <div v-for="(template, index) in templates" :key="template.id"

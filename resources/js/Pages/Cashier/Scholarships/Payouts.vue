@@ -12,7 +12,7 @@
                         </li>
                         <li class="hover:text-gray-600"> 
                             <!-- <span>{{ scholarship.name  }}</span> -->
-                             Same here
+                            Pending Payouts
                         </li>
                         <li>
                             <span class="text-blue-400 font-semibold"> Batch 1</span>
