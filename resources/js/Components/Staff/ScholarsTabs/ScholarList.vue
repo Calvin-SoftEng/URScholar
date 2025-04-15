@@ -147,7 +147,7 @@
                     </button>
                     </Link>
                   </th>
-                  <th v-else>
+                  <th v-else v-if="!batches.validated">
                     <button @click="setStatus(scholar)"
                       class="p-2 border bg-white text-primary rounded-lg transition-colors shadow-sm hover:bg-gray-200"
                       :class="{ 'ring-2 ring-red-500 animate-pulse': scholar.scholar_status === 'Unverified' || scholar.student_status === 'Unenrolled' }"

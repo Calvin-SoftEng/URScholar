@@ -183,6 +183,7 @@ const props = defineProps({
     scholar: Object,
     scholarship: Object,
     requirements: Array,
+    templates: Array,
 });
 
 const form = useForm({

@@ -23,6 +23,7 @@ use App\Models\Course;
 use App\Models\Batch;
 use App\Models\Message;
 use App\Models\Notifier;
+use App\Models\ScholarshipTemplate;
 use App\Models\Notification;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
@@ -151,8 +152,8 @@ class StudentController extends Controller
                     ->get();
 
                 $total_subreq = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->whereIn('requirement_id', $requirementIds)
-                ->get();
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
 
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
@@ -254,8 +255,8 @@ class StudentController extends Controller
                 $submitApproved = $approvedCount === $totalCount;
 
                 $total_subreq = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->whereIn('requirement_id', $requirementIds)
-                ->get();
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
 
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
@@ -1205,6 +1206,8 @@ class StudentController extends Controller
 
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
+        $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
+
         $reqID = $requirements->pluck('id')->first();
 
         $submitRequirements = SubmittedRequirements::where('id', $reqID)->exists();
@@ -1214,6 +1217,7 @@ class StudentController extends Controller
             'scholarship' => $scholarship,
             'scholar' => $scholar,
             'requirements' => $requirements,
+            'templates' => $templates,
         ]);
 
     }
@@ -1289,8 +1293,8 @@ class StudentController extends Controller
 
         if ($scholar) {
             $grantee = Grantees::where('scholar_id', $scholar->id)
-            ->where('status', '!=' ,'Inactive')
-            ->first();
+                ->where('status', '!=', 'Inactive')
+                ->first();
 
             // Get the batch semester logic
             $grantee_semester = null;

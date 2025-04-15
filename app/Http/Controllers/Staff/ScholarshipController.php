@@ -738,11 +738,11 @@ class ScholarshipController extends Controller
             }
         }
 
-        $valitedBatches = false;
+        $valitedBatches = true;
 
         foreach ($MybatchesUnfiltered as $batch) {
             if ($batch->validated == false) {
-                $valitedBatches = true;
+                $valitedBatches = false;
                 break;
             }
         }
@@ -1501,73 +1501,6 @@ class ScholarshipController extends Controller
         $batchIds = $request->input('batch_ids');
         $user = Auth::user();
 
-        // Group grantees by campus
-        $granteesByCampus = [];
-        foreach ($grantees as $grantee) {
-            // Get the batch to find campus_id
-            $batch = Batch::find($grantee['batch_id']);
-
-            if (!$batch) {
-                continue;
-            }
-
-            $campusId = $batch->campus_id;
-
-            if (!isset($granteesByCampus[$campusId])) {
-                $granteesByCampus[$campusId] = [];
-            }
-
-            $granteesByCampus[$campusId][] = $grantee;
-        }
-
-        // Create payouts for each campus and process disbursements
-        $createdPayouts = [];
-
-        foreach ($granteesByCampus as $campusId => $campusGrantees) {
-            // Create payout for this campus
-            $payout = Payout::create([
-                'scholarship_id' => $scholarshipId,
-                'campus_id' => $campusId,
-                'date_start' => $request->input('date_start'),
-                'date_end' => $request->input('date_end'),
-                'school_year_id' => $request->input('school_year_id'),
-                'semester' => $request->input('semester'),
-                'status' => 'Pending',
-            ]);
-
-            // Prepare disbursement data for this campus
-            $dataToInsert = [];
-            foreach ($campusGrantees as $grantee) {
-                $dataToInsert[] = [
-                    'payout_id' => $payout->id,
-                    'batch_id' => $grantee['batch_id'],
-                    'scholar_id' => $grantee['scholar']['id'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-
-            // Bulk insert disbursements
-            Disbursement::insert($dataToInsert);
-
-            // Update payout with total scholars count
-            $totalDisbursement = count($dataToInsert);
-
-            // Calculate sub_total based on scholarship amount if available
-            $subTotal = null;
-            $scholarship = Scholarship::find($scholarshipId);
-            if ($scholarship && isset($scholarship->amount)) {
-                $subTotal = $scholarship->amount * $totalDisbursement;
-            }
-
-            $payout->update([
-                'total_scholars' => $totalDisbursement,
-                'sub_total' => $subTotal
-            ]);
-
-            $createdPayouts[] = $payout;
-        }
-
         // Create Activity Log
         $activityLog = ActivityLog::create([
             'user_id' => $user->id,
@@ -1576,20 +1509,15 @@ class ScholarshipController extends Controller
         ]);
 
         // Get users to notify (similar to original function)
-        $users = User::whereIn('id', function ($query) use ($scholarshipId) {
-            $query->select('user_id')
-                ->from('scholarship_groups')
-                ->where('scholarship_id', $scholarshipId);
-        })
-            ->where('id', '!=', Auth::user()->id)
-            ->get();
+        $users = User::where('usertype', 'head_cashier')->first();
 
         // Create Notification
         $notification = Notification::create([
-            'title' => 'New Payouts Forwarded',
-            'message' => 'Active scholars forwarded to cashiers by campus by ' . $user->name,
+            'title' => 'Scholars Ready for Disbursement',
+            'message' => 'A new batch of active scholars has been forwarded and is now ready for payout processing.',
             'type' => 'payout_forward',
         ]);
+
 
         // Attach users to the notification
         $notification->users()->attach($users->pluck('id'));

@@ -291,7 +291,7 @@
 
                                 </div>
                                 <div v-else class="flex flex-row space-x-3 items-center">
-                                    <div v-if="valitedBatches">
+                                    <div v-if="!valitedBatches">
                                         <button @click="toggleForwardValidation"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -1108,7 +1108,7 @@
                         <!-- Title and Description -->
                         <div class="flex flex-col">
                             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Forward 
+                                Forward the list for Payouts
                             </h2>
                             <!-- <span class="text-sm text-gray-600 dark:text-gray-400">
                                 Provide the necessary details to set up a scholarship.
@@ -1511,7 +1511,7 @@
                         </div> -->
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length && allInactive" class="mt-4">
+                        <div v-if="completedBatches === batches.length || allInactive" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 @click="forwardSponsor"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -2624,68 +2624,68 @@ const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
 
 const selectedReportTypes = ref([]);
 
-// Generate Reports handler
-const handleGenerateReports = () => {
-    if (selectedReportTypes.value.includes('Scholars List')) {
-        generateScholarsList()
-    }
-    if (selectedReportTypes.value.includes('Enrolled List')) {
-        generateEnrolledList()
-    }
-    if (selectedReportTypes.value.includes('Graduate List')) {
-        generateGraduateList()
-    }
-    if (selectedReportTypes.value.includes('Payroll')) {
-        generatePayroll()
-    }
-}
+// // Generate Reports handler
+// const handleGenerateReports = () => {
+//     if (selectedReportTypes.value.includes('Scholars List')) {
+//         generateScholarsList()
+//     }
+//     if (selectedReportTypes.value.includes('Enrolled List')) {
+//         generateEnrolledList()
+//     }
+//     if (selectedReportTypes.value.includes('Graduate List')) {
+//         generateGraduateList()
+//     }
+//     if (selectedReportTypes.value.includes('Payroll')) {
+//         generatePayroll()
+//     }
+// }
 
 
-const GenerateReport = ref(false);
+// const GenerateReport = ref(false);
 
-const generateReportModal = () => {
-    GenerateReport.value = !GenerateReport.value;
-}
+// const generateReportModal = () => {
+//     GenerateReport.value = !GenerateReport.value;
+// }
 
 
-// Generate report function
-const generateScholarsList = async () => {
-    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
+// // Generate report function
+// const generateScholarsList = async () => {
+//     window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
 
-};
+// };
 
-const generateEnrolledList = async () => {
-    try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
-    }
-};
+// const generateEnrolledList = async () => {
+//     try {
+//         // Open PDF report in new tab
+//         window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
+//         showToast('Report Generated', 'Your report is being downloaded');
+//     } catch (err) {
+//         console.error('Failed to generate report:', err);
+//         showToast('Error', 'Failed to generate report', 'error');
+//     }
+// };
 
-const generateGraduateList = async () => {
-    try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
-    }
-};
+// const generateGraduateList = async () => {
+//     try {
+//         // Open PDF report in new tab
+//         window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
+//         showToast('Report Generated', 'Your report is being downloaded');
+//     } catch (err) {
+//         console.error('Failed to generate report:', err);
+//         showToast('Error', 'Failed to generate report', 'error');
+//     }
+// };
 
-const generatePayroll = async () => {
-    try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
-    }
-};
+// const generatePayroll = async () => {
+//     try {
+//         // Open PDF report in new tab
+//         window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
+//         showToast('Report Generated', 'Your report is being downloaded');
+//     } catch (err) {
+//         console.error('Failed to generate report:', err);
+//         showToast('Error', 'Failed to generate report', 'error');
+//     }
+// };
 
 </script>
 
