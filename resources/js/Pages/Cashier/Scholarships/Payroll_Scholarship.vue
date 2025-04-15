@@ -177,10 +177,8 @@
                                                             <span class="text-primary">
                                                                 Claimed</span>
                                                         </div>
-                                                        <span class="text-xl font-bold text-primary drop-shadow">{{
-                                                            batch.grantees.filter(grantee =>
-                                                                grantee.scholar?.status ===
-                                                                'Verified').length}}</span>
+                                                        <span class="text-xl font-bold text-primary drop-shadow"> {{
+                                                            getPayoutSubTotal(batch) ?? 0}}</span>
                                                     </div>
 
                                                     <!-- Unverified Students -->
@@ -348,7 +346,7 @@
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
                                                 Batch {{ batch.batch_no }}
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
-                                                    }})</span>
+                                                }})</span>
                                             </p>
                                             <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
                                         </div>
@@ -510,6 +508,29 @@ const getBatchesForCampus = (campusId) => {
         (!selectedCampus.value || selectedCampus.value === '' ||
             selectedCampus.value === campusId.toString())
     ).sort((a, b) => a.batch_no - b.batch_no); // Sort by batch number
+};
+
+// Add this computed method after your other computed properties
+const getPayoutForCampus = (campusId) => {
+    // Find the payout for this campus
+    const campusPayouts = props.payoutsByCampus[campusId];
+    return campusPayouts && campusPayouts.length > 0 ? campusPayouts[0] : null;
+};
+
+// Add this function to get the payout sub_total for a batch
+const getPayoutSubTotal = (batch) => {
+  // Find a payout that matches this batch's campus_id
+  const matchingPayout = props.payouts.find(payout => 
+    payout.campus_id === batch.campus_id
+  );
+  
+  // If we found a matching payout, return its sub_total
+  if (matchingPayout) {
+    return matchingPayout.sub_total;
+  }
+  
+  // Fall back to batch's own sub_total
+  return 0;
 };
 
 // Stats calculations

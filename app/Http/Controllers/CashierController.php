@@ -665,6 +665,24 @@ class CashierController extends Controller
         $disbursement->claimed_by = Auth::id();
         $disbursement->save();
 
+        $payout = Payout::findOrFail($disbursement->payout_id);
+        // Get the scholar to verify permissions
+        $scholar = Scholar::findOrFail($disbursement->scholar_id);
+        // Log the activity
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Disbursement Claim',
+            'description' => 'User confirmed disbursement claim for Scholar ID: ' . $scholar->urscholar_id,
+        ]);
+
+        // Update payout total claimed count
+        $total_claimed = Disbursement::where('payout_id', $payout->id)
+            ->where('status', 'Claimed')->count();
+
+        $payout->update([
+            'sub_total' => $total_claimed,
+        ]);
+
         return back()->with('success', 'Disbursement manually claimed successfully.');
     }
 
