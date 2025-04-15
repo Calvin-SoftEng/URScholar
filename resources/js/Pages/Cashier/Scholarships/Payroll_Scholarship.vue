@@ -118,7 +118,7 @@
                                 </select>
 
                                 <!-- Forward to Cashier -->
-                                <div v-if="hasForwardableBatches">
+                                <div v-if="!hasForwardableBatches">
                                     <button @click="toggleSendBatch"
                                         class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -128,7 +128,6 @@
                                 </div>
                                 <div v-else>
                                     <button v-tooltip.left="'All batches must be inactive and complete'"
-                                        @click="toggleSendBatch"
                                         class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
                                                 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 px-4 py-2 rounded-lg transition duration-200">
                                         <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />

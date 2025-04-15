@@ -1642,11 +1642,11 @@
                                                                         class="text-red-900 font-bold mr-1">*</span>Student ID
                                                                 </Label>
                                                                 <InputError v-if="errors?.last_name"
-                                                                    :message="errors.last_name"
+                                                                    :message="errors.student_number"
                                                                     class="items-center flex text-xs" />
                                                             </div>
                                                             <Input id="last_name" type="text" placeholder="Student ID"
-                                                                v-model="form.last_name"
+                                                                v-model="form.student_number"
                                                                 class="w-full border border-gray-200" />
                                                         </div>
                                                     </div>
@@ -1779,6 +1779,7 @@ const form = ref({
     first_name: user.first_name,
     middle_name: usePage().props.scholar?.middle_name ?? '',
     last_name: user.last_name,
+    student_number: props.scholar.student_number ?? '',
     password: '',
     confirm_password: '',
     suffix: 'N/A',
