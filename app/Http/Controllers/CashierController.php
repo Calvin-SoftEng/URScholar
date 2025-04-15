@@ -988,50 +988,30 @@ class CashierController extends Controller
             $userPicture = User::where('id', $scholar->user_id)
                 ->first();
 
+            $disbursement = Disbursement::where('scholar_id', $scholar->id)->first();
+
             if (!$userPicture) {
                 $userPicture = null;
             }
 
-            $userVerified = User::where('id', $scholar->user_id)->first();
-
-            if ($userVerified) {
-                return [
-                    'id' => $scholar->id,
-                    'picture' => $userPicture,
-                    'urscholar_id' => $scholar->urscholar_id,
-                    'first_name' => $scholar->first_name,
-                    'last_name' => $scholar->last_name,
-                    'middle_name' => $scholar->middle_name,
-                    'campus' => $scholar->campus->name ?? 'N/A',
-                    'course' => $scholar->course->name ?? 'N/A',
-                    'year_level' => $scholar->year_level,
-                    'grant' => $scholar->grant,
-                    'scholar_status' => $scholar->status,
-                    'student_status' => $grantee->student_status,
-                    'user' => [
-                        'picture' => $scholar->user->picture ?? null
-                    ],
-                    'userVerified' => $userVerified->email_verified_at,
-                ];
-            } else {
-                return [
-                    'id' => $scholar->id,
-                    'picture' => $userPicture,
-                    'urscholar_id' => $scholar->urscholar_id,
-                    'first_name' => $scholar->first_name,
-                    'last_name' => $scholar->last_name,
-                    'middle_name' => $scholar->middle_name,
-                    'campus' => $scholar->campus->name ?? 'N/A',
-                    'course' => $scholar->course->name ?? 'N/A',
-                    'year_level' => $scholar->year_level,
-                    'grant' => $scholar->grant,
-                    'scholar_status' => $scholar->status,
-                    'student_status' => $grantee->student_status,
-                    'user' => [
-                        'picture' => $scholar->user->picture ?? null
-                    ],
-                ];
-            }
+            return [
+                'id' => $scholar->id,
+                'picture' => $userPicture,
+                'urscholar_id' => $scholar->urscholar_id,
+                'first_name' => $scholar->first_name,
+                'last_name' => $scholar->last_name,
+                'middle_name' => $scholar->middle_name,
+                'campus' => $scholar->campus->name ?? 'N/A',
+                'course' => $scholar->course->name ?? 'N/A',
+                'year_level' => $scholar->year_level,
+                'grant' => $scholar->grant,
+                'scholar_status' => $scholar->status,
+                'student_status' => $grantee->student_status,
+                'claimed_status' => $disbursement->status ?? null,
+                'user' => [
+                    'picture' => $scholar->user->picture ?? null
+                ],
+            ];
         });
 
         return Inertia::render('Cashier/Scholarships/Payouts', [

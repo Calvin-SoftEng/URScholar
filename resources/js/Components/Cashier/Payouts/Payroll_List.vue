@@ -50,7 +50,7 @@
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
                           <img 
-                            :src="scholar.user?.picture || '../../../../assets/images/no_userpic.png'" 
+                            :src="`/storage/user/profile/${scholar.user?.picture}` || '../../../../assets/images/no_userpic.png'" 
                             alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
