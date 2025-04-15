@@ -201,7 +201,7 @@
                         <!-- Title and Description -->
                         <div class="flex flex-col">
                             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Forward the Batch List
+                                Forward to Campus Cashiers
                             </h2>
                         </div>
                     </div>
