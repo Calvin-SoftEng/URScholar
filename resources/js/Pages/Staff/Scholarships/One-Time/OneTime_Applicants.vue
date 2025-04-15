@@ -20,7 +20,7 @@
                             <Link href="/scholarships">Scholarships</Link>
                         </li>
                         <li class="hover:text-gray-600">
-                            <span>{{ scholarship?.name }} Applicants</span>
+                            <span class="text-blue-400 font-semibold dark:text-gray-300">{{ scholarship?.name }} Applicants</span>
                         </li>
                         <!-- <li>
                             <span class="text-blue-400 font-semibold">{{ currentBatch ? `Batch ${currentBatch.batch_no}`

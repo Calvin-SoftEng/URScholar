@@ -21,26 +21,30 @@
 
     <!-- super_admin ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'super_admin'">
-        <div class="w-full h-screen flex flex-col overflow-hidden">
-        <!-- Header -->
-        <headerTop class="w-full h-[50px]" />
+        <div class="w-full h-screen flex flex-col">
+            
+            <!-- Header -->
+            <headerTop class="w-full h-[50px] flex-none" />
 
-            <!-- Content Area -->
-            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
-                <!-- Sidebar -->
-                <sidebar 
+            <!-- Content Area: fills remaining height -->
+            <div class="flex flex-1 flex-col lg:flex-row overflow-hidden">
+
+            <!-- Sidebar -->
+            <sidebar 
                 :dataOpenSideBar="openSidebar" 
                 :clickHamburger="toggleSidebar" 
-                class="lg:w-[250px] w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
-                />
+                class="lg:w-[250px] w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600 flex-none"
+            />
 
-                <!-- Main Content -->
-                <div class="flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary overflow-auto">
+            <!-- Main Content (scrollable) -->
+            <div class="flex-1 h-full overflow-auto dark:text-dprimary">
                 <slot></slot>
-                </div>
+            </div>
+
             </div>
         </div>
     </div>
+
 
     <!-- sponsor ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'sponsor'">
@@ -89,7 +93,7 @@
     </div>
 
     <!-- cashier ---------------------------------------------------------------------------------------------------------------------------------------- -->
-    <div v-if="$page.props.auth.user.usertype == 'cashier'">
+    <div v-if="$page.props.auth.user.usertype == 'cashier' || $page.props.auth.user.usertype == 'head_cashier'">
         <div class="w-full h-screen flex flex-col overflow-hidden">
         <!-- Header -->
         <headerTop class="w-full h-[50px]" />

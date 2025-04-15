@@ -11,7 +11,7 @@
                                 <span>Scholarships</span>
                         </li>
                         <li class="hover:text-gray-600">
-                                <span>Scholarship Batches</span>
+                                <span>Scholarship</span>
                         </li>
                         <li>
                                 <span class="text-blue-400 font-semibold">Adding Scholars</span>
@@ -22,7 +22,7 @@
                 <div class="w-full flex flex-row justify-between dark:bg-dcontainer dark:border dark:border-gray-600 rounded-xl mb-3">
                     <div class="w-full flex justify-between ">
                         <div class="flex flex-col space-y-1">
-                            <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-left dark:text-dtext">
+                            <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                                 <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span>
                             </h1>
                         </div>

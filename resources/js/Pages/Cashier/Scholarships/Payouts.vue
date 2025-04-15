@@ -25,10 +25,9 @@
                         <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
                         
                         <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <!-- <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span> <span>scholarship type</span> -->
-                            {{ scholarship.name }}
+                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>fefefafe</span> <span>Grant</span>
                         </h1>
-                        <span class="text-xl">SY {{ batch.school_year.year }} - {{ batch.semester }} Semester</span>
+                        <span class="text-xl">SY feafaefe Semester</span>
                     </div>
                     <div class="flex gap-2">
 
@@ -42,7 +41,7 @@
                                     <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Assigned</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ payout.total_scholars }}</p>
+                                <p class="text-4xl font-semibold font-kanit">222</p>
                             </div>
 
                             <div class="flex flex-col items-start py-4 px-10 border-gray-300">
@@ -50,7 +49,7 @@
                                     <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base"/>
                                     <p class="text-gray-500 text-sm">Claim Completed</p>
                                 </div>
-                                <p class="text-4xl font-semibold font-kanit">{{ totalClaimed }}</p>
+                                <p class="text-4xl font-semibold font-kanit">2</p>
                             </div>
                         </div>
                     </div>
@@ -58,7 +57,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payout_List :payout_schedule="payout_schedule"  :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
+                <Payroll_List :payout_schedule="payout_schedule"  :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -93,7 +92,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
-import Payout_List from '../../../Components/Cashier/Payouts/Payout_List.vue';
+import Payroll_List from '../../../Components/Cashier/Payouts/Payroll_List.vue';
 
 // components
 

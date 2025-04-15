@@ -9,6 +9,7 @@ use App\Models\ActivityLog;
 use App\Models\Campus;
 use App\Models\Course;
 use App\Models\User;
+use App\Models\Scholar;
 use App\Models\PortalBranding;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
@@ -273,6 +274,12 @@ class SystemAdminController extends Controller
                 $academicYear->status = 'Active'; // Set as active
                 $academicYear->save();
 
+                // Reset all scholars' status to Unverified and student_status to Unenrolled
+                Scholar::query()->update([
+                    'status' => 'Unverified',
+                    'student_status' => 'Unenrolled'
+                ]);
+
                 $notification = Notification::create([
                     'title' => 'New Academic Semester',
                     'message' => "You can now upload a new set of Students",
@@ -307,6 +314,12 @@ class SystemAdminController extends Controller
                 $academicYear->semester = '2nd';
                 $academicYear->status = 'Active'; // Set as active
                 $academicYear->save();
+
+                // Reset all scholars' status to Unverified and student_status to Unenrolled
+                Scholar::query()->update([
+                    'status' => 'Unverified',
+                    'student_status' => 'Unenrolled'
+                ]);
 
                 $notification = Notification::create([
                     'title' => 'New Academic Semester',
@@ -344,6 +357,7 @@ class SystemAdminController extends Controller
             ], 500);
         }
     }
+
     // users ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     // public function user_roles() {

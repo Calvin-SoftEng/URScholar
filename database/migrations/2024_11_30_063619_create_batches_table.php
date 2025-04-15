@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,16 +15,19 @@ return new class extends Migration
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->integer('batch_no');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->string('semester');
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();
             $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->boolean('validated')->default(false);
             $table->boolean('read')->default(false);
             $table->timestamps();
         });
 
         Schema::create('scholars', function (Blueprint $table) {
             $table->id();
+            $table->string('student_number')->nullable();
             $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('hei_name');
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
@@ -33,8 +35,8 @@ return new class extends Migration
             $table->string('grant')->nullable();
             $table->string('urscholar_id')->unique();
             $table->string('qr_code')->nullable();
-            $table->string('app_no')->nullable();;
-            $table->string('award_no')->nullable();;
+            $table->string('app_no')->nullable();
+            $table->string('award_no')->nullable();
             $table->string('last_name');
             $table->string('first_name');
             $table->string('extname')->nullable();
@@ -71,6 +73,7 @@ return new class extends Migration
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
+            $table->enum('student_status', ['Graduated', 'Enrolled', 'Unenrolled', 'Dropped'])->default('Unenrolled');
             $table->enum('status', ['Active', 'Inactive', 'Pending', 'Accomplished'])->default('Pending');
             $table->timestamps();
         });
@@ -94,7 +97,8 @@ return new class extends Migration
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('essay');
             $table->string('semester');
-            $table->enum('status', ['Successful', 'Unsuccessful', 'Pending'])->default('Pending');
+            $table->datetime('validated_date')->nullable();
+            $table->enum('status', ['Approved', 'Rejected', 'Pending'])->default('Pending');
             $table->timestamps();
         });
 
@@ -105,7 +109,7 @@ return new class extends Migration
             $table->string('submitted_requirements');
             $table->string('path');
             $table->string('message')->nullable();
-            $table->date('approved_date')->nullable();
+            $table->datetime('validated_date')->nullable();
             $table->enum('status', ['Approved', 'Pending', 'Returned'])->default('Pending');
             $table->timestamps();
         });

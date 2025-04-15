@@ -11,7 +11,7 @@
 
             <div class="w-full mx-auto space-y-3">
                 <!-- Breadcrumbs -->
-                <div class="breadcrumbs text-sm text-gray-400 mb-2">
+                <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
                         <li class="hover:text-gray-600">
                             <Link href="/dashboard">Home</Link>
@@ -35,7 +35,8 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <Link>
-                            <button class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">
+                                <button @click="goBack"
+                                class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
                                 < </button>
                                     </Link>
                                     <span>{{ scholarship?.name }}</span>
@@ -51,7 +52,7 @@
                         <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
-                                <p class="text-gray-500 text-sm">Completed Scholars</p>
+                                <p class="text-gray-500 text-sm">Completed Validation</p>
                             </div>
                             <p class="text-4xl font-semibold font-kanit text-green-600">{{ stats.completedCount }}</p>
                         </div>
@@ -60,7 +61,7 @@
                         <div class="flex flex-col items-start py-4 px-10">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Total Active Scholars</p>
+                                <p class="text-gray-500 text-sm">Total Students</p>
                             </div>
                             <p class="text-4xl font-semibold font-kanit">{{ totalScholars }}</p>
                         </div>
@@ -74,20 +75,6 @@
                 <!-- Actions bar -->
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex gap-2">
-                        <Select v-model="selectedBatchId" @update:modelValue="changeBatch">
-                            <SelectTrigger class="w-[200px]">
-                                <SelectValue :placeholder="`Batch ${currentBatch?.batch_no || '1'}`" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectGroup>
-                                    <SelectLabel>Available Batches</SelectLabel>
-                                    <SelectItem v-for="batch in batches" :key="batch.id" :value="batch.id">
-                                        Batch {{ batch.batch_no }}
-                                    </SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
-
                         <!-- Refresh button that only appears when data has changed -->
                         <Button v-if="dataChanged" variant="outline" @click="refreshData"
                             class="flex items-center gap-2">
@@ -95,11 +82,6 @@
                             Refresh Data
                         </Button>
                     </div>
-
-                    <Button variant="default" @click="openScholarship" class="bg-primary text-white">
-                        <font-awesome-icon :icon="['fas', 'plus']" class="mr-2" />
-                        Add Scholars
-                    </Button>
                 </div>
 
                 <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
@@ -179,6 +161,11 @@ const currentBatch = computed(() => {
 const originalScholars = ref([]);
 const originalRequirements = ref([]);
 const dataChanged = ref(false);
+
+const goBack = () => {
+    window.history.back();
+};
+
 
 // Statistics state
 const stats = ref({

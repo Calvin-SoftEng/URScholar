@@ -131,9 +131,8 @@
             <!-- QR Code Scanner -->
             <div class="p-4 flex flex-col space-y-4">
               <!-- Error Alert - Display any errors inside the modal -->
-              <div  v-if="errorMessage" class="space-y-4">
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-                  role="alert">
+              <div v-if="errorMessage" class="space-y-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
                   <strong class="font-bold">Error!</strong>
                   <span class="block sm:inline"> {{ errorMessage }}</span>
                 </div>
@@ -145,8 +144,45 @@
                 </div>
               </div>
 
+              <!-- Confirmation Dialog - New Addition -->
+              <div v-if="showConfirmation" class="space-y-4">
+                <div class="bg-blue-50 border border-blue-300 text-blue-800 px-4 py-5 rounded-lg">
+                  <h3 class="font-bold text-lg text-center mb-3">Confirm Disbursement Claim</h3>
+
+                  <div class="flex flex-col items-center mb-4">
+                    <div class="w-24 h-24 bg-gray-300 rounded-full overflow-hidden mb-2">
+                      <img v-if="pendingScholar && pendingScholar.picture"
+                        :src="`/storage/user/profile/${pendingScholar.picture}`" alt="Scholar Profile"
+                        class="w-full h-full object-cover" />
+                      <div v-else class="w-full h-full flex items-center justify-center bg-gray-200">
+                        <font-awesome-icon :icon="['fas', 'user']" class="text-gray-400 text-4xl" />
+                      </div>
+                    </div>
+
+                    <div class="text-center" v-if="pendingScholar">
+                      <p class="font-semibold text-lg">{{ pendingScholar.last_name }}, {{ pendingScholar.first_name }}
+                      </p>
+                      <p class="text-gray-600 text-sm">{{ pendingScholar.email }}</p>
+                      <p class="text-gray-600 text-sm">{{ pendingScholar.campus }}</p>
+                    </div>
+                  </div>
+
+                  <p class="text-center mb-4">Are you sure you want to mark this disbursement as claimed?</p>
+
+                  <div class="flex justify-center space-x-4">
+                    <button @click="cancelConfirmation"
+                      class="bg-gray-300 hover:bg-gray-400 text-gray-800 px-6 py-2 rounded-lg">
+                      Decline
+                    </button>
+                    <button @click="confirmClaim" class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg">
+                      Confirm
+                    </button>
+                  </div>
+                </div>
+              </div>
+
               <!-- QR Code Scanner Stream with Animation -->
-              <div v-if="isScanning"
+              <div v-if="isScanning && !showConfirmation"
                 class="relative w-full h-96 bg-gray-200 mt-4 flex items-center justify-center custom-corners">
                 <!-- Scanning Line Animation -->
                 <div
@@ -158,9 +194,10 @@
               </div>
 
               <!-- Result Section (Success/Failure Message) -->
-              <div v-if="scannedResult && scholar" class="mt-4 flex justify-center items-center">
+              <div v-if="scannedResult && scholar && !showConfirmation && !errorMessage"
+                class="mt-4 flex justify-center items-center">
                 <div class="w-full max-w-lg text-center p-6">
-                  <div v-if="!errorMessage" class="text-center text-green-500 font-medium">
+                  <div class="text-center text-green-500 font-medium">
                     <div class="flex justify-center items-center mb-6 overflow-hidden">
                       <img :src="`/storage/user/profile/${scholar.picture}`" alt="Profile Picture"
                         class="w-40 h-40 object-cover rounded-full border-2 border-primary">
@@ -286,6 +323,7 @@ import Button from 'primevue/button';
 import FileUpload from 'primevue/fileupload';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 import { QrcodeStream } from "vue-qrcode-reader";
+import axios from 'axios';
 import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
@@ -319,6 +357,11 @@ const toastVisible = ref(false);
 const toastTitle = ref('');
 const toastMessage = ref('');
 const currentDisbursement = ref(null);
+// Add new state variables for confirmation
+const showConfirmation = ref(false);
+const pendingScholar = ref(null);
+const pendingDisbursementId = ref(null);
+const scholar = ref(null);
 
 // Form for reason submission
 const form = useForm({
@@ -446,38 +489,132 @@ const toggleCamera = () => {
 
 
 // Modified onDetect function to handle errors
+// const onDetect = async (detectedCodes) => {
+//   if (detectedCodes.length > 0) {
+//     scannedResult.value = detectedCodes[0].rawValue;
+//     isScanning.value = false;
+
+//     // Send scanned QR code data to Laravel
+//     router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
+//       onSuccess: (page) => {
+//         // Check if there are errors in the page object
+//         if (page.props.errors && page.props.errors.message) {
+//           errorMessage.value = page.props.errors.message;
+//           showToast('Error', errorMessage.value);
+//         } else if (page.props.flash && page.props.flash.success) {
+//           // Success handling
+//           successMessage.value = 'Scholar verified successfully!';
+//           showToast('Success', 'Scholar verified successfully!');
+//         }
+//       },
+//       onError: (errors) => {
+//         errorMessage.value = errors.message || 'An error occurred';
+//         showToast('Error', errorMessage.value);
+//       }
+//     });
+//   }
+// };
+
 const onDetect = async (detectedCodes) => {
   if (detectedCodes.length > 0) {
     scannedResult.value = detectedCodes[0].rawValue;
     isScanning.value = false;
 
-    // Send scanned QR code data to Laravel
-    router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
-      onSuccess: (page) => {
-        // Check if there are errors in the page object
-        if (page.props.errors && page.props.errors.message) {
-          errorMessage.value = page.props.errors.message;
-          showToast('Error', errorMessage.value);
-        } else if (page.props.flash && page.props.flash.success) {
-          // Success handling
-          successMessage.value = 'Scholar verified successfully!';
+    try {
+      // Using Axios directly for JSON endpoints instead of Inertia
+      const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+      const response = await axios.post('/cashier/verify-qr',
+        { scanned_data: scannedResult.value },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': csrf,
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        }
+      );
+
+      const data = response.data;
+
+      if (data.success) {
+        if (data.require_confirmation) {
+          // Show confirmation dialog
+          pendingScholar.value = data.scholar;
+          pendingDisbursementId.value = data.scholar.disbursement_id;
+          showConfirmation.value = true;
+        } else {
+          // Success but no confirmation needed
+          scholar.value = data.scholar;
           showToast('Success', 'Scholar verified successfully!');
         }
-      },
-      onError: (errors) => {
-        errorMessage.value = errors.message || 'An error occurred';
+      } else {
+        // Handle error responses
+        errorMessage.value = data.error || 'An error occurred during verification';
         showToast('Error', errorMessage.value);
       }
-    });
+    } catch (error) {
+      errorMessage.value = error.response?.data?.error || 'Network or processing error';
+      showToast('Error', errorMessage.value);
+    }
   }
 };
 
-// Improved restart function to clear all relevant states
+// Function to confirm the disbursement claim
+const confirmClaim = async () => {
+  try {
+    const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+    const response = await axios.post('/cashier/confirm-claim',
+      { disbursement_id: pendingDisbursementId.value },
+    );
+
+    const data = response.data;
+
+    if (data.success) {
+      // Update UI to show success
+      scholar.value = data.scholar;
+      showToast('Success', 'Disbursement successfully claimed');
+
+      // Reset confirmation state
+      showConfirmation.value = false;
+
+      // Refresh the disbursements list using Inertia
+      router.reload({ only: ['disbursements'] });
+    } else {
+      errorMessage.value = data.error || 'Failed to process claim';
+      showToast('Error', errorMessage.value);
+      showConfirmation.value = false;
+    }
+  } catch (error) {
+    // Improve error handling with more details
+    errorMessage.value = error.response?.data?.error ||
+      error.response?.data?.message ||
+      error.message ||
+      'Network or processing error';
+    console.error('Complete error object:', error);
+    showToast('Error', errorMessage.value);
+    showConfirmation.value = false;
+  }
+};
+
+// Function to cancel confirmation
+const cancelConfirmation = () => {
+  showConfirmation.value = false;
+  pendingScholar.value = null;
+  pendingDisbursementId.value = null;
+  restartScan();
+};
+
+// Modified restart function to reset all states
 const restartScan = () => {
   scannedResult.value = null;
   isScanning.value = true;
   errorMessage.value = null;
   successMessage.value = null;
+  showConfirmation.value = false;
+  pendingScholar.value = null;
+  pendingDisbursementId.value = null;
 };
 
 // Modified closeCamera function to reset error state
@@ -491,10 +628,10 @@ const closeCamera = () => {
 watchEffect(() => {
   // Success messages
   const flashMessage = usePage().props.flash?.success;
-  
+
   // Error messages
   const errorMsg = usePage().props.errors?.message;
-  
+
   if (flashMessage) {
     console.log("Showing success toast:", flashMessage);
     usePage().props.scholar = flashMessage;
@@ -504,11 +641,11 @@ watchEffect(() => {
       toastVisible.value = false;
     }, 3000);
   }
-  
+
   if (errorMsg) {
     console.log("Setting error message:", errorMsg);
     errorMessage.value = errorMsg;
-    
+
     // Only show toast if modal is not open
     if (!OpenCamera.value) {
       showToast('Error', errorMsg);

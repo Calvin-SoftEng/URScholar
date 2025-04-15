@@ -246,6 +246,7 @@ class ScholarController extends Controller
         }
 
         $grade = Grade::where('scholar_id', $scholar->id)
+            ->with('school_year')
             ->where('school_year_id', $grantee_school_year_id)
             ->where('semester', $grantee_semester)
             ->first();
@@ -263,6 +264,12 @@ class ScholarController extends Controller
             ->where('read', 0)
             ->first();
 
+        $hasGrantee = Grantees::where('scholar_id', $scholar->id)->exists();
+
+        $applicant = Applicant::where('scholar_id', $scholar->id)
+            ->first();
+
+
         return Inertia::render('Staff/Scholarships/One-Time/Applicant-Details', [
             'scholar' => $scholar,
             'student' => $student,
@@ -275,6 +282,8 @@ class ScholarController extends Controller
             'submittedRequirements' => $submittedRequirements,
             'grade' => $grade,
             'notify' => $notify,
+            'hasGrantee' => $hasGrantee,
+            'applicant' => $applicant,
         ]);
     }
 
@@ -297,19 +306,115 @@ class ScholarController extends Controller
             $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
             $grantee->status = 'Inactive';
+            $grantee->student_status = $validated['status'];
             $grantee->save();
+
             $scholar->student_status = $validated['status'];
             $scholar->status = 'Unverified';
             $scholar->save();
+        } else {
+            // Update the scholar's status for other cases
+            $grantee = Grantees::where('scholar_id', $scholar->id)
+                ->where('status', 'Pending')
+                ->first();
+
+            if ($grantee) {
+                $grantee->status = 'Inactive';
+                $grantee->student_status = $validated['status'];
+                $grantee->save();
+            }
+
+            $scholar->student_status = $validated['status'];
+            $scholar->save();
         }
 
-        // Update the scholar's status
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        // Get the grantee record if it wasn't retrieved earlier
+        if (!isset($grantee)) {
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        }
 
-        $grantee->status = 'Inactive';
-        $grantee->save();
-        $scholar->student_status = $validated['status'];
-        $scholar->save();
+        // Skip batch checks if no grantee is found
+        if (!$grantee) {
+            return response()->json(['message' => 'Student status updated successfully']);
+        }
+
+        // Check batch status conditions
+        $batch = Batch::find($grantee->batch_id);
+
+        if ($batch) {
+            $totalGranteesInBatch = Grantees::where('batch_id', $batch->id)->count();
+
+            // Check for "Inactive" condition - all grantees are either 'Graduated' or 'Dropped'
+            $completedGrantees = Grantees::where('batch_id', $batch->id)
+                ->whereIn('student_status', ['Graduated', 'Dropped'])
+                ->count();
+
+            // Check for "validated" condition - all grantees are 'Graduated', 'Dropped', or 'Enrolled'
+            $validatedGrantees = Grantees::where('batch_id', $batch->id)
+                ->whereIn('student_status', ['Graduated', 'Dropped', 'Enrolled'])
+                ->count();
+
+            // If all grantees have either 'Graduated' or 'Dropped' status, set batch status to 'Inactive'
+            if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $completedGrantees) {
+                $batch->status = 'Inactive';
+            }
+
+            // if (Auth::user()->usertype == 'super_admin') {
+            //     // If all grantees have 'Graduated', 'Dropped', or 'Enrolled' status, set validated to true
+            //     if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $validatedGrantees) {
+            //         $batch->validated = true;
+            //     }
+
+            // }
+
+            $batch->save();
+        }
+
+        return response()->json(['message' => 'Student status updated successfully']);
+    }
+
+    public function updateApplicant(Request $request)
+    {
+        $request->validate([
+            'scholar_id' => 'required|exists:scholars,id',
+            'status' => 'required|in:Approve,Reject',
+        ]);
+
+        $scholar = Scholar::where('id', $request['scholar_id'])->first();
+        $applicant = Applicant::where('scholar_id', $scholar->id)
+            ->where('status', 'Pending')
+            ->first();
+
+        $message = null;
+        if ($request['status'] == 'Approve') {
+            $applicant->status = 'Approved';
+            $applicant->validated_date = now();
+            $message = 'Approved';
+        } else {
+            $applicant->status = 'Rejected';
+            $applicant->validated_date = now();
+            $message = 'Rejected';
+        }
+        $applicant->save();
+
+        // Optionally: Send notification about scholar status update
+        $notification = Notification::create([
+            'title' => 'Status Update',
+            'message' => 'Your Applicant has been ' . $message,
+            'type' => 'scholar_status_update',
+        ]);
+
+        $notification->users()->attach($scholar->user_id);
+
+        broadcast(new NewNotification($notification))->toOthers();
+
+        event(new NewNotification($notification));
+
+        $statusMessage = $request->status === 'Approve'
+            ? 'Application approved successfully!'
+            : 'Application rejected successfully!';
+
+        return back()->with('success', $statusMessage);
     }
 
     public function updateStatus(Request $request)
@@ -322,6 +427,7 @@ class ScholarController extends Controller
 
         $requirement = SubmittedRequirements::findOrFail($request->submittedReq);
         $requirement->status = $request->status;
+        $requirement->validated_date = now();
 
         // Save message for both Returned and Approved statuses
         if ($request->message) {
@@ -372,8 +478,12 @@ class ScholarController extends Controller
             if ($allApproved && count($allRequirements) > 0) {
                 $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
-                $grantee->status = 'Active';
-                $grantee->save();
+
+                if ($grantee) {
+                    $grantee->status = 'Active';
+                    $grantee->save();
+                }
+
 
                 // Optionally: Send notification about scholar status update
                 $notification = Notification::create([
@@ -576,6 +686,7 @@ class ScholarController extends Controller
                     ->where('middle_name', $record['MIDDLENAME'] ?? '')
                     ->first();
 
+
                 if ($existingScholar) {
                     // Check if this scholar already has a grantee record for this batch, semester, and school year
                     $existingGrantee = Grantees::where('scholar_id', $existingScholar->id)
@@ -727,6 +838,36 @@ class ScholarController extends Controller
                 }
             }
 
+            // Student verification process for new scholars only
+            $students = Student::all();
+            $matchedCount = 0;
+            $unmatchedCount = 0;
+
+            foreach ($createdScholars as $scholar) {
+                $matched = $students->first(function ($student) use ($scholar) {
+                    return $student->course_id === $scholar->course_id &&
+                        $student->campus_id === $scholar->campus_id &&
+                        $scholar->year_level == $student->year_level &&
+                        $scholar->first_name == $student->first_name &&
+                        $scholar->last_name == $student->last_name;
+                });
+
+                // Update status directly
+                if ($matched) {
+                    // Update status and copy email and student_number from matched student
+                    $scholar->update([
+                        'student_status' => 'Enrolled',
+                        'status' => 'Verified',
+                        'email' => $matched->email, // Copy email from matched student
+                        'student_number' => $matched->student_number // Copy student_number from matched student
+                    ]);
+                    $matchedCount++;
+                } else {
+                    $scholar->update(['status' => 'Unverified']);
+                    $unmatchedCount++;
+                }
+            }
+
             // Group scholars by campus
             $scholarsByCompus = [];
             foreach ($allScholars as $scholar) {
@@ -754,6 +895,7 @@ class ScholarController extends Controller
                         'scholarship_id' => $scholarship->id,
                         'batch_no' => $firstRecord['BATCH NO.'],
                         'school_year_id' => $request->schoolyear,
+                        'semester' => $request->semester,
                         'campus_id' => $campusId,
                     ]);
                     $campusBatches[$campusId] = $batch;
@@ -761,9 +903,12 @@ class ScholarController extends Controller
                     $campusBatches[$campusId] = $existingBatch;
                 }
 
-                // Create grantee entries for scholars in this campus
+                /// In the loop where grantee entries are created for scholars in each campus
                 $granteesData = [];
                 foreach ($scholarIds as $scholarId) {
+                    // Fetch the scholar to get their student_status
+                    $scholar = Scholar::find($scholarId);
+
                     $granteesData[] = [
                         'scholarship_id' => $scholarship->id,
                         'batch_id' => $campusBatches[$campusId]->id,
@@ -771,6 +916,7 @@ class ScholarController extends Controller
                         'school_year_id' => $request->schoolyear,
                         'semester' => $request->semester,
                         'status' => 'Pending',
+                        'student_status' => $scholar['student_status'] ?? null, // Add student_status from scholar
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];
@@ -785,34 +931,27 @@ class ScholarController extends Controller
                 $campusBatches[$campusId]->update([
                     'total_scholars' => count($scholarIds)
                 ]);
-            }
 
-            // Student verification process for new scholars only
-            $students = Student::all();
-            $matchedCount = 0;
-            $unmatchedCount = 0;
+                // CHECK IF ALL GRANTEES IN THIS BATCH HAVE ENROLLED STATUS
+// Only proceed with validation if the batch's campus matches the authenticated user's campus
+                if ($campusId == Auth::user()->campus_id) {
+                    // Get all grantees for this batch
+                    $batchGrantees = Grantees::where('batch_id', $campusBatches[$campusId]->id)->get();
+                    $allEnrolled = true;
 
-            foreach ($createdScholars as $scholar) {
-                $matched = $students->first(function ($student) use ($scholar) {
-                    return $student->course_id === $scholar->course_id &&
-                        $student->campus_id === $scholar->campus_id &&
-                        $scholar->year_level == $student->year_level &&
-                        $scholar->first_name == $student->first_name &&
-                        $scholar->last_name == $student->last_name;
-                });
+                    foreach ($batchGrantees as $grantee) {
+                        if ($grantee->student_status !== 'Enrolled') {
+                            $allEnrolled = false;
+                            break;
+                        }
+                    }
 
-                // Update status directly
-                if ($matched) {
-                    // Update status and copy email from matched student
-                    $scholar->update([
-                        'student_status' => 'Enrolled',
-                        'status' => 'Verified',
-                        'email' => $matched->email // Copy email from matched student
-                    ]);
-                    $matchedCount++;
-                } else {
-                    $scholar->update(['status' => 'Unverified']);
-                    $unmatchedCount++;
+                    // If all grantees are enrolled, mark the batch as validated
+                    if ($allEnrolled && count($batchGrantees) > 0) {
+                        $campusBatches[$campusId]->update([
+                            'validated' => true
+                        ]);
+                    }
                 }
             }
 
@@ -844,13 +983,13 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                         ]);
 
-                        // Create Group Page for current user
-                        Page::create([
-                            'user_id' => $currentUser->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                        // // Create Group Page for current user
+                        // Page::create([
+                        //     'user_id' => $currentUser->id,
+                        //     'scholarship_id' => $scholarship->id,
+                        //     'batch_id' => $batch->id,
+                        //     'campus_id' => $campus->id,
+                        // ]);
                     }
 
                     // Find coordinator
@@ -865,13 +1004,13 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                         ]);
 
-                        //Create Group Page
-                        Page::create([
-                            'user_id' => $coordinator->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                        // //Create Group Page
+                        // Page::create([
+                        //     'user_id' => $coordinator->id,
+                        //     'scholarship_id' => $scholarship->id,
+                        //     'batch_id' => $batch->id,
+                        //     'campus_id' => $campus->id,
+                        // ]);
 
                         // Create notification for coordinator
                         $notification = Notification::create([
@@ -897,13 +1036,13 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                         ]);
 
-                        //Create Group Page
-                        Page::create([
-                            'user_id' => $cashier->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                        // //Create Group Page
+                        // Page::create([
+                        //     'user_id' => $cashier->id,
+                        //     'scholarship_id' => $scholarship->id,
+                        //     'batch_id' => $batch->id,
+                        //     'campus_id' => $campus->id,
+                        // ]);
                     }
                 }
             }

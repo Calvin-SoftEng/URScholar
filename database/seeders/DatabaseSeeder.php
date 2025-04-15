@@ -56,7 +56,7 @@ class DatabaseSeeder extends Seeder
         //Super Admin
         User::factory()->create([
             'name' => 'superadmin1',
-            'email' => 'sadmin1@gmail.com',
+            'email' => 'headadmin@gmail.com',
             'first_name' => 'Roslyn',
             'last_name' => 'Magat',
             'middle_name' => 'B',
@@ -69,7 +69,7 @@ class DatabaseSeeder extends Seeder
         //coordinator
         User::factory()->create([
             'name' => 'coordinator1',
-            'email' => 'coor1@gmail.com',
+            'email' => 'bcoor@gmail.com',
             'first_name' => 'Baby Eunice',
             'last_name' => 'Cabaltera',
             'middle_name' => 'N/A',
@@ -80,10 +80,10 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'coordinator12',
-            'email' => 'coor2@gmail.com',
-            'first_name' => 'Rublyn',
-            'last_name' => 'IDK',
-            'middle_name' => 'Maribujoc',
+            'email' => 'pcoor@gmail.com',
+            'first_name' => 'Keith Ashley',
+            'last_name' => 'Cruz',
+            'middle_name' => 'Dolorian',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
             'campus_id' => '4'
@@ -92,7 +92,7 @@ class DatabaseSeeder extends Seeder
         //sponsor
         User::factory()->create([
             'name' => 'sponsor1',
-            'email' => 'sponsor1@gmail.com',
+            'email' => 'chedsponsor@gmail.com',
             'first_name' => 'Calvin',
             'last_name' => 'Manalo',
             'middle_name' => 'De Guzman',
@@ -103,8 +103,19 @@ class DatabaseSeeder extends Seeder
 
         //cashier
         User::factory()->create([
+            'name' => 'head_cashier1',
+            'email' => 'headcashier1@gmail.com',
+            'first_name' => 'Eva',
+            'last_name' => 'Natividad',
+            'middle_name' => 'N/A',
+            'password' => bcrypt('password'),
+            'usertype' => 'head_cashier',
+            'campus_id' => '1'
+        ]);
+
+        User::factory()->create([
             'name' => 'cashier1',
-            'email' => 'cashier1@gmail.com',
+            'email' => 'bcashier@gmail.com',
             'first_name' => 'Denise Ann',
             'last_name' => 'Lopez',
             'middle_name' => 'N/A',
@@ -115,13 +126,13 @@ class DatabaseSeeder extends Seeder
 
         User::factory()->create([
             'name' => 'cashier2',
-            'email' => 'cashier2@gmail.com',
-            'first_name' => 'Johnsdwada Paul',
-            'last_name' => 'Manalodawdaw',
-            'middle_name' => 'De Guzman',
+            'email' => 'mcashier@gmail.com',
+            'first_name' => 'Oliver John',
+            'last_name' => 'Cayas',
+            'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
-            'campus_id' => '1'
+            'campus_id' => '3'
         ]);
 
         //student
@@ -207,8 +218,6 @@ class DatabaseSeeder extends Seeder
             'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
-            'date_start' => '2025-03-15',
-            'date_end' => '2025-03-25',
         ]);
 
         Scholarship::factory()->create([
@@ -217,8 +226,6 @@ class DatabaseSeeder extends Seeder
             'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
-            'date_start' => '2025-03-15',
-            'date_end' => '2025-03-25',
         ]);
 
         //school year

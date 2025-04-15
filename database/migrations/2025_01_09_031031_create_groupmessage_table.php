@@ -38,9 +38,19 @@ return new class extends Migration {
             $table->unsignedBigInteger('staff_group_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
-            
+
             $table->foreign('staff_group_id')->references('id')->on('staff_groups')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+        });
+
+        Schema::create('conversations', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedBigInteger('sender_id');
+            $table->unsignedBigInteger('receiver_id');
+            $table->timestamps();
+
+            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('receiver_id')->references('id')->on('users')->onDelete('cascade');
         });
 
         Schema::create('messages', function (Blueprint $table) {
@@ -48,6 +58,7 @@ return new class extends Migration {
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('staff_group_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('conversation_id')->nullable()->constrained()->onDelete('cascade');
             $table->text('content');
             $table->timestamps();
         });
@@ -55,9 +66,9 @@ return new class extends Migration {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
-            $table->foreignId('batch_id')->constrained()->onDelete('cascade');
-            $table->foreignId('campus_id')->constrained()->onDelete('cascade');
+            $table->json('scholarship_ids');  // Stores array of IDs
+            $table->json('batch_ids');        // Stores array of IDs
+            $table->json('campus_ids');       // Stores array of IDs
             $table->timestamps();
         });
 
@@ -78,6 +89,7 @@ return new class extends Migration {
         Schema::dropIfExists('postings');
         Schema::dropIfExists('pages');
         Schema::dropIfExists('messages');
+        Schema::dropIfExists('conversations');
         Schema::dropIfExists('staff_group_users');
         Schema::dropIfExists('staff_groups');
         Schema::dropIfExists('scholarship_group_users');

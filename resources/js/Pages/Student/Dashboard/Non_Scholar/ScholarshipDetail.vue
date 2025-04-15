@@ -42,7 +42,7 @@
                                     <p v-if="props.criterias.find(c => c.grade)">
                                         Student General Weighted Average must be at least
                                         <span class="font-semibold">{{props.criterias.find(c => c.grade).grade
-                                            }}</span>
+                                        }}</span>
                                     </p>
 
                                     <!-- Income criteria -->
@@ -223,8 +223,8 @@ const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-U
 
 // For grade requirement check
 const meetsGradeRequirement = (scholarship) => {
-    // If no criteria are available, student is eligible
-    if (!props.criterias || props.criterias.length === 0) return true;
+    // // If no criteria are available, student is eligible
+    // if (!props.criterias || props.criterias.length === 0) return true;
 
     // Get the first criteria with a grade requirement
     const gradeCriteria = props.criterias.find(criteria => criteria.grade);
@@ -233,8 +233,12 @@ const meetsGradeRequirement = (scholarship) => {
     const requiredGrade = gradeCriteria.grade;
     const studentGrade = props.grade?.grade;
 
-    // If student has no grade, they're not eligible
-    if (!studentGrade) return false;
+    if (requiredGrade <= 0) {
+        return true
+    }
+
+    // Check if student grade is null or undefined (but NOT 0.00)
+    if (studentGrade === null || studentGrade === undefined) return false;
 
     // Compare grades (assuming lower is better)
     return studentGrade <= requiredGrade;

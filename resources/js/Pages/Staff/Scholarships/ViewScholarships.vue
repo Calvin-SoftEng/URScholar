@@ -89,16 +89,13 @@
                                     </div>
 
                                     <!-- Additional Info -->
-                                    <div class="flex flex-row gap-8 text-center">
-                                        <div>
-                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
-                                            <p class="text-xl font-bold text-gray-800 dark:text-dtext">1</p>
-                                        </div>
-                                        <div>
-                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Campuses</p>
-                                            <p class="text-xl font-bold text-gray-800 dark:text-dtext">2</p>
+                                    <div class="flex items-center gap-6 text-center px-4 py-3 bg-white dark:bg-dcontainer rounded-xl shadow-sm border border-gray-200 dark:border-gray-600">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 dark:text-gray-400">Total Batches</span>
+                                            <span class="text-2xl font-semibold text-gray-900 dark:text-dtext">1</span>
                                         </div>
                                     </div>
+
                                 </div>
                             </button>
                         </template>
@@ -173,10 +170,6 @@
                                             <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
                                             <p class="text-xl font-bold text-gray-800 dark:text-dtext">34</p>
                                         </div>
-                                        <div>
-                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Campuses</p>
-                                            <p class="text-xl font-bold text-gray-800 dark:text-dtext">2</p>
-                                        </div>
                                     </div>
                                 </div>
                             </button>
@@ -215,7 +208,7 @@
                         </div>
                         <div class="grid grid-cols-3 justify-center items-center gap-3">
                             <InputError v-if="errors?.selectedSem" :message="errors.selectedSem"
-                                class="text-2xs text-red-500" />
+                                class="text-2xs text-red-500 col-span-3 flex justify-center items-center" />
                             <div
                                 class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
                                 Academic Year:

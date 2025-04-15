@@ -30,7 +30,7 @@
               </Link>
             </li>
             <li class="relative">
-                <Link :href="route('feed.index')" class="flex items-center space-x-2">
+                <Link :href="route('feed.grantee_feed')" class="flex items-center space-x-2">
                     <p class="text-primary-foreground hover:text-primary transition">Feed</p>
                     <!-- Notification Badge (only shows if unreadMessages > 0) -->
                     <span 
@@ -234,9 +234,9 @@
         No notifications
       </div>
       <div v-else
-        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
         <div v-for="notification in filteredNotifications" :key="notification.id"
-          class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+          class="flex px-4 py-3 bg-white hover:bg-gray-100 dark:hover:bg-gray-700"
           :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
           <div class="w-full">
             <div >{{ notification.title }}</div>
@@ -278,9 +278,9 @@
         No notifications
       </div>
       <div v-else
-        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
         <div v-for="notification in filteredNotifications" :key="notification.id"
-          class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+          class="flex px-4 py-3 bg-white hover:bg-gray-100 dark:hover:bg-gray-700"
           :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
           <div class="w-full">
             <div >{{ notification.title }}</div>
@@ -297,7 +297,7 @@
             <div class="flex justify-between items-center">
               <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
               <button v-if="!notification.read" @click="markAsRead(notification.id)"
-                class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+                class="text-xs font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
                 Mark as read
               </button>
             </div>
@@ -310,24 +310,26 @@
     <!-- Dropdown menu -->
     <div id="userDropdown" v-show="isDropdownOpen"
       class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-      <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-        <div>{{ $page.props.auth.user.name }}</div>
-        <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
+      <div class="py-1 text-left">
+        <Link :href="route('student.account')" as="button"
+          class="w-full px-4 items-start justify-start py-2 text-sm text-gray-700 text-left hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">
+        Account Settings
+        </Link>
       </div>
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
-          <li class="relative">
-              <Link :href="route('student.profile')"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                  Profile
-              </Link>
-              <!-- Notification Dot with FontAwesome Icon -->
-              <div class="absolute top-0 right-1 flex items-center space-x-2">
-                  <!-- Red Notification Icon with FontAwesome -->
-                  <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
-                      <font-awesome-icon :icon="['fas', 'exclamation']" />
-                  </div>
-              </div>
-          </li>
+      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
+        <li class="relative">
+            <Link :href="route('student.profile')"
+                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                Profile
+            </Link>
+            <!-- Notification Dot with FontAwesome Icon -->
+            <div class="absolute top-0 right-1 flex items-center space-x-2">
+                <!-- Red Notification Icon with FontAwesome -->
+                <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
+                    <font-awesome-icon :icon="['fas', 'exclamation']" />
+                </div>
+            </div>
+        </li>
       </ul>
 
       <div class="py-1 text-left">

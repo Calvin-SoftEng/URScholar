@@ -30,34 +30,6 @@
             <option v-for="campus in availableCampuses" :key="campus" :value="campus">{{ campus }}</option>
           </select>
         </div>
-
-        <!-- School Year Filter -->
-        <div>
-          <label class="text-sm block mb-1">Filter School Year</label>
-          <select v-model="selectedYear"
-            class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white"
-            @change="updateFilters">
-            <option value="">All Years</option>
-            <option v-for="year in availableYears" :key="year.id" :value="year.id">{{ year.school_year }}</option>
-          </select>
-        </div>
-
-        <!-- Semester Filter -->
-        <div>
-          <label class="text-sm block mb-1">Filter Semester</label>
-          <div class="flex items-center gap-4 text-sm">
-            <label class="flex items-center gap-1">
-              <input type="radio" name="semester" value="1st" v-model="selectedSemester"
-                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" @change="updateFilters" />
-              1st
-            </label>
-            <label class="flex items-center gap-1">
-              <input type="radio" name="semester" value="2nd" v-model="selectedSemester"
-                class="text-blue-600 focus:ring-blue-500 dark:focus:ring-blue-400" @change="updateFilters" />
-              2nd
-            </label>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -132,14 +104,7 @@
                   <td>{{ scholar.campus }}</td>
                   <td>{{ scholar.course }}</td>
                   <td>{{ scholar.grant }}</td>
-                  <td>
-                    <!-- <span class="text-sm text-gray-700 mt-1 flex items-center justify-center">
-                      {{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}
-                    </span>
-                    <div class="w-full bg-gray-200 rounded-full h-2">
-                      <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }"></div>
-                    </div> -->1.2
-                  </td>
+                  <td>{{ scholar.grade ?? 'No Grade' }}</td>
                   <td>
                     <span class="px-2 py-1 rounded-md text-xs" :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
@@ -150,7 +115,7 @@
                     </span>
                   </td>
                   <th>
-                    <Link :href="`/scholarships/scholar=${scholar.id}`">
+                    <Link :href="route('sponsor.sponsor_scholar', scholar.id)">
                     <button
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">

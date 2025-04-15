@@ -6,7 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Page extends Model
 {
-    protected $fillable = ['user_id', 'scholarship_id', 'batch_id', 'campus_id'];
+    protected $fillable = [
+        'user_id',
+        'scholarship_ids',
+        'batch_ids',
+        'campus_ids',
+    ];
 
     public function scholarship()
     {
@@ -26,5 +31,10 @@ class Page extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function postings()
+    {
+        return $this->hasMany(Posting::class);
     }
 }

@@ -10,7 +10,7 @@
                 dataOpenSideBar ? 'justify-between' : 'justify-center',
                 'min-h-[50px]'
               ]">
-              <span v-if="dataOpenSideBar" class="text-blue-900 opacity-90 font-poppins text-sm font-semibold dark:text-dtext">
+              <span v-if="dataOpenSideBar" class="text-blue-900 opacity-90 font-poppins text-sm font-semibold dark:text-dtext whitespace-nowrap">
                 Main Menu
               </span>
 
@@ -25,14 +25,14 @@
             <Link :href="(route('cashier.dashboard'))" >
               <div v-tooltip.right="!dataOpenSideBar ? 'Dashboard' : ''" :class="[
                 'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
-                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/admin/dashboard' }
+                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url === '/cashier/dashboard' }
               ]">
               <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url === '/admin/dashboard' }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url === '/admin/dashboard' }]"
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url === '/cashier/dashboard' }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url === '/cashier/dashboard' }]"
                 >
                 dashboard
                 </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/admin/dashboard' }]">Dashboard</span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url === '/cashier/dashboard' }]">Dashboard</span>
               </div>
               </div>
             </Link>
@@ -40,14 +40,13 @@
             <Link :href="(route('cashier.active_scholarships'))" >
               <div v-tooltip.right="!dataOpenSideBar ? 'Scholarships' : ''" :class="[
                 'py-2 cursor-pointer rounded-md hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md',
-                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/scholarships') }
-              ]">
+                { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]">
               <div :class="['flex items-center space-x-2 text-blue-900 dark:text-dtext font-quicksand font-semibold pl-2 text-[16px]']">
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/scholarships') }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/scholarships') }]"
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]" :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]"
                 >
                 checkbook
                 </span>
-                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/scholarships') }]">Payouts</span>
+                <span v-show="dataOpenSideBar" :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/cashier/scholarships') || $page.url.startsWith('/cashier/active_scholarships')  }]">Payouts</span>
               </div>
               </div>
             </Link>
@@ -71,14 +70,14 @@
             
             <Link :href="route('messaging.index')">
             <div v-tooltip.right="!dataOpenSideBar ? 'Group Page' : ''"
-              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/group-page') }]">
+              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/messaging') }]">
               <div class="flex items-center space-x-2 font-quicksand font-semibold pl-2 text-[16px]">
-                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/group-page') }]"
-                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/group-page') }]">
+                <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/messaging') }]"
+                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/messaging') }]">
                   forum
                 </span>
                 <span v-show="dataOpenSideBar"
-                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/group-page') }]">Messaging</span>
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/messaging') }]">Messaging</span>
               </div>
             </div>
             </Link>
@@ -99,22 +98,22 @@
           
             <div class="text-blue-900 dark:text-dtext opacity-90 font-poppins text-sm font-semibold py-2 px-1 w-full" :class="{ 'opacity-0': !dataOpenSideBar }">Docs</div>
 
-            <!-- <Link :href="route('cashier.payroll')"> -->
+            <Link :href="route('cashier.payouts_index')">
               <div v-tooltip.right="!dataOpenSideBar ? 'Payouts' : ''"
-              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/payouts') }]">
+              :class="['py-2 rounded-md cursor-pointer text-blue-900 dark:text-dtext hover:bg-gray-100 dark:hover:bg-dcontainer hover:rounded-md', { 'active bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 dark:bg-primary': $page.url.startsWith('/cashier/payouts') }]">
                 <div class="flex space-x-2 font-quicksand font-semibold pl-2">
-                  <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/payouts') }]"
-                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/payouts') }]">
+                  <span :class="['material-symbols-rounded', { 'active text-dtext': $page.url.startsWith('/cashier/payouts') }]"
+                  :style="['text-dtext hover:text-white', { 'active text-dtext hover:text-white': $page.url.startsWith('/cashier/payouts') }]">
                     price_check
                   </span>
                   <span v-show="dataOpenSideBar" 
-                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/payouts') }]">Payrolls</span>
+                  :class="['pl-2', { 'active text-dtext': $page.url.startsWith('/cashier/payouts') }]">Payrolls</span>
                 </div>
               </div>
-            <!-- </Link> -->
+            </Link>
 
-        
         </div>
+        
 
         
 
@@ -128,16 +127,41 @@
                 <!-- Avatar (displayed only when !dataOpenSideBar) -->
                 <div class="avatar" v-show="dataOpenSideBar">
                   <div class="w-8 h-8 rounded-full ring ring-offset-2">
-                    <img
-                      src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                      alt="Avatar"
-                    />
+                    <div v-if="$page.props.auth.user.picture">
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                    </div>
+                    <div v-else>
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                        src="../../../assets/images/no_userpic.png" alt="picture">
+                    </div>
+                    <!-- <div >
+                      <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                        data-dropdown-placement="bottom-start"
+                        class="w-10 h-10 rounded-lg border object-cover border-gray-300 cursor-pointer"
+                        src="../../../assets/images/no_userpic.png" alt="picture">
+                    </div> -->
                   </div>
                 </div>
-                  <!-- Text (displayed only when dataOpenSideBar) -->
+                <!-- Text (displayed only when dataOpenSideBar) -->
                 <div class="flex flex-col items-start text-[12px] text-blue-900 dark:text-dtext">
-                  <span v-show="dataOpenSideBar">{{ $page.props.auth.user.email }}</span>
-                  <span v-show="dataOpenSideBar">{{ $page.props.auth.user.usertype }}</span>
+                  <span v-show="dataOpenSideBar">{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name
+                    }} </span>
+                  <span v-show="dataOpenSideBar">
+                    {{
+                        $page.props.auth.user.usertype === 'super_admin' ? 'Head Admin' :
+                          $page.props.auth.user.usertype === 'coordinator' ? 'Scholarship Coordinator' :
+                            $page.props.auth.user.usertype === 'cashier' ? 'Campus Cashier' :
+                            $page.props.auth.user.usertype === 'head_cashier' ? 'University Cashier' :
+                            $page.props.auth.user.usertype
+                    }}
+                  </span>
+
+
                 </div>
               </div>
                 <div>
@@ -152,12 +176,13 @@
           <div id="dropdownTop" class="z-10 hidden bg-gray-50 divide-y divide-gray-100 rounded-lg w-52 dark:bg-primary">
             <ul class="text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownTopButton">
-              <li class="flex items-left space-x-2 px-4 py-1 hover:bg-gray-100 hover:rounded-t-lg dark:hover:bg-dcontainer dark:hover:text-white">
-                <Link :href="route('profile.edit')" method="post" as="button" class="flex items-center justify-start space-x-2 py-2 ">
-                  <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
-                    person
-                  </span>
-                  <span class="font-poppins">My Profile</span>
+              <li
+                class="flex items-left space-x-2 px-4 py-1 hover:bg-gray-100 hover:rounded-t-lg dark:hover:bg-dcontainer dark:hover:text-white">
+                <Link :href="route('view.profile')" class="flex items-center justify-start space-x-2 py-2 ">
+                <span class="material-symbols-rounded text-blue-900 dark:text-dtext">
+                  person
+                </span>
+                <span class="font-poppins">Account Settings</span>
                 </Link>
               </li>
               <Link :href="route('logout')" method="post" as="button" class="w-full">

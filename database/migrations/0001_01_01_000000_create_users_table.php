@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('picture')->nullable();
             $table->string('email')->unique();
-            $table->enum('usertype', ['cashier', 'coordinator', 'student', 'super_admin', 'system_admin', 'sponsor'])->default('student');
+            $table->enum('usertype', ['cashier', 'coordinator', 'student', 'super_admin', 'system_admin', 'sponsor', 'head_cashier'])->default('student');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('first_name')->nullable();

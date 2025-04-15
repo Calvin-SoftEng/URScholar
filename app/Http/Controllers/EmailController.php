@@ -77,8 +77,6 @@ class EmailController extends Controller
         ];
 
         $validator = Validator::make($request->all(), [
-            'subject' => 'required|string|max:255',
-            'content' => 'required|string',
             'requirements' => 'required',
             'application' => 'required|date',
             'deadline' => 'required|date',
@@ -169,6 +167,10 @@ class EmailController extends Controller
 
         // Process each batch
         foreach ($batches as $batch) {
+
+            $batch->status = 'Pending';
+            $batch->save();
+
             // Retrieve scholars through grantees with necessary relationships
             $scholars = $scholarship->grantees()
                 ->where('batch_id', $batch->id)
@@ -341,7 +343,7 @@ class EmailController extends Controller
                         "*Bigayan Oras: " . $request['scheduled_time'] . "\n\n" .
                         "*Reminders be: " . $request['reminders'] . "\n\n" .
                         "Click the following link to access your portal: " .
-                        "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
+                        "urscholar.up.railway.app\n\n"
                 ];
 
                 Mail::to($scholar->email)->send(new SendEmail($mailData));
@@ -353,6 +355,8 @@ class EmailController extends Controller
             'activity' => 'Email',
             'description' => 'Scholar has been sent an email for payouts ' . $scholarship->name,
         ]);
+
+        return redirect()->route('cashier.payout_batches', ['payout' => $payout])->with('success', 'Schedule email sent successfully!');
     }
 
     public function store(Request $request): RedirectResponse
@@ -403,7 +407,7 @@ class EmailController extends Controller
                     " - Stay updated with announcements and notifications regarding your application status.\n\n" .
                     "*Application Deadline: " . ($request->has('deadline') ? $request['deadline'] : 'Please check the website for details') . "\n\n" .
                     "Click the following link to access your portal: " .
-                    "https://youtu.be/cHSRG1mGaAo?si=pl0VL7UAJClvoNd5\n\n"
+                    "urscholar.up.railway.app\n\n"
             ];
 
             // Send email
@@ -469,7 +473,7 @@ class EmailController extends Controller
                     " - Stay updated with announcements and notifications regarding your application status.\n\n" .
                     "Application Deadline: " . ($request->has('deadline') ? $request->deadline : 'Please check the website for details') . "\n\n" .
                     "Click the following link to access your portal: " .
-                    "https://yourscholarshipportal.com/login\n\n"
+                    "urscholar.up.railway.app\n\n"
             ];
 
             // Send email

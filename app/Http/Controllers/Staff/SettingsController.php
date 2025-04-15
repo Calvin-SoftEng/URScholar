@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Staff;
 
+use App\Mail\SendEmail;
 use App\Models\AcademicYear;
 use App\Models\Campus;
 use App\Models\Condition;
@@ -17,11 +18,14 @@ use App\Models\Sponsor;
 use App\Models\Scholar;
 use App\Models\Grantees;
 use App\Models\SchoolYear;
+use App\Models\User;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use League\Csv\Reader;
+use Illuminate\Support\Str;
 
 class SettingsController extends Controller
 {
@@ -74,10 +78,9 @@ class SettingsController extends Controller
             'imgName' => 'required|string',
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
+            'sponsor_name' => 'required|string|max:255',
+            'email' => 'required|email',
         ]);
-
-
-
 
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
@@ -92,7 +95,12 @@ class SettingsController extends Controller
         $moa = $moaFile->getClientOriginalName();
 
         // Store the MOA file
-        $filePath = $request->file('file')->store('sponsor/moa/' . $moa, 'public');
+
+        $filePath = Storage::disk('public')->putFileAs(
+            'sponsor/moa',
+            $request->file('file'),
+            $moa
+        );
 
         // dd($originalFileName);
         // Save sponsor record in the database
@@ -110,6 +118,33 @@ class SettingsController extends Controller
             'moa' => $moa,
             'status' => 'Active',
         ]);
+
+        $password = Str::random(8);
+
+        $user = User::create([
+            'name' => $request->sponsor_name,
+            'email' => $request->email,
+            'password' => bcrypt($password),
+        ]);
+
+        // Sending Emails
+        $mailData = [
+            'title' => 'Welcome to the URScholar Portal',
+            'body' => "Dear " . $request->sponsor_name . ",\n\n" .
+                "Welcome to the URScholar Portal! We’re excited to have you on board as a valued sponsor in our scholarship program.\n\n" .
+                "Below are your login credentials to access the system:\n\n" .
+                "Email: " . $request->email . "\n" .
+                "Password: " . $password . "\n\n" .
+                "Please log in to your account to begin exploring the features and managing your sponsorship activities.\n\n" .
+                "If you have any questions or need assistance, feel free to reach out to our support team.\n\n" .
+                "Best regards,\n" .
+                "URScholar Team"
+        ];
+
+        // Create mailable instance
+        $email = new SendEmail($mailData);
+
+        Mail::to($request->email)->send($email);
 
 
         ActivityLog::create([
@@ -180,29 +215,29 @@ class SettingsController extends Controller
             'file.required' => 'Please upload a CSV file.',
             'file.mimes' => 'The file must be a CSV file.'
         ]);
-
+    
         // Check if file exists in the request
         $file = $request->file('file');
-
+    
         // Log the initial file upload
         \Log::info('Attempting to import students from file', ['filename' => $file->getClientOriginalName()]);
-
+    
         try {
             // Get all campuses for efficient lookup
             $campuses = Campus::all()->mapWithKeys(function ($campus) {
                 return [strtolower($campus->name) => $campus->id];
             })->toArray();
-
+    
             // Get all courses with their names and abbreviations
             $courses = Course::select('id', 'name', 'abbreviation')->get();
-
+    
             // Prepare course lookup
             $standardizedCourseLookup = $this->prepareCourseStandardizedLookup($courses);
-
+    
             // Read CSV file
             $csv = Reader::createFromPath($file->getPathname(), 'r');
             $csv->setHeaderOffset(0);
-
+    
             // Validate CSV headers
             $requiredHeaders = [
                 'student_number',
@@ -222,28 +257,28 @@ class SettingsController extends Controller
                 'facebook_account',
                 'contact_no',
             ];
-
+    
             $headers = $csv->getHeader();
             $missingHeaders = array_diff($requiredHeaders, $headers);
-
+    
             if (!empty($missingHeaders)) {
                 return redirect()->back()->with('error', 'Missing required columns: ' . implode(', ', $missingHeaders));
             }
-
+    
             // Prepare insert data and tracking
             $insertData = [];
             $importErrors = [];
             $successCount = 0;
             $skipCount = 0;
-
+    
             // Get current academic year
             $current_year = AcademicYear::where('status', 'Active')->first();
-
+    
             // Process each record
             foreach ($csv->getRecords() as $index => $record) {
                 // Validate required fields
                 $validationErrors = $this->validateStudentRecord($record);
-
+    
                 if (!empty($validationErrors)) {
                     $importErrors[] = [
                         'row' => $index + 2,
@@ -252,11 +287,11 @@ class SettingsController extends Controller
                     $skipCount++;
                     continue;
                 }
-
+    
                 // Determine campus
                 $campusName = strtolower(trim($record['campus'] ?? ''));
                 $campusId = $campuses[$campusName] ?? null;
-
+    
                 if (!$campusId) {
                     $importErrors[] = [
                         'row' => $index + 2,
@@ -265,10 +300,10 @@ class SettingsController extends Controller
                     $skipCount++;
                     continue;
                 }
-
+    
                 // Course matching logic
                 $courseId = $this->matchCourse($record['course'], $standardizedCourseLookup, $courses);
-
+    
                 if (!$courseId) {
                     $importErrors[] = [
                         'row' => $index + 2,
@@ -277,7 +312,7 @@ class SettingsController extends Controller
                     $skipCount++;
                     continue;
                 }
-
+    
                 // Prepare student data
                 $insertData[] = [
                     'student_number' => $record['student_number'],
@@ -300,23 +335,56 @@ class SettingsController extends Controller
                     'created_at' => now(),
                     'updated_at' => now(),
                 ];
-
+    
                 $successCount++;
             }
-
+    
             // Bulk insert students
             if (!empty($insertData)) {
                 Student::insert($insertData);
             } else {
                 return redirect()->back()->with('error', 'No valid student records found for import.');
             }
-
+    
+            // Get the current user's campus ID
+            $userCampusId = Auth::user()->campus_id;
+    
+            // Get all the student numbers we just imported
+            $importedStudentNumbers = array_column($insertData, 'student_number');
+    
             // Now perform scholar matching after all students have been inserted
             $matchedScholars = 0;
             $unmatchedScholars = 0;
             $school_year = AcademicYear::where('status', 'Active')->first();
-
+    
             if ($school_year) {
+                // First, handle the case where scholars at the current user's campus aren't matched with any students
+                if ($userCampusId) {
+                    // Find all scholars at the current user's campus who are not already Verified
+                    $unmatchedCampusScholars = Scholar::where('campus_id', $userCampusId)
+                        ->where('status', '!=', 'Verified')
+                        ->whereNull('student_number')
+                        ->orWhereNotIn('student_number', $importedStudentNumbers)
+                        ->get();
+    
+                    foreach ($unmatchedCampusScholars as $scholar) {
+                        // Only update status if campus_id matches the user's campus_id
+                        if ($scholar->campus_id == $userCampusId) {
+                            // Set them to Unverified and Unenrolled explicitly
+                            $scholar->status = 'Unverified';
+                            $scholar->student_status = 'Unenrolled';
+                            $scholar->save();
+    
+                            // Set any existing grantee relationships to Pending
+                            Grantees::where('scholar_id', $scholar->id)
+                                ->where('school_year_id', $school_year->school_year_id)
+                                ->update(['status' => 'Pending']);
+    
+                            $unmatchedScholars++;
+                        }
+                    }
+                }
+    
                 // Process each inserted student for scholar matching
                 foreach ($insertData as $studentData) {
                     try {
@@ -326,44 +394,49 @@ class SettingsController extends Controller
                             ->where('campus_id', $studentData['campus_id'])
                             ->where('course_id', $studentData['course_id'])
                             ->first();
-
+    
                         if ($matchingScholar) {
-                            // Update scholar status to Verified and student_status to Enrolled
-                            $matchingScholar->status = 'Verified';
-                            $matchingScholar->student_status = 'Enrolled';
-                            $matchingScholar->save();
-
-                            // Check if a grantee relationship exists
-                            $grantee = Grantees::where('scholar_id', $matchingScholar->id)
-                                ->where('school_year_id', $school_year->school_year_id)
-                                ->where('semester', $school_year->semester)
-                                ->first();
-
-                            if ($grantee) {
-                                // Update existing grantee status
-                                $grantee->status = 'Active';
-                                $grantee->save();
-                            } else {
-
+                            // Only update if campus_id matches the user's campus_id
+                            if ($matchingScholar->campus_id == $userCampusId) {
+                                // Update scholar status to Verified and student_status to Enrolled
+                                $matchingScholar->status = 'Verified';
+                                $matchingScholar->student_status = 'Enrolled';
+                                $matchingScholar->student_number = $studentData['student_number'];
+                                $matchingScholar->email = $studentData['email'];
+                                $matchingScholar->save();
+    
+                                // Check if a grantee relationship exists
                                 $grantee = Grantees::where('scholar_id', $matchingScholar->id)
                                     ->where('school_year_id', $school_year->school_year_id)
                                     ->where('semester', $school_year->semester)
                                     ->first();
-
-                                if (!$grantee) {
-                                    // Create new grantee relationship
-                                    Grantees::create([
-                                        'scholarship_id' => $matchingScholar->scholarship_id,
-                                        'batch_id' => $grantee->batch_id,
-                                        'scholar_id' => $matchingScholar->id,
-                                        'school_year_id' => $school_year->school_year_id,
-                                        'semester' => $school_year->semester,
-                                        'status' => 'Active'
-                                    ]);
+    
+                                if ($grantee) {
+                                    // Update existing grantee status
+                                    $grantee->status = 'Pending';
+                                    $grantee->student_status = 'Enrolled';
+                                    $grantee->save();
+                                } else {
+                                    $grantee = Grantees::where('scholar_id', $matchingScholar->id)
+                                        ->where('school_year_id', $school_year->school_year_id)
+                                        ->where('semester', $school_year->semester)
+                                        ->first();
+    
+                                    if (!$grantee) {
+                                        // Create new grantee relationship
+                                        Grantees::create([
+                                            'scholarship_id' => $matchingScholar->scholarship_id,
+                                            'batch_id' => $matchingScholar->batch_id, // Fixed to use matchingScholar's batch_id
+                                            'scholar_id' => $matchingScholar->id,
+                                            'school_year_id' => $school_year->school_year_id,
+                                            'semester' => $school_year->semester,
+                                            'status' => 'Pending'
+                                        ]);
+                                    }
                                 }
+    
+                                $matchedScholars++;
                             }
-
-                            $matchedScholars++;
                         } else {
                             // Try to find scholars in the same campus and course but without exact name match
                             $potentialScholars = Scholar::where('campus_id', $studentData['campus_id'])
@@ -374,20 +447,23 @@ class SettingsController extends Controller
                                 })
                                 ->where('status', '!=', 'Verified')
                                 ->get();
-
+    
                             foreach ($potentialScholars as $scholar) {
-                                // Set them to Unverified and Unenrolled explicitly
-                                $scholar->status = 'Unverified';
-                                $scholar->student_status = 'Unenrolled';
-                                $scholar->save();
-
-                                // Set any existing grantee relationships to Pending
-                                Grantees::where('scholar_id', $scholar->id)
-                                    ->where('school_year_id', $school_year->school_year_id)
-                                    ->update(['status' => 'Pending']);
+                                // Only update if campus_id matches the user's campus_id
+                                if ($scholar->campus_id == $userCampusId) {
+                                    // Set them to Unverified and Unenrolled explicitly
+                                    $scholar->status = 'Unverified';
+                                    $scholar->student_status = 'Unenrolled';
+                                    $scholar->save();
+    
+                                    // Set any existing grantee relationships to Pending
+                                    Grantees::where('scholar_id', $scholar->id)
+                                        ->where('school_year_id', $school_year->school_year_id)
+                                        ->update(['status' => 'Pending']);
+                                    
+                                    $unmatchedScholars++;
+                                }
                             }
-
-                            $unmatchedScholars += $potentialScholars->count();
                         }
                     } catch (\Exception $e) {
                         \Log::error('Error in scholar matching process', [
@@ -399,14 +475,14 @@ class SettingsController extends Controller
                     }
                 }
             }
-
+    
             // Log the import activity
             ActivityLog::create([
                 'user_id' => Auth::user()->id,
                 'activity' => 'Create',
                 'description' => "Imported {$successCount} students, matched {$matchedScholars} scholars (Skipped {$skipCount})",
             ]);
-
+    
             // Prepare flash message
             $flashMessage = "Successfully imported {$successCount} students";
             if ($matchedScholars > 0) {
@@ -418,23 +494,23 @@ class SettingsController extends Controller
             if ($skipCount > 0) {
                 $flashMessage .= " (Skipped {$skipCount} rows with errors)";
             }
-
+    
             // Prepare redirect with detailed information
             $redirect = redirect()->back()->with('success', $flashMessage);
-
+    
             // Attach import errors if any
             if (!empty($importErrors)) {
                 $redirect->with('importErrors', $importErrors);
             }
-
+    
             return $redirect;
-
+    
         } catch (\Exception $e) {
             // Log the full error for debugging
             \Log::error('Student import error: ' . $e->getMessage(), [
                 'trace' => $e->getTraceAsString()
             ]);
-
+    
             // Return a user-friendly error message
             return redirect()->back()->with('error', 'An unexpected error occurred during import: ' . $e->getMessage());
         }

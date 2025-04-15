@@ -22,7 +22,7 @@
           </div>
           <input type="search" id="default-search" v-model="searchQuery"
             class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
+            placeholder="Search Grantee" required />
         </div>
       </form>
     </div>
@@ -39,16 +39,16 @@
           <div v-else class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <!-- head -->
-              <thead class="justify-center items-center bg-gray-100">
+              <thead class="justify-center items-center bg-gray-50">
                 <tr class="text-xs uppercase">
                   <th>URScholar ID</th>
-                  <th>Scholar</th>
+                  <th>Grantee</th>
                   <th>Campus</th>
                   <th>Grant</th>
                   <th v-if="requirements.length > 0">Requirements</th>
-                  <th v-if="requirements.length < 0">Validation</th>
                   <th v-if="requirements.length > 0">Status</th>
                   <th>Student Status</th>
+                  <th v-if="requirements.length == 0">Validation</th>
                   <th></th>
                 </tr>
               </thead>
@@ -61,7 +61,7 @@
                 </tr>
                 <!-- Scholar rows - HIGHLIGHTING CHANGES START HERE -->
                 <tr v-for="scholar in paginatedScholars" :key="scholar.id" class="text-sm"
-                  :class="{ 'bg-red-50': scholar.scholar_status === 'Unverified' || scholar.student_status === 'Unenrolled' }">
+                  :class="{ 'bg-red-50': scholar.scholar_status === 'Unverified' && scholar.student_status === 'Unenrolled' }">
                   <td>{{ scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
@@ -69,8 +69,7 @@
                         <div class="mask rounded-full h-10 w-10">
                           <img v-if="scholar.user.picture" :src="`/storage/user/profile/${scholar.user.picture}`"
                             alt="Profile Picture">
-                            <img v-else src="../../../../assets/images/no_userpic.png"
-                            alt="Profile Picture">
+                          <img v-else src="../../../../assets/images/no_userpic.png" alt="Profile Picture">
                         </div>
                       </div>
                       <div>
@@ -79,8 +78,9 @@
                           <span v-if="scholar.status === 'Verified'"
                             class="material-symbols-rounded text-sm text-blue-600">verified</span>
                         </div>
-                        <div class="text-sm opacity-50">
-                          {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
+                        <div class="text-sm text-gray-400">
+                          <span class="text-gray-500">{{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }}
+                            year</span>, {{ scholar.course }}
                         </div>
                       </div>
                     </div>
@@ -114,10 +114,10 @@
                   <td v-else>
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.scholar_status === 'Verified',
-                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.scholar_status === 'Unverified'
+                      'bg-red-200 text-red-800 border border-red-500 font-bold': scholar.scholar_status === 'Unverified'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       <span v-if="scholar.scholar_status === 'Unverified'" class="inline-flex items-center">
-                        ⚠️ {{ scholar.scholar_status }}
+                        {{ scholar.scholar_status }}
                       </span>
                       <span v-else>{{ scholar.scholar_status }}</span>
                     </span>
@@ -125,10 +125,12 @@
                   <td>
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
-                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled'
+                      'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Dropped',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Graduated'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       <span v-if="scholar.student_status === 'Unenrolled'" class="inline-flex items-center">
-                        ⚠️ {{ scholar.student_status }}
+                        {{ scholar.student_status }}
                       </span>
                       <span v-else>{{ scholar.student_status }}</span>
                     </span>
@@ -387,7 +389,7 @@ const submitForm = () => {
   // For example:
   loading.value = true;
   router.post(`/scholars/${currentScholar.value.id}/update-status`, {
-    status: statusValue.value
+    status: statusValue.value,
   }, {
     onSuccess: () => {
       showToast('Success', `Scholar status updated to ${statusValue.value}`, 'success');

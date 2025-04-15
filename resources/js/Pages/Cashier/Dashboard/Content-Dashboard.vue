@@ -1,31 +1,47 @@
 <template>
-    <div class="w-full h-full bg-dirtywhite dark:text-dprimary">
-        <div class="grid grid-cols-4 gap-3 px-3 py-3 h-full">
-            <!-- 75% Column -->
-            <div class="col-span-3 h-full flex flex-col space-y-3">
-                <!-- First Layer with 2 Column Cards -->
-                <div class="grid grid-cols-2 gap-3 h-[35%]">
-                    <div class="h-full w-full">
-                        <Statistics />
+    <div class="w-full h-full bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
+        <div class="grid grid-cols-5 gap-3 px-4 py-4 h-full">
+            <!-- Main Content (100%) -->
+            <div class="col-span-5 h-full flex flex-col gap-3 overflow-hidden">
+
+            <!-- Top Layer: 4 Cards -->
+            <div class="grid grid-cols-5 gap-3 flex-none">
+                <div class="col-span-3 flex flex-row gap-3">
+
+                    <!-- Statistics -->
+                    <div class="flex-1 h-full flex flex-col">
+                    <Statistics :univ_students="univ_students" :scholarships="scholarships" :active_scholars="active_scholars" />
                     </div>
-                    <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
-                        <ActivePayouts :sponsors="sponsors" :scholarships="scholarships" />
+
+                    <!-- Active Scholarships -->
+                    <div class="w-[40%] h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
+                    <ActiveScholarship :sponsors="sponsors" :scholarships="scholarships" />
                     </div>
                 </div>
-                <!-- Second Layer with Single Card -->
-                <div class="bg-white box-border rounded shadow-md h-[65%] dark:bg-dcontainer">
-                    <ScholarPayouts :sponsors="sponsors" :scholarships="scholarships" />
+
+                <!-- Date Data -->
+                <div class="col-span-2 h-full rounded-xl shadow-md bg-white dark:bg-dcontainer flex flex-col min-h-0 flex-shrink-0">
+                    <Date_Data :academic_year="academic_year" />
+                </div>
+                </div>
+
+                <!-- Bottom Layer: Activities -->
+                <div class="grid grid-cols-5 gap-3 flex-1 min-h-0">
+
+                <!-- Scholarship Activities (scrollable) -->
+                <div class="col-span-5 bg-white box-border rounded shadow-md dark:bg-dcontainer flex flex-col overflow-hidden">
+                    <ScholarshipActivities :sponsors="sponsors" :scholarships="scholarships" :scholars="scholars" />
+                </div>
+
+                <!-- Uncomment if needed -->
+                <!-- 
+                <div class="col-span-1 bg-white rounded-xl shadow-md dark:bg-dcontainer flex flex-col overflow-hidden">
+                    <Calendar_Activities :activity_logs="activity_logs" />
+                </div>
+                -->
                 </div>
             </div>
-            <!-- 25% Column -->
-            <div class="w-full h-full flex flex-col space-y-3">
-                <div class="h-full rounded-xl shadow-md bg-white dark:bg-dcontainer">
-                    <Messages />
-                </div>
-                <div class="bg-white rounded shadow-md h-[65%] dark:bg-dcontainer">
-                    <Calendar_Activities />
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -34,37 +50,34 @@
 <script setup>
 import { ref } from 'vue';
 
-import ActiveScholarship from '../../../Components/Staff/Dashboard/ActiveScholarship.vue';
-import ActivePayouts from '../../../Components/Cashier/Dashboard/ActivePayouts.vue';
-import Messages from '@/Components/Cashier/Dashboard/Messages.vue';
-import ScholarPayouts from '@/Components/Cashier/Dashboard/ScholarPayouts.vue';
-import Calendar_Activities from '@/Components/Cashier/Dashboard/Calendar_Activities.vue';
-import Statistics from '@/Components/Cashier/Dashboard/Statistics.vue';
+import ActiveScholarship from '../../../Components/Cashier/Dashboard/ActiveScholarship.vue';
+import Statistics from '../../../Components/Cashier/Dashboard/Statistics.vue';
+// import ScholarsStatistics from '@/Components/Cashier/Dashboard/ScholarsStatistics.vue';
 // import Calendar from '../../../Components/Staf/Dashboard/Calendar.vue';
+import Messages from '@/Components/Cashier/Dashboard/Messages.vue';
+import ScholarshipActivities from '@/Components/Cashier/Dashboard/ScholarshipActivities.vue';
+import Calendar_Activities from '@/Components/Cashier/Dashboard/Calendar_Activities.vue';
+import Date_Data from '@/Components/Cashier/Dashboard/Date_Data.vue';
 
 const components = {
     ActiveScholarship,
-    ActivePayouts,
     Messages,
-    ScholarPayouts,
-    Calendar_Activities,
     Statistics,
+    Calendar_Activities,
+    Date_Data
     // Calendar,
 };
 
 const props = defineProps({
-    sponsors: {
-        type: Array,
-        required: true
-    },
-    scholarships: {
-        type: Array,
-        required: true
-    }
+    scholarships: Array,
+    sponsors: Array,
+    scholars: Array,
+    active_scholars: Array,
+    activity_logs: Array,
+    academic_year: Object,
+    univ_students: Object,
 });
 
 </script>
 
-<style>
-
-</style>
+<style></style>

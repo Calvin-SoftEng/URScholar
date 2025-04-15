@@ -3,7 +3,7 @@
 
         <!-- Header with Filter -->
         <div class="flex justify-between items-center">
-            <span class="font-poppins font-semibold text-xl dark:text-dtext">Recent Submissions</span>
+            <span class="font-poppins font-semibold text-xl dark:text-dtext">Recent Payouts</span>
 
             <!-- Scholarship Type Filter -->
             <div class="flex items-center gap-3">
@@ -14,7 +14,7 @@
                         @click="selectedDateFilter = filter"
                         class="px-4 py-2 text-sm font-medium border-r last:border-r-0 dark:bg-dprimary dark:text-white"
                         :class="{
-                            'bg-blue-600 dark:bg-dnavy text-white': selectedDateFilter === filter,
+                            'bg-blue-600 dark:bg-dtext text-white': selectedDateFilter === filter,
                             'hover:bg-gray-200 dark:hover:bg-dprimary': selectedDateFilter !== filter
                         }">
                         {{ filter.charAt(0).toUpperCase() + filter.slice(1) }}
@@ -29,18 +29,6 @@
             </div>
         </div>
 
-        <!-- Analytics Section -->
-        <div class="grid grid-cols-2 gap-4">
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-dprimary">
-                <span class="text-sm text-gray-500 dark:text-dtext">Total Applicants</span>
-                <p class="text-2xl font-semibold dark:text-dtext">{{ totalApplicants }}</p>
-            </div>
-            <div class="p-4 border rounded-lg shadow-sm dark:bg-dprimary">
-                <span class="text-sm text-gray-500 dark:text-dtext">Total Verified Scholars</span>
-                <p class="text-2xl font-semibold dark:text-dtext">{{ totalVerifiedScholars }}</p>
-            </div>
-        </div>
-
         <!-- Scholarship List Container -->
         <div class="flex flex-col gap-3 flex-grow relative">
 
@@ -48,14 +36,14 @@
             <div class="overflow-x-auto font-poppins border rounded-lg">
                 <table class="table rounded-lg w-full">
                     <!-- Head -->
-                    <thead class="bg-gray-100 dark:bg-dnavy">
+                    <thead class="bg-gray-50 dark:bg-dprimary">
                         <tr class="text-xs uppercase dark:text-dtext">
                             <th>URScholar ID</th>
                             <th>Name</th>
                             <th>Scholarship</th>
                             <th v-if="selectedScholarshipType === 'Need-Based'">Submitted Requirements</th>
                             <th>Status</th>
-                            <th>Date Submitted</th>
+                            <th>Date Claimed</th>
                             <th>Remarks</th>
                             <th></th>
                         </tr>
@@ -104,7 +92,7 @@
                         </tr>
                         <tr v-if="latestSubmissions.length === 0">
                             <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7" class="text-center py-4 dark:text-dtext">No
-                                recent submissions found</td>
+                                recent payouts found</td>
                         </tr>
                     </tbody>
                 </table>

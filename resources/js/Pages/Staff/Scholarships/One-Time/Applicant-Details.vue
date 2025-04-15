@@ -25,7 +25,7 @@
 
                 <div class="w-full h-full flex justify-center items-center dark:text-dprimary relative">
                     <!-- Close Button -->
-                    <button class="absolute top-4 right-10">
+                    <button @click="goBack" class="absolute top-4 right-10">
                         <span
                             class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition">
                             arrow_back
@@ -62,7 +62,7 @@
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Applicant
                                                             Name</span>
-                                                        <p class="text-lg font-sora text-primary">
+                                                        <p class="text-lg font-poppins text-primary">
                                                             {{ formatScholarName(scholar) }}
                                                         </p>
 
@@ -71,18 +71,18 @@
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Contact
                                                             No.</span>
-                                                        <p class="text-lg text-primary">43432423432423</p>
+                                                        <p class="text-lg font-poppins text-primary">43432423432423</p>
                                                     </div>
                                                     <div class="text-black">
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Email
                                                             Address</span>
-                                                        <p class="text-lg text-primary">{{ scholar.email }}</p>
+                                                        <p class="text-lg font-poppins text-primary">{{ scholar.email }}</p>
                                                     </div>
                                                     <div class="text-black">
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Address</span>
-                                                        <p class="text-lg text-primary">feafaefeaf</p>
+                                                        <p class="text-lg font-poppins text-primary">feafaefeaf</p>
                                                     </div>
                                                 </div>
 
@@ -106,23 +106,23 @@
                                         <div class="text-black">
                                             <span class="text-xs font-semibold uppercase text-gray-500">URScholar
                                                 ID</span>
-                                            <p class="text-lg text-primary">{{ scholar.urscholar_id }}</p>
+                                            <p class="text-lg font-poppins text-primary">{{ scholar.urscholar_id }}</p>
                                         </div>
                                         <div class="text-black">
                                             <span class="text-xs font-semibold uppercase text-gray-500">Campus</span>
-                                            <p class="text-lg text-primary">{{ scholar.campus.name }}</p>
+                                            <p class="text-lg font-poppins text-primary">{{ scholar.campus.name }}</p>
                                         </div>
                                     </div>
 
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <span class="text-xl text-primary">{{ scholar.course.name }}</span>
+                                            <span class="text-lg font-poppins text-primary">{{ scholar.course.name }}</span>
                                         </div>
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">General Weighted
                                                 Average</span>
-                                            <span class="text-xl" :class="grade ? 'text-primary' : 'text-red-500'">
+                                            <span class="text-2xl font-bold" :class="grade ? 'text-primary' : 'text-red-500'">
                                                 {{ grade ? grade.grade : 'No grade Uploaded' }}
                                             </span>
 
@@ -131,8 +131,7 @@
                                     </div>
                                 </div>
 
-                                <div
-                                    class="col-span-4 gap-2 relative w-full flex items-center mt-4 mb-2 whitespace-nowrap">
+                                <div class="col-span-4 gap-2 relative w-full flex items-center mb-2 whitespace-nowrap">
                                     <h3 class="font-semibold text-base text-blue-900 dark:text-white">
                                         Family Information
                                     </h3>
@@ -145,10 +144,10 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Mother's
                                                 Name</span>
                                             <span v-if="mother.first_name === 'n\/a'"
-                                                class="text-xl font-sora text-primary">
+                                                class="text-xl font-poppins text-primary">
                                                 Deceased
                                             </span>
-                                            <span v-else class="text-xl font-sora text-primary">
+                                            <span v-else class="text-xl font-poppins text-primary">
                                                 {{ mother.last_name }},
                                                 {{ mother.first_name }}
                                                 {{mother.middle_name ? mother.middle_name.split(' ').map(word =>
@@ -158,7 +157,7 @@
                                         <div v-if="mother.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl text-primary">{{ mother.occupation }}</span>
+                                            <span class="text-xl font-poppins text-primary">{{ mother.occupation }}</span>
                                         </div>
                                     </div>
 
@@ -167,10 +166,10 @@
                                             <span class="font-semibold uppercase text-xs text-gray-500">Father's
                                                 Name</span>
                                             <span v-if="father.first_name === 'n\/a'"
-                                                class="text-xl font-sora text-primary">
+                                                class="text-xl font-poppins text-primary">
                                                 Deceased
                                             </span>
-                                            <span v-else class="text-xl font-sora text-primary">
+                                            <span v-else class="text-xl font-poppins text-primary">
                                                 {{ father.last_name }},
                                                 {{ father.first_name }}
                                                 {{father.middle_name ? father.middle_name.split(' ').map(word =>
@@ -180,7 +179,7 @@
                                         <div v-if="father.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl text-primary">{{ father.occupation }}</span>
+                                            <span class="text-xl font-poppins text-primary">{{ father.occupation }}</span>
                                         </div>
                                     </div>
 
@@ -188,18 +187,18 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Siblings</span>
                                             <div v-if="siblings.length === 0">
-                                                <span class="text-xl font-sora text-primary">
+                                                <span class="text-xl font-poppins text-primary">
                                                     N/A
                                                 </span>
                                             </div>
                                             <div v-else v-for="sibling in siblings" :key="sibling.id">
-                                                <span class="text-xl font-sora text-primary">
+                                                <span class="text-xl font-poppins text-primary">
                                                     {{ sibling.last_name }},
                                                     {{ sibling.first_name }}
                                                     {{sibling.middle_name ? sibling.middle_name.split(' ').map(word =>
                                                         word.charAt(0).toUpperCase()).join('.') + '.' : ''}}
                                                 </span>
-                                                <span class="text-xl font-sora text-primary">
+                                                <span class="text-xl font-poppins text-primary">
                                                     - {{ sibling.occupation }}
                                                 </span>
                                             </div>
@@ -211,7 +210,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Marital Status
                                                 of Parents</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.marital_status }}
                                             </span>
                                         </div>
@@ -219,7 +218,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Monthly Family
                                                 Income</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.monthly_income }}
                                             </span>
                                         </div>
@@ -227,7 +226,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Other Source of
                                                 Income</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.other_income }}
                                             </span>
                                         </div>
@@ -235,7 +234,7 @@
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Family Type of
                                                 Housing</span>
-                                            <span class="text-xl font-sora text-primary">
+                                            <span class="text-xl font-poppins text-primary">
                                                 {{ family.family_housing }}
                                             </span>
                                         </div>
@@ -249,6 +248,63 @@
                         <div class="col-span-1 h-full flex flex-col space-y-3">
                             <!-- Second Layer with Single Card -->
                             <div class="flex flex-col h-full gap-2">
+                                <div v-if="applicant.status == 'Pending'"
+                                    class="bg-white w-full p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
+                                    <h1 class="text-black font-normal text-xl font-poppins">Grant History Checking
+                                    </h1>
+                                    <div
+                                        class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
+
+                                        <div v-if="!hasGrantee"
+                                            class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 mt-4 shadow-sm flex">
+                                            <svg class="w-6 h-6 mr-3 text-blue-400 flex-shrink-0" fill="none"
+                                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+                                            </svg>
+                                            <div>
+                                                <h2 class="text-xl font-semibold">This is a first-time Applicant!</h2>
+                                                <p class="mt-2">
+                                                    The system has detected that this applicant is applying for a
+                                                    scholarship for the first time.<br>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <div v-else
+                                            class="bg-blue-50 border-l-4 border-blue-400 text-blue-900 p-4 mt-4 shadow-sm flex">
+                                            <svg class="w-6 h-6 mr-3 text-blue-400 flex-shrink-0" fill="none"
+                                                stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M12 20c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z" />
+                                            </svg>
+                                            <div>
+                                                <h2 class="text-xl font-semibold">Existing Scholarship Detected</h2>
+                                                <p class="mt-2">
+                                                    Our system shows that this applicant already holds a scholarship or
+                                                    a similar one.<br>
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="flex flex-row w-full gap-3">
+                                    <!-- Approve Button -->
+                                    <button @click="updateApplicantStatus('Approve')"
+                                        class="w-full px-4 py-2 border-2 border-green-600 text-green-600 font-semibold text-base rounded-md hover:bg-green-400 transition"
+                                    >
+                                        Approve
+                                    </button>
+
+                                        <!-- Reject Button -->
+                                        <button type="button" @click="updateApplicantStatus('Reject')"
+                                            class="w-full px-4 py-2 border-2 border-red-600 text-red-600 font-semibold text-base rounded-md hover:bg-red-400 transition">
+                                            Reject
+                                        </button>
+                                    </div>
+
+                                </div>
+
                                 <div
                                     class="bg-white p-6 box-border rounded shadow-md h-[100%] dark:bg-dcontainer flex flex-col space-y-3">
                                     <h1 class="text-black font-normal text-xl font-poppins">Application Requirements
@@ -260,7 +316,7 @@
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4">
                                             <!-- Requirement Item -->
                                             <div v-for="req in submittedRequirements" :key="req.id"
-                                                class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary">
+                                                class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-poppins text-primary">
                                                 <div class="flex flex-col space-y-2">
                                                     <span class="font-bold">{{ req.requirement.requirements }}</span>
                                                     <div class="flex items-center gap-2 text-gray-800">
@@ -300,7 +356,7 @@
                                         class="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-700 scrollbar-track-gray-100 dark:scrollbar-track-gray-900">
 
                                         <div v-if="!grade"
-                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-poppins text-primary mb-2">
 
                                             <!-- Message -->
                                             <div class="flex items-center gap-2 text-gray-900 dark:text-white">
@@ -320,7 +376,7 @@
 
                                         </div>
                                         <div v-else
-                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-quicksand text-primary mb-2">
+                                            class="bg-gray-100 w-full rounded-lg p-3 flex justify-between items-center font-poppins text-primary mb-2">
                                             <div class="flex flex-col space-y-2">
                                                 <span>General Weighted Average</span>
                                                 <span class="font-bold text-lg">{{ grade.grade }}</span>
@@ -328,7 +384,7 @@
                                             <div class="flex flex-col space-y-2">
                                                 <div class="flex items-center gap-2 text-gray-900 dark:text-white">
                                                     <span class="font-medium">{{ grade.semester }} Semester -
-                                                        {{ grade.school_year }}</span>
+                                                        {{ grade.school_year.year }}</span>
                                                 </div>
                                                 <div>
                                                     <button @click="toggleMonitor(grade)"
@@ -408,7 +464,7 @@
                     </div>
 
                     <!-- Close Button -->
-                    <div v-if="props.batch.status !== 'Inactive' && props.scholar.campus_id === $page.props.auth.user.campus_id"
+                    <div v-if="props.scholar.campus_id === $page.props.auth.user.campus_id"
                         class="mt-2 flex flex-row justify-between">
                         <button type="button" @click="updateRequirementStatus('Returned')"
                             class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
@@ -439,8 +495,8 @@
             <div
                 class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-10/12 max-h-[95vh] overflow-y-auto">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">{{ selectedMonitor.school_year }}
-                        {{ selectedMonitor.semester }} Semester</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white pl-2">
+                        {{ selectedMonitor.semester }} Semester - {{ selectedMonitor.school_year.year }}</h2>
                     <div class="flex items-center justify-between gap-10">
                         <!-- <a :href="`/storage/${selectedRequirement?.path}`" target="_blank"
                             class="flex items-center gap-2 text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm px-3 py-1.5 dark:hover:bg-gray-600 dark:hover:text-white transition">
@@ -532,11 +588,12 @@ const props = defineProps({
     notify: Object,
     submittedRequirements: Array,
     requirements: Array,
+    hasGrantee: Boolean,
+    applicant: Object,
 });
 
-const components = {
-    Button,
-    Papa,
+const goBack = () => {
+    window.history.back();
 };
 
 const isNotified = ref(false);
@@ -556,23 +613,6 @@ const notifyStudent = () => {
     isNotified.value = true;
 };
 
-// Submit reason form
-const forwardCoor = () => {
-    // No form data is actually being sent in your current implementation,
-    // but you're using form.post. Let's simplify this:
-    router.post(route('scholarship.forward_coor', {
-        scholarshipId: props.scholarship.id, selectedSem: props.selectedSem, school_year: props.schoolyear.id,
-        selectedCampus: props.selectedCampus
-    }), {}, {
-        onSuccess: () => {
-            closeModal();
-            showToast('Success', 'Batches forwarded successfully');
-        },
-        onError: (errors) => {
-            console.error('Error forwarding batches:', errors);
-        }
-    });
-};
 
 
 const statusClass = (status) => {
@@ -587,18 +627,6 @@ const statusClass = (status) => {
             return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400 border-gray-400';
     }
 };
-
-// const parsedRequirements = computed(() => {
-//     try {
-//         if (Array.isArray(props.requirements.requirements)) {
-//             return props.requirements.requirements;
-//         }
-//         return JSON.parse(props.requirements.requirements);
-//     } catch (error) {
-//         console.error("Error parsing requirements JSON:", error);
-//         return [];
-//     }
-// });
 
 const formatScholarName = (scholar) => {
     const middle = scholar.middle_name
@@ -632,6 +660,28 @@ const closeModal = () => {
 };
 
 const returnMessage = ref('');
+
+const updateApplicantStatus = (status) => {
+// Send an update request to the backend
+router.post('/scholarships/scholar/update-applicant', {
+        scholar_id: props.scholar.id,
+        status: status,
+    }, {
+        onSuccess: () => {
+            closeModal();
+            toastMessage.value = `Application ${status.toLowerCase()} successfully!`;
+            toastVisible.value = true;
+
+
+            setTimeout(() => {
+                toastVisible.value = false;
+            }, 3000);
+        },
+        onError: (errors) => {
+            console.error(errors);
+        }
+    });
+};
 
 const updateRequirementStatus = (status) => {
 

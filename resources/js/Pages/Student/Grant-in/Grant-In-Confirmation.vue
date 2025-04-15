@@ -34,7 +34,7 @@
 
                     <div>
                         <form @submit.prevent="submitRequirements" enctype="multipart/form-data">
-                            <div class="p-3 w-full bg-gray-100 rounded-lg">
+                            <div class="p-3 w-full bg-gray-100 rounded-lg space-y-4">
                                 <div class="flex justify-between items-center mb-4">
                                     <h1 class="text-lg font-inter font-bold text-dsecondary text-left">
                                         Uploading Documents
@@ -87,8 +87,43 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
+
+                                <div class="flex flex-col space-y-3 pt-5">
+                                    <span class="text-lg font-inter font-normal text-dsecondary text-left">For the other documents, you can download them below</span>
+
+                                    <div class="col-span-1 flex flex-col space-y-3">
+                                        <div 
+                                            class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
+                                            
+                                            <!-- Header -->
+                                            <div class="flex justify-between items-center gap-5">
+                                                <div class="flex items-center space-x-2">
+                                                    <span class="bg-green-400 text-black font-bold px-2 py-1 rounded">
+                                                        <!-- {{ String.fromCharCode(65 + index) }} -->feafef
+                                                    </span>
+                                                    <span class="font-semibold text-gray-800">
+                                                        <!-- {{ template.name }} --> Application form
+                                                    </span>
+                                                </div>
+                                                <!-- <a :href="template.download_link" target="_blank"
+                                                    class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition">
+                                                    Download
+                                                </a> -->
+                                                <a target="_blank"
+                                                    class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                                                    Download
+                                                </a>
+                                            </div>
+
+                                            <!-- Optional description or file info -->
+                                            <!-- <div v-if="template.description" class="mt-2 text-sm text-gray-600">
+                                                {{ template.description }}
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+
 
 
                                 <div class="items-right flex w-full justify-end mt-4">
