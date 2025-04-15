@@ -357,6 +357,7 @@ class ScholarController extends Controller
             // If all grantees have either 'Graduated' or 'Dropped' status, set batch status to 'Inactive'
             if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $completedGrantees) {
                 $batch->status = 'Inactive';
+                $batch->validated = true;
             }
 
             // if (Auth::user()->usertype == 'super_admin') {
