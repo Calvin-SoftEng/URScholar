@@ -614,7 +614,7 @@ const sendMessage = () => {
 
             // Scroll to bottom
             scrollToBottom();
-
+            clearForm();
             // Fetch messages to get the server-generated message with proper ID
             fetchMessages();
         },
@@ -622,6 +622,12 @@ const sendMessage = () => {
             console.error('Error sending message:', errors);
         }
     });
+};
+
+const clearForm = () => {
+    form.value = {
+        content: '',
+    };
 };
 
 // Scroll to bottom of message container
