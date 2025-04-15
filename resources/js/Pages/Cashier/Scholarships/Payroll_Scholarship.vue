@@ -117,20 +117,17 @@
                             </div>
                         </div>
 
-                        <!-- Current User's Campus Batches -->
-                        <div v-if="currentUserBatches.length > 0" class="mb-6">
-                            <h3 class="text-xl font-bold text-gray-800 mb-3">
-                                {{ currentUserCampus.name }} <span class="text-sm font-medium text-blue-500">(Your
-                                    Campus)</span>
-                            </h3>
+                        <!-- All Batches Listed Alphabetically -->
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">All Batches</h3>
 
-                            <div v-for="batch in currentUserBatches" :key="batch.id"
+                            <div v-for="batch in allBatchesSorted" :key="batch.id"
                                 class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3"
                                 @click="viewBatchDetails(batch)">
                                 <div class="flex justify-between items-center">
                                     <div class="flex items-center space-x-3">
-                                        <span class="text-lg font-semibold text-gray-800">Batch #{{ batch.batch_no
-                                        }}</span>
+                                        <span class="text-lg font-semibold text-gray-800">{{
+                                            getCampusName(batch.campus_id) }} - Batch #{{ batch.batch_no }}</span>
                                         <span :class="{
                                             'status-badge completed': batch.status === 'Completed',
                                             'status-badge pending': batch.status === 'Pending',
@@ -162,123 +159,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Other Campuses' Batches -->
-                        <div v-for="campusId in otherCampusIds" :key="campusId"
-                            v-show="!selectedCampus || selectedCampus === '' || selectedCampus === campusId.toString()"
-                            class="mb-6">
-                            <h3 class="text-xl font-bold text-gray-800 mb-3">
-                                {{ getCampusName(parseInt(campusId)) }} Campus
-                            </h3>
-
-                            <!-- Check if payouts for this campus are pending/active -->
-                            <div v-if="isCampusPayoutActive(campusId)" class="mb-4">
-                                <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg text-center animate-fade-in">
-                                    <font-awesome-icon :icon="['fas', 'user-graduate']"
-                                        class="text-4xl text-gray-400 dark:text-gray-500 mb-4" />
-                                    <p class="text-lg text-gray-700 dark:text-gray-300">
-                                        Payout for this campus is still Ongoing
-                                    </p>
-                                </div>
+                            <!-- No batches message -->
+                            <div v-if="allBatchesSorted.length === 0" class="text-center py-8">
+                                <font-awesome-icon :icon="['far', 'folder-open']" class="text-gray-400 text-5xl mb-3" />
+                                <p class="text-gray-500 text-lg">No batches found matching your criteria.</p>
                             </div>
-
-                            <!-- Show completed batches for this campus -->
-                            <div v-else>
-                                <div v-for="batch in getCampusBatches(campusId)" :key="batch.id"
-                                    @click="viewBatchDetails(batch)" class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                    <div 
-                                        class="flex justify-between items-center">
-
-                                        <!-- Batch Info -->
-                                        <div class="flex flex-col px-5">
-                                            <span class="text-lg font-semibold text-gray-800">Batch {{
-                                                batch.batch_no }}</span>
-                                            <span class="text-md font-medium text-gray-600">
-                                                <!-- {{ schoolyear ? batch.school_year.year : '' }} {{
-                                                    batch.semester }} Semester -->
-                                            </span>
-                                        </div>
-
-                                        <!--------------------------------------------------------- eto kapag validation na -->
-                                        <div class="flex flex-row gap-4">
-                                            <div>
-                                                <!-- Statistics -->
-                                                <div
-                                                    class="grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
-                                                    <!-- Validation Status -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-5 h-5 text-yellow-400" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
-                                                            </svg>
-                                                            <span class="text-primary">Disbursement
-                                                            </span>
-                                                        </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">
-                                                            {{ validationStatus == true ? 'Complete' :
-                                                                'Pending' }}
-                                                        </span>
-
-                                                    </div>
-
-                                                    <!-- Number of Students -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-5 h-5 text-blue-400" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
-                                                            </svg>
-                                                            <span class="text-primary">Claimed
-                                                                </span>
-                                                        </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">
-                                                            {{ batch.claimed_count
-                                                            }}</span>
-                                                    </div>
-
-                                                    <!-- Unverified Students -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-primary" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                                    d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87M12 11a4 4 0 100-8 4 4 0 000 8zm6 4a4 4 0 00-3-3.87" />
-                                                            </svg>
-                                                            <span class="text-primary">
-                                                                Grantees
-                                                            </span>
-                                                        </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">
-                                                            {{
-                                                            batch.not_claimed_count }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- No batches message -->
-                        <div v-if="!hasAnyBatches" class="text-center py-8">
-                            <font-awesome-icon :icon="['far', 'folder-open']" class="text-gray-400 text-5xl mb-3" />
-                            <p class="text-gray-500 text-lg">No batches found for any campus.</p>
                         </div>
                     </div>
                 </div>
@@ -701,19 +587,24 @@ const viewBatchDetails = (batch) => {
     }));
 };
 
-const getCampusBatches = (campusId) => {
-    return props.batches.filter(batch => batch.campus_id.toString() === campusId.toString());
-};
+// Single computed property for all batches, sorted alphabetically
+const allBatchesSorted = computed(() => {
+    return props.batches
+        .filter(batch => !selectedCampus.value || selectedCampus.value === '' ||
+            selectedCampus.value === batch.campus_id.toString())
+        .sort((a, b) => {
+            // Sort by campus name first, then by batch number
+            const campusA = getCampusName(a.campus_id);
+            const campusB = getCampusName(b.campus_id);
 
-const isCampusPayoutActive = (campusId) => {
-    if (!props.payoutsByCampus || !props.payoutsByCampus[campusId]) return false;
+            if (campusA !== campusB) {
+                return campusA.localeCompare(campusB);
+            }
 
-    // Check if any payout for this campus is Pending or Active
-    return props.payoutsByCampus[campusId].some(payout =>
-        payout.status === 'Pending' || payout.status === 'Active'
-    );
-};
-
+            // If same campus, sort by batch number
+            return a.batch_no - b.batch_no; // For numeric sorting
+        });
+});
 const forwardBatches = async () => {
     isSubmitting.value = true;
     errors.value = {};
