@@ -625,6 +625,7 @@ class CashierController extends Controller
             $documentPath = $file->storeAs('disbursement-reasons', $fileName, 'public');
 
             // If you want to store document path in database, you need to add this column
+
             $disbursement->path = $documentPath;
             $disbursement->file_name = $fileName;
         }
@@ -635,6 +636,8 @@ class CashierController extends Controller
 
 
         // Update status to 'Not Claimed' since we now have a reason
+        $disbursement->claimed_at = now();
+        $disbursement->claimed_by = Auth::user()->id;
         $disbursement->status = 'Not Claimed';
         $disbursement->save();
 
