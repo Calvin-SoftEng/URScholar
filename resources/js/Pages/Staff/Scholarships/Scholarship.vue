@@ -1478,10 +1478,8 @@
                                         </p>
                                     </div>
                                     <span
-                                        :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                        {{batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch =>
-                                            batch.status === 'Inactive') || batch.campus_id ==
-                                            $page.props.auth.user.campus_id)
+                                        :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                        {{batch.sub_total === batch.total_scholars
                                             ? 'Ready to Send' : 'Incomplete'
                                         }}
                                     </span>
