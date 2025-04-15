@@ -190,7 +190,7 @@
                                             </span>
                                         </div>
                                         <span
-                                            class="text-xl font-bold text-primary drop-shadow">{{ batch.not_claimed_count }}
+                                            class="text-xl font-bold text-primary drop-shadow">{{ batch.total_scholars }}
                                         </span>
                                     </div>
 
