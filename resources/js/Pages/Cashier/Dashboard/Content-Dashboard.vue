@@ -30,7 +30,7 @@
 
                 <!-- Scholarship Activities (scrollable) -->
                 <div class="col-span-5 bg-white box-border rounded shadow-md dark:bg-dcontainer flex flex-col overflow-hidden">
-                    <ScholarshipActivities :sponsors="sponsors" :scholarships="scholarships" :scholars="scholars" />
+                    <ScholarshipActivities :disbursements:="disbursements" :sponsors="sponsors" :scholarships="scholarships" :scholars="scholars" />
                 </div>
 
                 <!-- Uncomment if needed -->
@@ -76,6 +76,7 @@ const props = defineProps({
     activity_logs: Array,
     academic_year: Object,
     univ_students: Object,
+    disbursements: Array,
 });
 
 </script>
