@@ -57,7 +57,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payroll_List :payout_schedule="payout_schedule"  :scholarship="scholarship" :batch="batch" :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
+                <Payroll_List :payout_schedule="payout_schedule"  :scholarship="scholarship" :batch="batch" :scholars="scholars" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -131,7 +131,7 @@ const toggleMonitoring = () => {
 const props = defineProps({
     scholarship: Object,
     batch: Object,
-    disbursements: Array,
+    scholars: Array,
     payout: Object,
     scholar: Object,
     errors: Object,

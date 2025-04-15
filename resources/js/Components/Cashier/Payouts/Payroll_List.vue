@@ -29,72 +29,6 @@
     <div>
       <div>
         <div class="w-full bg-white h-full p-4">
-          <!-- <div v-show="!showRequirements" class="overflow-x-auto font-poppins border rounded-lg">
-            <table class="table rounded-lg">
-              <thead class="justify-center items-center bg-gray-100">
-                <tr class="text-xs uppercase">
-                  <th>URScholar ID</th>
-                  <th>Scholar</th>
-                  <th>Grant</th>
-                  <th>Campus</th>
-                  <th>Time Claimed</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="disbursement in filteredDisbursements" :key="disbursement.id" class="text-sm">
-                  <td>{{ disbursement.scholar.urscholar_id }}</td>
-                  <td>
-                    <div class="flex items-center gap-3">
-                      <div class="avatar">
-                        <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
-                        </div>
-                      </div>
-                      <div>
-                        <div class="font-normal">
-                          {{ disbursement.scholar.last_name }}, {{ disbursement.scholar.first_name }} {{
-                            disbursement.scholar.middle_name
-                          }}
-                        </div>
-                        <div class="text-sm opacity-50">
-                          {{ disbursement.scholar.year_level }}{{ getYearSuffix(disbursement.scholar.year_level) }}
-                          year, {{
-                            disbursement.scholar.course.name }}
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    {{ disbursement.scholar.grant }}
-                  </td>
-                  <td>
-                    {{ disbursement.scholar.campus.name }}
-                  </td>
-                  <td>
-                    {{ formatDate(disbursement.claimed_at) }}
-                  </td>
-                  <td>
-                    <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': disbursement.status === 'Claimed',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending',
-                      'bg-red-100 text-red-800 border border-red-400': disbursement.status === 'Not Claimed'
-                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ disbursement.status }}
-                    </span>
-                  </td>
-                  <td v-if="disbursement.status == 'Not Claimed'">
-                    <button @click="toggleReason"
-                      class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
-                      aria-label="View Details">
-                      <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div> -->
           <div class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <thead class="justify-center items-center bg-gray-50">
@@ -109,50 +43,55 @@
                 </tr>
               </thead>
               <tbody>
-                <tr  class="text-sm">
-                  <td>URs-id</td>
+                <tr v-for="scholar in filteredScholars" :key="scholar.id" class="text-sm">
+                  <td>{{ scholar.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                          <img 
+                            :src="scholar.user?.picture || '../../../../assets/images/no_userpic.png'" 
+                            alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
                       <div>
                         <div class="font-normal">
-                         name
+                          {{ scholar.first_name }} {{ scholar.middle_name }} {{ scholar.last_name }}
                         </div>
                         <div class="text-sm opacity-50">
-                         bsit
+                          {{ scholar.course }}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                   listahamn
+                    {{ scholar.grant }}
                   </td>
                   <td>
-                    morong
+                    {{ scholar.campus }}
                   </td>
                   <td>
-                   time
+                    <!-- This would be filled with actual claim time data -->
+                    N/A
                   </td>
                   <td>
-                    <!-- <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': disbursement.status === 'Claimed',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending',
-                      'bg-red-100 text-red-800 border border-red-400': disbursement.status === 'Not Claimed'
-                    }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ disbursement.status }}
-                    </span> -->status
+                    <span 
+                      :class="{
+                        'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Claimed',
+                        'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.student_status === 'Pending',
+                        'bg-red-100 text-red-800 border border-red-400': scholar.student_status === 'Not Claimed'
+                      }" 
+                      class="text-xs font-medium px-2.5 py-0.5 rounded">
+                      {{ scholar.student_status }}
+                    </span>
                   </td>
-                  <!-- <td v-if="disbursement.status == 'Not Claimed'">
-                    <button @click="toggleReason"
+                  <td v-if="scholar.student_status === 'Not Claimed'">
+                    <button @click="toggleReason(scholar)"
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
-                  </td> -->
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -188,17 +127,16 @@
               </button>
             </div>
 
-
             <div class="p-4 flex flex-col space-y-4">
               <div class="relative space-y-3">
                 <h3 class="font-semibold text-gray-900 dark:text-white">
-                  As per Scholar: <span>(Call mo name here)</span></h3>
-                <textarea id="subject" rows="4"
+                  As per Scholar: <span>{{ selectedScholar ? `${selectedScholar.first_name} ${selectedScholar.last_name}` : '' }}</span>
+                </h3>
+                <textarea id="subject" rows="4" v-model="reasonText"
                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="Write a message"></textarea>
-                <!-- <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" /> -->
+                <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" />
               </div>
-
 
               <div>
                 <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
@@ -251,7 +189,7 @@ import InputError from '@/Components/InputError.vue';
 const props = defineProps({
   scholarship: Object,
   batch: Object,
-  disbursements: Array,
+  scholars: Array,
   errors: Object,
   flash: Object,
   scholar: Object,
@@ -276,19 +214,29 @@ const isScanning = ref(true);
 const toastVisible = ref(false);
 const toastTitle = ref('');
 const toastMessage = ref('');
+const selectedScholar = ref(null);
+const reasonText = ref('');
+const uploadedFiles = ref([]);
 
-// Filtered payouts based on search query
-const filteredDisbursements = computed(() => {
-  return props.disbursements.filter(disbursements =>
-    disbursements.scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    disbursements.scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    disbursements.scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    disbursements.scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    disbursements.scholar.course?.name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    disbursements.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    disbursements.scholar.campus?.name?.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+// Filtered scholars based on search query
+const filteredScholars = computed(() => {
+  if (!props.scholars) return [];
+  
+  return props.scholars.filter(scholar => {
+    if (!scholar) return false;
+    
+    return (
+      scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.campus?.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+  });
 });
+
 // Toggle camera visibility
 const toggleCamera = () => {
   OpenCamera.value = !OpenCamera.value;
@@ -304,13 +252,15 @@ const closeCamera = () => {
   OpenCamera.value = false;
 }
 
-const toggleReason = () => {
-  Reasoning.value = !Reasoning.value;
-
+const toggleReason = (scholar) => {
+  selectedScholar.value = scholar;
+  Reasoning.value = true;
 };
 
 const closeModal = () => {
   Reasoning.value = false;
+  selectedScholar.value = null;
+  reasonText.value = '';
 }
 
 function formatDate(dateString) {
@@ -344,16 +294,16 @@ const openReport = () => {
 };
 
 // Show toast notification
-// const showToast = (title, message) => {
-//   toastTitle.value = title;
-//   toastMessage.value = message;
-//   toastVisible.value = true;
+const showToast = (title, message) => {
+  toastTitle.value = title;
+  toastMessage.value = message;
+  toastVisible.value = true;
 
-//   // Hide toast after 3 seconds
-//   setTimeout(() => {
-//     toastVisible.value = false;
-//   }, 3000);
-// };
+  // Hide toast after 3 seconds
+  setTimeout(() => {
+    toastVisible.value = false;
+  }, 3000);
+};
 
 // Helper function for year level suffix
 const getYearSuffix = (year) => {
@@ -369,7 +319,8 @@ watchEffect(() => {
   if (flashMessage) {
     console.log("Showing toast with message:", flashMessage);
     usePage().props.scholar = flashMessage;
-    toastMessage.value = flashMessage.first_name;  // This sets the toast message to "Carl Vincent"
+    toastTitle.value = "Success";
+    toastMessage.value = flashMessage.first_name ? `${flashMessage.first_name} ${flashMessage.last_name} updated successfully` : flashMessage;
     toastVisible.value = true;
     setTimeout(() => {
       console.log("Hiding toast...");
@@ -379,7 +330,6 @@ watchEffect(() => {
 });
 
 </script>
-
 
 <style>
 .qr-scanner {

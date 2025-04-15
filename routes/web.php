@@ -294,7 +294,7 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
     Route::get('/cashier/payouts', [CashierController::class, 'payouts_index'])->name('cashier.payouts_index');
     Route::get('/cashier/payout/{scholarshipId}/batch/{batchId}', [CashierController::class, 'payouts_disbursement'])->name('cashier.payouts_disbursement');
 
-    Route::get('/cashier/pending-payouts', [CashierController::class, 'pending_payouts'])->name('cashier.pending_payouts');
+    Route::get('/cashier/pending-payouts/{scholarshipId}/batch/{batchId}', [CashierController::class, 'pending_payouts'])->name('cashier.pending_payouts');
 
 });
 
