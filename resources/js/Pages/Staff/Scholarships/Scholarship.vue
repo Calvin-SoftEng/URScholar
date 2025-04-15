@@ -359,7 +359,6 @@
                                             Campus</h3>
 
                                         <!-- Display scholarship status for this campus -->
-
                                         <div v-if="campusData.batches?.some(batch => batch.validated === false) || campusData.batches?.some(batch => batch.status === 'Pending') && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
                                         " class="mb-4">
                                             <div

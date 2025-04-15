@@ -174,6 +174,7 @@ class CashierController extends Controller
 
     public function all_payouts(Request $request, Scholarship $scholarship)
     {
+
         $messages = [
             'selectedSem' => 'Need to select a semester.',
             'selectedYear' => 'Passwords must match.',
@@ -212,8 +213,13 @@ class CashierController extends Controller
 
         // Get all batches for the same scope
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
+            ->where('status', 'Accomplished')
             ->where('school_year_id', $schoolyear->id)
-            ->where('semester', $request->input('selectedSem'));
+            ->where('semester', $request->input('selectedSem'))
+            ->with([
+                'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
+                'grantees.scholar.submittedRequirements'
+            ]);
 
         $batches = $batchesQuery->with([
             'disbursement',
@@ -277,69 +283,32 @@ class CashierController extends Controller
     public function forward(Request $request)
     {
         $request->validate([
-            'scholarship_id' => 'required|integer',
+            'scholarship_id' => 'required|exists:scholarships,id',
             'batch_ids' => 'required|array',
-            'batch_ids.*' => 'integer',
+            'batch_ids.*' => 'exists:batches,id',
             'date_start' => 'required|date',
-            'date_end' => 'required|date',
-            'school_year_id' => 'required',
-            'semester' => 'required',
-            'grantees' => 'sometimes|array', // Make grantees optional
+            'date_end' => 'required|date|after_or_equal:date_start',
+            'school_year_id' => 'required|exists:school_years,id',
+            'semester' => 'required'
         ], [
             'date_start.required' => 'Set a Date start',
             'date_end.required' => 'Set a Date end',
         ]);
     
-        dd($request);
-        
         $scholarshipId = $request->input('scholarship_id');
         $batchIds = $request->input('batch_ids');
         $user = Auth::user();
-        
+    
         // Get all the batches we need to process
         $batches = Batch::whereIn('id', $batchIds)->get();
-        
-        // Get all scholars from these batches
-        $scholars = [];
-        foreach ($batches as $batch) {
-            // Fetch scholars associated with this batch
-            // This will need to be adjusted based on your actual data model
-            $batchScholars = Scholar::where('batch_id', $batch->id)
-                ->where('status', 'Active')
-                ->get()
-                ->map(function($scholar) use ($batch) {
-                    return [
-                        'scholar' => $scholar,
-                        'batch_id' => $batch->id
-                    ];
-                })
-                ->toArray();
-            
-            $scholars = array_merge($scholars, $batchScholars);
-        }
-        
-        // Group scholars by campus
-        $scholarsByCampus = [];
-        foreach ($scholars as $scholar) {
-            $batch = Batch::find($scholar['batch_id']);
-            
-            if (!$batch) {
-                continue;
-            }
-            
-            $campusId = $batch->campus_id;
-            
-            if (!isset($scholarsByCampus[$campusId])) {
-                $scholarsByCampus[$campusId] = [];
-            }
-            
-            $scholarsByCampus[$campusId][] = $scholar;
-        }
     
+        // Group batches by campus
+        $batchesByCampus = $batches->groupBy('campus_id');
+        
         // Create payouts for each campus and process disbursements
         $createdPayouts = [];
     
-        foreach ($scholarsByCampus as $campusId => $campusScholars) {
+        foreach ($batchesByCampus as $campusId => $campusBatches) {
             // Create payout for this campus
             $payout = Payout::create([
                 'scholarship_id' => $scholarshipId,
@@ -351,33 +320,44 @@ class CashierController extends Controller
                 'status' => 'Pending',
             ]);
     
-            // Prepare disbursement data for this campus
+            $totalScholars = 0;
             $dataToInsert = [];
-            foreach ($campusScholars as $scholar) {
-                $dataToInsert[] = [
-                    'payout_id' => $payout->id,
-                    'batch_id' => $scholar['batch_id'],
-                    'scholar_id' => $scholar['scholar']['id'],
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
+    
+            // Process each batch for this campus
+            foreach ($campusBatches as $batch) {
+                // Find active grantees for this batch
+                $grantees = Grantees::where('batch_id', $batch->id)
+                    ->where('scholarship_id', $scholarshipId)
+                    ->where('status', 'Active')
+                    ->get();
+                    
+                foreach ($grantees as $grantee) {
+                    $dataToInsert[] = [
+                        'payout_id' => $payout->id,
+                        'batch_id' => $batch->id,
+                        'scholar_id' => $grantee->scholar_id,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                    $totalScholars++;
+                }
             }
     
             // Bulk insert disbursements
-            Disbursement::insert($dataToInsert);
-    
-            // Update payout with total scholars count
-            $totalDisbursement = count($dataToInsert);
+            if (!empty($dataToInsert)) {
+                Disbursement::insert($dataToInsert);
+            }
     
             // Calculate sub_total based on scholarship amount if available
             $subTotal = null;
             $scholarship = Scholarship::find($scholarshipId);
             if ($scholarship && isset($scholarship->amount)) {
-                $subTotal = $scholarship->amount * $totalDisbursement;
+                $subTotal = $scholarship->amount * $totalScholars;
             }
     
+            // Update payout with total scholars count and sub_total
             $payout->update([
-                'total_scholars' => $totalDisbursement,
+                'total_scholars' => $totalScholars,
                 'sub_total' => $subTotal
             ]);
     
