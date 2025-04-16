@@ -55,7 +55,7 @@
                                     </div>
                                     <div class="flex flex-col items-start">
                                         <span class="text-gray-500 text-sm">Deadline</span>
-                                        <span class="font-medium text-red-500">Bukas na</span>
+                                        <span class="font-medium text-red-500">April 29, 2025</span>
                                     </div>
                                 </div>
                             </div>

@@ -338,7 +338,7 @@
                     <div v-if="filteredHistoryGrantee.length === 0">
                         <div class="grid grid-cols-5 gap-4 items-center">
                             <div class="col-span-5 flex items-center justify-center text-primary font-bold">
-                                NO history yet
+                                No claim history yet
                             </div>
                         </div>
                     </div>
@@ -363,9 +363,9 @@
                                         year: 'numeric', month: 'long', day: 'numeric'
                                     }) : 'Not yet claimed' }}</h2>
                                 <p class="text-gray-600" v-if="history.claimed_by">Claimed by: <span
-                                        class="font-medium">{{ history.claimed_by.first_name }}</span>,
-                                    ID: URSB123</p>
-                                <p class="text-gray-600" v-if="history.claimed_at">Processed at: sa cashier</p>
+                                        class="font-medium">You</span>,
+                                    ID: URS-0001</p>
+                                <p class="text-gray-600" v-if="history.claimed_at">Processed at: Campus Cashier</p>
                             </div>
                         </div>
                     </div>

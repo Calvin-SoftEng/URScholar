@@ -39,9 +39,9 @@
 
                                     <!-- Info -->
                                     <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                                        <span class="text-xl font-semibold text-gray-800">John Michael Doe</span>
+                                        <span class="text-xl font-semibold text-gray-800">Daughtry Manalo</span>
                                         <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full border">URS-20200</span>
+                                        <span class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full border">URS-0001</span>
                                         <span class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full border">URS Binangonan</span>
                                         <span class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full border">Active</span>
                                         <span class="px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded-full border">BSIT</span>
@@ -78,31 +78,31 @@
                                                         <!-- First Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Daughtry</span>
                                                         </div>
 
                                                         <!-- Middle Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle Name</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">De Guzman</span>
                                                         </div>
 
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last Name</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Manalo</span>
                                                         </div>
 
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">22</span>
                                                         </div>
 
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Birth Date</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">July 6, 2002</span>
                                                         </div>
                                                     </div>
 
@@ -110,32 +110,32 @@
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Place of Birth</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
                                                         </div> 
 
                                                         
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">San Mateo</span>
                                                         </div> 
 
                                                         <!-- First Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Civil Status</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Single</span>
                                                         </div>
 
                                                         <!-- Middle Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Sex</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Male</span>
                                                         </div>
 
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
                                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Religion</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Roman Catholic</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -207,7 +207,7 @@
                                                             <!-- First Name -->
                                                             <div class="mb-4">
                                                             <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Mother Name</span>
                                                             </div>
 
                                                             <!-- Middle Name -->

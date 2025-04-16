@@ -330,18 +330,16 @@ class EmailController extends Controller
             if ($scholar->email) {
                 //Sending Emails
                 $mailData = [
-                    'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                    'title' => 'Good Day Scholar!',
                     'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
-                        "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
-                        "Here are your login credentials:\n\n" .
-                        "*Email: " . $scholar['email'] . "\n" .
+                        "Great news! Your scholarship payout has been set, you can claim your grant by following the instructions below.\n\n\n" .
                         "*Next Steps:\n" .
-                        " - Log in to your account using the details above.\n" .
-                        " - Complete your application by submitting the required documents.\n" .
-                        " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                        "*Bigayan  Date: " . $request['scheduled_date'] . "\n\n" .
-                        "*Bigayan Oras: " . $request['scheduled_time'] . "\n\n" .
-                        "*Reminders be: " . $request['reminders'] . "\n\n" .
+                        // " - Log in to your account using the details above.\n" .
+                        // " - Complete your application by submitting the required documents.\n" .
+                        // " - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                        "*Payout Date: " . $request['scheduled_date'] . "\n\n" .
+                        "*Time: " . $request['scheduled_time'] . "\n\n" .
+                        "*Reminders: " . $request['reminders'] . "\n\n" .
                         "Click the following link to access your portal: " .
                         "urscholar.up.railway.app\n\n"
                 ];
@@ -395,7 +393,7 @@ class EmailController extends Controller
             ]);
 
             $mailData = [
-                'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                'title' => 'Welcome to the URScholar',
                 'body' => "Dear " . $studentEmail['first_name'] . ",\n\n" .
                     "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
                     "Here are your login credentials:\n\n" .
@@ -405,7 +403,7 @@ class EmailController extends Controller
                     " - Log in to your account using the details above.\n" .
                     " - Complete your application by submitting the required documents.\n" .
                     " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                    "*Application Deadline: " . ($request->has('deadline') ? $request['deadline'] : 'Please check the website for details') . "\n\n" .
+                    // "*Application Deadline: " . ($request->has('deadline') ? $request['deadline'] : 'Please check the website for details') . "\n\n" .
                     "Click the following link to access your portal: " .
                     "urscholar.up.railway.app\n\n"
             ];

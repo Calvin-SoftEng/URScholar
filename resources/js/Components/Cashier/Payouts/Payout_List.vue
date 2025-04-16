@@ -2,17 +2,19 @@
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="toggleCamera">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Open Camera
+        <button @click="toggleCamera"
+          class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+          <font-awesome-icon :icon="['fas', 'camera']" class="text-base" />
+          <span class="font-normal font-poppins">Open Camera</span>
         </button>
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
+
+        <button @click="openReport"
+          class="flex items-center gap-2 border-2 border-amber-500 text-amber-500 px-4 py-2 rounded-lg hover:bg-amber-200 transition duration-200">
+          <font-awesome-icon :icon="['fas', 'file-export']" class="text-base" />
+          <span class="font-normal font-poppins">Export</span>
         </button>
       </div>
+
       <form class="w-3/12">
         <label for="default-search"
           class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
