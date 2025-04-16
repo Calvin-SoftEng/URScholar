@@ -180,7 +180,7 @@ class DatabaseSeeder extends Seeder
         $logopath = 'storage/sponsor/logo/images.png';
         //sponsor
         Sponsor::factory()->create([
-            'name' => 'Commissioner of Higher Education',
+            'name' => 'Commissioner on Higher Education',
             'created_id' => 2,
             'assign_id' => 5,
             'abbreviation' => 'CHED',
