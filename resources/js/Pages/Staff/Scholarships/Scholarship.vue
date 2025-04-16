@@ -1623,7 +1623,7 @@
                                     <button type="button"
                                         class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
                                         @click="toggleDropdown('reportType')">
-                                        {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select ReportTypes' }}
+                                        {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select Report type' }}
                                     </button>
                                     <div v-if="openDropdown === 'reportType'"
                                         class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
@@ -2627,67 +2627,67 @@ const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
 const selectedReportTypes = ref([]);
 
 // // Generate Reports handler
-// const handleGenerateReports = () => {
-//     if (selectedReportTypes.value.includes('Scholars List')) {
-//         generateScholarsList()
-//     }
-//     if (selectedReportTypes.value.includes('Enrolled List')) {
-//         generateEnrolledList()
-//     }
-//     if (selectedReportTypes.value.includes('Graduate List')) {
-//         generateGraduateList()
-//     }
-//     if (selectedReportTypes.value.includes('Payroll')) {
-//         generatePayroll()
-//     }
-// }
+const handleGenerateReports = () => {
+    if (selectedReportTypes.value.includes('Scholars List')) {
+        generateScholarsList()
+    }
+    if (selectedReportTypes.value.includes('Enrolled List')) {
+        generateEnrolledList()
+    }
+    if (selectedReportTypes.value.includes('Graduate List')) {
+        generateGraduateList()
+    }
+    if (selectedReportTypes.value.includes('Payroll')) {
+        generatePayroll()
+    }
+}
 
 
-// const GenerateReport = ref(false);
+const GenerateReport = ref(false);
 
-// const generateReportModal = () => {
-//     GenerateReport.value = !GenerateReport.value;
-// }
+const generateReportModal = () => {
+    GenerateReport.value = !GenerateReport.value;
+}
 
 
-// // Generate report function
-// const generateScholarsList = async () => {
-//     window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
+// Generate report function
+const generateScholarsList = async () => {
+    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
 
-// };
+};
 
-// const generateEnrolledList = async () => {
-//     try {
-//         // Open PDF report in new tab
-//         window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
-//         showToast('Report Generated', 'Your report is being downloaded');
-//     } catch (err) {
-//         console.error('Failed to generate report:', err);
-//         showToast('Error', 'Failed to generate report', 'error');
-//     }
-// };
+const generateEnrolledList = async () => {
+    try {
+        // Open PDF report in new tab
+        window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
+        showToast('Report Generated', 'Your report is being downloaded');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+        showToast('Error', 'Failed to generate report', 'error');
+    }
+};
 
-// const generateGraduateList = async () => {
-//     try {
-//         // Open PDF report in new tab
-//         window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
-//         showToast('Report Generated', 'Your report is being downloaded');
-//     } catch (err) {
-//         console.error('Failed to generate report:', err);
-//         showToast('Error', 'Failed to generate report', 'error');
-//     }
-// };
+const generateGraduateList = async () => {
+    try {
+        // Open PDF report in new tab
+        window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
+        showToast('Report Generated', 'Your report is being downloaded');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+        showToast('Error', 'Failed to generate report', 'error');
+    }
+};
 
-// const generatePayroll = async () => {
-//     try {
-//         // Open PDF report in new tab
-//         window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
-//         showToast('Report Generated', 'Your report is being downloaded');
-//     } catch (err) {
-//         console.error('Failed to generate report:', err);
-//         showToast('Error', 'Failed to generate report', 'error');
-//     }
-// };
+const generatePayroll = async () => {
+    try {
+        // Open PDF report in new tab
+        window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
+        showToast('Report Generated', 'Your report is being downloaded');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+        showToast('Error', 'Failed to generate report', 'error');
+    }
+};
 
 </script>
 

@@ -214,7 +214,7 @@
                                         </div>
                                         <div v-else>
                                             <img class="w-8 h-8 rounded-full mt-6 border"
-                                                :src="`/storage/user/profile/male.png`" alt="picture">
+                                                :src="`/storage/user/profile/no_userpic.png`" alt="picture">
                                         </div>
                                         <div class="flex flex-col gap-1 w-full justify-start max-w-[320px] mb-3">
                                             <div class="flex justify-start items-center space-x-1 rtl:space-x-reverse">
@@ -261,7 +261,7 @@
                                         </div>
                                         <div v-else>
                                             <img class="w-8 h-8 rounded-full mt-6 border"
-                                                :src="`/storage/user/profile/male.png`" alt="picture">
+                                                :src="`/storage/user/profile/no_userpic.png`" alt="picture">
                                         </div>
                                     </template>
                                 </div>

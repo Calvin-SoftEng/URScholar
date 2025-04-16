@@ -32,10 +32,10 @@
                             <span class="pl-2 font-semibold text-gray-700">Recent Activities</span>
                             <div class="w-full space-y-3 flex flex-col">
                                 <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    Last Logged in April 1, 2025
+                                    Last Logged in April 16, 2025
                                 </div>
                                 <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    Submitted requirements last April 1, 2025
+                                    Submitted requirements last April 16, 2025
                                 </div>
                                 <!-- <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
                                     daefefafefa

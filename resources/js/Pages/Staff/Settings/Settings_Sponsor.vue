@@ -125,7 +125,7 @@
                                         <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Image</h3>
                                         <div class="mb-2 flex flex-col items-center gap-4">
                                             <div
-                                                class="w-40 h-40 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                                                class="w-60 h-60 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                                                 <img :src="form.imgPreview || (form.imgName ? `/storage/sponsor/logo/${form.imgName}` : '')"
                                                     alt="Sponsor Logo" class="object-cover w-full h-full">
                                             </div>
@@ -136,21 +136,21 @@
                                     <div class="flex flex-col gap-4">
                                         <div>
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Name</h3>
-                                            <p class="mt-1 text-gray-800 dark:text-dtext">{{ form.name || 'N/A' }}</p>
+                                            <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{ form.name || 'N/A' }}</p>
                                         </div>
 
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                 </h3>
-                                                <p class="mt-1 text-gray-800 dark:text-dtext">{{ form.abbreviation ||
+                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{ form.abbreviation ||
                                                     'N/A' }}</p>
                                             </div>
 
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Partnered Since
                                                 </h3>
-                                                <p class="mt-1 text-gray-800 dark:text-dtext">{{ form.since || 'N/A' }}
+                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{ form.since || 'N/A' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -158,7 +158,7 @@
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Background
                                                 Information</h3>
                                             <p
-                                                class="mt-1 text-sm text-gray-800 dark:text-dtext bg-gray-50 dark:bg-gray-900 p-3 rounded-lg max-h-44 overflow-y-auto">
+                                                class="mt-1 text-base font-poppins text-gray-800 dark:text-dtext bg-gray-50 dark:bg-gray-900 p-3 rounded-lg max-h-44 overflow-y-auto">
                                                 {{ form.description || 'No description available.' }}
                                             </p>
                                         </div>
@@ -347,7 +347,7 @@
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                             <div class="w-full">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponson Email
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Email
                                                 </h3>
                                                 <input v-model="form.email" type="email" id="name"
                                                     placeholder="sponsor@test.com"

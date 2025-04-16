@@ -57,7 +57,7 @@
                                             <label
                                                 class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
                                                 Add File
-                                                <input type="file" class="hidden"
+                                                <input type="file" class="hidden" accept=".pdf,.jpg,.jpeg,.png"
                                                 @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
                                                 :id="'file_input_' + requirement.id" />
                                             </label>

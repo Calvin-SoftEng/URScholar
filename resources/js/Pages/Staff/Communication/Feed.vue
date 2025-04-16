@@ -142,10 +142,10 @@
                     <img src="../../../../assets/images/no_userpic.png" alt="Profile Picture"
                         class="w-12 h-12 rounded-full object-cover">
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ currentUser?.name || 'User'
-                        }}
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ currentUser?.first_name || 'User'
+                        }} {{ currentUser?.last_name || '' }}
                         </h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ currentUser?.role || 'Staff' }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ currentUser?.role || 'Head Scholarship Admin' }}</p>
                     </div>
                 </div>
 

@@ -81,7 +81,7 @@
                         'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.claimed_status === 'Pending',
                         'bg-red-100 text-red-800 border border-red-400': scholar.claimed_status === 'Not Claimed'
                       }" 
-                      class="text-xs font-medium px-2.5 py-0.5 rounded">
+                      class="text-xs font-medium px-2.5 py-0.5 rounded bg-gray-200 text-gray-500 border border-gray-400">
                       {{ scholar.claimed_status ?? 'Pending' }}
                     </span>
                   </td>

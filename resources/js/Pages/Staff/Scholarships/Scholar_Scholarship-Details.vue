@@ -71,7 +71,9 @@
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Contact
                                                             No.</span>
-                                                        <p class="text-lg font-poppins text-primary">43432423432423</p>
+                                                        <p class="text-lg font-poppins text-primary">
+                                                            <!-- {{ student.contact_no }} --> 0946 861 3366
+                                                        </p>
                                                     </div>
                                                     <div class="text-black">
                                                         <span
@@ -82,7 +84,7 @@
                                                     <div class="text-black">
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Address</span>
-                                                        <p class="text-lg font-poppins text-primary">feafaefeaf</p>
+                                                        <p class="text-lg font-poppins text-primary">{{ scholar.street }} {{ scholar.municipality }}, {{ scholar.province }}</p>
                                                     </div>
                                                 </div>
 

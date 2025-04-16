@@ -17,7 +17,7 @@
                 </div>
                 <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2">
                     <div class="mx-auto w-7/12 sm:px-6 lg:px-8">
-                        <form action="">
+                        <form @submit.prevent="">
                             <div class="relative w-full">
                                 <!-- Background Image -->
                                 <img
@@ -82,19 +82,19 @@
                                         <!-- First Name -->
                                         <div class="mb-4">
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Roslyn</span>
                                         </div>
 
                                         <!-- Middle Name -->
                                         <div class="mb-4">
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle Name</label>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
                                         </div>
 
                                         <!-- Last Name -->
                                         <div class="mb-4">
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last Name</label>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Magat</span>
                                         </div>
                                     </div>
 
@@ -102,19 +102,19 @@
                                         <!-- First Name -->
                                         <div class="mb-4">
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
                                         </div>
 
                                         <!-- Middle Name -->
                                         <div class="mb-4">
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
                                         </div>
 
                                         <!-- Last Name -->
                                         <div class="mb-4">
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Contact</label>
-                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
+                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +208,7 @@
 
                             <!-- Email Action -->
                             <div class="flex items-end justify-start max-w-2xs">
-                                <button class="w-full px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                <button @click="toggleChangeEmail" class="w-full px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                                 Change Email
                                 </button>
                             </div>
@@ -235,6 +235,68 @@
                 </div>
             </div>
         </div>
+        </div>
+
+        <!-- adding course -->
+        <div v-if="changeEmail"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Change Email
+                            </h2>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Enter new email and submit the code
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                    <div>
+                        <label for="course"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current Email</label>
+                        <input type="text" id="last_name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div>
+                        <label for="abbreviation"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Email</label>
+                        <input type="text" id="last_name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div>
+                        <label for="abbreviation"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
+                        <input type="text" id="last_name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                            Save</button>
+                    </div>
+                </form>
+            </div>
         </div>
 
         <!-- adding course -->
@@ -409,8 +471,13 @@ const components = {
     Button,
 };
 
+const changeEmail = ref(false);
 const changePassword = ref(false);
 const changeDP = ref(false);
+
+const toggleChangeEmail = () => {
+    changeEmail.value = !changeEmail.value;
+}
 
 const toggleChangePassword = () => {
     changePassword.value = !changePassword.value;
@@ -421,6 +488,7 @@ const toggleChangeDP = () => {
 }
 
 const closeModal = () => {
+    changeEmail.value = false;
     changePassword.value = false;
     changeDP.value = false;
 }
