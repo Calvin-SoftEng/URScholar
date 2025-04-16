@@ -92,10 +92,9 @@
                   </td>
                   <!-- Modified button that only shows for Pending status -->
                   <td>
-                    <button v-if="disbursement.status === 'Pending'" @click="checkAndToggleReason(disbursement)"
+                    <button @click="checkAndToggleReason(disbursement)"
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
-                      :class="{ 'opacity-50 cursor-not-allowed': !dateCheckResult, 'animate-pulse': isNearEndDate }"
-                      :disabled="!dateCheckResult" aria-label="View Details">
+                      aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                   </td>
@@ -296,7 +295,8 @@
                     <p class="text-gray-600 text-xl">{{ pendingScholar.course?.name }}</p>
                     <p class="text-gray-600 text-xl">{{ pendingScholar.year_level }}{{
                       getYearSuffix(pendingScholar.year_level) }} Year - {{ pendingScholar.campus?.name }}</p>
-                    <p class="text-gray-600 text-xl">Scholar ID: <span class="font-semibold">{{ pendingScholar.urscholar_id }}</span></p>
+                    <p class="text-gray-600 text-xl">Scholar ID: <span class="font-semibold">{{
+                        pendingScholar.urscholar_id }}</span></p>
                   </div>
                 </div>
 
@@ -507,19 +507,15 @@ const inactiveTabClass = computed(() =>
 
 // Modified checkAndToggleReason function to properly set the pendingScholar data
 const checkAndToggleReason = (disbursement) => {
-  if (dateCheckResult.value) {
-    currentDisbursement.value = disbursement;
-    pendingScholar.value = disbursement.scholar; // Set the pendingScholar to the selected disbursement's scholar
-    form.disbursement_id = disbursement.id;
-    form.reason = '';
-    form.document = null;
-    Reasoning.value = true;
+  currentDisbursement.value = disbursement;
+  pendingScholar.value = disbursement.scholar; // Set the pendingScholar to the selected disbursement's scholar
+  form.disbursement_id = disbursement.id;
+  form.reason = '';
+  form.document = null;
+  Reasoning.value = true;
 
-    // Also set the selectedScholar for the reason tab
-    selectedScholar.value = disbursement.scholar;
-  } else {
-    showToast('Not Available', 'Reason can only be provided on or after the end date of the payout period.');
-  }
+  // Also set the selectedScholar for the reason tab
+  selectedScholar.value = disbursement.scholar;
 };
 
 // Submit reason form

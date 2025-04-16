@@ -761,8 +761,6 @@ class ScholarshipController extends Controller
             }
         }
 
-
-
         $scholarship->update(['read' => 1]);
 
         event(new GeneralNotification(
@@ -778,6 +776,25 @@ class ScholarshipController extends Controller
         );
 
         $allBatchesInactive = $allBatches->every(fn($batch) => in_array($batch->status, ['Inactive', 'Accomplished']));
+
+
+        // $payout_Batches = $batchesQuery->with([
+        //     'disbursement',
+        //     'campus:id,name'
+        // ])
+        //     ->orderBy('batch_no')
+        //     ->get();
+
+        // // Compute claimed and not claimed for each batch
+        // $payoutBatches = $payout_Batches->map(function ($batch) {
+        //     $claimed = $batch->disbursement->where('status', 'Claimed')->count();
+        //     $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
+
+        //     return array_merge($batch->toArray(), [
+        //         'claimed_count' => $claimed,
+        //         'not_claimed_count' => $notClaimed
+        //     ]);
+        // });
 
 
         // Payouts by campus
@@ -856,7 +873,7 @@ class ScholarshipController extends Controller
 
         foreach ($grantees as $grantee) {
             if (
-                $grantee && $grantee->status == 'Accomplished'
+                $grantee && $grantee->status == 'Accomplished' && $grantee->campus_id == Auth::user()->campus_id
             ) {
                 $granteeInactive = true;
                 break;
@@ -965,7 +982,7 @@ class ScholarshipController extends Controller
         // Update each batch individually using the requested format
         foreach ($batches as $batch) {
             Batch::where('id', $batch->id)->update([
-                'status' => 'Inactive'
+                'status' => 'Accomplished'
             ]);
         }
 
@@ -1019,7 +1036,7 @@ class ScholarshipController extends Controller
                     ->where('school_year_id', $schoolYearId)
                     ->where('semester', $selectedSem)
                     ->update([
-                        'status' => 'Inactive'
+                        'status' => 'Accomplished'
                     ]);
             }
 
@@ -1119,6 +1136,8 @@ class ScholarshipController extends Controller
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $schoolYearId)
             ->where('campus_id', $selectedCampus)
+            ->where('semester', $selectedSem)
+            ->where('school_year_id', $schoolYearId)
             ->get();
 
         foreach ($batches as $batch) {
@@ -1134,7 +1153,7 @@ class ScholarshipController extends Controller
             if ($totalGrantees > 0 || $droppedOrGraduatedGrantees == $totalGrantees) {
                 Batch::where('id', $batch->id)->update([
                     'validated' => true,
-                    'status' => 'Inactive'
+                    'status' => 'Validated'
                 ]);
             } else {
                 // Otherwise proceed with the original "Active" status

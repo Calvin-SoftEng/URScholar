@@ -164,8 +164,7 @@
                       </td>
                       <td class="sticky right-0 z-20 bg-white px-6 py-2 border-gray-200 text-center"
                           style="box-shadow: -4px 0 6px -2px rgba(0,0,0,1);">
-                        <Link :href="route('scholars.scholar_information')">
-                          <button
+                          <button @click="() => openScholar(scholar)"
                             class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             aria-label="View Details"
                           >
@@ -174,7 +173,6 @@
                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                           </button>
-                        </Link>
                       </td>
                     </tr>
                 </tbody>
@@ -191,7 +189,7 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { defineProps, ref, computed, onBeforeMount, reactive } from 'vue';
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
@@ -205,6 +203,13 @@ const components = {
   FileUpload,
   Papa,
 };
+
+const openScholar = (scholar) => {
+    router.visit(`/urs-scholars/scholar-information/${scholar.id}`, {
+        preserveState: true
+    });
+};
+
 
 
 // Props definition with user type and coordinator campus

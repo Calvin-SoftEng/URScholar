@@ -113,7 +113,7 @@
                 </div>
                 <div v-else v-for="batch in batches" :key="batch.id"
                     class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                    <div  @click="() => openBatch(batch.id)"
+                    <div  @click="() => openBatch(batch)"
                         class="flex justify-between items-center">
 
                         <!-- Batch Info -->
@@ -624,8 +624,8 @@ const toggleMonitoring = () => {
 };
 
 
-const openBatch = (batchId) => {
-    router.visit(`/cashier/scholarships/${props.scholarship.id}/batch/${batchId}`, {
+const openBatch = (batch) => {
+    router.visit(`/cashier/scholarships/${props.scholarship.id}/batch/${batch.id}`, {
         data: {
             scholarship: props.scholarship.id,
         },

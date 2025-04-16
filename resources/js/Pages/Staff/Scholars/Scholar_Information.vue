@@ -1,6 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div
+            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-2">
                     <ul>
@@ -24,27 +25,45 @@
                             arrow_back
                         </span>
                     </button>
-            
-                        <!-- 25% Column -->
-                        <div class="h-full flex flex-col w-7/12">
-                            <div class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
+
+                    <!-- 25% Column -->
+                    <div class="h-full flex flex-col w-7/12">
+                        <div
+                            class="h-full rounded-xl p-3 shadow-md bg-white dark:bg-dcontainer flex flex-col space-y-5">
                             <div class="flex-1 flex flex-col space-y-5">
-                                
+
                                 <!-- Profile Image & Name -->
-                                <div class="flex flex-col sm:flex-row items-center justify-center p-4 bg-white space-y-4 sm:space-y-0 sm:space-x-6">
+                                <div
+                                    class="flex flex-col sm:flex-row items-center justify-center p-4 bg-white space-y-4 sm:space-y-0 sm:space-x-6">
                                     <!-- Image -->
                                     <div class="w-40 h-40 overflow-hidden rounded-xl shadow-md">
-                                        <img src="../../../../assets/images/no_userpic.png" alt="Profile Picture" class="w-full h-full object-cover" />
+                                        <img :src="`/storage/user/profile/${user.picture}`" alt="Profile Picture"
+                                            class="w-full h-full object-cover" />
                                     </div>
 
                                     <!-- Info -->
                                     <div class="flex flex-col items-center sm:items-start text-center sm:text-left">
-                                        <span class="text-xl font-semibold text-gray-800">Daughtry Manalo</span>
+                                        <span class="text-xl font-semibold text-gray-800">{{
+                                            scholar.last_name
+                                        }},
+                                            {{ scholar.first_name }} {{student.middle_name ?
+                                                student.middle_name.split('').map(word =>word.charAt(0).toUpperCase()).join('.') + '.' : ''}}</span>
                                         <div class="flex flex-wrap gap-2 mt-2">
-                                        <span class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full border">URS-0001</span>
-                                        <span class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full border">URS Binangonan</span>
-                                        <span class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full border">Active</span>
-                                        <span class="px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded-full border">BSIT</span>
+                                            <span
+                                                class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-full border">{{
+                                                    scholar.urscholar_id }}</span>
+                                            <span
+                                                class="px-3 py-1 text-sm bg-blue-100 text-blue-700 rounded-full border">URS
+                                                {{
+                                                    scholar.campus.name
+                                                }}</span>
+                                            <span
+                                                class="px-3 py-1 text-sm bg-green-100 text-green-700 rounded-full border">{{
+                                                    scholar.student_status }}</span>
+                                            <span
+                                                class="px-3 py-1 text-sm bg-purple-100 text-purple-700 rounded-full border">{{
+                                                    scholar.course.abbreviation
+                                                }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -55,471 +74,700 @@
                                 <div class="space-y-2">
                                     <div v-for="(section, index) in sections" :key="index">
                                         <button
-                                        class="w-full text-left px-5 py-4 bg-white hover:bg-gray-100 flex justify-between items-center rounded-xl shadow-sm border border-gray-200 transition-all duration-200 group"
-                                        :class="{ 'bg-primary text-white': section.isOpen }"
-                                        @click="toggleSection(index)"
-                                        >
-                                        <span class="font-semibold text-gray-800 text-base"
-                                        :class="{ 'text-white': section.isOpen }">
-                                            {{ section.title }}
-                                        </span>
-                                        <span
-                                            class="material-symbols-rounded text-gray-500 text-2xl transition-transform duration-300 ease-in-out group-hover:text-gray-700"
-                                            :class="{ 'rotate-180': section.isOpen }"
-                                        >
-                                            keyboard_arrow_down
-                                        </span>
+                                            class="w-full text-left px-5 py-4 bg-white hover:bg-gray-100 flex justify-between items-center rounded-xl shadow-sm border border-gray-200 transition-all duration-200 group"
+                                            :class="{ 'bg-primary text-white': section.isOpen }"
+                                            @click="toggleSection(index)">
+                                            <span class="font-semibold text-gray-800 text-base"
+                                                :class="{ 'text-white': section.isOpen }">
+                                                {{ section.title }}
+                                            </span>
+                                            <span
+                                                class="material-symbols-rounded text-gray-500 text-2xl transition-transform duration-300 ease-in-out group-hover:text-gray-700"
+                                                :class="{ 'rotate-180': section.isOpen }">
+                                                keyboard_arrow_down
+                                            </span>
                                         </button>
 
-                                            <!-- Personal Information -->
-                                            <Transition name="collapse" v-if="section.isOpen && section.title === 'Personal Information'" class="p-4 bg-white">
-                                                <div class="flex flex-row w-full">
-                                                    <div class="w-1/2">
+                                        <!-- Personal Information -->
+                                        <Transition name="collapse"
+                                            v-if="section.isOpen && section.title === 'Personal Information'"
+                                            class="p-4 bg-white">
+                                            <div class="flex flex-row w-full">
+                                                <div class="w-1/2">
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">First
+                                                            Name</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                                scholar.first_name }}</span>
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Middle
+                                                            Name</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                                student.middle_name }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Last
+                                                            Name</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                                scholar.last_name }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            student.age }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Birth
+                                                            Date</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">
+                                                            {{ new Date(student.birthdate).toLocaleDateString('en-US', {
+                                                                year: 'numeric', month: 'long', day: 'numeric'
+                                                            }) }}
+                                                        </span>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="w-1/2">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Place
+                                                            of Birth</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            student.placebirth }}</span>
+                                                    </div>
+
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                                scholar.street }} {{ scholar.municipality }} {{
+                                                                scholar.province }}</span>
+                                                    </div>
+
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Civil
+                                                            Status</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            student.civil }}</span>
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Sex</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            student.gender }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Religion</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                                student.religion }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Transition>
+
+                                        <!-- Education -->
+                                        <Transition name="collapse"
+                                            v-if="section.isOpen && section.title === 'Education'"
+                                            class="p-4 bg-white ">
+                                            <div v-if="grades != 0" class="flex flex-row w-full">
+
+                                                <div v-for="grade in grades" :key="grade.id" class="w-1/3">
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">School
+                                                            Year and Sem</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">SY
+                                                            {{ grade.school_year.year }} - {{ grade.semester }}
+                                                            Sem</span>
+                                                    </div>
+                                                </div>
+
+                                                <div v-for="grade in grades" :key="grade.id" class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">General
+                                                            Weighted Average</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            grade.grade }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div v-for="grade in grades" :key="grade.id" class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Certifacate
+                                                            of Grades</label>
+                                                        <a v-tooltip.left="'Click to download'"
+                                                            :href="'/storage/' + grade.path" download
+                                                            class="hover:text-primary transition-colors">
+                                                            <font-awesome-icon :icon="['fas', 'file']"
+                                                                class="text-primary mr-1" />{{
+                                                                    grade.cog }}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-else class="flex flex-row w-full">
+                                                <div class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">No
+                                                            Grade huhu</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Transition>
+
+                                        <!-- Contact Information -->
+                                        <Transition name="collapse"
+                                            v-if="section.isOpen && section.title === 'Contact Information'"
+                                            class="p-4 bg-white">
+                                            <div class="flex flex-row w-full">
+                                                <div class="w-1/2">
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Email</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ scholar.email }}</span>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="w-1/2">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Phone
+                                                            Number</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">00000</span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </Transition>
+
+                                        <!-- Family Details -->
+                                        <Transition name="collapse"
+                                            v-if="section.isOpen && section.title === 'Family Details'"
+                                            class="p-4 bg-white ">
+                                            <div class="flex flex-col w-full gap-6">
+                                                <!-- Mother Column -->
+                                                <div class="w-full">
+                                                    <h3 class="text-xl font-bold mb-4">Mother</h3>
+
+                                                    <!-- Sibling Entry -->
+                                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                         <!-- First Name -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Daughtry</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">First
+                                                                Name</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Mother
+                                                                Name</span>
                                                         </div>
 
                                                         <!-- Middle Name -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle Name</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">De Guzman</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Middle
+                                                                Name</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Sample
+                                                                Middle</span>
                                                         </div>
 
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last Name</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Manalo</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Last
+                                                                Name</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Sample
+                                                                Last</span>
                                                         </div>
 
-                                                        <!-- Last Name -->
+                                                        <!-- Age -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">22</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">50</span>
                                                         </div>
 
-                                                        <!-- Last Name -->
+                                                        <!-- Address -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Birth Date</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">July 6, 2002</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">123
+                                                                Sample Street</span>
+                                                        </div>
+
+                                                        <!-- Citizenship -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Citizenship</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Filipino</span>
+                                                        </div>
+
+                                                        <!-- Occupation -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Occupation</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Teacher</span>
+                                                        </div>
+
+                                                        <!-- Education -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Education</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">College
+                                                                Graduate</span>
+                                                        </div>
+
+                                                        <!-- Batch -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Batch</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">1995</span>
+                                                        </div>
+
+                                                        <!-- Is Deceased -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Is
+                                                                Deceased</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">No</span>
                                                         </div>
                                                     </div>
 
-                                                    <div class="w-1/2">
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Place of Birth</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
-                                                        </div> 
+                                                    <h3 class="text-xl font-bold mb-4">Father</h3>
 
-                                                        
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">San Mateo</span>
-                                                        </div> 
-
+                                                    <!-- Sibling Entry -->
+                                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                         <!-- First Name -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Civil Status</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Single</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">First
+                                                                Name</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Maam
+                                                                Roslyn</span>
                                                         </div>
 
                                                         <!-- Middle Name -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Sex</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Male</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Middle
+                                                                Name</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Sample
+                                                                Middle</span>
                                                         </div>
 
                                                         <!-- Last Name -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Religion</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Roman Catholic</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Transition>
-
-                                            <!-- Education -->
-                                            <Transition name="collapse" v-if="section.isOpen && section.title === 'Education'" class="p-4 bg-white ">
-                                                <div class="flex flex-row w-full">
-                                                    <div class="w-1/3">
-                                                        <!-- First Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">School Year and Sem</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">SY 2022-2033 - 1st Sem</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Last
+                                                                Name</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Sample
+                                                                Last</span>
                                                         </div>
 
-                                                    </div>
-
-                                                    <div class="w-1/3">
-                                                        <!-- Last Name -->
+                                                        <!-- Age -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">General Weighted Average</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">1.2</span>
-                                                        </div> 
-
-                                                    </div>
-
-                                                    <div class="w-1/3">
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Certifacate of Grades</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">file</span>
-                                                        </div> 
-                                                    </div>
-                                                </div>
-                                            </Transition>
-
-                                            <!-- Contact Information -->
-                                            <Transition name="collapse" v-if="section.isOpen && section.title === 'Contact Information'" class="p-4 bg-white">
-                                                <div class="flex flex-row w-full">
-                                                    <div class="w-1/2">
-                                                        <!-- First Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Email</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">@gmail.cpm</span>
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">50</span>
                                                         </div>
 
-                                                    </div>
-
-                                                    <div class="w-1/2">
-                                                        <!-- Last Name -->
+                                                        <!-- Address -->
                                                         <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Phone Number</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">00000</span>
-                                                        </div> 
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">123
+                                                                Sample Street</span>
+                                                        </div>
 
+                                                        <!-- Citizenship -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Citizenship</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Filipino</span>
+                                                        </div>
+
+                                                        <!-- Occupation -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Occupation</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">Teacher</span>
+                                                        </div>
+
+                                                        <!-- Education -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Education</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">College
+                                                                Graduate</span>
+                                                        </div>
+
+                                                        <!-- Batch -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Batch</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">1995</span>
+                                                        </div>
+
+                                                        <!-- Is Deceased -->
+                                                        <div class="mb-4">
+                                                            <label
+                                                                class="block text-sm font-medium text-primary opacity-45 mb-1">Is
+                                                                Deceased</label>
+                                                            <span
+                                                                class="text-lg font-semibold text-gray-800 dark:text-white">No</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </Transition>
 
-                                            <!-- Family Details -->
-                                            <Transition name="collapse" v-if="section.isOpen && section.title === 'Family Details'" class="p-4 bg-white ">
-                                                <div class="flex flex-col w-full gap-6">
-                                                    <!-- Mother Column -->
-                                                    <div class="w-full">
-                                                        <h3 class="text-xl font-bold mb-4">Mother</h3>
+                                                    <!-- Siblings Section -->
+                                                    <div class="w-full mt-6">
+                                                        <h3 class="text-xl font-bold mb-4">Siblings</h3>
 
                                                         <!-- Sibling Entry -->
                                                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                            <!-- First Name -->
                                                             <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Mother Name</span>
+                                                                <label
+                                                                    class="block text-sm font-medium text-primary opacity-45 mb-1">First
+                                                                    Name</label>
+                                                                <span
+                                                                    class="text-lg font-semibold text-gray-800 dark:text-white">Juan</span>
                                                             </div>
-
-                                                            <!-- Middle Name -->
                                                             <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle Name</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Sample Middle</span>
+                                                                <label
+                                                                    class="block text-sm font-medium text-primary opacity-45 mb-1">Middle
+                                                                    Name</label>
+                                                                <span
+                                                                    class="text-lg font-semibold text-gray-800 dark:text-white">Dela</span>
                                                             </div>
-
-                                                            <!-- Last Name -->
                                                             <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last Name</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Sample Last</span>
+                                                                <label
+                                                                    class="block text-sm font-medium text-primary opacity-45 mb-1">Last
+                                                                    Name</label>
+                                                                <span
+                                                                    class="text-lg font-semibold text-gray-800 dark:text-white">Cruz</span>
                                                             </div>
-
-                                                            <!-- Age -->
                                                             <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">50</span>
+                                                                <label
+                                                                    class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
+                                                                <span
+                                                                    class="text-lg font-semibold text-gray-800 dark:text-white">22</span>
                                                             </div>
-
-                                                            <!-- Address -->
                                                             <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">123 Sample Street</span>
-                                                            </div>
-
-                                                            <!-- Citizenship -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Citizenship</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Filipino</span>
-                                                            </div>
-
-                                                            <!-- Occupation -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Occupation</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Teacher</span>
-                                                            </div>
-
-                                                            <!-- Education -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Education</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">College Graduate</span>
-                                                            </div>
-
-                                                            <!-- Batch -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Batch</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">1995</span>
-                                                            </div>
-
-                                                            <!-- Is Deceased -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Is Deceased</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">No</span>
+                                                                <label
+                                                                    class="block text-sm font-medium text-primary opacity-45 mb-1">Occupation</label>
+                                                                <span
+                                                                    class="text-lg font-semibold text-gray-800 dark:text-white">Student</span>
                                                             </div>
                                                         </div>
-
-                                                        <h3 class="text-xl font-bold mb-4">Father</h3>
-
-                                                        <!-- Sibling Entry -->
-                                                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                            <!-- First Name -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Maam Roslyn</span>
-                                                            </div>
-
-                                                            <!-- Middle Name -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle Name</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Sample Middle</span>
-                                                            </div>
-
-                                                            <!-- Last Name -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last Name</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Sample Last</span>
-                                                            </div>
-
-                                                            <!-- Age -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">50</span>
-                                                            </div>
-
-                                                            <!-- Address -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">123 Sample Street</span>
-                                                            </div>
-
-                                                            <!-- Citizenship -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Citizenship</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Filipino</span>
-                                                            </div>
-
-                                                            <!-- Occupation -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Occupation</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">Teacher</span>
-                                                            </div>
-
-                                                            <!-- Education -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Education</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">College Graduate</span>
-                                                            </div>
-
-                                                            <!-- Batch -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Batch</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">1995</span>
-                                                            </div>
-
-                                                            <!-- Is Deceased -->
-                                                            <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Is Deceased</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">No</span>
-                                                            </div>
-                                                        </div>
-
-                                                        <!-- Siblings Section -->
-                                                        <div class="w-full mt-6">
-                                                            <h3 class="text-xl font-bold mb-4">Siblings</h3>
-
-                                                            <!-- Sibling Entry -->
-                                                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                                <div class="mb-4">
-                                                                <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
-                                                                <span class="text-lg font-semibold text-gray-800 dark:text-white">Juan</span>
-                                                                </div>
-                                                                <div class="mb-4">
-                                                                <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle Name</label>
-                                                                <span class="text-lg font-semibold text-gray-800 dark:text-white">Dela</span>
-                                                                </div>
-                                                                <div class="mb-4">
-                                                                <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last Name</label>
-                                                                <span class="text-lg font-semibold text-gray-800 dark:text-white">Cruz</span>
-                                                                </div>
-                                                                <div class="mb-4">
-                                                                <label class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
-                                                                <span class="text-lg font-semibold text-gray-800 dark:text-white">22</span>
-                                                                </div>
-                                                                <div class="mb-4">
-                                                                <label class="block text-sm font-medium text-primary opacity-45 mb-1">Occupation</label>
-                                                                <span class="text-lg font-semibold text-gray-800 dark:text-white">Student</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>  
-
-                                            </Transition>
-
-                                            <Transition name="collapse" v-if="section.isOpen && section.title === 'Education History'" class="p-4 bg-white border-t border-gray-200">
-                                                <div class="flex flex-row w-full">
-                                                    <div class="w-1/3">
-                                                        <!-- First Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Elementary</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">Elementry svhool</span>
-                                                        </div>
-
-                                                        <!-- Middle Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Junior High School</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">jhs</span>
-                                                        </div>
-
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Senior High School</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">shs</span>
-                                                        </div>
-
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">College</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">urs</span>
-                                                        </div>
-
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Post Graduate School</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">n/a</span>
-                                                        </div>
-
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Vocational</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">n/a</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="w-1/3">
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Years Attended</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">2023-2024</span>
-                                                        </div> 
-
-                                                        
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Years Attended</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">2023-2024</span>
-                                                        </div> 
-
-                                                        <!-- First Name -->
-                                                        <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Years Attended</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">2023-2024</span>
-                                                        </div>
-
-                                                        <!-- Middle Name -->
-                                                        <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Years Attended</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">2023-2024</span>
-                                                        </div>
-
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Years Attended</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">2023-2024</span>
-                                                        </div>
-
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                            <label class="block text-sm font-medium text-primary opacity-45 mb-1">Years Attended</label>
-                                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">2023-2024</span>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="w-1/3">
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards Received</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">None</span>
-                                                        </div> 
-
-                                                        
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards Received</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">None</span>
-                                                        </div> 
-
-                                                        <!-- First Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards Received</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">None</span>
-                                                        </div> 
-
-                                                        <!-- Middle Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards Received</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">None</span>
-                                                        </div> 
-
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards Received</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">None</span>
-                                                        </div> 
-
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards Received</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">None</span>
-                                                        </div> 
                                                     </div>
                                                 </div>
-                                            </Transition>
+                                            </div>
 
-                                            <!-- Extracurricular -->
-                                            <Transition name="collapse" v-if="section.isOpen && section.title === 'Extracurricular'" class="p-4 bg-white border-t border-gray-200">
-                                                <div class="flex flex-row w-full">
-                                                    
-                                                    <div class="w-1/3">
-                                                        <!-- First Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Name of Organization</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">SY 2022-2033 - 1st Sem</span>
-                                                        </div>
+                                        </Transition>
 
+                                        <Transition name="collapse"
+                                            v-if="section.isOpen && section.title === 'Education History'"
+                                            class="p-4 bg-white border-t border-gray-200">
+                                            <div class="flex flex-row w-full">
+                                                <div class="w-1/3">
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Elementary</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ elementary.name }}</span>
                                                     </div>
 
-                                                    <div class="w-1/3">
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Inclusive Dates</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">1.2</span>
-                                                        </div> 
-
+                                                    <!-- Middle Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Junior
+                                                            High School</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ junior.name }}</span>
                                                     </div>
 
-                                                    <div class="w-1/3">
-                                                        <!-- Last Name -->
-                                                        <div class="mb-4">
-                                                        <label class="block text-sm font-medium text-primary opacity-45 mb-1">Position Held</label>
-                                                        <span class="text-lg font-semibold text-gray-800 dark:text-white">PIO</span>
-                                                        </div> 
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Senior
+                                                            High School</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ senior.name }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">College</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ college.name }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Post
+                                                            Graduate School</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ postgrad.name }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Vocational</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ vocational.name }}</span>
                                                     </div>
                                                 </div>
-                                            </Transition>
+
+                                                <div class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Years
+                                                            Attended</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ elementary.years }}</span>
+                                                    </div>
+
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Years
+                                                            Attended</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ junior.years }}</span>
+                                                    </div>
+
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Years
+                                                            Attended</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ senior.years }}</span>
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Years
+                                                            Attended</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ college.years }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Years
+                                                            Attended</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ postgrad.years }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Years
+                                                            Attended</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{ vocational.years }}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards
+                                                            Received</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            elementary.honors || 'N/A' }}</span>
+                                                    </div>
+
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards
+                                                            Received</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            junior.honors || 'N/A' }}</span>
+                                                    </div>
+
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards
+                                                            Received</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            senior.honors || 'N/A' }}</span>
+                                                    </div>
+
+                                                    <!-- Middle Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards
+                                                            Received</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            college.honors || 'N/A' }}</span>
+                                                    </div>
+
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards
+                                                            Received</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            postgrad.honors || 'N/A' }}</span>
+                                                    </div>
+
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Honors/Awards
+                                                            Received</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                            vocational.honors || 'N/A' }}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </Transition>
+
+                                        <!-- Extracurricular -->
+                                        <div name="collapse"
+                                            v-if="section.isOpen && section.title === 'Extracurricular'"
+                                            class="p-4 bg-white border-t border-gray-200">
+                                            <div v-if="orgs != 0" class="flex flex-row w-full">
+
+                                                <div class="w-1/3">
+                                                    <!-- First Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Name
+                                                            of Organization</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">SY
+                                                            2022-2033 - 1st Sem</span>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Inclusive
+                                                            Dates</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">1.2</span>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <label
+                                                            class="block text-sm font-medium text-primary opacity-45 mb-1">Position
+                                                            Held</label>
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">PIO</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div v-else class="flex flex-row w-full">
+                                                <div class="w-1/3">
+                                                    <!-- Last Name -->
+                                                    <div class="mb-4">
+                                                        <span
+                                                            class="text-lg font-semibold text-gray-800 dark:text-white">No ORGI</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </div>
                                 </div>
                             </div>
 
-                            </div>
                         </div>
+                    </div>
 
 
                 </div>
@@ -582,7 +830,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, computed } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import Papa from 'papaparse';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
@@ -602,7 +850,13 @@ import { Check } from 'lucide-vue-next';
 
 const props = defineProps({
     scholar: Object,
-    scholarship: Object,
+    student: Object,
+    education: Object,
+    user: Object,
+    family: Object,
+    siblings: Array,
+    grades: Array,
+    orgs: Array,
 });
 
 const components = {
@@ -615,16 +869,88 @@ const goBack = () => {
 };
 
 const sections = ref([
-  { title: 'Personal Information', isOpen: false },
-  { title: 'Education', isOpen: false },
-  { title: 'Contact Information', isOpen: false },
-  { title: 'Family Details', isOpen: false },
-  { title: 'Education History', isOpen: false },
-  { title: 'Extracurricular', isOpen: false }
+    { title: 'Personal Information', isOpen: false },
+    { title: 'Education', isOpen: false },
+    { title: 'Contact Information', isOpen: false },
+    { title: 'Family Details', isOpen: false },
+    { title: 'Education History', isOpen: false },
+    { title: 'Extracurricular', isOpen: false }
 ]);
 
+const elementary = computed(() => {
+    try {
+        return JSON.parse(props.education.elementary);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const junior = computed(() => {
+    try {
+        return JSON.parse(props.education.junior);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const senior = computed(() => {
+    try {
+        return JSON.parse(props.education.senior);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const college = computed(() => {
+    try {
+        return JSON.parse(props.education.college);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const vocational = computed(() => {
+    try {
+        return JSON.parse(props.education.vocational);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const postgrad = computed(() => {
+    try {
+        return JSON.parse(props.education.postgrad);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const mother = computed(() => {
+    try {
+        return JSON.parse(props.family.mother);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
+const father = computed(() => {
+    try {
+        return JSON.parse(props.family.father);
+    } catch (error) {
+        console.error("Invalid JSON format", error);
+        return {}; // Return empty object if parsing fails
+    }
+});
+
 const toggleSection = (index) => {
-  sections.value[index].isOpen = !sections.value[index].isOpen;
+    sections.value[index].isOpen = !sections.value[index].isOpen;
 };
 </script>
 
@@ -665,19 +991,18 @@ const toggleSection = (index) => {
 
 .collapse-enter-active,
 .collapse-leave-active {
-  transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 
 .collapse-enter-from,
 .collapse-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
+    opacity: 0;
+    transform: translateY(-10px);
 }
 
 .collapse-enter-to,
 .collapse-leave-from {
-  opacity: 1;
-  transform: translateY(0);
+    opacity: 1;
+    transform: translateY(0);
 }
-
 </style>

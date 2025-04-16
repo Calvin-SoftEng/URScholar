@@ -1541,7 +1541,7 @@
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Batch Disbursement Status
                             </h3>
                             <div class="space-y-3">
-                                <div v-for="batch in batchesWithScholars" :key="batch.id"
+                                <div v-for="batch in payoutBatches" :key="batch.id"
                                     class="py-3 px-4 flex justify-between items-center bg-gray-50 dark:bg-gray-700 rounded-lg">
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
@@ -1705,6 +1705,7 @@ const props = defineProps({
     total_scholars: Array,
     requirements: Array,
     completedBatches: Array,
+    payoutBatches: Array,
     errors: Object,
     userType: String,
     userCampusId: Number,

@@ -25,6 +25,7 @@ use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\ScholarshipGroup;
 use App\Models\AcademicYear;
+use App\Models\OrgRecord;
 use App\Models\SubmittedRequirements;
 use App\Models\Page;
 use App\Models\User;
@@ -41,17 +42,19 @@ class ScholarController extends Controller
         if (Auth::user()->usertype === 'coordinator') {
             $scholars = Scholar::with('user', 'campus', 'course', 'batch')
                 ->whereHas('grantees', function ($query) {
-                    $query->where('status', 'Active');
+                    $query->where('status', 'Accomplished');
                 })
                 ->where('status', 'Verified')
+                ->where('student_status', 'Enrolled')
                 ->where('campus_id', Auth::user()->campus_id)
                 ->get();
         } else {
             $scholars = Scholar::with('user', 'campus', 'course', 'batch')
                 ->whereHas('grantees', function ($query) {
-                    $query->where('status', 'Active');
+                    $query->where('status', 'Accomplished');
                 })
                 ->where('status', 'Verified')
+                ->where('student_status', 'Enrolled')
                 ->get();
         }
 
@@ -1172,8 +1175,29 @@ class ScholarController extends Controller
         return Inertia::render('Staff/Scholarships/Scholar_Scholarship-Details');
     }
 
-    public function scholar_information()
+    public function scholar_information(Scholar $scholar)
     {
-        return Inertia::render('Staff/Scholars/Scholar_Information');
+        // Reload the scholar with the campus relationship
+        $scholar = Scholar::with('campus', 'course')->find($scholar->id);
+
+        $student = StudentRecord::where('scholar_id', $scholar->id)->first();
+        $education = EducationRecord::where('student_record_id', $student->id)->first();
+        $family = FamilyRecord::where('student_record_id', $student->id)->first();
+
+        $siblings = SiblingRecord::where('family_record_id', $family->id)->get();
+        $orgs = OrgRecord::where('student_record_id', $student->id)->get();
+        $grades = Grade::where('scholar_id', $scholar->id)->with('school_year')->get();
+        $user = User::where('id', $scholar->user_id)->first();
+
+        return Inertia::render('Staff/Scholars/Scholar_Information', [
+            'scholar' => $scholar,
+            'student' => $student,
+            'education' => $education,
+            'family' => $family,
+            'siblings' => $siblings,
+            'orgs' => $orgs,
+            'grades' => $grades,
+            'user' => $user,
+        ]);
     }
 }

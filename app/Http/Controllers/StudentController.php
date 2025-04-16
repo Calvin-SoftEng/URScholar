@@ -1131,6 +1131,12 @@ class StudentController extends Controller
         }
 
         foreach ($request->organizations as $index => $org) {
+            if (
+                is_null($org['name']) && is_null($org['year']) && is_null($org['position'])
+            ) {
+                continue;
+            }
+
             OrgRecord::create([
                 'student_record_id' => $studentrecordID,
                 'name' => $org['name'],

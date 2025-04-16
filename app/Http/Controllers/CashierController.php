@@ -175,7 +175,7 @@ class CashierController extends Controller
         $currentUser = Auth::user();
 
         // Get batches for all campuses that match the criteria
-        $batches = Batch::where('scholarship_id', $scholarship->id)
+        $Allbatches = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $schoolyear->id)
             ->where('semester', $request->input('selectedSem'))
             ->with('campus') // eager load the campus relation
@@ -203,7 +203,7 @@ class CashierController extends Controller
                 'grantees.scholar.submittedRequirements'
             ]);
 
-        $batches = $batchesQuery->with([
+        $Allbatches = $batchesQuery->with([
             'disbursement',
             'campus:id,name'
         ])
@@ -211,7 +211,7 @@ class CashierController extends Controller
             ->get();
 
         // Compute claimed and not claimed for each batch
-        $batches = $batches->map(function ($batch) {
+        $batches = $Allbatches->map(function ($batch) {
             $claimed = $batch->disbursement->where('status', 'Claimed')->count();
             $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
 
@@ -248,6 +248,19 @@ class CashierController extends Controller
 
         $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
 
+        $allAccomplished = false;
+
+        foreach ($Allbatches as $batch) {
+            if (
+                $batch && $batch->status == 'Accomplished'
+            ) {
+                $allAccomplished = true;
+                break;
+            }
+        }
+
+        // dd($allAccomplished);
+
 
         // Check if any batches are forwardable
         return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
@@ -259,6 +272,7 @@ class CashierController extends Controller
             'currentUser' => $currentUser,
             'payouts' => $payouts,
             'payoutsByCampus' => $payoutsByCampus,
+            'allAccomplished' => $allAccomplished,
         ]);
     }
 
@@ -474,6 +488,8 @@ class CashierController extends Controller
 
         // Get active payout for this scholarship and campus
         $activePayout = Payout::where('scholarship_id', $scholarship->id)
+            ->where('school_year_id', $payout->school_year_id)
+            ->where('semester', $payout->semester)
             ->where('status', 'Active');
 
         if ($userCampusIds) {
@@ -564,19 +580,21 @@ class CashierController extends Controller
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
-        $payout = Payout::where('scholarship_id', $scholarship->id)
-            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
-            ->where('status', '!=', 'Inactive')
-            ->with('school_year')
-            ->first();
-
-
+        
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
             ->where('campus_id', Auth::user()->campus_id) // Filter by campus
             ->orderBy('batch_no', 'desc')
             ->with('school_year')
             ->firstOrFail(); // Use firstOrFail to handle cases where batch doesn't exist
+
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+            ->where('campus_id', Auth::user()->campus_id) // Filter by campus
+            ->where('status', '!=', 'Inactive')
+            ->where('semester', $batch->semester)
+            ->where('school_year_id', $batch->school_year_id)
+            ->with('school_year')
+            ->first();
 
         // Optimize query to reduce N+1 problem
         $disbursements = Disbursement::where('payout_id', $payout->id)
@@ -673,6 +691,12 @@ class CashierController extends Controller
         $payout = Payout::findOrFail($disbursement->payout_id);
         // Get the scholar to verify permissions
         $scholar = Scholar::findOrFail($disbursement->scholar_id);
+        $grantee = Grantees::where('batch_id', $disbursement->batch_id)
+            ->where('scholar_id', $scholar->id)
+            ->first();
+        $grantee->status = 'Accomplished';
+        $grantee->save();
+
         // Log the activity
         ActivityLog::create([
             'user_id' => Auth::user()->id,
@@ -784,6 +808,11 @@ class CashierController extends Controller
 
             // Get the payout for updating totals
             $payout = Payout::findOrFail($disbursement->payout_id);
+            $grantee = Grantees::where('batch_id', $disbursement->batch_id)
+                ->where('scholar_id', $scholar->id)
+                ->first();
+            $grantee->status = 'Accomplished';
+            $grantee->save();
 
             // Update disbursement status
             $disbursement->update([
@@ -842,6 +871,8 @@ class CashierController extends Controller
         $request->validate([
             'scanned_data' => 'required|string',
         ]);
+
+        dd('tite');
 
         try {
             // Decode the scanned QR data
@@ -1057,9 +1088,12 @@ class CashierController extends Controller
             $userPicture = User::where('id', $scholar->user_id)
                 ->first();
 
-            $disbursement = Disbursement::where('scholar_id', $scholar->id)
-                ->where('payout_id', $payout->id)
-                ->first();
+            if ($payout) {
+                $disbursement = Disbursement::where('scholar_id', $scholar->id)
+                    ->where('payout_id', $payout->id)
+                    ->first();
+            }
+
 
             if (!$userPicture) {
                 $userPicture = null;

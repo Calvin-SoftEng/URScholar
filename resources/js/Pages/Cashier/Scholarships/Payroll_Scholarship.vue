@@ -368,8 +368,18 @@
 
                         <!-- Forward Button -->
                         <div class="mt-4">
-                            <button type="submit"
+                            <button type="submit" v-if="batches.length != 0 && allAccomplished"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200">
+                                <span v-if="isSubmitting" class="flex items-center justify-center">
+                                    <div
+                                        class="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent mr-2">
+                                    </div>
+                                    Processing...
+                                </span>
+                                <span v-else>Forward All Batches</span>
+                            </button>
+                            <button disabled v-else
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50">
                                 <span v-if="isSubmitting" class="flex items-center justify-center">
                                     <div
                                         class="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent mr-2">
@@ -465,6 +475,7 @@ const props = defineProps({
     total_verified_grantees: Object,
     total_unverified_grantees: Object,
     payoutBatches: Array,
+    allAccomplished: Array,
 });
 
 // State
