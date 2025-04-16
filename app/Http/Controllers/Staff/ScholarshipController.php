@@ -106,7 +106,7 @@ class ScholarshipController extends Controller
         $grantees = null;
         if ($totalRequirements) {
             $grantees = $scholarship->grantees()
-                ->whereIn('status', ['Active', 'Pending', 'Accomplished'])
+                ->whereIn('status', ['Active', 'Pending', 'Accomplished', 'Inactive'])
                 ->where('batch_id', $batch->id)
                 ->where('semester', $request->input('selectedSem')) // Add this line
                 ->with('scholar.campus', 'scholar.course')
@@ -652,7 +652,10 @@ class ScholarshipController extends Controller
 
         $currentUser = Auth::user();
 
-        $allBatchesOriginal = Batch::where('scholarship_id', $scholarship->id)->get();
+        $allBatchesOriginal = Batch::where('scholarship_id', $scholarship->id)
+        ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+        ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+        ->get();
 
         $inactiveBatches = $allBatchesOriginal->every(fn($batch) => $batch->status === 'Inactive');
 

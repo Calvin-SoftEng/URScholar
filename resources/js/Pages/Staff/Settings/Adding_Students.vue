@@ -8,8 +8,51 @@
                     System Students
                 </h1>
                 <div class="text-3xl font-semibold text-gray-700">
-                    <span class="text-xl">Academic Year: {{ current_year.school_year.year || '2024' }} - {{ current_year.semester|| 'Semester'
-                    }} Semester</span>
+                    <span class="text-xl">Academic Year: {{ current_year.school_year.year || '2024' }} - {{
+                        current_year.semester || 'Semester'
+                        }} Semester</span>
+
+                    <div class="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label for="year-select"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">School
+                                Year</label>
+                            <Select v-model="selectedYear" required @update:modelValue="updateSemesters">
+                                <SelectTrigger class="w-full border">
+                                    <SelectValue placeholder="Select year" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup v-for="schoolyear in [...schoolyears].reverse()" :key="schoolyear.id">
+                                        <SelectItem :value="schoolyear.id">
+                                            {{ schoolyear.year }}
+                                            {{
+                                                schoolyear.id === current_year?.school_year?.id ? '(Current)' : ''
+                                            }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        <div>
+                            <label for="semester-select"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester</label>
+                            <Select v-model="selectedSem" required :disabled="!availableSemesters.length">
+                                <SelectTrigger class="w-full border">
+                                    <SelectValue placeholder="Select Semester" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem v-for="semester in availableSemesters" :key="semester.id"
+                                            :value="semester.semester">
+                                            {{ semester.semester === '1st' ? 'First Semester' : 'Second Semester' }}
+                                            {{ semester.status === 'Active' ? '(Active)' : '(Inactive)' }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="flex justify-end items-center w-full gap-3">
@@ -45,16 +88,40 @@
 
                 <div class="w-full mt-5">
                     <!-- Empty state message when no students are available -->
-                    <div v-if="!students || students.length === 0" class="flex flex-col items-center justify-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    <div v-if="!getSelectedAcademicYearId"
+                        class="flex flex-col items-center justify-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">Select an Academic Year
+                        </h3>
+                        <p class="text-gray-500 dark:text-gray-400 text-center max-w-md mb-6">Please select a school
+                            year and semester to view the student list.</p>
+                    </div>
+
+                    <!-- Empty state when academic year is selected but no students are found -->
+                    <div v-else-if="getSelectedAcademicYearId && filteredStudents.length === 0"
+                        class="flex flex-col items-center justify-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <svg class="w-16 h-16 text-gray-400 dark:text-gray-500 mb-4" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
                         <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No Students Available</h3>
-                        <p class="text-gray-500 dark:text-gray-400 text-center max-w-md mb-6">Upload the current year's student list to start managing your university students.</p>
+                        <p class="text-gray-500 dark:text-gray-400 text-center max-w-md mb-6">
+                            No students found for {{
+                                props.schoolyears.find(sy => sy.id === selectedYear)?.year || ''
+                            }} - {{
+                                selectedSem === '1st' ? 'First' : 'Second'
+                            }} Semester. Upload the student list to start managing your university students.
+                        </p>
                     </div>
 
                     <!-- Student table shown only when students are available -->
-                    <div v-else class="relative overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg w-full">
+                    <div v-else
+                        class="relative overflow-x-auto border border-gray-200 dark:border-gray-600 rounded-lg w-full">
                         <!-- Add an enclosing div for scroll functionality -->
                         <div class="overflow-x-auto w-full max-w-full">
                             <table
@@ -88,11 +155,11 @@
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.year_level }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.email }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.contact_no ?? 'N/A'
-                                            }}</td>
+                                                }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.permanent_address ??
                                                 'N/A' }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.facebook_account ?? 'N/A'
-                                            }}</td>
+                                                }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.birthplace ?? 'N/A' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.birthdate ?? 'N/A' }}
@@ -221,6 +288,7 @@ import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
 import InputError from '@/Components/InputError.vue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
 
 const dataOpenSideBar = inject('dataOpenSideBar');
@@ -239,6 +307,7 @@ const props = defineProps({
     students: Array,
     errors: Object,
     current_year: Object,
+    schoolyears: Array,
 });
 
 const directives = {
@@ -270,6 +339,106 @@ const toggleCreate = () => {
         resetForm();
     }
 };
+
+// Initialize selectedYear and selectedSem with the current active year values
+const selectedYear = ref(props.current_year?.school_year?.id || "");
+const selectedSem = ref(props.current_year?.semester || "");
+const availableSemesters = ref([]);
+
+// Computed property to get the currently active academic year ID
+const activeAcademicYearId = computed(() => {
+    if (props.current_year) {
+        return props.current_year.id;
+    }
+    return null;
+});
+
+const updateSemesters = () => {
+    if (!selectedYear.value) {
+        availableSemesters.value = [];
+        selectedSem.value = "";
+        return;
+    }
+
+    const selectedSchoolYear = props.schoolyears.find(sy => sy.id === selectedYear.value);
+    if (selectedSchoolYear && selectedSchoolYear.academic_year) {
+        // If academic_year is an array of semester objects
+        availableSemesters.value = Array.isArray(selectedSchoolYear.academic_year)
+            ? selectedSchoolYear.academic_year
+            : [selectedSchoolYear.academic_year];
+    } else {
+        availableSemesters.value = [];
+    }
+
+    // If no semester is selected yet, try to select active semester if available
+    if (!selectedSem.value && availableSemesters.value.length > 0) {
+        const activeSem = availableSemesters.value.find(sem => sem.status === 'Active');
+        if (activeSem) {
+            selectedSem.value = activeSem.semester;
+        } else {
+            selectedSem.value = availableSemesters.value[0].semester;
+        }
+    }
+};
+
+// Function to get the academic_year_id based on the selected year and semester
+const getSelectedAcademicYearId = computed(() => {
+    if (!selectedYear.value || !selectedSem.value) return null;
+
+    const selectedSchoolYear = props.schoolyears.find(sy => sy.id === selectedYear.value);
+    if (!selectedSchoolYear || !selectedSchoolYear.academic_year) return null;
+
+    const academicYears = Array.isArray(selectedSchoolYear.academic_year)
+        ? selectedSchoolYear.academic_year
+        : [selectedSchoolYear.academic_year];
+
+    const selectedAcademicYear = academicYears.find(ay => ay.semester === selectedSem.value);
+    return selectedAcademicYear ? selectedAcademicYear.id : null;
+});
+
+// Modified filteredStudents computed property to filter by academic year
+const filteredStudents = computed(() => {
+    const allStudents = props.students || [];
+    const academicYearId = getSelectedAcademicYearId.value;
+
+    // If no academic year is selected, return an empty array (don't show any students)
+    if (!academicYearId) {
+        return [];
+    }
+
+    // First filter by academic year
+    let filtered = allStudents.filter(student => student.academic_year_id === academicYearId);
+
+    // Then filter by search query
+    const query = searchQuery.value.toLowerCase();
+    if (query) {
+        filtered = filtered.filter(student =>
+            student.first_name?.toLowerCase().includes(query) ||
+            student.last_name?.toLowerCase().includes(query) ||
+            student.middle_name?.toLowerCase().includes(query) ||
+            student.email?.toLowerCase().includes(query) ||
+            student.student_number?.toLowerCase().includes(query) ||
+            student.course?.name?.toLowerCase().includes(query) ||
+            student.campus?.name?.toLowerCase().includes(query)
+        );
+    }
+
+    return filtered;
+});
+
+// Watch for changes to the selected year or semester to update the filtered list
+watch([selectedYear, selectedSem], () => {
+    currentPage.value = 1; // Reset to first page when filters change
+});
+
+// The rest of the pagination code remains the same
+const totalStudents = computed(() => filteredStudents.value.length);
+const totalPages = computed(() => Math.ceil(totalStudents.value / itemsPerPage));
+
+const paginatedStudents = computed(() => {
+    const startIdx = (currentPage.value - 1) * itemsPerPage;
+    return filteredStudents.value.slice(startIdx, startIdx + itemsPerPage);
+});
 
 const closeModal = () => {
     isCreating.value = false;
@@ -351,6 +520,10 @@ const activeateForm = async () => {
     }
 };
 
+// Initialize the available semesters based on the selected year
+watchEffect(() => {
+    updateSemesters();
+});
 
 // radix vue testing
 
@@ -376,32 +549,6 @@ watchEffect(() => {
 const currentPage = ref(1);
 const itemsPerPage = 10;
 const searchQuery = ref('');
-
-// Computed property for filtering students
-const filteredStudents = computed(() => {
-    const allStudents = props.students || [];
-
-    const query = searchQuery.value.toLowerCase();
-    return allStudents.filter(student =>
-        student.first_name?.toLowerCase().includes(query) ||
-        student.last_name?.toLowerCase().includes(query) ||
-        student.middle_name?.toLowerCase().includes(query) ||
-        student.email?.toLowerCase().includes(query) ||
-        student.course?.toLowerCase().includes(query) ||
-        student.campus?.toLowerCase().includes(query) ||
-        student.grant?.toLowerCase().includes(query) ||
-        student.urscholar_id?.toLowerCase().includes(query)
-    );
-});
-
-// Computed properties for pagination
-const totalStudents = computed(() => filteredStudents.value.length);
-const totalPages = computed(() => Math.ceil(totalStudents.value / itemsPerPage));
-
-const paginatedStudents = computed(() => {
-    const startIdx = (currentPage.value - 1) * itemsPerPage;
-    return filteredStudents.value.slice(startIdx, startIdx + itemsPerPage);
-});
 
 const startIndex = computed(() =>
     totalStudents.value === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1

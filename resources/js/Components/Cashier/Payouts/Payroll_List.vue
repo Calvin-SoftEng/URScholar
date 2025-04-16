@@ -71,8 +71,7 @@
                     {{ scholar.campus }}
                   </td>
                   <td>
-                    <!-- This would be filled with actual claim time data -->
-                    N/A
+                    {{formatDate(scholar.claimed_time)}}
                   </td>
                   <td>
                     <span 

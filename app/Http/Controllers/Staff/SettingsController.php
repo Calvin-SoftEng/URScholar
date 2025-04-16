@@ -52,9 +52,12 @@ class SettingsController extends Controller
 
         $currentUser = Auth::user();
 
+        $school_year = SchoolYear::with('academic_year')
+        ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
+        ->get();
+
         $students = Student::with('campus', 'course')
             ->where('campus_id', $currentUser->campus_id)
-            ->where('academic_year_id', $current_year->id)
             ->get();
 
 
@@ -63,7 +66,7 @@ class SettingsController extends Controller
             [
                 'students' => $students,
                 'current_year' => $current_year,
-
+                'schoolyears' => $school_year,
             ]
         );
     }

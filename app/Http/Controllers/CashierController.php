@@ -249,8 +249,6 @@ class CashierController extends Controller
         $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
 
 
-
-
         // Check if any batches are forwardable
         return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
             'scholarship' => $scholarship,
@@ -1034,7 +1032,21 @@ class CashierController extends Controller
             ->with('scholar.campus', 'scholar.course')
             ->get();
 
-        $scholars = $grantees->map(function ($grantee) {
+        $payout = Payout::where('scholarship_id', $scholarship->id)
+            ->when($request->input('selectedYear'), function ($query, $year) {
+                return $query->where('school_year_id', $year);
+            })
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->where('campus_id', $batch->campus_id) // Filter by campus
+            ->with('school_year')
+            ->first();
+
+        $selectedYear = $request->input('selectedYear');
+        $selectedSem = $request->input('selectedSem');
+
+
+
+        $scholars = $grantees->map(function ($grantee) use ($payout) {
             // Skip if there's no related scholar
             if (!$grantee->scholar) {
                 return null;
@@ -1045,7 +1057,9 @@ class CashierController extends Controller
             $userPicture = User::where('id', $scholar->user_id)
                 ->first();
 
-            $disbursement = Disbursement::where('scholar_id', $scholar->id)->first();
+            $disbursement = Disbursement::where('scholar_id', $scholar->id)
+                ->where('payout_id', $payout->id)
+                ->first();
 
             if (!$userPicture) {
                 $userPicture = null;
@@ -1064,18 +1078,13 @@ class CashierController extends Controller
                 'grant' => $scholar->grant,
                 'scholar_status' => $scholar->status,
                 'student_status' => $grantee->student_status,
+                'claimed_time' => $disbursement->claimed_at ?? null,
                 'claimed_status' => $disbursement->status ?? null,
                 'user' => [
                     'picture' => $scholar->user->picture ?? null
                 ],
             ];
         });
-
-        $payout = Payout::where('scholarship_id', $scholarship->id)
-            ->where('campus_id', $batch->campus_id) // Filter by campus
-            ->where('status', '!=', 'Inactive')
-            ->with('school_year')
-            ->first();
 
         if ($payout) {
             // Count total claimed disbursements
@@ -1087,7 +1096,6 @@ class CashierController extends Controller
             $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
                 ->first();
         }
-
 
 
         return Inertia::render('Cashier/Scholarships/Payouts', [
