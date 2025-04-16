@@ -15,13 +15,13 @@
 
                 <!-- Disbursements Card -->
                 <div class="bg-white shadow-md rounded-lg">
-                    <Disbursements />
+                    <Disbursements :payouts="payouts" :campuses="campuses" :scholarships="scholarships"/>
                 </div>
             </div>
 
             <!-- Right Column (70% width) -->
             <div class="bg-white shadow-md p-6 rounded-lg flex flex-col justify-between">
-                <Scholarships :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
+                <Scholarships :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
             </div>
         </div>
 
@@ -55,6 +55,8 @@ const props = defineProps({
     sponsor: Object,
     scholarships: Array,
     schoolyears: Array,
+    payouts: Array,
+    campuses: Array,
 });
 
 const grantBasedScholarships = computed(() =>

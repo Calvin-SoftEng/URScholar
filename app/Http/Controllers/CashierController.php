@@ -932,13 +932,23 @@ class CashierController extends Controller
     {
         $scholarships = Scholarship::all();
 
-        // Get payouts with date information
-        $payouts = Payout::where('campus_id', Auth::user()->campus_id)->get();
+        if (Auth::user()->usertype == 'head_cashier') {
+            // Get payouts with date information
+            $payouts = Payout::all();
 
-        // Get batches with school year and campus information
-        $batches = Batch::with(['school_year', 'campus'])
-            ->where('campus_id', Auth::user()->campus_id)
-            ->get();
+            // Get batches with school year and campus information
+            $batches = Batch::with(['school_year', 'campus'])
+                ->get();
+        } else {
+            // Get payouts with date information
+            $payouts = Payout::where('campus_id', Auth::user()->campus_id)->get();
+
+            // Get batches with school year and campus information
+            $batches = Batch::with(['school_year', 'campus'])
+                ->where('campus_id', Auth::user()->campus_id)
+                ->get();
+        }
+
 
         // Get all disbursements to track claims
         $disbursements = Disbursement::all();

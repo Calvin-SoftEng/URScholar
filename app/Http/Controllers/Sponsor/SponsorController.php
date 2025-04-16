@@ -48,20 +48,42 @@ class SponsorController extends Controller
 
         // Disbursement Listing
         $payout = Payout::whereIn('scholarship_id', $sponsor->scholarship->pluck('id'))
-            ->with(['campus'])
+            ->with([
+                'campus',
+                'scholarship',
+                'disbursement',
+                'school_year'
+            ])
+            ->get()
+            ->map(function ($payout) {
+                // Count disbursements by status
+                $disbursementCounts = $payout->disbursement->groupBy('status')
+                    ->map(function ($group) {
+                    return $group->count();
+                });
+
+                return array_merge($payout->toArray(), [
+                    'claimed_count' => $disbursementCounts['Claimed'] ?? 0,
+                    'pending_count' => $disbursementCounts['Pending'] ?? 0,
+                    'not_claimed_count' => $disbursementCounts['Not Claimed'] ?? 0
+                ]);
+            });
+
+        // Get all unique campuses
+        $campuses = Campus::whereIn('id', $payout->pluck('campus_id')->unique())
             ->get();
 
         $school_year = SchoolYear::with('academic_year')
-            ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
+            ->orderBy('id', 'asc')
             ->get();
 
         return Inertia::render('Sponsor/Dashboard', [
             'sponsor' => $sponsor,
             'scholarships' => $scholarship,
-            'payouts' => $payout,  // Don't forget to pass this to your view
+            'payouts' => $payout,
+            'campuses' => $campuses,
             'schoolyears' => $school_year,
         ]);
-
     }
 
     public function index()
@@ -267,9 +289,9 @@ class SponsorController extends Controller
                 $userVerified = User::where('id', $scholar->user_id)->first();
 
                 $grade = Grade::where('scholar_id', $scholar->id)
-                ->where('status', 'Active')
-                ->first();
-                
+                    ->where('status', 'Active')
+                    ->first();
+
                 // Determine status
                 $status = 'No submission';
                 if ($totalRequirements > 0) {

@@ -6,6 +6,8 @@ import ContentDashboard from '@/Pages/Sponsor/Dashboard/Content-Dashboard.vue';
 const props = defineProps({
     sponsor: Object,
     scholarships: Array,
+    payouts: Array,
+    campuses: Array,
     schoolyears: Array,
 });
 
@@ -17,7 +19,7 @@ const props = defineProps({
     <AuthenticatedLayout>
         <template #default>
             <!-- Your dashboard content goes here -->
-            <ContentDashboard class="w-full h-full dark:bg-dprimary" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
+            <ContentDashboard class="w-full h-full dark:bg-dprimary" :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
         </template>
     </AuthenticatedLayout>
 </template>
