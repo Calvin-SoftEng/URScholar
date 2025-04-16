@@ -19,7 +19,7 @@ return new class extends Migration {
             $table->foreignId('campus_id')->constrained()->onDelete('cascade');
             $table->string('total_scholars')->nullable();
             $table->string('sub_total')->nullable();
-            $table->enum('status', ['Active', 'Inactive', 'Pending'])->default('Pending');
+            $table->enum('status', ['Active', 'Inactive', 'Pending', 'Accomplished'])->default('Pending');
             $table->boolean('validated')->default(false);
             $table->boolean('read')->default(false);
             $table->timestamps();

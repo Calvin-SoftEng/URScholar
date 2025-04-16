@@ -23,6 +23,7 @@ use App\Models\Course;
 use App\Models\Batch;
 use App\Models\Message;
 use App\Models\Notifier;
+use App\Models\ScholarshipTemplate;
 use App\Models\Notification;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
@@ -56,6 +57,8 @@ class StudentController extends Controller
         $grantee = Grantees::where('scholar_id', $scholar->id)
             ->with('school_year')
             ->first();
+
+        $academic_year = AcademicYear::where('status', 'Active')->first();
 
         if ($grantee) {
             $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
@@ -151,8 +154,8 @@ class StudentController extends Controller
                     ->get();
 
                 $total_subreq = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->whereIn('requirement_id', $requirementIds)
-                ->get();
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
 
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
@@ -168,6 +171,7 @@ class StudentController extends Controller
                     'total_subreq' => $total_subreq,
                     'payout_schedule' => $payout_schedule,
                     'reqDeadline' => $reqDeadline,
+                    'academic_year' => $academic_year,
                 ]);
             }
         }
@@ -254,8 +258,8 @@ class StudentController extends Controller
                 $submitApproved = $approvedCount === $totalCount;
 
                 $total_subreq = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->whereIn('requirement_id', $requirementIds)
-                ->get();
+                    ->whereIn('requirement_id', $requirementIds)
+                    ->get();
 
 
                 return Inertia::render('Student/Dashboard/Dashboard', [
@@ -272,6 +276,7 @@ class StudentController extends Controller
                     'submitApproved' => $submitApproved,
                     'reqDeadline' => $reqDeadline,
                     'total_subreq' => $total_subreq,
+                    'academic_year' => $academic_year,
                 ]);
             }
         }
@@ -286,7 +291,7 @@ class StudentController extends Controller
             'grade' => $grade,
             'campuses' => $campuses,
             'courses' => $courses,
-
+            'academic_year' => $academic_year,
         ]);
     }
 
@@ -459,8 +464,11 @@ class StudentController extends Controller
             $newFileName
         );
 
+        $academic_year = AcademicYear::where('status', 'Active')->first();
+
         $testing = Grade::create([
             'scholar_id' => $scholar->id,
+            'academic_year_id' => $academic_year->id,
             'grade' => $request->grade,
             'cog' => $originalFileName,
             'path' => $filePath,
@@ -920,8 +928,11 @@ class StudentController extends Controller
                 $newFileName
             );
 
+            $academic_year = AcademicYear::where('status', 'Active')->first();
+
             $testing = Grade::create([
                 'scholar_id' => $scholar->id,
+                'academic_year_id' => $academic_year->id,
                 'grade' => $request->grade,
                 'cog' => $originalFileName,
                 'path' => $filePath,
@@ -1205,6 +1216,8 @@ class StudentController extends Controller
 
         $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
 
+        $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
+
         $reqID = $requirements->pluck('id')->first();
 
         $submitRequirements = SubmittedRequirements::where('id', $reqID)->exists();
@@ -1214,6 +1227,7 @@ class StudentController extends Controller
             'scholarship' => $scholarship,
             'scholar' => $scholar,
             'requirements' => $requirements,
+            'templates' => $templates,
         ]);
 
     }
@@ -1238,12 +1252,14 @@ class StudentController extends Controller
         $education = EducationRecord::where('student_record_id', $student->id)->first();
         $family = FamilyRecord::where('student_record_id', $student->id)->first();
         $siblings = SiblingRecord::where('family_record_id', $family->id)->get();
+        $academic_year = AcademicYear::where('status', 'Active')->first();
 
 
 
         if ($scholar) {
             $grades = Grade::where('scholar_id', $scholar->id)->with('school_year')->get();
             $latestgrade = Grade::where('scholar_id', $scholar->id)
+                ->where('academic_year_id', '>=', $academic_year->id)
                 ->with('school_year')
                 ->latest()
                 ->first();
@@ -1289,28 +1305,54 @@ class StudentController extends Controller
 
         if ($scholar) {
             $grantee = Grantees::where('scholar_id', $scholar->id)
-            ->where('status', '!=' ,'Inactive')
-            ->first();
+                ->where('status', '!=', 'Inactive')
+                ->first();
 
             // Get the batch semester logic
             $grantee_semester = null;
             $grantee_school_year_id = null;
 
             if ($grantee) {
-                if ($grantee->semester == '2nd') {
-                    $grantee_semester = '1st';
-                    $grantee_school_year_id = $grantee->school_year_id; // Keep the same school year
+                // if ($grantee->semester == '2nd') {
+                //     $grantee_semester = '1st';
+                //     $grantee_school_year_id = $grantee->school_year_id; // Keep the same school year
 
-                } elseif ($grantee->semester == '1st') {
-                    $grantee_semester = '2nd';
+                // } elseif ($grantee->semester == '1st') {
+                //     $grantee_semester = '2nd';
 
-                    // Adjust the school year based on the current year
-                    if ($grantee->school_year_id == 1) {
-                        $grantee_school_year_id = 1; // First school year
-                    } else {
-                        $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
+                //     // Adjust the school year based on the current year
+                //     if ($grantee->school_year_id == 1) {
+                //         $grantee_school_year_id = 1; // First school year
+                //     } else {
+                //         $grantee_school_year_id = $grantee->school_year_id - 1; // Previous school year
+                //     }
+                // }
+                // If no scholar is found, get the most recent academic year
+                $academic_year = AcademicYear::orderBy('id', 'desc')->first();
+
+                // Apply similar logic as for scholars to determine semester and school year
+                $grantee_semester = null;
+                $grantee_school_year_id = null;
+
+                if ($academic_year) {
+                    if ($academic_year->semester == '2nd') {
+                        $grantee_semester = '1st';
+                        $grantee_school_year_id = $academic_year->school_year_id; // Keep the same school year
+
+                    } elseif ($academic_year->semester == '1st') {
+                        $grantee_semester = '2nd';
+
+                        // Adjust the school year based on the current year
+                        if ($academic_year->school_year_id == 1) {
+                            $grantee_school_year_id = 1; // First school year
+                        } else {
+                            $grantee_school_year_id = $academic_year->school_year_id - 1; // Previous school year
+                        }
                     }
                 }
+
+                // Fetch the school year from the database using the calculated school year ID
+                $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
             } else {
                 // If no scholar is found, get the most recent academic year
                 $academic_year = AcademicYear::orderBy('id', 'desc')->first();
@@ -1366,6 +1408,7 @@ class StudentController extends Controller
             'semesterGrade' => $grantee_semester,
             'schoolyear_grade' => $school_year,
             'notify' => $notify,
+            'academic_year' => $academic_year,
         ]);
     }
 

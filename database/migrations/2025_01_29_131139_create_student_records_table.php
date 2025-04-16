@@ -44,6 +44,7 @@ return new class extends Migration
         Schema::create('grades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
+            $table->foreignId('academic_year_id')->constrained()->onDelete('cascade');
             $table->decimal('grade')->nullable();
             $table->string('cog')->nullable();
             $table->string('path');

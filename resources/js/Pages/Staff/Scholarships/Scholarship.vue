@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -256,8 +256,8 @@
                                     <!-- Forward to Sponsor -->
                                     <div>
                                         <button @click="toggleForwardSponsor"
-                                            :disabled="inactiveBatches && !payouts || granteeInactive"
-                                            v-tooltip.left="inactiveBatches ? 'Batches sent to Sponsor' : 'Payouts sent to Sponsor'"
+                                            :disabled="accomplishedBatches  && !payouts"
+                                            v-tooltip.left="accomplishedBatches ? 'Batches sent to Sponsor' : 'Payouts sent to Sponsor'"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                                             hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
                                             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
@@ -266,8 +266,8 @@
                                         </button>
                                     </div>
                                     <!-- Forward to Cashier -->
-                                    <div v-if="allBatchesInactive">
-                                        <div v-if="completedBatches == batches.length">
+                                    <div v-if="accomplishedBatches">
+                                        <div v-if="accomplishedBatches && !payouts">
                                             <button @click="toggleSendBatch"
                                                 class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                                 <font-awesome-icon :icon="['fas', 'share-from-square']"
@@ -359,7 +359,6 @@
                                             Campus</h3>
 
                                         <!-- Display scholarship status for this campus -->
-
                                         <div v-if="campusData.batches?.some(batch => batch.validated === false) || campusData.batches?.some(batch => batch.status === 'Pending') && campusData.batches.some(batch => batch.campus_id !== $page.props.auth.user.campus_id)
                                         " class="mb-4">
                                             <div
@@ -548,7 +547,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -560,7 +559,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -663,7 +662,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -866,7 +865,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1129,57 +1128,6 @@
                 <!-- Form -->
                 <form @submit.prevent="forwardBatches">
                     <div class="py-4 px-8 flex flex-col gap-3">
-                        <div class="mb-4">
-                            <label for="batchSelection"
-                                class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                                Select a Date:
-                            </label>
-
-                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
-
-                                <div class="flex flex-col w-full">
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                viewBox="0 0 20 20">
-                                                <path
-                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                            </svg>
-                                        </div>
-                                        <InputError v-if="errors?.date_start" :message="errors.date_start"
-                                            class=" text-red-500" />
-                                        <input v-model="StartPayout" id="datepicker-range-start" name="start"
-                                            type="text" autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Submission Start Date">
-                                    </div>
-                                </div>
-
-                                <span class="text-gray-500">to</span>
-
-                                <div class="flex flex-col w-full">
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                viewBox="0 0 20 20">
-                                                <path
-                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                            </svg>
-                                        </div>
-                                        <InputError v-if="errors?.date_end" :message="errors.date_end"
-                                            class=" text-red-500" />
-                                        <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text"
-                                            autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Submission Start Date">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
 
                         <label for="batchSelection"
                             class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
@@ -1506,37 +1454,39 @@
                         </div>
 
                         <!-- Batch List -->
-                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
-                            class="flex flex-col divide-y divide-gray-300">
-                            <p>
-                                {{ campusData.campus.name }}
-                            </p>
-                            <div v-for="batch in campusData.batches" :key="batch.id"
-                                class="py-3 px-4 flex justify-between items-center">
-                                <div>
-                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1
-                                    </p>
-                                    <p v-if="batch.validated" class="text-sm text-gray-500">
-                                        {{batch.grantees.filter(grantee => grantee.scholar?.status ===
-                                        'Verified').length }}
-                                        Enrolled,
-                                        {{batch.grantees.filter(grantee => grantee.scholar?.status ===
-                                        'Unverified').length }}
-                                        Unenrolled
-                                    </p>
-                                    <p v-else class="text-sm text-gray-500">
-                                        Validating...
-                                    </p>
+                        <div v-else>
+                            <div v-for="(campusData, campusId) in batchesByCampus"
+                                :key="campusId" class="flex flex-col divide-y divide-gray-300">
+                                <p>
+                                    {{ campusData.campus.name }}
+                                </p>
+                                <div v-for="batch in campusData.batches" :key="batch.id"
+                                    class="py-3 px-4 flex justify-between items-center">
+                                    <div>
+                                        <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{ batch.batch_no }}
+                                        </p>
+                                        <p v-if="batch.validated" class="text-sm text-gray-500">
+                                            {{batch.grantees.filter(grantee => grantee.scholar?.status ===
+                                                'Verified').length}}
+                                            Enrolled,
+                                            {{batch.grantees.filter(grantee => grantee.scholar?.status ===
+                                                'Unverified').length}}
+                                            Unenrolled
+                                        </p>
+                                        <p v-else class="text-sm text-gray-500">
+                                            Validating...
+                                        </p>
+                                    </div>
+                                    <span
+                                        :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                        {{batch.sub_total === batch.total_scholars
+                                            ? 'Ready to Send' : 'Incomplete'
+                                        }}
+                                    </span>
                                 </div>
-                                <span
-                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch => batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id) ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                    {{batch.sub_total === batch.total_scholars || (campusData.batches?.some(batch =>
-                                        batch.status === 'Inactive') || batch.campus_id == $page.props.auth.user.campus_id)
-                                        ? 'Ready to Send' : 'Incomplete'
-                                    }}
-                                </span>
                             </div>
                         </div>
+
 
                         <!-- <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
                             class="flex flex-col divide-y divide-gray-300">
@@ -1562,7 +1512,7 @@
                         </div> -->
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length && allInactive" class="mt-4">
+                        <div v-if="completedBatches === batches.length || accomplishedBatches" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 @click="forwardSponsor"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1596,7 +1546,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not
@@ -1762,6 +1712,7 @@ const props = defineProps({
     allBatches: Array,
     disableSendEmailButton: Boolean,
     inactiveBatches: Boolean,
+    accomplishedBatches: Boolean,
     inactivePayouts: Boolean,
     hasActiveGrantees: Boolean,
     valitedScholars: Boolean,
@@ -2675,68 +2626,68 @@ const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
 
 const selectedReportTypes = ref([]);
 
-// Generate Reports handler
-const handleGenerateReports = () => {
-    if (selectedReportTypes.value.includes('Scholars List')) {
-        generateScholarsList()
-    }
-    if (selectedReportTypes.value.includes('Enrolled List')) {
-        generateEnrolledList()
-    }
-    if (selectedReportTypes.value.includes('Graduate List')) {
-        generateGraduateList()
-    }
-    if (selectedReportTypes.value.includes('Payroll')) {
-        generatePayroll()
-    }
-}
+// // Generate Reports handler
+// const handleGenerateReports = () => {
+//     if (selectedReportTypes.value.includes('Scholars List')) {
+//         generateScholarsList()
+//     }
+//     if (selectedReportTypes.value.includes('Enrolled List')) {
+//         generateEnrolledList()
+//     }
+//     if (selectedReportTypes.value.includes('Graduate List')) {
+//         generateGraduateList()
+//     }
+//     if (selectedReportTypes.value.includes('Payroll')) {
+//         generatePayroll()
+//     }
+// }
 
 
-const GenerateReport = ref(false);
+// const GenerateReport = ref(false);
 
-const generateReportModal = () => {
-    GenerateReport.value = !GenerateReport.value;
-}
+// const generateReportModal = () => {
+//     GenerateReport.value = !GenerateReport.value;
+// }
 
 
-// Generate report function
-const generateScholarsList = async () => {
-    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
+// // Generate report function
+// const generateScholarsList = async () => {
+//     window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
 
-};
+// };
 
-const generateEnrolledList = async () => {
-    try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
-    }
-};
+// const generateEnrolledList = async () => {
+//     try {
+//         // Open PDF report in new tab
+//         window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
+//         showToast('Report Generated', 'Your report is being downloaded');
+//     } catch (err) {
+//         console.error('Failed to generate report:', err);
+//         showToast('Error', 'Failed to generate report', 'error');
+//     }
+// };
 
-const generateGraduateList = async () => {
-    try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
-    }
-};
+// const generateGraduateList = async () => {
+//     try {
+//         // Open PDF report in new tab
+//         window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
+//         showToast('Report Generated', 'Your report is being downloaded');
+//     } catch (err) {
+//         console.error('Failed to generate report:', err);
+//         showToast('Error', 'Failed to generate report', 'error');
+//     }
+// };
 
-const generatePayroll = async () => {
-    try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
-    }
-};
+// const generatePayroll = async () => {
+//     try {
+//         // Open PDF report in new tab
+//         window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
+//         showToast('Report Generated', 'Your report is being downloaded');
+//     } catch (err) {
+//         console.error('Failed to generate report:', err);
+//         showToast('Error', 'Failed to generate report', 'error');
+//     }
+// };
 
 </script>
 

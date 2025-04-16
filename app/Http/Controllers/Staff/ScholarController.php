@@ -296,6 +296,7 @@ class ScholarController extends Controller
 
         // Find the scholar by ID
         $scholar = Scholar::findOrFail($id);
+        $originalStatus = $scholar->student_status; // Store original status for comparison
 
         if ($scholar->student_status == 'Unenrolled' && $validated['status'] == 'Enrolled') {
             // Update the scholar's status
@@ -342,11 +343,22 @@ class ScholarController extends Controller
         $batch = Batch::find($grantee->batch_id);
 
         if ($batch) {
+            // Decrease total_scholars count if status changed to Dropped or Graduated from any other status
+            if (
+                in_array($validated['status'], ['Dropped', 'Graduated']) &&
+                $originalStatus !== 'Dropped' && $originalStatus !== 'Graduated'
+            ) {
+                // Only decrease if the total is greater than 0
+                if ($batch->total_scholars > 0) {
+                    $batch->total_scholars = $batch->total_scholars - 1;
+                }
+            }
+
             $totalGranteesInBatch = Grantees::where('batch_id', $batch->id)->count();
 
             // Check for "Inactive" condition - all grantees are either 'Graduated' or 'Dropped'
             $completedGrantees = Grantees::where('batch_id', $batch->id)
-                ->whereIn('student_status', ['Graduated', 'Dropped'])
+                ->whereIn('student_status', ['Graduated', 'Dropped', 'Enrolled'])
                 ->count();
 
             // Check for "validated" condition - all grantees are 'Graduated', 'Dropped', or 'Enrolled'
@@ -357,20 +369,17 @@ class ScholarController extends Controller
             // If all grantees have either 'Graduated' or 'Dropped' status, set batch status to 'Inactive'
             if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $completedGrantees) {
                 $batch->status = 'Inactive';
+
+                if (Auth::user()->usertype == 'super_admin') {
+                    $batch->validated = true;
+                }
+
             }
-
-            // if (Auth::user()->usertype == 'super_admin') {
-            //     // If all grantees have 'Graduated', 'Dropped', or 'Enrolled' status, set validated to true
-            //     if ($totalGranteesInBatch > 0 && $totalGranteesInBatch == $validatedGrantees) {
-            //         $batch->validated = true;
-            //     }
-
-            // }
 
             $batch->save();
         }
 
-        return response()->json(['message' => 'Student status updated successfully']);
+        return back()->with(['message' => 'Student status updated successfully']);
     }
 
     public function updateApplicant(Request $request)
@@ -897,9 +906,14 @@ class ScholarController extends Controller
                         'school_year_id' => $request->schoolyear,
                         'semester' => $request->semester,
                         'campus_id' => $campusId,
+                        'total_scholars' => count($scholarIds), // Set initial count
                     ]);
                     $campusBatches[$campusId] = $batch;
                 } else {
+                    // Use existing batch and increase total_scholars count
+                    $existingBatch->update([
+                        'total_scholars' => $existingBatch->total_scholars + count($scholarIds)
+                    ]);
                     $campusBatches[$campusId] = $existingBatch;
                 }
 
@@ -927,13 +941,10 @@ class ScholarController extends Controller
                     Grantees::insert($granteesData);
                 }
 
-                // Update the batch total scholars
-                $campusBatches[$campusId]->update([
-                    'total_scholars' => count($scholarIds)
-                ]);
+                // No need to update total_scholars here since we've already set it correctly above
 
                 // CHECK IF ALL GRANTEES IN THIS BATCH HAVE ENROLLED STATUS
-// Only proceed with validation if the batch's campus matches the authenticated user's campus
+                // Only proceed with validation if the batch's campus matches the authenticated user's campus
                 if ($campusId == Auth::user()->campus_id) {
                     // Get all grantees for this batch
                     $batchGrantees = Grantees::where('batch_id', $campusBatches[$campusId]->id)->get();

@@ -52,7 +52,7 @@
                                 :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :historygrantee="historygrantee"
                                 :disbursement="disbursement" :grantee="grantee" :oldestGrantee="oldestGrantee"
-                                :submitApproved="submitApproved" :total_subreq="total_subreq"/>
+                                :submitApproved="submitApproved" :total_subreq="total_subreq" :academic_year="academic_year"/>
                         </div>
                     </div>
 
@@ -67,7 +67,7 @@
                             <ScholarAppliant :reqDeadline="reqDeadline" :payout_schedule="payout_schedule"
                                 :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :applicant="applicant"
-                                :submitApproved="submitApproved" :total_subreq="total_subreq" />
+                                :submitApproved="submitApproved" :total_subreq="total_subreq" :academic_year="academic_year" />
                         </div>
                     </div>
                 </div>
@@ -133,6 +133,7 @@ const props = defineProps({
     oldestGrantee: Object,
     payout_schedule: Object,
     reqDeadline: Object,
+    academic_year: Object,
 
     //For non-scholars only
     sponsors: {

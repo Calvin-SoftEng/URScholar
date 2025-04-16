@@ -1,5 +1,6 @@
 <template>
-    <div class="bg-white w-full flex-grow min-h-0 p-5 gap-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col overflow-hidden">
+    <div
+        class="bg-white w-full flex-grow min-h-0 p-5 gap-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col overflow-hidden">
 
         <!-- Header with Filter -->
         <div class="flex justify-between items-center">
@@ -41,57 +42,48 @@
                             <th>URScholar ID</th>
                             <th>Name</th>
                             <th>Scholarship</th>
-                            <th v-if="selectedScholarshipType === 'Need-Based'">Submitted Requirements</th>
                             <th>Status</th>
                             <th>Date Claimed</th>
                             <th>Remarks</th>
                             <th></th>
                         </tr>
                     </thead>
+                    <!-- Replace the table body with this -->
                     <tbody>
-                        <tr v-for="scholar in latestSubmissions" :key="scholar.id" class="text-sm">
-                            <td>{{ scholar.urscholar_id }}</td>
+                        <tr v-for="disbursement in latestPayouts" :key="disbursement.id" class="text-sm">
+                            <td>{{ disbursement.urscholar_id }}</td>
                             <td>
                                 <div class="flex items-center gap-3">
                                     <div>
                                         <div class="font-normal">
-                                            {{ scholar.first_name }} {{ scholar.last_name }}
-                                            <span v-if="scholar.status === 'Verified'"
+                                            {{ disbursement.first_name }} {{ disbursement.last_name }}
+                                            <span v-if="disbursement.status === 'Claimed'"
                                                 class="material-symbols-rounded text-sm text-blue-600">verified</span>
                                         </div>
-                                        <div class="text-sm opacity-50">{{ scholar.campus }}</div>
+                                        <div class="text-sm opacity-50">{{ disbursement.campus }}</div>
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ scholar.scholarship_name }}</td>
-                            <td v-if="selectedScholarshipType === 'Need-Based'">
-                                <div class="flex items-center">
-                                    <div class="w-full bg-gray-200 rounded-full h-2.5 mr-2">
-                                        <div class="bg-blue-600 h-2.5 rounded-full"
-                                            :style="{ width: scholar.progress + '%' }"></div>
-                                    </div>
-                                    <span>{{ scholar.submittedRequirements }}/{{ scholar.totalRequirements }}</span>
-                                </div>
-                            </td>
+                            <td>{{ disbursement.scholarship_name }}</td>
                             <td>
                                 <span :class="{
-                                    'text-green-600': scholar.status === 'Verified',
-                                    'text-yellow-500': scholar.status === 'Pending',
-                                    'text-red-600': scholar.status === 'Rejected'
+                                    'text-green-600': disbursement.status === 'Claimed',
+                                    'text-yellow-500': disbursement.status === 'Pending',
+                                    'text-red-600': disbursement.status === 'Not Claimed'
                                 }">
-                                    {{ scholar.status }}
+                                    {{ disbursement.status }}
                                 </span>
                             </td>
-                            <td>{{ formatDate(scholar.submission_date) }}</td>
-                            <td>{{ scholar.remarks || 'N/A' }}</td>
+                            <td>{{ formatDate(disbursement.submission_date) }}</td>
+                            <td>{{ disbursement.remarks || 'N/A' }}</td>
                             <td>
                                 <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700">
                                     View
                                 </button>
                             </td>
                         </tr>
-                        <tr v-if="latestSubmissions.length === 0">
-                            <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7" class="text-center py-4 dark:text-dtext">No
+                        <tr v-if="latestPayouts.length === 0">
+                            <td colspan="7" class="text-center py-4 dark:text-dtext">No
                                 recent payouts found</td>
                         </tr>
                     </tbody>
@@ -131,7 +123,7 @@ import { ref, computed, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 
 const props = defineProps({
-    scholars: {
+    disbursements: {
         type: Array,
         default: () => []
     }
@@ -141,27 +133,19 @@ const props = defineProps({
 const selectedDateFilter = ref('day');
 const selectedScholarshipType = ref('Grant-Based');
 
-// Get latest submissions from props or page data
+// Get page data first
 const page = usePage();
-const scholars = computed(() => {
-    return props.scholars.length > 0
-        ? props.scholars
-        : (page.props.scholars || []);
+
+// Get disbursements from props or page data
+const disbursements = computed(() => {
+    return props.disbursements.length > 0
+        ? props.disbursements
+        : (page.props.disbursements || []);
 });
 
-// Filter scholars based on scholarship type
-const latestSubmissions = computed(() => {
-    const dateFiltered = filterByDate(scholars.value);
-
-    // Apply scholarship type filter
-    return selectedScholarshipType.value === "Grant-Based"
-        ? dateFiltered.filter(scholar => scholar.scholarshipType === "Grant-Based")
-        : dateFiltered.filter(scholar => scholar.scholarshipType === "One-time Payment");
-});
-
-// Function to filter scholars by date
-const filterByDate = (scholars) => {
-    if (!scholars || scholars.length === 0) return [];
+// Function to filter disbursements by date
+const filterByDate = (disbursementsToFilter) => {
+    if (!disbursementsToFilter || disbursementsToFilter.length === 0) return [];
 
     const now = new Date();
     let startDate = new Date();
@@ -178,11 +162,29 @@ const filterByDate = (scholars) => {
             break;
     }
 
-    return scholars.filter(scholar => {
-        const submissionDate = new Date(scholar.submission_date);
-        return submissionDate >= startDate && submissionDate <= now;
-    }).slice(0, 5); // Get top 5
+    return disbursementsToFilter.filter(disbursement => {
+        // Use claimed_at date for filtering
+        const claimedDate = disbursement.submission_date ? new Date(disbursement.submission_date) : null;
+
+        // If not claimed, use created_at instead
+        if (!claimedDate) return false;
+
+        return claimedDate >= startDate && claimedDate <= now;
+    });
 };
+
+// Now use the disbursements computed property in latestPayouts 
+const latestPayouts = computed(() => {
+    const dateFiltered = filterByDate(disbursements.value);
+
+    // Apply scholarship type filter
+    return selectedScholarshipType.value === "Grant-Based"
+        ? dateFiltered.filter(disbursement => disbursement.grant_type === "Grant-Based")
+        : dateFiltered.filter(disbursement => disbursement.grant_type === "One-time Payment");
+});
+
+// For pagination
+const scholars = computed(() => latestPayouts.value || []);
 
 // Analytics
 const totalApplicants = computed(() => scholars.value.length);

@@ -279,11 +279,12 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
     Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'all_payouts'])->name('cashier.all_payouts');
     Route::post('/cashier/scholarship/forward-batches', [CashierController::class, 'forward'])->name('cashier.forward');
 
-    Route::get('/cashier/scholarships/{payout}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
+    Route::get('/cashier/payouts/{payout}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
     Route::post('/cashier/scholarships/{scholarshipId}/forward', [CashierController::class, 'forward_payout'])->name('cashier.forward_payout');
 
     Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
     Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/submit-reason', [CashierController::class, 'submitReason'])->name('cashier.submit-reason');
+    Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/manual-claim', [CashierController::class, 'manualClaim'])->name('cashier.manual-claim');
 
     Route::post('/cashier/verify-qr', [CashierController::class, 'verifyQr'])->name('cashier.verify_qr');
     Route::post('/cashier/confirm-claim', [CashierController::class, 'confirmClaim'])->name('cashier.confirmClaim');
@@ -294,7 +295,7 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
     Route::get('/cashier/payouts', [CashierController::class, 'payouts_index'])->name('cashier.payouts_index');
     Route::get('/cashier/payout/{scholarshipId}/batch/{batchId}', [CashierController::class, 'payouts_disbursement'])->name('cashier.payouts_disbursement');
 
-    Route::get('/cashier/pending-payouts', [CashierController::class, 'pending_payouts'])->name('cashier.pending_payouts');
+    Route::get('/cashier/pending-payouts/{scholarshipId}/batch/{batchId}', [CashierController::class, 'pending_payouts'])->name('cashier.pending_payouts');
 
 });
 

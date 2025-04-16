@@ -33,7 +33,7 @@
                     <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <button v-for="scholarship in scholarships" :key="scholarship.id" class="w-full h-full">
                             <div v-for="payout in getPayoutsForScholarship(scholarship.id)" :key="payout.id">
-                                <Link :href="`/cashier/scholarships/${payout.id}`" class="block h-full">
+                                <Link :href="`/cashier/payouts/${payout.id}`" class="block h-full">
                                 <div class="card relative border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer 
                                             dark:border-gray-600 dark:hover:border-gray-400 flex flex-col h-full">
                                     <div class="card-body p-5 space-y-2 flex flex-col flex-grow">

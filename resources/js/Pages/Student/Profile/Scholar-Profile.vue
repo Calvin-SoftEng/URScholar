@@ -307,7 +307,7 @@
                                     class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-1 gap-4">
-                                        <div>
+                                        <div v-if="mother.first_name !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person-dress']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -325,7 +325,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div>
+                                        <div v-if="father.first_name !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -1314,7 +1314,7 @@
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-2 gap-4">
                                         
-                                        <div v-if="mother !== 'n\/a'">
+                                        <div v-if="mother.first_name !== 'n\/a'">
                                             <div class="w-full flex flex-row items-center gap-2 py-2">
                                                 <font-awesome-icon :icon="['fas', 'person-dress']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -1351,7 +1351,7 @@
                                                     Family
                                                     Income</span>
                                                 <span
-                                                    class="text-gray-900 text-3xl font-semibold leading-tight">100,000</span>
+                                                    class="text-gray-900 text-3xl font-semibold leading-tight">{{family.monthly_income}}</span>
                                             </div>
                                         </div>
                                         <div v-if="father.first_name !== 'n\/a'">
@@ -2289,7 +2289,8 @@ const props = defineProps({
     semesterGrade: Object,
     schoolyear_grade: Object,
     notify: Object,
-    user: Object
+    user: Object,
+    academic_year: Object
 });
 
 

@@ -11,6 +11,8 @@ use App\Models\Campus;
 use App\Models\Notification;
 use App\Models\Page;
 use App\Models\Posting;
+use App\Models\Scholar;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -32,14 +34,102 @@ class FeedController extends Controller
 
     public function grantee_feed()
     {
-        $scholarships = Scholarship::all();
-        $batches = Batch::with('scholarship')->get();
-        $campuses = Campus::all();
+        // Get the authenticated user's scholar information
+        $user = Auth::user();
+        $scholar = Scholar::where('user_id', $user->id)->first();
+
+        if (!$scholar) {
+            return Inertia::render('Student/Communication/Feed', [
+                'scholarships' => Scholarship::all(),
+                'batches' => Batch::with('scholarship')->get(),
+                'campuses' => Campus::all(),
+                'posts' => []
+            ]);
+        }
+
+        // Get the grantee records for this scholar
+        $grantees = Grantees::where('scholar_id', $scholar->id)->get();
+
+        // Collect the specific batch IDs and their associated campus IDs that this scholar belongs to
+        $scholarBatchCampusPairs = [];
+        foreach ($grantees as $grantee) {
+            // Get the batch
+            $batch = Batch::find($grantee->batch_id);
+            if ($batch) {
+                // Store batch ID and its associated campus ID
+                $scholarBatchCampusPairs[] = [
+                    'batch_id' => $batch->id,
+                    'campus_id' => $batch->campus_id
+                ];
+            }
+        }
+
+        // Find pages that match the scholar's batch AND campus combinations
+        $pages = Page::get()->filter(function ($page) use ($scholarBatchCampusPairs) {
+            // Decode JSON arrays
+            $pageBatchIds = json_decode($page->batch_ids);
+            $pageCampusIds = json_decode($page->campus_ids);
+
+            // Check for a match in any of the scholar's batch-campus pairs
+            foreach ($scholarBatchCampusPairs as $pair) {
+                // This page is relevant if it contains both the batch_id and its associated campus_id
+                if (in_array($pair['batch_id'], $pageBatchIds) && in_array($pair['campus_id'], $pageCampusIds)) {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        // Format the pages data for the Vue component
+        $formattedPosts = $pages->map(function ($page) {
+            // Find the latest posting for this page
+            $posting = Posting::where('page_id', $page->id)
+                ->latest()
+                ->first();
+
+            // Get user who created the posting
+            $user = $posting ? User::find($posting->user_id) : User::find($page->user_id);
+
+            // Decode JSON arrays
+            $scholarshipIds = json_decode($page->scholarship_ids);
+            $batchIds = json_decode($page->batch_ids);
+            $campusIds = json_decode($page->campus_ids);
+
+            // Get scholarship names
+            $scholarships = Scholarship::whereIn('id', $scholarshipIds)->pluck('name')->toArray();
+
+            // Get batch details
+            $batches = Batch::whereIn('id', $batchIds)->get()->map(function ($batch) {
+                return [
+                    'name' => 'Batch ' . $batch->batch_no,
+                    'id' => $batch->id
+                ];
+            })->toArray();
+
+            // Get campus names
+            $campuses = Campus::whereIn('id', $campusIds)->pluck('name')->toArray();
+
+            return [
+                'id' => $page->id,
+                'content' => $posting ? $posting->content : 'No content',
+                'created_at' => $posting ? $posting->created_at->diffForHumans() : $page->created_at->diffForHumans(),
+                'user' => [
+                    'name' => $user->name ?? 'Unknown User',
+                    'id' => $user->id
+                ],
+                'filters' => [
+                    'scholarships' => $scholarships,
+                    'batches' => $batches,
+                    'campuses' => $campuses
+                ]
+            ];
+        });
 
         return Inertia::render('Student/Communication/Feed', [
-            'scholarships' => $scholarships,
-            'batches' => $batches,
-            'campuses' => $campuses,
+            'scholarships' => Scholarship::all(),
+            'batches' => Batch::with('scholarship')->get(),
+            'campuses' => Campus::all(),
+            'posts' => $formattedPosts
         ]);
     }
 

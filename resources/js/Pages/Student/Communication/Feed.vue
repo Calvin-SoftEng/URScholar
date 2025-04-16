@@ -1,17 +1,21 @@
 <template>
     <AuthenticatedLayout>
         <template #default>
-            <div class="sm:px-0 lg:px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
+            <div
+                class="sm:px-0 lg:px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
                 <div class="border-box w-full h-full flex flex-row">
-                    <div class="w-full pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
+                    <div
+                        class="w-full pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
                         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 ">
                             <div class="rounded-lg mb-10">
                                 <div class="h-full space-y-3 flex flex-col items-center justify-start pt-2 pb-10">
                                     <!-- Check if there are any posts -->
                                     <div v-if="posts.length">
-                                        <div v-for="post in posts" :key="post.id" class="w-full bg-white rounded-lg shadow-md">
+                                        <div v-for="post in posts" :key="post.id"
+                                            class="w-full bg-white rounded-lg shadow-md mb-4">
                                             <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                                <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
+                                                <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50"
+                                                    alt="user-avatar" />
                                                 <div class="ml-4">
                                                     <p class="text-primary font-semibold">{{ post.user.name }}</p>
                                                     <p class="text-sm text-gray-500">Posted {{ post.created_at }}</p>
@@ -45,7 +49,8 @@
                                     </div>
 
                                     <!-- Show this if no posts -->
-                                    <div v-else class="w-full bg-white rounded-lg shadow-md text-center text-gray-500 py-10">
+                                    <div v-else
+                                        class="w-full bg-white rounded-lg shadow-md text-center text-gray-500 py-10">
                                         <p class="text-lg font-medium">No posts or announcements yet.</p>
                                     </div>
 
@@ -56,36 +61,32 @@
                 </div>
             </div>
         </template>
-    </AuthenticatedLayout> 
-
+    </AuthenticatedLayout>
 </template>
-
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router, Link } from '@inertiajs/vue3';
 import { ref, onMounted, onBeforeUnmount, watch, nextTick, computed } from 'vue';
-import Echo from 'laravel-echo';
-import Pusher from 'pusher-js';
 import { initFlowbite } from 'flowbite';
-import axios from 'axios';
 
-// Props from controller
+// Props from controller - now using 'posts' prop directly from controller
 const props = defineProps({
     campuses: Array,
     batches: Array,
     scholarships: Array,
     auth: Object,
+    posts: Array, // Posts are now passed directly from controller
 });
 
 // Current user
 const currentUser = computed(() => props.auth?.user || null);
 
-// Posts state
-const posts = ref([]);
-const isLoading = ref(true);
+// Create reference to posts for reactivity
+const posts = computed(() => props.posts || []);
+const isLoading = ref(false);
 
-// Modal state
+// Modal state if needed for creating new posts
 const Share = ref(false);
 const announcementContent = ref('');
 const modalContent = ref('');
@@ -205,18 +206,6 @@ const handleClickOutside = (event) => {
     }
 };
 
-const fetchPosts = async () => {
-    isLoading.value = true;
-    try {
-        const response = await axios.get('/posts');
-        posts.value = response.data.posts;
-    } catch (error) {
-        console.error('Error fetching posts:', error);
-    } finally {
-        isLoading.value = false;
-    }
-};
-
 const submitForm = () => {
     // Prepare scholarship IDs array
     const scholarship_ids = props.scholarships
@@ -243,7 +232,6 @@ const submitForm = () => {
         onSuccess: () => {
             closeModal();
             announcementContent.value = '';
-            fetchPosts(); // Refresh the posts after successful submission
         }
     });
 };
@@ -251,7 +239,6 @@ const submitForm = () => {
 onMounted(() => {
     document.addEventListener('click', handleClickOutside);
     initFlowbite();
-    fetchPosts();
 });
 
 onBeforeUnmount(() => {

@@ -113,7 +113,7 @@ class EmailController extends Controller
         if ($request->hasFile('templates')) {
             foreach ($request->file('templates') as $file) {
                 // Generate a unique filename
-                $filename = time() . '_' . $file->getClientOriginalName();
+                $filename =  $file->getClientOriginalName();
 
                 // Store file in public storage for easy access - alternatively use private storage
                 $path = $file->storeAs('scholarship_templates/' . $scholarship->id, $filename, 'public');

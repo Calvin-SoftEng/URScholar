@@ -144,7 +144,7 @@
                                                     d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
                                             </svg>
                                             <span class="text-primary">
-                                            Disbursement Status
+                                            Disbursement
                                             </span>
                                         </div>
                                         <span
@@ -166,11 +166,11 @@
                                                     d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                             </svg>
                                             <span class="text-primary">
-                                                Grantees
+                                                Claimed
                                             </span>
                                         </div>
                                         <span
-                                            class="text-xl font-bold text-primary drop-shadow">{{ batch.not_claimed_count }}
+                                            class="text-xl font-bold text-primary drop-shadow">{{ batch.claimed_count }}
                                         </span>
                                     </div>
 
@@ -186,11 +186,11 @@
                                                     d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                             </svg>
                                             <span class="text-primary">
-                                                Claimed
+                                                Grantees
                                             </span>
                                         </div>
                                         <span
-                                            class="text-xl font-bold text-primary drop-shadow">{{ batch.claimed_count }}
+                                            class="text-xl font-bold text-primary drop-shadow">{{ batch.total_scholars }}
                                         </span>
                                     </div>
 

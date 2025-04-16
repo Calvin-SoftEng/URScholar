@@ -85,13 +85,14 @@
 
                         <div class="w-full h-[1px] bg-gray-200"></div>
 
-                        <!-- Campus Filter -->
+                        <!-- Batch List Section -->
                         <div class="flex flex-row justify-between items-center">
                             <h2 class="text-lg font-semibold text-gray-800 mt-4">
                                 List of Batches by Campus
                             </h2>
 
                             <div class="flex flex-row space-x-3 items-center">
+                                <!-- Campus Filter -->
                                 <span class="font-poppins text-sm">Filter Campus</span>
                                 <select v-model="selectedCampus"
                                     class="p-2.5 text-sm border border-gray-200 rounded-lg dark:bg-gray-700 dark:text-white">
@@ -102,16 +103,13 @@
                                 </select>
 
                                 <!-- Forward to Cashier Button -->
-                                <button v-if="payouts >= 0" @click="toggleSendBatch"
-                                    class="bg-green-500 hover:bg-green-700 text-white flex items-center gap-2 font-poppins px-4 py-2 rounded-lg transition duration-200">
-                                    <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                    <span class="font-normal">Forward to <span
-                                            class="font-semibold">Cashiers</span></span>
-                                </button>
-
-                                <button v-else
-                                    class="flex items-center gap-2 font-poppins px-4 py-2 rounded-lg transition duration-200 bg-blue-100 dark:bg-blue-800 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 dark:text-dtext"
-                                    disabled v-tooltip.left="'All batches must be inactive and complete'">
+                                <button @click="toggleSendBatch" :class="[
+                                    hasForwardableBatches
+                                        ? 'bg-green-500 hover:bg-green-700 text-white'
+                                        : 'bg-blue-100 dark:bg-blue-800 border border-blue-300 dark:border-blue-500 hover:bg-blue-200 dark:text-dtext',
+                                    'flex items-center gap-2 font-poppins px-4 py-2 rounded-lg transition duration-200'
+                                ]" :disabled="!hasForwardableBatches"
+                                    v-tooltip.left="!hasForwardableBatches ? 'All batches must be inactive and complete' : ''">
                                     <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                     <span class="font-normal">Forward to <span
                                             class="font-semibold">Cashiers</span></span>
@@ -119,100 +117,51 @@
                             </div>
                         </div>
 
-                        <!-- Batches by Campus -->
-                        <div>
-                            <!-- Loop through each campus -->
-                            <div v-for="campus in campusesWithBatches" :key="campus.id" class="mb-8">
-                                <h3 class="text-xl font-bold text-gray-800 mb-3">{{ campus.name }} Campus</h3>
+                        <!-- All Batches Listed Alphabetically -->
+                        <div class="mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 mb-3">All Batches</h3>
 
-                                <div v-for="batch in getBatchesForCampus(campus.id)" :key="batch.id"
-                                    class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
-                                    <div @click="viewBatchDetails(batch)" class="flex justify-between items-center">
+                            <div v-for="batch in allBatchesSorted" :key="batch.id"
+                                class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3"
+                                @click="viewBatchDetails(batch)">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <span class="text-lg font-semibold text-gray-800">{{
+                                            getCampusName(batch.campus_id) }} - Batch #{{ batch.batch_no }}</span>
+                                        <span :class="{
+                                            'status-badge completed': batch.status === 'Completed',
+                                            'status-badge pending': batch.status === 'Pending',
+                                            'status-badge processing': batch.status === 'Processing'
+                                        }">{{ batch.status || 'Pending' }}</span>
+                                    </div>
 
-                                        <!-- Batch Info -->
-                                        <div class="flex flex-col px-5">
-                                            <span class="text-lg font-semibold text-gray-800">Batch {{
-                                                batch.batch_no }}</span>
-                                            <span class="text-md font-medium text-gray-600">
-                                                {{ schoolyear.year }} - {{ selectedSem }} Semester
-                                            </span>
+                                    <div class="grid grid-cols-4 gap-6">
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">Total Scholars</span>
+                                            <span class="text-xl font-bold text-blue-600">{{ batch.claimed_count +
+                                                batch.not_claimed_count }}</span>
                                         </div>
-
-                                        <!--------------------------------------------------------- eto kapag validation na -->
-                                        <div class="flex flex-row gap-4">
-                                            <div>
-                                                <!-- Statistics -->
-                                                <div
-                                                    class="grid grid-cols-3 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
-                                                    <!-- Validation Status -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-5 h-5 text-yellow-400" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2"
-                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
-                                                            </svg>
-                                                            <span class="text-primary">
-                                                                Disbursement</span>
-                                                        </div>
-                                                        <span class="text-xl font-bold text-primary drop-shadow">
-                                                            {{ getPayoutStatus(batch) }}
-                                                        </span>
-
-                                                    </div>
-
-                                                    <!-- Number of Students -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-5 h-5 text-blue-400" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2"
-                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
-                                                            </svg>
-                                                            <span class="text-primary">
-                                                                Claimed</span>
-                                                        </div>
-                                                        <span class="text-xl font-bold text-primary drop-shadow"> {{
-                                                            getPayoutSubTotal(batch) ?? 0 }}</span>
-                                                    </div>
-
-                                                    <!-- Unverified Students -->
-                                                    <div class="flex flex-col items-center space-y-1">
-                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                class="w-4 h-4 text-primary" fill="none"
-                                                                viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                                    stroke-width="2"
-                                                                    d="M17 20h5v-2a4 4 0 00-5-3.87M9 20H4v-2a4 4 0 015-3.87M12 11a4 4 0 100-8 4 4 0 000 8zm6 4a4 4 0 00-3-3.87" />
-                                                            </svg>
-                                                            <span class="text-primary">
-                                                                Students</span>
-                                                        </div>
-                                                        <span class="text-xl font-bold text-primary drop-shadow">
-                                                            {{
-                                                                batch.sub_total }}
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">Claimed</span>
+                                            <span class="text-xl font-bold text-green-600">{{ batch.claimed_count
+                                            }}</span>
+                                        </div>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">Pending</span>
+                                            <span class="text-xl font-bold text-yellow-600">{{ batch.not_claimed_count
+                                            }}</span>
+                                        </div>
+                                        <div class="flex flex-col items-center">
+                                            <span class="text-sm text-gray-600">Date Created</span>
+                                            <span class="text-base text-gray-700">{{ formatDate(batch.created_at)
+                                            }}</span>
                                         </div>
                                     </div>
                                 </div>
-
-                                <!-- No batches message -->
-                                <div v-if="getBatchesForCampus(campus.id).length === 0"
-                                    class="text-center py-4 bg-gray-50 rounded-lg">
-                                    <p class="text-gray-500">No batches available for this campus</p>
-                                </div>
                             </div>
 
-                            <!-- No campuses message when filtering returns nothing -->
-                            <div v-if="campusesWithBatches.length === 0" class="text-center py-8">
+                            <!-- No batches message -->
+                            <div v-if="allBatchesSorted.length === 0" class="text-center py-8">
                                 <font-awesome-icon :icon="['far', 'folder-open']" class="text-gray-400 text-5xl mb-3" />
                                 <p class="text-gray-500 text-lg">No batches found matching your criteria.</p>
                             </div>
@@ -222,7 +171,7 @@
             </div>
         </div>
 
-        <!-- Forward batch list modal - Keep as is -->
+        <!-- Forward batch list modal - KEPT AS IS -->
         <div v-if="ForwardBatchList"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
@@ -329,9 +278,10 @@
                                                 batches.length }}</p>
                                         </div>
                                         <div>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">Total Grantees</p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Total Scholars</p>
                                             <p class="text-xl font-semibold text-gray-900 dark:text-white">
-                                                {{batches.reduce((sum, batch) => sum + parseInt(batch.sub_total), 0)}}
+                                                {{batches.reduce((sum, batch) => sum +
+                                                    (batch.claimed_count + batch.not_claimed_count), 0)}}
                                             </p>
                                         </div>
                                     </div>
@@ -384,12 +334,19 @@
             </div>
         </div>
 
-        <!-- Toast notifications - Keep as is -->
+        <!-- Toast notifications -->
         <ToastProvider>
-            <!-- Toast content - Keep as is -->
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastTitle class="font-semibold dark:text-dtext">{{ toastMessage.title }}</ToastTitle>
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage.description }}
+                </ToastDescription>
+            </ToastRoot>
+            <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
     </AuthenticatedLayout>
 </template>
+
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
@@ -400,17 +357,8 @@ import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport }
 import InputError from '@/Components/InputError.vue';
 import { initFlowbite } from 'flowbite';
 
-// Props and initial setup
+
 const props = defineProps({
-    // scholarship: Object,
-    // schoolyear: Object,
-    // selectedSem: String,
-    // batches: Array,
-    // campuses: Array,
-    // currentUser: Object,
-    // payouts: Array,
-    // payoutsByCampus: Array,
-    // Other props
     scholarship: Object,
     schoolyear: Object,
     selectedSem: String,
@@ -467,121 +415,144 @@ const props = defineProps({
     payoutBatches: Array,
 });
 
-// State
-const selectedCampus = ref('');
-const ForwardBatchList = ref(false);
-const isLoading = ref(false);
-const isSubmitting = ref(false);
-const dateRange = ref({ start: '', end: '' });
-const errors = ref({});
-const toastVisible = ref(false);
-const toastMessage = ref({ title: '', description: '' });
 const form = ref({
-    // Form fields
+    name: '',
+    scholarshipType: '',
+    totalRecipients: 0,
+    requirements: [],
+    criteria: [],
+    conditions: [],
+    grade: 0.0,
+    amount: 0,
+    application: '',
+    deadline: '',
     payoutStartInput: '',
     payoutEndInput: '',
 });
 
-const selectedStart = ref(""); // Stores the selected start date
-const selectedEnd = ref("");   // Stores the selected end date
+// Toast notification
+const toastVisible = ref(false);
+const toastMessage = ref({ title: '', description: '' });
 
-const StartPayout = ref(""); // Stores the selected start date
-const EndPayout = ref("");   // Stores the selected end date
+// Campus filter
+const selectedCampus = ref('');
 
-// Computed properties
-const campusesWithBatches = computed(() => {
-    // Filter campuses that have batches (or all if no campus filter is applied)
-    return props.campuses.filter(campus => {
-        const hasBatches = props.batches.some(batch =>
-            batch.campus_id === campus.id &&
-            (!selectedCampus.value || selectedCampus.value === '' ||
-                selectedCampus.value === campus.id.toString())
-        );
-        return hasBatches;
-    }).sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
+// Modal state
+const ForwardBatchList = ref(false);
+const isLoading = ref(false);
+const isSubmitting = ref(false);
+
+// Date range for forwarding batches
+const dateRange = ref({
+    start: '',
+    end: ''
 });
 
-const getBatchesForCampus = (campusId) => {
+const errors = ref({});
+
+
+// Filter batches by campus
+const filteredBatchesByCampus = computed(() => {
+    const campusGroups = {};
+
+    props.batches.forEach(batch => {
+        if (!campusGroups[batch.campus_id]) {
+            campusGroups[batch.campus_id] = [];
+        }
+        campusGroups[batch.campus_id].push(batch);
+    });
+
+    return campusGroups;
+});
+
+// Get batches for user's campus
+const filteredBatchesByCurrentUserCampus = computed(() => {
+    if (!selectedCampus.value || selectedCampus.value === '') {
+        return props.batches.filter(batch => batch.campus_id === props.currentUser.campus_id);
+    }
+
+    return selectedCampus.value === props.currentUser.campus_id.toString()
+        ? props.batches.filter(batch => batch.campus_id === props.currentUser.campus_id)
+        : [];
+});
+
+// Change this computed property
+const filteredOtherCampuses = computed(() => {
+    if (!selectedCampus.value || selectedCampus.value === '') {
+        // Only return campuses that have batches
+        return props.campuses.filter(campus => {
+            return campus.id !== props.currentUser.campus_id &&
+                filteredBatchesByCampus.value[campus.id]?.length > 0;
+        });
+    }
+
+    return selectedCampus.value !== props.currentUser.campus_id.toString()
+        ? props.campuses.filter(campus =>
+            campus.id.toString() === selectedCampus.value &&
+            filteredBatchesByCampus.value[campus.id]?.length > 0)
+        : [];
+});
+
+
+// Check if there are any batches
+const hasAnyBatches = computed(() => props.batches.length > 0);
+
+// Get current user's campus info
+const currentUserCampus = computed(() => {
+    return props.campuses.find(campus => campus.id === props.currentUser.campus_id) || {};
+});
+
+// Get batches for current user's campus
+const currentUserBatches = computed(() => {
     return props.batches.filter(batch =>
-        batch.campus_id === campusId &&
-        (!selectedCampus.value || selectedCampus.value === '' ||
-            selectedCampus.value === campusId.toString())
-    ).sort((a, b) => a.batch_no - b.batch_no); // Sort by batch number
-};
-
-// Add this computed method after your other computed properties
-const getPayoutForCampus = (campusId) => {
-    // Find the payout for this campus
-    const campusPayouts = props.payoutsByCampus[campusId];
-    return campusPayouts && campusPayouts.length > 0 ? campusPayouts[0] : null;
-};
-
-// Add this function to get the payout sub_total for a batch
-const getPayoutSubTotal = (batch) => {
-    // Find a payout that matches this batch's campus_id
-    const matchingPayout = props.payouts.find(payout =>
-        payout.campus_id === batch.campus_id
+        batch.campus_id === props.currentUser.campus_id &&
+        (!selectedCampus.value || selectedCampus.value === '' || selectedCampus.value === props.currentUser.campus_id.toString())
     );
+});
 
-    // If we found a matching payout, return its sub_total
-    if (matchingPayout) {
-        return matchingPayout.sub_total;
-    }
+// Get IDs of campuses other than current user's
+const otherCampusIds = computed(() => {
+    const campusIds = props.batches
+        .map(batch => batch.campus_id.toString())
+        .filter(id => id !== props.currentUser.campus_id.toString());
+    return [...new Set(campusIds)]; // Remove duplicates
+});
 
-    // Fall back to batch's own sub_total
-    return 0;
-};
-
-const getPayoutStatus = (batch) => {
-    // Find a payout that matches this batch's campus_id
-    const matchingPayout = props.payouts.find(payout =>
-        payout.campus_id === batch.campus_id
-    );
-
-    // If we found a matching payout, return its sub_total
-    if (matchingPayout) {
-        return Number(matchingPayout.sub_total) > 0 &&
-            Number(matchingPayout.total_scholars) > 0
-            ? 'Complete'
-            : 'Incomplete';
-    }
-
-    // Fall back to batch's own sub_total
-    return 'Pending';
-};
-
-// Stats calculations
+// Calculate statistics
+const totalBatches = computed(() => props.batches.length);
 const totalScholars = computed(() => {
     return props.batches.reduce((total, batch) => {
         return total + batch.claimed_count + batch.not_claimed_count;
     }, 0);
 });
-
 const totalClaimed = computed(() => {
     return props.batches.reduce((total, batch) => {
         return total + batch.claimed_count;
     }, 0);
 });
-
 const totalPending = computed(() => {
     return props.batches.reduce((total, batch) => {
         return total + batch.not_claimed_count;
     }, 0);
 });
 
-const completedBatchesCount = computed(() => {
-    return props.batches.filter(batch => batch.status === 'Completed').length;
-});
-
+// Forwardable batches
 const forwardableBatches = computed(() => {
     return props.batches.filter(batch =>
         batch.status === 'Accomplished' && batch.not_claimed_count === 0
     );
 });
 
-const hasForwardableBatches = computed(() => forwardableBatches.value.length > 0);
+const forwardableBatchesCount = computed(() => forwardableBatches.value.length);
 
-// Functions
+const hasForwardableBatches = computed(() => forwardableBatchesCount.value > 0);
+
+// Navigate back
+const goBack = () => {
+    window.history.back();
+};
+
+// Format date
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('en-US', {
@@ -591,20 +562,13 @@ const formatDate = (dateString) => {
     }).format(date);
 };
 
+// Get campus name by ID
 const getCampusName = (campusId) => {
     const campus = props.campuses.find(c => c.id === campusId);
     return campus ? campus.name : 'Unknown Campus';
 };
 
-const viewBatchDetails = (batch) => {
-    router.visit(route('cashier.pending_payouts', {
-        scholarshipId: props.scholarship.id,
-        batchId: batch.id,
-        selectedSem: props.selectedSem,
-        selectedYear: props.schoolyear.id,
-    }));
-};
-
+// Open/close forward batch modal
 const toggleSendBatch = () => {
     ForwardBatchList.value = true;
 };
@@ -615,16 +579,52 @@ const closeModal = () => {
     errors.value = {};
 };
 
+// View batch details
+const viewBatchDetails = (batch) => {
+    router.visit(route('cashier.pending_payouts', {
+        scholarship: props.scholarship.id,
+        batch: batch.id
+    }));
+};
+
+// Single computed property for all batches, sorted alphabetically
+const allBatchesSorted = computed(() => {
+    return props.batches
+        .filter(batch => !selectedCampus.value || selectedCampus.value === '' ||
+            selectedCampus.value === batch.campus_id.toString())
+        .sort((a, b) => {
+            // Sort by campus name first, then by batch number
+            const campusA = getCampusName(a.campus_id);
+            const campusB = getCampusName(b.campus_id);
+
+            if (campusA !== campusB) {
+                return campusA.localeCompare(campusB);
+            }
+
+            // If same campus, sort by batch number
+            return a.batch_no - b.batch_no; // For numeric sorting
+        });
+});
 const forwardBatches = async () => {
     isSubmitting.value = true;
     errors.value = {};
 
-    try {
-        const batchIds = forwardableBatches.value.map(batch => batch.id);
+    // Make sure we have batch IDs to send
+    if (forwardableBatches.value.length === 0) {
+        errors.value.batch_ids = "No batches available to forward";
+        isSubmitting.value = false;
+        return;
+    }
 
+    try {
+        // Collect all batch IDs
+        const batchIds = forwardableBatches.value.map(batch => batch.id);
+        console.log("Sending batch IDs:", batchIds); // For debugging
+
+        // Call to backend to forward batches
         await router.post(route('cashier.forward'), {
             scholarship_id: props.scholarship.id,
-            batch_ids: batchIds,
+            batch_ids: batchIds, // Make sure this is an array of IDs
             date_start: form.value.payoutStartInput,
             date_end: form.value.payoutEndInput,
             school_year_id: props.schoolyear.id,
@@ -652,9 +652,12 @@ const forwardBatches = async () => {
     }
 };
 
-const goBack = () => {
-    window.history.back();
-};
+const selectedStart = ref(""); // Stores the selected start date
+const selectedEnd = ref("");   // Stores the selected end date
+
+const StartPayout = ref(""); // Stores the selected start date
+const EndPayout = ref("");   // Stores the selected end date
+
 
 // Initialize campus data from props
 onMounted(() => {
@@ -798,6 +801,87 @@ watch(ForwardBatchList, (newValue) => {
         }, 200);
     }
 });
+// Initialize datepicker on mount
+// onMounted(() => {
+//     // Integration with Flowbite Datepicker or other library would go here
+//     // Example: if using Flowbite
+//     // Initialize Flowbite Datepicker
+//     const dateInput = document.getElementById("datepicker-autohide");
+//     if (dateInput) {
+//         const datepicker = new Datepicker(dateInput, {
+//             autohide: true,
+//             format: "yyyy-mm-dd", // Adjust format as needed
+//         });
+
+//         dateInput.addEventListener("changeDate", (event) => {
+//             form.value.birthdate = event.target.value;
+//         });
+//     }
+
+//     const startInput = document.getElementById("datepicker-range-start");
+//     if (startInput) {
+//         startInput.value = selectedStart.value; // Keep the previous value
+//         startInput.addEventListener("changeDate", (event) => {
+//             const date = new Date(event.target.value);
+
+//             // Correct for time zone issues
+//             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+//             form.value.application = date.toISOString().split("T")[0]; // Keeps the correct local date
+//             console.log("Application:", form.value.application);
+//             selectedStart.value = event.target.value;
+//         });
+//     }
+
+//     const endInput = document.getElementById("datepicker-range-end");
+//     if (endInput) {
+//         endInput.value = selectedEnd.value; // Keep the previous value
+//         endInput.addEventListener("changeDate", (event) => {
+//             const date = new Date(event.target.value);
+
+//             // Correct for time zone issues
+//             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
+
+//             form.value.deadline = date.toISOString().split("T")[0]; // Keeps the correct local date
+//             selectedEnd.value = event.target.value;
+//         });
+//     }
+
+//     watch(ForwardBatchList, (newValue) => {
+//         if (newValue) {
+//             setTimeout(() => {
+//                 initFlowbite(); // Initialize Flowbite when modal is accessed
+
+//                 const startInput = document.getElementById("datepicker-range-start");
+//                 if (startInput) {
+//                     startInput.value = StartPayout.value; // Keep the previous value
+//                     startInput.addEventListener("changeDate", (event) => {
+//                         const date = new Date(event.target.value); // ✅ Get selected date
+//                         form.value.payoutStartInput = date.toISOString().split("T")[0];
+//                         console.log("Application:", form.value.payoutStartInput);
+//                         StartPayout.value = event.target.value;
+//                     });
+//                 } else {
+//                     console.warn("Start datepicker not found.");
+//                 }
+
+//                 const endInput = document.getElementById("datepicker-range-end");
+//                 if (endInput) {
+//                     endInput.value = EndPayout.value; // Keep the previous value
+//                     endInput.addEventListener("changeDate", (event) => {
+//                         const date = new Date(event.target.value); // ✅ Get selected date
+//                         form.value.payoutEndInput = date.toISOString().split("T")[0];
+//                         EndPayout.value = event.target.value;
+//                     });
+//                 } else {
+//                     console.warn("End datepicker not found.");
+//                 }
+
+
+//             }, 200); // Small delay to ensure modal is in the DOM
+//         }
+//     });
+// });
 </script>
 
 <style scoped>
@@ -833,12 +917,91 @@ watch(ForwardBatchList, (newValue) => {
     color: #1E40AF;
 }
 
-/* Additional styles */
 .payout-card {
     transition: transform 0.2s ease-in-out;
 }
 
 .payout-card:hover {
     transform: translateY(-2px);
+}
+</style>
+
+<style scoped>
+/* override the prime vue componentss */
+:root {
+    --p-tooltip-background: #D97706 !important;
+    /* Yellow warning color */
+}
+
+.p-tooltip-text {
+    font-size: 12px !important;
+    color: white !important;
+}
+
+.p-fileupload-choose-button {
+    background-color: #003366 !important;
+    color: white !important;
+    border-radius: 4px;
+}
+
+.slide-enter-active,
+.slide-leave-active {
+    transition: transform 0.3s ease;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+    transform: translateX(100%);
+}
+
+.slide-enter-to,
+.slide-leave-from {
+    transform: translateX(0);
+}
+
+/* Fade transition for backdrop */
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+
+/* Custom styles for payout cards */
+.payout-card {
+    transition: all 0.2s ease;
+}
+
+.payout-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Status indicators */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-badge.completed {
+    background-color: #DEF7EC;
+    color: #03543E;
+}
+
+.status-badge.pending {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.status-badge.processing {
+    background-color: #E0F2FE;
+    color: #0369A1;
 }
 </style>

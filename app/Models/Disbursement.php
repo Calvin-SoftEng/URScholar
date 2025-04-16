@@ -22,4 +22,9 @@ class Disbursement extends Model
     {
         return $this->belongsTo(Batch::class);
     }
+
+    public function claimedBy()
+{
+    return $this->belongsTo(User::class, 'claimed_by');
+}
 }
