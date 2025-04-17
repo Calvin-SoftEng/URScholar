@@ -2357,7 +2357,6 @@ const updateSelectedCourses = () => {
 };
 
 const submitForm = () => {
-
     // Prepare campus recipients data for the backend
     const campusRecipients = selectedCampuses.value.map(campus => ({
         campus_id: campus.id,
@@ -2370,39 +2369,67 @@ const submitForm = () => {
         ),
     }));
 
-    // Create the payload
-    const payload = {
-        // name: form.value.name,
-        // scholarship_type: form.value.scholarshipType,
-        total_recipients: form.value.totalRecipients,
-        requirements: form.value.requirements,
-        criteria: form.value.criteria,
-        conditions: form.value.conditions,
-        grade: form.value.grade,
-        application: form.value.application,
-        deadline: form.value.deadline,
-        amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
-        campus_recipients: campusRecipients,
-        semester: props.selectedSem,
-        school_year: props.schoolyear.id
-    };
+    // Create FormData object to handle files
+    const formData = new FormData();
+    
+    // Add all non-file fields to FormData
+    formData.append('total_recipients', form.value.totalRecipients);
+    formData.append('grade', form.value.grade);
+    formData.append('application', form.value.application);
+    formData.append('deadline', form.value.deadline);
+    formData.append('semester', props.selectedSem);
+    formData.append('school_year', props.schoolyear.id);
+    
+    // Add amount if scholarship type is One-Time
+    if (form.value.scholarshipType === 'One-Time') {
+        formData.append('amount', form.value.amount);
+    }
+    
+    // Add requirements as array
+    form.value.requirements.forEach((req, index) => {
+        formData.append(`requirements[${index}]`, req);
+    });
+    
+    // Add criteria as array
+    form.value.criteria.forEach((criteriaId, index) => {
+        formData.append(`criteria[${index}]`, criteriaId);
+    });
+    
+    // Add conditions as array
+    form.value.conditions.forEach((conditionId, index) => {
+        formData.append(`conditions[${index}]`, conditionId);
+    });
+    
+    // Add campus recipients as JSON
+    campusRecipients.forEach((recipient, index) => {
+        formData.append(`campus_recipients[${index}][campus_id]`, recipient.campus_id);
+        formData.append(`campus_recipients[${index}][slots]`, recipient.slots);
+        formData.append(`campus_recipients[${index}][remaining_slots]`, recipient.remaining_slots);
+        formData.append(`campus_recipients[${index}][selected_campus]`, recipient.selected_campus);
+    });
+    
+    // Add template files
+    selectedFiles.value.forEach((file, index) => {
+        formData.append(`templates[${index}]`, file);
+    });
 
-    // Submit the form to the backend
-    router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, payload, {
+    // Submit the form using FormData
+    router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
         onSuccess: () => {
-            showToast('Success', 'Scholarship created successfully');
+            showToast('Success', 'Scholarship with templates created successfully');
             clearForm();
             setTimeout(() => {
                 router.visit('/scholarships');
             }, 1500);
         },
         onError: (errors) => {
-            // showToast('Error', 'There was an error creating the scholarship');
             errors.value = errors;
             isSubmitting.value = false;
         },
     });
-
 }
 
 

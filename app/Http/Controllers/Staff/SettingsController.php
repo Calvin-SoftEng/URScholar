@@ -107,20 +107,6 @@ class SettingsController extends Controller
 
         // dd($originalFileName);
         // Save sponsor record in the database
-        $sponsor = Sponsor::create([
-            'name' => $request->name,
-            'user_id' => Auth::user()->id,
-            'abbreviation' => $request->abbreviation,
-            'since' => $request->since,
-            'description' => $request->description,
-            'logo' => $originalFileName, // Save only the filename in the database
-        ]);
-
-        SponsorMoa::create([
-            'sponsor_id' => $sponsor->id,
-            'moa' => $moa,
-            'status' => 'Active',
-        ]);
 
         $password = Str::random(8);
 
@@ -148,6 +134,22 @@ class SettingsController extends Controller
         $email = new SendEmail($mailData);
 
         Mail::to($request->email)->send($email);
+
+        $sponsor = Sponsor::create([
+            'name' => $request->name,
+            'created_id' => Auth::user()->id,
+            'assign_id' => $user->id,
+            'abbreviation' => $request->abbreviation,
+            'since' => $request->since,
+            'description' => $request->description,
+            'logo' => $originalFileName, // Save only the filename in the database
+        ]);
+
+        SponsorMoa::create([
+            'sponsor_id' => $sponsor->id,
+            'moa' => $moa,
+            'status' => 'Active',
+        ]);
 
 
         ActivityLog::create([

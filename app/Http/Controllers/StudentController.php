@@ -1154,13 +1154,18 @@ class StudentController extends Controller
 
         event(new Verified($user));
 
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
-
-        if ($grantee) {
-            return redirect()->route('student.confirmation');
+        if ($scholar) {
+            $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        
+            if ($grantee) {
+                return redirect()->route('student.confirmation');
+            } else {
+                return redirect()->route('student.dashboard');
+            }
         } else {
-            return redirect()->route('student.dashboard');
+            return redirect()->route('student.dashboard'); // or any default fallback
         }
+        
 
     }
 

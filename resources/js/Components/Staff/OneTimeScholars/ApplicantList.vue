@@ -392,14 +392,35 @@ const recipientLimit = computed(() => {
   return campusRecipient ? campusRecipient.slots : 0;
 });
 
-// Filter scholars by applicant status - matching the case in database (Pending, Approved, Rejected)
+// Add a new campus filter state variable
+const campusFilter = ref(null);
+
+// Update the filtered scholars computed property to include campus filtering
 const filteredByStatus = computed(() => {
   // Convert the filter value to match database case (capitalize first letter)
   const filterValue = applicantStatusFilter.value.charAt(0).toUpperCase() +
     applicantStatusFilter.value.slice(1).toLowerCase();
 
-  return props.scholars.filter(scholar => scholar.applicant_status === filterValue);
+  // Start with status filtering
+  let filtered = props.scholars.filter(scholar => scholar.applicant_status === filterValue);
+
+  // Apply campus filter if one is selected
+  if (campusFilter.value) {
+    filtered = filtered.filter(scholar => {
+      // For campus filtering, we need to match the campus_id from the backend
+      // Since we have campus name in the UI, we might need a mapping or direct comparison
+      return props.currentUser.campus_id === campusFilter.value;
+    });
+  }
+
+  return filtered;
 });
+
+// Add a new method to toggle campus filter
+function toggleCampusFilter() {
+  // Toggle between Binangonan campus ID and null (all campuses)
+  campusFilter.value = campusFilter.value ? null : props.currentUser.campus_id;
+}
 
 // Total number of scholars after filtering
 const totalScholars = computed(() => filteredByStatus.value.length);
