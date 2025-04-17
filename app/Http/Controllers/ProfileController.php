@@ -18,7 +18,10 @@ class ProfileController extends Controller
      */
     public function view_profile() {        
 
-        return Inertia::render('Staff&Cashier-Profile/Profile');
+        $user = Auth::user();
+        return Inertia::render('Staff&Cashier-Profile/Profile', [
+            'user' => $user,
+        ]);
     }
 
 
