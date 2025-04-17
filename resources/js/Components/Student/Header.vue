@@ -39,7 +39,7 @@
                     </span>
                 </Link>
             </li>
-            <!-- <li class="relative">
+            <li class="relative">
                 <Link :href="route('messaging.index')" class="flex items-center space-x-2">
                     <p class="text-primary-foreground hover:text-primary transition">Groupchats</p>
 
@@ -48,7 +48,7 @@
                         1
                     </span>
                 </Link>
-            </li> -->
+            </li>
 
 
           </ul>
@@ -199,10 +199,13 @@
           <!-- Menu Links with animation -->
           <ul class="text-white text-2xl font-medium space-y-8 text-center font-poppins">
             <li class="transform transition-transform duration-300 hover:scale-110">
-              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Feed</a>
+              <Link :href="(route('student.dashboard'))" class="block py-2 px-6 hover:text-gray-300 transition-colors">Dashboard</Link>
             </li>
             <li class="transform transition-transform duration-300 hover:scale-110">
-              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Scholarship</a>
+              <Link :href="route('feed.grantee_feed')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Feed</Link>
+            </li>
+            <li class="transform transition-transform duration-300 hover:scale-110">
+              <Link :href="route('messaging.index')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Groupchats</Link>
             </li>
             <li class="transform transition-transform duration-300 hover:scale-110">
               <Link :href="route('student.profile')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</Link>
