@@ -11,11 +11,13 @@
                     <span class="text-xl">Academic Year: {{ current_year.school_year.year || '2024' }} - {{
                         current_year.semester || 'Semester'
                         }} Semester</span>
+                </div>
 
+                <div class="flex justify-end items-center w-full gap-3">
                     <div class="grid grid-cols-2 gap-4 mb-4">
                         <div>
                             <label for="year-select"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">School
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">School
                                 Year</label>
                             <Select v-model="selectedYear" required @update:modelValue="updateSemesters">
                                 <SelectTrigger class="w-full border">
@@ -36,7 +38,7 @@
 
                         <div>
                             <label for="semester-select"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semester</label>
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Semester</label>
                             <Select v-model="selectedSem" required :disabled="!availableSemesters.length">
                                 <SelectTrigger class="w-full border">
                                     <SelectValue placeholder="Select Semester" />
@@ -53,16 +55,14 @@
                             </Select>
                         </div>
                     </div>
-                </div>
-
-                <div class="flex justify-end items-center w-full gap-3">
                     <button @click="toggleCreate"
-                        class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
-                        <span class="material-symbols-rounded dark:text-dtext">
+                        class="mt-1 flex items-center gap-2 rounded-md py-2.5 px-5 bg-white border text-sm hover:bg-slate-100 dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
+                        <span class="material-symbols-rounded dark:text-dtext text-sm">
                             library_add
                         </span>
                         Import Students
                     </button>
+
 
                     <div class="w-3/12" v-if="students && students.length > 0">
                         <form class="max-w-md mx-auto">
