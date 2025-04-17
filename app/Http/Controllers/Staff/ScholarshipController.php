@@ -1444,7 +1444,7 @@ class ScholarshipController extends Controller
             ];
         });
 
-        return Inertia::render('Staff/Scholarships/One-Time/One-TimeScholars', [
+        return Inertia::render('Staff/Scholarships/One-Time/ListOfGrantees', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'grantees' => $grantees,
