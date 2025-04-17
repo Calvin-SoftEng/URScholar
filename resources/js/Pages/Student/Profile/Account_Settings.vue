@@ -8,45 +8,6 @@
                 <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
                     My Account
                 </h1>
-                <!-- Web Version -->
-                <div class="hidden lg:flex space-x-4 p-3 mx-20">
-                    <!-- Edit Button -->
-                    <button v-if="!EditProfileWeb" type="button" @click="enableWebEdit"
-                        class="text-primary font-medium text-sm">
-                        Edit Account
-                    </button>
-
-                    <!-- Save Button -->
-                    <button v-else type="submit" class="text-primary font-medium text-sm">
-                        Save Updates
-                    </button>
-
-                    <!-- Cancel Button -->
-                    <button v-if="EditProfileWeb" type="button" @click="cancelWebEdit"
-                        class="text-gray-500 font-medium text-sm">
-                        Cancel
-                    </button>
-                </div>
-
-                <!-- Mobile Version -->
-                <div class="flex lg:hidden space-x-4 p-3">
-                    <!-- Edit Button -->
-                    <button v-if="!EditProfileMobile" type="button" @click="enableMobileEdit"
-                        class="text-primary font-medium text-xs">
-                        Edit Account
-                    </button>
-
-                    <!-- Save Button -->
-                    <button v-else type="submit" class="text-primary font-medium text-xs">
-                        Save Updates
-                    </button>
-
-                    <!-- Cancel Button -->
-                    <button v-if="EditProfileMobile" type="button" @click="cancelMobileEdit"
-                        class="text-gray-500 font-medium text-xs">
-                        Cancel
-                    </button>
-                </div>
             </div>
             <div
                 class="pt-3 sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
@@ -56,7 +17,7 @@
 
                     <div class="block md:hidden">
                         <!-- Content for Mobile -->
-                        <div v-if="!EditProfileMobile"
+                        <div 
                             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
                             <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                                 
@@ -93,7 +54,7 @@
                             </div>
                         </div>
 
-                        <div v-if="EditProfileMobile" class="mx-auto max-w-xl h-full justify-center items-center flex flex-col gap-3">
+                        <div class="mx-auto max-w-xl h-full justify-center items-center flex flex-col gap-3">
                             <div class="w-full h-full col-span-1 space-y-4 flex flex-col items-center">
 
                                 <!-- Email -->
@@ -124,79 +85,56 @@
                     
 
                         <!-- Mobile Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-
-                    <!-- Web------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-                    <div class="hidden md:block">
-                        <!-- Content for Web -->
-                        <div v-if="!EditProfileWeb" class="mx-auto max-w-xl bg-white p-5 h-full justify-center items-center flex flex-col gap-3">
-                            <div class="w-full space-y-6">
-
-                                <!-- Email Field -->
-                                <div class="w-full">
-                                <label class="block mb-2 text-sm font-semibold text-gray-700 dark:text-white">Email</label>
-                                <div class="flex items-center gap-3 p-3 border-b-2 border-gray-200 dark:border-gray-600 w-full">
-                                    
-                                    <!-- Icon -->
-                                    <span class="p-2 bg-primary rounded-md text-white text-lg font-bold">@</span>
-
-                                    <!-- Email Value -->
-                                    <span class="text-gray-900 dark:text-white text-base font-semibold break-all">
-                                    <!-- {{ $page.props.auth.user.email }} --> feafafe@example.com
-                                    </span>
-                                </div>
-                                </div>
-
-                                <!-- Password Field -->
-                                <div class="w-full">
-                                <label class="block mb-2 text-sm font-semibold text-gray-700 dark:text-white">Password</label>
-                                <div class="flex items-center gap-3 p-3 border-b-2 border-gray-200 dark:border-gray-600 w-full">
-                                    
-                                    <!-- Icon -->
-                                    <span class="p-2 bg-primary rounded-md text-white text-lg font-bold">🔒</span>
-
-                                    <!-- Hidden Password -->
-                                    <span class="text-gray-900 dark:text-white text-base font-semibold tracking-widest">
-                                    ••••••••
-                                    </span>
-                                </div>
-                                </div>
-
-                                </div>
-                        </div>
-                    </div>
-                    
-
                     <!-- Web Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
                     <div class="hidden md:block">
                         <!-- Content for Web -->
-                        <div v-if="EditProfileWeb" class="mx-auto max-w-xl h-full bg-white p-5 justify-center items-center flex flex-col gap-3">
+                        <div  class="mx-auto max-w-xl h-full bg-white p-5 justify-center items-center flex flex-col gap-3">
                             <div class="w-full h-full col-span-1 space-y-4 flex flex-col items-center">
 
-                                <!-- Email -->
-                                <div class="w-full">
-                                <label class="block mb-1 text-sm font-semibold text-gray-700 dark:text-white">Change Email</label>
-                                <input
-                                    v-model="form.email"
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                />
-                                </div>
+                                <div class="relative w-full mx-auto mt-5 p-6 border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-gray-800">
 
-                                <!-- New Password -->
-                                <div class="w-full">
-                                <label class="block mb-1 text-sm font-semibold text-gray-700 dark:text-white">New Password</label>
-                                <input
-                                    v-model="form.password"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                />
+                                    <!-- Grid Layout -->
+                                    <div class="grid grid-cols-2 gap-5">
+
+                                    <!-- Email Section -->
+                                    <div class="space-y-2">
+                                        <label class="block text-sm font-medium text-primary opacity-60 mb-1">Email</label>
+                                        <input
+                                        type="email"
+                                        placeholder="Enter your email" v-model="form.email"
+                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        />
+                                    </div>
+
+                                    <!-- Email Action -->
+                                    <div class="flex items-end justify-start max-w-2xs">
+                                        <button @click="toggleChangeEmail" class="w-full px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                        Change Email
+                                        </button>
+                                    </div>
+
+                                    <!-- Password Section -->
+                                    <div class="space-y-2">
+                                        <label class="block text-sm font-medium text-primary opacity-60 mb-1">Password</label>
+                                        <input
+                                        type="password"
+                                        placeholder="••••••••"
+                                        class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+                                        />
+                                    </div>
+
+                                    <!-- Password Action -->
+                                    <div class="flex items-end justify-start max-w-2xs">
+                                        <button @click="toggleChangePassword" class="w-full px-4 py-2 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                                        Change Password
+                                        </button>
+                                    </div>
+
+                                    </div>
+
                                 </div>
-                                </div>
+                            </div>
 
                         </div>
                     </div>
@@ -206,13 +144,138 @@
         </form>
 
 
+        <!-- adding course -->
+        <div v-if="changeEmail"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Change Email
+                            </h2>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Enter new email and submit the code
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                    <div>
+                        <label for="course"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current Email</label>
+                        <input type="text" id="last_name" v-model="form.email"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div>
+                        <label for="abbreviation"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Email</label>
+                        <input type="text" id="last_name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div>
+                        <label for="abbreviation"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
+                        <input type="text" id="last_name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                            Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- adding course -->
+        <div v-if="changePassword"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Update Password
+                            </h2>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Enter current password and a new password
+                            </span>
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                    <div>
+                        <label for="course"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current Password</label>
+                        <input type="text" id="last_name" v-model="form.password"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div>
+                        <label for="abbreviation"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Password</label>
+                        <input type="text" id="last_name" v-model="form.newpassword"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div>
+                        <label for="abbreviation"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
+                        <input type="text" id="last_name" v-model="form.confirmpassword"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                            Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
 
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import { ref, onMounted, onUnmounted, computed, watch, nextTick } from 'vue';
 import axios from 'axios';
 import { Input } from '@/Components/ui/input'
@@ -235,55 +298,32 @@ const props = defineProps({
     notify: Object,
 });
 
-const form = ref({
-    email: '',
-    password: '',
-    confirm_password: '',
-    suffix: 'N/A',
-    birthdate: '',
-    birthplace: '',
-    age: '',
-    gender: '',
-    civil_status: '',
-    municipality: '',
-    province: '',
-    street: '',
-    religion: '',
-    guardian_name: '',
-    relationship: '',
-    grade: '',
-    cog: '',
-    semester: '',
-    school_year: '',
-    education: {
-        elementary: { name: '', years: '' },
-        junior: { name: '', years: '' },
-        senior: { name: '', years: '' },
-        college: { name: '', years: '' },
-        vocational: { name: 'N/A', years: 'N/A' },
-        postgrad: { name: 'N/A', years: 'N/A' },
-    },
-    mother: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
-    father: { first_name: '', last_name: '', middle_name: '', age: '', occupation: '', isDeceased: false },
-    marital_status: '',
-    monthly_income: '',
-    other_income: 'N/A',
-    family_housing: '',
-    otherText: '',
-    siblings: [{ first_name: '', last_name: '', middle_name: '', age: '', occupation: '' }],
-    organizations: [{ name: '', membership_dates: '', position: '' }],
-    img: null,
-    imgName: null,
-    imgPreview: null,
-});
+const form = useForm({
+    email: "headadmin@gmail.com",
+    password: "password",
+})
 
+const changeEmail = ref(false);
+const changePassword = ref(false);
+const changeDP = ref(false);
 
-const formGrade = ref({
-    grade: '',
-    cog: '',
-    semester: '',
-    school_year: '',
-});
+const toggleChangeEmail = () => {
+    changeEmail.value = !changeEmail.value;
+}
+
+const toggleChangePassword = () => {
+    changePassword.value = !changePassword.value;
+}
+
+const toggleChangeDP = () => {
+    changeDP.value = !changeDP.value;
+}
+
+const closeModal = () => {
+    changeEmail.value = false;
+    changePassword.value = false;
+    changeDP.value = false;
+}
 
 const EditProfileMobile = ref(false);
 const EditProfileWeb = ref(false);
@@ -343,30 +383,6 @@ const submit = async () => {
     } catch (error) {
         console.error('Error submitting form:', error);
     }
-};
-
-// Handle Profile Picture Update
-const updateProfilePicture = () => {
-    if (!form.value.img) {
-        alert("Please upload an image first.");
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('profile_picture', form.value.img);
-
-    // Send FormData to backend (Example using fetch API)
-    fetch('/api/update-profile-picture', {
-        method: 'POST',
-        body: formData
-    })
-        .then(response => response.json())
-        .then(data => {
-            alert('Profile updated successfully!');
-        })
-        .catch(error => {
-            console.error('Error updating profile picture:', error);
-        });
 };
 
 
