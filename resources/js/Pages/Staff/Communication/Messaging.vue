@@ -274,11 +274,11 @@
 
                                     <div v-if="members.length > 0">
                                         <!-- Group members by usertype -->
-                                        <template v-for="member in members" :key="member">
+                                        <template v-for="members in members" :key="member">
                                             <div class="mb-4">
-                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">ewan ko
+                                                <!-- <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">ewan ko
                                                 </h5>
-                                                <!-- <div 
+                                                <div 
                                                     class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
                                                     <div v-if="user.picture">
                                                         <img class="h-8 w-8 rounded-full"

@@ -39,7 +39,7 @@
                                     class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                     <!-- Notification Badge -->
                                     <span v-if="scholarship.read !== 1"
-                                        class="absolute -top-3 right-4 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                                        class="absolute -top-3 right-4 bg-dprimary dark:bg-white dark:text-dprimary  text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                                         New
                                     </span>
 
@@ -52,12 +52,12 @@
                                         </div>
 
                                         <!-- Scholarship Name -->
-                                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
+                                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-dtext ">
                                             {{ scholarship.name }}
                                         </h2>
 
                                         <!-- Dates -->
-                                        <div class="text-sm text-primary opacity-70 dark:text-gray-400 space-y-1">
+                                        <div class="text-sm text-dprimary opacity-70 dark:text-dtext space-y-1">
                                             <p><font-awesome-icon :icon="['far', 'calendar']" class="mr-1" /> Created:
                                                 {{
                                                     new Date(scholarship.created_at).toLocaleDateString('en-US', {
@@ -117,7 +117,7 @@
                                     class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                     <!-- Notification Badge -->
                                     <span
-                                        class="absolute -top-3 right-4 bg-primary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                                        class="absolute -top-3 right-4 bg-dprimary dark:bg-white dark:text-dprimary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                                         New Activities
                                     </span>
 
@@ -135,7 +135,7 @@
                                         </h2>
 
                                         <!-- Dates -->
-                                        <div class="text-sm text-primary opacity-70 dark:text-gray-400 space-y-1">
+                                        <div class="text-sm text-dprimary opacity-70 dark:text-dtext space-y-1">
                                             <p><font-awesome-icon :icon="['far', 'calendar']" class="mr-1" /> Created:
                                                 {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
                                                     year: 'numeric',
@@ -219,10 +219,10 @@
                                         :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
                                         <SelectValue placeholder="Select year" />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent class="dark:bg-white dark:text-dprimary">
                                         <SelectGroup v-for="schoolyear in [...schoolyears].reverse()"
                                             :key="schoolyear.id">
-                                            <SelectItem :value="schoolyear.id">
+                                            <SelectItem :value="schoolyear.id" class="dark:hover:bg-gray-700">
                                                 {{ schoolyear.year }}
                                             </SelectItem>
                                         </SelectGroup>
@@ -239,9 +239,9 @@
                                         :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
                                         <SelectValue placeholder="Select Semester" />
                                     </SelectTrigger>
-                                    <SelectContent>
+                                    <SelectContent class="dark:bg-white dark:text-dprimary">
                                         <SelectGroup>
-                                            <SelectItem v-for="semester in availableSemesters" :key="semester.id"
+                                            <SelectItem class="dark:hover:bg-gray-700" v-for="semester in availableSemesters" :key="semester.id"
                                                 :value="semester.semester">
                                                 {{ semester.semester === '1st' ? 'First Semester' : 'Second Semester' }}
                                                 {{ semester.status === 'Active' ? '(Active)' : '(Inactive)' }}
