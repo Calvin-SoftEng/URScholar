@@ -1,34 +1,6 @@
 <template>
-  <div class="w-full mt-5 bg-white rounded-xl">
-    <div class="px-4 pt-4 flex flex-row justify-between items-center">
-      <div class="flex flex-row gap-2">
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Print Payroll
-        </button>
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
-        </button>
-      </div>
-      <form class="w-3/12">
-        <label for="default-search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-          </div>
-          <input type="search" id="default-search" v-model="searchQuery"
-            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
-        </div>
-      </form>
-    </div>
+  <div class="w-full bg-white rounded-xl">
+    
 
     <div>
       <div>

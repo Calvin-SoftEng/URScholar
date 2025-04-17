@@ -73,7 +73,17 @@
 
                     <div>
                         <!-- Forward to Cashier -->
-                        <div class="w-full flex justify-end">
+                        <div class="w-full flex justify-end gap-3">
+                            <div>
+                                <button @click="toggleView"
+                                    class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                                    <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                                    <span class="font-normal">
+                                        {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                                    </span>
+                                </button>
+                            </div>
                             <button @click="toggleSendBatch"
                                 class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                 <font-awesome-icon :icon="['fas', 'share-from-square']"
@@ -84,8 +94,14 @@
                             </button>
                         </div>
                         
-                        <ListOfGrantees :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                            :requirements="requirements" @update:stats="updateStats" />
+                            <div v-if="!showPayrolls">
+                                <ListOfGrantees :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                                :requirements="requirements" @update:stats="updateStats" />
+                            </div>
+
+                            <div v-else>
+                                <PayrollTable :scholarship="scholarship" :scholars="scholars" @update:stats="updateStats" />
+                            </div>
                     </div>
                 </div>
 
@@ -317,6 +333,7 @@ import { initFlowbite } from 'flowbite';
 import { Tooltip } from 'primevue';
 import InputError from '@/Components/InputError.vue';
 import ListOfGrantees from '@/Components/Staff/OneTimeScholars/ListOfGrantees.vue';
+import PayrollTable from '@/Components/Staff/OneTimeScholars/PayrollTable.vue';
 
 
 // Define props to include scholars data
@@ -449,49 +466,10 @@ const clearForm = () => {
     };
 };
 
+const showPayrolls = ref(false);
 
-
-// Safe check if criteria includes an ID
-const criteriaIncludes = (dataId) => {
-    return form.value && form.value.criteria && Array.isArray(form.value.criteria)
-        ? form.value.criteria.includes(dataId)
-        : false;
-};
-
-// Handle criteria selection
-const toggleCriteria = (dataId) => {
-    // Ensure criteria is initialized
-    if (!form.value.criteria) {
-        form.value.criteria = [];
-    }
-
-    const index = form.value.criteria.indexOf(dataId);
-    if (index === -1) {
-        // Add to criteria if not already present
-        form.value.criteria.push(dataId);
-    } else {
-        // Remove from criteria if already present
-        form.value.criteria.splice(index, 1);
-    }
-};
-
-const newReq = ref("");
-const reqs = ref([]);
-
-// dynamic requirements
-const newItem = ref('');
-const items = ref([]);
-
-const addItem = () => {
-    if (newItem.value.trim() !== '') {
-        items.value.push(newItem.value.trim());
-        form.value.requirements = items.value;
-        newItem.value = '';
-    }
-};
-
-const removeItem = (index) => {
-    items.value = items.value.filter((_, i) => i !== index);
+const toggleView = () => {
+    showPayrolls.value = !showPayrolls.value;
 };
 
 
