@@ -310,21 +310,30 @@
       <!-- Form -->
       <form>
         <div class="py-4 px-8 flex flex-col gap-3">
-          <!-- Loading Indicator -->
-          <!-- <div class="flex justify-center items-center py-4">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-                    <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
-                </div> -->
+          <!-- Title -->
+          <div>
+            <p class="text-lg font-semibold text-gray-800 dark:text-white">
+              Applicants for <span class="text-blue-600 dark:text-blue-400">Scholarship Name</span>
+            </p>
+          </div>
+
+          <!-- Summary per Campus -->
+          <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Summary of Applicants per Campus:</p>
+            <ul class="text-sm text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
+              <li>Binangonan Campus – 12 Applicants</li>
+              <li>Tanay Campus – 15 Applicants</li>
+              <li>Morong Campus – 8 Applicants</li>
+              <li>Angono Campus – 5 Applicants</li>
+            </ul>
+          </div>
 
           <!-- Batch List -->
-          <div class="flex flex-col divide-y divide-gray-300">
-            <p>
-              Applicants for Scholarship Name
-            </p>
+          <div class="flex flex-col divide-y divide-gray-300 dark:divide-gray-600">
             <div class="py-3 px-4 flex justify-between items-center">
               <div>
                 <p class="text-base font-medium text-gray-900 dark:text-white">Year 2023 - 1st Sem</p>
-                <p class="text-sm text-gray-500">Number of Applicants: 10</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Number of Applicants: 40</p>
               </div>
             </div>
           </div>
@@ -469,7 +478,7 @@ function togglePublish() {
 }
 
 function closeModal() {
-  ForwardtoSponsor.value = false;
+  Publish.value = false;
 }
 
 function generateReport() {
