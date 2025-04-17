@@ -113,7 +113,7 @@ class EmailController extends Controller
         if ($request->hasFile('templates')) {
             foreach ($request->file('templates') as $file) {
                 // Generate a unique filename
-                $filename =  $file->getClientOriginalName();
+                $filename = $file->getClientOriginalName();
 
                 // Store file in public storage for easy access - alternatively use private storage
                 $path = $file->storeAs('scholarship_templates/' . $scholarship->id, $filename, 'public');
@@ -185,6 +185,7 @@ class EmailController extends Controller
 
             $totalScholarsProcessed += $scholars->count();
 
+
             // Process each scholar in the batch
             foreach ($scholars as $scholar) {
                 if ($scholar && $scholar->email) {
@@ -192,6 +193,7 @@ class EmailController extends Controller
                     $password = null;
 
                     if (!$userExists) {
+                        // Create new user
                         $password = Str::random(8);
                         $user = User::create([
                             'name' => $scholar->first_name . ' ' . $scholar->last_name,
@@ -199,46 +201,45 @@ class EmailController extends Controller
                             'first_name' => $scholar->first_name,
                             'last_name' => $scholar->last_name,
                             'password' => bcrypt($password),
+                            'campus_id' => $scholar->campus_id
                         ]);
 
                         // Update scholar's user_id
                         $scholar->update([
                             'user_id' => $user->id
                         ]);
-
-                        // Check if scholarship group already exists
-                        $scholarshipGroupExists = ScholarshipGroup::where('user_id', $user->id)
-                            ->where('scholarship_id', $scholarship->id)
-                            ->exists();
-
-                        if (!$scholarshipGroupExists) {
-                            ScholarshipGroup::create([
-                                'user_id' => $user->id,
-                                'scholarship_id' => $scholarship->id,
-                                'batch_id' => $batch->id,
-                                'campus_id' => $batch->campus_id
-                            ]);
-                        }
                     } else {
+                        // Use existing user
+                        $user = $userExists;
+
                         // If user already exists, update the scholar with existing user's ID if needed
                         if (!$scholar->user_id) {
                             $scholar->update([
-                                'user_id' => $userExists->id
-                            ]);
-                        }
-
-                        // Check if scholarship group already exists
-                        $scholarshipGroupExists = ScholarshipGroup::where('user_id', $userExists->id)
-                            ->where('scholarship_id', $scholarship->id)
-                            ->exists();
-
-                        if (!$scholarshipGroupExists) {
-                            ScholarshipGroup::create([
-                                'user_id' => $userExists->id,
-                                'scholarship_id' => $scholarship->id,
+                                'user_id' => $user->id
                             ]);
                         }
                     }
+
+                    // Find existing group for this campus and batch
+                    $groupName = "Batch " . $batch->batch_no;
+
+                    // Look for existing group for this campus
+                    $scholarshipGroup = ScholarshipGroup::where('name', $groupName)
+                        ->where('campus_id', $scholar->campus_id)
+                        ->first();
+
+                    if ($scholarshipGroup) {
+                        // Check if user is already a member of this group
+                        $isAlreadyMember = $scholarshipGroup->users()
+                            ->where('user_id', $user->id)
+                            ->exists();
+
+                        // Add user to group if not already a member
+                        if (!$isAlreadyMember) {
+                            $scholarshipGroup->users()->attach($user->id);
+                        }
+                    }
+                    // Note: If no group exists for this campus, we don't create one - we just skip adding the user to any group
 
                     // Sending Emails
                     $mailData = [
@@ -268,7 +269,6 @@ class EmailController extends Controller
                         ]);
                     }
 
-                    // Mail::to($scholar->email)->send(new SendEmail($mailData));
                     // Send email with attachments
                     Mail::to($scholar->email)->send($email);
                     $emailsSent++;

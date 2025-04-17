@@ -9,7 +9,7 @@ use Illuminate\Notifications\Notifiable;
 class ScholarshipGroup extends Model
 {
     use HasFactory, Notifiable;
-    protected $fillable = ['user_id', 'name'];
+    protected $fillable = ['user_id', 'campus_id','name'];
 
     public function users()
     {
@@ -19,6 +19,11 @@ class ScholarshipGroup extends Model
     public function messages()
     {
         return $this->hasMany(Message::class);
+    }
+
+    public function campus()
+    {
+        return $this->belongsTo(Campus::class);
     }
 
     // Get the latest message for the scholarship group

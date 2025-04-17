@@ -981,82 +981,86 @@ class ScholarController extends Controller
             // Update for the current user - only create for matching campus/batch
             $currentUser = Auth::user();
             // Find in the upload function, where we create scholarship groups for coordinators
-// Find this section around line 362 where you're creating scholarship groups
+            // In the upload function, after creating scholarship groups for each campus
             foreach ($campusesForGroups as $campus) {
                 // Only create groups for batches that exist for this campus
                 if (isset($campusBatches[$campus->id])) {
                     $batch = $campusBatches[$campus->id];
 
-                    // Check if current user's campus matches this campus
-                    if ($currentUser && $currentUser->campus_id == $campus->id) {
-                        // Create scholarship group for current user
-                        ScholarshipGroup::create([
-                            'user_id' => $currentUser->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
+                    // Create a group chat for this campus with batch number in the name
+                    $groupName = "Batch " . $batch->batch_no;
+
+                    // Check if this group already exists for this campus
+                    $existingGroup = ScholarshipGroup::where('name', $groupName)
+                        ->where('campus_id', $campus->id)
+                        ->first();
+
+                    if (!$existingGroup) {
+                        // Create new scholarship group with name
+                        $scholarshipGroup = ScholarshipGroup::create([
+                            'name' => $groupName,
                             'campus_id' => $campus->id,
+                            'user_id' => Auth::user()->id, // Creator of the group
                         ]);
 
-                        // // Create Group Page for current user
-                        // Page::create([
-                        //     'user_id' => $currentUser->id,
-                        //     'scholarship_id' => $scholarship->id,
-                        //     'batch_id' => $batch->id,
-                        //     'campus_id' => $campus->id,
-                        // ]);
-                    }
+                        // Add members to the group - only staff, no scholars
 
-                    // Find coordinator
-                    $coordinator = User::find($campus->coordinator_id);
+                        // // Add current user if their campus matches
+                        // if ($currentUser && $currentUser->campus_id == $campus->id) {
+                        //     $scholarshipGroup->users()->attach($currentUser->id);
+                        // }
 
-                    // Insert records for coordinator if they exist and their campus matches
-                    if ($coordinator && $coordinator->campus_id == $campus->id) {
-                        ScholarshipGroup::create([
-                            'user_id' => $coordinator->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                        // Add coordinator if they exist and their campus matches
+                        $coordinator = User::find($campus->coordinator_id);
+                        if ($coordinator && $coordinator->campus_id == $campus->id) {
+                            $scholarshipGroup->users()->attach($coordinator->id);
+                        }
 
-                        // //Create Group Page
-                        // Page::create([
-                        //     'user_id' => $coordinator->id,
-                        //     'scholarship_id' => $scholarship->id,
-                        //     'batch_id' => $batch->id,
-                        //     'campus_id' => $campus->id,
-                        // ]);
+                        // Add cashier if they exist and their campus matches
+                        $cashier = User::find($campus->cashier_id);
+                        if ($cashier && $cashier->campus_id == $campus->id) {
+                            $scholarshipGroup->users()->attach($cashier->id);
+                        }
 
-                        // Create notification for coordinator
+                        // Create notification about new group chat
                         $notification = Notification::create([
-                            'title' => 'New Scholars Batch Uploaded',
-                            'message' => 'New scholars have been uploaded to ' . $scholarship->name . ' for ' .
-                                $campus->name . ' campus, Batch #' . $batch->batch_no,
-                            'type' => 'scholars_upload',
+                            'title' => 'New Group Chat Created',
+                            'message' => 'You have been added to group chat ' . $groupName . ' for ' . $campus->name . ' campus',
+                            'type' => 'group_chat_created',
                         ]);
 
-                        // Attach the coordinator to the notification
-                        $notification->users()->attach($coordinator->id);
-                    }
+                        // Notify all group members
+                        $memberIds = $scholarshipGroup->users()->pluck('users.id')->toArray();
+                        $notification->users()->attach($memberIds);
+                    } else {
+                        // If group exists, check if batch matches the group name
+                        $batchNumber = $batch->batch_no;
+                        if (strpos($existingGroup->name, $batchNumber) !== false) {
+                            // Group exists and batch numbers match, add any missing members
 
-                    // Find cashier
-                    $cashier = User::find($campus->cashier_id);
+                            // Add current user if not already in group
+                            if ($currentUser && $currentUser->campus_id == $campus->id) {
+                                if (!$existingGroup->users()->where('user_id', $currentUser->id)->exists()) {
+                                    $existingGroup->users()->attach($currentUser->id);
+                                }
+                            }
 
-                    // Insert records for cashier if they exist and their campus matches
-                    if ($cashier && $cashier->campus_id == $campus->id) {
-                        ScholarshipGroup::create([
-                            'user_id' => $cashier->id,
-                            'scholarship_id' => $scholarship->id,
-                            'batch_id' => $batch->id,
-                            'campus_id' => $campus->id,
-                        ]);
+                            // Add coordinator if not already in group
+                            $coordinator = User::find($campus->coordinator_id);
+                            if ($coordinator && $coordinator->campus_id == $campus->id) {
+                                if (!$existingGroup->users()->where('user_id', $coordinator->id)->exists()) {
+                                    $existingGroup->users()->attach($coordinator->id);
+                                }
+                            }
 
-                        // //Create Group Page
-                        // Page::create([
-                        //     'user_id' => $cashier->id,
-                        //     'scholarship_id' => $scholarship->id,
-                        //     'batch_id' => $batch->id,
-                        //     'campus_id' => $campus->id,
-                        // ]);
+                            // Add cashier if not already in group
+                            $cashier = User::find($campus->cashier_id);
+                            if ($cashier && $cashier->campus_id == $campus->id) {
+                                if (!$existingGroup->users()->where('user_id', $cashier->id)->exists()) {
+                                    $existingGroup->users()->attach($cashier->id);
+                                }
+                            }
+                        }
                     }
                 }
             }

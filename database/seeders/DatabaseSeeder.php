@@ -151,15 +151,15 @@ class DatabaseSeeder extends Seeder
         Campus::create([
             'name' => 'Morong',
             'location' => 'Sumulong St, Morong, Rizal',
-            'coordinator_id' => '4',
-            'cashier_id' => '7',
+            'coordinator_id' => '2',
+            'cashier_id' => '8',
         ]);
 
         Campus::create([
             'name' => 'Binangonan',
             'location' => '601: Manila East Rd, Binangonan, Philippines',
             'coordinator_id' => '3',
-            'cashier_id' => '6',
+            'cashier_id' => '7',
         ]);
 
         Campus::create([

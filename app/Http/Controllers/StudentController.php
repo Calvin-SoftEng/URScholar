@@ -1132,7 +1132,7 @@ class StudentController extends Controller
 
         foreach ($request->organizations as $index => $org) {
             if (
-                is_null($org['name']) && is_null($org['year']) && is_null($org['position'])
+                is_null($org['name']) && is_null($org['membership_dates']) && is_null($org['position'])
             ) {
                 continue;
             }
@@ -1154,7 +1154,9 @@ class StudentController extends Controller
 
         event(new Verified($user));
 
-        if ($scholar) {
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        if ($grantee) {
             return redirect()->route('student.confirmation');
         } else {
             return redirect()->route('student.dashboard');

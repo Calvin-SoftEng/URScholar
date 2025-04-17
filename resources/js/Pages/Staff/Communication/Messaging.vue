@@ -172,8 +172,8 @@
                     <div class="w-[70%] h-full flex flex-col">
                         <div class="shadow-sm p-4 flex justify-between items-center">
                             <h3 class="text-lg font-bold text-primary">
-                                {{ selectedData ? (selectedData.name || (selectedData.batch_no ? `Batch
-                                ${selectedData.batch_no}` : 'Conversation')) : 'Conversation' }}
+                                {{ selectedData ? (selectedData.name  || (selectedData.batch_no ? `Batch
+                                ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
                             </h3>
                             <!-- Three dots menu aligned with conversation text -->
                             <button class="text-gray-600 hover:text-primary transition-colors"

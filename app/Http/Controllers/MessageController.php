@@ -47,6 +47,7 @@ class MessageController extends Controller
                 $query->where('users.id', $currentUser->id);
             })
             ->withCount('users')
+            ->with('campus')
             ->get();
 
 
@@ -397,6 +398,7 @@ class MessageController extends Controller
                 $query->where('users.id', $currentUser->id);
             })
             ->withCount('users')
+            ->with('campus')
             ->get();
 
         return [
