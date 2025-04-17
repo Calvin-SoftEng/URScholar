@@ -196,6 +196,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     //One-time Payment Applicants
     Route::get('/scholarships/{scholarshipId}/applicant', [ScholarshipController::class, 'onetime_list'])->name('scholarship.onetime_list');
+    Route::post('/scholarships/{scholarshipId}/one-time/publish-applicants',[ScholarshipController::class, 'publishApplicantList'])->name('scholarships.publish-applicants');
+    
+    Route::get('/scholarships/{scholarshipId}/one-time/{batchId}', [ScholarshipController::class, 'showBatch'])->name('scholarship.onetime_batch');
     Route::get('/scholarships/one-time/scholars', [ScholarshipController::class, 'onetime_scholars'])->name('scholarship.onetime_scholars');
 
     Route::get('/scholarships/scholar={id}/one-time', [ScholarController::class, 'scholar_onetime'])->name('scholarship.applicant_details');
