@@ -1,6 +1,6 @@
 <template>
-  <div class="w-full mt-5 bg-white rounded-xl">
-    <div class="px-4 pt-4 flex flex-row justify-between items-center">
+  <div class="w-full bg-white rounded-xl">
+    <div class="px-4 flex flex-row justify-between items-center">
       <!-- <form class="w-3/12">
         <label for="default-search"
           class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>

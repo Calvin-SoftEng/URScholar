@@ -30,60 +30,60 @@
                     </div>
                 </div>
 
-                <div>
-                    <div class="w-full rounded-xl">
+                <div class="w-full mt-5 rounded-xl space-y-10">
+                    <!-- Stats Section -->
+                    <div class="w-full h-[1px] bg-gray-200"></div>
 
-
-                        <div class="w-full h-[1px] bg-gray-200 my-2"></div>
-
-                        <!-- Actions bar -->
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="flex gap-2">
-                                <!-- Refresh button that only appears when data has changed -->
-                                <Button v-if="dataChanged" variant="outline" @click="refreshData"
-                                    class="flex items-center gap-2">
-                                    <font-awesome-icon :icon="['fas', 'sync']"
-                                        :class="{ 'animate-spin': refreshing }" />
-                                    Refresh Data
-                                </Button>
+                    <div class="grid grid-cols-4">
+                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Total Verified Scholars</p>
+                            </div>
+                            <div class="w-full flex flex-row justify-between space-x-3 items-end">
+                                <!-- <p class="text-4xl font-semibold font-kanit">{{ verified_scholars }}</p> -->
                             </div>
                         </div>
 
-                         <!-- Forward to Cashier -->
-                         <div class="w-full flex justify-end">
-                            <div>
-                                <button @click="toggleSendBatch"
-                                    class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
-                                    <font-awesome-icon :icon="['fas', 'share-from-square']"
-                                        class="text-base" />
-                                    <span class="font-normal">Forward to <span
-                                            class="font-semibold">University
-                                            Cashier</span></span>
-                                </button>
+                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'user-clock']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Unverified Scholars</p>
                             </div>
-
-                            <!-- <div v-else>
-                                <button v-tooltip.left="'Complete all batches first'" disabled
-                                    class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
-                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
-                                    <font-awesome-icon :icon="['fas', 'share-from-square']"
-                                        class="text-base" />
-                                    <span class="font-normal">Forward to University Cashier</span>
-                                </button>
-                            </div> -->
+                            <!-- <p class="text-4xl font-semibold font-kanit">{{ unverified_scholars }}</p> -->
                         </div>
 
-
-
-                        <!-- <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
-
-                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                                :requirements="requirements" @update:stats="updateStats" />
+                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Scholarships</p>
+                            </div>
                         </div>
-                        <div v-else>
-                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                            :requirements="requirements" @update:stats="updateStats" />
-                        </div> -->
+
+                        <div class="flex flex-col items-start py-4 px-10">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Completed Payouts</p>
+                            </div>
+                            <!-- <p class="text-4xl font-semibold font-kanit">{{ completedBatches ?? 0 }}</p> -->
+                        </div>
+                    </div>
+
+                    <div class="w-full h-[1px] bg-gray-200"></div>
+
+                    <div>
+                        <!-- Forward to Cashier -->
+                        <div class="w-full flex justify-end">
+                            <button @click="toggleSendBatch"
+                                class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
+                                <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                    class="text-base" />
+                                <span class="font-normal">Forward to <span
+                                        class="font-semibold">University
+                                        Cashier</span></span>
+                            </button>
+                        </div>
+                        
                         <ListOfGrantees :scholarship="scholarship" :batches="batches" :scholars="scholars"
                             :requirements="requirements" @update:stats="updateStats" />
                     </div>
