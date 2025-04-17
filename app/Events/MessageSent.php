@@ -25,7 +25,7 @@ class MessageSent implements ShouldBroadcastNow
     public function broadcastOn()
     {
         // Use batch_id if available, otherwise fall back to staff_group_id
-        $channelId = $this->message->batch_id ?? $this->message->staff_group_id ?? $this->message->conversation_id;
+        $channelId = $this->message->scholarship_group_id ?? $this->message->staff_group_id ?? $this->message->conversation_id;
 
         return new PrivateChannel("chat.{$channelId}"); // Use Private Channel for authenticated users
     }

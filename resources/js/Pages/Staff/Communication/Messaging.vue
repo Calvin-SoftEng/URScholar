@@ -126,34 +126,34 @@
                                 </Link>
                             </div>
 
-                            <!-- Scholarship Batches Section -->
+                            <!-- Scholarship Group Section -->
                             <div class="py-2">
-                                <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Scholarship Batches
+                                <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Scholarship Groups
                                 </h4>
-                                <Link v-for="batch in filteredBatches" :key="`batch-${batch.id}`"
-                                    :href="route('messaging.batch', batch.id)"
+                                <Link v-for="group in filteredScholarshipGroups" :key="`scholarship-${group.id}`"
+                                    :href="route('messaging.scholarship', group.id)"
                                     :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
-                                        selectedData && selectedData.id === batch.id && groupType === 'batch' ? 'bg-blue-50' : '']"
-                                    @click.prevent="selectGroup(batch, 'batch')">
+                                        selectedData && selectedData.id === group.id && groupType === 'scholarship' ? 'bg-blue-50' : '']"
+                                    @click.prevent="selectGroup(group, 'scholarship')">
                                 <div
                                     class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                    {{ batch.batch_no || 'B' }}
+                                    {{ group.name ? group.name.slice(0, 2).toUpperCase() : 'SG' }}
                                 </div>
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">
-                                            {{ batch.name || `Batch ${batch.batch_no}` }}
+                                            {{ group.name || 'Scholarship Group' }}
                                             <span class="text-xs text-gray-500">
-                                                ({{ batch.scholarship ? batch.scholarship.name : 'Scholarship' }})
+                                                ({{ group.scholarship ? group.scholarship.name : 'Scholarship' }})
                                             </span>
                                         </span>
-                                        <span v-if="batch.latest_message" class="text-xs text-gray-400">
-                                            {{ formatTimestamp(batch.latest_message.created_at) }}
+                                        <span v-if="group.latest_message" class="text-xs text-gray-400">
+                                            {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
                                     </div>
                                     <div class="flex-grow">
-                                        <p class="text-xs text-gray-500 truncate" v-if="batch.latest_message">
-                                            {{ batch.latest_message.user.first_name }}: {{ batch.latest_message.content
+                                        <p class="text-xs text-gray-500 truncate" v-if="group.latest_message">
+                                            {{ group.latest_message.user.first_name }}: {{ group.latest_message.content
                                             }}
                                         </p>
                                         <p class="text-xs text-gray-500 italic" v-else>
@@ -161,7 +161,7 @@
                                         </p>
                                     </div>
                                     <div class="flex items-center">
-                                        <span class="text-xs text-gray-400">{{ batch.users_count }} members</span>
+                                        <span class="text-xs text-gray-400">{{ group.users_count }} members</span>
                                     </div>
                                 </div>
                                 </Link>
@@ -353,7 +353,7 @@ const props = defineProps({
     messages: Array,
     currentUser: Object,
     staffGroups: Array,
-    batches: Array,
+    scholarshipGroups: Array,
     users: Array,
     conversations: Array,
     selectedGroup: Object,
@@ -373,9 +373,9 @@ const conversations = ref(props.conversations || []);
 const selectedUser = ref(props.selectedUser || null);
 const selectedConversation = ref(props.selectedConversation || null);
 
-// Create reactive refs for staff groups and batches
+// Create reactive refs for staff groups and scholarship groups
 const staffGroupsData = ref(props.staffGroups || []);
-const batchesData = ref(props.batches || []);
+const scholarshipGroupsData = ref(props.scholarshipGroups || []);
 
 // Form data for sending messages
 const form = ref({
@@ -394,15 +394,15 @@ const filteredStaffGroups = computed(() => {
     );
 });
 
-// Filter batches based on search term
-const filteredBatches = computed(() => {
-    if (!batchesData.value) return [];
-    if (!searchTerm.value) return batchesData.value;
+// Filter Scholarships based on search term
+const filteredScholarshipGroups = computed(() => {
+    if (!scholarshipGroupsData.value) return [];
+    if (!searchTerm.value) return scholarshipGroupsData.value;
 
-    return batchesData.value.filter(batch => {
-        const batchName = batch.name || `Batch ${batch.batch_no}`;
-        const scholarshipName = batch.scholarship ? batch.scholarship.name : '';
-        return batchName.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+    return scholarshipGroupsData.value.filter(group => {
+        const groupName = group.name || `Scholarship Group`;
+        const scholarshipName = group.scholarship ? group.scholarship.name : '';
+        return groupName.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
             scholarshipName.toLowerCase().includes(searchTerm.value.toLowerCase());
     });
 });
@@ -432,8 +432,8 @@ const formatUserType = (usertype) => {
 };
 
 const formatTimeOnly = (datetime) => {
-  const date = new Date(datetime);
-  return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+    const date = new Date(datetime);
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 };
 
 
@@ -528,7 +528,7 @@ const selectGroup = (group, type) => {
     selectedConversation.value = null;
 
     // Navigate to the appropriate route
-    const routeName = type === 'staff' ? 'messaging.staff' : 'messaging.batch';
+    const routeName = type === 'staff' ? 'messaging.staff' : 'messaging.scholarship';
     router.get(route(routeName, group.id), {}, {
         preserveState: true,
         preserveScroll: true,
@@ -593,11 +593,11 @@ const sendMessage = () => {
                     staffGroupsData.value[groupIndex].latest_message = tempMessage;
                     staffGroupsData.value = [...staffGroupsData.value]; // Force reactivity
                 }
-            } else if (groupType.value === 'batch' && selectedData.value) {
-                const batchIndex = batchesData.value.findIndex(b => b.id === selectedData.value.id);
-                if (batchIndex !== -1) {
-                    batchesData.value[batchIndex].latest_message = tempMessage;
-                    batchesData.value = [...batchesData.value]; // Force reactivity
+            } else if (groupType.value === 'scholarship' && selectedData.value) {
+                const groupIndex = scholarshipGroupsData.value.findIndex(g => g.id === selectedData.value.id);
+                if (groupIndex !== -1) {
+                    scholarshipGroupsData.value[groupIndex].latest_message = tempMessage;
+                    scholarshipGroupsData.value = [...scholarshipGroupsData.value]; // Force reactivity
                 }
             } else if (groupType.value === 'conversation' && selectedUser.value) {
                 const convoIndex = conversations.value.findIndex(c =>
@@ -711,18 +711,18 @@ const setupRealTimeListeners = () => {
     });
 
     // Listen for new messages in all batches
-    batchesData.value.forEach(batch => {
-        echo.private(`chat.${batch.id}`)
+    scholarshipGroupsData.value.forEach(group => {
+        echo.private(`chat.${group.id}`)
             .listen('.message.sent', (e) => {
                 fetchMessages();
-                console.log('New message received in batch:', e);
+                console.log('New message received in scholarship group:', e);
                 if (e.message) {
-                    // Update the latest message for this batch
-                    const batchIndex = batchesData.value.findIndex(b => b.id === batch.id);
-                    if (batchIndex !== -1) {
-                        batchesData.value[batchIndex].latest_message = e.message;
+                    // Update the latest message for this group
+                    const groupIndex = scholarshipGroupsData.value.findIndex(g => g.id === group.id);
+                    if (groupIndex !== -1) {
+                        scholarshipGroupsData.value[groupIndex].latest_message = e.message;
                         // Force Vue to recognize the change
-                        batchesData.value = [...batchesData.value];
+                        scholarshipGroupsData.value = [...scholarshipGroupsData.value];
                     }
                 }
             });
@@ -734,8 +734,8 @@ const fetchMessages = async () => {
     if (!selectedData.value || !selectedData.value.id) return;
 
     let url;
-    if (groupType.value === 'batch') {
-        url = route("messaging.batch", { batch: selectedData.value.id });
+    if (groupType.value === 'scholarship') {
+        url = route("messaging.scholarship", { scholarshipGroup: selectedData.value.id });
     } else if (groupType.value === 'staff') {
         url = route("messaging.staff", { staffGroup: selectedData.value.id });
     } else if (groupType.value === 'conversation' && selectedUser.value) {
@@ -785,8 +785,8 @@ const cleanupListeners = () => {
             echo.leave(`private-chat.${group.id}`);
         });
 
-        batchesData.value.forEach(batch => {
-            echo.leave(`private-chat.${batch.id}`);
+        scholarshipGroupsData.value.forEach(scholarship => {
+            echo.leave(`private-chat.${scholarship.id}`);
         });
     }
 };
@@ -832,9 +832,9 @@ watch(selectedTab, (newTab) => {
         if (staffGroupsData.value.length > 0) {
             selectedData.value = staffGroupsData.value[0];
             groupType.value = 'staff';
-        } else if (batchesData.value.length > 0) {
-            selectedData.value = batchesData.value[0];
-            groupType.value = 'batch';
+        } else if (scholarshipGroupsData.value.length > 0) {
+            selectedData.value = scholarshipGroupsData.value[0];
+            groupType.value = 'scholarship';
         }
     }
 });

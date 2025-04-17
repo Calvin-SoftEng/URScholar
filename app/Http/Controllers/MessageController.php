@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use App\Events\MessageSent;
 use App\Models\Notification;
+use App\Models\ScholarshipGroup;
 use StaffGroupUser;
 
 class MessageController extends Controller
@@ -36,16 +37,11 @@ class MessageController extends Controller
             ->get();
 
         // Get scholarship batches with relationships that the current user has
-        $batches = Batch::with([
+        $scholarshipGroups = ScholarshipGroup::with([
             'latestMessage.user',
             'users' => function ($query) {
                 $query->select('users.id', 'users.name', 'users.first_name', 'users.usertype', 'users.picture');
-            },
-            'scholarshipGroups' => function ($query) use ($currentUser) {
-                $query->where('user_id', $currentUser->id);
-            },
-            'scholarshipGroups.campus',
-            'scholarship'
+            }
         ])
             ->whereHas('users', function ($query) use ($currentUser) {
                 $query->where('users.id', $currentUser->id);
@@ -79,7 +75,7 @@ class MessageController extends Controller
             'messages' => [],
             'currentUser' => $currentUser,
             'staffGroups' => $staffGroups,
-            'batches' => $batches,
+            'scholarshipGroups' => $scholarshipGroups,
             'users' => $users,
             'conversations' => $conversations,
             'selectedGroup' => null,
@@ -131,7 +127,7 @@ class MessageController extends Controller
             'messages' => $messages,
             'currentUser' => $currentUser,
             'staffGroups' => $data['staffGroups'],
-            'batches' => $data['batches'],
+            'scholarshipGroups' => $data['scholarshipGroups'],
             'users' => $users,
             'conversations' => $conversations,
             'selectedUser' => $otherUser,
@@ -141,17 +137,17 @@ class MessageController extends Controller
         ]);
     }
 
-    public function showBatch(Batch $batch)
+    public function showScholarshipGroup(ScholarshipGroup $scholarshipGroup)
     {
         // Get the authenticated user
         $currentUser = Auth::user();
 
         // Get all messages for this batch
-        $messages = Message::with(['user', 'batch'])
-            ->where('batch_id', $batch->id)
+        $messages = Message::with(['user', 'scholarshipGroup'])
+            ->where('scholarship_group_id', $scholarshipGroup->id)
             ->orderBy('created_at', 'desc')
             ->get();
-
+            
         // Get both staff groups and scholarship batches for the sidebar listing
         $data = $this->getCombinedGroupsData($currentUser);
 
@@ -170,11 +166,11 @@ class MessageController extends Controller
             'messages' => $messages,
             'currentUser' => $currentUser,
             'staffGroups' => $data['staffGroups'],
-            'batches' => $data['batches'],
+            'scholarshipGroups' => $data['scholarshipGroups'],
             'users' => $users,
             'conversations' => $conversations,
-            'selectedGroup' => $batch,
-            'groupType' => 'batch',
+            'selectedGroup' => $scholarshipGroup,
+            'groupType' => 'scholarship',
         ]);
     }
 
@@ -212,7 +208,7 @@ class MessageController extends Controller
             'messages' => $messages,
             'currentUser' => $currentUser,
             'staffGroups' => $data['staffGroups'],
-            'batches' => $data['batches'],
+            'scholarshipGroups' => $data['scholarshipGroups'],
             'users' => $users,
             'conversations' => $conversations,
             'selectedGroup' => $staffGroup,
@@ -226,7 +222,7 @@ class MessageController extends Controller
         $request->validate([
             'content' => 'required|string',
             'group_id' => 'required',
-            'group_type' => 'required|in:batch,staff,conversation',
+            'group_type' => 'required|in:scholarship,staff,conversation',
         ]);
 
         $user = Auth::user()->id;
@@ -237,11 +233,11 @@ class MessageController extends Controller
         ];
 
         // Set appropriate group ID field based on type
-        if ($request->group_type === 'batch') {
-            $messageData['batch_id'] = $request->group_id;
-            $group = Batch::find($request->group_id);
+        if ($request->group_type === 'scholarship') {
+            $messageData['scholarship_group_id'] = $request->group_id;
+            $group = ScholarshipGroup::find($request->group_id);
             $channelName = "batch.{$request->group_id}";
-            $notificationMessage = "You have a new message in the batch: {$group->name}";
+            $notificationMessage = "You have a new message in the scholarship: {$group->name}";
         } elseif ($request->group_type === 'staff') {
             $messageData['staff_group_id'] = $request->group_id;
             $group = StaffGroup::find($request->group_id);
@@ -297,11 +293,11 @@ class MessageController extends Controller
         ]);
 
         // Get users who should receive the notification
-        if ($request->group_type === 'batch') {
+        if ($request->group_type === 'scholarship') {
             $users = User::whereHas('scholarshipGroups', function ($query) use ($request) {
-                $query->where('batch_id', $request->group_id);
+                $query->where('scholarship_group_id', $request->group_id);
             })->where('id', '!=', Auth::user()->id)->get();
-            $group = Batch::with('latestMessage.user')->find($request->group_id);
+            $group = ScholarshipGroup::with('latestMessage.user')->find($request->group_id);
         } elseif ($request->group_type === 'staff') {
             $users = User::whereHas('staffGroups', function ($query) use ($request) {
                 $query->where('staff_group_id', $request->group_id);
@@ -319,6 +315,7 @@ class MessageController extends Controller
                 $conversation = null;
             }
         }
+
 
         // Attach users to the notification
         $notification->users()->attach($users->pluck('id'));
@@ -390,16 +387,11 @@ class MessageController extends Controller
             ->get();
 
         // Get batches
-        $batches = Batch::with([
+        $scholarshipGroups = ScholarshipGroup::with([
             'latestMessage.user',
             'users' => function ($query) {
                 $query->select('users.id', 'users.name', 'users.first_name', 'users.usertype', 'users.picture');
-            },
-            'scholarshipGroups' => function ($query) use ($currentUser) {
-                $query->where('user_id', $currentUser->id);
-            },
-            'scholarshipGroups.campus',
-            'scholarship'
+            }
         ])
             ->whereHas('users', function ($query) use ($currentUser) {
                 $query->where('users.id', $currentUser->id);
@@ -409,7 +401,7 @@ class MessageController extends Controller
 
         return [
             'staffGroups' => $staffGroups,
-            'batches' => $batches
+            'scholarshipGroups' => $scholarshipGroups
         ];
     }
 
