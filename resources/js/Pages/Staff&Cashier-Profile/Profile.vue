@@ -127,7 +127,7 @@
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">First Name</label>
                                         <input
                                             type="email"
-                                            
+                                            v-model="form.first_name"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         </div>
@@ -137,7 +137,7 @@
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle Name</label>
                                         <input
                                             type="email"
-                                            
+                                            v-model="form.middle_name"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         </div>
@@ -147,7 +147,7 @@
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last Name</label>
                                         <input
                                             type="email"
-                                            
+                                            v-model="form.last_name"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         </div>
@@ -159,7 +159,7 @@
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
                                         <input
                                             type="email"
-                                    
+                                        v-model="form.age"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         </div>
@@ -169,7 +169,7 @@
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
                                         <input
                                             type="email"
-                                            
+                                            v-model="form.address"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         </div>
@@ -179,7 +179,7 @@
                                         <label class="block text-sm font-medium text-primary opacity-45 mb-1">Contact</label>
                                         <input
                                             type="email"
-                                            
+                                            v-model="form.contact"
                                             class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                         />
                                         </div>
@@ -201,7 +201,7 @@
                                 <label class="block text-sm font-medium text-primary opacity-60 mb-1">Email</label>
                                 <input
                                 type="email"
-                                placeholder="Enter your email"
+                                placeholder="Enter your email" v-model="form.email"
                                 class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 />
                             </div>
@@ -272,7 +272,7 @@
                     <div>
                         <label for="course"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current Email</label>
-                        <input type="text" id="last_name"
+                        <input type="text" id="last_name" v-model="form.email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
                     </div>
@@ -334,21 +334,21 @@
                     <div>
                         <label for="course"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current Password</label>
-                        <input type="text" id="last_name"
+                        <input type="text" id="last_name" v-model="form.password"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
                     </div>
                     <div>
                         <label for="abbreviation"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Password</label>
-                        <input type="text" id="last_name"
+                        <input type="text" id="last_name" v-model="form.newpassword"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
                     </div>
                     <div>
                         <label for="abbreviation"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm Password</label>
-                        <input type="text" id="last_name"
+                        <input type="text" id="last_name" v-model="form.confirmpassword"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
                     </div>
@@ -470,6 +470,17 @@ import EditProfile from '@/Components/Profile/EditProfile.vue';
 const components = {
     Button,
 };
+
+const form = useForm({
+    first_name: "Roslyn",
+    middle_name: "N/A",
+    last_name: "Magat",
+    contact: "09123456789",
+    address: "N/A",
+    age: "N/A",
+    email: "headadmin@gmail.com",
+    password: "password",
+})
 
 const changeEmail = ref(false);
 const changePassword = ref(false);

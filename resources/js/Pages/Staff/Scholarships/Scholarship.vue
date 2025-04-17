@@ -433,7 +433,6 @@
                                                                         {{ validationStatus == true ? 'Complete' :
                                                                             'Pending' }}
                                                                     </span>
-
                                                                 </div>
 
                                                                 <!-- Number of Students -->
@@ -1616,8 +1615,27 @@
                         <!-- Batch Disbursement Status -->
                         <div>
                             <!-- Filters -->
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
                                 <!-- Report Type Filter -->
+                                <div class="relative">
+                                    <label class="block text-xs font-medium mb-1">Report Type</label>
+                                    <button type="button"
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        @click="toggleDropdown('reportType')">
+                                        {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select Report type' }}
+                                    </button>
+                                    <div v-if="openDropdown === 'reportType'"
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                                        <label v-for="type in reportTypeOptions" :key="type"
+                                            class="block px-4 py-2 hover:bg-gray-100">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :value="type" v-model="selectedReportTypes" />
+                                            {{ type }}
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div class="relative">
                                     <label class="block text-xs font-medium mb-1">Report Type</label>
                                     <button type="button"

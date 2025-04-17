@@ -52,7 +52,7 @@
                                     </div>
 
                                     <!-- Check if there are any posts -->
-                                    <div v-if="posts.length">
+                                    <div v-if="posts.length" class="w-full">
                                         <div v-for="post in posts" :key="post.id" class="w-full bg-white rounded-lg shadow-md">
                                             <div class="w-full p-4 flex items-center border-b border-gray-200">
                                                 <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
