@@ -53,9 +53,25 @@
         </button>
 
         <!-- avatar -->
-        <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start"
-          class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-          src="" alt="User dropdown">
+       <!-- Avatar with Red Notification Dot -->
+       <div v-if="$page.props.auth.user.picture">
+            <div class="relative">
+                <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+                    data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                <!-- Red Notification Dot -->
+                <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+            </div>
+        </div>
+        <div v-else>
+          <div class="relative">
+              <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+                  data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                  :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+              <!-- Red Notification Dot -->
+              <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+          </div>
+        </div>
 
         <!-- Notifs Dropdown menu -->
         <div id="dropdownNotification"
