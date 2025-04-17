@@ -1347,85 +1347,100 @@ class ScholarshipController extends Controller
             'school_year_id' => 'required',
             'semester' => 'required|string'
         ]);
-
+    
         // Find the scholarship by ID
         $scholarship = Scholarship::findOrFail($scholarshipId);
         $currentUser = Auth::user();
-
-        ApplicantTrack::where('scholarship_id', $scholarship->id)
+        
+        // Get all applicant tracks for the selected semester and school year across all campuses
+        $applicantTracks = ApplicantTrack::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $request->input('school_year_id'))
             ->where('semester', $request->input('semester'))
-            ->update([
-                'status' => 'Inactive'
-            ]);
-
-        // Get the applicant track for the selected semester and school year
-        $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
-            ->where('school_year_id', $request->input('school_year_id'))
-            ->where('semester', $request->input('semester'))
-            ->where('campus_id', $currentUser->campus_id)
-            ->firstOrFail();
-
-
-        // Get all approved applicants for this track
-        $approvedApplicants = Applicant::where('applicant_track_id', $applicantTrack->id)
-            ->where('status', 'Approved')
-            ->with('scholar')
             ->get();
-
-        if ($approvedApplicants->isEmpty()) {
-            return back()->with('error', 'No approved applicants found for this scholarship.');
+        
+        if ($applicantTracks->isEmpty()) {
+            return back()->with('error', 'No applicant tracks found for this scholarship.');
         }
-
-        // Get the latest batch number for this scholarship
-        $latestBatch = Batch::where('scholarship_id', $scholarship->id)
-            ->orderBy('batch_no', 'desc')
-            ->first();
-
-        $batchNo = $latestBatch ? $latestBatch->batch_no + 1 : 1;
-
-        // Create a new batch
-        $batch = Batch::create([
-            'scholarship_id' => $scholarship->id,
-            'batch_no' => $batchNo,
-            'school_year_id' => $request->input('school_year_id'),
-            'semester' => $request->input('semester'),
-            'campus_id' => $currentUser->campus_id,
-            'total_scholars' => $approvedApplicants->count(),
-            'sub_total' => $approvedApplicants->count() * $scholarship->grant_amount,
-            'status' => 'Active',
-            'validated' => true,
-            'read' => false,
-        ]);
-
-        // Create grantees for each approved applicant
-        foreach ($approvedApplicants as $applicant) {
-            Grantees::create([
+    
+        $totalApprovedCount = 0;
+        $batchesCreated = [];
+    
+        // Process each campus's applicant track
+        foreach ($applicantTracks as $applicantTrack) {
+            // Get all approved applicants for this track
+            $approvedApplicants = Applicant::where('applicant_track_id', $applicantTrack->id)
+                ->where('status', 'Approved')
+                ->with('scholar')
+                ->get();
+    
+            if ($approvedApplicants->isEmpty()) {
+                // Skip this campus if no approved applicants
+                continue;
+            }
+    
+            // Get the latest batch number for this scholarship
+            $latestBatch = Batch::where('scholarship_id', $scholarship->id)
+                ->orderBy('batch_no', 'desc')
+                ->first();
+    
+            $batchNo = $latestBatch ? $latestBatch->batch_no + 1 : 1;
+    
+            // Create a new batch for this campus
+            $batch = Batch::create([
                 'scholarship_id' => $scholarship->id,
-                'batch_id' => $batch->id,
-                'scholar_id' => $applicant->scholar_id,
+                'batch_no' => $batchNo,
                 'school_year_id' => $request->input('school_year_id'),
                 'semester' => $request->input('semester'),
-                'student_status' => 'Enrolled', // Default status
+                'campus_id' => $applicantTrack->campus_id,
+                'total_scholars' => $approvedApplicants->count(),
+                'sub_total' => $approvedApplicants->count() * $scholarship->grant_amount,
                 'status' => 'Active',
+                'validated' => true,
+                'read' => false,
             ]);
+    
+            // Create grantees for each approved applicant
+            foreach ($approvedApplicants as $applicant) {
+                Grantees::create([
+                    'scholarship_id' => $scholarship->id,
+                    'batch_id' => $batch->id,
+                    'scholar_id' => $applicant->scholar_id,
+                    'school_year_id' => $request->input('school_year_id'),
+                    'semester' => $request->input('semester'),
+                    'student_status' => 'Enrolled', // Default status
+                    'status' => 'Active',
+                ]);
+            }
+    
+            // Update the applicant track status to inactive after publishing
+            $applicantTrack->update([
+                'status' => 'Inactive'
+            ]);
+    
+            $totalApprovedCount += $approvedApplicants->count();
+            $batchesCreated[] = $batch->id;
         }
-
-        // Update applicant track status to inactive after publishing
-        $applicantTrack->update([
-            'status' => 'Inactive'
-        ]);
-
-        // Return to a confirmation page or back with success message
-        return redirect()->route('scholarship.onetime_batch', [
+    
+        if ($totalApprovedCount === 0) {
+            return back()->with('error', 'No approved applicants found for this scholarship in any campus.');
+        }
+    
+        // If we're dealing with the current user's campus only
+        if (count($batchesCreated) === 1 && $applicantTracks->contains('campus_id', $currentUser->campus_id)) {
+            return redirect()->route('scholarship.onetime_batch', [
+                'scholarshipId' => $scholarship->id,
+                'batchId' => $batchesCreated[0],
+                'selectedYear' => $request->input('school_year_id'),
+                'selectedSem' => $request->input('semester'),
+            ])->with('success', 'Applicant list has been published successfully.');
+        }
+    
+        // If multiple campuses were processed
+        return redirect()->route('scholarship.batches', [
             'scholarshipId' => $scholarship->id,
-            'batchId' => $batch->id,
-            'selectedYear' => $request->input('school_year_id'),
-            'selectedSem' => $request->input('semester'),
-
-        ])->with('success', 'Applicant list has been published successfully.');
+        ])->with('success', "Applicant lists from " . count($batchesCreated) . " campus(es) have been published successfully.");
     }
-
+    
     public function showBatch(Request $request, $scholarshipId, $batchId)
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
