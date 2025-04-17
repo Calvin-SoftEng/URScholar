@@ -1436,9 +1436,13 @@ class ScholarshipController extends Controller
         }
     
         // If multiple campuses were processed
-        return redirect()->route('scholarship.batches', [
+        return redirect()->route('scholarship.onetime_batch', [
             'scholarshipId' => $scholarship->id,
-        ])->with('success', "Applicant lists from " . count($batchesCreated) . " campus(es) have been published successfully.");
+            'batchId' => $batch->id,
+            'selectedYear' => $request->input('school_year_id'),
+            'selectedSem' => $request->input('semester'),
+
+        ])->with('success', 'Applicant list has been published successfully.');
     }
     
     public function showBatch(Request $request, $scholarshipId, $batchId)
