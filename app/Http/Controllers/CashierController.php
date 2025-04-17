@@ -400,7 +400,6 @@ class CashierController extends Controller
     {
         $academic_year = AcademicYear::where('status', 'Active')->first();
 
-
         // Get batches related to the grantees for the specific scholarship
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->with('grantees') // Eager load grantees for the batches
