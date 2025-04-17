@@ -1419,11 +1419,14 @@ class ScholarshipController extends Controller
         // Return to a confirmation page or back with success message
         return redirect()->route('scholarship.onetime_batch', [
             'scholarshipId' => $scholarship->id,
-            'batchId' => $batch->id
+            'batchId' => $batch->id,
+            'selectedYear' => $request->input('school_year_id'),
+            'selectedSem' => $request->input('semester'),
+
         ])->with('success', 'Applicant list has been published successfully.');
     }
 
-    public function showBatch($scholarshipId, $batchId)
+    public function showBatch(Request $request, $scholarshipId, $batchId)
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
         $batch = Batch::with(['grantees.scholar', 'school_year', 'campus'])->findOrFail($batchId);
@@ -1444,12 +1447,15 @@ class ScholarshipController extends Controller
             ];
         });
 
+        $schoolyear = SchoolYear::where('id', $batch->school_year_id)->first();
+
         return Inertia::render('Staff/Scholarships/One-Time/ListOfGrantees', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'grantees' => $grantees,
-            'schoolYear' => $batch->schoolYear,
+            'schoolyear' => $schoolyear,
             'campus' => $batch->campus,
+            'selectedSem' => $batch->semester,
         ]);
     }
 

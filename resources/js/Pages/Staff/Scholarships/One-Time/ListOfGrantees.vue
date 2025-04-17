@@ -322,19 +322,12 @@ import ListOfGrantees from '@/Components/Staff/OneTimeScholars/ListOfGrantees.vu
 
 // Define props to include scholars data
 const props = defineProps({
-    scholarship_form: Array,
-    scholarship_form_data: Array,
-    batches: Array,
+    batch: Object,
     scholarship: Object,
     schoolyear: Object,
     selectedSem: String,
-    scholars: Array, // Add scholars prop
-    campuses: Array,
-    courses: Array,
-    students: Array,
-    total_scholars: Array,
-    requirements: Array,
-    completedBatches: Array,
+    grantees: Array, // Add scholars prop
+    campus: Array,
 });
 
 const directives = {
