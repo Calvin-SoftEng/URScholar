@@ -654,9 +654,9 @@ class ScholarshipController extends Controller
         $currentUser = Auth::user();
 
         $allBatchesOriginal = Batch::where('scholarship_id', $scholarship->id)
-        ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-        ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
-        ->get();
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->get();
 
         $inactiveBatches = $allBatchesOriginal->every(fn($batch) => $batch->status === 'Inactive');
 
@@ -1188,68 +1188,65 @@ class ScholarshipController extends Controller
     {
         // Find the scholarship by ID
         $scholarship = Scholarship::findOrFail($scholarshipId);
-
+    
         $currentUser = Auth::user();
-
+    
         // Get the batch for the selected semester and school year
         $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $request->input('selectedYear'))
             ->where('semester', $request->input('selectedSem'))
-            ->where('campus_id', $currentUser->campus_id)
+            ->when($currentUser->usertype !== 'super_admin', function($query) use ($currentUser) {
+                // Only filter by campus if user is not a super_admin
+                return $query->where('campus_id', $currentUser->campus_id);
+            })
             ->firstOrFail();
-
+    
         // Check if scholar's payment claimed
         $payout = Payout::where('scholarship_id', $scholarshipId)
             ->where('status', 'claimed')
             ->get();
-
+    
         // Get all requirements for this scholarship
         $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
         $totalRequirements = $requirements->count();
-
-        $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
-            ->where('semester', $request->input('selectedSem'))
-            ->where('school_year_id', $request->input('selectedYear'))
-            ->first();
-
-
+    
         // Use relationships to get applicants and their related scholars
         $applicants = $scholarship->applicants()
             ->with('scholar.campus', 'scholar.course')
             ->get();
-
+    
         // Count scholars with complete submissions
         $completeSubmissionsCount = 0;
-
+    
         // Process scholars data using the relationship
         $scholars = $applicants->map(function ($applicant) use ($totalRequirements, &$completeSubmissionsCount, $request) {
             // Skip if there's no related scholar
             if (!$applicant->scholar) {
                 return null;
             }
-
+    
             $scholar = $applicant->scholar;
-
+    
             // Get the scholar's grade for the selected semester and school year
             $grade = Grade::where('scholar_id', $scholar->id)
                 // ->where('semester', $request->input('selectedSem'))
                 // ->where('school_year_id', $request->input('selectedYear'))
                 ->first();
-
+    
             $userPicture = User::where('id', $scholar->user_id)
                 ->first();
-
+    
             $approvedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Approved')
                 ->count();
-
+    
             $returnedRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->where('status', 'Returned')
                 ->count();
-
+    
             $countRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
                 ->count();
-
+    
             // Determine status
             $status = 'No submission';
             if ($totalRequirements > 0) {
@@ -1266,12 +1263,12 @@ class ScholarshipController extends Controller
                     $status = 'Incomplete';
                 }
             }
-
+    
             // Calculate progress percentage
             $progress = $totalRequirements > 0
                 ? ($approvedRequirements / $totalRequirements) * 100
                 : 0;
-
+    
             return [
                 'id' => $scholar->id,
                 'picture' => $userPicture->picture,
@@ -1280,7 +1277,7 @@ class ScholarshipController extends Controller
                 'last_name' => $scholar->last_name,
                 'middle_name' => $scholar->middle_name,
                 'campus' => $scholar->campus->name ?? 'N/A',
-                'campus_id' => $scholar->campus_id, // Add this line to include campus_id
+                'campus_id' => $scholar->campus_id, // Make sure campus_id is included
                 'course' => $scholar->course->name ?? 'N/A',
                 'year_level' => $scholar->year_level,
                 'grant' => $scholar->grant,
@@ -1295,15 +1292,22 @@ class ScholarshipController extends Controller
                 'date_applied' => $applicant->created_at,
             ];
         })->filter(); // Remove any null values
-
-
+    
+        // Add filtering based on user type in the backend
+        if ($currentUser->usertype !== 'super_admin') {
+            // Filter scholars by campus_id if not super_admin
+            $scholars = $scholars->filter(function ($scholar) use ($currentUser) {
+                return $scholar['campus_id'] == $currentUser->campus_id;
+            })->values(); // Re-index the collection
+        }
+    
         // Add this to fetch campus recipient data
         $campusRecipients = CampusRecipients::where('scholarship_id', $scholarshipId)
             ->get();
-
+    
         // Calculate total slots across all campuses
         $totalSlots = $campusRecipients->sum('slots');
-
+    
         return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
             'applicantTrack' => $applicantTrack,
@@ -1368,24 +1372,24 @@ class ScholarshipController extends Controller
             'school_year' => 'required',
             'templates.*' => 'nullable|file|max:10240', // Allow up to 10MB per file
         ]);
-    
+
         $total_recipients = $validated['total_recipients'];
         $campus_recipients = $validated['campus_recipients'];
-    
+
         // Calculate total remaining slots
         $total_remaining_slots = array_sum(array_column($campus_recipients, 'remaining_slots'));
-    
+
         // Check if the total recipients don't match the sum of remaining slots
         if ($total_recipients != $total_remaining_slots) {
             dd('need to maximize slots');
         }
-    
+
         foreach ($campus_recipients as $campusRecipient) {
             // Check if record exists
             $existingRecord = CampusRecipients::where('scholarship_id', $scholarship->id)
                 ->where('campus_id', $campusRecipient['campus_id'])
                 ->first();
-    
+
             if ($existingRecord) {
                 // Update existing record
                 $existingRecord->update([
@@ -1403,13 +1407,13 @@ class ScholarshipController extends Controller
                     'remaining_slots' => max(0, $campusRecipient['remaining_slots'] - $campusRecipient['slots']),
                 ]);
             }
-    
+
             $applicantTrack = ApplicantTrack::where('scholarship_id', $scholarship->id)
                 ->where('semester', $request->semester)
                 ->where('school_year_id', $request->school_year)
                 ->where('campus_id', $campusRecipient['campus_id'])
                 ->first();
-    
+
             if (!$applicantTrack) {
                 ApplicantTrack::create([
                     'scholarship_id' => $scholarship->id,
@@ -1420,16 +1424,16 @@ class ScholarshipController extends Controller
                 ]);
             }
         }
-    
+
         // For requirements
         $requirementsMap = []; // To store requirement ID mappings for templates
-        
+
         foreach ($validated['requirements'] as $requirement) {
             // Check if record exists
             $existingRequirement = Requirements::where('scholarship_id', $scholarship->id)
                 ->where('requirements', $requirement)
                 ->first();
-    
+
             if ($existingRequirement) {
                 // Update existing record
                 $existingRequirement->update([
@@ -1450,19 +1454,19 @@ class ScholarshipController extends Controller
                 $requirementsMap[$requirement] = $newRequirement->id;
             }
         }
-    
+
         // Handle template uploads
         if ($request->hasFile('templates')) {
             foreach ($request->file('templates') as $index => $file) {
                 // Get original filename
                 $originalName = $file->getClientOriginalName();
-                
+
                 // Generate unique filename
                 $filename = time() . '_' . $originalName;
-                
+
                 // Store the file in storage/app/public/templates
                 $path = $file->storeAs('templates', $filename, 'public');
-                
+
                 // Match template with requirement (if possible)
                 // This assumes file index matches requirement index
                 $requirementId = null;
@@ -1470,7 +1474,7 @@ class ScholarshipController extends Controller
                     $requirementName = $validated['requirements'][$index];
                     $requirementId = $requirementsMap[$requirementName] ?? null;
                 }
-                
+
                 // Save to scholarship_templates table
                 ScholarshipTemplate::insert([
                     'scholarship_id' => $scholarship->id,
@@ -1483,14 +1487,14 @@ class ScholarshipController extends Controller
                 ]);
             }
         }
-    
+
         // For criteria
         foreach ($validated['criteria'] as $scholarship_form_data_id) {
             // Check if record exists
             $existingCriteria = Criteria::where('scholarship_id', $scholarship->id)
                 ->where('scholarship_form_data_id', $scholarship_form_data_id)
                 ->first();
-    
+
             if ($existingCriteria) {
                 // Update existing record
                 $existingCriteria->update([
@@ -1505,14 +1509,14 @@ class ScholarshipController extends Controller
                 ]);
             }
         }
-    
+
         // For eligible
         foreach ($validated['conditions'] as $condition_id) {
             // Check if record exists
             $existingEligible = Eligible::where('scholarship_id', $scholarship->id)
                 ->where('condition_id', $condition_id)
                 ->first();
-    
+
             if ($existingEligible) {
                 // Update existing record
                 $existingEligible->update([
@@ -1526,12 +1530,12 @@ class ScholarshipController extends Controller
                 ]);
             }
         }
-    
+
         //Update Scholarship Status
         $scholarship->update([
             'status' => 'Active'
         ]);
-    
+
         return back()->with('success', 'Scholarship recipients, requirements and templates saved successfully');
     }
 

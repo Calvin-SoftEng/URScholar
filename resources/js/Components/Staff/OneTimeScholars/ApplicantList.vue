@@ -1,28 +1,28 @@
 <template>
   <div class="w-full mt-5 bg-white rounded-xl">
+    <!-- Header section with buttons remains unchanged -->
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
         <!-- Publish Button -->
-        <Link :href="(route('scholarship.onetime_scholars'))">
-        <button @click="generateReport" class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
+        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="toggleForwardSponsor"class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
           <span class="font-normal">Publish <span class="font-semibold">Applicant List</span></span>
         </button>
-        </Link>
 
         <!-- Forward to Sponsor -->
-        <div>
+        <!-- <div>
           <button @click="toggleForwardSponsor" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
             <span class="font-normal">Forward to <span class="font-semibold">Sponsor</span></span>
           </button>
-        </div>
+        </div> -->
       </div>
 
-      <!-- Applicant Status Filter -->
+      <!-- Filter Controls -->
       <div class="flex items-center space-x-4">
+        <!-- Status Filter -->
         <span class="text-sm font-medium text-gray-700">Filter by Status:</span>
         <div class="flex space-x-3">
           <label class="inline-flex items-center">
@@ -158,7 +158,7 @@
                     </tr>
                   </template>
 
-                  <!-- Cut-Off Line - Always show if there are scholars outside limit -->
+                  <!-- Cut-Off Line - Always show if there are scholars outside limit, even when filtered -->
                   <tr v-if="hasScholarsOutsideLimitFiltered">
                     <td colspan="8" class="text-center font-semibold text-red-600 py-4 bg-red-50">
                       Cut-Off Line: Below applicants are NOT within the required {{ recipientLimit }} recipients.
@@ -199,8 +199,8 @@
                       <template v-if="applicantStatusFilter === 'pending'">
                         <td>
                           <span :class="{
-                            'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.applicant_status === 'pending',
-                            'bg-green-100 text-green-800 border border-green-400': scholar.applicant_status === 'approved',
+                            'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.applicant_status === 'Pending',
+                            'bg-green-100 text-green-800 border border-green-400': scholar.applicant_status === 'Approved',
                             'bg-red-100 text-red-800 border border-red-400': scholar.applicant_status === 'rejected'
                           }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                             {{ scholar.applicant_status }}
@@ -246,7 +246,8 @@
               </table>
             </div>
           </div>
-          <!-- Pagination controls -->
+
+          <!-- Pagination controls - no changes needed -->
           <div v-if="totalScholars > itemsPerPage" class="mt-5 flex justify-between items-center">
             <span class="text-sm text-gray-700 dark:text-gray-400">
               Showing
@@ -381,8 +382,8 @@ const toast = ref({
 // Pagination state
 const currentPage = ref(1);
 
-// Filter state - default to 'approved' instead of 'all'
-const applicantStatusFilter = ref('approved');
+// Filter state - default to 'pending' to match your screenshot
+const applicantStatusFilter = ref('pending');
 
 // Computed values for recipient limits and filtering
 const recipientLimit = computed(() => {
@@ -392,35 +393,22 @@ const recipientLimit = computed(() => {
   return campusRecipient ? campusRecipient.slots : 0;
 });
 
-// Add a new campus filter state variable
-const campusFilter = ref(null);
-
-// Update the filtered scholars computed property to include campus filtering
+// Key modification: Filter scholars based on user type and campus
 const filteredByStatus = computed(() => {
   // Convert the filter value to match database case (capitalize first letter)
   const filterValue = applicantStatusFilter.value.charAt(0).toUpperCase() +
     applicantStatusFilter.value.slice(1).toLowerCase();
 
-  // Start with status filtering
+  // First filter by the selected applicant status
   let filtered = props.scholars.filter(scholar => scholar.applicant_status === filterValue);
 
-  // Apply campus filter if one is selected
-  if (campusFilter.value) {
-    filtered = filtered.filter(scholar => {
-      // For campus filtering, we need to match the campus_id from the backend
-      // Since we have campus name in the UI, we might need a mapping or direct comparison
-      return props.currentUser.campus_id === campusFilter.value;
-    });
+  // Then, if user is not a super_admin, filter by campus
+  if (props.currentUser.usertype !== 'super_admin') {
+    filtered = filtered.filter(scholar => scholar.campus_id === props.currentUser.campus_id);
   }
 
   return filtered;
 });
-
-// Add a new method to toggle campus filter
-function toggleCampusFilter() {
-  // Toggle between Binangonan campus ID and null (all campuses)
-  campusFilter.value = campusFilter.value ? null : props.currentUser.campus_id;
-}
 
 // Total number of scholars after filtering
 const totalScholars = computed(() => filteredByStatus.value.length);
@@ -432,7 +420,8 @@ const totalPages = computed(() => Math.ceil(totalScholars.value / props.itemsPer
 const startIndex = computed(() => (currentPage.value - 1) * props.itemsPerPage + 1);
 const endIndex = computed(() => Math.min(currentPage.value * props.itemsPerPage, totalScholars.value));
 
-// Scholars within recipient limit (with pagination and status filtering)
+// Scholars within recipient limit (with pagination and status filtering),
+// with updated logic to respect the campus filtering above
 const scholarsWithinLimitFiltered = computed(() => {
   const start = (currentPage.value - 1) * props.itemsPerPage;
   const end = start + props.itemsPerPage;
@@ -471,9 +460,9 @@ const scholarsOutsideLimitFiltered = computed(() => {
 
 // Check if there are any scholars outside the limit after filtering
 const hasScholarsOutsideLimitFiltered = computed(() => {
-  return filteredByStatus.value.length > recipientLimit.value;
+  // Always show cut-off line if we have more than the recipient limit
+  return filteredByStatus.value.length > 0 && recipientLimit.value > 0;
 });
-
 // Methods
 function toggleForwardSponsor() {
   ForwardtoSponsor.value = !ForwardtoSponsor.value;
@@ -484,7 +473,6 @@ function closeModal() {
 }
 
 function generateReport() {
-  // Implementation of report generation
   showToast('Report Generated', 'Applicant list has been published successfully.');
 }
 
@@ -519,9 +507,9 @@ function prevPage() {
   }
 }
 
-// Lifecycle hooks
+// Initialize component
 onMounted(() => {
-  // Any initialization code
+  // No need for additional initialization - the filtering is handled by computed properties
 });
 </script>
 
