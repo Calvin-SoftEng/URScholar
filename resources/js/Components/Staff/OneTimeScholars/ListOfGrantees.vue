@@ -65,7 +65,7 @@
                             class="material-symbols-rounded text-sm text-blue-600">verified</span>
                         </div>
                         <div class="text-sm opacity-50">
-                          {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
+                          {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} course
                         </div>
                       </div>
                     </div>

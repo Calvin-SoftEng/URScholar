@@ -269,36 +269,33 @@
 
                             <!-- Member list sidebar - conditionally shown -->
                             <div v-if="showMemberList" class="w-64 border-l overflow-y-auto">
-                                <div class="p-4">
+                                <div class="p-2">
                                     <h4 class="font-bold text-primary mb-3">Members</h4>
 
-                                    <div v-if="members.length > 0">
+                                    <div>
                                         <!-- Group members by usertype -->
-                                        <template v-for="members in members" :key="member">
                                             <div class="mb-4">
-                                                <!-- <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">ewan ko
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">Grantees
                                                 </h5>
                                                 <div 
                                                     class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
-                                                    <div v-if="user.picture">
-                                                        <img class="h-8 w-8 rounded-full"
-                                                            :src="`/storage/user/profile/${user.picture}`"
-                                                            :alt="user.name">
+                                                    <div >
+                                                            <img class="h-8 w-8 rounded-full"
+                                                            src="../../../../assets/images/no_userpic.png">
                                                     </div>
-                                                    <div v-else
+                                                    <!-- <div 
                                                         class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                                        {{ user.first_name ? user.first_name.charAt(0) :
-                                                            user.name.charAt(0) }}
-                                                    </div>
-                                                    <span class="text-sm font-medium">{{ user.first_name || user.name
-                                                        }}</span>
-                                                </div> -->
+                                                       eafeafef
+                                                    </div> -->
+                                                    <span class="text-sm font-medium">
+                                                        Manalo, Daughtry
+                                                        </span>
+                                                </div>
                                             </div>
-                                        </template>
                                     </div>
-                                    <div v-else class="text-center text-gray-500 py-4">
+                                    <!-- <div v-else class="text-center text-gray-500 py-4">
                                         <p>No member information available</p>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -306,13 +303,13 @@
                         <div
                             class="flex items-center box-border p-2 bg-white z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
                             <!-- For the circle-plus button -->
-                            <button class="px-2" @click="toggleAttachmentMenu"
+                            <!-- <button class="px-2" @click="toggleAttachmentMenu"
                                 :disabled="!selectedData || !selectedData.id">
                                 <font-awesome-icon :icon="['fas', 'circle-plus']" :class="[
                                     'w-6 h-6 transition',
                                     selectedData && selectedData.id ? 'text-primary hover:text-primary/80' : 'text-gray-400 cursor-not-allowed'
                                 ]" />
-                            </button>
+                            </button> -->
 
                             <!-- For the text input -->
                             <input type="text" placeholder="Type your message..."

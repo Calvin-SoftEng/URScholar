@@ -33,6 +33,7 @@
                 <div>
                     <div class="w-full rounded-xl">
 
+
                         <div class="w-full h-[1px] bg-gray-200 my-2"></div>
 
                         <!-- Actions bar -->
@@ -46,6 +47,30 @@
                                     Refresh Data
                                 </Button>
                             </div>
+                        </div>
+
+                         <!-- Forward to Cashier -->
+                         <div class="w-full flex justify-end">
+                            <div>
+                                <button @click="toggleSendBatch"
+                                    class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
+                                    <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                        class="text-base" />
+                                    <span class="font-normal">Forward to <span
+                                            class="font-semibold">University
+                                            Cashier</span></span>
+                                </button>
+                            </div>
+
+                            <!-- <div v-else>
+                                <button v-tooltip.left="'Complete all batches first'" disabled
+                                    class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                    border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                    <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                        class="text-base" />
+                                    <span class="font-normal">Forward to University Cashier</span>
+                                </button>
+                            </div> -->
                         </div>
 
 
@@ -181,6 +206,92 @@
             </div>
         </div>
 
+        <!-- Simplified forwarding batch list modal -->
+        <div v-if="ForwardBatchList"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
+                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Forward the list for Payouts
+                            </h2>
+                            <!-- <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Provide the necessary details to set up a scholarship.
+                            </span> -->
+                        </div>
+                    </div>
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                        data-modal-hide="default-modal">
+                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <!-- <form @submit.prevent="forwardBatches">
+                    <div class="py-4 px-8 flex flex-col gap-3">
+
+                        <label for="batchSelection"
+                            class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
+                            Pending Disbursement Batches:
+                        </label>
+
+
+                        <div v-if="isLoading" class="flex justify-center items-center py-4">
+                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                        </div>
+
+
+                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                            class="flex flex-col divide-y divide-gray-300">
+                            <p>
+                                {{ campusData.campus.name }}
+                            </p>
+                            <div v-for="batch in campusData.batches" :key="batch.id"
+                                class="py-3 px-4 flex justify-between items-center">
+                                <div>
+                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                        batch.batch_no }}</p>
+                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                </div>
+                                <span
+                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                    {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
+                                    }}
+                                </span>
+                            </div>
+                        </div>
+
+  
+                        <div v-if="completedBatches === batches.length || allInactive" class="mt-4">
+                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                {{ isSubmitting ? 'Processing...' : 'Forward' }}
+                            </button>
+                        </div>
+                        <div v-else class="mt-4">
+                            <button v-tooltip.left="'Complete all batches'" disabled
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Forward
+                            </button>
+                        </div>
+                    </div>
+                </form> -->
+            </div>
+        </div>
+
+
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
@@ -241,6 +352,8 @@ const isLoading = ref(false);
 const isSubmitting = ref(false);
 const batchesWithScholars = ref([]);
 
+const ForwardBatchList = ref(false);
+
 const selectedStart = ref(""); // Stores the selected start date
 const selectedEnd = ref("");   // Stores the selected end date
 
@@ -265,12 +378,9 @@ const total_scholars = computed(() => {
     }).length;
 });
 
-
 const toggleSendBatch = async () => {
-    ForwardScholarsList.value = true;
+    ForwardBatchList.value = !ForwardBatchList.value;
 
-    // Load batches with scholar counts
-    await loadBatchesData();
 };
 
 const loadBatchesData = async () => {
