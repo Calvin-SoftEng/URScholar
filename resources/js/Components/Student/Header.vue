@@ -39,16 +39,16 @@
                     </span>
                 </Link>
             </li>
-            <li class="relative">
+            <!-- <li class="relative">
                 <Link :href="route('messaging.index')" class="flex items-center space-x-2">
                     <p class="text-primary-foreground hover:text-primary transition">Groupchats</p>
-                    <!-- Notification Badge (only shows if unreadMessages > 0) -->
+
                     <span 
                         class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
                         1
                     </span>
                 </Link>
-            </li>
+            </li> -->
 
 
           </ul>

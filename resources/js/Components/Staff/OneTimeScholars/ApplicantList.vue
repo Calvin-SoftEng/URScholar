@@ -4,7 +4,7 @@
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
         <!-- Publish Button -->
-        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="toggleForwardSponsor"class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
+        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="togglePublish"class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
           <span class="font-normal">Publish <span class="font-semibold">Applicant List</span></span>
@@ -279,7 +279,7 @@
   </div>
 
   <!-- Simplified forwarding batch list modal -->
-  <div v-if="ForwardtoSponsor"
+  <div v-if="Publish"
     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
     <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
       <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -290,10 +290,10 @@
           <!-- Title and Description -->
           <div class="flex flex-col">
             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-              Forward to Sponsor
+              Publishing Applicant List
             </h2>
             <span class="text-sm text-gray-600 dark:text-gray-400">
-              Send the applicant list to the sponsor account
+              Publish and Forward the applicant list to the Sponsor
             </span>
           </div>
         </div>
@@ -319,12 +319,12 @@
           <!-- Batch List -->
           <div class="flex flex-col divide-y divide-gray-300">
             <p>
-              rgsrgrsg
+              Applicants for Scholarship Name
             </p>
             <div class="py-3 px-4 flex justify-between items-center">
               <div>
-                <p class="text-base font-medium text-gray-900 dark:text-white">Batch fefef</p>
-                <p class="text-sm text-gray-500">Completed:fefefef</p>
+                <p class="text-base font-medium text-gray-900 dark:text-white">Year 2023 - 1st Sem</p>
+                <p class="text-sm text-gray-500">Number of Applicants: 10</p>
               </div>
             </div>
           </div>
@@ -372,7 +372,7 @@ const props = defineProps({
 
 // State variables
 const loading = ref(false);
-const ForwardtoSponsor = ref(false);
+const Publish = ref(false);
 const toast = ref({
   visible: false,
   title: '',
@@ -464,8 +464,8 @@ const hasScholarsOutsideLimitFiltered = computed(() => {
   return filteredByStatus.value.length > 0 && recipientLimit.value > 0;
 });
 // Methods
-function toggleForwardSponsor() {
-  ForwardtoSponsor.value = !ForwardtoSponsor.value;
+function togglePublish() {
+  Publish.value = !Publish.value;
 }
 
 function closeModal() {
