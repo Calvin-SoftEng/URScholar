@@ -79,23 +79,24 @@
                                         <div class="mb-4">
                                             <label class="block text-sm font-medium text-primary opacity-45 mb-1">First
                                                 Name</label>
-                                            <span
-                                                class="text-lg font-semibold text-gray-800 dark:text-white">Roslyn</span>
+                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                user.first_name }}</span>
                                         </div>
 
                                         <!-- Middle Name -->
                                         <div class="mb-4">
                                             <label class="block text-sm font-medium text-primary opacity-45 mb-1">Middle
                                                 Name</label>
-                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
+                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                user.middle_name }}</span>
                                         </div>
 
                                         <!-- Last Name -->
                                         <div class="mb-4">
                                             <label class="block text-sm font-medium text-primary opacity-45 mb-1">Last
                                                 Name</label>
-                                            <span
-                                                class="text-lg font-semibold text-gray-800 dark:text-white">Magat</span>
+                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                user.last_name }}</span>
                                         </div>
                                     </div>
 
@@ -104,21 +105,24 @@
                                         <div class="mb-4">
                                             <label
                                                 class="block text-sm font-medium text-primary opacity-45 mb-1">Age</label>
-                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
+                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                user.age }}</span>
                                         </div>
 
                                         <!-- Middle Name -->
                                         <div class="mb-4">
                                             <label
                                                 class="block text-sm font-medium text-primary opacity-45 mb-1">Address</label>
-                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
+                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                user.address }}</span>
                                         </div>
 
                                         <!-- Last Name -->
                                         <div class="mb-4">
                                             <label
                                                 class="block text-sm font-medium text-primary opacity-45 mb-1">Contact</label>
-                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">N/A</span>
+                                            <span class="text-lg font-semibold text-gray-800 dark:text-white">{{
+                                                user.contact }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -235,15 +239,14 @@
             </div>
         </div>
 
-        <!-- adding course -->
+        <!-- Email Change Modal -->
         <div v-if="changeEmail"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <div class="flex items-center gap-3">
                         <!-- Icon -->
-                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
-                            class="text-blue-600 text-2xl flex-shrink-0" />
+                        <font-awesome-icon :icon="['fas', 'envelope']" class="text-blue-600 text-2xl flex-shrink-0" />
 
                         <!-- Title and Description -->
                         <div class="flex flex-col">
@@ -251,7 +254,7 @@
                                 Change Email
                             </h2>
                             <span class="text-sm text-gray-600 dark:text-gray-400">
-                                Enter new email and submit the code
+                                {{ emailStep === 1 ? 'Verify your current email first' : 'Enter new email and verification code' }}
                             </span>
                         </div>
                     </div>
@@ -266,46 +269,72 @@
                     </button>
                 </div>
 
-                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                <!-- Step 1: Verify Current Email -->
+                <form v-if="emailStep === 1" @submit.prevent="sendOldEmailVerification" class="p-4 flex flex-col gap-3">
                     <div>
-                        <label for="course" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current
-                            Email</label>
-                        <input type="text" id="last_name" v-model="form.email"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            required />
+                        <label for="current_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Current Email
+                        </label>
+                        <input type="email" id="current_email" v-model="form.email" disabled
+                            class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
                     </div>
-                    <div>
-                        <label for="abbreviation"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Email</label>
-                        <input type="text" id="last_name"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            required />
-                    </div>
-                    <div>
-                        <label for="abbreviation"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Code</label>
-                        <input type="text" id="last_name"
+                    <div v-if="oldEmailCodeSent">
+                        <label for="verification_code"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Verification Code
+                        </label>
+                        <input type="text" id="verification_code" v-model="form.oldEmailCode"
+                            placeholder="Enter the code sent to your email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
                     </div>
                     <div class="mt-2">
                         <button type="submit"
                             class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            Save</button>
+                            {{ oldEmailCodeSent ? 'Verify Code' : 'Send Verification Code' }}
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Step 2: Enter New Email -->
+                <form v-if="emailStep === 2" @submit.prevent="sendNewEmailVerification" class="p-4 flex flex-col gap-3">
+                    <div>
+                        <label for="new_email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            New Email
+                        </label>
+                        <input type="email" id="new_email" v-model="form.newEmail"
+                            placeholder="Enter your new email address"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div v-if="newEmailCodeSent">
+                        <label for="new_verification_code"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Verification Code
+                        </label>
+                        <input type="text" id="new_verification_code" v-model="form.newEmailCode"
+                            placeholder="Enter the code sent to your new email"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                            {{ newEmailCodeSent ? 'Complete Change' : 'Send Verification Code' }}
+                        </button>
                     </div>
                 </form>
             </div>
         </div>
 
-        <!-- adding course -->
+        <!-- Password Change Modal -->
         <div v-if="changePassword"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <div class="flex items-center gap-3">
                         <!-- Icon -->
-                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
-                            class="text-blue-600 text-2xl flex-shrink-0" />
+                        <font-awesome-icon :icon="['fas', 'lock']" class="text-blue-600 text-2xl flex-shrink-0" />
 
                         <!-- Title and Description -->
                         <div class="flex flex-col">
@@ -313,7 +342,7 @@
                                 Update Password
                             </h2>
                             <span class="text-sm text-gray-600 dark:text-gray-400">
-                                Enter current password and a new password
+                                {{ passwordStep === 1 ? 'Verify your current password' : 'Enter your new password' }}
                             </span>
                         </div>
                     </div>
@@ -328,33 +357,62 @@
                     </button>
                 </div>
 
-                <form @submit.prevent="submitForm" class="p-4 flex flex-col gap-3">
+                <!-- Step 1: Verify Current Password -->
+                <form v-if="passwordStep === 1" @submit.prevent="verifyCurrentPassword" class="p-4 flex flex-col gap-3">
                     <div>
-                        <label for="course" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Current
-                            Password</label>
-                        <input type="text" id="last_name" v-model="form.password"
+                        <label for="current_password"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Current Password
+                        </label>
+                        <input type="password" id="current_password" v-model="form.currentPassword"
+                            placeholder="Enter your current password"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
                     </div>
-                    <div>
-                        <label for="abbreviation"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">New Password</label>
-                        <input type="text" id="last_name" v-model="form.newpassword"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            required />
-                    </div>
-                    <div>
-                        <label for="abbreviation"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm
-                            Password</label>
-                        <input type="text" id="last_name" v-model="form.confirmpassword"
+                    <div v-if="passwordCodeSent">
+                        <label for="password_verification_code"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Verification Code
+                        </label>
+                        <input type="text" id="password_verification_code" v-model="form.passwordVerificationCode"
+                            placeholder="Enter the code sent to your email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
                     </div>
                     <div class="mt-2">
                         <button type="submit"
                             class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            Save</button>
+                            {{ passwordCodeSent ? 'Verify Code' : 'Send Verification Code' }}
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Step 2: Enter New Password -->
+                <form v-if="passwordStep === 2" @submit.prevent="updatePassword" class="p-4 flex flex-col gap-3">
+                    <div>
+                        <label for="new_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            New Password
+                        </label>
+                        <input type="password" id="new_password" v-model="form.newPassword"
+                            placeholder="Enter your new password"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div>
+                        <label for="confirm_password"
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                            Confirm Password
+                        </label>
+                        <input type="password" id="confirm_password" v-model="form.confirmPassword"
+                            placeholder="Confirm your new password"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            required />
+                    </div>
+                    <div class="mt-2">
+                        <button type="submit"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
+                            Update Password
+                        </button>
                     </div>
                 </form>
             </div>
@@ -460,19 +518,25 @@ const user = usePage().props.auth.user;
 
 // Initialize form with actual user data
 const form = useForm({
-    first_name: user.first_name || '',
-    middle_name: user.middle_name || '',
-    last_name: user.last_name || '',
-    suffix_name: user.suffix_name || '',
-    contact: user.contact || '',
-    address: user.address || '',
-    age: user.age || '',
-    email: user.email || '',
-    password: '',
-    newpassword: '',
-    confirmpassword: '',
+    first_name: props.user.first_name || '',
+    middle_name: props.user.middle_name || '',
+    last_name: props.user.last_name || '',
+    suffix_name: props.user.suffix_name || '',
+    contact: props.user.contact || '',
+    address: props.user.address || '',
+    age: props.user.age || '',
+    email: props.user.email || '',
+    currentPassword : '',
+    passwordVerificationCode : '',
+    newPassword : '',
+    confirmPassword : '',
     file: null,
-    filePreview: user.picture ? `/storage/${user.picture}` : null,
+    filePreview: props.user.picture ? `/storage/${user.picture}` : null,
+
+    // New fields for email verification
+    oldEmailCode: '',
+    newEmail: '',
+    newEmailCode: '',
 });
 
 // Modal states
@@ -499,11 +563,11 @@ const toggleChangeDP = () => {
     changeDP.value = !changeDP.value;
 };
 
-const closeModal = () => {
-    changeEmail.value = false;
-    changePassword.value = false;
-    changeDP.value = false;
-};
+// const closeModal = () => {
+//     changeEmail.value = false;
+//     changePassword.value = false;
+//     changeDP.value = false;
+// };
 
 const toggleEdit = () => {
     isEditing.value = !isEditing.value;
@@ -606,6 +670,173 @@ const handleImg = (img) => {
         };
         reader.readAsDataURL(img);
     }
+};
+
+
+// Add these to your existing script section
+const emailStep = ref(1); // Step 1: Verify old email, Step 2: Set new email
+const oldEmailCodeSent = ref(false);
+const newEmailCodeSent = ref(false);
+
+
+// Step 1: Send verification code to old email
+const sendOldEmailVerification = () => {
+    if (oldEmailCodeSent.value) {
+        // Verify the code
+        axios.post(route('profile.verify.old.email'), {
+            verification_code: form.oldEmailCode
+        })
+            .then(response => {
+                if (response.data.success) {
+                    // Move to step 2
+                    emailStep.value = 2;
+                    showToast('Current email verified successfully!');
+                } else {
+                    showToast('Invalid verification code. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Error verifying code: ' + error.response.data.message, 'error');
+            });
+    } else {
+        // Send verification code to current email
+        axios.post(route('profile.send.old.email.code'))
+            .then(response => {
+                oldEmailCodeSent.value = true;
+                showToast('Verification code sent to your current email!');
+            })
+            .catch(error => {
+                showToast('Error sending verification code: ' + error.response.data.message, 'error');
+            });
+    }
+};
+
+// Step 2: Send verification to new email and complete change
+const sendNewEmailVerification = () => {
+    if (newEmailCodeSent.value) {
+        // Complete the email change
+        axios.post(route('profile.update.email'), {
+            new_email: form.newEmail,
+            verification_code: form.newEmailCode
+        })
+            .then(response => {
+                closeModal();
+                resetEmailVerification();
+                form.email = form.newEmail; // Update the email in the form
+                showToast('Email updated successfully!');
+            })
+            .catch(error => {
+                showToast('Error updating email: ' + error.response.data.message, 'error');
+            });
+    } else {
+        // Send verification code to new email
+        axios.post(route('profile.send.new.email.code'), {
+            new_email: form.newEmail
+        })
+            .then(response => {
+                newEmailCodeSent.value = true;
+                showToast('Verification code sent to your new email!');
+            })
+            .catch(error => {
+                showToast('Error sending verification code: ' + error.response.data.message, 'error');
+            });
+    }
+};
+
+
+// For password change flow
+const passwordStep = ref(1); // Step 1: Verify current password, Step 2: Enter new password
+const passwordCodeSent = ref(false);
+
+// Step 1: Verify current password and send verification code
+const verifyCurrentPassword = () => {
+    if (passwordCodeSent.value) {
+        // Verify the code
+        axios.post(route('profile.verify.password.code'), {
+            verification_code: form.passwordVerificationCode
+        })
+            .then(response => {
+                if (response.data.success) {
+                    // Move to step 2
+                    passwordStep.value = 2;
+                    showToast('Verification successful! Now enter your new password.');
+                } else {
+                    showToast('Invalid verification code. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Error verifying code: ' + (error.response?.data?.message || 'Please try again'), 'error');
+            });
+    } else {
+        // First verify the current password and send verification code
+        axios.post(route('profile.send.password.code'), {
+            current_password: form.currentPassword
+        })
+            .then(response => {
+                passwordCodeSent.value = true;
+                showToast('Password verification code sent to your email!');
+            })
+            .catch(error => {
+                showToast('Error: ' + (error.response?.data?.message || 'Incorrect password'), 'error');
+                form.currentPassword = ''; // Clear the password field for retry
+            });
+    }
+};
+
+// Step 2: Update the password
+const updatePassword = () => {
+    if (form.newPassword !== form.confirmPassword) {
+        showToast('Passwords do not match!', 'error');
+        return;
+    }
+
+    if (form.newPassword.length < 8) {
+        showToast('Password must be at least 8 characters long!', 'error');
+        return;
+    }
+
+    axios.post(route('profile.update.password'), {
+        new_password: form.newPassword,
+        password_confirmation: form.confirmPassword
+    })
+        .then(response => {
+            closeModal();
+            resetPasswordVerification();
+            showToast('Password updated successfully!');
+        })
+        .catch(error => {
+            showToast('Error updating password: ' + (error.response?.data?.message || 'Please try again'), 'error');
+        });
+};
+
+
+// Reset the email verification flow
+const resetEmailVerification = () => {
+    emailStep.value = 1;
+    oldEmailCodeSent.value = false;
+    newEmailCodeSent.value = false;
+    form.oldEmailCode = '';
+    form.newEmail = '';
+    form.newEmailCode = '';
+};
+
+// Reset the password verification flow
+const resetPasswordVerification = () => {
+    passwordStep.value = 1;
+    passwordCodeSent.value = false;
+    form.currentPassword = '';
+    form.passwordVerificationCode = '';
+    form.newPassword = '';
+    form.confirmPassword = '';
+};
+
+// Update the closeModal function to reset password verification
+const closeModal = () => {
+    changeEmail.value = false;
+    changePassword.value = false;
+    changeDP.value = false;
+    resetEmailVerification();
+    resetPasswordVerification();
 };
 
 // Watch for flash messages

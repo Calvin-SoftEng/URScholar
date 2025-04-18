@@ -25,7 +25,10 @@ class User extends Authenticatable
         'last_name',
         'password',
         'usertype',
-        'campus_id'
+        'campus_id',
+        'age',
+        'address',
+        'contact',
     ];
 
     public function studentrecord()

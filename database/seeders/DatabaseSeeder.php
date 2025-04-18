@@ -50,7 +50,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'system_admin',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
         //Super Admin
@@ -62,7 +65,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'B',
             'password' => bcrypt('password'),
             'usertype' => 'super_admin',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
 
@@ -75,7 +81,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
-            'campus_id' => '2'
+            'campus_id' => '2',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
         User::factory()->create([
@@ -86,7 +95,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'Dolorian',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
-            'campus_id' => '4'
+            'campus_id' => '4',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
         //sponsor
@@ -98,7 +110,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
             'usertype' => 'sponsor',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
         //cashier
@@ -110,7 +125,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'head_cashier',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
         User::factory()->create([
@@ -121,7 +139,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
-            'campus_id' => '2'
+            'campus_id' => '2',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
         User::factory()->create([
@@ -132,7 +153,10 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
         ]);
 
         //student

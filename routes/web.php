@@ -196,8 +196,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     //One-time Payment Applicants
     Route::get('/scholarships/{scholarshipId}/applicant', [ScholarshipController::class, 'onetime_list'])->name('scholarship.onetime_list');
-    Route::post('/scholarships/{scholarshipId}/one-time/publish-applicants',[ScholarshipController::class, 'publishApplicantList'])->name('scholarships.publish-applicants');
-    
+    Route::post('/scholarships/{scholarshipId}/one-time/publish-applicants', [ScholarshipController::class, 'publishApplicantList'])->name('scholarships.publish-applicants');
+
     Route::get('/scholarships/{scholarshipId}/one-time/{batchId}', [ScholarshipController::class, 'showBatch'])->name('scholarship.onetime_batch');
     Route::get('/scholarships/one-time/scholars', [ScholarshipController::class, 'onetime_scholars'])->name('scholarship.onetime_scholars');
 
@@ -305,6 +305,18 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
 // Staff and Cashier Profile -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::get('/account/profile', [ProfileController::class, 'view_profile'])->name('view.profile');
+
+
+// New routes for email verification process
+Route::post('/profile/send-old-email-code', [ProfileController::class, 'sendOldEmailCode'])->name('profile.send.old.email.code');
+Route::post('/profile/verify-old-email', [ProfileController::class, 'verifyOldEmail'])->name('profile.verify.old.email');
+Route::post('/profile/send-new-email-code', [ProfileController::class, 'sendNewEmailCode'])->name('profile.send.new.email.code');
+Route::post('/profile/update-email', [ProfileController::class, 'updateEmail'])->name('profile.update.email');
+
+// Password change routes
+Route::post('/profile/send-password-code', [ProfileController::class, 'sendPasswordVerificationCode'])->name('profile.send.password.code');
+Route::post('/profile/verify-password-code', [ProfileController::class, 'verifyPasswordCode'])->name('profile.verify.password.code');
+Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
 
 // STUDENT -------------------------------------------------------------------------------------------------------------------------------------------------------
