@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function GranteeSummaryReport(Scholarship $scholarship, Batch $batch)
+    public function EnrolleesSummaryReport(Scholarship $scholarship, Batch $batch)
     {
         // Fetch real scholars
         $scholars = $batch->scholars;
@@ -38,7 +38,7 @@ class ReportsController extends Controller
             ]);
         }
 
-        $pdf = PDF::loadView('reports.grantee_summary', [
+        $pdf = PDF::loadView('reports.enrollees-summary', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars
@@ -47,7 +47,7 @@ class ReportsController extends Controller
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
 
-    public function EnrolledSummaryReport(Scholarship $scholarship, Batch $batch)
+    public function EnrolledListReport(Scholarship $scholarship, Batch $batch)
     {
         // Get the campus for this batch
         $campus = $batch->campus;
@@ -103,76 +103,7 @@ class ReportsController extends Controller
         }
 
         // Generate PDF
-        $pdf = PDF::loadView('reports.enrolled-report', [
-            'scholarship' => $scholarship,
-            'batch' => $batch,
-            'scholars' => $scholars,
-        ]);
-
-        // Set paper size and orientation
-        $pdf->setPaper([0, 0, 612, 936], 'portrait');
-
-        // Stream the PDF
-        return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
-    }
-
-    public function EnrolleesReport(Scholarship $scholarship, Batch $batch)
-    {
-        // Get the campus for this batch
-        $campus = $batch->campus;
-
-        // Get all grantees/scholars for this batch
-        $grantees = Grantees::where('batch_id', $batch->id)
-            ->where('scholarship_id', $scholarship->id)
-            ->with('scholar.course')
-            ->get();
-
-        // Map to scholars
-        $scholars = $grantees->map(function ($grantee) {
-            return $grantee->scholar;
-        })->filter()->values();
-
-        // Fallback for testing/demo purposes
-        if ($scholars->isEmpty()) {
-            $scholars = collect([
-                (object) [
-                    'urscholar_id' => 'SCH-' . rand(10000, 99999),
-                    'last_name' => 'Dela Cruz',
-                    'first_name' => 'Juan',
-                    'middle_name' => 'Santos',
-                    'sex' => 'Male',
-                    'year_level' => 3,
-                    'course' => (object) ['name' => 'BS Computer Science'],
-                    'student_status' => 'Enrolled',
-                    'grant' => null
-                ],
-                (object) [
-                    'urscholar_id' => 'SCH-' . rand(10000, 99999),
-                    'last_name' => 'Santos',
-                    'first_name' => 'Maria',
-                    'middle_name' => 'Reyes',
-                    'sex' => 'Female',
-                    'year_level' => 2,
-                    'course' => (object) ['name' => 'BS Accountancy'],
-                    'student_status' => 'Enrolled',
-                    'grant' => 'TES3-a'
-                ],
-                (object) [
-                    'urscholar_id' => 'SCH-' . rand(10000, 99999),
-                    'last_name' => 'Reyes',
-                    'first_name' => 'Pedro',
-                    'middle_name' => 'Garcia',
-                    'sex' => 'Male',
-                    'year_level' => 4,
-                    'course' => (object) ['name' => 'BS Civil Engineering'],
-                    'student_status' => 'Enrolled',
-                    'grant' => 'TES3-a'
-                ]
-            ]);
-        }
-
-        // Generate PDF
-        $pdf = PDF::loadView('reports.enrolleeslist', [
+        $pdf = PDF::loadView('reports.enrolled_list', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars,
@@ -242,70 +173,36 @@ class ReportsController extends Controller
 
     public function PayrollReport(Scholarship $scholarship, Batch $batch)
     {
-        // Get the campus for this batch
-        $campus = $batch->campus;
+        // Fetch real scholars
+        $scholars = $batch->scholars;
 
-        // Get all grantees/scholars for this batch
-        $grantees = Grantees::where('batch_id', $batch->id)
-            ->where('scholarship_id', $scholarship->id)
-            ->with('scholar.course')
-            ->get();
-
-        // Map to scholars
-        $scholars = $grantees->map(function ($grantee) {
-            return $grantee->scholar;
-        })->filter()->values();
-
-        // Fallback for testing/demo purposes
+        // Dummy fallback if no scholars exist
         if ($scholars->isEmpty()) {
             $scholars = collect([
                 (object) [
-                    'urscholar_id' => 'SCH-' . rand(10000, 99999),
-                    'last_name' => 'Dela Cruz',
-                    'first_name' => 'Juan',
-                    'middle_name' => 'Santos',
-                    'sex' => 'Male',
-                    'year_level' => 3,
-                    'course' => (object) ['name' => 'BS Computer Science'],
-                    'student_status' => 'Enrolled',
-                    'grant' => null
+                    'name' => 'Juan Dela Cruz',
+                    'email' => 'juan@example.com',
+                    'status' => 'Active'
                 ],
                 (object) [
-                    'urscholar_id' => 'SCH-' . rand(10000, 99999),
-                    'last_name' => 'Santos',
-                    'first_name' => 'Maria',
-                    'middle_name' => 'Reyes',
-                    'sex' => 'Female',
-                    'year_level' => 2,
-                    'course' => (object) ['name' => 'BS Accountancy'],
-                    'student_status' => 'Enrolled',
-                    'grant' => 'TES3-a'
+                    'name' => 'Maria Santos',
+                    'email' => 'maria@example.com',
+                    'status' => 'Graduated'
                 ],
                 (object) [
-                    'urscholar_id' => 'SCH-' . rand(10000, 99999),
-                    'last_name' => 'Reyes',
-                    'first_name' => 'Pedro',
-                    'middle_name' => 'Garcia',
-                    'sex' => 'Male',
-                    'year_level' => 4,
-                    'course' => (object) ['name' => 'BS Civil Engineering'],
-                    'student_status' => 'Enrolled',
-                    'grant' => 'TES3-a'
+                    'name' => 'Pedro Reyes',
+                    'email' => 'pedro@example.com',
+                    'status' => 'Inactive'
                 ]
             ]);
         }
 
-        // Generate PDF
         $pdf = PDF::loadView('reports.payroll', [
             'scholarship' => $scholarship,
             'batch' => $batch,
-            'scholars' => $scholars,
+            'scholars' => $scholars
         ]);
 
-        // Set paper size and orientation
-        $pdf->setPaper('a4', 'landscape');
-
-        // Stream the PDF
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
 }

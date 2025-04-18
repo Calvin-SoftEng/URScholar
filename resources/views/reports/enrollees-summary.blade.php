@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,16 +39,16 @@
     </div>
 
     <!-- Title -->
-    <h2 class="font-bold text-lg text-center mb-4 uppercase">Lis of Enrollees for {{ $scholarship->name }}</h2>
+    <h2 class="font-bold text-lg text-center mb-4 uppercase">Certification of Enrolled Grantees</h2>
 
     <!-- Paragraph -->
-    {{-- <p class="mb-4 ">
+    <p class="mb-4 ">
         <span class="font-bold">TO WHOM IT MAY CONCERN:</span>
         <br />
         <p class="text-justify indent-5">This is to certify that the total number of Continuing {{ $scholarship->name }} grantees by campus as shown below, are qualified to avail of the {{ $scholarship->name }} for the 
         <span class="font-bold text-red-600"> {{ $batch->school_year->semester ?? '1st' }}</span> semester of Academic Year
             {{ $batch->school_year->year }}.</p>
-    </p> --}}
+    </p>
 
     <br>
 
@@ -54,9 +56,9 @@
     <table class="w-full border border-gray-700 mb-4 text-center">
         <thead class="bg-gray-100">
         <tr>
-            <th class="border border-gray-700 p-2">Student ID</th>
-            <th class="border border-gray-700 p-2">Name</th>
-            <th class="border border-gray-700 p-2">Campus</th>
+            <th class="border border-gray-700 p-2">Name of Campus</th>
+            <th class="border border-gray-700 p-2">Number of {{ $scholarship->name }} Grantees</th>
+            <th class="border border-gray-700 p-2">Total</th>
         </tr>
         </thead>
         <tbody>
