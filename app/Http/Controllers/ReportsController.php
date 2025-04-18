@@ -21,6 +21,8 @@ class ReportsController extends Controller
         $schoolYearId = $request->input('school_year_id');
         $semester = $request->input('semester');
 
+        dd($batchIds);
+
         // Query batches with the given IDs that belong to the scholarship
         $batches = Batch::whereIn('id', $batchIds)
             ->where('scholarship_id', $scholarship->id)

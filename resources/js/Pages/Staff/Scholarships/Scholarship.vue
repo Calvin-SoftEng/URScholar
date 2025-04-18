@@ -1691,20 +1691,18 @@
 
                                         <!-- All Option -->
                                         <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
-                                        <input type="checkbox"
-                                            class="mr-2 w-4 h-4"
-                                            :checked="selectedReportBatches.length === batches.length"
-                                            @change="toggleAll('batch')" />
-                                        All
+                                            <input type="checkbox" class="mr-2 w-4 h-4"
+                                                :checked="selectedReportBatches.length === batches.length"
+                                                @change="toggleAll('batch')" />
+                                            All
                                         </label>
 
                                         <!-- Individual Batches -->
-                                        <label v-for="batch in batches" :key="batch.id" class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
-                                        <input type="checkbox"
-                                            class="mr-2 w-4 h-4"
-                                            :value="batch.id"
-                                            v-model="selectedReportBatches" />
-                                        Batch {{ batch.batch_no }}
+                                        <label v-for="batch in batches" :key="batch.id"
+                                            class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                            <input type="checkbox" class="mr-2 w-4 h-4" :value="batch.id"
+                                                v-model="selectedReportBatches" />
+                                            Batch {{ batch.batch_no }}
                                         </label>
 
                                         <!-- No batches message -->
@@ -1714,10 +1712,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-
-
                             </div>
                         </div>
                         <div class="mt-6">
@@ -2741,10 +2735,10 @@ const filteredBatches = computed(() => {
 // Update the toggleAll function to work with filtered batches
 function toggleAll(type) {
     if (type === 'batch') {
-    const allIds = props.batches.map(b => b.id);
-    selectedReportBatches.value =
-      selectedReportBatches.value.length === allIds.length ? [] : [...allIds];
-  }
+        const allIds = props.batches.map(b => b.id);
+        selectedReportBatches.value =
+            selectedReportBatches.value.length === allIds.length ? [] : [...allIds];
+    }
 
     if (type === 'campus') {
         const allIds = props.campuses.map(c => c.id);
@@ -2808,39 +2802,80 @@ const availableCampuses = ref([
 ]);
 
 
-// // Generate Reports handler
 const handleGenerateReports = () => {
+    // Validation first
+    if (!selectedReportType.value) {
+        showToast('Error', 'Please select a report type', 'error');
+        return;
+    }
+
+    if (selectedBatches.value.length === 0) {
+        showToast('Error', 'Please select at least one batch', 'error');
+        return;
+    }
+
+    if (selectedCampuses.value.length === 0) {
+        showToast('Error', 'Please select at least one campus', 'error');
+        return;
+    }
+
+    // Get actual batch IDs (filter out 'all')
+    const batchIds = selectedBatches.value.filter(id => id !== 'all');
+
+    // Prepare campus IDs
+    const campusIds = selectedCampuses.value;
+
+    // Generate specific report based on type
     switch (selectedReportType.value) {
         case 'Enrollees Summary':
-            generateEnrolleesSummary()
-            break
+            generateEnrolleesSummary(batchIds, campusIds);
+            break;
         case 'Enrolled List':
-            generateEnrolledList()
-            break
+            generateEnrolledList(batchIds, campusIds);
+            break;
         case 'Graduate Summary':
-            generateGraduateList()
-            break
+            generateGraduateList(batchIds, campusIds);
+            break;
         case 'Payroll':
-            generatePayroll()
-            break
+            generatePayroll(batchIds, campusIds);
+            break;
         case 'Scholars List':
-            generateScholarsList()
-            break
+            generateScholarsList(batchIds, campusIds);
+            break;
         default:
-            // Optional: handle invalid/empty selection
-            console.warn('No valid report type selected.')
+            showToast('Error', 'Invalid report type selected', 'error');
     }
+
+    // Close modal after generating report
+    closeReportGeneration();
 }
 
 
-const generateEnrolleesSummary = async () => {
+const generateEnrolleesSummary = async (batchIds, campusIds) => {
     try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/enrollees-summary`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
+        // Build query parameters
+        const params = new URLSearchParams();
+
+        // Add batch IDs
+        batchIds.forEach(id => params.append('batch_ids[]', id));
+
+        // Add campus IDs
+        campusIds.forEach(id => params.append('campus_ids[]', id));
+
+        // Add scholarship ID
+        params.append('scholarship_id', props.scholarship.id);
+
+        // Include school year and semester
+        params.append('school_year_id', props.schoolyear.id);
+        params.append('semester', props.selectedSem);
+
+        // Open PDF report in new tab with query parameters
+        window.open(`/scholarships/${props.scholarship.id}/enrollees-summary?${params.toString()}`, '_blank');
+
+        showToast('Report Generated', 'Your enrollees summary report is being downloaded');
     } catch (err) {
-        console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
+        console.error('Failed to generate enrollees summary report:', err);
+        showToast('Error', 'Failed to generate enrollees summary report', 'error');
     }
 };
 
