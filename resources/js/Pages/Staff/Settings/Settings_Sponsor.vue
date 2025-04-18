@@ -83,7 +83,7 @@
                                             {{ sponsor.since }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            Jason Statham
+                                            {{sponsor.assign.first_name}} {{sponsor.assign.last_name}}
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ formatDate(sponsor.created_at) }}

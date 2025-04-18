@@ -14,6 +14,7 @@ use App\Models\Requirements;
 use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
 use App\Models\ScholarshipForm;
+use App\Models\ScholarshipFormData;
 use App\Models\Criteria;
 use App\Models\ActivityLog;
 use App\Models\CampusRecipients;
@@ -371,7 +372,8 @@ class StudentController extends Controller
         $studentData = Student::where('email', Auth::user()->email)->first();
 
         // Add scholarship forms here
-        $scholarshipForms = ScholarshipForm::with('scholarshipformdata')->get();
+        $scholarship_form = ScholarshipForm::all();
+        $scholarship_form_data = ScholarshipFormData::all();
 
         // Rest of your existing code
         if ($scholar) {
@@ -435,7 +437,8 @@ class StudentController extends Controller
             'batch_semester' => $grantee_semester,
             'school_year' => $school_year ?? 'N/A', // Default to 'N/A' if no school year found
             'studentData' => $studentData,
-            'scholarshipForms' => $scholarshipForms, // Add scholarship forms to the view
+            'scholarship_form' => $scholarship_form, // Add scholarship forms to the view
+            'scholarship_form_data' => $scholarship_form_data,
         ]);
     }
     public function uploadGrade($urscholar_id, Request $request)

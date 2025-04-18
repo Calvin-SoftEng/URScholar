@@ -1771,8 +1771,13 @@ const props = defineProps({
     batch_semester: Object,
     school_year: Object,
     studentData: Object,
-    scholarshipForms: Array,
+    scholarship_form: Array,
+    scholarship_form_data: Array,
 });
+
+const getFormData = (formId) => {
+    return props.scholarship_form_data.filter(data => data.scholarship_form_id === formId);
+};
 
 const form = ref({
     name: user.name,

@@ -33,7 +33,7 @@ class SettingsController extends Controller
     public function index()
     {
 
-        $sponsors = Sponsor::all();
+        $sponsors = Sponsor::with('assign')->get();
         $moa = SponsorMoa::all();
 
         return Inertia::render(
