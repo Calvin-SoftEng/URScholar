@@ -111,7 +111,7 @@
                                     class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5">
                                     Go Back
                                 </button>
-                                <button @click="updateSponsor"
+                                <button v-if="form.created_id == $page.props.auth.user.id" @click="updateSponsor"
                                     class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5">
                                     Edit
                                 </button>
@@ -136,21 +136,27 @@
                                     <div class="flex flex-col gap-4">
                                         <div>
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Name</h3>
-                                            <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{ form.name || 'N/A' }}</p>
+                                            <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{
+                                                form.name || 'N/A' }}
+                                            </p>
                                         </div>
 
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                 </h3>
-                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{ form.abbreviation ||
+                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{
+                                                    form.abbreviation
+                                                    ||
                                                     'N/A' }}</p>
                                             </div>
 
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Partnered Since
                                                 </h3>
-                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{ form.since || 'N/A' }}
+                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{
+                                                    form.since ||
+                                                    'N/A' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -168,9 +174,10 @@
 
                             <div class="h-0.5 bg-gray-200 dark:bg-gray-700 my-6"></div>
 
-                            <div class="pt-4 text-left text-lg font-semibold text-gray-900 dark:text-white flex justify-between items-center">
+                            <div
+                                class="pt-4 text-left text-lg font-semibold text-gray-900 dark:text-white flex justify-between items-center">
                                 <span>Memorandum of Agreements History</span>
-                                <button @click="toggleUploadMOA"
+                                <button v-if="form.created_id == $page.props.auth.user.id" @click="toggleUploadMOA"
                                     class="inline-flex items-center gap-1 text-sm font-medium bg-primary hover:bg-blue-700 text-white py-1.5 px-3 rounded-lg transition duration-200">
                                     <span class="material-symbols-rounded text-base">upload_file</span>
                                     Add MOA
@@ -183,7 +190,9 @@
                                     class="grid grid-cols-1 md:grid-cols-3 gap-4 py-3 border-b border-gray-200 dark:border-gray-700">
                                     <!-- Date column -->
                                     <div class="w-full md:col-span-1 flex items-center">
-                                        <span class="font-semibold text-gray-900 dark:text-white">{{ formatDate(moaItem.created_at) }}</span>
+                                        <span class="font-semibold text-gray-900 dark:text-white">{{
+                                            formatDate(moaItem.created_at)
+                                        }}</span>
                                     </div>
 
                                     <!-- File name column -->
@@ -549,14 +558,17 @@
                     </button>
                 </div>
                 <!-- Form -->
-                <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-10">
+                <form @submit.prevent="submitMOA" class="p-6 flex flex-col gap-10">
 
                     <!-- Page 1: Basic Information -->
                     <div>
                         <div class="flex flex-col gap-3">
                             <div class="w-full flex flex-col space-y-2">
-                                <h3 class="font-semibold text-gray-900 dark:text-white">Upload Memorandum of Agreement</h3>
-                                <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"  @change="moaupload" type="file">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Upload Memorandum of Agreement
+                                </h3>
+                                <input
+                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    @change="moaupload" type="file">
                             </div>
                         </div>
                     </div>
@@ -648,6 +660,7 @@ const ViewSponsor = (sponsor) => {
         fileName: sponsor.moa_file,
         sponsor_name: sponsor.sponsor_name,
         email: sponsor.email,
+        created_id: sponsor.created_id,
         // Set these to null as they are for file upload handling
         file: null,
         filePreview: null,
@@ -689,7 +702,7 @@ const isEditing = ref(false);
 const Showcase = ref(false);
 
 function moaupload(event) {
-  form.value.file = event.target.files[0]
+    form.value.file = event.target.files[0]
 }
 
 const form = ref({
@@ -700,6 +713,7 @@ const form = ref({
     fileName: null,
     filePreview: null,
     img: null,
+    created_id: null,
     imgName: null,
     imgPreview: null,
     abbreviation: null,
@@ -793,6 +807,36 @@ const toggleCreate = () => {
     isCreating.value = !isCreating.value;
     if (isCreating.value) {
         resetForm();
+    }
+};
+
+const canManageSponsor = computed(() => {
+    const currentUser = usePage().props.auth.user;
+
+    // Find the current sponsor from props
+    const currentSponsor = props.sponsors.find(s => s.id === form.value.id);
+
+    // Check if current user is the assigned user for this sponsor
+    return currentSponsor && currentSponsor.assign_id === currentUser.id;
+});
+
+const submitMOA = async () => {
+    try {
+        // Create FormData to handle file upload
+        const formData = new FormData();
+        formData.append('sponsor_id', form.value.id);
+        formData.append('moa_file', form.value.file);
+
+        // Post the MOA to the server
+        router.post("/settings/sponsors/moa", formData, {
+            onSuccess: () => {
+                // Close the modal and show success message
+                uploadMOA.value = false;
+                form.value.file = null;
+            }
+        });
+    } catch (error) {
+        console.error("Error uploading MOA:", error);
     }
 };
 

@@ -207,6 +207,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/sponsors/create', [SettingsController::class, 'create_sponsor'])->name('settings.sponsor');
+    Route::post('/settings/sponsors/moa', [SettingsController::class, 'storeMOA'])->name('sponsors.moa.store');
     Route::put('/settings/sponsors/{id}', [SettingsController::class, 'sponsor_update'])->name('settings.sponsors.update');
 
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
