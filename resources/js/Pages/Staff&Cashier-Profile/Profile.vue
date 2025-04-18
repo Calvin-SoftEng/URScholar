@@ -67,18 +67,15 @@
                                 <!-- Header -->
                                 <div class="flex gap-2 justify-end">
                                     <button
-                                    class="text-white bg-blue-600 hover:bg-blue-800 rounded-md px-5 py-2 font-medium text-sm"
-                                    @click="toggleEdit"
-                                    >
-                                    {{ isEditing ? 'Save' : 'Edit Profile' }}
+                                        class="text-white bg-blue-600 hover:bg-blue-800 rounded-md px-5 py-2 font-medium text-sm"
+                                        @click="toggleEdit">
+                                        {{ isEditing ? 'Save' : 'Edit Profile' }}
                                     </button>
 
-                                    <button
-                                    v-if="isEditing"
-                                    class="text-white bg-gray-400 hover:bg-gray-600 rounded-md px-5 py-2 font-medium text-sm"
-                                    @click="cancelEdit"
-                                    >
-                                    Cancel
+                                    <button v-if="isEditing"
+                                        class="text-white bg-gray-400 hover:bg-gray-600 rounded-md px-5 py-2 font-medium text-sm"
+                                        @click="cancelEdit">
+                                        Cancel
                                     </button>
                                 </div>
 
@@ -536,10 +533,10 @@ const form = useForm({
     address: props.user.address || '',
     age: props.user.age || '',
     email: props.user.email || '',
-    currentPassword : '',
-    passwordVerificationCode : '',
-    newPassword : '',
-    confirmPassword : '',
+    currentPassword: '',
+    passwordVerificationCode: '',
+    newPassword: '',
+    confirmPassword: '',
     file: null,
     filePreview: props.user.picture ? `/storage/${user.picture}` : null,
 
@@ -557,9 +554,9 @@ const isEditing = ref(false);
 const isImgDragging = ref(false);
 
 function cancelEdit() {
-  isEditing.value = false
-  // Optional: revert form fields here
-  console.log("Canceled editing.")
+    isEditing.value = false
+    // Optional: revert form fields here
+    console.log("Canceled editing.")
 }
 // Toast notification
 const toastVisible = ref(false);
@@ -593,14 +590,14 @@ const toggleEdit = () => {
     }
 };
 
-// Submit profile changes
-const submitProfileChanges = () => {
-    form.post(route('profile.update'), {
-        onSuccess: () => {
-            showToast('Profile updated successfully!');
-        },
-    });
-};
+// // Submit profile changes
+// const submitProfileChanges = () => {
+//     form.post(route('profile.update'), {
+//         onSuccess: () => {
+//             showToast('Profile updated successfully!');
+//         },
+//     });
+// };
 
 // Email change
 const submitEmailChange = () => {
@@ -630,20 +627,20 @@ const submitPasswordChange = () => {
     });
 };
 
-// Profile picture change
-const submitProfilePicture = () => {
-    if (!form.file) {
-        closeModal();
-        return;
-    }
+// // Profile picture change
+// const submitProfilePicture = () => {
+//     if (!form.file) {
+//         closeModal();
+//         return;
+//     }
 
-    form.post(route('profile.update.picture'), {
-        onSuccess: () => {
-            closeModal();
-            showToast('Profile picture updated successfully!');
-        },
-    });
-};
+//     form.post(route('profile.update.picture'), {
+//         onSuccess: () => {
+//             closeModal();
+//             showToast('Profile picture updated successfully!');
+//         },
+//     });
+// };
 
 // Show toast message
 const showToast = (message, type = 'success') => {
@@ -685,6 +682,44 @@ const handleImg = (img) => {
         };
         reader.readAsDataURL(img);
     }
+};
+
+// Submit profile changes - make this function work correctly
+const submitProfileChanges = () => {
+    form.post(route('profile.update'), {
+        onSuccess: () => {
+            showToast('Profile updated successfully!');
+        },
+        onError: (errors) => {
+            // Display errors to the user
+            const errorMessage = Object.values(errors).join('\n');
+            showToast(errorMessage, 'error');
+        }
+    });
+};
+
+// Profile picture change - fix this function
+const submitProfilePicture = () => {
+    if (!form.file) {
+        closeModal();
+        return;
+    }
+
+    form.post(route('profile.update.picture'), {
+        onSuccess: () => {
+            closeModal();
+            showToast('Profile picture updated successfully!');
+        },
+        onError: (errors) => {
+            const errorMessage = Object.values(errors).join('\n');
+            showToast(errorMessage, 'error');
+        }
+    });
+};
+
+// Create a new submit form function to be used by the profile picture modal
+const submitForm = () => {
+    submitProfilePicture();
 };
 
 

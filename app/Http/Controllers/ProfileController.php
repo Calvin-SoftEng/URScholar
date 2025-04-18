@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -29,6 +30,45 @@ class ProfileController extends Controller
         return Inertia::render('Staff&Cashier-Profile/Profile', [
             'user' => $user,
         ]);
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'nullable|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'suffix_name' => 'nullable|string|max:255',
+            'contact' => 'nullable|string|max:255',
+            'address' => 'nullable|string|max:255',
+            'age' => 'nullable|numeric',
+        ]);
+
+        $user = Auth::user();
+        $user->update($validated);
+
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
+    // Profile picture update
+    public function updateProfilePicture(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|image|max:4096', // 4MB max
+        ]);
+
+        $user = Auth::user();
+
+        // Delete the old profile picture if it exists
+        if ($user->picture && Storage::exists('public/' . $user->picture)) {
+            Storage::delete('public/' . $user->picture);
+        }
+
+        $path = $request->file('file')->store('profile_pictures', 'public');
+        $user->picture = $path;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile picture updated successfully');
     }
 
     /**

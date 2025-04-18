@@ -318,6 +318,9 @@ Route::post('/profile/send-password-code', [ProfileController::class, 'sendPassw
 Route::post('/profile/verify-password-code', [ProfileController::class, 'verifyPasswordCode'])->name('profile.verify.password.code');
 Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
 
+Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+Route::post('/profile/update/picture', [ProfileController::class, 'updateProfilePicture'])->name('profile.update.picture');
+
 
 // STUDENT -------------------------------------------------------------------------------------------------------------------------------------------------------
 
