@@ -1691,18 +1691,20 @@
 
                                         <!-- All Option -->
                                         <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
-                                            <input type="checkbox" class="mr-2 w-4 h-4"
-                                                :checked="selectedReportBatches.length === filteredBatches.length && filteredBatches.length > 0"
-                                                :disabled="filteredBatches.length === 0" @change="toggleAll('batch')" />
-                                            All
+                                        <input type="checkbox"
+                                            class="mr-2 w-4 h-4"
+                                            :checked="selectedReportBatches.length === batches.length"
+                                            @change="toggleAll('batch')" />
+                                        All
                                         </label>
 
                                         <!-- Individual Batches -->
-                                        <label v-for="batch in filteredBatches" :key="batch.id"
-                                            class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
-                                            <input type="checkbox" class="mr-2 w-4 h-4" :value="batch.id"
-                                                v-model="selectedReportBatches" />
-                                            Batch {{ batch.batch_no }}
+                                        <label v-for="batch in batches" :key="batch.id" class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                        <input type="checkbox"
+                                            class="mr-2 w-4 h-4"
+                                            :value="batch.id"
+                                            v-model="selectedReportBatches" />
+                                        Batch {{ batch.batch_no }}
                                         </label>
 
                                         <!-- No batches message -->
@@ -2739,11 +2741,10 @@ const filteredBatches = computed(() => {
 // Update the toggleAll function to work with filtered batches
 function toggleAll(type) {
     if (type === 'batch') {
-        const allIds = filteredBatches.value.map(b => b.id);
-        const selected = selectedReportBatches.value;
-        selectedReportBatches.value =
-            selected.length === allIds.length ? [] : [...allIds];
-    }
+    const allIds = props.batches.map(b => b.id);
+    selectedReportBatches.value =
+      selectedReportBatches.value.length === allIds.length ? [] : [...allIds];
+  }
 
     if (type === 'campus') {
         const allIds = props.campuses.map(c => c.id);
