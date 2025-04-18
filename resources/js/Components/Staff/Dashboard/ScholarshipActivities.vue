@@ -53,7 +53,7 @@
                 <table class="table rounded-lg w-full">
                     <!-- Head -->
                     <thead class="bg-gray-50 dark:bg-dprimary">
-                        <tr class="text-xs uppercase dark:text-dtext">
+                        <tr class="text-xs uppercase dark:text-dtext tracking-wide">
                             <th>URScholar ID</th>
                             <th>Name</th>
                             <th>Scholarship</th>
@@ -65,7 +65,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="scholar in latestSubmissions" :key="scholar.id" class="text-sm">
+                        <tr v-for="scholar in latestSubmissions" :key="scholar.id" class="text-sm dark:text-dtext">
                             <td>{{ scholar.urscholar_id }}</td>
                             <td>
                                 <div class="flex items-center gap-3">

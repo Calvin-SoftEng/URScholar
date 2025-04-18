@@ -1619,22 +1619,35 @@
                                 <!-- Report Type Filter -->
                                 <div class="relative">
                                     <label class="block text-xs font-medium mb-1">Report Type</label>
-                                    <button type="button"
+                                    <button
+                                        type="button"
                                         class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                        @click="toggleDropdown('reportType')">
-                                        {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select Report type' }}
+                                        @click="toggleDropdown('reportType')"
+                                    >
+                                        {{ selectedReportType ? selectedReportType : 'Select Report type' }}
                                     </button>
-                                    <div v-if="openDropdown === 'reportType'"
-                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                        <label v-for="type in reportTypeOptions" :key="type"
-                                            class="block px-4 py-2 hover:bg-gray-100">
-                                            <input type="checkbox"
-                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                                :value="type" v-model="selectedReportTypes" />
-                                            {{ type }}
+
+                                    <div
+                                        v-if="openDropdown === 'reportType'"
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto"
+                                    >
+                                        <label
+                                        v-for="type in reportTypeOptions"
+                                        :key="type"
+                                        class="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        >
+                                        <input
+                                            type="radio"
+                                            class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                            :value="type"
+                                            v-model="selectedReportType"
+                                            name="reportType"
+                                        />
+                                        {{ type }}
                                         </label>
                                     </div>
                                 </div>
+
 
                                 <!-- Batch Filter -->
                                 <div class="relative">
@@ -2746,23 +2759,29 @@ const reportTypeOptions = ['Enrolled List', 'Graduate List', 'Payroll', 'Scholar
 const batchOptions = ['Batch 1', 'Batch 2', 'Batch 3'];
 const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
 
-const selectedReportTypes = ref([]);
+const selectedReportType = ref('')
 
 // // Generate Reports handler
 const handleGenerateReports = () => {
-    if (selectedReportTypes.value.includes('Scholars List')) {
-        generateScholarsList()
-    }
-    if (selectedReportTypes.value.includes('Enrolled List')) {
-        generateEnrolledList()
-    }
-    if (selectedReportTypes.value.includes('Graduate List')) {
-        generateGraduateList()
-    }
-    if (selectedReportTypes.value.includes('Payroll')) {
-        generatePayroll()
-    }
+  switch (selectedReportType.value) {
+    case 'Scholars List':
+      generateScholarsList()
+      break
+    case 'Enrolled List':
+      generateEnrolledList()
+      break
+    case 'Graduate List':
+      generateGraduateList()
+      break
+    case 'Payroll':
+      generatePayroll()
+      break
+    default:
+      // Optional: handle invalid/empty selection
+      console.warn('No valid report type selected.')
+  }
 }
+
 
 
 const GenerateReport = ref(false);
