@@ -1715,11 +1715,6 @@
                             </div>
                         </div>
                         <div class="mt-6">
-                            <!-- <button type="submit" @click="handleGenerateReports"
-                                :disabled="!selectedReportType || selectedBatches.length === 0 || selectedCampuses.length === 0"
-                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                Generate Report
-                            </button> -->
                             <button type="button" @click="handleGenerateReports"
                                 class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 Generate Report
@@ -1746,7 +1741,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed, onUnmounted } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed, onUnmounted, onBeforeUnmount } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 // import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
@@ -2701,6 +2696,8 @@ onMounted(() => {
     window.addEventListener('popstate', () => {
         window.location.reload();
     });
+
+    document.addEventListener('click', handleClickOutside);
 });
 
 onUnmounted(() => {
@@ -2708,6 +2705,10 @@ onUnmounted(() => {
         window.location.reload();
     });
 });
+
+onBeforeMount(() => {
+    document.addEventListener('click', handleClickOutside);
+})
 
 const openDropdown = ref('');
 
@@ -2748,20 +2749,7 @@ function toggleAll(type) {
     }
 }
 
-
-
 // Detect outside click
-function handleClickOutside(event) {
-    const clickedOutside =
-        !reportTypeRef.value?.contains(event.target) &&
-        !batchRef.value?.contains(event.target) &&
-        !campusRef.value?.contains(event.target)
-
-    if (clickedOutside) {
-        openDropdown.value = ''
-    }
-}
-
 const GenerateReport = ref(false);
 
 const generateReportModal = () => {
@@ -2781,134 +2769,146 @@ const resetSelections = () => {
     selectedReportCampuses.value = [];
 };
 
-const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Payroll', 'Scholars List'];
+const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Payroll'];
 const batchRef = ref(null);
 const campusRef = ref(null);
 
-const selectedReportType = ref('')
+const selectedReportType = ref('');
 const selectedReportBatches = ref([]);
 const selectedReportCampuses = ref([]);
 
-const availableBatches = ref([
-    { id: 1, batch_no: 2021 },
-    { id: 2, batch_no: 2022 },
-    { id: 3, batch_no: 2023 },
-]);
-
-const availableCampuses = ref([
-    { id: 'mnl', name: 'Manila' },
-    { id: 'ant', name: 'Antipolo' },
-    { id: 'tan', name: 'Tanay' },
-]);
-
+const handleClickOutside = (event) => {
+  // Check if click is outside the campusRef, batchRef, and reportRef
+  if (
+    campusRef.value && !campusRef.value.contains(event.target) &&
+    batchRef.value && !batchRef.value.contains(event.target) &&
+    reportRef.value && !reportRef.value.contains(event.target)
+  ) {
+    // Close the dropdown if no report type, campus, or batch is selected
+    if (
+      !selectedReportType.value &&
+      selectedReportBatches.value.length === 0 &&
+      selectedReportCampuses.value.length === 0
+    ) {
+      openDropdown.value = null;
+    }
+  }
+};
 
 const handleGenerateReports = () => {
-    // Validation first
-    if (!selectedReportType.value) {
-        showToast('Error', 'Please select a report type', 'error');
+    const filters = {
+        type: selectedReportType.value,
+        campuses: selectedReportCampuses.value,
+        batches: selectedReportBatches.value,
+    };
+
+    if (!filters.type || filters.campuses.length === 0 || filters.batches.length === 0) {
+        console.warn('Please select a report type, campuses, and batches.');
         return;
     }
 
-    if (selectedBatches.value.length === 0) {
-        showToast('Error', 'Please select at least one batch', 'error');
-        return;
-    }
-
-    if (selectedCampuses.value.length === 0) {
-        showToast('Error', 'Please select at least one campus', 'error');
-        return;
-    }
-
-    // Get actual batch IDs (filter out 'all')
-    const batchIds = selectedBatches.value.filter(id => id !== 'all');
-
-    // Prepare campus IDs
-    const campusIds = selectedCampuses.value;
-
-    // Generate specific report based on type
-    switch (selectedReportType.value) {
+    switch (filters.type) {
         case 'Enrollees Summary':
-            generateEnrolleesSummary(batchIds, campusIds);
+            generateEnrolleesSummary(filters);
             break;
         case 'Enrolled List':
-            generateEnrolledList(batchIds, campusIds);
+            generateEnrolledList(filters);
             break;
         case 'Graduate Summary':
-            generateGraduateList(batchIds, campusIds);
+            generateGraduateList(filters);
             break;
         case 'Payroll':
-            generatePayroll(batchIds, campusIds);
+            generatePayroll(filters);
             break;
-        case 'Scholars List':
-            generateScholarsList(batchIds, campusIds);
-            break;
+        // case 'Scholars List':
+        //     generateScholarsList(filters);
+        //     break;
         default:
-            showToast('Error', 'Invalid report type selected', 'error');
-    }
-
-    // Close modal after generating report
-    closeReportGeneration();
-}
-
-
-const generateEnrolleesSummary = async (batchIds, campusIds) => {
-    try {
-        // Build query parameters
-        const params = new URLSearchParams();
-
-        // Add batch IDs
-        batchIds.forEach(id => params.append('batch_ids[]', id));
-
-        // Add campus IDs
-        campusIds.forEach(id => params.append('campus_ids[]', id));
-
-        // Add scholarship ID
-        params.append('scholarship_id', props.scholarship.id);
-
-        // Include school year and semester
-        params.append('school_year_id', props.schoolyear.id);
-        params.append('semester', props.selectedSem);
-
-        // Open PDF report in new tab with query parameters
-        window.open(`/scholarships/${props.scholarship.id}/enrollees-summary?${params.toString()}`, '_blank');
-
-        showToast('Report Generated', 'Your enrollees summary report is being downloaded');
-    } catch (err) {
-        console.error('Failed to generate enrollees summary report:', err);
-        showToast('Error', 'Failed to generate enrollees summary report', 'error');
+            console.warn('No valid report type selected.');
     }
 };
 
-const generateEnrolledList = async () => {
+const generateEnrolleesSummary = async (filters) => {
     try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
+        
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        filters.campuses.forEach(campusId => {
+            filters.batches.forEach(batchId => {
+                const url = `/scholarships/${campusId}/batch/${batchId}/enrollees-summary`;
+                window.open(url, '_blank');
+            });
+        });
     } catch (err) {
         console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
     }
 };
 
-const generateGraduateList = async () => {
+
+
+const generateEnrolledList = async (filters) => {
     try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
+        
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        filters.campuses.forEach(campusId => {
+            filters.batches.forEach(batchId => {
+                const url = `/scholarships/${campusId}/batch/${batchId}/enrolled-scholars`;
+                window.open(url, '_blank');
+            });
+        });
     } catch (err) {
         console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
     }
 };
 
-const generatePayroll = async () => {
+
+const generateGraduateList = async (filters) => {
     try {
-        // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
-        showToast('Report Generated', 'Your report is being downloaded');
+        
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        filters.campuses.forEach(campusId => {
+            filters.batches.forEach(batchId => {
+                const url = `/scholarships/${campusId}/batch/${batchId}/graduate-scholars`;
+                window.open(url, '_blank');
+            });
+        });
     } catch (err) {
         console.error('Failed to generate report:', err);
-        showToast('Error', 'Failed to generate report', 'error');
+    }
+    
+};
+
+const generatePayroll = async (filters) => {
+    try {
+        
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        filters.campuses.forEach(campusId => {
+            filters.batches.forEach(batchId => {
+                const url = `/scholarships/${campusId}/batch/${batchId}/payroll-report`;
+                window.open(url, '_blank');
+            });
+        });
+    } catch (err) {
+        console.error('Failed to generate report:', err);
     }
 };
 
