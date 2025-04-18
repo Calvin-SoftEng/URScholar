@@ -4,7 +4,7 @@
 
     <AuthenticatedLayout class="shadow-md z-10">
         <form @submit.prevent="submit" class="w-full h-full overflow-hidden">
-            <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row">
+            <div class="w-full bg-dirtywhite dark:bg-dcontainer shadow-sm justify-between flex flex-row">
                 <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
                     My Profile
                 </h1>
@@ -12,18 +12,18 @@
                 <div class="hidden lg:flex space-x-4 p-3 mx-20">
                     <!-- Edit Button -->
                     <button v-if="!EditProfileWeb" type="button" @click="enableWebEdit"
-                        class="text-primary font-medium text-sm">
+                        class="text-dprimary dark:text-dtext font-medium text-sm">
                         Edit Profile
                     </button>
 
                     <!-- Save Button -->
-                    <button v-else type="submit" class="text-primary font-medium text-sm">
+                    <button v-else type="submit" class="text-dprimary dark:text-dtext font-medium text-sm">
                         Save Updates
                     </button>
 
                     <!-- Cancel Button -->
                     <button v-if="EditProfileWeb" type="button" @click="cancelWebEdit"
-                        class="text-gray-500 font-medium text-sm">
+                        class="text-gray-500 dark:text-dtext font-medium text-sm">
                         Cancel
                     </button>
                 </div>
@@ -49,7 +49,7 @@
                 </div>
             </div>
             <div
-                class="pt-3 sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
+                class="pt-3 sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
                 <div class="mx-auto sm:w-11/12 lg:w-7/12 sm:px-1 lg:px-8 ">
 
                     <!-- Mobile Display------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -74,7 +74,7 @@
                                 </div>
 
                                 <div
-                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
+                                    class="w-full h-1/12 bg-white dark:bg-dcontainer shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
                                     <div class="w-full flex flex-row items-center gap-2">
                                         <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                             class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
@@ -1053,32 +1053,32 @@
                                 <!-- info -->
                                 <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
                                     <span class="text-gray-500 text-sm">Permanent Address</span>
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">
+                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">
                                         {{scholar.street}} {{scholar.municipality}} {{scholar.province}}
                                     </span>
                                     <div class="w-full flex flex-row gap-2 py-2">
                                         <div class="w-[40%] flex flex-col items-left gap-1">
                                             <span class="text-gray-500 text-sm">Age</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                 student.age
                                                 }}</span>
                                         </div>
                                         <div class="w-[60%] flex flex-col items-left gap-1">
                                             <span class="text-gray-500 text-sm">Date of Birth</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                 formattedDate }}</span>
                                         </div>
                                     </div>
                                     <div class="w-full flex flex-row gap-2 py-2">
                                         <div class="w-[40%] flex flex-col items-left gap-1">
                                             <span class="text-gray-500 text-sm">Civil Status</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                 student.civil
                                             }}</span>
                                         </div>
                                         <div class="w-[60%] flex flex-col items-left gap-1">
                                             <span class="text-gray-500 text-sm">Place of Birth</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                 student.placebirth }}</span>
                                         </div>
                                     </div>
@@ -1089,13 +1089,13 @@
                                     <div class="w-full flex flex-row gap-2">
                                         <div class="w-[40%] flex flex-col items-left gap-1">
                                             <span class="text-gray-500 text-sm">Gender</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                 student.gender
                                             }}</span>
                                         </div>
                                         <div class="w-[60%] flex flex-col items-left gap-1">
                                             <span class="text-gray-500 text-sm">Religion</span>
-                                            <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                            <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                 student.religion }}</span>
                                         </div>
                                     </div>
@@ -1109,7 +1109,7 @@
                                     <!-- Email Container -->
                                     <div class="flex-1 min-w-0">
                                         <span
-                                            class="block pl-2 text-gray-900 text-base font-bold break-words leading-tight">
+                                            class="block pl-2 text-gray-900 dark:text-dtext text-base font-bold break-words leading-tight">
                                             {{ $page.props.auth.user.email }}
                                         </span>
                                     </div>
@@ -1117,8 +1117,8 @@
 
                                 <!-- qr -->
                                 <div v-if="!EditProfile"
-                                    class="w-full h-1/12 bg-white shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
-                                    <div v-if="scholar">
+                                    class="w-full h-1/12 bg-white dark:bg-dcontainer shadow-lg rounded-lg flex flex-col flex-grow items-center justify-center gap-2 p-3">
+                                    <div v-if="scholar" class="space-y-2">
                                         <div v-if="scholar.qr_code"
                                             class="w-40 h-40 flex items-center justify-center mx-auto">
                                             <img :src="`/storage/qr_codes/${scholar.qr_code}`" alt="QR Code"
@@ -1147,24 +1147,24 @@
                                 </div>
 
                                 <div
-                                    class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
+                                    class="w-full h-1/12 bg-white dark:bg-dcontainer shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
                                     <div class="w-full flex flex-row items-center gap-2">
                                         <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                             class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                             scholar.course.name
                                         }}</span>
                                     </div>
                                     <div class="w-full flex flex-row items-center gap-2">
                                         <font-awesome-icon :icon="['fas', 'id-card-clip']"
                                             class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                             scholar.urscholar_id }}</span>
                                     </div>
                                     <div class="w-full flex flex-row items-center gap-2">
                                         <font-awesome-icon :icon="['fas', 'school']"
                                             class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                             scholar.campus.name
                                         }}, Campus</span>
                                     </div>
@@ -1172,19 +1172,19 @@
 
                                 <!-- education -->
                                 <div
-                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
+                                    class="w-full h-1/12 bg-white dark:bg-dcontainer font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
                                     <h1 class="text-base">Education</h1>
 
                                     <div v-if="latestgrade">
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             General Weighted Average
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 latestgrade.school_year.year }} {{ latestgrade.semester }}
                                                 Semester</span>
                                             <div class="flex flex-col items-end">
-                                                <span class="text-gray-700 text-base font-medium leading-tight">
+                                                <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">
                                                     {{ latestgrade ? latestgrade.grade : 'N/A' }}
                                                 </span>
                                                 <button class="text-sm" @click="toggleCheck">
@@ -1195,11 +1195,11 @@
                                         <hr class="border-gray-300">
                                     </div>
                                     <div v-else>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             General Weighted Average
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">Must upload
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">Must upload
                                                 <b>{{ semesterGrade }} Semester
                                                     {{ schoolyear_grade.year }}</b>
                                             </span>
@@ -1225,67 +1225,67 @@
                                     </div>
 
                                     <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             Elementary
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 elementary.name
                                             }}</span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 elementary.years
                                             }}</span>
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             Junior High School
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 junior.name
                                                 }}</span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 junior.years
                                                 }}</span>
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             Senior High School
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 senior.name
                                                 }}</span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 senior.years
                                                 }}</span>
                                         </div>
                                     </div>
                                     <div>
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             College
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 college.name
                                                 }}</span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 college.years
                                                 }}</span>
                                         </div>
                                     </div>
                                     <!-- Vocational Section -->
                                     <div v-if="vocational.name !== 'N/A' && vocational.years !== 'N/A'">
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             Vocational
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 vocational.name
                                             }}</span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 vocational.years
                                             }}</span>
                                         </div>
@@ -1293,14 +1293,14 @@
 
                                     <!-- Post Graduate Section -->
                                     <div v-if="postgrad.name !== 'N/A' && postgrad.years !== 'N/A'">
-                                        <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                        <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                             Post Graduate
                                         </h3>
                                         <div class="w-full flex flex-row justify-between items-center space-y-3">
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext text-base font-medium leading-tight">{{
                                                 postgrad.name
                                                 }}</span>
-                                            <span class="text-gray-700 text-base font-medium leading-tight">{{
+                                            <span class="text-gray-700 dark:text-dtext  text-base font-medium leading-tight">{{
                                                 postgrad.years
                                             }}</span>
                                         </div>
@@ -1310,7 +1310,7 @@
 
                                 <!-- family -->
                                 <div
-                                    class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
+                                    class="w-full h-1/12 bg-white dark:bg-dcontainer font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                     <h1 class="cols-span-2 text-base">Family</h1>
                                     <div class="grid grid-cols-2 gap-4">
                                         
@@ -1322,12 +1322,12 @@
                                                 <div v-if="mother.first_name === 'n\/a'"
                                                     class="flex flex-col items-left gap-1">
                                                     <span
-                                                        class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                                        class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">Deceased</span>
                                                 </div>
                                                 <div v-else class="flex flex-col items-left gap-1">
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         mother.first_name }}</span>
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         mother.occupation }}</span>
                                                 </div>
                                             </div>
@@ -1338,20 +1338,20 @@
                                                 <font-awesome-icon :icon="['fas', 'person']"
                                                     class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
                                                 <div class="flex flex-col items-left gap-1">
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         student.guardian_name }}</span>
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         student.relationship }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div>
                                             <div class="w-full flex flex-col items-left ">
-                                                <span class="text-gray-500 text-sm font-semibold leading-tight">Monthly
+                                                <span class="text-gray-500 dark:text-dtext text-sm font-semibold leading-tight">Monthly
                                                     Family
                                                     Income</span>
                                                 <span
-                                                    class="text-gray-900 text-3xl font-semibold leading-tight">{{family.monthly_income}}</span>
+                                                    class="text-gray-900 dark:text-dtext text-3xl font-semibold leading-tight">{{family.monthly_income}}</span>
                                             </div>
                                         </div>
                                         <div v-if="father.first_name !== 'n\/a'">
@@ -1361,22 +1361,22 @@
                                                 <div v-if="father.first_name === 'n\/a'"
                                                     class="flex flex-col items-left gap-1">
                                                     <span
-                                                        class="text-gray-900 text-base font-semibold leading-tight">Deceased</span>
+                                                        class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">Deceased</span>
                                                 </div>
                                                 <div v-else class="flex flex-col items-left gap-1">
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         father.first_name }}</span>
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         father.occupation }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div>
                                             <div class="w-full flex flex-col items-left gap-1 py-1">
-                                                <span class="text-gray-500 text-base font-semibold leading-tight">Family
+                                                <span class="text-gray-500 dark:text-dtext text-base font-semibold leading-tight">Family
                                                     Housing
                                                     Type</span>
-                                                <span class="text-gray-900 text-lg font-semibold leading-tight">{{
+                                                <span class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">{{
                                                     family.family_housing }}</span>
                                             </div>
                                         </div>
@@ -1387,23 +1387,23 @@
                                                 <div v-if="siblings.length === 0"
                                                     class="flex flex-col items-left gap-1">
                                                     <span
-                                                        class="text-gray-900 text-base font-semibold leading-tight">N/A</span>
+                                                        class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">N/A</span>
                                                 </div>
                                                 <div v-else v-for="sibling in siblings" :key="sibling.id"
                                                     class="flex flex-col items-left gap-1">
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         sibling.first_name }} {{ sibling.last_name }}</span>
-                                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                                         sibling.occupation }}</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div>
                                             <div class="w-full flex flex-col items-left gap-1 py-1">
-                                                <span class="text-gray-500 text-base font-semibold leading-tight">Other
+                                                <span class="text-gray-500 dark:text-dtext text-base font-semibold leading-tight">Other
                                                     Sources
                                                     of Income</span>
-                                                <span class="text-gray-900 text-lg font-semibold leading-tight">{{
+                                                <span class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">{{
                                                     family.other_income }}</span>
                                             </div>
                                         </div>
@@ -1456,30 +1456,30 @@
                             <!-- info -->
                             <div class="w-full h-1/12 flex flex-col items-left gap-1 pb-4 border-b-2">
                                 <span class="text-gray-500 text-sm">Permanent Address</span>
-                                <span class="text-gray-900 text-base leading-tight">
+                                <span class="text-gray-900 dark:text-dtext text-base leading-tight">
                                     <span class="text-gray-500 text-xs">Street</span>
                                     <div class="relative w-full">
                                         <input v-model="form.street" type="text" placeholder="Address"
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
-                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm  pl-2 py-2" />
                                     </div>
                                     <span class="text-gray-500 text-xs">Municipality</span>
                                     <div class="relative w-full">
                                         <input v-model="form.municipality" type="text" placeholder="Address"
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
-                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                     </div>
                                     <span class="text-gray-500 text-xs">Province</span>
                                     <div class="relative w-full">
                                         <input v-model="form.province" type="text" placeholder="Address"
-                                            class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                            class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                         <!-- Icon inside input -->
                                         <font-awesome-icon :icon="['fas', 'pen']"
-                                            class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                            class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                     </div>
                                 </span>
                                 <div class="w-full flex flex-col gap-2 py-2">
@@ -1487,10 +1487,10 @@
                                         <span class="text-gray-500 text-sm">Age</span>
                                         <div class="relative w-full">
                                             <input v-model="form.age" type="text" placeholder="Age"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                         <!-- <span class="text-gray-900 text-base font-semibold leading-tight">{{ student.age
                                         }}</span> -->
@@ -1509,7 +1509,7 @@
                                             </div>
                                             <input :value="form.birthdate" id="datepicker-autohide" type="text"
                                                 autocomplete="off"
-                                                class="bg-white border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                                class="bg-white dark:bg-gray-800 border border-gray-200 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:border-gray-300 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                                 placeholder="Select Birthdate" />
 
                                             <!-- <InputError v-if="errors?.birthdate" :message="errors.birthdate"
@@ -1521,12 +1521,12 @@
                                     <div class="w-full flex flex-col items-left gap-1">
                                         <span class="text-gray-500 text-sm">Civil Status</span>
                                         <div class="relative w-full">
-                                            <Select v-model="form.civil_status">
-                                                <SelectTrigger id="civil_status" class="w-full border pr-10">
+                                            <Select v-model="form.civil_status" class="dark:bg-gray-800">
+                                                <SelectTrigger id="civil_status" class="w-full border pr-10 dark:bg-gray-800">
                                                     <SelectValue placeholder="Select Civil Status" />
                                                 </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
+                                                <SelectContent class="dark:bg-gray-800">
+                                                    <SelectGroup class="dark:bg-gray-800">
                                                         <SelectItem value="Single">
                                                             Single
                                                         </SelectItem>
@@ -1548,10 +1548,10 @@
                                         <span class="text-gray-500 text-sm">Place of Birth</span>
                                         <div class="relative w-full">
                                             <input v-model="form.birthplace" type="text" placeholder="Age"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm  pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
@@ -1559,8 +1559,8 @@
                             <div class="w-full h-1/12 flex flex-col items-left gap-2 pb-4 border-b-2">
                                 <div class="w-full flex flex-col gap-2">
                                     <div class="w-full flex flex-col items-left gap-1">
-                                        <span class="text-gray-500 text-sm">Gender</span>
-                                        <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                        <span class="text-gray-500 text-sm ">Gender</span>
+                                        <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                             student.gender
                                         }}</span>
                                     </div>
@@ -1568,10 +1568,10 @@
                                         <span class="text-gray-500 text-sm">Religion</span>
                                         <div class="relative w-full">
                                             <input v-model="form.religion" type="text" placeholder="Age"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
@@ -1606,24 +1606,24 @@
                         </div>
                         <div class="w-full h-full col-span-2 block flex-col items-center mx-auto max-w-8xl space-y-3">
                             <div
-                                class="w-full h-1/12 bg-white shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
+                                class="w-full h-1/12 bg-white dark:bg-dcontainer shadow-md rounded-lg flex flex-col items-center space-y-2 gap-2 py-5 px-10">
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'graduation-cap']"
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                         scholar.course.name
                                     }}</span>
                                 </div>
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'id-card-clip']"
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                         scholar.urscholar_id }}</span>
                                 </div>
                                 <div class="w-full flex flex-row items-center gap-2">
                                     <font-awesome-icon :icon="['fas', 'school']"
                                         class="p-2 w-7 h-7 bg-primary rounded-md text-white" />
-                                    <span class="text-gray-900 text-base font-semibold leading-tight">{{
+                                    <span class="text-gray-900 dark:text-dtext text-base font-semibold leading-tight">{{
                                         scholar.campus.name
                                     }}, Campus</span>
                                 </div>
@@ -1631,11 +1631,11 @@
 
                             <!-- education -->
                             <div
-                                class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
+                                class="w-full h-1/12 bg-white dark:bg-dcontainer font-instrument shadow-md rounded-lg flex flex-col items-left space-y-2 gap-2 py-5 px-10">
                                 <h1 class="text-base">Education</h1>
 
                                 <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                    <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                         Elementary
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center gap-3">
@@ -1644,25 +1644,25 @@
                                         <div class="relative w-full">
                                             <input v-model="form.education.elementary.name" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="form.education.elementary.years" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                    <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                         Junior High School
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center gap-3">
@@ -1671,25 +1671,25 @@
                                         <div class="relative w-full">
                                             <input v-model="form.education.junior.name" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm0 pl-2 py-2" />
                                         </div>
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="form.education.junior.years" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm  pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                    <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                         Senior High School
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center gap-3">
@@ -1698,25 +1698,25 @@
                                         <div class="relative w-full">
                                             <input v-model="form.education.senior.name" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="form.education.senior.years" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
                                 <div>
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                    <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                         College
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center gap-3">
@@ -1725,26 +1725,26 @@
                                         <div class="relative w-full">
                                             <input v-model="form.education.college.name" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm  pl-2 py-2" />
                                         </div>
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="form.education.college.years" type="text"
                                                 placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
                                 <!-- Vocational Section -->
                                 <div v-if="vocational.name !== 'N/A' && vocational.years !== 'N/A'">
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                    <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                         Vocational
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center gap-3">
@@ -1752,26 +1752,27 @@
                                             }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="vocational.name" type="text" placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="vocational.years" type="text" placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50  border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50  border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <!-- Post Graduate Section -->
                                 <div v-if="postgrad.name !== 'N/A' && postgrad.years !== 'N/A'">
-                                    <h3 class="text-gray-900 text-lg font-semibold leading-tight">
+                                    <h3 class="text-gray-900 dark:text-dtext text-lg font-semibold leading-tight">
                                         Post Graduate
                                     </h3>
                                     <div class="w-full flex flex-row justify-between items-center gap-3">
@@ -1779,19 +1780,20 @@
                                             }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="postgrad.name" type="text" placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50  border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50  border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm pl-2 py-2" />
                                         </div>
                                         <!-- <span class="text-gray-700 text-base font-medium leading-tight">{{ elementary.years
                                         }}</span> -->
                                         <div class="relative w-full">
                                             <input v-model="postgrad.years" type="text" placeholder="Enter User ID"
-                                                class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                class="w-full h-[35px] bg-gray-50 dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
                                             <!-- Icon inside input -->
                                             <font-awesome-icon :icon="['fas', 'pen']"
-                                                class="absolute right-3 bottom-1 text-gray-400 text-sm bg-gray-50 pl-2 py-2" />
+                                                class="absolute right-3 bottom-1 text-gray-400 text-sm  pl-2 py-2" />
                                         </div>
                                     </div>
                                 </div>
@@ -1800,7 +1802,7 @@
 
                             <!-- family -->
                             <div
-                                class="w-full h-1/12 bg-white font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
+                                class="w-full h-1/12 bg-white dark:bg-dcontainer font-instrument shadow-md rounded-lg flex flex-col items-left space-y-3 gap-2 py-5 px-10">
                                 <h1 class="cols-span-2 text-base">Family</h1>
                                 <div class="flex flex-col gap-4">
                                     <div 
@@ -2094,7 +2096,7 @@
                                             <div class="relative w-full">
                                                 <input v-model="family.other_income" type="text"
                                                     placeholder="Enter User ID"
-                                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                                                    class="w-full h-[35px] bg-gray-50  dark:bg-gray-800 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500" />
 
                                                 <!-- Icon inside input -->
                                                 <font-awesome-icon :icon="['fas', 'pen']"

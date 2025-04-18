@@ -15,73 +15,7 @@
 
                     <!-- Mobile Display------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
-                    <div class="block md:hidden">
-                        <!-- Content for Mobile -->
-                        <div 
-                            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                            <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
-                                
-                                    <!-- Email Field -->
-                                <div class="w-full">
-                                    <label class="block mb-2 text-sm font-semibold text-gray-700 dark:text-white">Email</label>
-                                    <div class="flex items-center gap-3 p-3 border-b-2 border-gray-200 dark:border-gray-600 w-full">
-                                        
-                                        <!-- Icon -->
-                                        <span class="p-2 bg-primary rounded-md text-white text-lg font-bold">@</span>
-
-                                        <!-- Email Value -->
-                                        <span class="text-gray-900 dark:text-white text-base font-semibold break-all">
-                                        <!-- {{ $page.props.auth.user.email }} --> feafafe@example.com
-                                        </span>
-                                    </div>
-                                    </div>
-
-                                    <!-- Password Field -->
-                                    <div class="w-full">
-                                    <label class="block mb-2 text-sm font-semibold text-gray-700 dark:text-white">Password</label>
-                                    <div class="flex items-center gap-3 p-3 border-b-2 border-gray-200 dark:border-gray-600 w-full">
-                                        
-                                        <!-- Icon -->
-                                        <span class="p-2 bg-primary rounded-md text-white text-lg font-bold">🔒</span>
-
-                                        <!-- Hidden Password -->
-                                        <span class="text-gray-900 dark:text-white text-base font-semibold tracking-widest">
-                                        ••••••••
-                                        </span>
-                                    </div>
-                                    </div>
-
-                            </div>
-                        </div>
-
-                        <div class="mx-auto max-w-xl h-full justify-center items-center flex flex-col gap-3">
-                            <div class="w-full h-full col-span-1 space-y-4 flex flex-col items-center">
-
-                                <!-- Email -->
-                                <div class="w-full">
-                                <label class="block mb-1 text-sm font-semibold text-gray-700 dark:text-white">Change Email</label>
-                                <input
-                                    v-model="form.email"
-                                    type="email"
-                                    placeholder="Enter your email"
-                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                />
-                                </div>
-
-                                <!-- New Password -->
-                                <div class="w-full">
-                                <label class="block mb-1 text-sm font-semibold text-gray-700 dark:text-white">New Password</label>
-                                <input
-                                    v-model="form.password"
-                                    type="password"
-                                    placeholder="••••••••"
-                                    class="w-full h-[35px] bg-gray-50 border border-gray-300 rounded-md px-3 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-                                />
-                                </div>
-                                </div>
-
-                        </div>
-                    </div>
+                    
                     
 
                         <!-- Mobile Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -287,15 +221,15 @@ import { initFlowbite } from 'flowbite';
 
 const props = defineProps({
     student: Object,
-    education: Object,
-    family: Object,
-    siblings: Array,
+    // education: Object,
+    // family: Object,
+    // siblings: Array,
     scholar: Object,
-    grades: Array,
-    latestgrade: Object,
-    semesterGrade: Object,
-    schoolyear_grade: Object,
-    notify: Object,
+    // grades: Array,
+    // latestgrade: Object,
+    // semesterGrade: Object,
+    // schoolyear_grade: Object,
+    // notify: Object,
 });
 
 const form = useForm({
@@ -315,52 +249,12 @@ const toggleChangePassword = () => {
     changePassword.value = !changePassword.value;
 }
 
-const toggleChangeDP = () => {
-    changeDP.value = !changeDP.value;
-}
-
 const closeModal = () => {
     changeEmail.value = false;
     changePassword.value = false;
     changeDP.value = false;
 }
 
-const EditProfileMobile = ref(false);
-const EditProfileWeb = ref(false);
-const showUpload = ref(false);
-
-// Web: Enable Edit Mode
-const enableWebEdit = async () => {
-    EditProfileWeb.value = true;
-    EditProfileMobile.value = false;
-
-    await nextTick();
-    initFlowbite();
-    initDatepicker();
-};
-
-// Web: Cancel Edit
-const cancelWebEdit = () => {
-    EditProfileWeb.value = false;
-};
-
-// Mobile: Enable Edit Mode
-const enableMobileEdit = async () => {
-    EditProfileMobile.value = true;
-    EditProfileWeb.value = false;
-
-    await nextTick();
-    initFlowbite();
-    initDatepicker();
-};
-
-// Mobile: Cancel Edit
-const cancelMobileEdit = () => {
-    EditProfileMobile.value = false;
-};
-
-// QR Code state management
-const isQRModalOpen = ref(false);
 const qrCodeUrl = ref(null);
 const loading = ref(false);
 const error = ref(null);
@@ -406,75 +300,4 @@ onUnmounted(() => {
     document.body.style.overflow = ""; // Reset when the component is unmounted
 });
 
-const elementary = computed(() => {
-    try {
-        return JSON.parse(props.education.elementary);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const junior = computed(() => {
-    try {
-        return JSON.parse(props.education.junior);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const senior = computed(() => {
-    try {
-        return JSON.parse(props.education.senior);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const college = computed(() => {
-    try {
-        return JSON.parse(props.education.college);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const vocational = computed(() => {
-    try {
-        return JSON.parse(props.education.vocational);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const postgrad = computed(() => {
-    try {
-        return JSON.parse(props.education.postgrad);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const mother = computed(() => {
-    try {
-        return JSON.parse(props.family.mother);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
-
-const father = computed(() => {
-    try {
-        return JSON.parse(props.family.father);
-    } catch (error) {
-        console.error("Invalid JSON format", error);
-        return {}; // Return empty object if parsing fails
-    }
-});
 </script>

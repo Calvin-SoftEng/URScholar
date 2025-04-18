@@ -1,7 +1,7 @@
 <template>
     <template v-if="!disbursement && !isDashboard">
         <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
-            <span class="text-4xl font-bold sm:text-center">Tulong Dunong Program</span>
+            <span class="text-4xl font-bold sm:text-center">{{ scholarship.name }}</span>
             <span class="text-xl">Grantee</span>
         </div>
 
@@ -41,7 +41,7 @@
 
             </div>
 
-            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+            <div class="bg-blue-100 dark:bg-gray-800 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
                 <h2 class="text-xl font-semibold">Congratulations!</h2>
                 <p class="mt-2">
                 <p>Your application has been successfully completed.</p>
@@ -186,11 +186,11 @@
             </div>
 
 
-            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
-                <h2 class="text-xl font-semibold">Congratulations!</h2>
+            <div class="bg-blue-100 dark:bg-dnavy border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+                <h2 class="text-xl font-semibold dark:text-dtext">Congratulations!</h2>
                 <p class="mt-2">
-                <p class="text-gray-700 mt-2">Your application has been successfully completed.</p>
-                <p class="text-gray-600">You will be notified about the payout announcement soon.</p>
+                <p class="text-gray-700 dark:text-dtext mt-2">Your application has been successfully completed.</p>
+                <p class="text-gray-600 dark:text-dtext">You will be notified about the payout announcement soon.</p>
                 </p>
 
                 <!-- Encouragement to Stay Updated -->
@@ -212,10 +212,10 @@
             <span class="text-2xl font-medium font-poppins">My Scholarship</span>
         </div>
 
-        <div class="bg-dirtywhite w-full sm:p-2 lg:p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
+        <div class="bg-dirtywhite dark:bg-dcontainer w-full sm:p-2 lg:p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
 
             <!-- Scholarship Details -->
-            <div class="bg-white shadow-md p-6 rounded-lg text-center">
+            <div class="bg-white dark:bg-dprimary shadow-md p-6 rounded-lg text-center">
                 <div class="flex flex-col sm:flex-row items-center justify-center space-x-4">
                     <!-- Logo -->
                     <img src="../../../../../assets/images/CHED.png" alt="CHED Logo"
@@ -231,19 +231,19 @@
                 <div class="h-0.5 bg-gray-300 my-4"></div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left text-gray-700">
-                    <p><span class="font-semibold">Current Semester:</span> {{ grantee.school_year.year }} - {{
+                    <p class="text-gray-600"><span class="font-semibold dark:text-dtext">Current Semester:</span> {{ grantee.school_year.year }} - {{
                         grantee.semester }} Sem</p>
-                    <p><span class="font-semibold">Status:</span> <span class="text-green-600 font-bold">{{
+                    <p><span class="font-semibold dark:text-dtext">Status:</span> <span class="text-green-600 font-bold">{{
                             grantee.status }}</span></p>
                 </div>
             </div>
 
             <!-- Payout Announcement Card (Only shown if there's a schedule) -->
             <div v-if="!payout_schedule || disbursement.status === 'Claimed'"
-                class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
-                <h2 class="text-xl font-semibold">Upcoming Payout Schedule</h2>
-                <p class="mt-2">
-                    <span class="font-bold">Next payout schedule will be announced soon</span>.
+                class="bg-blue-100 dark:bg-dnavy border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm">
+                <h2 class="text-xl font-semibold dark:text-dtext">Upcoming Payout Schedule</h2>
+                <p class="mt-2 dark:text-dtext">
+                    <span class="font-bold dark:text-dtext">Next payout schedule will be announced soon</span>.
                     Stay updated for further announcements.
                 </p>
             </div>
@@ -330,14 +330,14 @@
             <!-- Payout History -->
             <div>
                 <div class="flex flex-row justify-between items-center">
-                    <span class="font-semibold text-xl">Payout History</span>
+                    <span class="font-semibold text-xl dark:text-dtext">Payout History</span>
                     <!-- <span class="font-normal text-base">Show all</span> -->
                 </div>
 
                 <div class="max-w-6xl mx-auto space-y-6 mt-4">
                     <div v-if="filteredHistoryGrantee.length === 0">
                         <div class="grid grid-cols-5 gap-4 items-center">
-                            <div class="col-span-5 flex items-center justify-center text-primary font-bold">
+                            <div class="col-span-5 flex items-center justify-center text-primary dark:text-dtext font-bold">
                                 No claim history yet
                             </div>
                         </div>
@@ -353,12 +353,12 @@
                                 <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                             </div>
 
-                            <div class="col-span-1 flex items-center justify-center text-primary font-bold">
+                            <div class="sm:col-span-5 lg:col-span-1 flex items-center justify-center text-dprimary dark:text-dtext font-bold">
                                 {{ history.dibursement_status }}
                             </div>
 
-                            <div class="col-span-4 bg-white shadow-md p-4 rounded-lg">
-                                <h2 class="text-lg font-semibold">{{ history.claimed_at ? new
+                            <div class="sm:col-span-5 lg:col-span-4 bg-white dark:bg-dprimary shadow-md p-4 rounded-lg">
+                                <h2 class="text-lg font-semibold dark:text-dtext">{{ history.claimed_at ? new
                                     Date(history.claimed_at).toLocaleDateString('en-US', {
                                         year: 'numeric', month: 'long', day: 'numeric'
                                     }) : 'Not yet claimed' }}</h2>
@@ -374,9 +374,9 @@
 
 
             <!-- Encouragement & Next Steps -->
-            <div class="bg-white shadow-md p-6 rounded-lg text-center">
-                <h2 class="text-2xl font-bold text-blue-800">Keep Going!</h2>
-                <p class="text-gray-600 mt-2">
+            <div class="bg-white dark:bg-dprimary shadow-md p-6 rounded-lg text-center">
+                <h2 class="text-2xl font-bold text-blue-800 dark:text-dtext">Keep Going!</h2>
+                <p class="text-gray-600 mt-2 dark:text-dtext">
                     "Your hard work is paying off! Keep maintaining your academic performance and complete your
                     requirements on time to stay eligible for your next grant."
                     <br>
