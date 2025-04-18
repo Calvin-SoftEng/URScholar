@@ -203,6 +203,9 @@ class ReportsController extends Controller
             'scholars' => $scholars
         ]);
 
+         // Set paper size and orientation
+         $pdf->setPaper([0, 0, 612, 936], 'landscape');
+
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
 }

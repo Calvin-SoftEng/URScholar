@@ -2773,8 +2773,8 @@ const closeReportGeneration = () => {
 // Reset all selections
 const resetSelections = () => {
     selectedReportType.value = '';
-    selectedBatches.value = [];
-    selectedCampuses.value = [];
+    selectedReportBatches.value = [];
+    selectedReportCampuses.value = [];
 };
 
 const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Payroll', 'Scholars List'];
