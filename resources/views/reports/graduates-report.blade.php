@@ -26,11 +26,6 @@
             <p class="text-sm">Scholarship and Financial Assistance Office</p>
         </div>
 
-        <!-- Right Logo -->
-        {{-- <img src="{{ public_path('assets/images/CHED.png') }}"
-             class="absolute right-5 top-0 w-20 h-20 object-contain"
-             alt="Right Logo"> --}}
-
         <div class="absolute right-5 top-20 mt-4">
             <p class="text-right underline">Date: {{ date('F d, Y') }}</p>
         </div>
@@ -40,10 +35,10 @@
     <h2 class="font-bold text-lg text-center mb-4 uppercase">Certification of Graduated Grantees</h2>
 
     <!-- Paragraph -->
-    <p class="mb-4 ">
+    <p class="mb-4">
         <span class="font-bold">TO WHOM IT MAY CONCERN:</span>
         <br />
-        <p class="text-justify indent-5">This is to certify that the total number of Continuing {{ $scholarship->name }} grantees by campus as shown below graduated in {{ $batch->school_year->year }}.</p>
+        <p class="text-justify indent-5">This is to certify that the total number of Continuing {{ $scholarship->name }} grantees by campus as shown below graduated in {{ $schoolYear->year ?? 'N/A' }}{{ $semester ? ', '.$semester : '' }}.</p>
     </p>
 
     <br>
@@ -57,70 +52,24 @@
         </tr>
         </thead>
         <tbody>
-            {{-- @php
-                    $totalGrantees = 0;
-                    $totalTES3a = 0;
-                    $campus = $batch->campus;
-
-                    $granteeCount = $scholars->count();
-                    $tes3aCount = $scholars->where('grant', 'TES3-a')->count();
-                    $totalGrantees += $granteeCount;
-                    $totalTES3a += $tes3aCount;
-                @endphp
-
+            @foreach($campusData as $data)
                 <tr>
-                    <td>{{ $campus->name }}</td>
-                    <td>{{ $granteeCount }}</td>
-                    <td>{{ $tes3aCount }}</td>
-                    <td>{{ $granteeCount + $tes3aCount }}</td>
+                    <td class="border border-gray-700 p-2">{{ $data['campus']->name }}</td>
+                    <td class="border border-gray-700 p-2">{{ $data['graduated_count'] }}</td>
                 </tr>
-
-                <tr style="font-weight: bold; background-color: #f2f2f2;">
-                    <td>Total</td>
-                    <td>{{ $totalGrantees }}</td>
-                    <td>{{ $totalTES3a }}</td>
-                    <td>{{ $totalGrantees + $totalTES3a }}</td>
-                </tr> --}}
-                @php
-                    $totalGrantees = 0;
-                    $totalTES3a = 0;
-                    $campus = $batch->campus;
-
-                    $granteeCount = $scholars->count();
-                    $tes3aCount = $scholars->where('grant', 'TES3-a')->count();
-                    $totalGrantees += $granteeCount;
-                    $totalTES3a += $tes3aCount;
-                @endphp
-        <tr>
-            <td class="border border-gray-700 p-2">{{ $campus->name }}</td>
-            <td class="border border-gray-700 p-2">{{ $granteeCount }}</td>
-        </tr>
-        {{-- <tr>
-            <td class="border border-gray-700 p-2">Campus B</td>
-            <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr>
-        <tr>
-            <td class="border border-gray-700 p-2 italic text-gray-500">(Insert more rows for additional Campus)</td>
-            <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr> --}}
-        <tr class="font-bold">
-            <td class="border border-gray-700 p-2">Total</td>
-            <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
-        </tr>
+            @endforeach
+            <tr class="font-bold">
+                <td class="border border-gray-700 p-2">Total</td>
+                <td class="border border-gray-700 p-2">{{ $totalGraduates }}</td>
+            </tr>
         </tbody>
     </table>
 
     <!-- Additional Cert Text -->
     <p class="mb-4">
-        This further certifies that the student’s information indicated in 
+        This further certifies that the student's information indicated in 
         <span class="text-red-600 underline">{{ $scholarship->name }} Continuing Form </span> is accurate and complete.
     </p>
-
-    {{-- <p class="font-bold mb-6">
-        This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of 2022, Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
-    </p> --}}
 
     <!-- Signatories -->
     <div class="absolute bottom-0 right-0 flex justify-between mt-12">

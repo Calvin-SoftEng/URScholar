@@ -245,6 +245,14 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     // Reports
     Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
+    Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
+    ->name('scholarships.enrollees-summary');
+    Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
+    ->name('scholarships.enrolled-scholars');
+    Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
+    ->name('scholarships.graduate-scholars');
+
+
     // Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
     // Route::get('/scholarships/{scholarship}/batch/{batch}/grantee-summary', [ReportsController::class, 'GranteeSummaryReport']);
     Route::get('/scholarships/{scholarship}/batch/{batch}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport']);

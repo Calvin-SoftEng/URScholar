@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -546,7 +546,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -558,7 +558,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -661,7 +661,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -864,7 +864,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1464,7 +1464,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                            }}
+                                        }}
                                         </p>
                                         <p v-if="batch.validated" class="text-sm text-gray-500">
                                             {{batch.grantees.filter(grantee => grantee.scholar?.status ===
@@ -1547,7 +1547,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not
@@ -1619,7 +1619,7 @@
                             <!-- Filters -->
                             <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
                                 <!-- Report Type Filter -->
-                                <div class="relative">
+                                <div class="relative" ref="reportRef">
                                     <label class="block text-xs font-medium mb-1">Report Type</label>
                                     <button type="button"
                                         class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
@@ -1682,23 +1682,26 @@
                                         :class="{ 'opacity-50 cursor-not-allowed': selectedReportCampuses.length === 0 }"
                                         :disabled="selectedReportCampuses.length === 0">
                                         {{ selectedReportBatches.length ?
-                                            (selectedReportBatches.length === filteredBatches.length ? 'All Batches' :
-                                                `Selected (${selectedReportBatches.length})`) : 'Select Batch' }}
+                                            (selectedReportBatches.length === filteredBatches.length &&
+                                                filteredBatches.length > 0 ?
+                                                'All Batches' :
+                                        `Selected (${selectedReportBatches.length})`) : 'Select Batch' }}
                                     </button>
 
                                     <div v-if="openDropdown === 'batch'"
                                         class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
 
                                         <!-- All Option -->
-                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium"
+                                            v-if="filteredBatches.length > 0">
                                             <input type="checkbox" class="mr-2 w-4 h-4"
-                                                :checked="selectedReportBatches.length === batches.length"
-                                                @change="toggleAll('batch')" />
+                                                :checked="selectedReportBatches.length === filteredBatches.length && filteredBatches.length > 0"
+                                                @change="toggleAllBatches" />
                                             All
                                         </label>
 
                                         <!-- Individual Batches -->
-                                        <label v-for="batch in batches" :key="batch.id"
+                                        <label v-for="batch in filteredBatches" :key="batch.id"
                                             class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
                                             <input type="checkbox" class="mr-2 w-4 h-4" :value="batch.id"
                                                 v-model="selectedReportBatches" />
@@ -1716,7 +1719,8 @@
                         </div>
                         <div class="mt-6">
                             <button type="button" @click="handleGenerateReports"
-                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                :disabled="!selectedReportType || selectedReportCampuses.length === 0 || selectedReportBatches.length === 0">
                                 Generate Report
                             </button>
                         </div>
@@ -1752,6 +1756,7 @@ import { Tooltip } from 'primevue';
 import InputError from '@/Components/InputError.vue';
 import BackLink from '@/Components/BackLink.vue'
 import { generate } from '@syncfusion/ej2-vue-schedule';
+import { nextTick } from 'vue';
 
 
 // Define props to include scholars data
@@ -2719,16 +2724,18 @@ const toggleDropdown = (dropdownName) => {
 // Computed property to filter batches based on selected campuses
 const filteredBatches = computed(() => {
     // If no campuses selected, return empty array
-    if (selectedReportCampuses.length === 0) {
+    if (selectedReportCampuses.value.length === 0) {
         return [];
     }
 
     // Filter batches that belong to selected campuses
     return props.batches.filter(batch => {
-        // Check if the batch has scholars from any of the selected campuses
-        return batch.scholars?.some(scholar =>
-            selectedReportCampuses.includes(scholar.campus_id)
-        );
+        // Look for batches with matching campus_id
+        return selectedReportCampuses.value.includes(batch.campus_id) ||
+            // Or check if any scholars in the batch belong to selected campuses
+            batch.scholars?.some(scholar =>
+                selectedReportCampuses.value.includes(scholar.campus_id)
+            );
     });
 });
 
@@ -2736,18 +2743,32 @@ const filteredBatches = computed(() => {
 // Update the toggleAll function to work with filtered batches
 function toggleAll(type) {
     if (type === 'batch') {
-        const allIds = props.batches.map(b => b.id);
-        selectedReportBatches.value =
-            selectedReportBatches.value.length === allIds.length ? [] : [...allIds];
-    }
-
-    if (type === 'campus') {
+        toggleAllBatches();
+    } else if (type === 'campus') {
         const allIds = props.campuses.map(c => c.id);
-        const selected = selectedReportCampuses.value;
-        selectedReportCampuses.value =
-            selected.length === allIds.length ? [] : [...allIds];
+        if (selectedReportCampuses.value.length === allIds.length) {
+            // If all campuses are selected, deselect all and clear batch selection
+            selectedReportCampuses.value = [];
+            selectedReportBatches.value = [];
+        } else {
+            // Otherwise, select all campuses
+            selectedReportCampuses.value = [...allIds];
+        }
     }
 }
+
+// Add a function to toggle all batches
+const toggleAllBatches = () => {
+    if (filteredBatches.value.length === 0) return;
+
+    if (selectedReportBatches.value.length === filteredBatches.value.length) {
+        // If all batches are selected, deselect all
+        selectedReportBatches.value = [];
+    } else {
+        // Otherwise, select all filtered batches
+        selectedReportBatches.value = filteredBatches.value.map(batch => batch.id);
+    }
+};
 
 // Detect outside click
 const GenerateReport = ref(false);
@@ -2777,22 +2798,25 @@ const selectedReportType = ref('');
 const selectedReportBatches = ref([]);
 const selectedReportCampuses = ref([]);
 
+// Improved click outside handler
 const handleClickOutside = (event) => {
-  // Check if click is outside the campusRef, batchRef, and reportRef
-  if (
-    campusRef.value && !campusRef.value.contains(event.target) &&
-    batchRef.value && !batchRef.value.contains(event.target) &&
-    reportRef.value && !reportRef.value.contains(event.target)
-  ) {
-    // Close the dropdown if no report type, campus, or batch is selected
-    if (
-      !selectedReportType.value &&
-      selectedReportBatches.value.length === 0 &&
-      selectedReportCampuses.value.length === 0
-    ) {
-      openDropdown.value = null;
+    // Make sure all refs are defined before using them
+    if (openDropdown.value) {
+        const campusEl = campusRef.value;
+        const batchEl = batchRef.value;
+        const reportEl = reportRef.value;
+
+        // Check if click is outside all active dropdowns
+        const clickedOutside = (
+            (campusEl && !campusEl.contains(event.target) || !campusEl) &&
+            (batchEl && !batchEl.contains(event.target) || !batchEl) &&
+            (reportEl && !reportEl.contains(event.target) || !reportEl)
+        );
+
+        if (clickedOutside) {
+            openDropdown.value = null;
+        }
     }
-  }
 };
 
 const handleGenerateReports = () => {
@@ -2830,41 +2854,45 @@ const handleGenerateReports = () => {
 
 const generateEnrolleesSummary = async (filters) => {
     try {
-        
         if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
             !Array.isArray(filters.batches) || filters.batches.length === 0) {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-
-        filters.campuses.forEach(campusId => {
-            filters.batches.forEach(batchId => {
-                const url = `/scholarships/${campusId}/batch/${batchId}/enrollees-summary`;
-                window.open(url, '_blank');
-            });
+        
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/enrollees-summary`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         });
+        
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);
     }
 };
 
-
-
 const generateEnrolledList = async (filters) => {
     try {
-        
         if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
             !Array.isArray(filters.batches) || filters.batches.length === 0) {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-
-        filters.campuses.forEach(campusId => {
-            filters.batches.forEach(batchId => {
-                const url = `/scholarships/${campusId}/batch/${batchId}/enrolled-scholars`;
-                window.open(url, '_blank');
-            });
+        
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/enrolled-scholars`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         });
+        
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);
     }
@@ -2873,28 +2901,30 @@ const generateEnrolledList = async (filters) => {
 
 const generateGraduateList = async (filters) => {
     try {
-        
         if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
             !Array.isArray(filters.batches) || filters.batches.length === 0) {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-
-        filters.campuses.forEach(campusId => {
-            filters.batches.forEach(batchId => {
-                const url = `/scholarships/${campusId}/batch/${batchId}/graduate-scholars`;
-                window.open(url, '_blank');
-            });
+        
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/graduate-scholars`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         });
+        
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);
     }
-    
 };
 
 const generatePayroll = async (filters) => {
     try {
-        
+
         if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
             !Array.isArray(filters.batches) || filters.batches.length === 0) {
             console.warn('Campuses or batches are not selected properly.');
@@ -2916,13 +2946,16 @@ const generatePayroll = async (filters) => {
 watch(selectedReportCampuses, (newCampuses) => {
     // If campus selection changes, filter batch selection to only keep valid batches
     if (newCampuses.length > 0) {
-        // Get IDs of valid batches based on selected campuses
-        const validBatchIds = filteredBatches.value.map(batch => batch.id);
+        // Let filteredBatches compute first
+        nextTick(() => {
+            // Get IDs of valid batches based on selected campuses
+            const validBatchIds = filteredBatches.value.map(batch => batch.id);
 
-        // Filter selected batches to only include valid ones
-        selectedReportBatches.value = selectedReportBatches.value.filter(
-            batchId => validBatchIds.includes(batchId)
-        );
+            // Filter selected batches to only include valid ones
+            selectedReportBatches.value = selectedReportBatches.value.filter(
+                batchId => validBatchIds.includes(batchId)
+            );
+        });
     } else {
         // If no campuses selected, clear batch selection
         selectedReportBatches.value = [];
