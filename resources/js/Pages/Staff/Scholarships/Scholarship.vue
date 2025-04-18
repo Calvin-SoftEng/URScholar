@@ -1599,7 +1599,7 @@
                             </span>
                         </div>
                     </div>
-                    <button type="button" @click="closeModal"
+                    <button type="button" @click="closeReportGeneration"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -1610,7 +1610,7 @@
                     </button>
                 </div>
 
-                <form>
+                <form @submit.prevent="handleGenerateReports">
                     <div class="py-4 px-8 flex flex-col gap-3">
                         <!-- Batch Disbursement Status -->
                         <div>
@@ -1649,86 +1649,70 @@
                                     </div>
 
                                 <!-- Batch Filter -->
-                                <div class="relative">
+                                <div class="relative" ref="batchRef">
                                     <label class="block text-xs font-medium mb-1">Batch</label>
-                                    <button
-                                    type="button"
-                                    class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                    @click="toggleDropdown('batch')"
-                                    >
-                                    {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batch' }}
+                                    <button type="button"
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        @click="toggleDropdown('batch')">
+                                        {{ selectedBatches.length ? 
+                                        (selectedBatches.includes('all') ? 'All Batches' : 
+                                        `Selected (${selectedBatches.filter(id => id !== 'all').length})`) : 'Select Batch' }}
                                     </button>
-                                    <div
-                                    v-if="openDropdown === 'batch'"
-                                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto"
-                                    >
-                                    <!-- All option -->
-                                    <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
-                                        <input
-                                        type="checkbox"
-                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                        :checked="selectedBatches.length === batchOptions.length"
-                                        @change="toggleAll('batch')"
-                                        />
-                                        All
-                                    </label>
+                                    <div v-if="openDropdown === 'batch'"
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                                        <!-- All option -->
+                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :checked="selectedBatches.includes('all')"
+                                                @change="toggleAll('batch')" />
+                                            All
+                                        </label>
 
-                                    <!-- Individual batch options -->
-                                    <label
-                                        v-for="batch in batchOptions"
-                                        :key="batch"
-                                        class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
-                                    >
-                                        <input
-                                        type="checkbox"
-                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                        :value="batch"
-                                        v-model="selectedBatches"
-                                        />
-                                        {{ batch }}
-                                    </label>
+                                        <!-- Individual batch options -->
+                                        <label v-for="batch in batches" :key="batch.id"
+                                            class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :value="batch.id" 
+                                                v-model="selectedBatches"
+                                                @change="selectedBatches.includes('all') && !selectedBatches.includes(batch.id) ? 
+                                                selectedBatches = selectedBatches.filter(b => b !== 'all') : null" />
+                                            Batch {{ batch.batch_no }}
+                                        </label>
                                     </div>
                                 </div>
 
-                                <!-- Campus Filter -->
-                                <div class="relative">
+                                <!-- Campus Filter - Only enabled when batches are selected -->
+                                <div class="relative" ref="campusRef">
                                     <label class="block text-xs font-medium mb-1">Campus</label>
-                                    <button
-                                    type="button"
-                                    class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                    @click="toggleDropdown('campus')"
-                                    >
-                                    {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campus' }}
+                                    <button type="button"
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        :class="{'opacity-50 cursor-not-allowed': selectedBatches.length === 0}"
+                                        @click="selectedBatches.length > 0 ? toggleDropdown('campus') : null">
+                                        {{ selectedCampuses.length ? 
+                                        `Selected (${selectedCampuses.length})` : 'Select Campus' }}
                                     </button>
-                                    <div
-                                    v-if="openDropdown === 'campus'"
-                                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto"
-                                    >
-                                    <!-- All option -->
-                                    <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
-                                        <input
-                                        type="checkbox"
-                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                        :checked="selectedCampuses.length === campusOptions.length"
-                                        @change="toggleAll('campus')"
-                                        />
-                                        All
-                                    </label>
+                                    <div v-if="openDropdown === 'campus'"
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                                        <!-- All option -->
+                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :checked="selectedCampuses.length === availableCampuses.length && availableCampuses.length > 0"
+                                                @change="toggleAll('campus')" />
+                                            All
+                                        </label>
 
-                                    <!-- Individual campus options -->
-                                    <label
-                                        v-for="campus in campusOptions"
-                                        :key="campus"
-                                        class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
-                                    >
-                                        <input
-                                        type="checkbox"
-                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                        :value="campus"
-                                        v-model="selectedCampuses"
-                                        />
-                                        {{ campus }}
-                                    </label>
+                                        <!-- Available campuses based on selected batches -->
+                                        <label v-for="campus in availableCampuses" :key="campus.id"
+                                            class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                            <input type="checkbox"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                                :value="campus.id" 
+                                                v-model="selectedCampuses" />
+                                            {{ campus.name }}
+                                        </label>
                                     </div>
                                 </div>
 
@@ -1737,6 +1721,7 @@
                         </div>
                         <div class="mt-6">
                             <button type="button" @click="handleGenerateReports"
+                                :disabled="!selectedReportType || selectedBatches.length === 0 || selectedCampuses.length === 0"
                                 class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 Generate Report
                             </button>
@@ -2731,16 +2716,30 @@ const toggleDropdown = (dropdownName) => {
     openDropdown.value = openDropdown.value === dropdownName ? null : dropdownName
 }
 
+// Toggle all function (modified to work with our filtered lists)
 function toggleAll(type) {
-  if (type === 'batch') {
-    selectedBatches.value =
-      selectedBatches.value.length === batchOptions.length ? [] : [...batchOptions]
-  }
-  if (type === 'campus') {
-    selectedCampuses.value =
-      selectedCampuses.value.length === campusOptions.length ? [] : [...campusOptions]
-  }
+    if (type === 'batch') {
+        if (selectedBatches.value.includes('all')) {
+            // Unselect all
+            selectedBatches.value = [];
+        } else {
+            // Select all batches
+            selectedBatches.value = ['all', ...batches.value.map(b => b.id)];
+        }
+    }
+    
+    if (type === 'campus') {
+        const campusIds = availableCampuses.value.map(c => c.id);
+        if (selectedCampuses.value.length === campusIds.length) {
+            // Unselect all
+            selectedCampuses.value = [];
+        } else {
+            // Select all available campuses
+            selectedCampuses.value = campusIds;
+        }
+    }
 }
+
 
 // Detect outside click
 function handleClickOutside(event) {
@@ -2754,11 +2753,33 @@ function handleClickOutside(event) {
     }
 }
 
+const GenerateReport = ref(false);
+
+const generateReportModal = () => {
+    GenerateReport.value = !GenerateReport.value;
+}
+
+// Close modal function
+const closeReportGeneration = () => {
+    GenerateReport.value = false;
+    resetSelections();
+};
+
+// Reset all selections
+const resetSelections = () => {
+    selectedReportType.value = '';
+    selectedBatches.value = [];
+    selectedCampuses.value = [];
+};
+
 const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Payroll', 'Scholars List'];
-const batchOptions = ['Batch 1', 'Batch 2', 'Batch 3'];
-const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
+const batchRef = ref(null);
+const campusRef = ref(null);
 
 const selectedReportType = ref('')
+const selectedReportBatches = ref([]);
+const selectedReportCampuses = ref([]);
+
 
 // // Generate Reports handler
 const handleGenerateReports = () => {
@@ -2784,18 +2805,30 @@ const handleGenerateReports = () => {
     }
 }
 
-const GenerateReport = ref(false);
-
-const generateReportModal = () => {
-    GenerateReport.value = !GenerateReport.value;
-}
-
-
-// Generate report function
-// const generateScholarsList = async () => {
-//     window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
-
-// };
+// Filtered campuses that match the selected batch's campus_id
+const availableCampuses = computed(() => {
+    if (selectedBatches.length === 0) {
+        // If no batches selected, return all campuses
+        return props.campuses || [];
+    }
+    
+    // Get unique campus IDs from selected batches
+    const campusIds = new Set();
+    
+    // Only include real batch IDs (exclude 'all' if present)
+    const realBatchIds = selectedBatches.value.filter(id => id !== 'all');
+    
+    // For each selected batch, add its campus_id to our set
+    realBatchIds.forEach(batchId => {
+        const batch = props.batches.find(b => b.id === batchId);
+        if (batch && batch.campus_id) {
+            campusIds.add(batch.campus_id);
+        }
+    });
+    
+    // Filter campuses to only those with matching IDs
+    return props.campuses.filter(campus => campusIds.has(campus.id));
+});
 
 const generateEnrolleesSummary = async () => {
     try {
