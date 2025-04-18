@@ -5,12 +5,12 @@
             <div class="flex flex-col gap-3">
                 <!-- Small Card 1 -->
                 <div class="h-full">
-                    <ScholarsSupported />
+                    <ScholarsSupported :allscholars="allscholars" :academicYear="academicYear" :scholars="scholars" />
                 </div>
 
                 <!-- Small Card 2 -->
                 <div class="h-full">
-                    <TotalScholarsSupported />
+                    <TotalScholarsSupported :allscholars="allscholars"/>
                 </div>
 
                 <!-- Disbursements Card -->
@@ -57,6 +57,9 @@ const props = defineProps({
     schoolyears: Array,
     payouts: Array,
     campuses: Array,
+    scholars: Array,
+    academicYear: Object,
+    allscholars: Array,
 });
 
 const grantBasedScholarships = computed(() =>

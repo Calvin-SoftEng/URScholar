@@ -16,8 +16,8 @@
 
     <!-- Number Section -->
     <div class="text-right">
-        <p class="text-4xl font-extrabold leading-tight">25</p>
-        <p class="text-sm text-white/80">As of this semester</p>
+        <p class="text-4xl font-extrabold leading-tight">{{scholars.length}}</p>
+        <p class="text-sm text-white/80">{{ academicYear.school_year.year }} - {{ academicYear.semester }} Semester</p>
     </div>
     </div>
 
@@ -25,5 +25,10 @@
 </template>
 
 <script setup>
+const props = defineProps({
+    scholars: Array,
+    academicYear: Object,
+    allscholars: Array,
+});
 
 </script>

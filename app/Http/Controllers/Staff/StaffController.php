@@ -66,8 +66,6 @@ class StaffController extends Controller
                 ];
             });
 
-            $active_scholars = Grantees::where('status', 'Active')
-            ->get();
 
             $enrolled = Student::all();
 
@@ -76,6 +74,11 @@ class StaffController extends Controller
             $academic_year = AcademicYear::where('status', 'Active')
             ->with('school_year')
             ->first();
+
+            $active_scholars = Grantees::where('status', 'Accomplished')
+            ->where('semester', $academic_year->semester)
+            ->where('school_year_id', $academic_year->school_year_id)
+            ->get();
 
             $univ_students = Student::where('academic_year_id', $academic_year->id)
             ->where('campus_id', Auth::user()->campus_id)
