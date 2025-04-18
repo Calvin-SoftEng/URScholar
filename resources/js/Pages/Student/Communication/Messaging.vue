@@ -3,7 +3,7 @@
         <div
             class="sm:px-0 lg:px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
             <div class="w-full p-4 h-full">
-                <div class="bg-white w-full h-full rounded-xl flex flex-row">
+                <div class="bg-white dark:bg-dcontainer w-full h-full rounded-xl flex flex-row">
                     <div
                         class="border-r sm:w-full lg:w-[30%]"
                         :class="{
@@ -12,7 +12,7 @@
                             'md:block': true
                         }"
                         >
-                        <h3 class="text-xl text-primary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold">
+                        <h3 class="text-xl text-[#003366] dark:text-dtext mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold">
                             Messages</h3>
 
                         <!-- Tabs for DM and GC -->
@@ -21,7 +21,7 @@
                             <!-- GC Tab -->
                             <button type="button"
                                 class="w-full p-2 text-center text-sm font-medium focus:outline-none transition" :class="selectedTab === 'gc'
-                                    ? 'text-primary border-b-2 border-primary'
+                                    ? 'border-b-2 border-primary text-[#003366] dark:text-dtext '
                                     : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
                                 @click="selectedTab = 'gc'">
                                 Group Chats
@@ -41,7 +41,7 @@
                                     </svg>
                                 </div>
                                 <input type="search" id="default-search" v-model="searchTerm"
-                                    class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-dprimary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Search group chats and scholars" />
                             </div>
                         </form>
@@ -134,15 +134,18 @@
                             'lg:flex': true
                         }">
                         <div class="shadow-sm p-4 flex justify-between items-center">
-                            <div class="flex flex-row space-x-3">
-                                <button class="justify-center items-center" @click="closeChat"><span class="material-symbols-rounded">
+                            <div class="flex flex-row space-x-3 items-center">
+                            <button class="flex items-center justify-center" @click="closeChat">
+                                <span class="material-symbols-rounded">
                                 keyboard_arrow_left
-                                </span></button>
-                                <h3 class="text-lg font-bold text-primary">
-                                    {{ selectedData ? (selectedData.name  || (selectedData.batch_no ? `Batch
-                                    ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
-                                </h3>
+                                </span>
+                            </button>
+                            <h3 class="text-lg font-bold text-primary">
+                                {{ selectedData ? (selectedData.name  || (selectedData.batch_no ? `Batch
+                                ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
+                            </h3>
                             </div>
+
                             <!-- Three dots menu aligned with conversation text -->
                             <button class="text-gray-600 hover:text-primary transition-colors"
                                 @click="showMemberList = !showMemberList">

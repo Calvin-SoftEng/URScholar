@@ -10,7 +10,7 @@
                             <div class="rounded-lg mb-10">
                                 <div class="h-full space-y-3 flex flex-col items-center justify-start pt-2 pb-10">
                                     <!-- Check if there are any posts -->
-                                    <div v-if="posts.length">
+                                    <div v-if="posts.length" class="w-full">
                                         <div v-for="post in posts" :key="post.id"
                                             class="w-full bg-white rounded-lg shadow-md mb-4">
                                             <div class="w-full p-4 flex items-center border-b border-gray-200">

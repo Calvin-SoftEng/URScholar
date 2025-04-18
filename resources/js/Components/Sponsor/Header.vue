@@ -154,7 +154,7 @@
         <li class="relative">
             <Link :href="route('student.profile')"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                Profile
+                Account Settings
             </Link>
             <!-- Notification Dot with FontAwesome Icon -->
             <div class="absolute top-0 right-1 flex items-center space-x-2">
