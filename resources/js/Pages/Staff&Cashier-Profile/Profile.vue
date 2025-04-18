@@ -65,11 +65,21 @@
                                 class="relative w-full mx-auto mt-20 p-6 border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-gray-800">
 
                                 <!-- Header -->
-                                <div class="flex flex-row justify-between items-center mb-5">
-                                    <h1 class="text-xl font-semibold text-primary mb-6">Personal Information</h1>
+                                <div class="flex gap-2 justify-end">
                                     <button
-                                        class="text-dtext bg-blue-600 hover:bg-blue-800 rounded-md px-5  py-2 font-medium text-sm"
-                                        @click="toggleEdit">{{ isEditing ? "Save" : "Edit Profile" }}</button>
+                                    class="text-white bg-blue-600 hover:bg-blue-800 rounded-md px-5 py-2 font-medium text-sm"
+                                    @click="toggleEdit"
+                                    >
+                                    {{ isEditing ? 'Save' : 'Edit Profile' }}
+                                    </button>
+
+                                    <button
+                                    v-if="isEditing"
+                                    class="text-white bg-gray-400 hover:bg-gray-600 rounded-md px-5 py-2 font-medium text-sm"
+                                    @click="cancelEdit"
+                                    >
+                                    Cancel
+                                    </button>
                                 </div>
 
                                 <!-- DISPLAY -->
@@ -482,6 +492,11 @@ const changeDP = ref(false);
 const isEditing = ref(false);
 const isImgDragging = ref(false);
 
+function cancelEdit() {
+  isEditing.value = false
+  // Optional: revert form fields here
+  console.log("Canceled editing.")
+}
 // Toast notification
 const toastVisible = ref(false);
 const toastMessage = ref("");
