@@ -1634,7 +1634,7 @@
                                         <label
                                         v-for="type in reportTypeOptions"
                                         :key="type"
-                                        class="block px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                                        class="block px-4 py-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap text-sm"
                                         >
                                         <input
                                             type="radio"
@@ -2755,7 +2755,7 @@ function handleClickOutside(event) {
     }
 }
 
-const reportTypeOptions = ['Enrolled List', 'Graduate List', 'Payroll', 'Scholars List'];
+const reportTypeOptions = ['Grantee List', 'Enrollees Summary', 'Enrolled List', 'Graduate List', 'Payroll'];
 const batchOptions = ['Batch 1', 'Batch 2', 'Batch 3'];
 const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
 
@@ -2764,9 +2764,12 @@ const selectedReportType = ref('')
 // // Generate Reports handler
 const handleGenerateReports = () => {
   switch (selectedReportType.value) {
-    case 'Scholars List':
-      generateScholarsList()
+    case 'Grantee List':
+      generateGranteeList()
       break
+    case 'Enrollees Summary':
+      generateEnrolleesSummary()
+    break
     case 'Enrolled List':
       generateEnrolledList()
       break
@@ -2792,15 +2795,26 @@ const generateReportModal = () => {
 
 
 // Generate report function
-const generateScholarsList = async () => {
-    window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
+const generateGranteeList = async () => {
+    window.open(`/scholarships/1/batch/1/grantee-summary`, '_blank');
 
+};
+
+const generateEnrolleesSummary = async () => {
+    try {
+        // Open PDF report in new tab
+        window.open(`/scholarships/1/batch/1/enrollees-summary`, '_blank'); // Dummy ID values
+        showToast('Report Generated', 'Your report is being downloaded');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+        showToast('Error', 'Failed to generate report', 'error');
+    }
 };
 
 const generateEnrolledList = async () => {
     try {
         // Open PDF report in new tab
-        window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
+        window.open(`/scholarships/1/batch/1/enrollees`, '_blank'); // Dummy ID values
         showToast('Report Generated', 'Your report is being downloaded');
     } catch (err) {
         console.error('Failed to generate report:', err);
