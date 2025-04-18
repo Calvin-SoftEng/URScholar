@@ -1636,22 +1636,87 @@
                                     </div>
                                 </div>
 
+                                <!-- Batch Filter -->
                                 <div class="relative">
-                                    <label class="block text-xs font-medium mb-1">Report Type</label>
-                                    <button type="button"
-                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                        @click="toggleDropdown('reportType')">
-                                        {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select Report type' }}
+                                    <label class="block text-xs font-medium mb-1">Batch</label>
+                                    <button
+                                    type="button"
+                                    class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                    @click="toggleDropdown('batch')"
+                                    >
+                                    {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batch' }}
                                     </button>
-                                    <div v-if="openDropdown === 'reportType'"
-                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                        <label v-for="type in reportTypeOptions" :key="type"
-                                            class="block px-4 py-2 hover:bg-gray-100">
-                                            <input type="checkbox"
-                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                                :value="type" v-model="selectedReportTypes" />
-                                            {{ type }}
-                                        </label>
+                                    <div
+                                    v-if="openDropdown === 'batch'"
+                                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto"
+                                    >
+                                    <!-- All option -->
+                                    <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                        <input
+                                        type="checkbox"
+                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                        :checked="selectedBatches.length === batchOptions.length"
+                                        @change="toggleAll('batch')"
+                                        />
+                                        All
+                                    </label>
+
+                                    <!-- Individual batch options -->
+                                    <label
+                                        v-for="batch in batchOptions"
+                                        :key="batch"
+                                        class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
+                                    >
+                                        <input
+                                        type="checkbox"
+                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                        :value="batch"
+                                        v-model="selectedBatches"
+                                        />
+                                        {{ batch }}
+                                    </label>
+                                    </div>
+                                </div>
+
+                                <!-- Campus Filter -->
+                                <div class="relative">
+                                    <label class="block text-xs font-medium mb-1">Campus</label>
+                                    <button
+                                    type="button"
+                                    class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                    @click="toggleDropdown('campus')"
+                                    >
+                                    {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campus' }}
+                                    </button>
+                                    <div
+                                    v-if="openDropdown === 'campus'"
+                                    class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto"
+                                    >
+                                    <!-- All option -->
+                                    <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                        <input
+                                        type="checkbox"
+                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                        :checked="selectedCampuses.length === campusOptions.length"
+                                        @change="toggleAll('campus')"
+                                        />
+                                        All
+                                    </label>
+
+                                    <!-- Individual campus options -->
+                                    <label
+                                        v-for="campus in campusOptions"
+                                        :key="campus"
+                                        class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap"
+                                    >
+                                        <input
+                                        type="checkbox"
+                                        class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
+                                        :value="campus"
+                                        v-model="selectedCampuses"
+                                        />
+                                        {{ campus }}
+                                    </label>
                                     </div>
                                 </div>
 
@@ -2652,6 +2717,17 @@ const openDropdown = ref('');
 
 const toggleDropdown = (dropdownName) => {
     openDropdown.value = openDropdown.value === dropdownName ? null : dropdownName
+}
+
+function toggleAll(type) {
+  if (type === 'batch') {
+    selectedBatches.value =
+      selectedBatches.value.length === batchOptions.length ? [] : [...batchOptions]
+  }
+  if (type === 'campus') {
+    selectedCampuses.value =
+      selectedCampuses.value.length === campusOptions.length ? [] : [...campusOptions]
+  }
 }
 
 // Detect outside click
