@@ -84,7 +84,7 @@
                     <td>{{ $totalTES3a }}</td>
                     <td>{{ $totalGrantees + $totalTES3a }}</td>
                 </tr> --}}
-                @php
+                {{-- @php
                     $totalGrantees = 0;
                     $totalTES3a = 0;
                     $campus = $batch->campus;
@@ -93,11 +93,11 @@
                     $tes3aCount = $scholars->where('grant', 'TES3-a')->count();
                     $totalGrantees += $granteeCount;
                     $totalTES3a += $tes3aCount;
-                @endphp
+                @endphp --}}
         <tr>
-            <td class="border border-gray-700 p-2">{{ $campus->name }}</td>
-            <td class="border border-gray-700 p-2">{{ $granteeCount }}</td>
-            <td class="border border-gray-700 p-2">{{ $granteeCount}}</td>
+            <td class="border border-gray-700 p-2">ID</td>
+            <td class="border border-gray-700 p-2">BEBEBOI</td>
+            <td class="border border-gray-700 p-2">BINANGONAN</td>
         </tr>
         {{-- <tr>
             <td class="border border-gray-700 p-2">Campus B</td>
@@ -109,11 +109,11 @@
             <td class="border border-gray-700 p-2"></td>
             <td class="border border-gray-700 p-2"></td>
         </tr> --}}
-        <tr class="font-bold">
+        {{-- <tr class="font-bold">
             <td class="border border-gray-700 p-2">Total</td>
             <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
             <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
-        </tr>
+        </tr> --}}
         </tbody>
     </table>
 
