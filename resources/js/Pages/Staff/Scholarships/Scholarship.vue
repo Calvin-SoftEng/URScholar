@@ -1648,6 +1648,42 @@
                                     </div>
                                     </div>
 
+                                    <!-- Campus Filter - Only enabled when batches are selected -->
+                                <div class="relative" ref="campusRef">
+                                    <label class="block text-xs font-medium mb-1">Campus</label>
+                                    <button type="button"
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        :class="{ 'opacity-50 cursor-not-allowed': selectedReportBatches.length === 0 }"
+                                        @click="selectedReportBatches.length > 0 ? toggleDropdown('campus') : null">
+                                        {{ selectedReportCampuses.length ? 
+                                            (selectedReportCampuses.length === campuses.length ? 'All Campuses' : `Selected (${selectedReportCampuses.length})`) 
+                                            : 'Select Campus' }}
+                                    </button>
+
+                                    <div v-if="openDropdown === 'campus'"
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                                        
+                                        <!-- Select All -->
+                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                        <input type="checkbox"
+                                            class="mr-2 w-4 h-4"
+                                            :checked="selectedReportCampuses.length === campuses.length"
+                                            @change="toggleAll('campus')" />
+                                        All
+                                        </label>
+
+                                        <!-- Individual Campuses -->
+                                        <label v-for="campus in campuses" :key="campus.id"
+                                        class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                        <input type="checkbox"
+                                            class="mr-2 w-4 h-4"
+                                            :value="campus.id"
+                                            v-model="selectedReportCampuses" />
+                                        {{ campus.name }}
+                                        </label>
+                                    </div>
+                                    </div>
+
                                     <!-- Batch Filter -->
                                     <div class="relative" ref="batchRef">
                                     <label class="block text-xs font-medium mb-1">Batch</label>
@@ -1682,41 +1718,6 @@
                                     </div>
                                     </div>
 
-
-                                <!-- Campus Filter - Only enabled when batches are selected -->
-                                <div class="relative" ref="campusRef">
-                                    <label class="block text-xs font-medium mb-1">Campus</label>
-                                    <button type="button"
-                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                        :class="{'opacity-50 cursor-not-allowed': selectedBatches.length === 0}"
-                                        @click="selectedReportBatches.length > 0 ? toggleDropdown('campus') : null">
-                                        {{ selectedReportCampuses.length ? 
-                                        `Selected (${selectedReportCampuses.length})` : 'Select Campus' }}
-                                    </button>
-                                    <div v-if="openDropdown === 'campus'"
-                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                        <!-- All option -->
-                                        <!-- All -->
-                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
-                                        <input type="checkbox"
-                                            class="mr-2 w-4 h-4"
-                                            :checked="selectedReportCampuses.length === availableCampuses.length"
-                                            @change="toggleAll('campus')"
-                                        />
-                                        All
-                                        </label>
-
-                                        <!-- Individual -->
-                                        <label v-for="campus in availableCampuses" :key="campus.id" class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
-                                        <input type="checkbox"
-                                            class="mr-2 w-4 h-4"
-                                            :value="campus.id"
-                                            v-model="selectedReportCampuses"
-                                        />
-                                        {{ campus.name }}
-                                        </label>
-                                    </div>
-                                </div>
 
 
                             </div>
