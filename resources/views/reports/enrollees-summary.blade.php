@@ -101,16 +101,7 @@
             <td class="border border-gray-700 p-2">{{ $granteeCount }}</td>
             <td class="border border-gray-700 p-2">{{ $granteeCount}}</td>
         </tr>
-        {{-- <tr>
-            <td class="border border-gray-700 p-2">Campus B</td>
-            <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr>
-        <tr>
-            <td class="border border-gray-700 p-2 italic text-gray-500">(Insert more rows for additional Campus)</td>
-            <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr> --}}
+
         <tr class="font-bold">
             <td class="border border-gray-700 p-2">Total</td>
             <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
