@@ -1648,40 +1648,40 @@
                                     </div>
                                     </div>
 
-                                <!-- Batch Filter -->
-                                <div class="relative" ref="batchRef">
+                                    <!-- Batch Filter -->
+                                    <div class="relative" ref="batchRef">
                                     <label class="block text-xs font-medium mb-1">Batch</label>
                                     <button type="button"
                                         class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
                                         @click="toggleDropdown('batch')">
                                         {{ selectedReportBatches.length ? 
-                                        (selectedReportBatches.includes('all') ? 'All Batches' : 
-                                        `Selected (${selectedReportBatches.filter(id => id !== 'all').length})`) : 'Select Batch' }}
+                                            (selectedReportBatches.length === batches.length ? 'All Batches' : 
+                                            `Selected (${selectedReportBatches.length})`) : 'Select Batch' }}
                                     </button>
+
                                     <div v-if="openDropdown === 'batch'"
                                         class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                        <!-- All option -->
-                                        <!-- All -->
-                                            <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
-                                            <input type="checkbox"
-                                                class="mr-2 w-4 h-4"
-                                                :checked="selectedReportBatches.length === availableBatches.length"
-                                                @change="toggleAll('batch')"
-                                            />
-                                            All
-                                            </label>
+                                        
+                                        <!-- All Option -->
+                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                        <input type="checkbox"
+                                            class="mr-2 w-4 h-4"
+                                            :checked="selectedReportBatches.length === batches.length"
+                                            @change="toggleAll('batch')" />
+                                        All
+                                        </label>
 
-                                            <!-- Individual -->
-                                            <label v-for="batch in availableBatches" :key="batch.id" class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
-                                            <input type="checkbox"
-                                                class="mr-2 w-4 h-4"
-                                                :value="batch.id"
-                                                v-model="selectedReportBatches"
-                                            />
-                                            Batch {{ batch.batch_no }}
-                                            </label>
+                                        <!-- Individual Batches -->
+                                        <label v-for="batch in batches" :key="batch.id" class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                        <input type="checkbox"
+                                            class="mr-2 w-4 h-4"
+                                            :value="batch.id"
+                                            v-model="selectedReportBatches" />
+                                        Batch {{ batch.batch_no }}
+                                        </label>
                                     </div>
-                                </div>
+                                    </div>
+
 
                                 <!-- Campus Filter - Only enabled when batches are selected -->
                                 <div class="relative" ref="campusRef">
