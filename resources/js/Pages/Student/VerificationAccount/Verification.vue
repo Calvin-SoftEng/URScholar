@@ -1771,6 +1771,7 @@ const props = defineProps({
     batch_semester: Object,
     school_year: Object,
     studentData: Object,
+    scholarshipForms: Array,
 });
 
 const form = ref({

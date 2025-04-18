@@ -13,6 +13,7 @@ use App\Models\Scholarship;
 use App\Models\Requirements;
 use App\Models\SiblingRecord;
 use App\Models\StudentRecord;
+use App\Models\ScholarshipForm;
 use App\Models\Criteria;
 use App\Models\ActivityLog;
 use App\Models\CampusRecipients;
@@ -369,8 +370,10 @@ class StudentController extends Controller
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
         $studentData = Student::where('email', Auth::user()->email)->first();
 
-        // $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+        // Add scholarship forms here
+        $scholarshipForms = ScholarshipForm::with('scholarshipformdata')->get();
 
+        // Rest of your existing code
         if ($scholar) {
             $grantee = Grantees::where('scholar_id', $scholar->id)->first();
 
@@ -426,19 +429,13 @@ class StudentController extends Controller
             $school_year = $grantee_school_year_id ? SchoolYear::find($grantee_school_year_id) : null;
         }
 
-        // if ($school_year){
-        //     $school_year = SchoolYear::where('id', $batch->school_year)->first();
-        // }
-        // else {
-        //     $school_year = 'N/A';
-        // }
-
         return Inertia::render('Student/VerificationAccount/Verification', [
             'user' => $user,
             'scholar' => $scholar,
             'batch_semester' => $grantee_semester,
             'school_year' => $school_year ?? 'N/A', // Default to 'N/A' if no school year found
             'studentData' => $studentData,
+            'scholarshipForms' => $scholarshipForms, // Add scholarship forms to the view
         ]);
     }
     public function uploadGrade($urscholar_id, Request $request)
@@ -1156,7 +1153,7 @@ class StudentController extends Controller
 
         if ($scholar) {
             $grantee = Grantees::where('scholar_id', $scholar->id)->first();
-        
+
             if ($grantee) {
                 return redirect()->route('student.confirmation');
             } else {
@@ -1165,7 +1162,7 @@ class StudentController extends Controller
         } else {
             return redirect()->route('student.dashboard'); // or any default fallback
         }
-        
+
 
     }
 

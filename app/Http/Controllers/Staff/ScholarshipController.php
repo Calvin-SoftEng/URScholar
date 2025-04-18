@@ -1079,7 +1079,7 @@ class ScholarshipController extends Controller
                     ->where('school_year_id', $schoolYearId)
                     ->where('semester', $selectedSem)
                     ->update([
-                        'status' => 'Active'
+                        'status' => 'Accomplished'
                     ]);
             }
         } else {

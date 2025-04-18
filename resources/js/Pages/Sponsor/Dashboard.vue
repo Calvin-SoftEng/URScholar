@@ -8,7 +8,10 @@ const props = defineProps({
     scholarships: Array,
     payouts: Array,
     campuses: Array,
-    schoolyears: Array,
+    scholars: Array,
+    scholars: Array,
+    academicYear: Object,
+    allscholars: Array,
 });
 
 </script>
@@ -19,7 +22,7 @@ const props = defineProps({
     <AuthenticatedLayout>
         <template #default>
             <!-- Your dashboard content goes here -->
-            <ContentDashboard class="w-full h-full dark:bg-dprimary" :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
+            <ContentDashboard class="w-full h-full dark:bg-dprimary" :allscholars="allscholars" :academicYear="academicYear" :scholars="scholars" :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
         </template>
     </AuthenticatedLayout>
 </template>

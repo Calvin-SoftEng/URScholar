@@ -77,12 +77,40 @@ class SponsorController extends Controller
             ->orderBy('id', 'asc')
             ->get();
 
+        $academicYear = AcademicYear::where('status', 'Active')
+            ->with('school_year')
+            ->first();
+
+        $scholars = Scholar::with('user', 'campus', 'course', 'batch')
+            ->whereHas('grantees', function ($query) use ($academicYear) {
+                $query->where('status', 'Accomplished')
+                    ->where('semester', $academicYear->semester)
+                    ->where('school_year_id', $academicYear->school_year_id);
+            })
+            ->where('status', 'Verified')
+            ->where('student_status', 'Enrolled')
+            ->where('campus_id', Auth::user()->campus_id)
+            ->get();
+
+        $allscholars = Scholar::with('user', 'campus', 'course', 'batch')
+            ->whereHas('grantees', function ($query) use ($academicYear) {
+                $query->where('status', 'Accomplished');
+            })
+            ->where('status', 'Verified')
+            ->where('student_status', 'Enrolled')
+            ->where('campus_id', Auth::user()->campus_id)
+            ->get();
+
+
         return Inertia::render('Sponsor/Dashboard', [
             'sponsor' => $sponsor,
             'scholarships' => $scholarship,
             'payouts' => $payout,
             'campuses' => $campuses,
             'schoolyears' => $school_year,
+            'scholars' => $scholars,
+            'allscholars' => $allscholars,
+            'academicYear' => $academicYear,
         ]);
     }
 

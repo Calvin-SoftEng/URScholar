@@ -16,7 +16,7 @@
 
     <!-- Number Section -->
     <div class="text-right">
-        <p class="text-4xl font-extrabold leading-tight">1,002</p>
+        <p class="text-4xl font-extrabold leading-tight">{{allscholars.length}}</p>
         <p class="text-sm text-white/80">Across All Campuses</p>
     </div>
     </div>
@@ -25,5 +25,10 @@
 </template>
 
 <script setup>
+const props = defineProps({
+    scholars: Array,
+    academicYear: Object,
+    allscholars: Array,
+});
 
 </script>
