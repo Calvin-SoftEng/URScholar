@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function ScholarSummaryReport(Scholarship $scholarship, Batch $batch)
+    public function EnrolleesSummaryReport(Scholarship $scholarship, Batch $batch)
     {
         // Fetch real scholars
         $scholars = $batch->scholars;
@@ -38,7 +38,7 @@ class ReportsController extends Controller
             ]);
         }
 
-        $pdf = PDF::loadView('reports.scholars_summary', [
+        $pdf = PDF::loadView('reports.enrolled-summary', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars
@@ -47,7 +47,7 @@ class ReportsController extends Controller
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
 
-    public function EnrolledSummaryReport(Scholarship $scholarship, Batch $batch)
+    public function EnrolledListReport(Scholarship $scholarship, Batch $batch)
     {
         // Get the campus for this batch
         $campus = $batch->campus;
@@ -103,7 +103,7 @@ class ReportsController extends Controller
         }
 
         // Generate PDF
-        $pdf = PDF::loadView('reports.enrolled-report', [
+        $pdf = PDF::loadView('reports.enrolled_list', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars,

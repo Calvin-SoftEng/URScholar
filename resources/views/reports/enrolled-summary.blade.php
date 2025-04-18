@@ -234,7 +234,7 @@
         <tr>
             <td class="border border-gray-700 p-2">{{ $campus->name }}</td>
             <td class="border border-gray-700 p-2">{{ $granteeCount }}</td>
-            <td class="border border-gray-700 p-2">{{ $granteeCount + $tes3aCount }}</td>
+            <td class="border border-gray-700 p-2">{{ $granteeCount }}</td>
         </tr>
         {{-- <tr>
             <td class="border border-gray-700 p-2">Campus B</td>
@@ -249,7 +249,7 @@
         <tr class="font-bold">
             <td class="border border-gray-700 p-2">Total</td>
             <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
-            <td class="border border-gray-700 p-2">{{ $totalGrantees + $totalTES3a }}</td>
+            <td class="border border-gray-700 p-2">{{ $totalGrantees}}</td>
         </tr>
         </tbody>
     </table>
