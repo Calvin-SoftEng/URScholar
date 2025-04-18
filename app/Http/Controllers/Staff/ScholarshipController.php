@@ -863,7 +863,7 @@ class ScholarshipController extends Controller
             if (
                 $grantee->scholar &&
                 $grantee->scholar->campus_id == Auth::user()->campus_id && ($grantee->scholar->status === 'Verified' && $grantee->scholar->student_status === 'Enrolled' ||
-                    ($grantee->scholar->student_status === 'Dropped' || $grantee->scholar->student_status === 'Graduated'))
+                    ($grantee->scholar->student_status === 'Dropped' || $grantee->scholar->student_status === 'Graduated' || $grantee->scholar->student_status === 'Transferred'))
             ) {
                 $valitedScholars = true;
                 break;
@@ -886,7 +886,7 @@ class ScholarshipController extends Controller
         foreach ($grantees as $grantee) {
             if ($grantee && $grantee->scholar && $grantee->scholar->campus_id == Auth::user()->campus_id) {
                 $status = $grantee->scholar->student_status;
-                if ($status === 'Enrolled' || $status === 'Graduated' || $status === 'Dropped') {
+                if ($status === 'Enrolled' || $status === 'Graduated' || $status === 'Dropped' || $status === 'Transferred') {
                     $validationStatus = true;
                     break; // We can exit the loop once we find a valid status
                 }

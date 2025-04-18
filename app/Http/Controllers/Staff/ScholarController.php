@@ -590,6 +590,7 @@ class ScholarController extends Controller
 
     }
 
+
     public function upload(Request $request, Scholarship $scholarship)
     {
         $validator = Validator::make($request->all(), [
@@ -686,9 +687,6 @@ class ScholarController extends Controller
                 $currentNumber = (int) substr($highestId, 4);
                 $nextId = $currentNumber + 1;
             }
-
-            // Track campusBatches
-            $campusBatches = [];
 
             // Process each record from the CSV
             foreach ($records as $record) {
@@ -834,28 +832,13 @@ class ScholarController extends Controller
                 }
             }
 
-            // Collect all scholar IDs (both existing and newly created)
-            $allScholars = [];
-
-            // Add existing scholars
-            if (!empty($existingScholarIds)) {
-                $existingScholars = Scholar::whereIn('id', $existingScholarIds)->get();
-                $allScholars = array_merge($allScholars, $existingScholars->toArray());
-            }
-
-            // Add newly created scholars
-            if (!empty($createdScholars)) {
-                foreach ($createdScholars as $scholar) {
-                    $allScholars[] = $scholar->toArray();
-                }
-            }
-
             // Student verification process for new scholars only
             $students = Student::all();
             $matchedCount = 0;
             $unmatchedCount = 0;
             $transferredCount = 0;
             $campusTransfers = [];
+            $transferredScholars = []; // Track transferred scholars for special batch handling
 
             foreach ($createdScholars as $scholar) {
                 // First try to find a match by name and year level regardless of campus/course
@@ -885,8 +868,13 @@ class ScholarController extends Controller
                             'student_status' => 'Transferred',
                             'status' => 'Verified',
                             'email' => $matchedStudent->email,
-                            'student_number' => $matchedStudent->student_number
+                            'student_number' => $matchedStudent->student_number,
+                            'campus_id' => $matchedStudent->campus_id,
+                            'course_id' => $matchedStudent->course_id,
                         ]);
+
+                        // Add to transferredScholars array for separate batch handling
+                        $transferredScholars[] = $scholar->id;
 
                         // Track this transfer for notifications
                         if ($matchedStudent->campus_id !== $scholar->campus_id) {
@@ -920,19 +908,70 @@ class ScholarController extends Controller
                 }
             }
 
-            // Group scholars by campus
-            $scholarsByCompus = [];
-            foreach ($allScholars as $scholar) {
-                $campusId = $scholar['campus_id'];
-                if ($campusId) {
-                    if (!isset($scholarsByCompus[$campusId])) {
-                        $scholarsByCompus[$campusId] = [];
-                    }
-                    $scholarsByCompus[$campusId][] = $scholar['id'];
+            // Check for existing scholars with Transferred status
+            if (!empty($existingScholarIds)) {
+                $existingTransferredScholars = Scholar::whereIn('id', $existingScholarIds)
+                    ->where('student_status', 'Transferred')
+                    ->pluck('id')
+                    ->toArray();
+
+                // Add existing transferred scholars to the list
+                $transferredScholars = array_merge($transferredScholars, $existingTransferredScholars);
+            }
+
+            // Collect all scholar IDs (both existing and newly created)
+            $allScholars = [];
+
+            // Add existing scholars
+            if (!empty($existingScholarIds)) {
+                $existingScholars = Scholar::whereIn('id', $existingScholarIds)->get();
+                foreach ($existingScholars as $scholar) {
+                    $allScholars[] = $scholar->toArray();
                 }
             }
 
-            // Create or find batches for each campus
+            // Add newly created scholars
+            if (!empty($createdScholars)) {
+                foreach ($createdScholars as $scholar) {
+                    $allScholars[] = $scholar->toArray();
+                }
+            }
+
+            // Group scholars by campus (regular and transferred separately)
+            $scholarsByCompus = [];
+            $transferScholarsByCompus = [];
+
+            foreach ($allScholars as $scholar) {
+                $campusId = $scholar['campus_id'];
+                $scholarId = $scholar['id'];
+
+                if ($campusId) {
+                    // Check if this is a transferred scholar
+                    if (in_array((int) $scholarId, array_map('intval', $transferredScholars))) {
+                        // Add to transfer batch
+                        if (!isset($transferScholarsByCompus[$campusId])) {
+                            $transferScholarsByCompus[$campusId] = [];
+                        }
+                        $transferScholarsByCompus[$campusId][] = $scholarId;
+                    } else {
+                        // Add to regular batch
+                        if (!isset($scholarsByCompus[$campusId])) {
+                            $scholarsByCompus[$campusId] = [];
+                        }
+                        $scholarsByCompus[$campusId][] = $scholarId;
+                    }
+                }
+            }
+
+            // Debug logging
+            \Log::info('Transferred scholars detected: ' . count($transferredScholars));
+            \Log::info('Transfer scholar groups by campus: ' . json_encode($transferScholarsByCompus));
+
+            // Track campusBatches
+            $campusBatches = [];
+            $transferBatches = [];
+
+            // Create or find batches for each campus (for regular scholars)
             foreach ($scholarsByCompus as $campusId => $scholarIds) {
                 // Check if batch already exists for this campus
                 $existingBatch = Batch::where('scholarship_id', $scholarship->id)
@@ -960,18 +999,11 @@ class ScholarController extends Controller
                     $campusBatches[$campusId] = $existingBatch;
                 }
 
-                /// In the loop where grantee entries are created for scholars in each campus
+                // Create grantees for regular scholars
                 $granteesData = [];
                 foreach ($scholarIds as $scholarId) {
                     // Fetch the scholar to get their student_status
                     $scholar = Scholar::find($scholarId);
-
-                    // Set grantee status based on scholar's student_status
-                    $granteeStatus = 'Pending';
-                    if ($scholar->student_status === 'Transferred') {
-                        // For transferred students, set grantee status to 'Enrolled'
-                        $granteeStatus = 'Enrolled';
-                    }
 
                     $granteesData[] = [
                         'scholarship_id' => $scholarship->id,
@@ -979,7 +1011,7 @@ class ScholarController extends Controller
                         'scholar_id' => $scholarId,
                         'school_year_id' => $request->schoolyear,
                         'semester' => $request->semester,
-                        'status' => $granteeStatus,
+                        'status' => 'Pending',
                         'student_status' => $scholar->student_status ?? null,
                         'created_at' => now(),
                         'updated_at' => now(),
@@ -991,12 +1023,8 @@ class ScholarController extends Controller
                     Grantees::insert($granteesData);
                 }
 
-                // No need to update total_scholars here since we've already set it correctly above
-
-                // CHECK IF ALL GRANTEES IN THIS BATCH HAVE ENROLLED STATUS
-                // Only proceed with validation if the batch's campus matches the authenticated user's campus
+                // Check if all grantees in this batch have Enrolled status
                 if ($campusId == Auth::user()->campus_id) {
-                    // Get all grantees for this batch
                     $batchGrantees = Grantees::where('batch_id', $campusBatches[$campusId]->id)->get();
                     $allEnrolled = true;
 
@@ -1007,12 +1035,78 @@ class ScholarController extends Controller
                         }
                     }
 
-                    // If all grantees are enrolled, mark the batch as validated
                     if ($allEnrolled && count($batchGrantees) > 0) {
                         $campusBatches[$campusId]->update([
                             'validated' => true
                         ]);
                     }
+                }
+            }
+
+            // Create separate batches for transferred scholars
+            foreach ($transferScholarsByCompus as $campusId => $scholarIds) {
+                // Create a new transfer batch with a special name
+                $transferBatchNo = $firstRecord['BATCH NO.']; // Append T for Transfer
+
+                // Check if a transfer batch already exists
+                $existingTransferBatch = Batch::where('scholarship_id', $scholarship->id)
+                    ->where('batch_no', $transferBatchNo)
+                    ->where('school_year_id', $request->schoolyear)
+                    ->where('campus_id', $campusId)
+                    ->first();
+
+                if (!$existingTransferBatch) {
+                    // Create a new transfer batch
+                    $transferBatch = Batch::create([
+                        'scholarship_id' => $scholarship->id,
+                        'batch_no' => $transferBatchNo,
+                        'school_year_id' => $request->schoolyear,
+                        'semester' => $request->semester,
+                        'campus_id' => $campusId,
+                        'total_scholars' => count($scholarIds),
+                    ]);
+
+                    $transferBatches[$campusId] = $transferBatch;
+                } else {
+                    // Use existing transfer batch
+                    $existingTransferBatch->update([
+                        'total_scholars' => $existingTransferBatch->total_scholars + count($scholarIds)
+                    ]);
+                    $transferBatches[$campusId] = $existingTransferBatch;
+                }
+
+                // Create grantees for transferred scholars
+                $transferGranteesData = [];
+                foreach ($scholarIds as $scholarId) {
+                    $scholar = Scholar::find($scholarId);
+
+                    $transferGranteesData[] = [
+                        'scholarship_id' => $scholarship->id,
+                        'batch_id' => $transferBatches[$campusId]->id,
+                        'scholar_id' => $scholarId,
+                        'school_year_id' => $request->schoolyear,
+                        'semester' => $request->semester,
+                        'status' => 'Pending', // Transferred students are automatically enrolled
+                        'student_status' => 'Enrolled',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ];
+                }
+
+                // Bulk insert grantees for transferred scholars
+                if (!empty($transferGranteesData)) {
+                    Grantees::insert($transferGranteesData);
+                }
+            }
+
+            // Debug logging
+            \Log::info('Transfer batches created: ' . count($transferBatches));
+
+            // Verify and update scholar counts for transfer batches
+            foreach ($transferBatches as $campusId => $batch) {
+                $actualCount = Grantees::where('batch_id', $batch->id)->count();
+                if ($batch->total_scholars != $actualCount) {
+                    $batch->update(['total_scholars' => $actualCount]);
                 }
             }
 
@@ -1053,6 +1147,11 @@ class ScholarController extends Controller
                         $message .= "{$outgoingTransfers} outgoing transfers detected for students: {$studentNames}";
                     }
 
+                    // If there's a transfer batch, include batch information
+                    if (isset($transferBatches[$campusId])) {
+                        $message .= ". A new transfer batch '{$transferBatches[$campusId]->batch_no}' has been created.";
+                    }
+
                     // Create notification
                     $notification = Notification::create([
                         'title' => 'Student Transfer Alert',
@@ -1075,6 +1174,11 @@ class ScholarController extends Controller
                             $detailedMessage .= "Transferred IN from {$fromCampus} to {$toCampus}";
                         }
 
+                        // Add batch information
+                        if ($transfer['to_campus_id'] == $campusId && isset($transferBatches[$campusId])) {
+                            $detailedMessage .= ". Added to transfer batch '{$transferBatches[$campusId]->batch_no}'.";
+                        }
+
                         $detailNotification = Notification::create([
                             'title' => 'Transfer Details',
                             'message' => $detailedMessage,
@@ -1092,18 +1196,26 @@ class ScholarController extends Controller
                 'status' => 'Active'
             ]);
 
+            // Merge regular batches and transfer batches for group creation
+            $allBatches = $campusBatches;
+            foreach ($transferBatches as $campusId => $batch) {
+                if (!isset($allBatches[$campusId])) {
+                    $allBatches[$campusId] = $batch;
+                }
+            }
+
             // Get campuses for all scholars
-            $campusIds = array_keys($campusBatches);
+            $campusIds = array_keys($allBatches);
             $campusesForGroups = Campus::whereIn('id', $campusIds)->get();
 
             // Update for the current user - only create for matching campus/batch
             $currentUser = Auth::user();
-            // Find in the upload function, where we create scholarship groups for coordinators
-            // In the upload function, after creating scholarship groups for each campus
+
+            // Create groups for each campus batch
             foreach ($campusesForGroups as $campus) {
                 // Only create groups for batches that exist for this campus
-                if (isset($campusBatches[$campus->id])) {
-                    $batch = $campusBatches[$campus->id];
+                if (isset($allBatches[$campus->id])) {
+                    $batch = $allBatches[$campus->id];
 
                     // Create a group chat for this campus with batch number in the name
                     $groupName = "Batch " . $batch->batch_no;
@@ -1120,13 +1232,6 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                             'user_id' => Auth::user()->id, // Creator of the group
                         ]);
-
-                        // Add members to the group - only staff, no scholars
-
-                        // // Add current user if their campus matches
-                        // if ($currentUser && $currentUser->campus_id == $campus->id) {
-                        //     $scholarshipGroup->users()->attach($currentUser->id);
-                        // }
 
                         // Add coordinator if they exist and their campus matches
                         $coordinator = User::find($campus->coordinator_id);
@@ -1193,12 +1298,13 @@ class ScholarController extends Controller
 
             $existingScholarsCount = count($existingScholarIds);
             $newScholarsCount = count($createdScholars);
-            $totalCampuses = count($campusBatches);
+            $totalCampuses = count($allBatches);
+            $transferBatchesCount = count($transferBatches);
 
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
                     'type' => 'success',
-                    'message' => "Successfully processed " . count($records) . " records. Added {$existingScholarsCount} existing scholars and created {$newScholarsCount} new scholars across {$totalCampuses} campuses. New scholars - Matched: {$matchedCount}, Transferred: {$transferredCount}, Unmatched: {$unmatchedCount}."
+                    'message' => "Successfully processed " . count($records) . " records. Added {$existingScholarsCount} existing scholars and created {$newScholarsCount} new scholars across {$totalCampuses} campuses. Created {$transferBatchesCount} transfer batches. New scholars - Matched: {$matchedCount}, Transferred: {$transferredCount}, Unmatched: {$unmatchedCount}."
                 ]);
 
         } catch (\Exception $e) {
