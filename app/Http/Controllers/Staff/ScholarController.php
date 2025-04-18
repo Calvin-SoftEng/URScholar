@@ -597,23 +597,23 @@ class ScholarController extends Controller
             'semester' => 'required',
             'schoolyear' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return back()->withErrors([
                 'nofile' => 'Wrong file ya',
             ])->withInput();
         }
-    
+
         try {
             $file = $request->file('file');
             $csv = Reader::createFromPath($file->getPathname(), 'r');
             $csv->setHeaderOffset(0);
-    
+
             $firstRecord = $csv->fetchOne();
-    
+
             // Get all records
             $records = iterator_to_array($csv->getRecords());
-    
+
             // Check for existing students in the system
             $duplicateStudents = [];
             foreach ($records as $record) {
@@ -621,39 +621,39 @@ class ScholarController extends Controller
                     ->where('first_name', $record['FIRSTNAME'] ?? '')
                     ->where('year_level', $record['YEAR LEVEL'] ?? '')
                     ->first();
-    
+
                 if ($existingStudent) {
                     $duplicateStudents[] = $existingStudent;
                 }
             }
-    
+
             // if (!empty($duplicateStudents)) {
             //     return back()->withErrors([
             //         'student' => 'Uy lods, outdated na yung student info. Paki-update naman 😅',
             //     ])->withInput();
             // }
-    
-    
+
+
             // Get all campuses for efficient lookup
             $campuses = Campus::all()->mapWithKeys(function ($campus) {
                 return [strtolower($campus->name) => $campus->id];
             })->toArray();
-    
+
             // Get all courses with their names and abbreviations
             $courses = Course::select('id', 'name', 'abbreviation')->get();
-    
+
             // Map to standardize course names for comparison
             $standardizedCourseLookup = [];
-    
+
             foreach ($courses as $course) {
                 // Store the original course name
                 $standardizedCourseLookup[strtolower($course->name)] = $course->id;
-    
+
                 // Store the abbreviation
                 if (!empty($course->abbreviation)) {
                     $standardizedCourseLookup[strtolower($course->abbreviation)] = $course->id;
                 }
-    
+
                 // Store without "Bachelor of Science in"
                 $withoutPrefix = str_replace(
                     ['bachelor of science in ', 'bachelor of arts in ', 'bachelor of '],
@@ -661,35 +661,35 @@ class ScholarController extends Controller
                     strtolower($course->name)
                 );
                 $standardizedCourseLookup[$withoutPrefix] = $course->id;
-    
+
                 // Store with BS/BA prefix
                 $withBsPrefix = 'bs in ' . $withoutPrefix;
                 $standardizedCourseLookup[$withBsPrefix] = $course->id;
-    
+
                 $withBsPrefix2 = 'bs ' . $withoutPrefix;
                 $standardizedCourseLookup[$withBsPrefix2] = $course->id;
             }
-    
+
             // Lists to track what we need to do with each record
             $existingScholarIds = [];
             $newScholarsData = [];
             $courseMatching = [];
             $duplicateGranteeIds = []; // For storing scholars who already have grantees
-    
+
             // Get the next available urscholar_id
             $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')
                 ->orderByRaw('CAST(SUBSTRING(urscholar_id, 5) AS UNSIGNED) DESC')
                 ->value('urscholar_id');
-    
+
             $nextId = 1; // Default starting number
             if ($highestId) {
                 $currentNumber = (int) substr($highestId, 4);
                 $nextId = $currentNumber + 1;
             }
-    
+
             // Track campusBatches
             $campusBatches = [];
-    
+
             // Process each record from the CSV
             foreach ($records as $record) {
                 // Check if scholar already exists
@@ -697,8 +697,8 @@ class ScholarController extends Controller
                     ->where('first_name', $record['FIRSTNAME'] ?? '')
                     ->where('middle_name', $record['MIDDLENAME'] ?? '')
                     ->first();
-    
-    
+
+
                 if ($existingScholar) {
                     // Check if this scholar already has a grantee record for this batch, semester, and school year
                     $existingGrantee = Grantees::where('scholar_id', $existingScholar->id)
@@ -706,7 +706,7 @@ class ScholarController extends Controller
                         ->where('school_year_id', $request->schoolyear)
                         ->where('semester', $request->semester)
                         ->first();
-    
+
                     if ($existingGrantee) {
                         // Add to duplicate grantees list
                         $duplicateGranteeIds[] = $existingScholar->id;
@@ -719,15 +719,15 @@ class ScholarController extends Controller
                     // Determine campus_id from campus name
                     $campusName = strtolower($record['CAMPUS'] ?? null);
                     $campusId = null;
-    
+
                     if ($campusName && isset($campuses[$campusName])) {
                         $campusId = $campuses[$campusName];
                     }
-    
+
                     // MULTIPLE APPROACH COURSE MATCHING
                     $csvCourseName = $record['COURSE/PROGRAM ENROLLED'] ?? null;
                     $courseId = null;
-    
+
                     if ($csvCourseName) {
                         // 1. Try direct match with standardized lookup
                         $standardizedCsvName = strtolower(trim($csvCourseName));
@@ -737,7 +737,7 @@ class ScholarController extends Controller
                             // 2. Try to find match with keywords (Information Technology)
                             $bestMatchScore = 0;
                             $bestMatchId = null;
-    
+
                             foreach ($courses as $course) {
                                 // Extract the core subject part (e.g., "Information Technology")
                                 $coreSubject = preg_replace(
@@ -745,7 +745,7 @@ class ScholarController extends Controller
                                     '',
                                     strtolower($course->name)
                                 );
-    
+
                                 // Check if the core subject is in the CSV course name
                                 if (!empty($coreSubject) && stripos($standardizedCsvName, $coreSubject) !== false) {
                                     // Use a scoring system based on length of match
@@ -756,12 +756,12 @@ class ScholarController extends Controller
                                     }
                                 }
                             }
-    
+
                             if ($bestMatchId) {
                                 $courseId = $bestMatchId;
                             }
                         }
-    
+
                         // For debugging
                         $matchedCourse = $courseId ? Course::find($courseId)->name : 'No match found';
                         $courseMatching[$csvCourseName] = [
@@ -771,11 +771,11 @@ class ScholarController extends Controller
                             'course_id' => $courseId
                         ];
                     }
-    
+
                     // Generate urscholar_id with leading zeros (URS-0001 format)
                     $urscholarId = 'URS-' . str_pad($nextId, 4, '0', STR_PAD_LEFT);
                     $nextId++;
-    
+
                     // Add to new scholars data
                     $newScholarsData[] = [
                         'urscholar_id' => $urscholarId,
@@ -802,73 +802,75 @@ class ScholarController extends Controller
                     ];
                 }
             }
-    
+
             // If there are duplicate grantees, return with error
             if (!empty($duplicateGranteeIds)) {
                 $duplicateScholars = Scholar::whereIn('id', $duplicateGranteeIds)->get();
                 $names = $duplicateScholars->map(function ($scholar) {
                     return $scholar->first_name . ' ' . $scholar->last_name;
                 })->implode(', ');
-    
+
                 return back()->withErrors([
                     'student' => 'The following scholars already exist in this scholarship for the selected semester and school year: ' . $names
                 ])->withInput();
             }
-    
+
             // Insert new scholars
             $createdScholars = [];
             if (!empty($newScholarsData)) {
                 // Bulk insert new scholars
                 Scholar::insert($newScholarsData);
-    
+
                 // Get all newly created scholars by matching the inserted data
                 foreach ($newScholarsData as $data) {
                     $scholar = Scholar::where('urscholar_id', $data['urscholar_id'])
                         ->where('last_name', $data['last_name'])
                         ->where('first_name', $data['first_name'])
                         ->first();
-    
+
                     if ($scholar) {
                         $createdScholars[] = $scholar;
                     }
                 }
             }
-    
+
             // Collect all scholar IDs (both existing and newly created)
             $allScholars = [];
-    
+
             // Add existing scholars
             if (!empty($existingScholarIds)) {
                 $existingScholars = Scholar::whereIn('id', $existingScholarIds)->get();
                 $allScholars = array_merge($allScholars, $existingScholars->toArray());
             }
-    
+
             // Add newly created scholars
             if (!empty($createdScholars)) {
                 foreach ($createdScholars as $scholar) {
                     $allScholars[] = $scholar->toArray();
                 }
             }
-    
+
             // Student verification process for new scholars only
             $students = Student::all();
             $matchedCount = 0;
             $unmatchedCount = 0;
             $transferredCount = 0;
             $campusTransfers = [];
-    
+
             foreach ($createdScholars as $scholar) {
                 // First try to find a match by name and year level regardless of campus/course
                 $matchedStudent = $students->first(function ($student) use ($scholar) {
                     return $scholar->first_name == $student->first_name &&
-                           $scholar->last_name == $student->last_name &&
-                           $scholar->year_level == $student->year_level;
+                        $scholar->last_name == $student->last_name &&
+                        $scholar->year_level == $student->year_level;
                 });
-    
+
                 if ($matchedStudent) {
                     // Student exists in the system
-                    if ($matchedStudent->course_id === $scholar->course_id && 
-                        $matchedStudent->campus_id === $scholar->campus_id) {
+                    if (
+                        $matchedStudent->course_id === $scholar->course_id &&
+                        $matchedStudent->campus_id === $scholar->campus_id
+                    ) {
                         // Perfect match - set as Enrolled and Verified
                         $scholar->update([
                             'student_status' => 'Enrolled',
@@ -880,12 +882,12 @@ class ScholarController extends Controller
                     } else {
                         // Student exists but has different campus or course - mark as Transferred
                         $scholar->update([
-                            'student_status' => 'Transferred', 
+                            'student_status' => 'Transferred',
                             'status' => 'Verified',
                             'email' => $matchedStudent->email,
                             'student_number' => $matchedStudent->student_number
                         ]);
-                        
+
                         // Track this transfer for notifications
                         if ($matchedStudent->campus_id !== $scholar->campus_id) {
                             // Add to campusTransfers array
@@ -895,7 +897,7 @@ class ScholarController extends Controller
                             if (!isset($campusTransfers[$scholar->campus_id])) {
                                 $campusTransfers[$scholar->campus_id] = [];
                             }
-                            
+
                             // Store transfer info for both campuses
                             $transferInfo = [
                                 'scholar_id' => $scholar->id,
@@ -904,11 +906,11 @@ class ScholarController extends Controller
                                 'to_campus_id' => $scholar->campus_id,
                                 'student_number' => $matchedStudent->student_number
                             ];
-                            
+
                             $campusTransfers[$matchedStudent->campus_id][] = $transferInfo; // Old campus
                             $campusTransfers[$scholar->campus_id][] = $transferInfo; // New campus
                         }
-                        
+
                         $transferredCount++;
                     }
                 } else {
@@ -917,7 +919,7 @@ class ScholarController extends Controller
                     $unmatchedCount++;
                 }
             }
-    
+
             // Group scholars by campus
             $scholarsByCompus = [];
             foreach ($allScholars as $scholar) {
@@ -929,7 +931,7 @@ class ScholarController extends Controller
                     $scholarsByCompus[$campusId][] = $scholar['id'];
                 }
             }
-    
+
             // Create or find batches for each campus
             foreach ($scholarsByCompus as $campusId => $scholarIds) {
                 // Check if batch already exists for this campus
@@ -938,7 +940,7 @@ class ScholarController extends Controller
                     ->where('school_year_id', $request->schoolyear)
                     ->where('campus_id', $campusId)
                     ->first();
-    
+
                 if (!$existingBatch) {
                     // Create a new batch for this campus
                     $batch = Batch::create([
@@ -957,20 +959,20 @@ class ScholarController extends Controller
                     ]);
                     $campusBatches[$campusId] = $existingBatch;
                 }
-    
+
                 /// In the loop where grantee entries are created for scholars in each campus
                 $granteesData = [];
                 foreach ($scholarIds as $scholarId) {
                     // Fetch the scholar to get their student_status
                     $scholar = Scholar::find($scholarId);
-                    
+
                     // Set grantee status based on scholar's student_status
                     $granteeStatus = 'Pending';
                     if ($scholar->student_status === 'Transferred') {
                         // For transferred students, set grantee status to 'Enrolled'
                         $granteeStatus = 'Enrolled';
                     }
-    
+
                     $granteesData[] = [
                         'scholarship_id' => $scholarship->id,
                         'batch_id' => $campusBatches[$campusId]->id,
@@ -983,28 +985,28 @@ class ScholarController extends Controller
                         'updated_at' => now(),
                     ];
                 }
-    
+
                 // Bulk insert grantees for this campus
                 if (!empty($granteesData)) {
                     Grantees::insert($granteesData);
                 }
-    
+
                 // No need to update total_scholars here since we've already set it correctly above
-    
+
                 // CHECK IF ALL GRANTEES IN THIS BATCH HAVE ENROLLED STATUS
                 // Only proceed with validation if the batch's campus matches the authenticated user's campus
                 if ($campusId == Auth::user()->campus_id) {
                     // Get all grantees for this batch
                     $batchGrantees = Grantees::where('batch_id', $campusBatches[$campusId]->id)->get();
                     $allEnrolled = true;
-    
+
                     foreach ($batchGrantees as $grantee) {
                         if ($grantee->student_status !== 'Enrolled') {
                             $allEnrolled = false;
                             break;
                         }
                     }
-    
+
                     // If all grantees are enrolled, mark the batch as validated
                     if ($allEnrolled && count($batchGrantees) > 0) {
                         $campusBatches[$campusId]->update([
@@ -1013,7 +1015,7 @@ class ScholarController extends Controller
                     }
                 }
             }
-    
+
             // Send notifications to campus coordinators about transfers
             if (!empty($campusTransfers)) {
                 foreach ($campusTransfers as $campusId => $transfers) {
@@ -1022,25 +1024,25 @@ class ScholarController extends Controller
                     if (!$campus || !$campus->coordinator_id) {
                         continue; // Skip if campus doesn't exist or has no coordinator
                     }
-                    
+
                     // Get the coordinator for this campus
                     $coordinator = User::find($campus->coordinator_id);
                     if (!$coordinator) {
                         continue; // Skip if coordinator not found
                     }
-                    
+
                     // Create notification message based on transfer direction
                     $studentNames = collect($transfers)->pluck('name')->unique()->implode(', ');
-                    
+
                     // For each transfer, determine if this campus is the source or destination
-                    $incomingTransfers = collect($transfers)->filter(function($t) use ($campusId) {
+                    $incomingTransfers = collect($transfers)->filter(function ($t) use ($campusId) {
                         return $t['to_campus_id'] == $campusId;
                     })->count();
-                    
-                    $outgoingTransfers = collect($transfers)->filter(function($t) use ($campusId) {
+
+                    $outgoingTransfers = collect($transfers)->filter(function ($t) use ($campusId) {
                         return $t['from_campus_id'] == $campusId;
                     })->count();
-                    
+
                     // Create appropriate notification message
                     $message = "Scholarship transfer alert for {$campus->name} campus: ";
                     if ($incomingTransfers > 0 && $outgoingTransfers > 0) {
@@ -1050,50 +1052,50 @@ class ScholarController extends Controller
                     } else {
                         $message .= "{$outgoingTransfers} outgoing transfers detected for students: {$studentNames}";
                     }
-                    
+
                     // Create notification
                     $notification = Notification::create([
                         'title' => 'Student Transfer Alert',
                         'message' => $message,
                         'type' => 'student_transfer',
                     ]);
-                    
+
                     // Attach coordinator to notification
                     $notification->users()->attach($coordinator->id);
-                    
+
                     // Also send detailed transfer information for each student
                     foreach ($transfers as $transfer) {
                         $fromCampus = Campus::find($transfer['from_campus_id'])->name ?? 'Unknown';
                         $toCampus = Campus::find($transfer['to_campus_id'])->name ?? 'Unknown';
-                        
+
                         $detailedMessage = "Transfer details for {$transfer['name']} (#{$transfer['student_number']}): ";
                         if ($transfer['from_campus_id'] == $campusId) {
                             $detailedMessage .= "Transferred OUT from {$fromCampus} to {$toCampus}";
                         } else {
                             $detailedMessage .= "Transferred IN from {$fromCampus} to {$toCampus}";
                         }
-                        
+
                         $detailNotification = Notification::create([
                             'title' => 'Transfer Details',
                             'message' => $detailedMessage,
                             'type' => 'student_transfer_detail',
                             'reference_id' => $transfer['scholar_id'],
                         ]);
-                        
+
                         $detailNotification->users()->attach($coordinator->id);
                     }
                 }
             }
-    
+
             // Update Scholarship Status
             $scholarship->update([
                 'status' => 'Active'
             ]);
-    
+
             // Get campuses for all scholars
             $campusIds = array_keys($campusBatches);
             $campusesForGroups = Campus::whereIn('id', $campusIds)->get();
-    
+
             // Update for the current user - only create for matching campus/batch
             $currentUser = Auth::user();
             // Find in the upload function, where we create scholarship groups for coordinators
@@ -1102,15 +1104,15 @@ class ScholarController extends Controller
                 // Only create groups for batches that exist for this campus
                 if (isset($campusBatches[$campus->id])) {
                     $batch = $campusBatches[$campus->id];
-    
+
                     // Create a group chat for this campus with batch number in the name
                     $groupName = "Batch " . $batch->batch_no;
-    
+
                     // Check if this group already exists for this campus
                     $existingGroup = ScholarshipGroup::where('name', $groupName)
                         ->where('campus_id', $campus->id)
                         ->first();
-    
+
                     if (!$existingGroup) {
                         // Create new scholarship group with name
                         $scholarshipGroup = ScholarshipGroup::create([
@@ -1118,33 +1120,33 @@ class ScholarController extends Controller
                             'campus_id' => $campus->id,
                             'user_id' => Auth::user()->id, // Creator of the group
                         ]);
-    
+
                         // Add members to the group - only staff, no scholars
-    
+
                         // // Add current user if their campus matches
                         // if ($currentUser && $currentUser->campus_id == $campus->id) {
                         //     $scholarshipGroup->users()->attach($currentUser->id);
                         // }
-    
+
                         // Add coordinator if they exist and their campus matches
                         $coordinator = User::find($campus->coordinator_id);
                         if ($coordinator && $coordinator->campus_id == $campus->id) {
                             $scholarshipGroup->users()->attach($coordinator->id);
                         }
-    
+
                         // Add cashier if they exist and their campus matches
                         $cashier = User::find($campus->cashier_id);
                         if ($cashier && $cashier->campus_id == $campus->id) {
                             $scholarshipGroup->users()->attach($cashier->id);
                         }
-    
+
                         // Create notification about new group chat
                         $notification = Notification::create([
                             'title' => 'New Group Chat Created',
                             'message' => 'You have been added to group chat ' . $groupName . ' for ' . $campus->name . ' campus',
                             'type' => 'group_chat_created',
                         ]);
-    
+
                         // Notify all group members
                         $memberIds = $scholarshipGroup->users()->pluck('users.id')->toArray();
                         $notification->users()->attach($memberIds);
@@ -1153,14 +1155,14 @@ class ScholarController extends Controller
                         $batchNumber = $batch->batch_no;
                         if (strpos($existingGroup->name, $batchNumber) !== false) {
                             // Group exists and batch numbers match, add any missing members
-    
+
                             // Add current user if not already in group
                             if ($currentUser && $currentUser->campus_id == $campus->id) {
                                 if (!$existingGroup->users()->where('user_id', $currentUser->id)->exists()) {
                                     $existingGroup->users()->attach($currentUser->id);
                                 }
                             }
-    
+
                             // Add coordinator if not already in group
                             $coordinator = User::find($campus->coordinator_id);
                             if ($coordinator && $coordinator->campus_id == $campus->id) {
@@ -1168,7 +1170,7 @@ class ScholarController extends Controller
                                     $existingGroup->users()->attach($coordinator->id);
                                 }
                             }
-    
+
                             // Add cashier if not already in group
                             $cashier = User::find($campus->cashier_id);
                             if ($cashier && $cashier->campus_id == $campus->id) {
@@ -1180,25 +1182,25 @@ class ScholarController extends Controller
                     }
                 }
             }
-    
+
             $schoolyear = SchoolYear::find($request->schoolyear);
-    
+
             ActivityLog::create([
                 'user_id' => Auth::user()->id,
                 'activity' => 'Create',
                 'description' => 'Scholars added to ' . $scholarship->name . ' for ' . $schoolyear->name . ' ' . $request->semester,
             ]);
-    
+
             $existingScholarsCount = count($existingScholarIds);
             $newScholarsCount = count($createdScholars);
             $totalCampuses = count($campusBatches);
-    
+
             return redirect()->to("/scholarships/{$scholarship->id}?selectedSem={$request->semester}&selectedYear={$request->schoolyear}")
                 ->with('flash', [
                     'type' => 'success',
                     'message' => "Successfully processed " . count($records) . " records. Added {$existingScholarsCount} existing scholars and created {$newScholarsCount} new scholars across {$totalCampuses} campuses. New scholars - Matched: {$matchedCount}, Transferred: {$transferredCount}, Unmatched: {$unmatchedCount}."
                 ]);
-    
+
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'Error processing CSV file: ' . $e->getMessage(),
