@@ -2,8 +2,7 @@
 
     <Head title="Scholarships" />
     <AuthenticatedLayout>
-        <div
-            class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+        <div class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
             <div class="w-full mx-auto space-y-3">
                 <div class="breadcrumbs text-sm text-gray-400 mb-5">
                     <ul>
@@ -11,7 +10,7 @@
                             Home
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold dark:text-gray-300">URS Calendar</span>
+                            <span class="text-blue-400 font-semibold dark:text-gray-300">Calendar</span>
                         </li>
                     </ul>
                 </div>
@@ -19,55 +18,60 @@
                 <div class="flex justify-between items-center mb-4">
 
                     <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>Scholarship
-                        Calendar
+                        <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>URS Scholarship Calendar
                     </h1>
 
                 </div>
 
-                <div>
-                    <v-sheet class="d-flex p-10" height="54" tile>
-                    <v-select
-                        v-model="type"
-                        :items="types"
-                        class="ma-2 p-5"
-                        density="compact"
-                        label="View Mode"
-                        variant="outlined"
-                        hide-details
-                    ></v-select>
-                    <v-select
-                        v-model="weekday"
-                        :items="weekdays"
-                        class="ma-2"
-                        density="compact"
-                        label="weekdays"
-                        variant="outlined"
-                        hide-details
-                    ></v-select>
-                    </v-sheet>
-                    <v-sheet>
-                    <v-calendar
-                        ref="calendar"
-                        v-model="value"
-                        :events="events"
-                        :view-mode="type"
-                        :weekdays="weekday"
-                        color="indigo"
-                        event-color="primary"
-                        @click:event="showEventDetails"
-                    >
-                        <template v-slot:event="{ event }">
-                        <div class="custom-event" :style="{ backgroundColor: event.color || '#1976D2' }">
+                <div class="w-full mx-auto">
+                    <!-- Header -->
+                    <div class="flex items-center justify-between mb-4 ">
+                        <div class="flex text-2xl font-poppins font-semibold text-center justify-center items-center text-gray-800 dark:text-white mb-4">
+                        {{ formatDate(currentDate) }}
+                        </div>
+                    <div class="space-x-2">
+                        <button @click="prevMonth" class="px-3 py-1 bg-primary rounded">Prev</button>
+                        <button @click="nextMonth" class="px-3 py-1 bg-primary rounded">Next</button>
+                    </div>
+                    </div>
+
+                    <!-- Calendar Grid -->
+                    <div class="grid grid-cols-7 text-center font-semibold text-gray-700 border-b pb-2">
+                    <div v-for="(day, index) in daysOfWeek" :key="index">{{ day }}</div>
+                    </div>
+                    <div class="grid grid-cols-7 gap-2">
+                    <div v-for="(day, index) in calendarDays" :key="index" class="h-28 border rounded p-1 relative">
+                        
+                        <div
+                        class="absolute top-1 left-1 w-6 h-6 flex items-center justify-center text-xs"
+                        :class="isToday(day.date)
+                            ? 'bg-blue-500 text-white rounded-full font-bold'
+                            : 'text-gray-500'">
+                        {{ day.date.getDate() }}
+                        </div>
+
+                        <!-- Scholarship Events -->
+                        <div v-for="event in day.events" :key="event.title" class="mt-5">
+                        <div
+                            class="text-xs bg-blue-500 text-white px-1 py-0.5 rounded cursor-pointer"
+                            @click="showDetails(event)">
                             {{ event.title }}
                         </div>
-                        </template>
-                    </v-calendar>
-                    </v-sheet>
+                        </div>
+                    </div>
+                    </div>
+
+
+                    <!-- Toast or Modal -->
+                    <div v-if="toastVisible" class="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
+                    {{ toastMessage }}
+                    </div>
                 </div>
 
             </div>
         </div>
+
+
 
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
@@ -84,7 +88,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ref, onMounted, watchEffect, watch } from 'vue';
+import { ref, onMounted, watchEffect, watch, computed } from 'vue';
 import { usePage } from "@inertiajs/vue3";
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
 import { Tooltip } from 'primevue';
@@ -92,104 +96,104 @@ import { set } from 'date-fns';
 import { DatePicker } from 'primevue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
-import { Input } from '@/Components/ui/input'
-import { Button } from '@/Components/ui/button'
-import { Calendar } from '@/Components/ui/calendar'
+// import { Input } from '@/Components/ui/input'
+// import { Button } from '@/Components/ui/button'
+// import { Calendar } from '@/Components/ui/calendar'
 
-import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover'
-import { cn } from '@/lib/utils'
-import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
-import { Calendar as CalendarIcon } from 'lucide-vue-next'
+// import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover'
+// import { cn } from '@/lib/utils'
+// import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
+// import { Calendar as CalendarIcon } from 'lucide-vue-next'
 
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
-import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group'
-import { initFlowbite } from 'flowbite';
-import { Datepicker } from "flowbite";
+// import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
+// import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group'
+// import { initFlowbite } from 'flowbite';
+// import { Datepicker } from "flowbite";
 
-import { SchedulePlugin } from '@syncfusion/ej2-vue-schedule';
-import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda } from '@syncfusion/ej2-vue-schedule';
-import { useDate } from 'vuetify';
+// import { SchedulePlugin } from '@syncfusion/ej2-vue-schedule';
+// import { ScheduleComponent, Day, Week, WorkWeek, Month, Agenda } from '@syncfusion/ej2-vue-schedule';
+// import { useDate } from 'vuetify';
 
+const currentDate = ref(new Date());
 
-
-
-const props = defineProps({
-    scholarships: Array,
-});
-
-const directives = {
-    Tooltip,
-    DatePicker,
+const formatDate = (date) => {
+  const options = { month: 'long', day: 'numeric', year: 'numeric' };
+  return date.toLocaleDateString(undefined, options);
 };
 
-const value = ref(new Date());
-const type = ref('month');
-const weekday = ref([0, 1, 2, 3, 4, 5, 6]);
-const types = ref(['month', 'week', 'day', '4day']);
-const weekdays = ref([
-  { value: [0, 1, 2, 3, 4, 5, 6], text: 'All days' },
-  { value: [1, 2, 3, 4, 5], text: 'Weekdays' },
-  { value: [0, 6], text: 'Weekend' },
-]);
+const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
+const today = new Date()
+const currentMonth = ref(today.getMonth())
+const currentYear = ref(today.getFullYear())
 
-// Define events reactive variable
-const events = ref([]);
+const scholarships = ref([
+  { title: 'RISE Application Deadline', date: '2025-04-17', description: 'Submit form A1' },
+  { title: 'Payouts', date: '2025-04-23', description: 'Final application' },
+])
 
-// Calendar reference
-const calendar = ref(null);
+const toastMessage = ref('')
+const toastVisible = ref(false)
 
-// Replace the getEvents function with this:
-const getScholarshipEvents = () => {
-    if (!props.scholarships || props.scholarships.length === 0) return;
+const showDetails = (event) => {
+  toastMessage.value = `${event.title}: ${event.description}`
+  toastVisible.value = true
+  setTimeout(() => (toastVisible.value = false), 3000)
+}
 
-    const scholarshipEvents = props.scholarships.map(scholarship => {
-        // Convert date_end string to a Date object
-        const endDate = new Date(scholarship.date_start);
+const isToday = (date) => {
+  const d = new Date()
+  return (
+    date.getDate() === d.getDate() &&
+    date.getMonth() === d.getMonth() &&
+    date.getFullYear() === d.getFullYear()
+  )
+}
 
-        return {
-            title: scholarship.name || scholarship.title || 'Scholarship Deadline', // Use name as first priority
-            start: endDate,
-            end: endDate,
-            color: 'blue',
-            allDay: true,
-            details: scholarship.description || 'Application deadline'
-        };
-    });
+const calendarDays = computed(() => {
+  const firstDay = new Date(currentYear.value, currentMonth.value, 1)
+  const lastDay = new Date(currentYear.value, currentMonth.value + 1, 0)
 
-    events.value = scholarshipEvents;
-};
+  const startDate = new Date(firstDay)
+  startDate.setDate(firstDay.getDate() - firstDay.getDay())
 
-// Add this function to your script
-const showEventDetails = (event) => {
-    // You could show a modal or toast with scholarship details here
-    console.log('Scholarship details:', event);
-    // Example: show toast with scholarship deadline info
-    toastMessage.value = `Deadline for ${event.event.title} is on ${new Date(event.event.start).toLocaleDateString()}`;
-    toastVisible.value = true;
-    setTimeout(() => {
-        toastVisible.value = false;
-    }, 3000);
-};
+  const endDate = new Date(lastDay)
+  endDate.setDate(lastDay.getDate() + (6 - lastDay.getDay()))
 
-// Watch for changes in scholarships prop
-watch(() => props.scholarships, () => {
-    getScholarshipEvents();
-}, { immediate: true });
+  const days = []
+  for (let date = new Date(startDate); date <= endDate; date.setDate(date.getDate() + 1)) {
+    const dateCopy = new Date(date)
+    const eventList = scholarships.value.filter((event) => {
+      const eventDate = new Date(event.date)
+      return (
+        eventDate.getDate() === dateCopy.getDate() &&
+        eventDate.getMonth() === dateCopy.getMonth() &&
+        eventDate.getFullYear() === dateCopy.getFullYear()
+      )
+    })
+    days.push({ date: new Date(dateCopy), events: eventList })
+  }
 
+  return days
+})
 
-// Add these reactive variables if not already present
-const toastVisible = ref(false);
-const toastMessage = ref('');
+const prevMonth = () => {
+  if (currentMonth.value === 0) {
+    currentMonth.value = 11
+    currentYear.value -= 1
+  } else {
+    currentMonth.value -= 1
+  }
+}
 
-
-// Utility Function for Random Number Generation
-const rnd = (a, b) => Math.floor((b - a + 1) * Math.random()) + a;
-
-// Fetch Scholarship Events on Mount
-onMounted(() => {
-    getScholarshipEvents();
-});
+const nextMonth = () => {
+  if (currentMonth.value === 11) {
+    currentMonth.value = 0
+    currentYear.value += 1
+  } else {
+    currentMonth.value += 1
+  }
+}
 
 
 </script>
@@ -236,5 +240,12 @@ onMounted(() => {
 /* Selected day styling */
 :deep(.v-calendar-weekly__day--selected) {
   background-color: rgba(25, 118, 210, 0.2) !important;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.4s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
 }
 </style>

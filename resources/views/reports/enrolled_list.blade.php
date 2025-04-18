@@ -38,25 +38,28 @@
 
     <!-- Title -->
     <h2 class="font-bold text-lg text-center mb-4 uppercase">List of Enrollees for {{ $scholarship->name }}</h2>
-
     <!-- Paragraph -->
-    {{-- <p class="mb-4 ">
-        <span class="font-bold">TO WHOM IT MAY CONCERN:</span>
+    <p class="mb-4 ">
+        <span class="font-bold">School Year: </span><span> Semester:</span>
         <br />
-        <p class="text-justify indent-5">This is to certify that the total number of Continuing {{ $scholarship->name }} grantees by campus as shown below, are qualified to avail of the {{ $scholarship->name }} for the 
+        {{-- <p class="text-justify indent-5">This is to certify that the total number of Continuing {{ $scholarship->name }} grantees by campus as shown below, are qualified to avail of the {{ $scholarship->name }} for the 
         <span class="font-bold text-red-600"> {{ $batch->school_year->semester ?? '1st' }}</span> semester of Academic Year
-            {{ $batch->school_year->year }}.</p>
-    </p> --}}
-
+            {{ $batch->school_year->year }}.</p> --}}
+    </p>
     <br>
 
     <!-- Table -->
     <table class="w-full border border-gray-700 mb-4 text-center">
-        <thead class="bg-gray-100">
+        <thead class="bg-gray-100 text-xs">
         <tr>
             <th class="border border-gray-700 p-2">Student ID</th>
-            <th class="border border-gray-700 p-2">Name</th>
+            <th class="border border-gray-700 p-2">Last Name</th>
+            <th class="border border-gray-700 p-2">First Name</th>
+            <th class="border border-gray-700 p-2">Middle Name</th>
             <th class="border border-gray-700 p-2">Campus</th>
+            <th class="border border-gray-700 p-2">Course</th>
+            <th class="border border-gray-700 p-2">Year Level</th>
+            <th class="border border-gray-700 p-2">Batch Number</th>
         </tr>
         </thead>
         <tbody>
@@ -94,37 +97,23 @@
                     $totalGrantees += $granteeCount;
                     $totalTES3a += $tes3aCount;
                 @endphp --}}
-        <tr>
+        <tr class="text-sm">
             <td class="border border-gray-700 p-2">ID</td>
             <td class="border border-gray-700 p-2">BEBEBOI</td>
             <td class="border border-gray-700 p-2">BINANGONAN</td>
+            <td class="border border-gray-700 p-2">ID</td>
+            <td class="border border-gray-700 p-2">BEBEBOI</td>
+            <td class="border border-gray-700 p-2">BINANGONAN</td>
+            <td class="border border-gray-700 p-2">ID</td>
+            <td class="border border-gray-700 p-2">BEBEBOI</td>
         </tr>
-        {{-- <tr>
-            <td class="border border-gray-700 p-2">Campus B</td>
-            <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr>
-        <tr>
-            <td class="border border-gray-700 p-2 italic text-gray-500">(Insert more rows for additional Campus)</td>
-            <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr> --}}
-        {{-- <tr class="font-bold">
-            <td class="border border-gray-700 p-2">Total</td>
-            <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
-            <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
-        </tr> --}}
         </tbody>
     </table>
 
     <!-- Additional Cert Text -->
-    <p class="mb-4">
+    {{-- <p class="mb-4">
         This further certifies that the student’s information indicated in 
         <span class="text-red-600 underline">{{ $scholarship->name }} Continuing Form </span> is accurate and complete.
-    </p>
-
-    {{-- <p class="font-bold mb-6">
-        This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of 2022, Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
     </p> --}}
 
     <!-- Signatories -->
@@ -134,7 +123,7 @@
         <div class="h-12 border-b border-gray-700 w-64"></div>
         <p class="text-red-600 font-semibold mt-1 text-sm">Signature over Printed Name of the School Registrar</p>
         </div>
-        <div>
+        <div class="text-center justify-center items-center">
         <p class="mb-2">Approved by:</p>
         <div class="h-12 border-b border-gray-700 w-64"></div>
         <p class="text-red-600 font-semibold mt-1 text-sm">Signature over Printed Name of the President of the HEIs</p>

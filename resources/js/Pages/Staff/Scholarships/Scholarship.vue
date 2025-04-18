@@ -1720,8 +1720,13 @@
                             </div>
                         </div>
                         <div class="mt-6">
-                            <button type="button" @click="handleGenerateReports"
+                            <!-- <button type="submit" @click="handleGenerateReports"
                                 :disabled="!selectedReportType || selectedBatches.length === 0 || selectedCampuses.length === 0"
+                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                Generate Report
+                            </button> -->
+                            <button type="button" @click="handleGenerateReports"
+                                
                                 class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 Generate Report
                             </button>

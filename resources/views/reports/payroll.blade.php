@@ -1,140 +1,3 @@
-{{-- 
-<!DOCTYPE html>
-<html lang="en">
-
-
-<body>
-    <div class="header">
-        <h2>HIGHER EDUCATION INSTITUTION LETTERHEAD</h2>
-        <p>Republic of the Philippines</p>
-        <p><strong>{{ $scholarship->name }}</strong></p>
-        <p>Address of the HEI</p>
-    </div>
-
-    <div class="date">
-        Date: {{ date('F d, Y') }}
-    </div>
-
-    <h2 style="text-align: center; margin-top: 50px;">CERTIFICATION OF ENROLLED GRANTEES</h2>
-
-    <p>
-        This is to certify that the total number of Continuing TES grantees by campus as shown below,
-        are qualified to avail of the Tertiary Education Subsidy (TES) program under R.A. No. 10931 also
-        known as Universal Access to Quality Tertiary Education (UAQTE) for the
-        {{ $batch->school_year->semester ?? '1st' }} semester of Academic Year
-        {{ $batch->school_year->year }}.
-    </p>
-
-
-    <div class="summary-table">
-        <table>
-            <thead>
-                <tr>
-                    <th>Name of Campus</th>
-                    <th>Number of TES Grantees</th>
-                    <th>Number of TES Grantees with TES3-a</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $totalGrantees = 0;
-                    $totalTES3a = 0;
-                    $campus = $batch->campus;
-
-                    $granteeCount = $scholars->count();
-                    $tes3aCount = $scholars->where('grant', 'TES3-a')->count();
-                    $totalGrantees += $granteeCount;
-                    $totalTES3a += $tes3aCount;
-                @endphp
-
-                <tr>
-                    <td>{{ $campus->name }}</td>
-                    <td>{{ $granteeCount }}</td>
-                    <td>{{ $tes3aCount }}</td>
-                    <td>{{ $granteeCount + $tes3aCount }}</td>
-                </tr>
-
-                <tr style="font-weight: bold; background-color: #f2f2f2;">
-                    <td>Total</td>
-                    <td>{{ $totalGrantees }}</td>
-                    <td>{{ $totalTES3a }}</td>
-                    <td>{{ $totalGrantees + $totalTES3a }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <p>
-        This further certifies that the student's information indicated in <strong>Annex 2 - TES Continuing Form
-            2</strong> is accurate and complete.
-    </p>
-
-    <p style="font-weight: bold;">
-        This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of
-        2022,
-        Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
-    </p>
-
-    <div class="page-break"></div>
-
-
-    <h2 style="text-align: center;">LIST OF SCHOLARS - BATCH {{ $batch->batch_no }}</h2>
-    <h3>Campus: {{ $batch->campus->name }}</h3>
-
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Scholar ID</th>
-                <th>Name</th>
-                <th>Sex</th>
-                <th>Year Level</th>
-                <th>Course</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($scholars as $index => $scholar)
-                <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $scholar->urscholar_id ?? 'N/A' }}</td>
-                    <td>{{ $scholar->last_name ?? '' }}, {{ $scholar->first_name ?? '' }}
-                        {{ $scholar->middle_name ? substr($scholar->middle_name, 0, 1) . '.' : '' }}
-                        {{ $scholar->extname ?? '' }}</td>
-                    <td>{{ $scholar->sex ?? 'N/A' }}</td>
-                    <td>{{ $scholar->year_level ?? 'N/A' }}</td>
-                    <td>{{ $scholar->course->name ?? 'N/A' }}</td>
-                    <td>{{ $scholar->student_status ?? 'N/A' }}</td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-
-    <div class="signature-area">
-        <div style="position: relative;">
-            <div class="seal">Official Dry Seal</div>
-            <p><strong>(must be notarized)</strong></p>
-        </div>
-
-        <div style="text-align: right; width: 45%;">
-            <p style="margin-bottom: 50px;"><strong>Certified by:</strong></p>
-            <div class="signature-line">
-                <p>Signature over Printed Name of the School Registrar</p>
-            </div>
-
-            <p style="margin-top: 40px; margin-bottom: 50px;"><strong>Approved by:</strong></p>
-            <div class="signature-line">
-                <p>Signature over Printed Name of the President of the HEI</p>
-            </div>
-        </div>
-    </div>
-
-</body>
-
-</html> --}}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -174,26 +37,30 @@
     </div>
 
     <!-- Title -->
-    <h2 class="font-bold text-lg text-center mb-4 uppercase">Certification of Enrolled Grantees</h2>
-
+    <h2 class="font-bold text-lg text-center mb-4 uppercase">Summary of Payroll for {{ $scholarship->name }}</h2>
     <!-- Paragraph -->
     <p class="mb-4 ">
-        <span class="font-bold">TO WHOM IT MAY CONCERN:</span>
+        {{-- <span class="font-bold">School Year: </span><span> Semester:</span> --}}
         <br />
-        <p class="text-justify indent-5">This is to certify that the total number of Continuing {{ $scholarship->name }} grantees by campus as shown below, are qualified to avail of the {{ $scholarship->name }} for the 
+        <p class="text-justify indent-5">This is to certify that the total number of {{ $scholarship->name }} grantees as shown below, have successfully claimed their {{ $scholarship->name }} grant
         <span class="font-bold text-red-600"> {{ $batch->school_year->semester ?? '1st' }}</span> semester of Academic Year
             {{ $batch->school_year->year }}.</p>
     </p>
-
     <br>
 
     <!-- Table -->
     <table class="w-full border border-gray-700 mb-4 text-center">
-        <thead class="bg-gray-100">
+        <thead class="bg-gray-100 text-xs">
         <tr>
-            <th class="border border-gray-700 p-2">Name of Campus</th>
-            <th class="border border-gray-700 p-2">Number of {{ $scholarship->name }} Grantees</th>
-            <th class="border border-gray-700 p-2">Total</th>
+            <th class="border border-gray-700 p-2">Student ID</th>
+            <th class="border border-gray-700 p-2">Last Name</th>
+            <th class="border border-gray-700 p-2">First Name</th>
+            <th class="border border-gray-700 p-2">Middle Name</th>
+            <th class="border border-gray-700 p-2">Campus</th>
+            <th class="border border-gray-700 p-2">Course</th>
+            <th class="border border-gray-700 p-2">Year Level</th>
+            <th class="border border-gray-700 p-2">Batch Number</th>
+            <th class="border border-gray-700 p-2">Not Claimed Status</th>
         </tr>
         </thead>
         <tbody>
@@ -221,7 +88,7 @@
                     <td>{{ $totalTES3a }}</td>
                     <td>{{ $totalGrantees + $totalTES3a }}</td>
                 </tr> --}}
-                @php
+                {{-- @php
                     $totalGrantees = 0;
                     $totalTES3a = 0;
                     $campus = $batch->campus;
@@ -230,38 +97,25 @@
                     $tes3aCount = $scholars->where('grant', 'TES3-a')->count();
                     $totalGrantees += $granteeCount;
                     $totalTES3a += $tes3aCount;
-                @endphp
-        <tr>
-            <td class="border border-gray-700 p-2">{{ $campus->name }}</td>
-            <td class="border border-gray-700 p-2">{{ $granteeCount }}</td>
-            <td class="border border-gray-700 p-2">{{ $granteeCount}}</td>
-        </tr>
-        {{-- <tr>
-            <td class="border border-gray-700 p-2">Campus B</td>
+                @endphp --}}
+        <tr class="text-sm">
+            <td class="border border-gray-700 p-2">ID</td>
+            <td class="border border-gray-700 p-2">BEBEBOI</td>
+            <td class="border border-gray-700 p-2">BINANGONAN</td>
+            <td class="border border-gray-700 p-2">ID</td>
+            <td class="border border-gray-700 p-2">BEBEBOI</td>
+            <td class="border border-gray-700 p-2">BINANGONAN</td>
+            <td class="border border-gray-700 p-2">ID</td>
+            <td class="border border-gray-700 p-2">BEBEBOI</td>
             <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr>
-        <tr>
-            <td class="border border-gray-700 p-2 italic text-gray-500">(Insert more rows for additional Campus)</td>
-            <td class="border border-gray-700 p-2"></td>
-            <td class="border border-gray-700 p-2"></td>
-        </tr> --}}
-        <tr class="font-bold">
-            <td class="border border-gray-700 p-2">Total</td>
-            <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
-            <td class="border border-gray-700 p-2">{{ $totalGrantees }}</td>
         </tr>
         </tbody>
     </table>
 
     <!-- Additional Cert Text -->
-    <p class="mb-4">
+    {{-- <p class="mb-4">
         This further certifies that the student’s information indicated in 
         <span class="text-red-600 underline">{{ $scholarship->name }} Continuing Form </span> is accurate and complete.
-    </p>
-
-    {{-- <p class="font-bold mb-6">
-        This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of 2022, Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
     </p> --}}
 
     <!-- Signatories -->
@@ -271,7 +125,7 @@
         <div class="h-12 border-b border-gray-700 w-64"></div>
         <p class="text-red-600 font-semibold mt-1 text-sm">Signature over Printed Name of the School Registrar</p>
         </div>
-        <div>
+        <div class="text-center justify-center items-center">
         <p class="mb-2">Approved by:</p>
         <div class="h-12 border-b border-gray-700 w-64"></div>
         <p class="text-red-600 font-semibold mt-1 text-sm">Signature over Printed Name of the President of the HEIs</p>
