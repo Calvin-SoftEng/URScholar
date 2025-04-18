@@ -12,6 +12,7 @@ const props = defineProps({
     scholars: Array,
     academicYear: Object,
     allscholars: Array,
+    schoolyears: Array,
 });
 
 </script>
