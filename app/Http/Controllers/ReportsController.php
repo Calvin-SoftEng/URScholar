@@ -6,45 +6,70 @@ use App\Models\Batch;
 use App\Models\Grantees;
 use App\Models\Campus;
 use App\Models\Scholar;
+use App\Models\SchoolYear;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function EnrolleesSummaryReport(Scholarship $scholarship, Batch $batch)
+    public function EnrolleesSummaryReport(Request $request, Scholarship $scholarship)
     {
-        // Fetch real scholars
-        $scholars = $batch->scholars;
+        // Get parameters from request
+        $batchIds = $request->input('batch_ids', []);
+        $campusIds = $request->input('campus_ids', []);
+        $schoolYearId = $request->input('school_year_id');
+        $semester = $request->input('semester');
 
-        // Dummy fallback if no scholars exist
-        if ($scholars->isEmpty()) {
-            $scholars = collect([
-                (object) [
-                    'name' => 'Juan Dela Cruz',
-                    'email' => 'juan@example.com',
-                    'status' => 'Active'
-                ],
-                (object) [
-                    'name' => 'Maria Santos',
-                    'email' => 'maria@example.com',
-                    'status' => 'Graduated'
-                ],
-                (object) [
-                    'name' => 'Pedro Reyes',
-                    'email' => 'pedro@example.com',
-                    'status' => 'Inactive'
-                ]
-            ]);
+        // Query batches with the given IDs that belong to the scholarship
+        $batches = Batch::whereIn('id', $batchIds)
+            ->where('scholarship_id', $scholarship->id)
+            ->get();
+
+        // Aggregate data for enrolled students by batch and campus
+        $enrolledSummary = [];
+        $totalEnrolled = 0;
+
+        foreach ($batches as $batch) {
+            // Get scholars for this batch who have student_status = "Enrolled"
+            // And filter by the selected campuses
+            $enrolledScholars = $batch->scholars()
+                ->whereIn('campus_id', $campusIds)
+                ->where('student_status', 'Enrolled')
+                ->get();
+
+            if ($enrolledScholars->isNotEmpty()) {
+                // Group scholars by campus
+                $campusGroups = $enrolledScholars->groupBy('campus_id');
+
+                foreach ($campusGroups as $campusId => $scholars) {
+                    $campus = Campus::find($campusId);
+
+                    // Add to summary
+                    if (!isset($enrolledSummary[$campus->name])) {
+                        $enrolledSummary[$campus->name] = [
+                            'total' => 0,
+                            'batches' => []
+                        ];
+                    }
+
+                    $enrolledSummary[$campus->name]['batches'][$batch->batch_no] = $scholars->count();
+                    $enrolledSummary[$campus->name]['total'] += $scholars->count();
+                    $totalEnrolled += $scholars->count();
+                }
+            }
         }
 
+        // Load view with data
         $pdf = PDF::loadView('reports.enrollees-summary', [
             'scholarship' => $scholarship,
-            'batch' => $batch,
-            'scholars' => $scholars
+            'schoolYear' => SchoolYear::find($schoolYearId),
+            'semester' => $semester,
+            'enrolledSummary' => $enrolledSummary,
+            'totalEnrolled' => $totalEnrolled
         ]);
 
-        return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
+        return $pdf->stream("enrollees-summary-{$scholarship->name}.pdf");
     }
 
     public function EnrolledListReport(Scholarship $scholarship, Batch $batch)
@@ -203,8 +228,8 @@ class ReportsController extends Controller
             'scholars' => $scholars
         ]);
 
-         // Set paper size and orientation
-         $pdf->setPaper([0, 0, 612, 936], 'landscape');
+        // Set paper size and orientation
+        $pdf->setPaper([0, 0, 612, 936], 'landscape');
 
         return $pdf->stream("scholarship-report-batch-{$batch->batch_no}.pdf");
     }
