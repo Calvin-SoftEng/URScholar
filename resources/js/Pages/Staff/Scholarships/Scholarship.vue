@@ -1732,8 +1732,8 @@
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-                <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
-                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+                <ToastTitle class="font-semibold dark:text-dtext">{{ toastMessage }}</ToastTitle>
+                <!-- <ToastDescription class="text-gray-100 dark:text-dtext"></ToastDescription> -->
             </ToastRoot>
 
             <ToastViewport class="fixed bottom-4 right-4" />
@@ -2528,6 +2528,19 @@ watchEffect(() => {
         !selectedBatches.value.includes('all')) {
         selectedBatches.value.push('all');
     }
+
+    const flash = usePage().props.flash;
+
+    if (flash?.message) {
+        console.log("Showing toast with message:", flash.message);
+        toastMessage.value = flash.message;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
 });
 
 const forwardBatches = async () => {
@@ -2681,21 +2694,6 @@ const updateFile = (file) => {
 
 const toastVisible = ref(false);
 const toastMessage = ref("");
-
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
-
-    if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
-        toastMessage.value = flashMessage;
-        toastVisible.value = true;
-
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
-});
 
 onMounted(() => {
     window.addEventListener('popstate', () => {

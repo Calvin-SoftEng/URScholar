@@ -267,13 +267,23 @@
                 </div>
             </div>
         </div>
+
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastTitle class="font-semibold dark:text-dtext">{{ toastMessage }}</ToastTitle>
+                <!-- <ToastDescription class="text-gray-100 dark:text-dtext"></ToastDescription> -->
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { ref, onMounted, computed, onUnmounted } from 'vue';
-import { Head, useForm, Link, router } from '@inertiajs/vue3';
+import { ref, onMounted, computed, onUnmounted, watch, watchEffect } from 'vue';
+import { Head, useForm, Link, router, usePage } from '@inertiajs/vue3';
 import { useRouter, useRoute } from 'vue-router'
 import Echo from 'laravel-echo';
 import InputError from '@/Components/InputError.vue';
@@ -458,6 +468,25 @@ onUnmounted(() => {
         window.location.reload();
     });
 });
+
+const toastVisible = ref(false);
+const toastMessage = ref("");
+
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
+});
+
 
 </script>
 

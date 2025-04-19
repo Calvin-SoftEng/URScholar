@@ -168,11 +168,15 @@
             </div>
         </div>
 
-        <!-- Toast Notification -->
-        <div v-if="toastVisible"
-            class="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300">
-            {{ toastMessage }}
-        </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastTitle class="font-semibold dark:text-dtext">{{ toastMessage }}</ToastTitle>
+                <!-- <ToastDescription class="text-gray-100 dark:text-dtext"></ToastDescription> -->
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </SettingsLayout>
 </template>
 

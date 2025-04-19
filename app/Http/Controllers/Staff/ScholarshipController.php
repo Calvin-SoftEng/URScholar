@@ -1527,7 +1527,9 @@ class ScholarshipController extends Controller
             'description' => 'Scholarship created ' . $request['name'],
         ]);
 
-        return redirect()->route('sponsor.index')->with('success', 'Check out view scholarships');
+        return redirect()->route('scholarships.index')->with('success', 'Added New Scholarship');
+
+        // return inertia('Staff/Scholarships/ViewScholarships')->with('success', 'Scholarship created successfully.');
     }
 
 

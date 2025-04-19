@@ -44,7 +44,8 @@
                   class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                   <img v-if="tempLogoLight" :src="tempLogoLight" alt="Light Mode Logo"
                     class="object-cover w-full h-full">
-                  <span v-else class="text-gray-500">No Logo</span>
+                  <img v-else src="../../../../assets/images/main_logo.png" alt="Light Mode Logo">
+                  <!-- <span v-else" class="text-gray-500"><img src="../../assets/images/main_logo.png" alt="Light Mode Logo" class="object-cover w-full h-full"></span> -->
                 </div>
                 <div class="w-full">
                   <input type="file" ref="logoLightInput" @change="previewLogo('light', $event)" accept="image/*"
@@ -58,7 +59,8 @@
                 <div
                   class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                   <img v-if="tempLogoDark" :src="tempLogoDark" alt="Dark Mode Logo" class="object-cover w-full h-full">
-                  <span v-else class="text-gray-500">No Logo</span>
+                  <img v-else src="../../../../assets/images/main_logo_white.png" alt="Light Mode Logo">
+                  <!-- <span v-else class="text-gray-500">No Logo</span> -->
                 </div>
                 <div class="w-full">
                   <input type="file" ref="logoDarkInput" @change="previewLogo('dark', $event)" accept="image/*"
@@ -136,7 +138,8 @@ const faviconInput = ref(null);
 // Temporary state for form inputs
 const tempLogoLight = ref(null);
 const tempLogoDark = ref(null);
-const tempBrandingName = ref('');
+// const tempBrandingName = ref('');
+const tempBrandingName = 'URScholar';
 const tempFavicon = ref(null);
 
 // Final state (what's actually applied/saved)

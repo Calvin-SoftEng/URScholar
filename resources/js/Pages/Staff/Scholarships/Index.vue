@@ -28,7 +28,7 @@
                 <!-- List of Scholarships -->
                 <div v-if="!Showcase">
                     <div class="py-12">
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-16 gap-x-3">
                             <div v-for="sponsor in sponsors" :key="sponsor.id"
                                 class="relative bg-white border border-gray-300 rounded-lg shadow-lg hover:shadow-xl hover:border-gray-400 
                                     dark:bg-dcontainer dark:border-gray-600 dark:hover:border-gray-400 

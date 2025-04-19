@@ -15,7 +15,7 @@
                 <div v-if="!isTableVisible" class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 rounded-lg">
                     <div class="flex items-center justify-between pb-4 bg-white dark:bg-dcontainer m-5">
                         <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
-                            University of the Rizal System
+                            University of Rizal System
                         </h1>
                         <button @click="toggleTable"
                             class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">

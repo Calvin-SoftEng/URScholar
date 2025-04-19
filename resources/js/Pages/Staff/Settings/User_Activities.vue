@@ -23,17 +23,24 @@
                     </div>
 
                     <!-- Content Area -->
+                    <!-- Content Area -->
                     <div
-                        class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                        class="bg-white dark:bg-dcontainer relative h-full overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+
+                        <!-- Header inside content area -->
                         <div class="flex items-center justify-between bg-white dark:bg-dcontainer m-5">
                             <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
                                 {{ getActivitiesTitle() }}
                             </h1>
                         </div>
 
-                        <div class="max-w-3xl mx-auto bg-white dark:bg-dcontainer py-5">
+                        <!-- Scrollable log list -->
+                        <div
+                            class="w-full mx-auto bg-white dark:bg-dcontainer py-5 pr-2 overflow-y-auto"
+                            style="max-height: calc(100vh - 250px);">
+
                             <div v-if="filteredLogs.length > 0" class="space-y-6">
-                                <div v-for="(log, index) in filteredLogs" :key="index">
+                                <div v-for="(log, index) in filteredLogs" :key="index" class="max-w-3xl mx-auto">
                                     <!-- Display Day Only Once -->
                                     <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 
@@ -63,6 +70,7 @@
                                     </div>
                                 </div>
                             </div>
+
                             <div v-else class="flex justify-center items-center py-10">
                                 <div class="text-center">
                                     <span class="material-symbols-rounded text-4xl text-gray-400">
@@ -73,6 +81,7 @@
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
