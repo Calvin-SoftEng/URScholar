@@ -55,6 +55,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'head_admin_pic.jpg',
         ]);
 
         //Super Admin
@@ -71,6 +72,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'head_admin_pic.jpg',
         ]);
 
 
@@ -88,6 +90,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'bcoor_pic.jpg',
         ]);
 
         User::factory()->create([
@@ -103,6 +106,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'mcoor_pic.jpg',
         ]);
 
         //sponsor
@@ -119,6 +123,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'ched_pic.jpg',
         ]);
 
         //cashier
@@ -135,6 +140,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'univ_cashier_pic.jpg',
         ]);
 
         User::factory()->create([
@@ -150,6 +156,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'bcashier_pic.jpg',
         ]);
 
         User::factory()->create([
@@ -165,6 +172,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
+            'picture' => 'mcashier_pic.jpg',
         ]);
 
         //student
