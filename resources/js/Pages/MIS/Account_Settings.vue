@@ -2,14 +2,12 @@
     <AuthenticatedLayout>
         <div
             class="w-full h-full flex flex-col py-5 px-6 bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B] space-y-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
-            <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row">
-                <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
-                    My Account
-                </h1>
+            <div>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">My Account</h1>
             </div>
             <div class="w-full mx-auto space-y-3">
-                <div class="pt-3 pb-24 overflow-auto h-full scroll-py-2">
-                    <div class="mx-auto w-7/12 sm:px-6 lg:px-8">
+                <div class="pb-24 overflow-auto h-full scroll-py-2">
+                    <div class="mx-auto w-11/12 sm:px-6 lg:px-8">
                         <form @submit.prevent="">
                             <div class="relative w-full">
                                 <!-- Background Image -->
@@ -23,7 +21,7 @@
                                     <div class="flex items-center gap-4 relative">
                                         <!-- Profile Picture Wrapper -->
                                         <div class="relative w-20 h-20">
-                                            <img :src="form.filePreview || '../../../assets/images/no_userpic.png'"
+                                            <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
                                                 alt="Profile Picture"
                                                 class="w-full h-full object-cover rounded-xl border-2 border-white shadow-sm" />
 

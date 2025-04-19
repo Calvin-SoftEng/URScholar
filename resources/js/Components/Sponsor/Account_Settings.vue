@@ -1,25 +1,16 @@
 <template>
-
     <Head title="Dashboard" />
-
     <AuthenticatedLayout class="shadow-md z-10">
-        <form @submit.prevent="submit" class="w-full h-full overflow-hidden">
-            <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row">
+        <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row">
                 <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
                     My Account
                 </h1>
             </div>
+        <form @submit.prevent="submit" class="w-full h-full overflow-hidden">
+            
             <div
                 class="pt-3 sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
                 <div class="mx-auto sm:w-11/12 lg:w-7/12 sm:px-1 lg:px-8 ">
-
-                    <!-- Mobile Display------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
-                    
-                    
-
-                        <!-- Mobile Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-                    <!-- Web Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
                     <div class="hidden md:block">
                         <!-- Content for Web -->
@@ -196,7 +187,7 @@
                     </button>
                 </div>
 
-                <!-- Step 1: Verify Current Password -->
+
                 <form v-if="passwordStep === 1" @submit.prevent="verifyCurrentPassword" class="p-4 flex flex-col gap-3">
                     <div>
                         <label for="current_password"
@@ -226,7 +217,7 @@
                     </div>
                 </form>
 
-                <!-- Step 2: Enter New Password -->
+
                 <form v-if="passwordStep === 2" @submit.prevent="updatePassword" class="p-4 flex flex-col gap-3">
                     <div>
                         <label for="new_password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">

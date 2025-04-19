@@ -557,4 +557,12 @@ class SystemAdminController extends Controller
     //     return Inertia::render('MIS/User_Roles/Roles');
     // }
 
+    public function account() {
+        $user = Auth::user();
+
+        return Inertia::render('MIS/Account_Settings', [
+            'user' => $user,
+        ]);
+    }
+
 }

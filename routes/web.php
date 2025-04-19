@@ -95,6 +95,8 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     // security and backup
     Route::get('/system_admin/security-and-backup/archives', [SystemAdminController::class, 'backup_and_restore'])->name('sa.archives');
 
+    Route::get('/system_admin/my-account', [SystemAdminController::class, 'account'])->name('sa.account');
+
 });
 
 Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,sponsor,head_cashier'])->group(function () {

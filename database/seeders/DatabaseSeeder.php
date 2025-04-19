@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
-            'picture' => 'head_admin_pic.jpg',
+            'picture' => 'mis_pic.jpg',
         ]);
 
         //Super Admin
