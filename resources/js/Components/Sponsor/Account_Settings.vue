@@ -288,16 +288,16 @@ const props = defineProps({
 });
 
 const form = useForm({
-    // email: props.user.email || '',
-    currentPassword: '',
-    passwordVerificationCode: '',
-    newPassword: '',
-    confirmPassword: '',
 
-    // New fields for email verification
-    oldEmailCode: '',
-    newEmail: '',
-    newEmailCode: '',
+    // currentPassword: '',
+    // passwordVerificationCode: '',
+    // newPassword: '',
+    // confirmPassword: '',
+
+
+    // oldEmailCode: '',
+    // newEmail: '',
+    // newEmailCode: '',
 })
 
 const changeEmail = ref(false);

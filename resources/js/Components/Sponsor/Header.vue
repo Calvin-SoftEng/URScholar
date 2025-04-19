@@ -152,7 +152,7 @@
       </div>
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
         <li class="relative">
-            <Link :href="route('student.profile')"
+            <Link :href="route('sponsor.account')"
                 class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                 Account Settings
             </Link>

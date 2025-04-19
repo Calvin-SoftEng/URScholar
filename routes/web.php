@@ -276,6 +276,8 @@ Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
     // view scholars
     Route::get('/sponsor/scholarships/{scholarship}', [SponsorController::class, 'view_scholars'])->name('sponsor.scholars');
     Route::get('/sponsor/scholarships/scholar/{id}', [SponsorController::class, 'sponsor_scholar'])->name('sponsor.sponsor_scholar');
+
+    Route::get('/sponsor/my-account', [SponsorController::class, 'account'])->name('sponsor.account');
 });
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -523,4 +523,8 @@ class SponsorController extends Controller
             'notify' => $notify,
         ]);
     }
+
+    public function account() {
+        return Inertia::render('Sponsor/Account_Settings');
+    }
 }

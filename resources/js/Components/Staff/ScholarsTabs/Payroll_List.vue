@@ -3,10 +3,13 @@
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
         <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Generate Report
+          class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+          @click="generateReport"
+        >
+          <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
+          Generate Report
         </button>
+
       </div>
       <form class="w-3/12">
         <label for="default-search"

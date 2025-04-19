@@ -45,69 +45,73 @@
             </div>
           </div>
 
-          <div class="flex flex-col w-full sm:w-auto">
-            <span class="mb-2">Filter:</span>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-              <div>
-                <label for="year-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">School
-                  Year</label>
-                <Select v-model="selectedSchoolYear">
-                  <SelectTrigger class="w-full border">
-                    <SelectValue :placeholder="selectedSchoolYear || 'Select year'" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem v-for="year in academicYearOptions" :key="year.id" :value="year.id">
-                        {{ year.name }}
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
+          <div class="flex flex-row items-center gap-4">
+            <div class="flex flex-row items-center gap-3 w-full sm:w-auto">
+              <span class="mb-2">Filter:</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label for="year-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">School
+                    Year</label>
+                  <Select v-model="selectedSchoolYear">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="selectedSchoolYear || 'Select year'" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem v-for="year in academicYearOptions" :key="year.id" :value="year.id">
+                          {{ year.name }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-              <div>
-                <label for="semester-select"
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300">Semester</label>
-                <Select v-model="selectedSemester">
-                  <SelectTrigger class="w-full border">
-                    <SelectValue :placeholder="selectedSemester || 'Select Semester'" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem value="1st">First Semester</SelectItem>
-                      <SelectItem value="2nd">Second Semester</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <label for="campus-select"
-                  class="block text-sm font-medium text-gray-700 dark:text-gray-300">Campus</label>
-                <Select v-model="selectedCampus">
-                  <SelectTrigger class="w-full border">
-                    <SelectValue :placeholder="selectedCampus || 'Select Campus'" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectItem v-for="camp in props.campus" :key="camp.id" :value="camp.id">
-                        {{ camp.name }}
-                      </SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
+                <div>
+                  <label for="semester-select"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Semester</label>
+                  <Select v-model="selectedSemester">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="selectedSemester || 'Select Semester'" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="1st">First Semester</SelectItem>
+                        <SelectItem value="2nd">Second Semester</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label for="campus-select"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Campus</label>
+                  <Select v-model="selectedCampus">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="selectedCampus || 'Select Campus'" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem v-for="camp in props.campus" :key="camp.id" :value="camp.id">
+                          {{ camp.name }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
-            <!-- Search Bar -->
-            <div class="flex items-center justify-end w-full sm:w-auto sm:max-w-md">
-              <div class="relative w-full">
-                <input type="text" v-model="searchQuery" placeholder="Search grantee..."
-                  class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
-                <span class="absolute right-3 top-2.5 text-gray-400">
-                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </span>
+            <div>
+              <!-- Search Bar -->
+              <div class="flex items-center justify-end w-full sm:w-auto sm:max-w-md">
+                <div class="relative w-full">
+                  <input type="text" v-model="searchQuery" placeholder="Search grantee..."
+                    class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
+                  <span class="absolute right-3 top-2.5 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
