@@ -103,6 +103,12 @@ class SystemAdminController extends Controller
 
         $branding->save();
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Updated branding settings',
+            'description' => 'Branding settings updated successfully.',
+        ]);
+
         return redirect()->back()->with('success', 'Branding settings updated successfully');
     }
 
@@ -132,6 +138,13 @@ class SystemAdminController extends Controller
             'location' => $request->location,
         ]);
 
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Created campus',
+            'description' => 'Campus ' . $request->name . ' has been created.',
+        ]);
+
         return redirect()->route('sa.campuses');
     }
 
@@ -148,6 +161,12 @@ class SystemAdminController extends Controller
         $campus->update([
             'name' => $request->name,
             'location' => $request->location,
+        ]);
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Updated campus',
+            'description' => 'Campus ' . $request->name . ' has been updated.',
         ]);
 
         return redirect()->back()
@@ -168,6 +187,12 @@ class SystemAdminController extends Controller
         $campus->update([
             'coordinator_id' => $request['coor_id'],
             'cashier_id' => $request['cashier_id']
+        ]);
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Assigned campus',
+            'description' => 'Campus ' . $campus->name,
         ]);
 
         return redirect()->back()
@@ -225,6 +250,12 @@ class SystemAdminController extends Controller
             'campus_id' => $request->id,
             'name' => $request->name,
             'abbreviation' => $request->abbreviation,
+        ]);
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Created course',
+            'description' => 'Course ' . $request->name . ' has been created.',
         ]);
 
         return back();
@@ -296,6 +327,12 @@ class SystemAdminController extends Controller
 
                 event(new NewNotification($notification));
 
+                ActivityLog::create([
+                    'user_id' => Auth::user()->id,
+                    'activity' => 'Created 1st semester',
+                    'description' => '1st semester created successfully.',
+                ]);
+
                 return response()->json([
                     'success' => true,
                     'message' => 'First semester created successfully and set as active',
@@ -337,6 +374,13 @@ class SystemAdminController extends Controller
 
                 event(new NewNotification($notification));
 
+                ActivityLog::create([
+                    'user_id' => Auth::user()->id,
+                    'activity' => 'Created 2nd semester',
+                    'description' => '2nd semester created successfully.',
+                ]);
+
+                
                 return response()->json([
                     'success' => true,
                     'message' => 'Second semester created successfully and set as active',
@@ -388,6 +432,26 @@ class SystemAdminController extends Controller
         ]);
     }
 
+    public function deactivateUser(Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+            $user->status = 'Inactive';
+            $user->save();
+
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Deactivated user',
+                'description' => 'User ' . $user->name . ' has been deactivated.',
+            ]);
+    
+
+            return back()->with('success', 'Deactivated user successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to deactivate user: ' . $e->getMessage());
+        }
+    }
+
     public function create_users(Request $request)
     {
         $request->validate([
@@ -436,8 +500,14 @@ class SystemAdminController extends Controller
 
         Mail::to($request->email)->send(new SendUser($mailData));
 
-        return back();
+        
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Created user',
+            'description' => 'User ' . $name . ' has been created.',
+        ]);
 
+        return back()->with('success', 'User created successfully');
     }
 
     public function update_users(Request $request, User $user)
@@ -456,6 +526,12 @@ class SystemAdminController extends Controller
             'email' => $validated['email'],
             'campus_id' => $validated['campus_id'],
             'usertype' => $validated['role'],
+        ]);
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Updated user',
+            'description' => 'User ' . $validated['first_name'] . ' ' . $validated['last_name']. ' has been updated.',
         ]);
 
         return back()->with('success', 'User updated successfully');

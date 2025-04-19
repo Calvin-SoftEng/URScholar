@@ -99,7 +99,7 @@ const props = defineProps({
 // Updated menu items to match user types
 const menuItems = [
     { name: "All User Activities", key: "all_users" },
-    { name: "University MIS", key: "mis" },
+    { name: "University MIS", key: "system_admin" },
     { name: "Super Admin", key: "super_admin" },
     { name: "Coordinators", key: "coordinator" },
     { name: "Cashier", key: "cashier" },

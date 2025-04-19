@@ -97,8 +97,9 @@
 
                                             <!-- Actions -->
                                             <td class="px-6 py-4">
-                                                <button v-if="selectedMenu === 'student'" @click="showDeactivateModal(user)" 
-                                                        v-tooltip.right="'Deactivate User'">
+                                                <button v-if="selectedMenu === 'student'"
+                                                    @click="showDeactivateModal(user)"
+                                                    v-tooltip.right="'Deactivate User'">
                                                     <span
                                                         class="material-symbols-rounded p-2 font-medium text-white dark:text-red-500 bg-red-900 rounded-lg">
                                                         block
@@ -111,7 +112,7 @@
                                                         edit
                                                     </span>
                                                 </button>
-                                                
+
                                             </td>
                                         </tr>
                                     </template>
@@ -264,7 +265,7 @@
 
                     <div class="w-full h-1 bg-gray-200 dark:bg-gray-700 my-2"></div>
                     <div class="mt-2 flex justify-between space-x-2">
-                        <button v-if="EditUser" type="button" @click="openDeactivateModal = true"
+                        <button v-if="EditUser" type="button" @click="deactivateFromEdit"
                             class="flex-1 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                             Deactivate
                         </button>
@@ -372,16 +373,26 @@ const toggleEditUser = () => {
 
 const openDeactivateModal = ref(false);
 
-const deactivateUser = async () => {
-    try {
-        await axios.put(`/api/users/${form.id}/deactivate`, {
-            inactive: true,
+const deactivateUser = () => {
+    if (selectedUser.value) {
+        router.put(`/system_admin/user-settings/users/${selectedUser.value.id}/deactivate`, {}, {
+            onSuccess: () => {
+                openDeactivateModal.value = false;
+                // Optionally show a success message or toast notification
+            },
+            onError: (errors) => {
+                console.error('Failed to deactivate user:', errors);
+                // Optionally show an error message
+            }
         });
-        openDeactivateModal.value = false;
-        // Optionally show a success toast or refresh data
-    } catch (error) {
-        console.error('Failed to deactivate:', error);
     }
+};
+// In the edit form's deactivate button action
+// Replace the deactivate button click handler in the edit form
+const deactivateFromEdit = () => {
+    selectedUser.value = { id: form.value.id }; // Store just the ID of the user being edited
+    openDeactivateModal.value = true; // Open the same confirmation modal
+    closeModal(); // Close the edit modal to prevent UI stacking
 };
 
 const selectedUser = ref(null);
@@ -431,6 +442,7 @@ const getRoleName = (role) => {
         case 'system_admin': return 'System Admin';
         case 'super_admin': return 'Head Administrator';
         case 'coordinator': return 'Coordinator';
+        case 'head_cashier': return 'University Cashier';
         case 'cashier': return 'Cashier';
         case 'student': return 'Scholar';
         default: return role;
