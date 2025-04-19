@@ -244,28 +244,45 @@
                     </div>
 
                     <div class="w-full h-1 bg-gray-200 dark:bg-gray-700 my-2"></div>
+                    <div class="mt-2 flex justify-between space-x-2">
+                    <button
+                        v-if="EditUser"
+                        type="button"
+                        @click="openDeactivateModal = true"
+                        class="flex-1 text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                        Deactivate
+                    </button>
+                    <button
+                        type="submit"
+                        class="flex-1 text-white font-sans bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                    >
+                        {{ EditUser ? 'Update' : 'Register' }}
+                    </button>
+                    </div>
 
-                    <!-- Inactive Checkbox -->
-                    <div class="flex items-center space-x-2">
-                        <input
-                        type="checkbox"
-                        id="isInactive"
-                        v-model="form.inactive"
-                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                        />
-                        <label for="isInactive" class="text-base font-medium text-gray-900 dark:text-white">
-                        Is the user inactive?
-                        </label>
-                    </div>
-                    <div class="mt-2">
-                        <button type="submit"
-                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 ">
-                            {{ EditUser ? 'Update' : 'Register' }}
-                        </button>
-                    </div>
                 </form>
             </div>
         </div>
+
+        <Teleport to="body">
+        <div v-if="openDeactivateModal" class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+            <div class="bg-white dark:bg-dcontainer p-6 rounded-lg w-full max-w-md space-y-4">
+                <h3 class="text-lg font-semibold text-gray-800 dark:text-white">Confirm Deactivation</h3>
+                <p class="text-gray-600 dark:text-gray-300">Are you sure you want to deactivate this user?</p>
+                <div class="flex justify-end gap-2 mt-4">
+                    <button @click="openDeactivateModal = false"
+                    class="px-4 py-2 rounded-lg border dark:border-gray-500 dark:text-white text-gray-700 hover:bg-gray-100 dark:hover:bg-dsecondary">
+                    Cancel
+                    </button>
+                    <button @click="deactivateUser"
+                    class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg">
+                    Yes, Deactivate
+                    </button>
+                </div>
+                </div>
+            </div>
+        </Teleport>
     </AuthenticatedLayout>
 </template>
 
@@ -312,6 +329,20 @@ const toggleAddUser = () => {
 
 const toggleEditUser = () => {
     EditUser.value = !EditUser.value;
+};
+
+const openDeactivateModal = ref(false);
+
+const deactivateUser = async () => {
+  try {
+    await axios.put(`/api/users/${form.id}/deactivate`, {
+      inactive: true,
+    });
+    openDeactivateModal.value = false;
+    // Optionally show a success toast or refresh data
+  } catch (error) {
+    console.error('Failed to deactivate:', error);
+  }
 };
 
 const closeModal = () => {
