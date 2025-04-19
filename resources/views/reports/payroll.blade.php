@@ -59,7 +59,6 @@
             <th class="border border-gray-700 p-2">Course</th>
             <th class="border border-gray-700 p-2">Year Level</th>
             <th class="border border-gray-700 p-2">Batch Name</th>
-            <th class="border border-gray-700 p-2">Amount Received</th>
             <th class="border border-gray-700 p-2">Status</th>
         </tr>
         </thead>
@@ -74,8 +73,7 @@
                 <td class="border border-gray-700 p-2">{{ $scholar['course'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['year_level'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['batch_name'] ?? $scholar['batch_id'] }}</td>
-                <td class="border border-gray-700 p-2">{{ number_format($scholar['total_received'], 2) }}</td>
-                <td class="border border-gray-700 p-2">{{ $scholar['not_claimed_status'] }}</td>
+                <td class="border border-gray-700 p-2">{{ $scholar['status'] }}</td>
             </tr>
         @endforeach
         </tbody>

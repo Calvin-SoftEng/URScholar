@@ -276,17 +276,16 @@ class ReportsController extends Controller
                             'batch_name' => $batch->name,
                             'batch_id' => $batch->id,
                             'disbursements' => [],
-                            'total_received' => 0,
-                            'not_claimed_status' => 'Claimed' // Default to claimed, will update if not claimed
+                            'status' => $scholar['status'], // Default to claimed, will update if not claimed
                         ];
                     }
 
                     // Add this disbursement
-                    $allScholars[$scholarKey]['disbursements'][$disbursement['disbursement_id']] = [
-                        'amount' => $scholar['amount'],
-                        'status' => $scholar['status'],
-                        'date_received' => $scholar['date_received']
-                    ];
+                    // $allScholars[$scholarKey]['disbursements'][$disbursement['disbursement_id']] = [
+                    //     'amount' => $scholar['amount'],
+                    //     'status' => $scholar['status'],
+                    //     'date_received' => $scholar['date_received']
+                    // ];
 
                     // Calculate total received and update claimed status
                     if ($scholar['status'] == 'Disbursed') {
@@ -365,7 +364,6 @@ class ReportsController extends Controller
                         'course' => $scholar->course->name ?? 'N/A',
                         'year_level' => $scholar->year_level ?? 'N/A',
                         'campus' => $scholar->campus->name ?? 'N/A',
-                        'amount' => $scholarDisbursement ? $scholarDisbursement->amount : 0,
                         'status' => $scholarDisbursement ? $scholarDisbursement->status : 'Pending',
                         'date_received' => $scholarDisbursement ? $scholarDisbursement->date_received : null
                     ];
