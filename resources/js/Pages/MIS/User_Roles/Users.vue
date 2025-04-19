@@ -97,19 +97,21 @@
 
                                             <!-- Actions -->
                                             <td class="px-6 py-4">
-                                                <button v-if="menu.key === 'student'" @click="showDeactivateModal(user)"
-                                                    v-tooltip.right="'Deactivate User'">
+                                                <button v-if="selectedMenu === 'student'" @click="showDeactivateModal(user)" 
+                                                        v-tooltip.right="'Deactivate User'">
                                                     <span
                                                         class="material-symbols-rounded p-2 font-medium text-white dark:text-red-500 bg-red-900 rounded-lg">
                                                         block
                                                     </span>
                                                 </button>
+
                                                 <button v-else @click="editUser(user)" v-tooltip.right="'Edit User'">
                                                     <span
                                                         class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-blue-900 rounded-lg">
                                                         edit
                                                     </span>
                                                 </button>
+                                                
                                             </td>
                                         </tr>
                                     </template>
