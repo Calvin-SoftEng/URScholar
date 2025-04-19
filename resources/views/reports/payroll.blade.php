@@ -40,11 +40,10 @@
     <h2 class="font-bold text-lg text-center mb-4 uppercase">Summary of Payroll for {{ $scholarship->name }}</h2>
     <!-- Paragraph -->
     <p class="mb-4 ">
-        {{-- <span class="font-bold">School Year: </span><span> Semester:</span> --}}
         <br />
         <p class="text-justify indent-5">This is to certify that the total number of {{ $scholarship->name }} grantees as shown below, have successfully claimed their {{ $scholarship->name }} grant
-        <span class="font-bold text-red-600"> {{ $batch->school_year->semester ?? '1st' }}</span> semester of Academic Year
-            {{ $batch->school_year->year }}.</p>
+        <span class="font-bold text-red-600">{{ $semester ?? '1st' }}</span> semester of Academic Year
+            {{ $schoolYear ? $schoolYear->year : 'Current' }}.</p>
     </p>
     <br>
 
@@ -59,25 +58,13 @@
             <th class="border border-gray-700 p-2">Campus</th>
             <th class="border border-gray-700 p-2">Course</th>
             <th class="border border-gray-700 p-2">Year Level</th>
-            <th class="border border-gray-700 p-2">Batch Number</th>
-            <th class="border border-gray-700 p-2">Not Claimed Status</th>
+            <th class="border border-gray-700 p-2">Batch Name</th>
+            <th class="border border-gray-700 p-2">Amount Received</th>
+            <th class="border border-gray-700 p-2">Status</th>
         </tr>
         </thead>
         <tbody>
         @foreach($scholars as $scholar)
-            {{-- @php
-                // Assuming full_name is in format "LastName, FirstName MiddleName"
-                $nameParts = explode(', ', $scholar['name']);
-                $lastName = $nameParts[0] ?? '';
-                
-                $firstMiddle = isset($nameParts[1]) ? explode(' ', $nameParts[1], 2) : ['', ''];
-                $firstName = $firstMiddle[0] ?? '';
-                $middleName = $firstMiddle[1] ?? '';
-                
-                // Determine claimed status
-                $notClaimedStatus = $scholar['total_received'] > 0 ? '' : 'Not Claimed';
-            @endphp --}}
-            
             <tr class="text-sm">
                 <td class="border border-gray-700 p-2">{{ $scholar['student_number'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['last_name'] }}</td>
@@ -86,18 +73,13 @@
                 <td class="border border-gray-700 p-2">{{ $scholar['campus'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['course'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['year_level'] }}</td>
-                <td class="border border-gray-700 p-2">{{ $batch->name ?? $batch->id }}</td>
-                <td class="border border-gray-700 p-2">ewan</td>
+                <td class="border border-gray-700 p-2">{{ $scholar['batch_name'] ?? $scholar['batch_id'] }}</td>
+                <td class="border border-gray-700 p-2">{{ number_format($scholar['total_received'], 2) }}</td>
+                <td class="border border-gray-700 p-2">{{ $scholar['not_claimed_status'] }}</td>
             </tr>
         @endforeach
         </tbody>
     </table>
-
-    <!-- Additional Cert Text -->
-    {{-- <p class="mb-4">
-        This further certifies that the student's information indicated in 
-        <span class="text-red-600 underline">{{ $scholarship->name }} Continuing Form </span> is accurate and complete.
-    </p> --}}
 
     <!-- Signatories -->
     <div class="absolute bottom-0 right-0 flex justify-between mt-12">

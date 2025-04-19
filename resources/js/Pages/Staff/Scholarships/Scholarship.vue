@@ -2924,19 +2924,22 @@ const generateGraduateList = async (filters) => {
 
 const generatePayroll = async (filters) => {
     try {
-
         if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
             !Array.isArray(filters.batches) || filters.batches.length === 0) {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-
-        filters.campuses.forEach(campusId => {
-            filters.batches.forEach(batchId => {
-                const url = `/scholarships/${campusId}/batch/${batchId}/payroll-report`;
-                window.open(url, '_blank');
-            });
+        
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/payroll-report`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         });
+        
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);
     }

@@ -222,63 +222,92 @@ class ReportsController extends Controller
 
         return $pdf->stream("graduates-report-{$scholarship->name}.pdf");
     }
-    public function PayrollReport(Scholarship $scholarship, Batch $batch)
+    public function PayrollReport(Scholarship $scholarship, Request $request)
     {
-        // Get all campuses for this scholarship
-        $campusIds = request('campus_ids', null);
+        // Get parameters from request
+        $batchIds = $request->query('batch_ids', null);
+        $campusIds = $request->query('campus_ids', null);
+        $schoolYearId = $request->query('school_year_id', null);
+        $semester = $request->query('semester', null);
+
+        // Convert comma-separated strings to arrays
+        if ($batchIds && is_string($batchIds)) {
+            $batchIds = explode(',', $batchIds);
+        }
+
         if ($campusIds && is_string($campusIds)) {
             $campusIds = explode(',', $campusIds);
         }
 
-        // Get disbursement data
-        $data = $this->listPayoutDisbursements($scholarship, $batch, $campusIds);
+        // Get all selected batches
+        $batches = Batch::whereIn('id', $batchIds)->get();
 
-        // Create a flattened view of scholars with their disbursements
-        $scholarsList = [];
-        $disbursementDates = [];
+        // Initialize arrays for data collection
+        $allScholars = [];
+        $allDisbursementDates = [];
 
-        foreach ($data['disbursements'] as $disbursement) {
-            $disbursementDates[] = [
-                'id' => $disbursement['disbursement_id'],
-                'date' => $disbursement['disbursement_date']
-            ];
+        foreach ($batches as $batch) {
+            // Get disbursement data for this batch
+            $data = $this->listPayoutDisbursements($scholarship, $batch, $campusIds);
 
-            foreach ($disbursement['scholars'] as $scholar) {
-                // Initialize scholar record if not exists
-                if (!isset($scholarsList[$scholar['scholar_id']])) {
-                    $scholarsList[$scholar['scholar_id']] = [
-                        'id' => $scholar['scholar_id'],
-                        'first_name' => $scholar['first_name'],
-                        'last_name' => $scholar['last_name'],
-                        'middle_name' => $scholar['middle_name'],
-                        'student_number' => $scholar['student_number'],
-                        'course' => $scholar['course'],
-                        'year_level' => $scholar['year_level'],
-                        'campus' => $scholar['campus'],
-                        'disbursements' => [],
-                        'total_received' => 0
-                    ];
-                }
-
-                // Add this disbursement
-                $scholarsList[$scholar['scholar_id']]['disbursements'][$disbursement['disbursement_id']] = [
-                    'amount' => $scholar['amount'],
-                    'status' => $scholar['status'],
-                    'date_received' => $scholar['date_received']
+            // Process each disbursement
+            foreach ($data['disbursements'] as $disbursement) {
+                $allDisbursementDates[] = [
+                    'id' => $disbursement['disbursement_id'],
+                    'date' => $disbursement['disbursement_date'],
+                    'batch_id' => $batch->id,
+                    'batch_name' => $batch->name
                 ];
 
-                // Add to total if disbursed
-                if ($scholar['status'] == 'Disbursed') {
-                    $scholarsList[$scholar['scholar_id']]['total_received'] += $scholar['amount'];
+                foreach ($disbursement['scholars'] as $scholar) {
+                    $scholarKey = $scholar['scholar_id'];
+
+                    // Initialize scholar record if not exists
+                    if (!isset($allScholars[$scholarKey])) {
+                        $allScholars[$scholarKey] = [
+                            'id' => $scholar['scholar_id'],
+                            'first_name' => $scholar['first_name'],
+                            'last_name' => $scholar['last_name'],
+                            'middle_name' => $scholar['middle_name'],
+                            'student_number' => $scholar['student_number'],
+                            'course' => $scholar['course'],
+                            'year_level' => $scholar['year_level'],
+                            'campus' => $scholar['campus'],
+                            'batch_name' => $batch->name,
+                            'batch_id' => $batch->id,
+                            'disbursements' => [],
+                            'total_received' => 0,
+                            'not_claimed_status' => 'Claimed' // Default to claimed, will update if not claimed
+                        ];
+                    }
+
+                    // Add this disbursement
+                    $allScholars[$scholarKey]['disbursements'][$disbursement['disbursement_id']] = [
+                        'amount' => $scholar['amount'],
+                        'status' => $scholar['status'],
+                        'date_received' => $scholar['date_received']
+                    ];
+
+                    // Calculate total received and update claimed status
+                    if ($scholar['status'] == 'Disbursed') {
+                        $allScholars[$scholarKey]['total_received'] += $scholar['amount'];
+                    } else {
+                        $allScholars[$scholarKey]['not_claimed_status'] = 'Not Claimed';
+                    }
                 }
             }
         }
 
+        // Get the school year information
+        $schoolYear = SchoolYear::find($schoolYearId);
+
         $pdf = PDF::loadView('reports.payroll', [
             'scholarship' => $scholarship,
-            'batch' => $batch,
-            'scholars' => array_values($scholarsList),
-            'disbursementDates' => $disbursementDates
+            'batches' => $batches,
+            'scholars' => array_values($allScholars),
+            'disbursementDates' => $allDisbursementDates,
+            'schoolYear' => $schoolYear,
+            'semester' => $semester
         ]);
 
         // Set paper size and orientation
@@ -297,36 +326,36 @@ class ReportsController extends Controller
                 ->pluck('scholars.campus_id')
                 ->toArray();
         }
-
+    
         // Get all grantees and their scholars for this batch filtered by campus
         $grantees = $batch->grantees()
             ->whereHas('scholar', function ($query) use ($campusIds) {
                 $query->whereIn('campus_id', $campusIds);
             })
-            ->with('scholar') // eager load to prevent N+1 problem
+            ->with('scholar.course', 'scholar.campus') // eager load to prevent N+1 problem
             ->with('school_year')
             ->get();
-
+    
         // Get all disbursements for this batch
         $disbursements = Disbursement::where('batch_id', $batch->id)
             ->get();
-
+    
         // Transform data for report
         $disbursementData = [];
-
+    
         foreach ($disbursements as $disbursement) {
             $scholarData = [];
-
+    
             foreach ($grantees as $grantee) {
                 // Get scholar from grantee
                 $scholar = $grantee->scholar;
-
+    
                 if ($scholar) {
                     // Check if this scholar received this disbursement
-                    $scholarDisbursement = $scholar->disbursements()
+                    $scholarDisbursement = Disbursement::where('scholar_id', $scholar->id)
                         ->where('id', $disbursement->id)
                         ->first();
-
+    
                     $scholarData[] = [
                         'scholar_id' => $scholar->id,
                         'first_name' => $scholar->first_name ?? 'Unknown Scholar',
@@ -342,7 +371,7 @@ class ReportsController extends Controller
                     ];
                 }
             }
-
+    
             $disbursementData[] = [
                 'disbursement_id' => $disbursement->id,
                 'disbursement_date' => $disbursement->disbursement_date,
@@ -355,8 +384,7 @@ class ReportsController extends Controller
                 'total_scholars' => count($scholarData)
             ];
         }
-
-        
+    
         return [
             'scholarship' => $scholarship,
             'batch' => $batch,

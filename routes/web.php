@@ -251,6 +251,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     ->name('scholarships.enrolled-scholars');
     Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
     ->name('scholarships.graduate-scholars');
+    Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
+    ->name('scholarships.payroll-report');
 
 
     // Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
