@@ -84,7 +84,7 @@
                         </Link>
                     </li>
                     <li class="transform transition-transform duration-300 hover:scale-110">
-                        <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Register</a>
+                        <Link :href="route('register')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Register</Link>
                     </li>
                     <!-- <li class="transform transition-transform duration-300 hover:scale-110">
                     <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</a>
