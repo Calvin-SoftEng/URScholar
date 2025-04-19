@@ -290,20 +290,20 @@ class CashierController extends Controller
             'date_start.required' => 'Set a Date start',
             'date_end.required' => 'Set a Date end',
         ]);
-    
+
         $scholarshipId = $request->input('scholarship_id');
         $batchIds = $request->input('batch_ids');
         $user = Auth::user();
-    
+
         // Get all the batches we need to process
         $batches = Batch::whereIn('id', $batchIds)->get();
-    
+
         // Group batches by campus
         $batchesByCampus = $batches->groupBy('campus_id');
-    
+
         // Create payouts for each campus and process disbursements
         $createdPayouts = [];
-    
+
         foreach ($batchesByCampus as $campusId => $campusBatches) {
             // Create payout for this campus
             $payout = Payout::create([
@@ -315,10 +315,10 @@ class CashierController extends Controller
                 'semester' => $request->input('semester'),
                 'status' => 'Pending',
             ]);
-    
+
             $totalScholars = 0;
             $dataToInsert = [];
-    
+
             // Process each batch for this campus
             foreach ($campusBatches as $batch) {
                 // Find active grantees for this batch
@@ -327,7 +327,7 @@ class CashierController extends Controller
                     ->where('student_status', 'Enrolled')
                     ->where('status', 'Active')
                     ->get();
-    
+
                 foreach ($grantees as $grantee) {
                     $dataToInsert[] = [
                         'payout_id' => $payout->id,
@@ -339,60 +339,67 @@ class CashierController extends Controller
                     $totalScholars++;
                 }
             }
-    
+
             // Bulk insert disbursements
             if (!empty($dataToInsert)) {
                 Disbursement::insert($dataToInsert);
             }
-    
+
             // Calculate sub_total based on scholarship amount if available
             $subTotal = null;
             $scholarship = Scholarship::find($scholarshipId);
             if ($scholarship && isset($scholarship->amount)) {
                 $subTotal = $scholarship->amount * $totalScholars;
             }
-    
+
             // Update payout with total scholars count and sub_total
             $payout->update([
                 'total_scholars' => $totalScholars,
                 'sub_total' => $subTotal
             ]);
-    
+
             $createdPayouts[] = $payout;
         }
-    
+
         // Create Activity Log
         $activityLog = ActivityLog::create([
             'user_id' => $user->id,
             'activity' => 'Forward',
             'description' => 'Active scholars forwarded to cashiers by campus',
         ]);
-    
+
         // Get campus IDs from the batches
         $campusIds = $batchesByCampus->keys()->toArray();
-        
-        // Find cashiers for each campus where batches exist
-        $users = User::whereIn('campus_id', $campusIds)
+
+        // Find cashiers for each campus where batches exist and all super_admins
+        $cashiers = User::whereIn('campus_id', $campusIds)
             ->where('usertype', 'cashier')
             ->where('id', '!=', Auth::user()->id)
             ->get();
-    
+
+        $superAdmins = User::where('usertype', 'super_admin')
+            ->where('id', '!=', Auth::user()->id)
+            ->get();
+
+        // Combine the users without duplicates
+        $users = $cashiers->merge($superAdmins)->unique('id');
+
         // Create Notification
         $notification = Notification::create([
             'title' => 'New Payouts Forwarded',
             'message' => 'Active scholars forwarded to cashiers by campus by ' . $user->name,
             'type' => 'payout_forward',
         ]);
-    
+
         // Attach users to the notification
         $notification->users()->attach($users->pluck('id'));
-    
+
         // Broadcast the notification
         broadcast(new NewNotification($notification))->toOthers();
-    
+
         // Trigger event for new notification
         event(new NewNotification($notification));
-    
+
         return redirect()->back()->with('success', 'Batches have been successfully forwarded to cashiers.');
     }
 
@@ -579,7 +586,7 @@ class CashierController extends Controller
     {
         $scholarship = Scholarship::findOrFail($scholarshipId);
 
-        
+
         $batch = Batch::where('id', $batchId)
             ->where('scholarship_id', $scholarship->id)
             ->where('campus_id', Auth::user()->campus_id) // Filter by campus
