@@ -525,6 +525,10 @@ class SponsorController extends Controller
     }
 
     public function account() {
-        return Inertia::render('Sponsor/Account_Settings');
+        $user = Auth::user();
+
+        return Inertia::render('Sponsor/Account_Settings', [
+            'user' => $user,
+        ]);
     }
 }

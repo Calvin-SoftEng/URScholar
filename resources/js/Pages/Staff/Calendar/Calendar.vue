@@ -1,5 +1,4 @@
 <template>
-
   <Head title="Scholarships" />
   <AuthenticatedLayout>
     <div
@@ -73,7 +72,6 @@
               </div>
 
               <!-- Scholarship Events -->
-              <!-- Event in the calendar -->
               <div v-for="event in day.events" :key="`${event.id}-${event.type}`" class="mt-1 mb-1">
                 <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate"
                   :class="event.type === 'start' ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-green-500 text-white hover:bg-green-600'"
@@ -81,27 +79,41 @@
                   {{ event.displayText }}
                 </div>
               </div>
+
+              <!-- Payout Schedules -->
+              <div v-for="payout in day.payouts" :key="`payout-${payout.id}`" class="mt-1 mb-1">
+                <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-yellow-500 text-white hover:bg-yellow-600"
+                  @click="showPayoutDetails(payout)">
+                  {{ payout.displayText }}
+                </div>
+              </div>
+
+              <!-- Payout Start Dates -->
+              <div v-for="payoutStart in day.payoutStarts" :key="`payoutStart-${payoutStart.id}`" class="mt-1 mb-1">
+                <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-orange-500 text-white hover:bg-orange-600"
+                  @click="showPayoutDetails(payoutStart)">
+                  {{ payoutStart.campus_name }} (Start)
+                </div>
+              </div>
+
+              <!-- Payout End Dates -->
+              <div v-for="payoutEnd in day.payoutEnds" :key="`payoutEnd-${payoutEnd.id}`" class="mt-1 mb-1">
+                <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-red-500 text-white hover:bg-red-600"
+                  @click="showPayoutDetails(payoutEnd)">
+                  {{ payoutEnd.campus_name }} (End)
+                </div>
+              </div>
             </div>
           </div>
 
           <!-- Toast or Modal -->
           <div v-if="toastVisible"
-            class="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50">
-            {{ toastMessage }}
+            class="fixed bottom-4 right-4 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-lg z-50 max-w-md">
+            <pre class="whitespace-pre-wrap text-sm">{{ toastMessage }}</pre>
           </div>
         </div>
       </div>
     </div>
-
-    <ToastProvider>
-      <ToastRoot v-if="toastVisible"
-        class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-        <ToastTitle class="font-semibold dark:text-dtext">Scholarship Information</ToastTitle>
-        <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
-      </ToastRoot>
-
-      <ToastViewport class="fixed bottom-4 right-4" />
-    </ToastProvider>
   </AuthenticatedLayout>
 </template>
 
@@ -110,10 +122,6 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted, watchEffect, watch, computed } from 'vue';
 import { usePage } from "@inertiajs/vue3";
 import { Head, useForm, Link, router } from '@inertiajs/vue3';
-import { Tooltip } from 'primevue';
-import { set } from 'date-fns';
-import { DatePicker } from 'primevue';
-import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
 const currentDate = ref(new Date());
 
@@ -155,16 +163,8 @@ watch(currentDate, (newDate) => {
   currentYear.value = newDate.getFullYear();
 });
 
-const scholarships = ref([
-  { title: 'RISE Application Deadline', date: '2025-04-17', description: 'Submit form A1 by 5:00 PM EST to be considered for the RISE Scholarship.' },
-  { title: 'Payouts', date: '2025-04-23', description: 'Scholarship funds will be disbursed to student accounts.' },
-  { title: 'Merit Scholarship Interview', date: '2025-05-10', description: 'Virtual interviews for finalists begin at 9:00 AM.' },
-  { title: 'Summer Grant Deadline', date: '2025-05-15', description: 'Last day to submit summer research grant proposals.' },
-]);
-
 const toastMessage = ref('');
 const toastVisible = ref(false);
-
 
 const showDetails = (event) => {
   const eventType = event.type === 'start' ? 'Start' : 'End';
@@ -184,6 +184,48 @@ const showDetails = (event) => {
   setTimeout(() => (toastVisible.value = false), 6000);
 };
 
+const showPayoutDetails = (payout) => {
+  let message = `${payout.campus_name} Payouts\n`;
+  
+  if (payout.scheduled_date) {
+    message += `Date: ${formatDateStr(payout.scheduled_date)}\n`;
+  }
+  
+  if (payout.scheduled_time) {
+    message += `Time: ${formatTime(payout.scheduled_time)}\n`;
+  }
+  
+  message += `Scholarship: ${payout.scholarship_name}\n`;
+  message += `Semester: ${payout.semester}\n`;
+  message += `Total Scholars: ${payout.total_scholars || 0}\n`;
+  message += `Sub Total: ₱${(payout.sub_total || 0).toLocaleString()}\n`;
+  message += `Payout Period: ${formatDateStr(payout.date_start)} - ${formatDateStr(payout.date_end)}\n`;
+  
+  if (payout.reminders) {
+    message += `Reminders: ${payout.reminders}`;
+  }
+
+  toastMessage.value = message;
+  toastVisible.value = true;
+  setTimeout(() => (toastVisible.value = false), 8000);
+};
+
+const formatTime = (timeStr) => {
+  if (!timeStr) return '';
+  
+  const timeParts = timeStr.split(':');
+  if (timeParts.length < 2) return timeStr;
+  
+  let hours = parseInt(timeParts[0]);
+  const minutes = timeParts[1];
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  
+  return `${hours}:${minutes} ${ampm}`;
+};
+
 const isToday = (date) => {
   const d = new Date();
   return (
@@ -197,10 +239,11 @@ const isCurrentMonth = (date) => {
   return date.getMonth() === currentMonth.value && date.getFullYear() === currentYear.value;
 };
 
-// Update the scholarships ref to match the data structure coming from the backend
-// Replace your current scholarships ref with:
+// Props definition
 const props = defineProps({
-  scholarships: Array
+  scholarships: Array,
+  payouts: Array,
+  campuses: Array
 });
 
 const scholarshipEvents = computed(() => {
@@ -256,8 +299,69 @@ const scholarshipEvents = computed(() => {
   return groupedEvents;
 });
 
+// New computed property for payout schedules
+const payoutSchedules = computed(() => {
+  if (!props.payouts || !props.payouts.length) {
+    return [];
+  }
+
+  return props.payouts.flatMap(payout => {
+    if (!payout.payout_schedule || !payout.payout_schedule.length) {
+      return [];
+    }
+
+    const campusName = props.campuses?.find(c => c.id === payout.campus_id)?.name || 'Unknown Campus';
+    
+    return payout.payout_schedule.map(schedule => {
+      return {
+        id: schedule.id,
+        payout_id: payout.id,
+        campus_id: payout.campus_id,
+        campus_name: campusName,
+        scheduled_date: schedule.scheduled_date,
+        scheduled_time: schedule.scheduled_time,
+        reminders: schedule.reminders,
+        scholarship_id: payout.scholarship_id,
+        scholarship_name: props.scholarships?.find(s => s.id === payout.scholarship_id)?.name || 'Unknown Scholarship',
+        semester: payout.semester,
+        total_scholars: payout.total_scholars,
+        sub_total: payout.sub_total,
+        date_start: payout.date_start,
+        date_end: payout.date_end,
+        displayText: `${campusName} Payouts`
+      };
+    });
+  });
+});
+
+// Extract all payouts for displaying start and end dates
+const allPayouts = computed(() => {
+  if (!props.payouts || !props.payouts.length) {
+    return [];
+  }
+
+  return props.payouts.map(payout => {
+    const campusName = props.campuses?.find(c => c.id === payout.campus_id)?.name || 'Unknown Campus';
+    
+    return {
+      id: payout.id,
+      campus_id: payout.campus_id,
+      campus_name: campusName,
+      scholarship_id: payout.scholarship_id,
+      scholarship_name: props.scholarships?.find(s => s.id === payout.scholarship_id)?.name || 'Unknown Scholarship',
+      semester: payout.semester,
+      total_scholars: payout.total_scholars,
+      sub_total: payout.sub_total,
+      date_start: payout.date_start,
+      date_end: payout.date_end,
+      payout_schedules: payout.payout_schedules
+    };
+  });
+});
+
 // Helper function to format date strings
 const formatDateStr = (dateStr) => {
+  if (!dateStr) return 'N/A';
   const date = new Date(dateStr);
   return date.toLocaleDateString();
 };
@@ -268,7 +372,7 @@ const formatSimpleDate = (dateStr) => {
   return `${date.getMonth() + 1}/${date.getDate()}`;
 };
 
-// First, update the calendar days computed property to properly handle both start and end dates
+// Updated calendar days computed property to include payouts
 const calendarDays = computed(() => {
   const firstDay = new Date(currentYear.value, currentMonth.value, 1);
   const lastDay = new Date(currentYear.value, currentMonth.value + 1, 0);
@@ -285,6 +389,9 @@ const calendarDays = computed(() => {
 
     // Process each scholarship to check if this date is a start or end date
     const dayEvents = [];
+    const dayPayouts = [];
+    const dayPayoutStarts = [];
+    const dayPayoutEnds = [];
 
     scholarshipEvents.value.forEach(event => {
       const eventStartDate = new Date(event.startDate);
@@ -316,7 +423,46 @@ const calendarDays = computed(() => {
       }
     });
 
-    days.push({ date: new Date(dateCopy), events: dayEvents });
+    // Process payouts for this date
+    payoutSchedules.value.forEach(payout => {
+      const payoutDate = new Date(payout.scheduled_date);
+      payoutDate.setHours(0, 0, 0, 0);
+
+      const currentDate = new Date(dateCopy);
+      currentDate.setHours(0, 0, 0, 0);
+
+      if (currentDate.getTime() === payoutDate.getTime()) {
+        dayPayouts.push(payout);
+      }
+    });
+
+    // Process payout start and end dates
+    allPayouts.value.forEach(payout => {
+      const payoutStartDate = new Date(payout.date_start);
+      const payoutEndDate = new Date(payout.date_end);
+      
+      payoutStartDate.setHours(0, 0, 0, 0);
+      payoutEndDate.setHours(0, 0, 0, 0);
+      
+      const currentDate = new Date(dateCopy);
+      currentDate.setHours(0, 0, 0, 0);
+      
+      if (currentDate.getTime() === payoutStartDate.getTime()) {
+        dayPayoutStarts.push(payout);
+      }
+      
+      if (currentDate.getTime() === payoutEndDate.getTime()) {
+        dayPayoutEnds.push(payout);
+      }
+    });
+
+    days.push({ 
+      date: new Date(dateCopy), 
+      events: dayEvents,
+      payouts: dayPayouts,
+      payoutStarts: dayPayoutStarts,
+      payoutEnds: dayPayoutEnds
+    });
   }
 
   return days;
