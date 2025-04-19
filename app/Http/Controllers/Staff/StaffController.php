@@ -21,7 +21,7 @@ class StaffController extends Controller
     public function dashboard()
     {
         if (Auth::check() && Auth::user()->email_verified_at === null) {
-            return redirect()->route('verify_account');
+            return redirect()->route('staff.verify_account');
         }
 
         $sponsor = Sponsor::all();

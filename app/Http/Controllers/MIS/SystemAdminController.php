@@ -462,7 +462,6 @@ class SystemAdminController extends Controller
             'role' => 'required',
         ]);
 
-        // dd($request);
         $userExists = User::where('email', $request->email)->exists();
 
         $password = Str::random(8);
