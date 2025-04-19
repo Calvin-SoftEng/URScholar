@@ -30,7 +30,7 @@ class SendUser extends Mailable
     {
         return new Envelope(
             from: new Address('urscholar@ursbinangonan.com', 'URS Scholarship Unit'),
-            subject: 'New account bes',
+            subject: 'URScholar Account Registration Successful',
         );
     }
 

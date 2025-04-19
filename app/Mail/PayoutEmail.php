@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Address;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class SendEmail extends Mailable
+class PayoutEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -23,7 +23,6 @@ class SendEmail extends Mailable
     {
         $this->mailData = $mailData;
     }
-
     /**
      * Get the message envelope.
      */
@@ -31,7 +30,7 @@ class SendEmail extends Mailable
     {
         return new Envelope(
             from: new Address('urscholar@ursbinangonan.com', 'URS Scholarship Unit'),
-            subject: 'You are on your way to becoming a scholar!',
+            subject: 'Heads Up! Your Scholarship Payout is on the Way!',
         );
     }
 
@@ -41,7 +40,7 @@ class SendEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mails.sendGmail'
+            view: 'mails.sendGmail',
         );
     }
 

@@ -14,6 +14,7 @@ use App\Models\Scholar;
 use App\Models\Batch;
 use Inertia\Inertia;
 use App\Mail\SendEmail;
+use App\Mail\PayoutEmail;
 use App\Models\ActivityLog;
 use App\Models\ScholarshipTemplate;
 use App\Models\Payout;
@@ -344,7 +345,7 @@ class EmailController extends Controller
                         "urscholar.up.railway.app\n\n"
                 ];
 
-                Mail::to($scholar->email)->send(new SendEmail($mailData));
+                Mail::to($scholar->email)->send(new PayoutEmail($mailData));
             }
         }
 
