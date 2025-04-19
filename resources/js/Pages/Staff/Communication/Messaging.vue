@@ -176,7 +176,9 @@
                                 ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
                             </h3>
                             <!-- Three dots menu aligned with conversation text -->
-                            <button class="text-gray-600 hover:text-primary transition-colors"
+                            <button 
+                                v-if="selectedTab !== 'dm'"
+                                class="text-gray-600 hover:text-primary transition-colors"
                                 @click="showMemberList = !showMemberList">
                                 <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
                             </button>
