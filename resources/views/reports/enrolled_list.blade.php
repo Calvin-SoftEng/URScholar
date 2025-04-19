@@ -36,7 +36,7 @@
     <h2 class="font-bold text-lg text-center mb-4 uppercase">List of Enrollees for {{ $scholarship->name }}</h2>
     <!-- Paragraph -->
     <p class="mb-4">
-        <span class="font-bold">School Year: {{ $schoolYear ? $schoolYear->school_year : 'N/A' }}</span>
+        <span class="font-bold">School Year: {{ $schoolYear ? $schoolYear->year : 'N/A' }}</span>
         <span class="font-bold ml-4">Semester: {{ $semester ?? 'N/A' }}</span>
         <br />
     <p class="text-justify indent-5">This is to certify that the following students are qualified to avail of the
