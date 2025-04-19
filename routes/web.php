@@ -131,6 +131,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
         ->name('staff.dashboard');
+    Route::get('/staff/account-verify', [StaffController::class, 'verify_account'])
+        ->name('staff.verify_account');
 
     //Sponsors
     Route::get('/sponsors', [SponsorController::class, 'index'])->name('sponsor.index');

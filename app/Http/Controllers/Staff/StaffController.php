@@ -20,6 +20,10 @@ class StaffController extends Controller
 {
     public function dashboard()
     {
+        if (Auth::check() && Auth::user()->email_verified_at === null) {
+            return redirect()->route('verify_account');
+        }
+
         $sponsor = Sponsor::all();
         $activeScholarships = Scholarship::where('status', 'active')->get();
 
@@ -92,6 +96,17 @@ class StaffController extends Controller
             'activity_logs' => $activity_logs,
             'academic_year' => $academic_year,
             'univ_students' => $univ_students,
+        ]);
+    }
+
+    public function verify_account()
+    {
+        if (Auth::user()->email_verified_at !== null) {
+            return redirect()->route('staff.dashboard');
+        }
+
+        return Inertia::render('Staff/Account/Verification', [
+
         ]);
     }
 }
