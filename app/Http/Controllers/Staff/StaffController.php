@@ -101,9 +101,9 @@ class StaffController extends Controller
 
     public function verify_account()
     {
-        if (Auth::user()->email_verified_at !== null) {
-            return redirect()->route('staff.dashboard');
-        }
+        // if (Auth::user()->email_verified_at !== null) {
+        //     return redirect()->route('staff.dashboard');
+        // }
 
         return Inertia::render('Staff/Account/Verification', [
 
