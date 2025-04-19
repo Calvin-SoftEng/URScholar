@@ -3,18 +3,18 @@
         <div
             class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
             <div class="w-full p-4 h-full">
-                <div class="bg-white w-full h-full rounded-xl flex flex-row">
-                    <div class="w-[30%] border-r">
-                        <h3 class="text-xl text-primary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold">
+                <div class="bg-white dark:bg-dcontainer w-full h-full rounded-xl flex flex-row">
+                    <div class="w-[30%] border-r dark:border-gray-500">
+                        <h3 class="text-xl text-dprimary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold dark:text-dtext">
                             Messages</h3>
 
                         <!-- Tabs for DM and GC -->
-                        <div class="mt-4 flex border-b border-gray-100 dark:border-gray-600">
+                        <div class="mt-4 flex border-b border-gray-100 dark:border-gray-500">
                             <!-- DM Tab -->
                             <button type="button"
                                 class="w-full p-2 text-center text-sm font-medium focus:outline-none transition" :class="selectedTab === 'dm'
-                                    ? 'text-primary border-b-2 border-primary'
-                                    : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
+                                    ? 'text-dprimary dark:text-dtext border-b-2 border-dprimary dark:border-dtext'
+                                    : 'text-gray-900 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-dnavy'"
                                 @click="selectedTab = 'dm'">
                                 Direct Messages
                             </button>
@@ -22,8 +22,8 @@
                             <!-- GC Tab -->
                             <button type="button"
                                 class="w-full p-2 text-center text-sm font-medium focus:outline-none transition" :class="selectedTab === 'gc'
-                                    ? 'text-primary border-b-2 border-primary'
-                                    : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
+                                    ? 'text-dprimary dark:text-dtext border-b-2 border-dprimary dark:border-dtext'
+                                    : 'text-gray-900 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-dnavy'"
                                 @click="selectedTab = 'gc'">
                                 Group Chats
                             </button>
@@ -53,8 +53,8 @@
                             <div class="">
                                 <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Sponsors</h4>
                                 <Link v-for="user in filteredUsers" :key="`user-${user.id}`"
-                                    :href="route('messaging.conversation', user.id)" :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
-                                        selectedUser && selectedUser.id === user.id ? 'bg-blue-50' : '']"
+                                    :href="route('messaging.conversation', user.id)" :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100 dark:hover:bg-dnavy',
+                                        selectedUser && selectedUser.id === user.id ? 'bg-blue-50 dark:bg-dprimary' : '']"
                                     @click.prevent="selectUser(user)">
                                 <div v-if="user.picture">
                                     <img class="h-10 w-10 rounded-full" :src="`/storage/user/profile/${user.picture}`"
@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
-                                        <span class="text-primary-foreground font-quicksand font-semibold">
+                                        <span class="text-dprimary dark:text-dtext font-quicksand font-semibold">
                                             {{ user.first_name || user.name }}
                                         </span>
                                         <!-- Show timestamp of latest message if exists -->
@@ -95,8 +95,8 @@
                                 <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Staff Groups</h4>
                                 <Link v-for="group in filteredStaffGroups" :key="`staff-${group.id}`"
                                     :href="route('messaging.staff', group.id)"
-                                    :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
-                                        selectedData && selectedData.id === group.id && groupType === 'staff' ? 'bg-blue-50' : '']"
+                                    :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100 dark:hover:bg-dnavy',
+                                        selectedData && selectedData.id === group.id && groupType === 'staff' ? 'bg-blue-50 dark:bg-dprimary ' : '']"
                                     @click.prevent="selectGroup(group, 'staff')">
                                 <div
                                     class="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-500 font-semibold">
@@ -104,7 +104,7 @@
                                 </div>
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
-                                        <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
+                                        <span class="text-dprimary dark:text-dtext font-quicksand font-semibold">{{ group.name
                                         }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
@@ -170,8 +170,8 @@
                     </div>
 
                     <div class="w-[70%] h-full flex flex-col">
-                        <div class="shadow-sm p-4 flex justify-between items-center">
-                            <h3 class="text-lg font-bold text-primary">
+                        <div class="shadow-sm p-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-400">
+                            <h3 class="text-lg font-bold text-dprimary dark:text-dtext">
                                 {{ selectedData ? (selectedData.name || (selectedData.batch_no ? `Batch
                                 ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
                             </h3>
@@ -312,8 +312,8 @@
                             </div>
                         </div>
 
-                        <div
-                            class="flex items-center box-border p-2 bg-white z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
+                        <div 
+                            class="flex items-center box-border p-2 bg-white dark:bg-dcontainer z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
                             <!-- For the circle-plus button -->
                             <!-- <button class="px-2" @click="toggleAttachmentMenu"
                                 :disabled="!selectedData || !selectedData.id">
@@ -325,21 +325,48 @@
 
                             <!-- For the text input -->
                             <input type="text" placeholder="Type your message..."
-                                class="flex-1 bg-transparent text-primary-foreground p-2 focus:outline-none focus:ring-0 border-none"
+                                class="flex-1 bg-transparent dark:bg-dcontainer text-dprimary dark:text-dtext p-2 focus:outline-none focus:ring-0 border-none"
                                 v-model="form.content" @keyup.enter="sendMessage"
                                 :disabled="!selectedData || !selectedData.id" />
 
                             <!-- For the paper-plane button -->
-                            <button class="px-2 transition duration-200 group" @click="sendMessage"
+                            <!-- <button class="px-2 transition duration-200 group" @click="sendMessage"
                                 :disabled="!selectedData || !selectedData.id || !form.content.trim()">
                                 <font-awesome-icon :icon="['far', 'paper-plane']" :class="[
                                     'w-6 h-6',
-                                    selectedData && selectedData.id && form.content.trim() ? 'text-primary group-hover:hidden' : 'text-gray-400 cursor-not-allowed'
+                                    selectedData && selectedData.id && form.content.trim() ? 'text-dprimary dark:text-dtext group-hover:hidden' : 'text-gray-400 cursor-not-allowed'
                                 ]" />
                                 <font-awesome-icon :icon="['fas', 'paper-plane']" :class="[
                                     'w-6 h-6 hidden group-hover:inline-block',
                                     selectedData && selectedData.id && form.content.trim() ? 'text-primary' : 'text-gray-400 cursor-not-allowed'
                                 ]" />
+                            </button> -->
+                            <button
+                                class="px-2 transition duration-200 group"
+                                @click="sendMessage"
+                                :disabled="!selectedData || !selectedData.id || !form.content.trim()"
+                                >
+                                <!-- Regular icon -->
+                                <font-awesome-icon
+                                    :icon="['far', 'paper-plane']"
+                                    class="w-6 h-6 group-hover:hidden"
+                                    :class="[
+                                    selectedData && selectedData.id && form.content.trim()
+                                        ? 'text-dprimary dark:text-dtext'
+                                        : 'text-gray-400 cursor-not-allowed'
+                                    ]"
+                                />
+
+                                <!-- Hover icon -->
+                                <font-awesome-icon
+                                    :icon="['fas', 'paper-plane']"
+                                    class="w-6 h-6 hidden group-hover:inline-block"
+                                    :class="[
+                                    selectedData && selectedData.id && form.content.trim()
+                                        ? 'text-dprimary dark:text-dtext'
+                                        : 'text-gray-400 cursor-not-allowed'
+                                    ]"
+                                />
                             </button>
                         </div>
                     </div>

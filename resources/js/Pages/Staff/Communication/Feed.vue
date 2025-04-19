@@ -5,7 +5,7 @@
                 class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
                 <div class="w-[95%] p-4 h-full">
                     <div
-                        class="w-[95%] pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
+                        class="w-[95%] pt-3 overflow-auto scrollbar-thin scrollbar-thumb-primary scrollbar-track-gray-100 dark:scrollbar-track-dcontainer scrollbar-thumb-rounded h-full">
                         <div class="mx-auto max-w-3xl sm:px-6 lg:px-8 ">
                             <div class="rounded-lg mb-10">
                                 <div class="h-full space-y-3 flex flex-col items-center justify-start pt-2 pb-10">
@@ -55,13 +55,13 @@
                                     <!-- Check if there are any posts -->
                                     <div v-if="posts.length" class="w-full">
                                         <div v-for="post in posts" :key="post.id"
-                                            class="w-full bg-white rounded-lg shadow-md">
+                                            class="w-full bg-white dark:bg-dcontainer dark:border dark:border-gray-600 rounded-lg shadow-md">
                                             <div class="w-full p-4 flex items-center border-b border-gray-200">
                                                 <img class="w-12 h-12 rounded-full"
                                                     :src="`/storage/user/profile/${post.user.picture }`"
                                                     alt="picture" />
                                                 <div class="ml-4">
-                                                    <p class="text-primary font-semibold">{{ post.user.first_name }} {{
+                                                    <p class="text-dprimary dark:text-dtext font-semibold">{{ post.user.first_name }} {{
                                                         post.user.last_name }}</p>
                                                     <p class="text-sm text-gray-500">Posted {{ post.created_at }}</p>
                                                     <div v-if="post.filters.scholarships.length || post.filters.batches.length || post.filters.campuses.length"
@@ -152,7 +152,7 @@
                             'User'
                         }} {{ currentUser?.last_name || '' }}
                         </h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ currentUser?.role || 'Head ScholarshipAdmin'}}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ currentUser?.role || 'Head Scholarship Admin'}}</p>
                     </div>
                 </div>
 
@@ -169,14 +169,14 @@
                     <div class="relative">
                         <label class="block text-xs font-medium mb-1">Scholarship</label>
                         <button type="button"
-                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white dark:bg-dprimary"
                             @click="toggleDropdown('scholarship')">
                             {{ selectedScholarships.length ? selectedScholarships.join(', ') : 'Select Scholarships' }}
                         </button>
                         <div v-if="openDropdown === 'scholarship'"
-                            class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                            class="absolute z-50 mt-1 w-full bg-white dark:bg-dprimary border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
                             <label v-for="item in props.scholarships" :key="item.id"
-                                class="block px-4 py-2 hover:bg-gray-100">
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-dnavy">
                                 <input type="checkbox"
                                     class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                                     :value="item.name" v-model="selectedScholarships" />
@@ -189,14 +189,14 @@
                     <div class="relative">
                         <label class="block text-xs font-medium mb-1">Batch</label>
                         <button type="button"
-                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white dark:bg-dprimary"
                             @click="toggleDropdown('batch')">
                             {{ selectedBatches.length ? selectedBatches.join(', ') : 'Select Batches' }}
                         </button>
                         <div v-if="openDropdown === 'batch'"
-                            class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                            class="absolute z-50 mt-1 w-full bg-white dark:bg-dprimary border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
                             <label v-for="item in filteredBatches" :key="item.id"
-                                class="block px-4 py-2 hover:bg-gray-100">
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-dnavy">
                                 <input type="checkbox"
                                     class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                                     :value="`Batch ${item.batch_no}`" v-model="selectedBatches" />
@@ -209,14 +209,14 @@
                     <div class="relative">
                         <label class="block text-xs font-medium mb-1">Campus</label>
                         <button type="button"
-                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                            class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white dark:bg-dprimary"
                             @click="toggleDropdown('campus')">
                             {{ selectedCampuses.length ? selectedCampuses.join(', ') : 'Select Campuses' }}
                         </button>
                         <div v-if="openDropdown === 'campus'"
-                            class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                            class="absolute z-50 mt-1 w-full bg-white dark:bg-dprimary border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
                             <label v-for="item in filteredCampuses" :key="item.id"
-                                class="block px-4 py-2 hover:bg-gray-100">
+                                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-dnavy">
                                 <input type="checkbox"
                                     class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                                     :value="item.name" v-model="selectedCampuses" />
