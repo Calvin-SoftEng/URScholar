@@ -514,6 +514,7 @@ const submitAssign = async () => {
 
 // Updated menu items to match user types
 const menuItems = [
+    { name: "University MIS", key: "mis" },
     { name: "Head Admin", key: "super_admin" },
     { name: "Coordinators", key: "coordinator" },
     { name: "Cashiers", key: "cashier" },
