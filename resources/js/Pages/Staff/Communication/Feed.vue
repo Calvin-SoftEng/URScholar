@@ -2,7 +2,7 @@
     <AuthenticatedLayout>
         <template #default>
             <div
-            class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
+                class="px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
                 <div class="w-[95%] p-4 h-full">
                     <div
                         class="w-[95%] pt-3 overflow-auto scrollbar-thin scrollbar-thumb-blue-900 scrollbar-track-gray-100 scrollbar-thumb-rounded h-full">
@@ -24,9 +24,10 @@
                                                     rows="5" placeholder="Write your announcement here..."></textarea>
                                             </div>
                                             <!-- Buttons Container (Stays at the Bottom) -->
-                                            <div class="w-full flex flex-row justify-end items-center border-t dark:border-gray-600">
+                                            <div
+                                                class="w-full flex flex-row justify-end items-center border-t dark:border-gray-600">
 
-                                                <button @click="toggleSharePost" 
+                                                <button @click="toggleSharePost"
                                                     class="text-white mt-2 font-sans bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                                                     Share a Post
                                                 </button>
@@ -53,11 +54,15 @@
 
                                     <!-- Check if there are any posts -->
                                     <div v-if="posts.length" class="w-full">
-                                        <div v-for="post in posts" :key="post.id" class="w-full bg-white rounded-lg shadow-md">
+                                        <div v-for="post in posts" :key="post.id"
+                                            class="w-full bg-white rounded-lg shadow-md">
                                             <div class="w-full p-4 flex items-center border-b border-gray-200">
-                                                <img class="w-12 h-12 rounded-full" src="https://placehold.co/50x50" alt="user-avatar" />
+                                                <img class="w-12 h-12 rounded-full"
+                                                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                                    alt="picture" />
                                                 <div class="ml-4">
-                                                    <p class="text-primary font-semibold">{{ post.user.name }}</p>
+                                                    <p class="text-primary font-semibold">{{ post.user.first_name }} {{
+                                                        post.user.first_name }}</p>
                                                     <p class="text-sm text-gray-500">Posted {{ post.created_at }}</p>
                                                     <div v-if="post.filters.scholarships.length || post.filters.batches.length || post.filters.campuses.length"
                                                         class="flex flex-wrap gap-1 mt-1">
@@ -89,7 +94,8 @@
                                     </div>
 
                                     <!-- Show this if no posts -->
-                                    <div v-else class="w-full bg-white rounded-lg shadow-md text-center text-gray-500 py-10">
+                                    <div v-else
+                                        class="w-full bg-white rounded-lg shadow-md text-center text-gray-500 py-10">
                                         <p class="text-lg font-medium">No posts or announcements yet.</p>
                                     </div>
 
@@ -139,13 +145,14 @@
 
                 <!-- User Profile Section -->
                 <div class="flex items-center gap-3">
-                    <img src="../../../../assets/images/no_userpic.png" alt="Profile Picture"
-                        class="w-12 h-12 rounded-full object-cover">
+                    <img class="w-12 h-12 rounded-full object-cover"
+                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
                     <div>
-                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ currentUser?.first_name || 'User'
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white">{{ currentUser?.first_name ||
+                            'User'
                         }} {{ currentUser?.last_name || '' }}
                         </h3>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ currentUser?.role || 'Head Scholarship Admin' }}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ currentUser?.role || 'Head ScholarshipAdmin'}}</p>
                     </div>
                 </div>
 

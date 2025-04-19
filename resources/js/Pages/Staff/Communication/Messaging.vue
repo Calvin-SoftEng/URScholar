@@ -105,7 +105,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                            }}</span>
+                                        }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -172,7 +172,7 @@
                     <div class="w-[70%] h-full flex flex-col">
                         <div class="shadow-sm p-4 flex justify-between items-center">
                             <h3 class="text-lg font-bold text-primary">
-                                {{ selectedData ? (selectedData.name  || (selectedData.batch_no ? `Batch
+                                {{ selectedData ? (selectedData.name || (selectedData.batch_no ? `Batch
                                 ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
                             </h3>
                             <!-- Three dots menu aligned with conversation text -->
@@ -268,34 +268,44 @@
                             </div>
 
                             <!-- Member list sidebar - conditionally shown -->
+                            <!-- Member list sidebar -->
                             <div v-if="showMemberList" class="w-64 border-l overflow-y-auto">
                                 <div class="p-2">
                                     <h4 class="font-bold text-primary mb-3">Members</h4>
 
-                                    <div>
+                                    <div v-if="groupMembers && groupMembers.length">
                                         <!-- Group members by usertype -->
+                                        <template v-for="(users, userType) in groupedMembers" :key="userType">
                                             <div class="mb-4">
-                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">Grantees
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">
+                                                    {{ formatUserType(userType) }}
                                                 </h5>
-                                                <div 
+                                                <div v-for="user in users" :key="user.id"
                                                     class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
-                                                    <div >
-                                                            <img class="h-8 w-8 rounded-full"
-                                                            src="../../../../assets/images/no_userpic.png">
+                                                    <!-- User with profile picture -->
+                                                    <div v-if="user.picture">
+                                                        <img class="h-8 w-8 rounded-full border"
+                                                            :src="`/storage/user/profile/${user.picture}`"
+                                                            :alt="user.first_name || user.name">
                                                     </div>
-                                                    <!-- <div 
+                                                    <!-- User without profile picture (show initials) -->
+                                                    <div v-else
                                                         class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                                       eafeafef
-                                                    </div> -->
+                                                        {{ (user.first_name ? user.first_name.charAt(0) :
+                                                            user.name.charAt(0)).toUpperCase() }}
+                                                    </div>
                                                     <span class="text-sm font-medium">
-                                                        Manalo, Daughtry
-                                                        </span>
+                                                        {{ user.last_name && user.first_name ?
+                                                            `${user.last_name}, ${user.first_name}` :
+                                                            user.name }}
+                                                    </span>
                                                 </div>
                                             </div>
+                                        </template>
                                     </div>
-                                    <!-- <div v-else class="text-center text-gray-500 py-4">
+                                    <div v-else class="text-center text-gray-500 py-4">
                                         <p>No member information available</p>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -417,21 +427,21 @@ const groupedUsers = computed(() => {
     }, {});
 });
 
-// Format usertype for display
-const formatUserType = (usertype) => {
-    if (!usertype) return 'Unknown';
+// // Format usertype for display
+// const formatUserType = (usertype) => {
+//     if (!usertype) return 'Unknown';
 
-    // Convert snake_case to Title Case
-    return usertype
-        .split('_')
-        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-        .join(' ');
-};
+//     // Convert snake_case to Title Case
+//     return usertype
+//         .split('_')
+//         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+//         .join(' ');
+// };
 
-const formatTimeOnly = (datetime) => {
-    const date = new Date(datetime);
-    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-};
+// const formatTimeOnly = (datetime) => {
+//     const date = new Date(datetime);
+//     return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+// };
 
 
 // Format timestamp for message display
@@ -626,6 +636,81 @@ const clearForm = () => {
         content: '',
     };
 };
+
+// Add these to your script setup
+const groupMembers = computed(() => {
+    if (!selectedData.value || !selectedData.value.users) {
+        return [];
+    }
+    return selectedData.value.users;
+});
+
+// Group members by usertype
+const groupedMembers = computed(() => {
+    if (!groupMembers.value || groupMembers.value.length === 0) {
+        return {};
+    }
+
+    return groupMembers.value.reduce((acc, user) => {
+        const usertype = user.usertype || 'other';
+        if (!acc[usertype]) {
+            acc[usertype] = [];
+        }
+        acc[usertype].push(user);
+        return acc;
+    }, {});
+});
+
+// Format usertype for display
+const formatUserType = (usertype) => {
+    if (!usertype) return 'Other';
+
+    const userTypeMap = {
+        'super_admin': 'Administrators',
+        'coordinator': 'Coordinators',
+        'sponsor': 'Sponsors',
+        'student': 'Scholars',
+        'cashier': 'Cashiers'
+    };
+
+    return userTypeMap[usertype] || usertype
+        .split('_')
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+};
+
+// Add this method to your Vue component script
+
+const fetchGroupMembers = async () => {
+    if (!selectedData.value || !selectedData.value.id || !groupType.value) {
+        return;
+    }
+
+    try {
+        const response = await axios.post('/messaging/get-members', {
+            group_id: selectedData.value.id,
+            group_type: groupType.value,
+        });
+
+        if (response.data && response.data.members) {
+            // Update the selected data with the fetched members
+            selectedData.value = {
+                ...selectedData.value,
+                users: response.data.members
+            };
+        }
+    } catch (error) {
+        console.error('Error fetching group members:', error);
+    }
+};
+
+// Call this in the watch function when selectedData changes
+watch([selectedData, groupType], ([newData, newType], [oldData, oldType]) => {
+    if (newData && newData.id && (!oldData || newData.id !== oldData.id || newType !== oldType)) {
+        // Fetch updated members for the newly selected group
+        fetchGroupMembers();
+    }
+});
 
 // Scroll to bottom of message container
 const scrollToBottom = () => {

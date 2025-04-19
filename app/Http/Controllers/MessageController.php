@@ -148,7 +148,7 @@ class MessageController extends Controller
             ->where('scholarship_group_id', $scholarshipGroup->id)
             ->orderBy('created_at', 'desc')
             ->get();
-            
+
         // Get both staff groups and scholarship batches for the sidebar listing
         $data = $this->getCombinedGroupsData($currentUser);
 
@@ -329,6 +329,34 @@ class MessageController extends Controller
         } else {
             return back()->with(['updatedGroup' => $group]);
         }
+    }
+
+    // Add or update this method in your MessageController
+
+    public function getGroupMembers(Request $request)
+    {
+        $request->validate([
+            'group_id' => 'required|integer',
+            'group_type' => 'required|in:scholarship,staff',
+        ]);
+
+        if ($request->group_type === 'scholarship') {
+            $group = ScholarshipGroup::with([
+                'users' => function ($query) {
+                    $query->select('users.id', 'users.name', 'users.first_name', 'users.last_name', 'users.usertype', 'users.picture');
+                }
+            ])->findOrFail($request->group_id);
+        } else {
+            $group = StaffGroup::with([
+                'users' => function ($query) {
+                    $query->select('users.id', 'users.name', 'users.first_name', 'users.last_name', 'users.usertype', 'users.picture');
+                }
+            ])->findOrFail($request->group_id);
+        }
+
+        return response()->json([
+            'members' => $group->users
+        ]);
     }
 
     // Helper method to find or create a conversation between two users

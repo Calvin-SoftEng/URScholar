@@ -76,7 +76,7 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     Route::post('/system_admin/user-settings/users/create', [SystemAdminController::class, 'create_users'])->name('sa.users_create');
     Route::put('/system_admin/user-settings/users/{user}/update', [SystemAdminController::class, 'update_users'])->name('sa.users_update');
     Route::put('/system_admin/user-settings/users/{id}/deactivate', [SystemAdminController::class, 'deactivateUser'])
-    ->name('users.deactivate');
+        ->name('users.deactivate');
     Route::get('/system_admin/user-settings/activity-logs', [SystemAdminController::class, 'activity_logs'])->name('sa.activity_logs');
 
     // univ settings
@@ -106,6 +106,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,spo
     Route::get('/messaging/staff/{staffGroup}', [MessageController::class, 'showStaffGroup'])->name('messaging.staff');
     // Add this to your existing routes
     Route::get('/messaging/conversation/{userId}', [MessageController::class, 'showConversation'])->name('messaging.conversation');
+    // Add this to your routes/web.php file
+
+    Route::post('/messaging/get-members', [MessageController::class, 'getGroupMembers'])->name('messaging.getMembers');
 
 
 
@@ -248,13 +251,13 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     // Reports
     Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
     Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
-    ->name('scholarships.enrollees-summary');
+        ->name('scholarships.enrollees-summary');
     Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
-    ->name('scholarships.enrolled-scholars');
+        ->name('scholarships.enrolled-scholars');
     Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
-    ->name('scholarships.graduate-scholars');
+        ->name('scholarships.graduate-scholars');
     Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
-    ->name('scholarships.payroll-report');
+        ->name('scholarships.payroll-report');
 
 
     // Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
