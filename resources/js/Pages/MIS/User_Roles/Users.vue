@@ -500,14 +500,14 @@ const updateUser = async () => {
     }
 };
 
-// const submitAssign = async () => {
-//     try {
-//         router.post("/system_admin/user-settings/users/create", form.value);
-//         closeModal();
-//     } catch (error) {
-//         console.error("Error submitting form:", error);
-//     }
-// };
+const submitAssign = async () => {
+    try {
+        router.post("/system_admin/user-settings/users/create", form.value);
+        closeModal();
+    } catch (error) {
+        console.error("Error submitting form:", error);
+    }
+};
 
 
 // Filtered logs based on selected menu
