@@ -8,9 +8,9 @@ use Illuminate\Http\Request;
 
 class CalendarController extends Controller
 {
-    public function calendar() {
-
-        $scholarships = Scholarship::all();
+    public function calendar()
+    {
+        $scholarships = Scholarship::with('requirements')->get();
         return Inertia::render('Staff/Calendar/Calendar', [
             'scholarships' => $scholarships
         ]);

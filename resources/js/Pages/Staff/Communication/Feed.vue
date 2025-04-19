@@ -58,11 +58,11 @@
                                             class="w-full bg-white rounded-lg shadow-md">
                                             <div class="w-full p-4 flex items-center border-b border-gray-200">
                                                 <img class="w-12 h-12 rounded-full"
-                                                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                                    :src="`/storage/user/profile/${post.user.picture }`"
                                                     alt="picture" />
                                                 <div class="ml-4">
                                                     <p class="text-primary font-semibold">{{ post.user.first_name }} {{
-                                                        post.user.first_name }}</p>
+                                                        post.user.last_name }}</p>
                                                     <p class="text-sm text-gray-500">Posted {{ post.created_at }}</p>
                                                     <div v-if="post.filters.scholarships.length || post.filters.batches.length || post.filters.campuses.length"
                                                         class="flex flex-wrap gap-1 mt-1">
