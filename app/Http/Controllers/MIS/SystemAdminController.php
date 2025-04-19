@@ -378,8 +378,7 @@ class SystemAdminController extends Controller
         $currentUser = Auth::user();
 
         $campuses = Campus::all();
-        $users = User::whereNotIn('usertype', ['student'])
-            ->where('id', '!=', $currentUser->id) // Exclude current user
+        $users = User::where('id', '!=', $currentUser->id) // Exclude current user
             ->with('campus') // This eager loads the campus relationship
             ->get();
 
