@@ -88,19 +88,19 @@
                 </div>
               </div>
 
-              <!-- Payout Start Dates -->
-              <div v-for="payoutStart in day.payoutStarts" :key="`payoutStart-${payoutStart.id}`" class="mt-1 mb-1">
+              <!-- Combined Payout Start Dates -->
+              <div v-for="(payoutGroup, scholarshipId) in day.combinedPayoutStarts" :key="`payoutStart-${scholarshipId}`" class="mt-1 mb-1">
                 <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-orange-500 text-white hover:bg-orange-600"
-                  @click="showPayoutDetails(payoutStart)">
-                  {{ payoutStart.campus_name }} (Start)
+                  @click="showCombinedPayoutDetails(payoutGroup, 'start')">
+                  {{ payoutGroup[0].scholarship_name }} Payout Start
                 </div>
               </div>
 
-              <!-- Payout End Dates -->
-              <div v-for="payoutEnd in day.payoutEnds" :key="`payoutEnd-${payoutEnd.id}`" class="mt-1 mb-1">
+              <!-- Combined Payout End Dates -->
+              <div v-for="(payoutGroup, scholarshipId) in day.combinedPayoutEnds" :key="`payoutEnd-${scholarshipId}`" class="mt-1 mb-1">
                 <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-red-500 text-white hover:bg-red-600"
-                  @click="showPayoutDetails(payoutEnd)">
-                  {{ payoutEnd.campus_name }} (End)
+                  @click="showCombinedPayoutDetails(payoutGroup, 'end')">
+                  {{ payoutGroup[0].scholarship_name }} Payout End
                 </div>
               </div>
             </div>
@@ -203,6 +203,38 @@ const showPayoutDetails = (payout) => {
   
   if (payout.reminders) {
     message += `Reminders: ${payout.reminders}`;
+  }
+
+  toastMessage.value = message;
+  toastVisible.value = true;
+  setTimeout(() => (toastVisible.value = false), 8000);
+};
+
+// New function to show combined payout details
+const showCombinedPayoutDetails = (payoutGroup, type) => {
+  const eventType = type === 'start' ? 'Start' : 'End';
+  const scholarshipName = payoutGroup[0].scholarship_name;
+  const semester = payoutGroup[0].semester;
+  
+  let message = `${scholarshipName} Payout ${eventType}\n`;
+  message += `Semester: ${semester}\n`;
+  
+  message += '\nCampuses:\n';
+  payoutGroup.forEach((payout, index) => {
+    message += `${index + 1}. ${payout.campus_name}\n`;
+  });
+  
+  // Calculate totals
+  const totalScholars = payoutGroup.reduce((sum, payout) => sum + (payout.total_scholars || 0), 0);
+  const totalAmount = payoutGroup.reduce((sum, payout) => sum + (payout.sub_total || 0), 0);
+  
+  message += `\nTotal Scholars: ${totalScholars}\n`;
+  message += `Total Amount: ₱${totalAmount.toLocaleString()}\n`;
+  
+  if (type === 'start') {
+    message += `\nPayout Period Starts: ${formatDateStr(payoutGroup[0].date_start)}`;
+  } else {
+    message += `\nPayout Period Ends: ${formatDateStr(payoutGroup[0].date_end)}`;
   }
 
   toastMessage.value = message;
@@ -372,7 +404,28 @@ const formatSimpleDate = (dateStr) => {
   return `${date.getMonth() + 1}/${date.getDate()}`;
 };
 
-// Updated calendar days computed property to include payouts
+// Group payouts by scholarship and date
+const groupPayoutsByScholarshipAndDate = (payouts, dateField) => {
+  const grouped = {};
+  
+  payouts.forEach(payout => {
+    const dateStr = payout[dateField];
+    const scholarshipId = payout.scholarship_id;
+    
+    // Create a unique key for this scholarship and date
+    const key = `${scholarshipId}-${dateStr}`;
+    
+    if (!grouped[key]) {
+      grouped[key] = [];
+    }
+    
+    grouped[key].push(payout);
+  });
+  
+  return grouped;
+};
+
+// Updated calendar days computed property to include combined payouts
 const calendarDays = computed(() => {
   const firstDay = new Date(currentYear.value, currentMonth.value, 1);
   const lastDay = new Date(currentYear.value, currentMonth.value + 1, 0);
@@ -390,8 +443,10 @@ const calendarDays = computed(() => {
     // Process each scholarship to check if this date is a start or end date
     const dayEvents = [];
     const dayPayouts = [];
-    const dayPayoutStarts = [];
-    const dayPayoutEnds = [];
+    
+    // For combined payouts data structures
+    const startPayoutsByScholarship = {}; // Scholarship ID -> Array of payouts
+    const endPayoutsByScholarship = {}; // Scholarship ID -> Array of payouts
 
     scholarshipEvents.value.forEach(event => {
       const eventStartDate = new Date(event.startDate);
@@ -436,7 +491,7 @@ const calendarDays = computed(() => {
       }
     });
 
-    // Process payout start and end dates
+    // Process payout start and end dates - but group by scholarship
     allPayouts.value.forEach(payout => {
       const payoutStartDate = new Date(payout.date_start);
       const payoutEndDate = new Date(payout.date_end);
@@ -448,11 +503,19 @@ const calendarDays = computed(() => {
       currentDate.setHours(0, 0, 0, 0);
       
       if (currentDate.getTime() === payoutStartDate.getTime()) {
-        dayPayoutStarts.push(payout);
+        // Group by scholarship_id for start dates
+        if (!startPayoutsByScholarship[payout.scholarship_id]) {
+          startPayoutsByScholarship[payout.scholarship_id] = [];
+        }
+        startPayoutsByScholarship[payout.scholarship_id].push(payout);
       }
       
       if (currentDate.getTime() === payoutEndDate.getTime()) {
-        dayPayoutEnds.push(payout);
+        // Group by scholarship_id for end dates
+        if (!endPayoutsByScholarship[payout.scholarship_id]) {
+          endPayoutsByScholarship[payout.scholarship_id] = [];
+        }
+        endPayoutsByScholarship[payout.scholarship_id].push(payout);
       }
     });
 
@@ -460,8 +523,8 @@ const calendarDays = computed(() => {
       date: new Date(dateCopy), 
       events: dayEvents,
       payouts: dayPayouts,
-      payoutStarts: dayPayoutStarts,
-      payoutEnds: dayPayoutEnds
+      combinedPayoutStarts: startPayoutsByScholarship,
+      combinedPayoutEnds: endPayoutsByScholarship
     });
   }
 

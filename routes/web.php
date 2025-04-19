@@ -133,6 +133,8 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
         ->name('staff.dashboard');
     Route::get('/staff/account-verify', [StaffController::class, 'verify_account'])
         ->name('staff.verify_account');
+    // In web.php or routes file
+    Route::post('/staff/verify-account/verifying', [StaffController::class, 'verifyAccount'])->name('staff_verify_account');
 
     //Sponsors
     Route::get('/sponsors', [SponsorController::class, 'index'])->name('sponsor.index');
