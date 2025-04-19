@@ -3,14 +3,14 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2 overflow-y-auto ">
             <div>
                 <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Activity Logs</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of all the system activities. Listed are logs of each users.
             </p>
-            <div class="w-full mt-5">
+            <div class="w-full mt-5 overflow-y-auto ">
 
                 <div class="flex w-full border-b border-gray-200 dark:border-gray-700">
                     <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)" :class="[
@@ -25,7 +25,8 @@
 
                 <!-- Content Area -->
                 <div
-                    class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                    class="bg-white dark:bg-dcontainer relative overflow-y-auto h-full overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+
                     <div class="flex items-center justify-between bg-white dark:bg-dcontainer m-5">
                         <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
                             {{ getActivitiesTitle() }}
