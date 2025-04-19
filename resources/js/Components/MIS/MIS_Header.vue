@@ -67,9 +67,9 @@
           <div class="relative">
               <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
                   data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-                  :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                  :src="`/storage/user/profile/no_userpic.png`" alt="picture">
               <!-- Red Notification Dot -->
-              <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+              <!-- <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div> -->
           </div>
         </div>
 

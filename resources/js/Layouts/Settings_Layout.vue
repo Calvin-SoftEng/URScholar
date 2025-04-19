@@ -3,11 +3,11 @@
     <AuthenticatedLayout>
         <template #default>
 
-            <div class="flex flex-col lg:flex-row w-full h-[calc(100vh-50px)] overflow-hidden">
+            <div class="flex flex-1 flex-col lg:flex-row overflow-hidden">
 
                 <SettingsNav />
 
-                <div class=" flex-1 lg:h-full h-full lg:ml-0 overflow-auto">
+                <div class=" flex-1 h-full overflow-auto">
                 <slot></slot>
                 </div>
             </div>
