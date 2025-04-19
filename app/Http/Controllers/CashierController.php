@@ -156,7 +156,6 @@ class CashierController extends Controller
 
     public function all_payouts(Request $request, Scholarship $scholarship)
     {
-
         $messages = [
             'selectedSem' => 'Need to select a semester.',
             'selectedYear' => 'Passwords must match.',
@@ -165,108 +164,79 @@ class CashierController extends Controller
             'selectedSem' => 'required',
             'selectedYear' => 'required',
         ], $messages);
-
-
-        $campuses = Campus::orderBy('name')->get();
+    
+        $campuses = Campus::all();
         $schoolyear = $request->input('selectedYear')
             ? SchoolYear::find($request->input('selectedYear'))
             : null;
-
+    
         $currentUser = Auth::user();
-
+        // Cast selectedCampus to integer if it's a non-empty string
+        $selectedCampus = $request->input('selectedCampus');
+        $selectedCampusId = !empty($selectedCampus) ? (int)$selectedCampus : null;
+    
         // Get batches for all campuses that match the criteria
-        $Allbatches = Batch::where('scholarship_id', $scholarship->id)
-            ->where('school_year_id', $schoolyear->id)
-            ->where('semester', $request->input('selectedSem'))
-            ->with('campus') // eager load the campus relation
-            ->get();
-
-
-        // Get all payouts for this scholarship, school year, and semester
-        $payouts = Payout::where('scholarship_id', $scholarship->id)
-            ->where('school_year_id', $schoolyear->id)
-            ->where('semester', $request->input('selectedYear'))
-            ->with([
-                'campus:id,name',
-                'disbursement.scholar:id,first_name,last_name'
-            ])
-            ->orderBy('created_at', 'desc')
-            ->get();
-
-        // Get all batches for the same scope
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->where('status', 'Accomplished')
             ->where('school_year_id', $schoolyear->id)
-            ->where('semester', $request->input('selectedSem'))
-            ->with([
-                'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
-                'grantees.scholar.submittedRequirements'
-            ]);
-
+            ->where('semester', $request->input('selectedSem'));
+    
+        // Apply campus filter if selected
+        if ($selectedCampusId) {
+            $batchesQuery->where('campus_id', $selectedCampusId);
+        }
+    
         $Allbatches = $batchesQuery->with([
+            'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
+            'grantees.scholar.submittedRequirements',
             'disbursement',
             'campus:id,name'
         ])
-            ->orderBy('batch_no')
-            ->get();
-
+        ->orderBy('batch_no')
+        ->get();
+    
         // Compute claimed and not claimed for each batch
         $batches = $Allbatches->map(function ($batch) {
             $claimed = $batch->disbursement->where('status', 'Claimed')->count();
             $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
-
+    
             return array_merge($batch->toArray(), [
                 'claimed_count' => $claimed,
                 'not_claimed_count' => $notClaimed
             ]);
         });
-
-        // Use the latest payout (if any) for schedule/checking
-        $latestPayout = $payouts->first();
-
-        $canForward = $latestPayout && $latestPayout->total_scholars == $latestPayout->sub_total;
-
-        $allDisbursementsClaimed = $latestPayout && $latestPayout->disbursement->every(function ($disbursement) {
-            return $disbursement->status === 'Claimed';
-        });
-
-        $payout_schedule = $latestPayout
-            ? PayoutSchedule::where('payout_id', $latestPayout->id)->first()
-            : null;
-
-
+    
         $payouts = Payout::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $schoolyear->id)
             ->where('semester', $request->input('selectedSem'))
             ->with('campus') // eager load the campus relation
             ->get();
-
+    
         $payoutQuery = Payout::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
-            ->with('campus');
-
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem));
+        
+        // Apply campus filter to payouts if selected
+        if ($selectedCampusId) {
+            $payoutQuery->where('campus_id', $selectedCampusId);
+        }
+        
+        $payoutQuery->with('campus');
         $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
-
+    
         $allAccomplished = false;
-
         foreach ($Allbatches as $batch) {
-            if (
-                $batch && $batch->status == 'Accomplished'
-            ) {
+            if ($batch && $batch->status == 'Accomplished') {
                 $allAccomplished = true;
                 break;
             }
         }
-
-        // dd($allAccomplished);
-
-
-        // Check if any batches are forwardable
+    
         return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
             'scholarship' => $scholarship,
             'schoolyear' => $schoolyear,
             'selectedSem' => $request->input('selectedSem', ''),
+            'selectedCampus' => $selectedCampus, // Pass the selected campus to the frontend
             'batches' => $batches,
             'campuses' => $campuses,
             'currentUser' => $currentUser,

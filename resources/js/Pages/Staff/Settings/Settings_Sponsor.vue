@@ -235,6 +235,8 @@
                                     <div class="flex flex-col w-full gap-2 h-full">
                                         <div class="w-full">
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor</h3>
+                                            <InputError v-if="errors?.name" :message="errors.name"
+                                                    class="text-2xs text-red-500" />
                                             <input v-model="form.name" type="text" id="name"
                                                 placeholder="Enter a Partnership or Sponsor"
                                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -244,6 +246,8 @@
                                                 <div class="w-full">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                     </h3>
+                                                    <InputError v-if="errors?.abbreviation" :message="errors.abbreviation"
+                                                    class="text-2xs text-red-500" />
                                                     <input v-model="form.abbreviation" type="text" id="name"
                                                         placeholder="e.g., CHED"
                                                         class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -251,6 +255,8 @@
                                                 <div class="w-full">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Partnered
                                                         Since</h3>
+                                                        <InputError v-if="errors?.since" :message="errors.since"
+                                                    class="text-2xs text-red-500" />
                                                     <input v-model="form.since" type="text" id="name"
                                                         placeholder="e.g., Since 2012"
                                                         class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -259,6 +265,8 @@
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor
                                                         Background
                                                         Information</h3>
+                                                        <InputError v-if="errors?.description" :message="errors.description"
+                                                    class="text-2xs text-red-500" />
                                                     <textarea v-model="form.description" id="description"
                                                         placeholder="Enter Description"
                                                         class="textarea textarea-bordered h-64 bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
@@ -269,6 +277,8 @@
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Attach
                                                         Memorandum of
                                                         Agreement</h3>
+                                                        <InputError v-if="errors?.file" :message="errors.file"
+                                                    class="text-2xs text-red-500" />
                                                     <label for="dropzone-file"
                                                         class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                                         :class="{ 'border-blue-500 bg-blue-50': isDragging }"
@@ -312,6 +322,8 @@
                                                     <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Upload
                                                         Photo (Optional
                                                         for Displaying)</h3>
+                                                        <InputError v-if="errors?.img" :message="errors.img"
+                                                    class="text-2xs text-red-500" />
                                                     <label for="dropzone-img"
                                                         class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                                         :class="{ 'border-blue-500 bg-blue-50': isDragging }"
@@ -355,6 +367,8 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full
                                                     Name</h3>
+                                                    <InputError v-if="errors?.sponsor_name" :message="errors.sponsor_name"
+                                                    class="text-2xs text-red-500" />
                                                 <input v-model="form.sponsor_name" type="text" id="name"
                                                     placeholder="name"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -362,6 +376,8 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Email
                                                 </h3>
+                                                <InputError v-if="errors?.email" :message="errors.email"
+                                                    class="text-2xs text-red-500" />
                                                 <input v-model="form.email" type="email" id="name"
                                                     placeholder="sponsor@test.com"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -604,11 +620,14 @@ import { usePage } from "@inertiajs/vue3";
 import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import InputError from '@/Components/InputError.vue';
 
 
 const props = defineProps({
     sponsors: Array,
     moa: Array,
+    errors: Object,
+    flash: Object,
 });
 
 const directives = {

@@ -345,7 +345,7 @@
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
                                                 Batch {{ batch.batch_no }}
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
-                                                }})</span>
+                                                    }})</span>
                                             </p>
                                             <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
                                         </div>
@@ -479,7 +479,7 @@ const props = defineProps({
 });
 
 // State
-const selectedCampus = ref('');
+const selectedCampus = ref(props.selectedCampus || '');
 const ForwardBatchList = ref(false);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
@@ -503,23 +503,21 @@ const EndPayout = ref("");   // Stores the selected end date
 const campusesWithBatches = computed(() => {
     // Filter campuses that have batches (or all if no campus filter is applied)
     return props.campuses.filter(campus => {
+        // If there's a campus filter, only include this campus if it matches
+        if (selectedCampus.value && selectedCampus.value !== '') {
+            if (campus.id.toString() !== selectedCampus.value.toString()) {
+                return false;
+            }
+        }
+
+        // Check if this campus has any batches
         const hasBatches = props.batches.some(batch =>
-            batch.campus_id === campus.id &&
-            (!selectedCampus.value || selectedCampus.value === '' ||
-                selectedCampus.value === campus.id.toString())
+            batch.campus_id === campus.id
         );
+
         return hasBatches;
     }).sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
 });
-
-const getBatchesForCampus = (campusId) => {
-    return props.batches.filter(batch =>
-        batch.campus_id === campusId &&
-        (!selectedCampus.value || selectedCampus.value === '' ||
-            selectedCampus.value === campusId.toString())
-    ).sort((a, b) => a.batch_no - b.batch_no); // Sort by batch number
-};
-
 // Add this computed method after your other computed properties
 const getPayoutForCampus = (campusId) => {
     // Find the payout for this campus
@@ -661,6 +659,12 @@ const forwardBatches = async () => {
     } finally {
         isSubmitting.value = false;
     }
+};
+
+const getBatchesForCampus = (campusId) => {
+    return props.batches.filter(batch =>
+        batch.campus_id === campusId
+    ).sort((a, b) => a.batch_no - b.batch_no); // Sort by batch number
 };
 
 const goBack = () => {
@@ -808,6 +812,17 @@ watch(ForwardBatchList, (newValue) => {
             initFlowbite(); // Initialize the modal components
         }, 200);
     }
+});
+
+// Watch for changes to the campus filter
+watch(selectedCampus, (newValue) => {
+    // When the filter changes, update the URL with the new filter value
+    router.get(route('cashier.all_payouts', {
+        scholarship: props.scholarship.id,
+        selectedSem: props.selectedSem,
+        selectedYear: props.schoolyear.id,
+        selectedCampus: newValue // Pass the selected campus value
+    }), {}, { preserveState: true, preserveScroll: true });
 });
 </script>
 
