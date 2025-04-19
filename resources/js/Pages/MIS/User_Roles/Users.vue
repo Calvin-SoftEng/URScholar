@@ -5,7 +5,7 @@
     <AuthenticatedLayout>
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
-                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Stakeholders</h1>
+                <h1 class="text-2xl font-bold mb-5 dark:text-dtext">System Users</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of the University's campuses. You can add and edit campuses here, and assign
@@ -13,94 +13,176 @@
             </p>
             <div class="w-full mt-5">
 
-                <div class="relative overflow-x-auto border border-gray-200 rounded-lg">
-                    <div
-                        class="p-3 flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-dcontainer">
-                        <div>
-                            <label for="table-search" class="sr-only">Search</label>
-                            <div class="relative">
-                                <div
-                                    class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                            stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                                    </svg>
-                                </div>
-                                <input type="text" id="table-search-users" v-model="searchQuery"
-                                    class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Search for users">
+                <div
+                    class="p-3 flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 ">
+                    <div>
+                        <label for="table-search" class="sr-only">Search</label>
+                        <div class="relative">
+                            <div
+                                class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+                                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+                                </svg>
                             </div>
-                        </div>
-                        <div>
-                            <button @click="toggleAddUser"
-                                class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
-                                Add User
-                            </button>
+                            <input type="text" id="table-search-users" v-model="searchQuery"
+                                class="block p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="Search for users">
                         </div>
                     </div>
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dcontainer dark:text-gray-400">
-                            <tr>
-                                <th scope="col" class="px-6 py-3">
-                                    User Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Role
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Campus
-                                </th>
-                                <th scope="col" class="sr-only px-6 py-3">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template v-for="user in filteredUsers" :key="user.id">
-                                <tr
-                                    class="bg-white border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                    <th scope="row"
-                                        class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
-                                        <div v-if="$page.props.auth.user.picture">
-                                            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
-                                                data-dropdown-placement="bottom-start"
-                                                class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-                                                :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
-                                                alt="picture">
-                                        </div>
-                                        <div v-else>
-                                            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
-                                                data-dropdown-placement="bottom-start"
-                                                class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-                                                :src="`/storage/user/profile/male.png`" alt="picture">
-                                        </div>
-                                        <div class="ps-3">
-                                            <div class="text-base font-semibold">{{ user.first_name }}</div>
-                                            <div class="font-normal text-gray-500">{{ user.email }}</div>
-                                        </div>
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{ getRoleName(user.usertype) }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        {{ user.campus.name }}
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button @click="editUser(user)" class="" v-tooltip.right="'Edit User'">
-                                            <span
-                                                class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-blue-900 rounded-lg">
-                                                edit
-                                            </span>
-                                        </button>
-                                    </td>
-                                </tr>
-                            </template>
-
-                        </tbody>
-                    </table>
+                    <div>
+                        <button @click="toggleAddUser"
+                            class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
+                            Add User
+                        </button>
+                    </div>
                 </div>
 
+                <div class="flex w-full border-b border-gray-200 dark:border-gray-700">
+                    <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)" :class="[
+                        'flex-1 text-center whitespace-nowrap px-6 py-3 text-sm font-medium',
+                        selectedMenu === item.key
+                            ? 'text-blue-700 border-b-4 border-blue-700 dark:border-dnavy dark:text-white'
+                            : 'text-gray-900 border-transparent hover:border-gray-200 hover:text-blue-700 dark:text-white dark:hover:bg-gray-700'
+                    ]">
+                        {{ item.name }}
+                    </a>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-dcontainer relative overflow-y-auto h-full overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                    <div v-if="selectedMenu === 'super_admin'">
+                        <div class="relative overflow-x-auto border border-gray-200 rounded-lg">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dcontainer dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            User Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Role
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Campus
+                                        </th>
+                                        <th scope="col" class="sr-only px-6 py-3">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="user in filteredUsers" :key="user.id">
+                                        <tr
+                                            class="bg-white border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <th scope="row"
+                                                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                                <div v-if="$page.props.auth.user.picture">
+                                                    <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                                                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                                        alt="picture">
+                                                </div>
+                                                <div v-else>
+                                                    <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                                                        :src="`/storage/user/profile/male.png`" alt="picture">
+                                                </div>
+                                                <div class="ps-3">
+                                                    <div class="text-base font-semibold">{{ user.first_name }}</div>
+                                                    <div class="font-normal text-gray-500">{{ user.email }}</div>
+                                                </div>
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ getRoleName(user.usertype) }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ user.campus.name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <button @click="editUser(user)" class="" v-tooltip.right="'Edit User'">
+                                                    <span
+                                                        class="material-symbols-rounded p-2 font-medium text-white dark:text-blue-500 bg-blue-900 rounded-lg">
+                                                        edit
+                                                    </span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </template>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div v-if="selectedMenu === 'student'">
+                        <div class="relative overflow-x-auto border border-gray-200 rounded-lg">
+                            <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-dcontainer dark:text-gray-400">
+                                    <tr>
+                                        <th scope="col" class="px-6 py-3">
+                                            User Name
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Scholarship
+                                        </th>
+                                        <th scope="col" class="px-6 py-3">
+                                            Campus
+                                        </th>
+                                        <th scope="col" class="sr-only px-6 py-3">
+                                            Action
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="user in filteredUsers" :key="user.id">
+                                        <tr
+                                            class="bg-white border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                                            <th scope="row"
+                                                class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
+                                                <div v-if="$page.props.auth.user.picture">
+                                                    <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                                                        :src="`/storage/user/profile/${$page.props.auth.user.picture}`"
+                                                        alt="picture">
+                                                </div>
+                                                <div v-else>
+                                                    <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown"
+                                                        data-dropdown-placement="bottom-start"
+                                                        class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                                                        :src="`/storage/user/profile/male.png`" alt="picture">
+                                                </div>
+                                                <div class="ps-3">
+                                                    <div class="text-base font-semibold">{{ user.first_name }}</div>
+                                                    <div class="font-normal text-gray-500">{{ user.email }}</div>
+                                                </div>
+                                            </th>
+                                            <td class="px-6 py-4">
+                                                {{ getRoleName(user.usertype) }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                {{ user.campus.name }}
+                                            </td>
+                                            <td class="px-6 py-4">
+                                                <button @click="showDeactivateModal(user)" class="" v-tooltip.right="'Deactivate User'">
+                                                    <span
+                                                        class="material-symbols-rounded p-2 font-medium text-white dark:text-red-500 bg-red-900 rounded-lg">
+                                                        block
+                                                    </span>
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                    </template>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -283,6 +365,7 @@
                 </div>
             </div>
         </Teleport>
+
     </AuthenticatedLayout>
 </template>
 
@@ -344,6 +427,21 @@ const deactivateUser = async () => {
     console.error('Failed to deactivate:', error);
   }
 };
+const selectedUser = ref(null);
+
+const showDeactivateModal = (user) => {
+    selectedUser.value = user;
+    openDeactivateModal.value = true;
+};
+
+// const deactivateUser = () => {
+//     if (selectedUser.value) {
+//         console.log("Deactivating user:", selectedUser.value);
+//         // Add your API call or logic here
+
+//         openDeactivateModal.value = false;
+//     }
+// };
 
 const closeModal = () => {
     AddUser.value = false;
@@ -402,12 +500,37 @@ const updateUser = async () => {
     }
 };
 
-const submitAssign = async () => {
-    try {
-        router.post("/system_admin/user-settings/users/create", form.value);
-        closeModal();
-    } catch (error) {
-        console.error("Error submitting form:", error);
-    }
+// const submitAssign = async () => {
+//     try {
+//         router.post("/system_admin/user-settings/users/create", form.value);
+//         closeModal();
+//     } catch (error) {
+//         console.error("Error submitting form:", error);
+//     }
+// };
+
+
+// Filtered logs based on selected menu
+
+// Updated menu items to match user types
+const menuItems = [
+    { name: "Head Admin", key: "super_admin" },
+    { name: "Coordinators", key: "coordinator" },
+    { name: "Cashiers", key: "cashier" },
+    { name: "Scholars", key: "student" },
+];
+
+// Track the selected menu
+const selectedMenu = ref("super_admin");
+
+// Function to change the selected menu
+const selectMenu = (key) => {
+    selectedMenu.value = key;
+};
+
+// Updated title to reflect SYSTEM USERS instead of activities
+const getSystemUsersTitle = () => {
+    const menuItem = menuItems.find(item => item.key === selectedMenu.value);
+    return menuItem ? `${menuItem.name} Users` : 'System Users';
 };
 </script>
