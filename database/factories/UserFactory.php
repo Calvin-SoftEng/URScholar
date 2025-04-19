@@ -36,6 +36,7 @@ class UserFactory extends Factory
             'age' => fake()->name(),
             'address' => fake()->name(),
             'contact' => fake()->name(),
+            'status' => fake()->name(),
         ];
     }
 

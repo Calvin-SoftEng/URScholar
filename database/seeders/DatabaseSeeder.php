@@ -54,6 +54,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
         //Super Admin
@@ -69,6 +70,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
 
@@ -85,6 +87,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
         User::factory()->create([
@@ -99,6 +102,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
         //sponsor
@@ -114,6 +118,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
         //cashier
@@ -129,6 +134,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
         User::factory()->create([
@@ -143,6 +149,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
         User::factory()->create([
@@ -157,6 +164,7 @@ class DatabaseSeeder extends Seeder
             'age' => '25',
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
+            'status' => 'Active',
         ]);
 
         //student
@@ -168,7 +176,8 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'Soriano',
             'password' => bcrypt('password'),
             'usertype' => 'student',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'status' => 'Active',
         ]);
 
         //Campus
