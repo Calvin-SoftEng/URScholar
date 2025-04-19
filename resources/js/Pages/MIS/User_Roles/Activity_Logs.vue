@@ -36,11 +36,11 @@
 
                     <!-- Scrollable log list -->
                     <div
-                        class="max-w-3xl mx-auto bg-white dark:bg-dcontainer py-5 pr-2 overflow-y-auto"
+                        class="w-full mx-auto bg-white dark:bg-dcontainer py-5 pr-2 overflow-y-auto"
                         style="max-height: calc(100vh - 300px);">
 
                         <div v-if="filteredLogs.length > 0" class="space-y-6">
-                            <div v-for="(log, index) in filteredLogs" :key="index">
+                            <div v-for="(log, index) in filteredLogs" :key="index" class="max-w-3xl mx-auto">
                                 <!-- Display Day Only Once -->
                                 <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 

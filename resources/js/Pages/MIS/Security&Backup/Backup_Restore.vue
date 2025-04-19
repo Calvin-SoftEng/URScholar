@@ -51,7 +51,7 @@
                             <tbody>
                                 <tr class="bg-white dark:bg-dcontainer border-b dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Si ano
+                                        User 1
                                     </th>
                                     <td class="px-6 py-4">
                                         Binangonan
@@ -67,7 +67,7 @@
                                 </tr>
                                 <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Si ano
+                                        User 2
                                     </th>
                                     <td class="px-6 py-4">
                                         Binangonan
