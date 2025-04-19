@@ -152,12 +152,14 @@
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">
                                 First Name</h3>
+                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="text-2xs text-red-500" />
                             <input v-model="form.first_name" type="text" id="firstname"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                         </div>
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">
                                 Last Name</h3>
+                                <InputError v-if="errors?.last_name" :message="errors.last_name" class="text-2xs text-red-500" />
                             <input v-model="form.last_name" type="text" id="lastname"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                         </div>
@@ -165,6 +167,7 @@
                     <div class="w-full flex flex-row gap-2">
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">Campus</h3>
+                            <InputError v-if="errors?.campus_id" :message="errors.campus_id" class="text-2xs text-red-500" />
                             <select v-model="form.campus_id" id="campusSelect"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                                 <option value="" disabled>Select Campus</option>
@@ -174,6 +177,7 @@
                         </div>
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">Role</h3>
+                            <InputError v-if="errors?.role" :message="errors.role" class="text-2xs text-red-500" />
                             <select v-model="form.role" id="roleSelect"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                                 <option value="" disabled>Select Role</option>
@@ -186,6 +190,7 @@
                     </div>
                     <div class="w-full flex flex-col space-y-2">
                         <h3 class="font-semibold text-gray-900 dark:text-white">Email</h3>
+                        <InputError v-if="errors?.email" :message="errors.email" class="text-2xs text-red-500" />
                         <input v-model="form.email" type="email" id="email"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                     </div>
@@ -306,12 +311,15 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { Head, router } from '@inertiajs/vue3';
 import { ref, computed } from 'vue';
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
+    errors: Object,
+    flash: Object,
     campuses: Array,
     users: Array,
     userType: String,
-    coordinatorCampus: String
+    coordinatorCampus: String,
 });
 
 const searchQuery = ref('');
@@ -463,8 +471,11 @@ const editUser = (user) => {
 
 const updateUser = async () => {
     try {
-        router.put(`/system_admin/user-settings/users/${form.value.id}/update`, form.value);
-        closeModal();
+        await router.put(`/system_admin/user-settings/users/${form.value.id}/update`, form.value, {
+            onSuccess: () => {
+                closeModal();
+            },
+        });
     } catch (error) {
         console.error("Error updating user:", error);
     }
@@ -472,8 +483,11 @@ const updateUser = async () => {
 
 const submitAssign = async () => {
     try {
-        router.post("/system_admin/user-settings/users/create", form.value);
-        closeModal();
+        await router.post("/system_admin/user-settings/users/create", form.value, {
+            onSuccess: () => {
+                closeModal();
+            },
+        });
     } catch (error) {
         console.error("Error submitting form:", error);
     }

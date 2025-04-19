@@ -22,7 +22,6 @@ const directives = {
 
 const form = ref({
     email: '',
-    campus: '',
 });
 
 const isResending = ref(false);
@@ -30,7 +29,7 @@ const resendSuccess = ref(false);
 
 const submit = async () => {
     try {
-        router.post(`/register/checking`, form.value);
+        router.post(`/login/forgot-password/request`, form.value);
     } catch (error) {
         console.error('Error submitting form:', error);
     }

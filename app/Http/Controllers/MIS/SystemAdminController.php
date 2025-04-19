@@ -380,7 +380,7 @@ class SystemAdminController extends Controller
                     'description' => '2nd semester created successfully.',
                 ]);
 
-                
+
                 return response()->json([
                     'success' => true,
                     'message' => 'Second semester created successfully and set as active',
@@ -444,7 +444,7 @@ class SystemAdminController extends Controller
                 'activity' => 'Deactivated user',
                 'description' => 'User ' . $user->name . ' has been deactivated.',
             ]);
-    
+
 
             return back()->with('success', 'Deactivated user successfully');
         } catch (\Exception $e) {
@@ -460,9 +460,21 @@ class SystemAdminController extends Controller
             'email' => 'required|email',
             'campus_id' => 'required',
             'role' => 'required',
+        ], [
+            'first_name.required' => 'First name is required.',
+            'first_name.string' => 'First name must be a valid string.',
+            'last_name.required' => 'Last name is required.',
+            'last_name.string' => 'Last name must be a valid string.',
+            'email.required' => 'Email is required.',
+            'email.email' => 'Please enter a valid email address.',
+            'campus_id.required' => 'Please select a campus.',
+            'role.required' => 'Please select a user role.',
         ]);
 
-        $userExists = User::where('email', $request->email)->exists();
+        // Check if the email already exists
+        if (User::where('email', $request->email)->exists()) {
+            return back()->withErrors(['email' => 'The email has already been taken.'])->withInput();
+        }
 
         $password = Str::random(8);
 
@@ -499,7 +511,7 @@ class SystemAdminController extends Controller
 
         Mail::to($request->email)->send(new SendUser($mailData));
 
-        
+
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Created user',
@@ -530,7 +542,7 @@ class SystemAdminController extends Controller
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Updated user',
-            'description' => 'User ' . $validated['first_name'] . ' ' . $validated['last_name']. ' has been updated.',
+            'description' => 'User ' . $validated['first_name'] . ' ' . $validated['last_name'] . ' has been updated.',
         ]);
 
         return back()->with('success', 'User updated successfully');
@@ -557,7 +569,8 @@ class SystemAdminController extends Controller
     //     return Inertia::render('MIS/User_Roles/Roles');
     // }
 
-    public function account() {
+    public function account()
+    {
         $user = Auth::user();
 
         return Inertia::render('MIS/Account_Settings', [

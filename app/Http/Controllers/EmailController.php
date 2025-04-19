@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ForgetMail;
 use App\Models\Campus;
 use App\Models\Disbursement;
 use App\Models\PayoutSchedule;
@@ -421,6 +422,72 @@ class EmailController extends Controller
             // If email and campus don't match, return with error message
             return back()->withErrors([
                 'email' => 'The provided email and campus do not match our records.',
+            ])->withInput();
+        }
+    }
+
+    public function forget(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        // Check if student exists with the provided email
+        $userEmail = User::where('email', $request->email)->first();
+
+        // Check if student exists and belongs to the selected campus
+        if ($userEmail) {
+            // Generate random password
+            $password = Str::random(8);
+
+            $userExists = User::where('email', $userEmail->email)->exists();
+
+            if ($userExists) {
+
+
+                $user = User::find($userEmail->id);
+
+
+                $user->update([
+                    'password' => Hash::make($password),
+                ]);
+
+                $mailData = [
+                    'title' => 'Password Reset Request – URScholar',
+                    'body' => "Dear " . $userEmail['first_name'] . ",\n\n" .
+                        "We received a request to reset the password for your URScholar account.\n\n" .
+                        "Here are your updated login credentials:\n\n" .
+                        "* Email: " . $userEmail['email'] . "\n" .
+                        "* Temporary Password: " . $password . "\n\n" .
+                        "* What to do next:\n" .
+                        " - Log in using the temporary password above.\n" .
+                        " - You’ll be prompted to create a new password for your account.\n\n" .
+                        "Access your portal here: urscholar.up.railway.app\n\n" .
+                        "If you did not request this change, please contact support immediately.\n\n" .
+                        "Best regards,\n" .
+                        "URScholar Team"
+                ];
+
+
+                // Send email
+                Mail::to($userEmail->email)->send(new ForgetMail($mailData));
+
+                // Update or create user account here if needed
+                // You might want to save the hashed password to your users table
+
+                //return redirect(route('dashboard', absolute: false))->with('success', 'Registration email sent successfully!');
+                return back()->with('success', 'New password sent successfully!');
+            }
+
+            return back()->withErrors([
+                'existing' => 'We couldn’t find any account associated with that email. Please make sure you entered the correct email address or register if you haven’t already.',
+            ])->withInput();
+
+
+        } else {
+            // If email and campus don't match, return with error message
+            return back()->withErrors([
+                'email' => 'The provided email do not match our records.',
             ])->withInput();
         }
     }
