@@ -345,7 +345,7 @@
                                             <p class="text-base font-medium text-gray-900 dark:text-white">
                                                 Batch {{ batch.batch_no }}
                                                 <span class="text-sm text-gray-500">({{ getCampusName(batch.campus_id)
-                                                    }})</span>
+                                                }})</span>
                                             </p>
                                             <p class="text-sm text-gray-500">Scholars: {{ batch.sub_total }}</p>
                                         </div>
@@ -394,9 +394,13 @@
             </div>
         </div>
 
-        <!-- Toast notifications - Keep as is -->
         <ToastProvider>
-            <!-- Toast content - Keep as is -->
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
     </AuthenticatedLayout>
 </template>
@@ -640,10 +644,7 @@ const forwardBatches = async () => {
             semester: props.selectedSem
         }, {
             onSuccess: () => {
-                toastMessage.value = {
-                    title: 'Success!',
-                    description: 'Batches have been forwarded to the cashier.'
-                };
+                toastMessage.value = 'Payouts successfully forwarded to campus cashiers.';
                 toastVisible.value = true;
                 closeModal();
                 setTimeout(() => {

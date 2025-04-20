@@ -308,7 +308,7 @@ const submitForm = async () => {
             },
             onSuccess: () => {
                 resetForm();
-                toastMessage.value = `Payout scheduled successfully for ${form.value.scholar_email}`;
+                toastMessage.value = `Payout scheduled successfully`;
                 toastVisible.value = true;
             }
         });

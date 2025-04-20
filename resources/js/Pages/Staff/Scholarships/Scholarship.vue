@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -546,7 +546,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -558,7 +558,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -619,7 +619,7 @@
                                                 <div class="flex flex-col px-5">
                                                     <span class="text-lg font-semibold text-gray-800">Batch {{
                                                         batch.batch_no
-                                                        }}</span>
+                                                    }}</span>
                                                     <span class="text-md font-medium text-gray-600">
                                                         {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester
                                                         }}
@@ -707,7 +707,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -910,7 +910,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1510,7 +1510,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                            }}
+                                        }}
                                         </p>
                                         <p v-if="batch.validated" class="text-sm text-gray-500">
                                             {{batch.grantees.filter(grantee => grantee.scholar?.status ===
@@ -1593,7 +1593,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not
@@ -1780,6 +1780,7 @@
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
                 <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
             </ToastRoot>
+
             <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
 
@@ -2632,7 +2633,7 @@ const forwardBatches = async () => {
                     return total + (batch ? batch.scholar_count : 0);
                 }, 0);
 
-                toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
+                toastMessage.value = `Successfully forwarded to University Cashier`;
                 toastVisible.value = true;
 
 
@@ -2908,8 +2909,8 @@ const handleGenerateReports = () => {
         //     generateScholarsList(filters);
         //     break;
         case 'Transferred Grantee':
-             generateTransferredList(filters);
-             break;
+            generateTransferredList(filters);
+            break;
         default:
             console.warn('No valid report type selected.');
     }

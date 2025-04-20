@@ -844,11 +844,10 @@ class CashierController extends Controller
      */
     public function verifyQr(Request $request)
     {
+        
         $request->validate([
             'scanned_data' => 'required|string',
         ]);
-
-        dd('tite');
 
         try {
             // Decode the scanned QR data

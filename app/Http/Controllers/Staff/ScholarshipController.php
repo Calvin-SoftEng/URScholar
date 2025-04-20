@@ -1805,6 +1805,8 @@ class ScholarshipController extends Controller
         // Trigger event for new notification
         event(new NewNotification($notification));
 
+        // return redirect()->back()->with('success', 'MOA uploaded successfully.');
+
     }
 
     // Add a method to get payouts by campus for a specific scholarship

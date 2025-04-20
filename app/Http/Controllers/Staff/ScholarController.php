@@ -51,10 +51,6 @@ class ScholarController extends Controller
         } else {
             $grantees = Grantees::with('scholar', 'scholar.user', 'scholar.campus', 'scholar.course', 'batch')
                 ->where('status', 'Accomplished')
-                ->whereHas('scholar', function ($query) {
-                    $query->where('status', 'Verified')
-                        ->where('student_status', 'Enrolled');
-                })
                 ->get();
         }
 
@@ -900,9 +896,9 @@ class ScholarController extends Controller
                     return $scholar->first_name . ' ' . $scholar->last_name;
                 })->implode(', ');
 
-                return back()->withErrors([
-                    'student' => 'The following scholars already exist in this scholarship for the selected semester and school year: ' . $names
-                ])->withInput();
+                // return back()->withErrors([
+                //     'student' => 'The following scholars already exist in this scholarship for the selected semester and school year: ' . $names
+                // ])->withInput();
             }
 
             // Insert new scholars

@@ -77,7 +77,7 @@ class EmailController extends Controller
         $messages = [
             'required' => 'This field is required.',
         ];
-
+    
         $validator = Validator::make($request->all(), [
             'requirements' => 'required',
             'application' => 'required|date',
@@ -86,51 +86,51 @@ class EmailController extends Controller
             'school_year' => 'required',
             'templates.*' => 'nullable|file|max:10240', // Allow up to 10MB per file
         ], $messages);
-
+    
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-
+    
         // Handle requirements - may come as JSON string if using FormData
         $requirements = is_string($request->requirements)
             ? json_decode($request->requirements, true)
             : $request->requirements;
-
+    
         // Find batches matching the specified semester and school year
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $request->school_year)
             ->get();
-
+    
         if ($batches->isEmpty()) {
             return back()->with('flash', [
                 'type' => 'error',
                 'message' => "No batches found for the specified semester and school year.",
             ]);
         }
-
+    
         // Process uploaded files
         $uploadedFiles = [];
         $storagePaths = [];
-
+    
         if ($request->hasFile('templates')) {
             foreach ($request->file('templates') as $file) {
                 // Generate a unique filename
                 $filename = $file->getClientOriginalName();
-
+    
                 // Store file in public storage for easy access - alternatively use private storage
                 $path = $file->storeAs('scholarship_templates/' . $scholarship->id, $filename, 'public');
-
+    
                 $uploadedFiles[] = [
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,
                     'storage_path' => storage_path('app/public/' . $path),
                     'mime' => $file->getMimeType(),
                 ];
-
+    
                 $storagePaths[] = $path;
             }
         }
-
+    
         // Create the requirements for the scholarship
         $req = [];
         foreach ($requirements as $requirement) {
@@ -142,14 +142,14 @@ class EmailController extends Controller
                 'total_scholars' => 0, // We'll update this after counting all scholars
             ];
         }
-
+    
         // Store the requirements and get the IDs
         $requirementIds = [];
         foreach ($req as $requirement) {
             $newRequirement = Requirements::create($requirement);
             $requirementIds[] = $newRequirement->id;
         }
-
+    
         // Store file information in database if needed
         if (!empty($uploadedFiles)) {
             foreach ($uploadedFiles as $file) {
@@ -163,16 +163,16 @@ class EmailController extends Controller
                 ]);
             }
         }
-
+    
         $totalScholarsProcessed = 0;
         $emailsSent = 0;
-
+    
         // Process each batch
         foreach ($batches as $batch) {
-
+    
             $batch->status = 'Pending';
             $batch->save();
-
+    
             // Retrieve scholars through grantees with necessary relationships
             $scholars = $scholarship->grantees()
                 ->where('batch_id', $batch->id)
@@ -183,17 +183,15 @@ class EmailController extends Controller
                 ->get()
                 ->map(fn($grantee) => $grantee->scholar)
                 ->filter(); // Remove null scholars (if any)
-
-
+    
             $totalScholarsProcessed += $scholars->count();
-
-
+    
             // Process each scholar in the batch
             foreach ($scholars as $scholar) {
                 if ($scholar && $scholar->email) {
                     $userExists = User::where('email', $scholar->email)->first();
                     $password = null;
-
+    
                     if (!$userExists) {
                         // Create new user
                         $password = Str::random(8);
@@ -205,7 +203,7 @@ class EmailController extends Controller
                             'password' => bcrypt($password),
                             'campus_id' => $scholar->campus_id
                         ]);
-
+    
                         // Update scholar's user_id
                         $scholar->update([
                             'user_id' => $user->id
@@ -213,7 +211,7 @@ class EmailController extends Controller
                     } else {
                         // Use existing user
                         $user = $userExists;
-
+    
                         // If user already exists, update the scholar with existing user's ID if needed
                         if (!$scholar->user_id) {
                             $scholar->update([
@@ -221,48 +219,80 @@ class EmailController extends Controller
                             ]);
                         }
                     }
-
+    
                     // Find existing group for this campus and batch
                     $groupName = "Batch " . $batch->batch_no;
-
+    
                     // Look for existing group for this campus
                     $scholarshipGroup = ScholarshipGroup::where('name', $groupName)
                         ->where('campus_id', $scholar->campus_id)
                         ->first();
-
+    
                     if ($scholarshipGroup) {
                         // Check if user is already a member of this group
                         $isAlreadyMember = $scholarshipGroup->users()
                             ->where('user_id', $user->id)
                             ->exists();
-
+    
                         // Add user to group if not already a member
                         if (!$isAlreadyMember) {
                             $scholarshipGroup->users()->attach($user->id);
                         }
                     }
-                    // Note: If no group exists for this campus, we don't create one - we just skip adding the user to any group
-
-                    // Sending Emails
-                    $mailData = [
-                        'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
-                        'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
-                            "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
-                            "Here are your login credentials:\n\n" .
-                            "*Email: " . $scholar['email'] . "\n" .
-                            "*Password: " . $password . "\n\n" .
-                            "*Next Steps:\n" .
-                            " - Log in to your account using the details above.\n" .
-                            " - Complete your application by submitting the required documents.\n" .
-                            " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                            "*Application Deadline: " . $request['deadline'] . "\n\n" .
-                            "Click the following link to access your portal: " .
-                            "https://urscholar.up.railway.app\n\n"
-                    ];
-
+    
+                    // Prepare requirements list for email
+                    $requirementsList = "";
+                    $counter = 1;
+                    foreach ($requirements as $requirement) {
+                        $requirementsList .= "  {$counter}. {$requirement}\n";
+                        $counter++;
+                    }
+    
+                    // Prepare email content based on whether user is new or existing
+                    if (!$userExists) {
+                        // For new users - include credentials and requirements
+                        $mailData = [
+                            'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                            'body' => "Dear " . $scholar->first_name . ",\n\n" .
+                                "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
+                                "Here are your login credentials:\n\n" .
+                                "* Email: " . $scholar->email . "\n" .
+                                "* Password: " . $password . "\n\n" .
+                                "NEW REQUIREMENTS SUBMISSION:\n" .
+                                "Please submit the following requirements for your scholarship:\n\n" . 
+                                $requirementsList . "\n" .
+                                "* Next Steps:\n" .
+                                "  - Log in to your account using the details above.\n" .
+                                "  - Complete your application by submitting all the required documents listed above.\n" .
+                                "  - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                                "* Application Deadline: " . $request->deadline . "\n\n" .
+                                "Click the following link to access your portal: " .
+                                "https://urscholar.up.railway.app\n\n"
+                        ];
+                    } else {
+                        // For existing users - focus on new requirements
+                        $mailData = [
+                            'title' => $scholarship->name . ' - New Requirements Submission',
+                            'body' => "Dear " . $scholar->first_name . ",\n\n" .
+                                "This is a notification that new requirements have been added to your scholarship application.\n\n" .
+                                "REQUIRED DOCUMENTS:\n" .
+                                $requirementsList . "\n" .
+                                "* Important Information:\n" .
+                                "  - Log in to your account to submit these documents.\n" .
+                                "  - All requirements must be submitted before the deadline.\n" .
+                                "  - Make sure all documents are complete and properly formatted.\n\n" .
+                                "* Submission Deadline: " . $request->deadline . "\n\n" .
+                                "Click the following link to access your portal: " .
+                                "https://urscholar.up.railway.app\n\n" .
+                                "If you have any questions or need assistance, please contact the scholarship office.\n\n" .
+                                "Thank you,\n" .
+                                "The Scholarship Management Team"
+                        ];
+                    }
+    
                     // Create mailable instance
                     $email = new SendEmail($mailData);
-
+    
                     // Attach files to the email
                     foreach ($uploadedFiles as $file) {
                         $email->attach($file['storage_path'], [
@@ -270,30 +300,25 @@ class EmailController extends Controller
                             'mime' => $file['mime'],
                         ]);
                     }
-
+    
                     // Send email with attachments
                     Mail::to($scholar->email)->send($email);
                     $emailsSent++;
                 }
             }
         }
-
+    
         // Update the total scholars count for each requirement
         Requirements::whereIn('id', $requirementIds)->update(['total_scholars' => $totalScholarsProcessed]);
-
+    
         // Log the activity
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Email',
-            'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name,
+            'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name . ' with requirement details',
         ]);
-
+    
         return redirect()->back()->with('success', 'Emails sent successfully!');
-
-        // return back()->with('flash', [
-        //     'type' => 'success',
-        //     'message' => "Successfully sent email to {$emailsSent} scholars out of {$totalScholarsProcessed} total scholars with " . count($uploadedFiles) . " attachment(s).",
-        // ]);
     }
 
     public function notify(Request $request, Scholarship $scholarship)

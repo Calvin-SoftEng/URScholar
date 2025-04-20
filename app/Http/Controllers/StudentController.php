@@ -52,6 +52,8 @@ class StudentController extends Controller
 {
     public function dashboard()
     {
+
+        
         $scholar = Scholar::where('email', Auth::user()->email)
             ->with('campus')
             ->with('course')
