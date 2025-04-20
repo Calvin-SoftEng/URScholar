@@ -6,6 +6,7 @@ use App\Models\Batch;
 use App\Models\Grantees;
 use App\Models\Disbursement;
 use App\Models\Campus;
+use App\Models\Sponsor;
 use App\Models\Scholar;
 use App\Models\SchoolYear;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -26,6 +27,8 @@ class ReportsController extends Controller
         $batches = Batch::whereIn('id', $batchIds)
             ->where('scholarship_id', $scholarship->id)
             ->get();
+
+        $sponsor = Sponsor::find($scholarship->sponsor_id);
 
         // Aggregate data for enrolled students by batch and campus
         $enrolledSummary = [];
@@ -71,6 +74,7 @@ class ReportsController extends Controller
             'scholarship' => $scholarship,
             'schoolYear' => SchoolYear::find($schoolYearId),
             'semester' => $semester,
+            'sponsor' => $sponsor,
             'enrolledSummary' => $enrolledSummary,
             'totalEnrolled' => $totalEnrolled
         ]);
@@ -93,6 +97,7 @@ class ReportsController extends Controller
         $batches = Batch::whereIn('id', $batchIds)
             ->where('scholarship_id', $scholarship->id)
             ->get();
+        $sponsor = Sponsor::find($scholarship->sponsor_id);
 
         // Get campuses with the given IDs
         $campuses = Campus::whereIn('id', $campusIds)->get();
@@ -161,6 +166,7 @@ class ReportsController extends Controller
             'scholarship' => $scholarship,
             'batches' => $batches,
             'campusData' => $campusData,
+            'sponsor' => $sponsor,
             'schoolYear' => $schoolYear,
             'semester' => $semester
         ]);
@@ -188,6 +194,10 @@ class ReportsController extends Controller
             ->where('scholarship_id', $scholarship->id)
             ->get();
 
+        $sponsor = Sponsor::find($scholarship->sponsor_id);
+
+        // dd($sponsor);
+
         // Prepare campus data structure
         $campusData = [];
         $totalGraduates = 0;
@@ -222,6 +232,7 @@ class ReportsController extends Controller
             'scholarship' => $scholarship,
             'schoolYear' => $schoolYear,
             'semester' => $semester,
+            'sponsor' => $sponsor,
             'campusData' => $campusData,
             'totalGraduates' => $totalGraduates,
             'batch' => $batches->first() // Pass the first batch for backward compatibility
@@ -246,6 +257,8 @@ class ReportsController extends Controller
             ->where('scholarship_id', $scholarship->id)
             ->get();
 
+        $sponsor = Sponsor::find($scholarship->sponsor_id);
+
         // Prepare campus data structure
         $campusData = [];
         $totalGraduates = 0;
@@ -280,6 +293,7 @@ class ReportsController extends Controller
             'scholarship' => $scholarship,
             'schoolYear' => $schoolYear,
             'semester' => $semester,
+            'sponsor' => $sponsor,
             'campusData' => $campusData,
             'totalGraduates' => $totalGraduates,
             'batch' => $batches->first() // Pass the first batch for backward compatibility
@@ -307,6 +321,8 @@ class ReportsController extends Controller
 
         // Get all selected batches
         $batches = Batch::whereIn('id', $batchIds)->get();
+
+        $sponsor = Sponsor::find($scholarship->sponsor_id);
 
         // Initialize arrays for data collection
         $allScholars = [];
@@ -371,6 +387,7 @@ class ReportsController extends Controller
             'batches' => $batches,
             'scholars' => array_values($allScholars),
             'disbursementDates' => $allDisbursementDates,
+            'sponsor' => $sponsor,
             'schoolYear' => $schoolYear,
             'semester' => $semester
         ]);
@@ -404,6 +421,8 @@ class ReportsController extends Controller
         // Get all disbursements for this batch
         $disbursements = Disbursement::where('batch_id', $batch->id)
             ->get();
+
+        $sponsor = Sponsor::find($scholarship->sponsor_id);
 
         // Transform data for report
         $disbursementData = [];
@@ -452,6 +471,7 @@ class ReportsController extends Controller
         return [
             'scholarship' => $scholarship,
             'batch' => $batch,
+            'sponsor' => $sponsor,
             'disbursements' => $disbursementData
         ];
     }

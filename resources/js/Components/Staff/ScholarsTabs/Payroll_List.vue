@@ -199,6 +199,7 @@ const props = defineProps({
   errors: Object,
   flash: Object,
   scholar: Object,
+  schoolyear: Object,
 });
 
 const components = {
@@ -269,21 +270,21 @@ function formatDate(dateString) {
   return new Date(dateString).toLocaleString('en-US', options);
 }
 
-// Restart QR scanner
-const restartScan = () => {
-  scannedResult.value = null;
-  isScanning.value = true;
-  errorMessage.value = null;
-  successMessage.value = null;
-};
-
-// Open batch report
-const openReport = () => {
+const generateReport = async () => {
   try {
-    window.open(`/scholarships/${props.scholarship.id}/batch/${props.batch.id}/report`, '_blank');
+
+    // Instead of opening multiple windows, send all data in one request
+    const url = `/scholarships/${props.scholarship.id}/payroll-report`;
+    const queryParams = new URLSearchParams({
+      batch_ids: props.batch.id,
+      campus_ids: props.batch.campus_id,
+      school_year_id: props.schoolyear.id,
+      semester: props.selectedSem
+    });
+
+    window.open(`${url}?${queryParams.toString()}`, '_blank');
   } catch (err) {
-    console.error('Failed to open report:', err);
-    showToast('Error', 'Failed to open report');
+    console.error('Failed to generate report:', err);
   }
 };
 

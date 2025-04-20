@@ -87,7 +87,7 @@
                 <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
 
                     <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                        :requirements="requirements" @update:stats="updateStats" />
+                        :requirements="requirements" :schoolyear="schoolyear" @update:stats="updateStats" />
                 </div>
                 <div v-else>
                     <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"

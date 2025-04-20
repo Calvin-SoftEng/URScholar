@@ -76,6 +76,8 @@ class PayoutsController extends Controller
             ])
             ->get();
 
+        $schoolyear = AcademicYear::find($batch->school_year_id);
+
 
         // Count total claimed disbursements
         $totalClaimed = Disbursement::where('payout_id', $payout->id)
@@ -88,6 +90,7 @@ class PayoutsController extends Controller
             'batch' => $batch,
             'disbursements' => $disbursements,
             'payout' => $payout,
+            'schoolyear' => $schoolyear,
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
         ]);
     }

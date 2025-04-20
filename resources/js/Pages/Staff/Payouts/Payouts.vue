@@ -12,8 +12,7 @@
                             <span>Scholarships</span>
                         </li>
                         <li class="hover:text-gray-600">
-                            <!-- <span>{{ scholarship.name  }}</span> -->
-                            Same here
+                            <span>{{ scholarship.name  }}</span>
                         </li>
                         <li>
                             <span class="text-blue-400 font-semibold"> Batch 1</span>
@@ -74,7 +73,7 @@
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
                 <Payroll_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements"
-                    :scholar="scholar" :errors="errors" :flash="flash" />
+                    :scholar="scholar" :errors="errors" :flash="flash" :schoolyear="schoolyear"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
         </div>
@@ -154,6 +153,7 @@ const props = defineProps({
     errors: Object,
     flash: Object,
     totalClaimed: Object,
+    schoolyear: Object,
 });
 
 const scannedScholar = ref(null);

@@ -27,9 +27,12 @@
         </div>
 
         <!-- Right Logo -->
-        <img src="{{ public_path('assets/images/CHED.png') }}"
-             class="absolute right-5 top-0 w-20 h-20 object-contain"
-             alt="Right Logo">
+        @php
+            $imagePath = storage_path('app/public/sponsor/logo/' . $sponsor->logo);
+            $imageData = base64_encode(file_get_contents($imagePath));
+            $src = 'data:image/' . pathinfo($sponsor->logo, PATHINFO_EXTENSION) . ';base64,' . $imageData;
+        @endphp
+
     </div>
 
 

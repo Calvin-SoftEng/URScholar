@@ -5,8 +5,7 @@
 
         <button
           class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-          @click="generateReport"
-        >
+          @click="generateReport">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
           Generate Report
         </button>
@@ -274,7 +273,7 @@
 
 <script setup>
 import { ref, computed, watch, onMounted } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
 import { initFlowbite } from 'flowbite';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
@@ -446,21 +445,20 @@ const fetchScholars = async () => {
 
 // Generate report function
 const generateReport = async () => {
-  loading.value = true;
   try {
-    const batchId = props.batches?.[0]?.id;
-    if (!batchId) {
-      showToast('Error', 'No batch selected', 'error');
-      return;
-    }
 
-    window.open(`/scholarships/${props.scholarship.id}/batch/${batchId}/scholar-summary`, '_blank');
-    showToast('Report Generated', 'Your report is being downloaded');
+    // Instead of opening multiple windows, send all data in one request
+    const url = `/scholarships/${props.scholarship.id}/enrolled-scholars`;
+    const queryParams = new URLSearchParams({
+      batch_ids: props.batches.id,
+      campus_ids: props.batches.campus_id,
+      school_year_id: props.schoolyear.id,
+      semester: props.selectedSem
+    });
+
+    window.open(`${url}?${queryParams.toString()}`, '_blank');
   } catch (err) {
     console.error('Failed to generate report:', err);
-    showToast('Error', 'Failed to generate report', 'error');
-  } finally {
-    loading.value = false;
   }
 };
 

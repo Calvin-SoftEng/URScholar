@@ -271,6 +271,7 @@ class ScholarshipController extends Controller
             ->first();
 
 
+        $schoolyear = SchoolYear::find($batch->school_year_id);
 
         // Optimize query to reduce N+1 problem
         $disbursements = Disbursement::where('payout_id', $payout->id)
@@ -293,6 +294,7 @@ class ScholarshipController extends Controller
             'batch' => $batch,
             'disbursements' => $disbursements,
             'payout' => $payout,
+            'schoolyear' => $schoolyear,
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
         ]);
     }
