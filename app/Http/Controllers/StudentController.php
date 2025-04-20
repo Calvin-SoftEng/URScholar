@@ -53,7 +53,7 @@ class StudentController extends Controller
     public function dashboard()
     {
 
-        
+
         $scholar = Scholar::where('email', Auth::user()->email)
             ->with('campus')
             ->with('course')
@@ -1221,31 +1221,36 @@ class StudentController extends Controller
     }
 
 
-    public function confirmation()
-    {
-        $scholar = Scholar::where('email', Auth::user()->email)->first();
+public function confirmation()
+{
+    $scholar = Scholar::where('email', Auth::user()->email)->first();
+    
+    $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+    
+    $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
+    
+    // Get all requirements for this scholarship
+    $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+    
+    // Get requirements that this scholar has already submitted
+    $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
+        ->pluck('requirement_id')
+        ->toArray();
+    
+    // Filter out requirements that have already been submitted
+    $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+        return in_array($requirement->id, $submittedRequirementIds);
+    })->values();
+    
+    $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
 
-        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
-
-        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
-
-        $requirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-        $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
-
-        $reqID = $requirements->pluck('id')->first();
-
-        $submitRequirements = SubmittedRequirements::where('id', $reqID)->exists();
-
-
-        return Inertia::render('Student/Grant-in/Grant-In-Confirmation', [
-            'scholarship' => $scholarship,
-            'scholar' => $scholar,
-            'requirements' => $requirements,
-            'templates' => $templates,
-        ]);
-
-    }
+    return Inertia::render('Student/Grant-in/Grant-In-Confirmation', [
+        'scholarship' => $scholarship,
+        'scholar' => $scholar,
+        'requirements' => $pendingRequirements, // Pass only pending requirements
+        'templates' => $templates,
+    ]);
+}
 
     public function scholarships()
     {
