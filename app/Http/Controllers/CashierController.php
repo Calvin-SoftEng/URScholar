@@ -990,6 +990,8 @@ class CashierController extends Controller
             ->where('campus_id', $batch->campus_id)
             ->first();
 
+        $selectedSem = $batch->semester;
+
 
         // Optimize query to reduce N+1 problem
         $disbursements = Disbursement::where('payout_id', $payout->id)
@@ -1001,7 +1003,7 @@ class CashierController extends Controller
             ])
             ->get();
 
-
+        $schoolyear = SchoolYear::where('id', $batch->school_year_id)->first();
         // Count total claimed disbursements
         $totalClaimed = Disbursement::where('payout_id', $payout->id)
             ->where('batch_id', $batchId)
@@ -1013,6 +1015,8 @@ class CashierController extends Controller
             'batch' => $batch,
             'disbursements' => $disbursements,
             'payout' => $payout,
+            'schoolyear' => $schoolyear,
+            'selectedSem' => $selectedSem,
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
         ]);
     }
@@ -1030,6 +1034,9 @@ class CashierController extends Controller
             ->orderBy('batch_no', 'desc')
             ->with('school_year')
             ->first();
+
+
+        $schoolyear = SchoolYear::where('id', $batch->school_year_id)->first();
 
         $grantees = $scholarship->grantees()
             ->whereIn('status', ['Active', 'Pending', 'Accomplished'])
@@ -1112,8 +1119,10 @@ class CashierController extends Controller
             'batch' => $batch,
             'scholars' => $scholars,
             'payout' => $payout,
+            'schoolyear' => $schoolyear,
             'totalClaimed' => $totalClaimed ?? null,
             'payout_schedule' => $payout_schedule ?? null,
+            'selectedSem' => $selectedSem,
         ]);
     }
 }

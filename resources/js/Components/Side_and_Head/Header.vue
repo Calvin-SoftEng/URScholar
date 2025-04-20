@@ -8,7 +8,8 @@
 
           <div class="flex flex-row  items-center justify-center gap-2">
             <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
-            <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] hidden dark:block">
+            <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo"
+              class="w-[40px] h-[40px] hidden dark:block">
 
             <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
           </div>
@@ -73,9 +74,10 @@
     <div v-else
       class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
       <div v-for="notification in filteredNotifications" :key="notification.id"
-        class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+        class="flex px-4 py-3 bg-white hover:bg-gray-100 dark:hover:bg-gray-700"
         :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
         <div class="w-full">
+          <div>{{ notification.title }}</div>
           <div class="flex justify-between items-start mb-1.5">
             <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
             <button @click.stop="deleteNotification(notification.id)"
@@ -89,7 +91,7 @@
           <div class="flex justify-between items-center">
             <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
             <button v-if="!notification.read" @click="markAsRead(notification.id)"
-              class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+              class="text-xs font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
               Mark as read
             </button>
           </div>

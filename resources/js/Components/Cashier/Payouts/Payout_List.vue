@@ -395,6 +395,7 @@ const props = defineProps({
   scholar: Object,
   payout: Object, // Add the payout object prop
   payout_schedule: Object,
+  selectedSem: String,
 });
 
 const components = {

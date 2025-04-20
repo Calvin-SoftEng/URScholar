@@ -383,9 +383,6 @@
         </Link>
       </div>
     </div>
-
-
-
   </div>
 </template>
 

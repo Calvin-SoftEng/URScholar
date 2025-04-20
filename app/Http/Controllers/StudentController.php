@@ -53,7 +53,6 @@ class StudentController extends Controller
     public function dashboard()
     {
 
-
         $scholar = Scholar::where('email', Auth::user()->email)
             ->with('campus')
             ->with('course')
@@ -61,6 +60,11 @@ class StudentController extends Controller
         $grantee = Grantees::where('scholar_id', $scholar->id)
             ->with('school_year')
             ->first();
+
+        $activity = ActivityLog::where('user_id', Auth::user()->id)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         $academic_year = AcademicYear::where('status', 'Active')->first();
 
@@ -176,6 +180,7 @@ class StudentController extends Controller
                     'payout_schedule' => $payout_schedule,
                     'reqDeadline' => $reqDeadline,
                     'academic_year' => $academic_year,
+                    'activity' => $activity,
                 ]);
             }
         }
@@ -281,6 +286,7 @@ class StudentController extends Controller
                     'reqDeadline' => $reqDeadline,
                     'total_subreq' => $total_subreq,
                     'academic_year' => $academic_year,
+                    'activity' => $activity,
                 ]);
             }
         }
@@ -296,6 +302,7 @@ class StudentController extends Controller
             'campuses' => $campuses,
             'courses' => $courses,
             'academic_year' => $academic_year,
+            'activity' => $activity,
         ]);
     }
 
@@ -477,6 +484,15 @@ class StudentController extends Controller
             'school_year_id' => $request->school_year,
             'semester' => $request->semester,
         ]);
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Upload Grade',
+            'description' => 'Uploaded GWA and Certificate of Grade',
+        ]);
+
+        return redirect()->back()->with('success', 'Grade Uploaded Successfully');
+
     }
 
     public function updateProfile(Request $request)
@@ -688,6 +704,13 @@ class StudentController extends Controller
                 'picture' => $originalFileName,
             ]);
         }
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update Profile',
+            'description' => 'Updated Profile Information',
+        ]);
+
 
         return redirect()->back()->with('success', 'Profile Updated Successfully');
     }
@@ -1150,7 +1173,7 @@ class StudentController extends Controller
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Verify Account',
-            'description' => 'Gumawa siya ng account para sa sarili niya',
+            'description' => 'Successfully Verified Account',
         ]);
 
 
@@ -1212,6 +1235,7 @@ class StudentController extends Controller
                 'status' => $submitted->status,
             ];
         });
+        
 
         return Inertia::render('Student/Grant-in/Grant-In', [
             'scholarship' => $scholarship,
@@ -1221,36 +1245,36 @@ class StudentController extends Controller
     }
 
 
-public function confirmation()
-{
-    $scholar = Scholar::where('email', Auth::user()->email)->first();
-    
-    $grantee = Grantees::where('scholar_id', $scholar->id)->first();
-    
-    $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
-    
-    // Get all requirements for this scholarship
-    $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-    
-    // Get requirements that this scholar has already submitted
-    $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
-        ->pluck('requirement_id')
-        ->toArray();
-    
-    // Filter out requirements that have already been submitted
-    $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
-        return in_array($requirement->id, $submittedRequirementIds);
-    })->values();
-    
-    $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
+    public function confirmation()
+    {
+        $scholar = Scholar::where('email', Auth::user()->email)->first();
 
-    return Inertia::render('Student/Grant-in/Grant-In-Confirmation', [
-        'scholarship' => $scholarship,
-        'scholar' => $scholar,
-        'requirements' => $pendingRequirements, // Pass only pending requirements
-        'templates' => $templates,
-    ]);
-}
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
+
+        // Get all requirements for this scholarship
+        $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+        // Get requirements that this scholar has already submitted
+        $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->pluck('requirement_id')
+            ->toArray();
+
+        // Filter out requirements that have already been submitted
+        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+            return in_array($requirement->id, $submittedRequirementIds);
+        })->values();
+
+        $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
+
+        return Inertia::render('Student/Grant-in/Grant-In-Confirmation', [
+            'scholarship' => $scholarship,
+            'scholar' => $scholar,
+            'requirements' => $pendingRequirements, // Pass only pending requirements
+            'templates' => $templates,
+        ]);
+    }
 
     public function scholarships()
     {
@@ -1704,7 +1728,7 @@ public function confirmation()
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Upload Requirements',
-            'description' => 'User uploaded their scholarship requirements for the first time.',
+            'description' => 'User uploaded their scholarship requirements',
         ]);
 
         return redirect()->route('student.dashboard')->with('success', 'Requirements submitted successfully');

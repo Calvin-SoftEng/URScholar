@@ -72,7 +72,7 @@
 
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
-                <Payroll_List :scholarship="scholarship" :batch="batch" :disbursements="disbursements"
+                <Payroll_List :selectedSem=selectedSem :scholarship="scholarship" :batch="batch" :disbursements="disbursements"
                     :scholar="scholar" :errors="errors" :flash="flash" :schoolyear="schoolyear"/>
                 <!-- <Batches :scholarship="scholarship" :batches="batches" /> -->
             </div>
@@ -154,6 +154,7 @@ const props = defineProps({
     flash: Object,
     totalClaimed: Object,
     schoolyear: Object,
+    selectedSem: String,
 });
 
 const scannedScholar = ref(null);

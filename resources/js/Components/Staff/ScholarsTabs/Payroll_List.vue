@@ -200,6 +200,7 @@ const props = defineProps({
   flash: Object,
   scholar: Object,
   schoolyear: Object,
+  selectedSem: Object,
 });
 
 const components = {

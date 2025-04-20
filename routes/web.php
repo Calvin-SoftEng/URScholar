@@ -124,6 +124,22 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,spo
 
     Route::post('/posts', [FeedController::class, 'createPost'])->name('posts.create');
     Route::get('/posts', [FeedController::class, 'getPosts']);
+
+
+    //Reports
+        // Reports
+        Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
+        Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
+            ->name('scholarships.enrollees-summary');
+        Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
+            ->name('scholarships.enrolled-scholars');
+        Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
+            ->name('scholarships.graduate-scholars');
+            Route::get('/scholarships/{scholarship}/transferred=grantees', [ReportsController::class, 'TransferredSummaryReport'])
+            ->name('scholarships.transferred-scholars');
+        Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
+            ->name('scholarships.payroll-report');
+    
 });
 
 
@@ -252,21 +268,6 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/payouts', [PayoutsController::class, 'payouts_index'])->name('payouts_index.payouts');
     Route::get('/payouts/{scholarshipId}/batch/{batchId}', [PayoutsController::class, 'student_payouts'])->name('payouts.payroll');
     Route::get('/payouts/list', [PayoutsController::class, 'payouts_list'])->name('payouts_list.payouts');
-
-
-    // Reports
-    Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
-    Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
-        ->name('scholarships.enrollees-summary');
-    Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
-        ->name('scholarships.enrolled-scholars');
-    Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
-        ->name('scholarships.graduate-scholars');
-        Route::get('/scholarships/{scholarship}/transferred=grantees', [ReportsController::class, 'TransferredSummaryReport'])
-        ->name('scholarships.transferred-scholars');
-    Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
-        ->name('scholarships.payroll-report');
-
 
     // Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
     // Route::get('/scholarships/{scholarship}/batch/{batch}/grantee-summary', [ReportsController::class, 'GranteeSummaryReport']);

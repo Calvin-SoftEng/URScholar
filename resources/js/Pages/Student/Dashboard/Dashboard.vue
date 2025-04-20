@@ -28,18 +28,19 @@
                         </div>
 
                         <!-- Recent Activities Section (Hidden on Mobile) -->
-                        <div class="hidden sm:block w-full space-y-3 bg-white dark:bg-dcontainer shadow-lg rounded-lg p-3">
+                        <div
+                            class="hidden sm:block w-full space-y-3 bg-white dark:bg-dcontainer shadow-lg rounded-lg p-3">
                             <span class="pl-2 font-semibold text-gray-700 dark:text-dtext">Recent Activities</span>
                             <div class="w-full space-y-3 flex flex-col">
-                                <div class="w-full text-dtext bg-dsecondary dark:bg-dprimary rounded-lg flex items-center gap-2 p-3">
-                                    Last Logged in April 16, 2025
+                                <div v-for="(log, index) in activity" :key="index"
+                                    class="w-full text-dtext bg-dsecondary dark:bg-dprimary rounded-lg flex items-center gap-2 p-3">
+                                    {{ log.description }} {{ new Date(log.created_at).toLocaleDateString('en-US', {
+                                        month: 'long', day: 'numeric', year: 'numeric' }) }}
                                 </div>
-                                <div class="w-full text-dtext bg-dsecondary dark:bg-dprimary rounded-lg flex items-center gap-2 p-3">
-                                    Submitted requirements last April 16, 2025
+                                <div v-if="activity.length === 0"
+                                    class="w-full text-dtext bg-dsecondary dark:bg-dprimary rounded-lg flex items-center gap-2 p-3">
+                                    No recent activities found.
                                 </div>
-                                <!-- <div class="w-full text-dtext bg-dsecondary rounded-lg flex items-center gap-2 p-3">
-                                    daefefafefa
-                                </div> -->
                             </div>
                         </div>
                     </div>
@@ -52,22 +53,26 @@
                                 :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :historygrantee="historygrantee"
                                 :disbursement="disbursement" :grantee="grantee" :oldestGrantee="oldestGrantee"
-                                :submitApproved="submitApproved" :total_subreq="total_subreq" :academic_year="academic_year"/>
+                                :submitApproved="submitApproved" :total_subreq="total_subreq"
+                                :academic_year="academic_year" />
                         </div>
                     </div>
 
                     <!-- Section When No Scholarship Exists -->
                     <div v-else
                         class="md:col-span-2 w-full h-full block border-l border-gray-200 p-10 flex-col items-center mx-auto max-w-8xl sm:px-6 lg:px-8">
-                        <div v-if="!applicant" class="w-full h-full bg-white dark:bg-dprimary rounded-lg shadow-md sm:p-5 lg:py-10 flex-col items-center mx-auto max-w-8xl sm:px-2 lg:px-8">
+                        <div v-if="!applicant"
+                            class="w-full h-full bg-white dark:bg-dprimary rounded-lg shadow-md sm:p-5 lg:py-10 flex-col items-center mx-auto max-w-8xl sm:px-2 lg:px-8">
                             <Scholarships :sponsors="sponsors" :scholarships="scholarships" :schoolyears="schoolyears"
                                 :scholar="scholar" :grade="grade" />
                         </div>
-                        <div v-else class="w-full h-full bg-white dark:bg-dprimary rounded-lg shadow-md sm:p-5 lg:py-10 flex-col items-center mx-auto max-w-8xl sm:px-2 lg:px-8">
+                        <div v-else
+                            class="w-full h-full bg-white dark:bg-dprimary rounded-lg shadow-md sm:p-5 lg:py-10 flex-col items-center mx-auto max-w-8xl sm:px-2 lg:px-8">
                             <ScholarAppliant :reqDeadline="reqDeadline" :payout_schedule="payout_schedule"
                                 :scholar="scholar" :schoolyears="schoolyears" :scholarship="scholarship"
                                 :submitReq="submitReq" :submitPending="submitPending" :applicant="applicant"
-                                :submitApproved="submitApproved" :total_subreq="total_subreq" :academic_year="academic_year" />
+                                :submitApproved="submitApproved" :total_subreq="total_subreq"
+                                :academic_year="academic_year" />
                         </div>
                     </div>
                 </div>
@@ -134,6 +139,7 @@ const props = defineProps({
     payout_schedule: Object,
     reqDeadline: Object,
     academic_year: Object,
+    activity: Array,
 
     //For non-scholars only
     sponsors: {

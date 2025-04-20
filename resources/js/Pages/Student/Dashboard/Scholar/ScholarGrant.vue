@@ -364,7 +364,7 @@
                                     }) : 'Not yet claimed' }}</h2>
                                 <p class="text-gray-600" v-if="history.claimed_by">Claimed by: <span
                                         class="font-medium">You</span>,
-                                    ID: URS-0001</p>
+                                    ID: {{scholar.urscholar_id}}</p>
                                 <p class="text-gray-600" v-if="history.claimed_at">Processed at: Campus Cashier</p>
                             </div>
                         </div>
