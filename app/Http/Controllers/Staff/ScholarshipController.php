@@ -937,11 +937,14 @@ class ScholarshipController extends Controller
         })->count();
 
 
+        $totalSubTotal = $batches->sum('sub_total') ?? 0;
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'total_verified_grantees' => $total_verified_grantees,
             'total_unverified_grantees' => $total_unverified_grantees,
             'scholarship' => $scholarship,
             'batches' => $batches,
+            'totalSubTotal' => $totalSubTotal,
             'batchesByCampus' => $batchesByCampus,
             'allBatchesInactive' => $allBatchesInactive,
             'total_scholars' => $total_scholars,

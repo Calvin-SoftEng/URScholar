@@ -145,7 +145,7 @@
                                 <div class="grid grid-cols-3 items-center gap-3">
                                     <!-- Scholars Length -->
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ approvedCount }}
+                                        {{ totalSubTotal }}
                                     </p>
 
                                     <!-- Divider -->
@@ -153,7 +153,7 @@
 
                                     <!-- Total Scholars -->
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ total_approved.length }}
+                                        {{ total_verified_grantees }}
                                     </p>
                                 </div>
                             </div>
@@ -1834,6 +1834,7 @@ const props = defineProps({
     errors: Object,
     userType: String,
     userCampusId: Number,
+    totalSubTotal: Number,
     approvedCount: Number,
     allBatches: Array,
     disableSendEmailButton: Boolean,
