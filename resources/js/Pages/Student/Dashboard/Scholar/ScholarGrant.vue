@@ -6,7 +6,8 @@
         </div>
 
         <!-- done application -->
-        <div v-if="submitPending.length == total_subreq.length || (submitReq.length <= 0 && submitApproved.length != total_subreq.length)">
+        <div
+            v-if="submitPending.length == total_subreq.length || (submitReq.length <= 0 && submitApproved.length != total_subreq.length)">
             <div class="flex items-center justify-center my-8 ">
                 <!-- Step 1 -->
                 <div class="relative flex flex-col items-center">
@@ -47,7 +48,8 @@
                 <p>Your application has been successfully completed.</p>
                 <p>You will be notified about the next steps soon.</p>
                 <br>
-                <p>For now kindly update and upload your grades to the system by navigativing to the profile then education
+                <p>For now kindly update and upload your grades to the system by navigativing to the profile then
+                    education
                     section. Thankyou!</p>
                 <p></p>
                 </p>
@@ -91,35 +93,42 @@
 
             </div>
 
-            <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
-                <span class="text-lg">From <span class="font-bold">Scholarship and Financial Assistance Unit</span>:</span>
+            <div
+                class="bg-blue-100 border-l-4 border-blue-500 text-blue-900 p-4 mt-4 shadow-sm flex flex-col space-y-2">
+                <span class="text-lg">From <span class="font-bold">Scholarship and Financial Assistance
+                        Unit</span>:</span>
                 <br>
                 <span>Message</span>
                 <p>It is noted, however, that among the requirements you have submittted to DBP, the
                     following documents must be
                     resubmitted.</p>
                 <br>
-                <span>Ongoing Deadline: <span class="font-bold"> {{ new Date(reqDeadline.date_end).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                }) }}</span>
+                <span>Ongoing Deadline: <span class="font-bold"> {{ new
+                    Date(reqDeadline.date_end).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric'
+                    }) }}</span>
                 </span>
                 <br>
                 <form @submit.prevent="submitRequirements" class="space-y-6">
-                    <div v-for="req in returnedRequirements" :key="req.id" class="bg-white border rounded-lg shadow-sm p-4">
+                    <div v-for="req in returnedRequirements" :key="req.id"
+                        class="bg-white border rounded-lg shadow-sm p-4">
                         <h3 class="font-medium text-gray-900 text-lg font-poppins">{{ req.requirement_name }}</h3>
-                        <p class="text-sm text-gray-600 mt-1">Reason of Return: <span class="font-bold">{{ req.message }}</span></p>
+                        <p class="text-sm text-gray-600 mt-1">Reason of Return: <span class="font-bold">{{ req.message
+                        }}</span></p>
 
                         <div class="mt-3">
                             <input type="file" @change="(e) => handleFile(e, req.id, req.requirement_name)"
                                 :id="'file_' + req.id" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
                                 class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none hover:bg-gray-100" />
 
-                            <div v-if="selectedFiles[req.id]" class="flex items-center gap-2 text-sm text-gray-600 mt-2">
+                            <div v-if="selectedFiles[req.id]"
+                                class="flex items-center gap-2 text-sm text-gray-600 mt-2">
                                 <font-awesome-icon :icon="['fas', 'file']" />
                                 <span>{{ selectedFiles[req.id] }}</span>
-                                <button type="button" @click="removeFile(req.id)" class="text-red-600 hover:text-red-800">
+                                <button type="button" @click="removeFile(req.id)"
+                                    class="text-red-600 hover:text-red-800">
                                     <font-awesome-icon :icon="['fas', 'times']" />
                                 </button>
                             </div>
@@ -212,7 +221,8 @@
             <span class="text-2xl font-medium font-poppins">My Scholarship</span>
         </div>
 
-        <div class="bg-dirtywhite dark:bg-dcontainer w-full sm:p-2 lg:p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
+        <div
+            class="bg-dirtywhite dark:bg-dcontainer w-full sm:p-2 lg:p-6 flex flex-col font-poppins text-xl space-y-10 text-primary">
 
             <!-- Scholarship Details -->
             <div class="bg-white dark:bg-dprimary shadow-md p-6 rounded-lg text-center">
@@ -231,10 +241,12 @@
                 <div class="h-0.5 bg-gray-300 my-4"></div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-left text-gray-700">
-                    <p class="text-gray-600"><span class="font-semibold dark:text-dtext">Current Semester:</span> {{ grantee.school_year.year }} - {{
-                        grantee.semester }} Sem</p>
-                    <p><span class="font-semibold dark:text-dtext">Status:</span> <span class="text-green-600 font-bold">{{
-                            grantee.status }}</span></p>
+                    <p class="text-gray-600"><span class="font-semibold dark:text-dtext">Current Semester:</span> {{
+                        grantee.school_year.year }} - {{
+                            grantee.semester }} Sem</p>
+                    <p><span class="font-semibold dark:text-dtext">Status:</span> <span
+                            class="text-green-600 font-bold">{{
+                                grantee.status }}</span></p>
                 </div>
             </div>
 
@@ -337,35 +349,52 @@
                 <div class="max-w-6xl mx-auto space-y-6 mt-4">
                     <div v-if="filteredHistoryGrantee.length === 0">
                         <div class="grid grid-cols-5 gap-4 items-center">
-                            <div class="col-span-5 flex items-center justify-center text-primary dark:text-dtext font-bold">
+                            <div
+                                class="col-span-5 flex items-center justify-center text-primary dark:text-dtext font-bold">
                                 No claim history yet
                             </div>
                         </div>
                     </div>
 
                     <div v-else>
-                        <div v-for="history in filteredHistoryGrantee" :key="history.id"
-                            class="grid grid-cols-5 gap-4 items-center">
-                            <div class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
-                                <h3 class="font-semibold text-base text-blue-900 dark:text-white">
-                                    {{ history.semester }} Semester - {{ history.school_year }}
-                                </h3>
-                                <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                        <div v-for="history in filteredHistoryGrantee" :key="history.id">
+                            <div class="grid grid-cols-5 gap-4 items-center">
+                                <div class="col-span-5 gap-2 relative w-full flex items-center mt-2 whitespace-nowrap">
+                                    <h3 class="font-semibold text-base text-blue-900 dark:text-white">
+                                        {{ history.semester }} Semester - {{ history.school_year }}
+                                    </h3>
+                                    <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                </div>
                             </div>
 
-                            <div class="sm:col-span-5 lg:col-span-1 flex items-center justify-center text-dprimary dark:text-dtext font-bold">
-                                {{ history.dibursement_status }}
-                            </div>
+                            <!-- Loop through only non-pending disbursements -->
+                            <div v-for="disbursement in history.disbursements.filter(d => d.status !== 'Pending')"
+                                :key="disbursement.disbursement_id" class="grid grid-cols-5 gap-4 items-center mb-4">
 
-                            <div class="sm:col-span-5 lg:col-span-4 bg-white dark:bg-dprimary shadow-md p-4 rounded-lg">
-                                <h2 class="text-lg font-semibold dark:text-dtext">{{ history.claimed_at ? new
-                                    Date(history.claimed_at).toLocaleDateString('en-US', {
-                                        year: 'numeric', month: 'long', day: 'numeric'
-                                    }) : 'Not yet claimed' }}</h2>
-                                <p class="text-gray-600" v-if="history.claimed_by">Claimed by: <span
-                                        class="font-medium">You</span>,
-                                    ID: {{scholar.urscholar_id}}</p>
-                                <p class="text-gray-600" v-if="history.claimed_at">Processed at: Campus Cashier</p>
+                                <div
+                                    class="sm:col-span-5 lg:col-span-1 flex items-center justify-center text-dprimary dark:text-dtext font-bold">
+                                    {{ disbursement.status }}
+                                </div>
+
+                                <div
+                                    class="sm:col-span-5 lg:col-span-4 bg-white dark:bg-dprimary shadow-md p-4 rounded-lg">
+                                    <h2 class="text-lg font-semibold dark:text-dtext">
+                                        {{ disbursement.claimed_at ? new
+                                            Date(disbursement.claimed_at).toLocaleDateString('en-US', {
+                                                year: 'numeric', month: 'long', day: 'numeric'
+                                        }) : 'Not yet claimed' }}
+                                    </h2>
+                                    <p class="text-gray-600" v-if="disbursement.claimed_by">
+                                        Claimed by: <span class="font-medium">You</span>,
+                                        ID: {{ scholar.urscholar_id }}
+                                    </p>
+                                    <p class="text-gray-600" v-if="disbursement.claimed_at">
+                                        Processed at: Campus Cashier
+                                    </p>
+                                    <p class="text-gray-600" v-if="disbursement.reasons_of_not_claimed">
+                                        Reason: {{ disbursement.reasons_of_not_claimed }}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -512,13 +541,15 @@ const removeFile = (reqId) => {
     }
 };
 
-// Create the computed property
+// Create the computed property to filter out grantees with only pending disbursements
 const filteredHistoryGrantee = computed(() => {
-    return props.historygrantee.filter(history =>
-        history.dibursement_status !== 'Pending'
-    );
+    return props.historygrantee.filter(history => {
+        // Only include history entries that have at least one non-pending disbursement
+        return history.disbursements && history.disbursements.some(
+            disbursement => disbursement.status !== 'Pending'
+        );
+    });
 });
-
 // const handleFile = (event, requirementId, requirementName) => {
 //     const file = event.target.files[0];
 //     if (file) {

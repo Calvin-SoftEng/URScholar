@@ -164,66 +164,66 @@ class CashierController extends Controller
             'selectedSem' => 'required',
             'selectedYear' => 'required',
         ], $messages);
-    
+
         $campuses = Campus::all();
         $schoolyear = $request->input('selectedYear')
             ? SchoolYear::find($request->input('selectedYear'))
             : null;
-    
+
         $currentUser = Auth::user();
         // Cast selectedCampus to integer if it's a non-empty string
         $selectedCampus = $request->input('selectedCampus');
-        $selectedCampusId = !empty($selectedCampus) ? (int)$selectedCampus : null;
-    
+        $selectedCampusId = !empty($selectedCampus) ? (int) $selectedCampus : null;
+
         // Get batches for all campuses that match the criteria
         $batchesQuery = Batch::where('scholarship_id', $scholarship->id)
             ->where('status', 'Accomplished')
             ->where('school_year_id', $schoolyear->id)
             ->where('semester', $request->input('selectedSem'));
-    
+
         // Apply campus filter if selected
         if ($selectedCampusId) {
             $batchesQuery->where('campus_id', $selectedCampusId);
         }
-    
+
         $Allbatches = $batchesQuery->with([
             'grantees.scholar' => fn($q) => $q->orderBy('last_name')->orderBy('first_name'),
             'grantees.scholar.submittedRequirements',
             'disbursement',
             'campus:id,name'
         ])
-        ->orderBy('batch_no')
-        ->get();
-    
+            ->orderBy('batch_no')
+            ->get();
+
         // Compute claimed and not claimed for each batch
         $batches = $Allbatches->map(function ($batch) {
             $claimed = $batch->disbursement->where('status', 'Claimed')->count();
             $notClaimed = $batch->disbursement->whereIn('status', ['Pending', 'Not Claimed'])->count();
-    
+
             return array_merge($batch->toArray(), [
                 'claimed_count' => $claimed,
                 'not_claimed_count' => $notClaimed
             ]);
         });
-    
+
         $payouts = Payout::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $schoolyear->id)
             ->where('semester', $request->input('selectedSem'))
             ->with('campus') // eager load the campus relation
             ->get();
-    
+
         $payoutQuery = Payout::where('scholarship_id', $scholarship->id)
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem));
-        
+
         // Apply campus filter to payouts if selected
         if ($selectedCampusId) {
             $payoutQuery->where('campus_id', $selectedCampusId);
         }
-        
+
         $payoutQuery->with('campus');
         $payoutsByCampus = $payoutQuery->get()->groupBy('campus_id');
-    
+
         $allAccomplished = false;
         foreach ($Allbatches as $batch) {
             if ($batch && $batch->status == 'Accomplished') {
@@ -231,7 +231,7 @@ class CashierController extends Controller
                 break;
             }
         }
-    
+
         return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
             'scholarship' => $scholarship,
             'schoolyear' => $schoolyear,
@@ -357,7 +357,7 @@ class CashierController extends Controller
         // Create Notification
         $notification = Notification::create([
             'title' => 'New Payouts Forwarded',
-            'message' => 'Active scholars forwarded to cashiers by campus by ' . $user->name,
+            'message' => 'Active scholars forwarded to cashiers by campus by ' . $user->first_name . ' ' . $user->last_name,
             'type' => 'payout_forward',
         ]);
 
@@ -540,6 +540,31 @@ class CashierController extends Controller
 
         // Attach the coordinator to the notification
         $notification->users()->attach($super_admin->id);
+
+        // Broadcast the notification
+        broadcast(new NewNotification($notification))->toOthers();
+
+        // Trigger event for scholar notification
+        event(new NewNotification($notification));
+
+        // Create notification for scholars
+        $scholarNotification = Notification::create([
+            'title' => 'Payout Done',
+            'message' => $campus->name . 'Payouts are now finished',
+            'type' => 'payout_done',
+        ]);
+
+        // Attach scholars to the notification
+        // Notify users from the same campus as the current user
+        $campusUsers = User::where('campus_id', Auth::user()->campus_id)->pluck('id');
+        $scholarNotification->users()->attach($campusUsers);
+
+        // Broadcast the notification
+        broadcast(new NewNotification($scholarNotification))->toOthers();
+
+        // Trigger event for scholar notification
+        event(new NewNotification($scholarNotification));
+
 
         ActivityLog::create([
             'user_id' => Auth::user()->id,
@@ -844,7 +869,7 @@ class CashierController extends Controller
      */
     public function verifyQr(Request $request)
     {
-        
+
         $request->validate([
             'scanned_data' => 'required|string',
         ]);

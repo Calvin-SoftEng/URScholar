@@ -21,7 +21,7 @@
 
             <!-- Right Column (70% width) -->
             <div class="bg-white shadow-md p-6 rounded-lg flex flex-col justify-between">
-                <Scholarships :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
+                <Scholarships :uniqueCampusesCount="uniqueCampusesCount" :scholarshipData="scholarshipData" :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
             </div>
         </div>
 
@@ -60,6 +60,8 @@ const props = defineProps({
     scholars: Array,
     academicYear: Object,
     allscholars: Array,
+    scholarshipData: Array,
+    uniqueCampusesCount: Number,
 });
 
 const grantBasedScholarships = computed(() =>

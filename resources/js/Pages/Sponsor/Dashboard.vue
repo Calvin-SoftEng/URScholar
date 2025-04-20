@@ -13,6 +13,8 @@ const props = defineProps({
     academicYear: Object,
     allscholars: Array,
     schoolyears: Array,
+    scholarshipData: Array,
+    uniqueCampusesCount: Number,
 });
 
 </script>
@@ -23,7 +25,7 @@ const props = defineProps({
     <AuthenticatedLayout>
         <template #default>
             <!-- Your dashboard content goes here -->
-            <ContentDashboard class="w-full h-full dark:bg-dprimary" :allscholars="allscholars" :academicYear="academicYear" :scholars="scholars" :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
+            <ContentDashboard class="w-full h-full dark:bg-dprimary" :uniqueCampusesCount="uniqueCampusesCount" :scholarshipData="scholarshipData" :allscholars="allscholars" :academicYear="academicYear" :scholars="scholars" :payouts="payouts" :campuses="campuses" :sponsor="sponsor" :scholarships="scholarships" :schoolyears="schoolyears"/>
         </template>
     </AuthenticatedLayout>
 </template>

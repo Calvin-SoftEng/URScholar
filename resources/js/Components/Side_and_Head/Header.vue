@@ -59,45 +59,45 @@
   <!-- Dropdown menu -->
   <div v-show="isDropdownVisible" id="dropdownNotification"
     class="absolute right-2 mt-14 z-20 w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow-xl dark:bg-gray-800 dark:divide-gray-700">
-    <div
-      class="flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
-      Notifications
-      <button v-if="filteredNotifications.length > 0 && filteredUnreadCount > 0" @click="markAllAsRead"
-        class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
-        Mark all as read
-      </button>
-    </div>
-    <div v-if="filteredNotifications.length === 0"
-      class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
-      No notifications
-    </div>
-    <div v-else
-      class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
-      <div v-for="notification in filteredNotifications" :key="notification.id"
-        class="flex px-4 py-3 bg-white hover:bg-gray-100 dark:hover:bg-gray-700"
-        :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
-        <div class="w-full">
-          <div>{{ notification.title }}</div>
-          <div class="flex justify-between items-start mb-1.5">
-            <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
-            <button @click.stop="deleteNotification(notification.id)"
-              class="ml-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400">
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
-                stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <div class="flex justify-between items-center">
-            <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
-            <button v-if="!notification.read" @click="markAsRead(notification.id)"
-              class="text-xs font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
-              Mark as read
-            </button>
+      <div
+        class="flex justify-between items-center px-4 py-2 text-left text-gray-700 rounded-t-lg bg-gray-50 dark:bg-gray-800 dark:text-white font-quicksand font-bold">
+        Notifications
+        <button v-if="filteredNotifications.length > 0 && filteredUnreadCount > 0" @click="markAllAsRead"
+          class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+          Mark all as read
+        </button>
+      </div>
+      <div v-if="filteredNotifications.length === 0"
+        class="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
+        No notifications
+      </div>
+      <div v-else
+        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+        <div v-for="notification in filteredNotifications" :key="notification.id"
+          class="flex px-4 py-3 bg-white hover:bg-gray-100 dark:hover:bg-gray-700"
+          :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
+          <div class="w-full">
+            <div>{{ notification.title }}</div>
+            <div class="flex justify-between items-start mb-1.5">
+              <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
+              <button @click.stop="deleteNotification(notification.id)"
+                class="ml-2 text-gray-400 hover:text-red-500 dark:hover:text-red-400">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div class="flex justify-between items-center">
+              <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
+              <button v-if="!notification.read" @click="markAsRead(notification.id)"
+                class="text-xs font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+                Mark as read
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
   </div>
 </template>
 

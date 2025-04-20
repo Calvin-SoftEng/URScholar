@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewNotification;
 use App\Mail\ForgetMail;
 use App\Models\Campus;
 use App\Models\Disbursement;
@@ -9,6 +10,7 @@ use App\Models\PayoutSchedule;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\Scholarship;
+use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\User;
 use App\Models\Scholar;
@@ -77,7 +79,7 @@ class EmailController extends Controller
         $messages = [
             'required' => 'This field is required.',
         ];
-    
+
         $validator = Validator::make($request->all(), [
             'requirements' => 'required',
             'application' => 'required|date',
@@ -86,51 +88,51 @@ class EmailController extends Controller
             'school_year' => 'required',
             'templates.*' => 'nullable|file|max:10240', // Allow up to 10MB per file
         ], $messages);
-    
+
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
-    
+
         // Handle requirements - may come as JSON string if using FormData
         $requirements = is_string($request->requirements)
             ? json_decode($request->requirements, true)
             : $request->requirements;
-    
+
         // Find batches matching the specified semester and school year
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $request->school_year)
             ->get();
-    
+
         if ($batches->isEmpty()) {
             return back()->with('flash', [
                 'type' => 'error',
                 'message' => "No batches found for the specified semester and school year.",
             ]);
         }
-    
+
         // Process uploaded files
         $uploadedFiles = [];
         $storagePaths = [];
-    
+
         if ($request->hasFile('templates')) {
             foreach ($request->file('templates') as $file) {
                 // Generate a unique filename
                 $filename = $file->getClientOriginalName();
-    
+
                 // Store file in public storage for easy access - alternatively use private storage
                 $path = $file->storeAs('scholarship_templates/' . $scholarship->id, $filename, 'public');
-    
+
                 $uploadedFiles[] = [
                     'name' => $file->getClientOriginalName(),
                     'path' => $path,
                     'storage_path' => storage_path('app/public/' . $path),
                     'mime' => $file->getMimeType(),
                 ];
-    
+
                 $storagePaths[] = $path;
             }
         }
-    
+
         // Create the requirements for the scholarship
         $req = [];
         foreach ($requirements as $requirement) {
@@ -142,14 +144,14 @@ class EmailController extends Controller
                 'total_scholars' => 0, // We'll update this after counting all scholars
             ];
         }
-    
+
         // Store the requirements and get the IDs
         $requirementIds = [];
         foreach ($req as $requirement) {
             $newRequirement = Requirements::create($requirement);
             $requirementIds[] = $newRequirement->id;
         }
-    
+
         // Store file information in database if needed
         if (!empty($uploadedFiles)) {
             foreach ($uploadedFiles as $file) {
@@ -163,16 +165,16 @@ class EmailController extends Controller
                 ]);
             }
         }
-    
+
         $totalScholarsProcessed = 0;
         $emailsSent = 0;
-    
+
         // Process each batch
         foreach ($batches as $batch) {
-    
+
             $batch->status = 'Pending';
             $batch->save();
-    
+
             // Retrieve scholars through grantees with necessary relationships
             $scholars = $scholarship->grantees()
                 ->where('batch_id', $batch->id)
@@ -183,15 +185,15 @@ class EmailController extends Controller
                 ->get()
                 ->map(fn($grantee) => $grantee->scholar)
                 ->filter(); // Remove null scholars (if any)
-    
+
             $totalScholarsProcessed += $scholars->count();
-    
+
             // Process each scholar in the batch
             foreach ($scholars as $scholar) {
                 if ($scholar && $scholar->email) {
                     $userExists = User::where('email', $scholar->email)->first();
                     $password = null;
-    
+
                     if (!$userExists) {
                         // Create new user
                         $password = Str::random(8);
@@ -203,7 +205,7 @@ class EmailController extends Controller
                             'password' => bcrypt($password),
                             'campus_id' => $scholar->campus_id
                         ]);
-    
+
                         // Update scholar's user_id
                         $scholar->update([
                             'user_id' => $user->id
@@ -211,7 +213,7 @@ class EmailController extends Controller
                     } else {
                         // Use existing user
                         $user = $userExists;
-    
+
                         // If user already exists, update the scholar with existing user's ID if needed
                         if (!$scholar->user_id) {
                             $scholar->update([
@@ -219,27 +221,27 @@ class EmailController extends Controller
                             ]);
                         }
                     }
-    
+
                     // Find existing group for this campus and batch
                     $groupName = "Batch " . $batch->batch_no;
-    
+
                     // Look for existing group for this campus
                     $scholarshipGroup = ScholarshipGroup::where('name', $groupName)
                         ->where('campus_id', $scholar->campus_id)
                         ->first();
-    
+
                     if ($scholarshipGroup) {
                         // Check if user is already a member of this group
                         $isAlreadyMember = $scholarshipGroup->users()
                             ->where('user_id', $user->id)
                             ->exists();
-    
+
                         // Add user to group if not already a member
                         if (!$isAlreadyMember) {
                             $scholarshipGroup->users()->attach($user->id);
                         }
                     }
-    
+
                     // Prepare requirements list for email
                     $requirementsList = "";
                     $counter = 1;
@@ -247,7 +249,7 @@ class EmailController extends Controller
                         $requirementsList .= "  {$counter}. {$requirement}\n";
                         $counter++;
                     }
-    
+
                     // Prepare email content based on whether user is new or existing
                     if (!$userExists) {
                         // For new users - include credentials and requirements
@@ -259,7 +261,7 @@ class EmailController extends Controller
                                 "* Email: " . $scholar->email . "\n" .
                                 "* Password: " . $password . "\n\n" .
                                 "NEW REQUIREMENTS SUBMISSION:\n" .
-                                "Please submit the following requirements for your scholarship:\n\n" . 
+                                "Please submit the following requirements for your scholarship:\n\n" .
                                 $requirementsList . "\n" .
                                 "* Next Steps:\n" .
                                 "  - Log in to your account using the details above.\n" .
@@ -289,10 +291,10 @@ class EmailController extends Controller
                                 "The Scholarship Management Team"
                         ];
                     }
-    
+
                     // Create mailable instance
                     $email = new SendEmail($mailData);
-    
+
                     // Attach files to the email
                     foreach ($uploadedFiles as $file) {
                         $email->attach($file['storage_path'], [
@@ -300,24 +302,24 @@ class EmailController extends Controller
                             'mime' => $file['mime'],
                         ]);
                     }
-    
+
                     // Send email with attachments
                     Mail::to($scholar->email)->send($email);
                     $emailsSent++;
                 }
             }
         }
-    
+
         // Update the total scholars count for each requirement
         Requirements::whereIn('id', $requirementIds)->update(['total_scholars' => $totalScholarsProcessed]);
-    
+
         // Log the activity
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Email',
             'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name . ' with requirement details',
         ]);
-    
+
         return redirect()->back()->with('success', 'Emails sent successfully!');
     }
 
@@ -376,6 +378,26 @@ class EmailController extends Controller
                 Mail::to($scholar->email)->send(new PayoutEmail($mailData));
             }
         }
+
+        // Create notification for scholars
+        $scholarNotification = Notification::create([
+            'title' => 'Scholarship Payout Scheduled',
+            'message' => 'Your scholarship payout has been scheduled for ' . $request['scheduled_date'] . ' at ' . $request['scheduled_time'],
+            'type' => 'payout_scheduled',
+        ]);
+
+        // Attach scholars to the notification
+        $scholarNotification->users()->attach($scholars->pluck('user_id')); // Assuming scholars have a user_id field
+
+        // Notify users from the same campus as the current user
+        $campusUsers = User::where('campus_id', Auth::user()->campus_id)->pluck('id');
+        $scholarNotification->users()->attach($campusUsers);
+
+        // Broadcast the notification
+        broadcast(new NewNotification($scholarNotification))->toOthers();
+
+        // Trigger event for scholar notification
+        event(new NewNotification($scholarNotification));
 
         ActivityLog::create([
             'user_id' => Auth::user()->id,

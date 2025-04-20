@@ -95,14 +95,26 @@ class StudentController extends Controller
                 ->with(['school_year', 'scholar.disbursements'])
                 ->get()
                 ->map(function ($grantee) {
-                    // Get the disbursement for this scholar
-                    $disbursement = $grantee->scholar->disbursements->first();
+                    // Get all disbursements for this scholar
+                    $disbursements = $grantee->scholar->disbursements;
 
-                    // Fix: Add null check before accessing claimed_by property
-                    $user = null;
-                    if ($disbursement && isset($disbursement->claimed_by)) {
-                        $user = User::where('id', $disbursement->claimed_by)->first();
-                    }
+                    // Process all disbursements
+                    $processedDisbursements = $disbursements->map(function ($disbursement) {
+                        // Get user who claimed the disbursement
+                        $user = null;
+                        if (isset($disbursement->claimed_by)) {
+                            $user = User::where('id', $disbursement->claimed_by)->first();
+                        }
+
+                        return [
+                            'disbursement_id' => $disbursement->id,
+                            'status' => $disbursement->status ?? 'N/A',
+                            'claimed_at' => $disbursement->claimed_at,
+                            'claimed_by' => $user,
+                            'reasons_of_not_claimed' => $disbursement->reasons_of_not_claimed,
+                            // Add any other disbursement fields you need
+                        ];
+                    });
 
                     return [
                         'id' => $grantee->id,
@@ -111,11 +123,8 @@ class StudentController extends Controller
                         'school_year' => $grantee->school_year->year ?? 'N/A',
                         'semester' => $grantee->semester ?? 'N/A',
                         'batch_name' => $grantee->batch ? $grantee->batch->batch_name : 'N/A',
-                        'dibursement_status' => $disbursement ? $disbursement->status : 'No Disbursement',
-                        'claimed_at' => $disbursement ? $disbursement->claimed_at : null,
-                        'claimed_by' => $user,
-                        'reasons_of_not_claimed' => $disbursement ? $disbursement->reasons_of_not_claimed : null,
-                        // Add any other fields you need from grantee or disbursement
+                        'disbursements' => $processedDisbursements,
+                        // Add any other grantee fields you need
                     ];
                 });
 
@@ -1235,7 +1244,7 @@ class StudentController extends Controller
                 'status' => $submitted->status,
             ];
         });
-        
+
 
         return Inertia::render('Student/Grant-in/Grant-In', [
             'scholarship' => $scholarship,

@@ -44,7 +44,36 @@ class SponsorController extends Controller
         $sponsor = Sponsor::where('assign_id', Auth::user()->id)
             ->first();
 
-        $scholarship = $sponsor->scholarship;
+        $scholarships = $sponsor->scholarship;
+
+        // Count batches for each scholarship and collect unique campuses
+        $scholarshipData = [];
+        $uniqueCampuses = [];
+
+        foreach ($scholarships as $scholarship) {
+            // Get batches for this scholarship
+            $batches = Batch::where('scholarship_id', $scholarship->id)->get();
+
+            // Count batches
+            $batchCount = $batches->count();
+
+            // Get unique campus IDs from these batches
+            $campusIds = $batches->pluck('campus_id')->unique()->toArray();
+
+            // Add to unique campuses collection
+            $uniqueCampuses = array_merge($uniqueCampuses, $campusIds);
+
+            // Store data for this scholarship
+            $scholarshipData[] = [
+                'scholarship_id' => $scholarship->id,
+                'scholarship_name' => $scholarship->name,
+                'batch_count' => $batchCount,
+                'campus_ids' => $campusIds
+            ];
+        }
+
+        // Get unique campuses count across all batches
+        $uniqueCampusesCount = count(array_unique($uniqueCampuses));
 
         // Disbursement Listing
         $payout = Payout::whereIn('scholarship_id', $sponsor->scholarship->pluck('id'))
@@ -104,7 +133,9 @@ class SponsorController extends Controller
 
         return Inertia::render('Sponsor/Dashboard', [
             'sponsor' => $sponsor,
-            'scholarships' => $scholarship,
+            'scholarships' => $scholarships,
+            'scholarshipData' => $scholarshipData,
+            'uniqueCampusesCount' => $uniqueCampusesCount,
             'payouts' => $payout,
             'campuses' => $campuses,
             'schoolyears' => $school_year,
@@ -524,7 +555,8 @@ class SponsorController extends Controller
         ]);
     }
 
-    public function account() {
+    public function account()
+    {
         $user = Auth::user();
 
         return Inertia::render('Sponsor/Account_Settings', [

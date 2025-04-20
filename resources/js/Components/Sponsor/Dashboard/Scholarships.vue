@@ -66,11 +66,11 @@
                         <div class="flex flex-row gap-6">
                             <div class="flex flex-col items-center">
                                 <span class="text-gray-500 text-sm">Batches</span>
-                                <span class="text-lg font-semibold text-gray-800 dark:text-dtext">34</span>
+                                <span class="text-lg font-semibold text-gray-800 dark:text-dtext">{{ getBatchCount(scholarship.id) }}</span>
                             </div>
                             <div class="flex flex-col items-center">
                                 <span class="text-gray-500 text-sm">Campuses</span>
-                                <span class="text-lg font-semibold text-gray-800 dark:text-dtext">2</span>
+                                <span class="text-lg font-semibold text-gray-800 dark:text-dtext">{{ getCampusCount(scholarship.id) }}</span>
                             </div>
                         </div>
 
@@ -141,11 +141,11 @@
                             <div class="flex flex-row gap-6">
                                 <div class="flex flex-col items-center">
                                     <span class="text-gray-500 text-sm">Batches</span>
-                                    <span class="text-lg font-semibold text-gray-800 dark:text-dtext">34</span>
+                                    <span class="text-lg font-semibold text-gray-800 dark:text-dtext">{{ getBatchCount(scholarship.id) }}</span>
                                 </div>
                                 <div class="flex flex-col items-center">
                                     <span class="text-gray-500 text-sm">Campuses</span>
-                                    <span class="text-lg font-semibold text-gray-800 dark:text-dtext">2</span>
+                                    <span class="text-lg font-semibold text-gray-800 dark:text-dtext">{{ getCampusCount(scholarship.id) }}</span>
                                 </div>
                             </div>
 
@@ -159,90 +159,89 @@
     </div>
 
     <div v-if="ScholarshipSpecification"
-            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity-ease-in duration-300">
-            <div class="bg-white dark:bg-dprimary rounded-lg shadow-xl w-4/12">
-                <div class="flex items-center justify-between px-4 py-2 md:px-5 rounded-t">
-                    <button type="button" @click="closeModal"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                    </button>
-                </div>
+        class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity-ease-in duration-300">
+        <div class="bg-white dark:bg-dprimary rounded-lg shadow-xl w-4/12">
+            <div class="flex items-center justify-between px-4 py-2 md:px-5 rounded-t">
+                <button type="button" @click="closeModal"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                    data-modal-hide="default-modal">
+                    <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                        viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                    </svg>
+                </button>
+            </div>
 
-                <div class="bg-white dark:bg-dprimary flex justify-center items-center p-5 rounded-lg">
-                    <div class="flex flex-col space-y-2 items-center">
-                        <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-center dark:text-dtext">
-                            {{ selectedScholarship.name }}<span> Scholars</span>
-                        </h1>
+            <div class="bg-white dark:bg-dprimary flex justify-center items-center p-5 rounded-lg">
+                <div class="flex flex-col space-y-2 items-center">
+                    <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-center dark:text-dtext">
+                        {{ selectedScholarship.name }}<span> Scholars</span>
+                    </h1>
 
-                        <div class="py-5 text-gray-500 dark:text-gray-300">
-                            Select School Year and Semester
+                    <div class="py-5 text-gray-500 dark:text-gray-300">
+                        Select School Year and Semester
+                    </div>
+                    <div class="grid grid-cols-3 justify-center items-center gap-3">
+                        <InputError v-if="errors?.selectedSem" :message="errors.selectedSem"
+                            class="text-2xs text-red-500" />
+                        <div
+                            class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                            Academic Year:
                         </div>
-                        <div class="grid grid-cols-3 justify-center items-center gap-3">
-                            <InputError v-if="errors?.selectedSem" :message="errors.selectedSem"
-                                class="text-2xs text-red-500" />
-                            <div
-                                class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
-                                Academic Year:
-                            </div>
-                            <div class="col-span-2 w-full">
-                                <Select v-model="selectedYear" required @update:modelValue="updateSemesters">
-                                    <SelectTrigger class="w-full border"
-                                        :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
-                                        <SelectValue placeholder="Select year" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup v-for="schoolyear in [...schoolyears].reverse()"
-                                            :key="schoolyear.id">
-                                            <SelectItem :value="schoolyear.id">
-                                                {{ schoolyear.year }}
-                                            </SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div
-                                class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
-                                Semester:
-                            </div>
-                            <div class="col-span-2 w-full">
-                                <Select v-model="selectedSem" required :disabled="!availableSemesters.length">
-                                    <SelectTrigger class="w-full border"
-                                        :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
-                                        <SelectValue placeholder="Select Semester" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectGroup>
-                                            <SelectItem v-for="semester in availableSemesters" :key="semester.id"
-                                                :value="semester.semester">
-                                                {{ semester.semester === '1st' ? 'First Semester' : 'Second Semester' }}
-                                                {{ semester.status === 'Active' ? '(Active)' : '(Inactive)' }}
-                                            </SelectItem>
-                                        </SelectGroup>
-                                    </SelectContent>
-                                </Select>
-                            </div>
+                        <div class="col-span-2 w-full">
+                            <Select v-model="selectedYear" required @update:modelValue="updateSemesters">
+                                <SelectTrigger class="w-full border"
+                                    :class="formErrors.selectedYear ? 'border-red-500' : 'border-gray-300'">
+                                    <SelectValue placeholder="Select year" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup v-for="schoolyear in [...schoolyears].reverse()" :key="schoolyear.id">
+                                        <SelectItem :value="schoolyear.id">
+                                            {{ schoolyear.year }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
                         </div>
-                        <p v-if="formErrors.selectedSem" class="text-red-500 text-sm mt-1">
-                            {{ formErrors.selectedSem }}
-                        </p>
-                        <p v-if="formErrors.selectedYear" class="text-red-500 text-sm mt-1">
-                            {{ formErrors.selectedYear }}
-                        </p>
-                        <div class="pt-10 w-full">
-                            <button @click="openScholarship"
-                                class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                Proceed to Scholarship
-                            </button>
+                        <div
+                            class="col-span-1 text-dprimary dark:text-dtext font-quicksand font-bold text-base justify-center">
+                            Semester:
                         </div>
+                        <div class="col-span-2 w-full">
+                            <Select v-model="selectedSem" required :disabled="!availableSemesters.length">
+                                <SelectTrigger class="w-full border"
+                                    :class="formErrors.selectedSem ? 'border-red-500' : 'border-gray-300'">
+                                    <SelectValue placeholder="Select Semester" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem v-for="semester in availableSemesters" :key="semester.id"
+                                            :value="semester.semester">
+                                            {{ semester.semester === '1st' ? 'First Semester' : 'Second Semester' }}
+                                            {{ semester.status === 'Active' ? '(Active)' : '(Inactive)' }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    <p v-if="formErrors.selectedSem" class="text-red-500 text-sm mt-1">
+                        {{ formErrors.selectedSem }}
+                    </p>
+                    <p v-if="formErrors.selectedYear" class="text-red-500 text-sm mt-1">
+                        {{ formErrors.selectedYear }}
+                    </p>
+                    <div class="pt-10 w-full">
+                        <button @click="openScholarship"
+                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 shadow-lg shadow-blue-500/50 dark:shadow-lg dark:shadow-blue-900/90 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                            Proceed to Scholarship
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 </template>
 
 <script setup>
@@ -272,6 +271,12 @@ const props = defineProps({
         type: Array,
         required: true
     },
+    scholarshipData: {  // Add this prop
+        type: Array,
+        required: false,
+        default: () => []
+    },
+    uniqueCampusesCount: Number,
 });
 
 onMounted(() => {
@@ -307,6 +312,19 @@ const grantBasedScholarships = computed(() =>
 const oneTimeScholarships = computed(() =>
     props.scholarships.filter(scholarship => scholarship.scholarshipType === 'One-time Payment')
 );
+
+// Add these methods
+const getBatchCount = (scholarshipId) => {
+    console.log("Scholarship ID:", scholarshipId);
+    const data = props.scholarshipData.find(s => s.scholarship_id === scholarshipId);
+    return data ? data.batch_count : 0;
+};
+
+const getCampusCount = (scholarshipId) => {
+    const data = props.scholarshipData.find(s => s.scholarship_id === scholarshipId);
+    return data && data.campus_ids ? data.campus_ids.length : 0;
+};
+
 
 const form = ref({
     id: null,

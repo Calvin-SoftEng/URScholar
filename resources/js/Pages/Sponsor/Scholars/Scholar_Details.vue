@@ -25,9 +25,9 @@
 
                 <div class="w-full h-full flex justify-center items-center dark:text-dprimary relative">
                     <!-- Close Button -->
-                    <button class="absolute top-4 right-10">
+                    <button @click="goBack" class="absolute top-4 right-10">
                         <span
-                            class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-800 dark:hover:bg-gray-700 transition">
+                            class="material-symbols-rounded p-2 rounded-full bg-white dark:bg-dcontainer text-blue-900 dark:text-dprimary shadow-md hover:bg-gray-200 dark:hover:bg-gray-700 transition">
                             arrow_back
                         </span>
                     </button>
@@ -398,38 +398,6 @@
                                 class="text-blue-600 underline" target="_blank">Download here</a>.
                         </p>
                     </div>
-
-                    <!-- Returning Requirement Message -->
-                    <div class="w-full flex flex-col space-y-2">
-                        <h3 class="font-semibold text-gray-900 dark:text-white">*If Returning Requirement</h3>
-                        <textarea id="return-requirement" placeholder="Add a message in returning"
-                            v-model="returnMessage"
-                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-6/12 h-32 resize-none text-left dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"></textarea>
-                    </div>
-
-                    <!-- Close Button -->
-                    <div v-if="props.batch.status !== 'Inactive' && props.scholar.campus_id === $page.props.auth.user.campus_id"
-                        class="mt-2 flex flex-row justify-between">
-                        <button type="button" @click="updateRequirementStatus('Returned')"
-                            class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Return
-                        </button>
-                        <button type="button" @click="updateRequirementStatus('Approved')"
-                            class="text-white font-sans w-full bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Approve
-                        </button>
-                    </div>
-                    <div v-else class="mt-2 flex flex-row justify-between">
-                        <button type="button" disabled
-                            class="text-white font-sans w-full bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600 cursor-not-allowed opacity-70 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Return
-                        </button>
-                        <button type="button" disabled
-                            class="text-white font-sans w-full bg-gradient-to-r from-gray-400 via-gray-500 to-gray-600 cursor-not-allowed opacity-70 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                            Approve
-                        </button>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -659,6 +627,11 @@ const updateRequirementStatus = (status) => {
         });
     }
 };
+
+const goBack = () => {
+    window.history.back();
+};
+
 
 const toastVisible = ref(false);
 const toastMessage = ref("");

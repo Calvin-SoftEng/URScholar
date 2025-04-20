@@ -58,16 +58,16 @@ class ScholarshipController extends Controller
         // 2. Have applicant_tracks matching the user's campus_id, OR
         // 3. Were created by the authenticated user
         $scholarships = Scholarship::with(['requirements', 'batches'])
-        ->where(function ($query) use ($userId, $userCampusId) {
-            $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
-                $subQuery->where('campus_id', $userCampusId);
-            })
-                ->orWhereHas('applicant_tracks', function ($subQuery) use ($userCampusId) {
+            ->where(function ($query) use ($userId, $userCampusId) {
+                $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
                     $subQuery->where('campus_id', $userCampusId);
                 })
-                ->orWhere('user_id', $userId);
-        })
-        ->get();
+                    ->orWhereHas('applicant_tracks', function ($subQuery) use ($userCampusId) {
+                        $subQuery->where('campus_id', $userCampusId);
+                    })
+                    ->orWhere('user_id', $userId);
+            })
+            ->get();
         $sponsors = Sponsor::all();
         $school_year = SchoolYear::with('academic_year')
             ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
@@ -436,6 +436,25 @@ class ScholarshipController extends Controller
                                                 'student_status' => $scholarEnrolled->student_status,
                                                 'status' => 'Pending',
                                             ]);
+
+                                            if ($newBatch->campus_id == Auth::user()->campus_id) {
+                                                // Get all grantees for this new batch
+                                                $batchGrantees = Grantees::where('batch_id', $newBatch->id)->get();
+
+                                                // Check if there are grantees and if all of them have "Enrolled" status
+                                                if (
+                                                    $batchGrantees->isNotEmpty() && $batchGrantees->every(function ($grantee) {
+                                                        return $grantee->student_status === 'Enrolled';
+                                                    })
+                                                ) {
+                                                    // Update batch status to Validated
+                                                    $newBatch->update([
+                                                        'status' => 'Validated',
+                                                        'validated' => true
+                                                    ]);
+                                                }
+                                            }
+
                                         } elseif ($scholarUnenrolled) {
                                             Grantees::create([
                                                 'scholarship_id' => $oldGrantee->scholarship_id,
@@ -978,6 +997,7 @@ class ScholarshipController extends Controller
         // Find all matching batches
         $batches = Batch::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $schoolYearId)
+            ->where('semester', $selectedSem)
             ->where('campus_id', $selectedCampus)
             ->get();
 
@@ -1458,10 +1478,10 @@ class ScholarshipController extends Controller
             ->first();
 
         $DonePayout = Payout::where('scholarship_id', $scholarshipId)
-        ->where('school_year_id', $batch->school_year_id)
-        ->where('semester', $batch->semester)
-        ->where('status', 'Inactive')
-        ->count();
+            ->where('school_year_id', $batch->school_year_id)
+            ->where('semester', $batch->semester)
+            ->where('status', 'Inactive')
+            ->count();
 
         // Get all disbursements for this payout and batch
         $disbursements = [];
