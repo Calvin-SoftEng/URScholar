@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
-            'picture' => 'mis_pic.jpg',
+            'picture' => 'men.png',
         ]);
 
         //Super Admin
@@ -106,7 +106,7 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
-            'picture' => 'mcoor_pic.jpg',
+            'picture' => 'pcoor_pic.png',
         ]);
 
         //sponsor
@@ -172,21 +172,21 @@ class DatabaseSeeder extends Seeder
             'address' => 'Morong, Rizal',
             'contact' => '09999999999',
             'status' => 'Active',
-            'picture' => 'mcashier_pic.jpg',
+            'picture' => 'men.png',
         ]);
 
         //student
-        User::factory()->create([
-            'name' => 'student1',
-            'email' => 'student1@gmail.com',
-            'first_name' => 'Carl Vincent',
-            'last_name' => 'Catahimican',
-            'middle_name' => 'Soriano',
-            'password' => bcrypt('password'),
-            'usertype' => 'student',
-            'campus_id' => '1',
-            'status' => 'Active',
-        ]);
+        // User::factory()->create([
+        //     'name' => 'student1',
+        //     'email' => 'student1@gmail.com',
+        //     'first_name' => 'Carl Vincent',
+        //     'last_name' => 'Catahimican',
+        //     'middle_name' => 'Soriano',
+        //     'password' => bcrypt('password'),
+        //     'usertype' => 'student',
+        //     'campus_id' => '1',
+        //     'status' => 'Active',
+        // ]);
 
         //Campus
         Campus::create([

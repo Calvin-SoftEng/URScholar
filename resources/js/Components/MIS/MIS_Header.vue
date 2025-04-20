@@ -4,7 +4,7 @@
     <div class="hidden lg:flex justify-between items-center h-[50px] place-content-center px-10">
       <div class="flex items-center space-x-4">
         <div class="pl-1">
-          <img src="../../../assets/images/logo-hori.png" alt="" class="w-[180px] h-[40px]">
+          <img :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="" class="w-[180px] h-[40px]">
         </div>
       </div>
 
