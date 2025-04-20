@@ -73,7 +73,7 @@ return new class extends Migration {
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
             $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
             $table->string('semester');
-            $table->enum('student_status', ['Graduated', 'Enrolled', 'Unenrolled', 'Dropped'])->default('Unenrolled');
+            $table->enum('student_status', ['Graduated', 'Enrolled', 'Unenrolled', 'Dropped', 'Transferred'])->default('Unenrolled');
             $table->enum('status', ['Active', 'Inactive', 'Pending', 'Accomplished'])->default('Pending');
             $table->timestamps();
         });
