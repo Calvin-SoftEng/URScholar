@@ -30,6 +30,9 @@ class StaffController extends Controller
 
         // Get the latest 5 submitted requirements
         $latestSubmissions = SubmittedRequirements::with(['scholar', 'requirement.scholarship'])
+            ->whereHas('scholar', function ($query) {
+                $query->where('campus_id', Auth::user()->campus_id);
+            })
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get()

@@ -1634,7 +1634,10 @@ class StudentController extends Controller
 
     public function account()
     {
-        return Inertia::render('Student/Profile/Account_Settings');
+        $user = Auth::user();
+        return Inertia::render('Student/Profile/Account_Settings', [
+            'user' => $user,
+        ]);
     }
 
     public function application(Request $request)

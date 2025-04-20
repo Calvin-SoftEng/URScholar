@@ -1,5 +1,6 @@
 <template>
-    <div class="bg-white w-full flex-grow min-h-0 p-5 gap-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col overflow-hidden">
+    <div
+        class="bg-white w-full flex-grow min-h-0 p-5 gap-y-3 rounded-xl dark:bg-dcontainer dark:border dark:border-gray-600 flex flex-col overflow-hidden">
 
         <!-- Header with Filter -->
         <div class="flex justify-between items-center">
@@ -101,13 +102,17 @@
                             <td>{{ formatDate(scholar.submission_date) }}</td>
                             <td>{{ scholar.remarks || 'N/A' }}</td>
                             <td>
+                                <Link :href="`/scholarships/scholar=${scholar.id}`">
                                 <button class="px-3 py-1 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700">
                                     View
                                 </button>
+                                </Link>
+
                             </td>
                         </tr>
                         <tr v-if="latestSubmissions.length === 0">
-                            <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7" class="text-center py-4 dark:text-dtext">No
+                            <td :colspan="selectedScholarshipType === 'Need-Based' ? 8 : 7"
+                                class="text-center py-4 dark:text-dtext">No
                                 recent submissions found</td>
                         </tr>
                     </tbody>
@@ -144,7 +149,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { usePage, Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     scholars: {

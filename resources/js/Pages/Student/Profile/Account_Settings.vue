@@ -276,19 +276,13 @@ import { initFlowbite } from 'flowbite';
 
 const props = defineProps({
     student: Object,
-    // education: Object,
-    // family: Object,
-    // siblings: Array,
+    user: Object,
     scholar: Object,
-    // grades: Array,
-    // latestgrade: Object,
-    // semesterGrade: Object,
-    // schoolyear_grade: Object,
-    // notify: Object,
+
 });
 
 const form = useForm({
-    // email: props.user.email || '',
+    email: props.user.email || '',
     currentPassword: '',
     passwordVerificationCode: '',
     newPassword: '',

@@ -190,6 +190,12 @@ class ScholarController extends Controller
             'type' => 'scholarship_notification',
         ]);
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Notify',
+            'description' => 'Notified scholar with ID: ' . $scholarID,
+        ]);
+
         return back()->with('success', 'Notify scholar successfully!');
     }
 
@@ -395,6 +401,12 @@ class ScholarController extends Controller
             $batch->save();
         }
 
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update Status',
+            'description' => 'Updated student status for scholar ID: ' . $scholar->urscholar_id,
+        ]);
+
         return back()->with(['message' => 'Student status updated successfully']);
     }
 
@@ -438,6 +450,12 @@ class ScholarController extends Controller
         $statusMessage = $request->status === 'Approve'
             ? 'Application approved successfully!'
             : 'Application rejected successfully!';
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update Status',
+            'description' => 'Updated application status for scholar ID: ' . $scholar->urscholar_id,
+        ]);
 
         return back()->with('success', $statusMessage);
     }
@@ -527,6 +545,12 @@ class ScholarController extends Controller
         $statusMessage = $request->status === 'Approved'
             ? 'Requirement approved successfully!'
             : 'Requirement returned successfully!';
+
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update Status',
+            'description' => 'Updated requirement status for scholar ID: ' . $scholar->urscholar_id,
+        ]);
 
         return back()->with('success', $statusMessage);
     }
@@ -1384,7 +1408,7 @@ class ScholarController extends Controller
 
             ActivityLog::create([
                 'user_id' => Auth::user()->id,
-                'activity' => 'Create',
+                'activity' => 'Upload Scholarship CSV',
                 'description' => 'Scholars added to ' . $scholarship->name . ' for ' . $schoolyear->name . ' ' . $request->semester,
             ]);
 
@@ -1539,6 +1563,12 @@ class ScholarController extends Controller
                         'student_status' => 'Enrolled',
                     ]);
                 }
+
+                ActivityLog::create([
+                    'user_id' => Auth::user()->id,
+                    'activity' => 'Create Manual Scholar',
+                    'description' => 'Added ' . $request->first_name . ' ' . $request->last_name . ' to ' . $scholarship->name,
+                ]);
 
                 return redirect()->back()->with('success', 'Scholar added successfully!');
             }
