@@ -303,6 +303,8 @@ class CashierController extends Controller
                         'payout_id' => $payout->id,
                         'batch_id' => $batch->id,
                         'scholar_id' => $grantee->scholar_id,
+                        'school_year_id' => $request->input('school_year_id'),
+                        'semester' => $request->input('semester'),
                         'created_at' => now(),
                         'updated_at' => now(),
                     ];

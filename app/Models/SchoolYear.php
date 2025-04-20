@@ -15,6 +15,11 @@ class SchoolYear extends Model
         return $this->hasMany(Batch::class);
     }
 
+    public function disbursements()
+    {
+        return $this->hasMany(Disbursement::class);
+    }
+
     public function grades()
     {
         return $this->hasMany(Grade::class);

@@ -38,6 +38,8 @@ return new class extends Migration {
             $table->foreignId('payout_id')->constrained()->onDelete('cascade');
             $table->foreignId('batch_id')->constrained()->onDelete('cascade');
             $table->foreignId('scholar_id')->constrained()->onDelete('cascade');
+            $table->foreignId('school_year_id')->constrained()->onDelete('cascade');
+            $table->string('semester');
             $table->string('reasons_of_not_claimed')->nullable();
             $table->string('file_name')->nullable();
             $table->string('path')->nullable();

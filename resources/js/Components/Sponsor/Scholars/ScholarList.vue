@@ -107,11 +107,11 @@
                   <td>{{ scholar.grade ?? 'No Grade' }}</td>
                   <td>
                     <span class="px-2 py-1 rounded-md text-xs" :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.status === 'Submitted' || scholar.status === 'Returned',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'No submission' || scholar.status === 'Incomplete'
+                      'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.student_status === 'Dropped' || scholar.student_status === 'Graduated',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.student_status === 'Unenrolled' || scholar.student_status === 'Unenrolled'
                     }">
-                      {{ scholar.status }}
+                      {{ scholar.student_status }}
                     </span>
                   </td>
                   <th>
