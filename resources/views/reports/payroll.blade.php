@@ -27,10 +27,11 @@
         </div>
 
         <!-- Right Logo -->
-        {{-- <img src="{{ public_path('assets/images/CHED.png') }}"
-             class="absolute right-5 top-0 w-20 h-20 object-contain"
-             alt="Right Logo"> --}}
+        <img src="{{ public_path('assets/images/CHED.png') }}"
+        class="absolute right-5 top-0 w-20 h-20 object-contain"
+        alt="Right Logo">
 
+        
         <div class="absolute right-5 top-20 mt-4">
             <p class="text-right underline">Date: {{ date('F d, Y') }}</p>
         </div>

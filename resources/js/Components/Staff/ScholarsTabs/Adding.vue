@@ -18,6 +18,9 @@
 
         <div v-if="ManualAdding" class="mx-auto w-full h-full justify-center items-center flex flex-col gap-3">
             <form @submit.prevent="submitManual" class="w-full flex flex-col gap-2">
+                <div v-if="errors?.student" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                    <p class="text-red-600 text-sm">{{ errors.student }}</p>
+                </div>
                 <div class="flex flex-col w-full gap-2">
                     <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
@@ -30,7 +33,8 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <Select v-model="manual.batch_id">
+                            <!-- Use a dropdown if batch array has items -->
+                            <Select v-if="batch && batch.length > 0" v-model="manual.batch_id">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Batch" class="text-black" />
                                 </SelectTrigger>
@@ -38,11 +42,16 @@
                                     <SelectGroup>
                                         <SelectItem v-for="batchItem in batch" :key="batchItem.id"
                                             :value="batchItem.id">
-                                            {{ batchItem.id }}
+                                            {{ batchItem.batch_no }}
                                         </SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
                             </Select>
+                            <!-- Use a text input if batch array is empty -->
+                            <input v-else type="text" id="batch_id" placeholder="Enter Batch No"
+                                v-model="manual.batch_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
@@ -58,7 +67,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                            <Select v-model="manual.campus">
+                            <Select v-model="manual.campus_id">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Campus" class="text-black" />
                                 </SelectTrigger>
@@ -73,7 +82,7 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Course and
                                 Program</label>
-                            <Select v-model="manual.course">
+                            <Select v-model="manual.course_id">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Course" class="text-black" />
                                 </SelectTrigger>
@@ -191,8 +200,8 @@
                                             d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                     </svg>
                                 </div>
-                                <input v-model="manual.birthdate" id="datepicker-autohide" datepicker
-                                    datepicker-autohide type="text"
+                                <input v-model="manual.birthdate" id="datepicker-autohide" type="text"
+                                    autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Select Birthdate">
                             </div>
@@ -280,7 +289,8 @@
                                 <img :src="form.filePreview" alt="Uploaded Preview" class="h-32 mb-2 rounded-lg" />
                             </template>
                             <template v-else>
-                                <img src="../../../../assets/images/previewdocs.png" alt="Document Icon" class="h-48 mb-2" />
+                                <img src="../../../../assets/images/previewdocs.png" alt="Document Icon"
+                                    class="h-48 mb-2" />
                             </template>
                             <p class="text-sm text-gray-500">{{ form.fileName }}</p>
                         </div>
@@ -302,7 +312,6 @@
     <ToastProvider>
         <ToastRoot v-if="toastVisible"
             class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-            <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
             <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
         </ToastRoot>
 
@@ -331,6 +340,7 @@ import { cn } from '@/lib/utils'
 import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
 import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { initFlowbite } from 'flowbite';
+import InputError from '@/Components/InputError.vue';
 
 const df = new DateFormatter('en-US', {
     dateStyle: 'long',
@@ -447,10 +457,13 @@ const manual = ref({
 
 const submitManual = async () => {
     try {
+
+
+
         router.post(`/scholarships/${props.scholarship.id}/manual-upload`, manual.value, {
             onSuccess: () => {
                 // Show success message
-                showToast("Scholar added successfully!");
+                // showToast("Scholar added successfully!");
                 // Reset form
                 resetManualForm();
             },
@@ -469,8 +482,8 @@ const resetManualForm = () => {
         grant: '',
         batch_id: '',
         hei_name: 'University of Rizal System',
-        campus: '',
-        course: '',
+        campus_id: '',
+        course_id: '',
         year: '',
         app_no: '',
         award_no: '',
@@ -639,8 +652,39 @@ const removeEntry = (index) => {
     entries.value.splice(index, 1)
 }
 
+
+const initDatepicker = () => {
+    const datepickerEl = document.getElementById("datepicker-autohide");
+
+    if (datepickerEl) {
+        if (!datepickerEl.dataset.initialized) {
+            const datepicker = new window.Datepicker(datepickerEl, {
+                autohide: true,
+                format: "yyyy-mm-dd",
+            });
+
+            datepickerEl.dataset.initialized = "true";
+
+            // Store selected date when user types or selects a date
+            datepickerEl.addEventListener("input", () => {
+                manual.value.birthdate = datepickerEl.value;
+            });
+
+            datepickerEl.addEventListener("blur", () => {
+                manual.value.birthdate = datepickerEl.value;
+            });
+        }
+
+        // 🔥 Restore value manually when switching steps
+        if (manual.value.birthdate) {
+            datepickerEl.value = manual.value.birthdate;
+        }
+    }
+};
+
 onMounted(() => {
     initFlowbite();
+    initDatepicker();
 });
 </script>
 

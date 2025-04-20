@@ -97,63 +97,70 @@ class ReportsController extends Controller
         // Get campuses with the given IDs
         $campuses = Campus::whereIn('id', $campusIds)->get();
 
-        // Get all grantees/scholars for these batches
-        $allScholars = collect();
+        // Prepare data for each campus
+        $campusData = [];
 
-        foreach ($batches as $batch) {
-            $grantees = Grantees::where('batch_id', $batch->id)
-                ->where('scholarship_id', $scholarship->id)
-                ->with(['scholar.course', 'scholar.campus']) // Include campus relation
-                ->get();
+        foreach ($campuses as $campus) {
+            $campusScholars = collect();
 
-            // Map to scholars and filter by selected campuses
-            $batchScholars = $grantees->map(function ($grantee) use ($campusIds, $batch) {
-                if ($grantee->scholar && in_array($grantee->scholar->campus_id, $campusIds)) {
-                    // Add batch information to each scholar for reporting
-                    $scholar = $grantee->scholar;
-                    $scholar->batch_no = $batch->batch_no;
-                    $scholar->campus_name = $scholar->campus ? $scholar->campus->name : 'N/A';
-                    return $scholar;
-                }
-                return null;
-            })->filter()->values();
+            foreach ($batches as $batch) {
+                $grantees = Grantees::where('batch_id', $batch->id)
+                    ->where('scholarship_id', $scholarship->id)
+                    ->with(['scholar.course', 'scholar.campus'])
+                    ->get();
 
-            $allScholars = $allScholars->concat($batchScholars);
-        }
-
-        // Fallback for testing/demo purposes
-        if ($allScholars->isEmpty()) {
-            foreach ($campuses as $campus) {
-                foreach ($batches as $batch) {
-                    // Create 5 demo students for each campus-batch combination
-                    for ($i = 0; $i < 5; $i++) {
-                        $faker = \Faker\Factory::create('en_PH');
-                        $allScholars->push((object) [
-                            'id' => $faker->unique()->randomNumber(6),
-                            'urscholar_id' => 'SCH-' . rand(10000, 99999),
-                            'last_name' => strtoupper($faker->lastName),
-                            'first_name' => strtoupper($faker->firstName),
-                            'middle_name' => strtoupper($faker->lastName),
-                            'sex' => $faker->randomElement(['Male', 'Female']),
-                            'year_level' => rand(1, 4),
-                            'course' => (object) ['name' => $faker->randomElement(['BS Computer Science', 'BS Information Technology', 'BS Accountancy', 'BS Civil Engineering', 'BS Psychology'])],
-                            'student_status' => 'Enrolled',
-                            'grant' => $faker->randomElement(['TES', 'TES3-a', null]),
-                            'batch_no' => $batch->batch_no,
-                            'campus_name' => $campus->name,
-                            'campus_id' => $campus->id
-                        ]);
+                // Map to scholars and filter by current campus
+                $batchScholars = $grantees->map(function ($grantee) use ($campus, $batch) {
+                    if ($grantee->scholar && $grantee->scholar->campus_id == $campus->id) {
+                        // Add batch information to each scholar for reporting
+                        $scholar = $grantee->scholar;
+                        $scholar->batch_no = $batch->batch_no;
+                        $scholar->campus_name = $scholar->campus ? $scholar->campus->name : 'N/A';
+                        return $scholar;
                     }
-                }
+                    return null;
+                })->filter()->values();
+
+                $campusScholars = $campusScholars->concat($batchScholars);
             }
+
+            // // Fallback for testing/demo purposes
+            // if ($campusScholars->isEmpty()) {
+            //     foreach ($batches as $batch) {
+            //         // Create 5 demo students for each batch in this campus
+            //         for ($i = 0; $i < 5; $i++) {
+            //             $faker = \Faker\Factory::create('en_PH');
+            //             $campusScholars->push((object) [
+            //                 'id' => $faker->unique()->randomNumber(6),
+            //                 'urscholar_id' => 'SCH-' . rand(10000, 99999),
+            //                 'student_number' => 'STUD-' . rand(10000, 99999),
+            //                 'last_name' => strtoupper($faker->lastName),
+            //                 'first_name' => strtoupper($faker->firstName),
+            //                 'middle_name' => strtoupper($faker->lastName),
+            //                 'sex' => $faker->randomElement(['Male', 'Female']),
+            //                 'year_level' => rand(1, 4),
+            //                 'course' => (object) ['name' => $faker->randomElement(['BS Computer Science', 'BS Information Technology', 'BS Accountancy', 'BS Civil Engineering', 'BS Psychology'])],
+            //                 'student_status' => 'Enrolled',
+            //                 'grant' => $faker->randomElement(['TES', 'TES3-a', null]),
+            //                 'batch_no' => $batch->batch_no,
+            //                 'campus_name' => $campus->name,
+            //                 'campus_id' => $campus->id
+            //             ]);
+            //         }
+            //     }
+            // }
+
+            $campusData[$campus->id] = [
+                'campus' => $campus,
+                'scholars' => $campusScholars
+            ];
         }
 
-        // Generate PDF
+        // Generate PDF with multiple pages
         $pdf = PDF::loadView('reports.enrolled_list', [
             'scholarship' => $scholarship,
             'batches' => $batches,
-            'campuses' => $campuses,
-            'scholars' => $allScholars,
+            'campusData' => $campusData,
             'schoolYear' => $schoolYear,
             'semester' => $semester
         ]);
@@ -222,6 +229,65 @@ class ReportsController extends Controller
 
         return $pdf->stream("graduates-report-{$scholarship->name}.pdf");
     }
+
+    public function TransferredSummaryReport(Scholarship $scholarship, Request $request)
+    {
+        // Get parameters from request
+        $batchIds = explode(',', $request->query('batch_ids'));
+        $campusIds = explode(',', $request->query('campus_ids'));
+        $schoolYearId = $request->query('school_year_id');
+        $semester = $request->query('semester');
+
+        // Get the school year
+        $schoolYear = SchoolYear::find($schoolYearId);
+
+        // Query batches with the given IDs that belong to the scholarship
+        $batches = Batch::whereIn('id', $batchIds)
+            ->where('scholarship_id', $scholarship->id)
+            ->get();
+
+        // Prepare campus data structure
+        $campusData = [];
+        $totalGraduates = 0;
+
+        foreach ($campusIds as $campusId) {
+            $campus = Campus::find($campusId);
+            if ($campus) {
+                $graduatedCount = 0;
+
+                foreach ($batches as $batch) {
+                    $scholars = $batch->grantees()
+                        ->whereHas('scholar', function ($query) use ($campusId) {
+                            $query->where('campus_id', $campusId)
+                                ->where('student_status', 'Graduated');
+                        })
+                        ->with('scholar')
+                        ->get();
+
+                    $graduatedCount += $scholars->count();
+                }
+
+                $campusData[] = [
+                    'campus' => $campus,
+                    'graduated_count' => $graduatedCount
+                ];
+
+                $totalGraduates += $graduatedCount;
+            }
+        }
+
+        $pdf = PDF::loadView('reports.graduates-report', [
+            'scholarship' => $scholarship,
+            'schoolYear' => $schoolYear,
+            'semester' => $semester,
+            'campusData' => $campusData,
+            'totalGraduates' => $totalGraduates,
+            'batch' => $batches->first() // Pass the first batch for backward compatibility
+        ]);
+
+        return $pdf->stream("graduates-report-{$scholarship->name}.pdf");
+    }
+
     public function PayrollReport(Scholarship $scholarship, Request $request)
     {
         // Get parameters from request
@@ -325,7 +391,7 @@ class ReportsController extends Controller
                 ->pluck('scholars.campus_id')
                 ->toArray();
         }
-    
+
         // Get all grantees and their scholars for this batch filtered by campus
         $grantees = $batch->grantees()
             ->whereHas('scholar', function ($query) use ($campusIds) {
@@ -334,27 +400,27 @@ class ReportsController extends Controller
             ->with('scholar.course', 'scholar.campus') // eager load to prevent N+1 problem
             ->with('school_year')
             ->get();
-    
+
         // Get all disbursements for this batch
         $disbursements = Disbursement::where('batch_id', $batch->id)
             ->get();
-    
+
         // Transform data for report
         $disbursementData = [];
-    
+
         foreach ($disbursements as $disbursement) {
             $scholarData = [];
-    
+
             foreach ($grantees as $grantee) {
                 // Get scholar from grantee
                 $scholar = $grantee->scholar;
-    
+
                 if ($scholar) {
                     // Check if this scholar received this disbursement
                     $scholarDisbursement = Disbursement::where('scholar_id', $scholar->id)
                         ->where('id', $disbursement->id)
                         ->first();
-    
+
                     $scholarData[] = [
                         'scholar_id' => $scholar->id,
                         'first_name' => $scholar->first_name ?? 'Unknown Scholar',
@@ -369,7 +435,7 @@ class ReportsController extends Controller
                     ];
                 }
             }
-    
+
             $disbursementData[] = [
                 'disbursement_id' => $disbursement->id,
                 'disbursement_date' => $disbursement->disbursement_date,
@@ -382,7 +448,7 @@ class ReportsController extends Controller
                 'total_scholars' => count($scholarData)
             ];
         }
-    
+
         return [
             'scholarship' => $scholarship,
             'batch' => $batch,

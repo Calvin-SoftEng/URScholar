@@ -10,7 +10,7 @@
                 <div class="text-3xl font-semibold text-gray-700">
                     <span class="text-xl">Academic Year: {{ current_year.school_year.year || '2024' }} - {{
                         current_year.semester || 'Semester'
-                        }} Semester</span>
+                    }} Semester</span>
                 </div>
 
                 <div class="flex justify-end items-center w-full gap-3">
@@ -155,11 +155,11 @@
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.year_level }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.email }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.contact_no ?? 'N/A'
-                                                }}</td>
+                                            }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.permanent_address ??
                                                 'N/A' }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.facebook_account ?? 'N/A'
-                                                }}</td>
+                                            }}</td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.birthplace ?? 'N/A' }}
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">{{ student.birthdate ?? 'N/A' }}
@@ -275,6 +275,14 @@
                 </form>
             </div>
         </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </SettingsLayout>
 </template>
 
@@ -497,7 +505,7 @@ const submitForm = async () => {
             preserveScroll: true,
             onSuccess: () => {
                 closeModal();
-                usePage().props.flash = { success: "Scholars added to the scholarship!" };
+                // usePage().props.flash = { success: "Scholars added to the scholarship!" };
                 error.value = "";
                 fileReadyToUpload.value = false;
                 document.getElementById("dropzone-file").value = null; // Clear file input
@@ -526,25 +534,6 @@ watchEffect(() => {
 });
 
 // radix vue testing
-
-const toastVisible = ref(false);
-const toastMessage = ref("");
-
-watchEffect(() => {
-    const flashMessage = usePage().props.flash?.success;
-
-    if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
-        toastMessage.value = flashMessage;
-        toastVisible.value = true;
-
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
-});
-
 // Pagination state
 const currentPage = ref(1);
 const itemsPerPage = 10;
@@ -574,6 +563,24 @@ const prevPage = () => {
 // Reset pagination when search changes
 watch(searchQuery, () => {
     currentPage.value = 1;
+});
+
+const toastVisible = ref(false);
+const toastMessage = ref("");
+
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
 });
 
 </script>

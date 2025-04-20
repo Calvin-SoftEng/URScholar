@@ -57,18 +57,17 @@ class ScholarshipController extends Controller
         // 1. Have batches matching the user's campus_id, OR
         // 2. Have applicant_tracks matching the user's campus_id, OR
         // 3. Were created by the authenticated user
-        $scholarships = Scholarship::with('requirements')
-            ->where(function ($query) use ($userId, $userCampusId) {
-                $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
+        $scholarships = Scholarship::with(['requirements', 'batches'])
+        ->where(function ($query) use ($userId, $userCampusId) {
+            $query->whereHas('batches', function ($subQuery) use ($userCampusId) {
+                $subQuery->where('campus_id', $userCampusId);
+            })
+                ->orWhereHas('applicant_tracks', function ($subQuery) use ($userCampusId) {
                     $subQuery->where('campus_id', $userCampusId);
                 })
-                    ->orWhereHas('applicant_tracks', function ($subQuery) use ($userCampusId) {
-                        $subQuery->where('campus_id', $userCampusId);
-                    })
-                    ->orWhere('user_id', $userId); // Add this condition to include scholarships created by the user
-            })
-            ->get();
-
+                ->orWhere('user_id', $userId);
+        })
+        ->get();
         $sponsors = Sponsor::all();
         $school_year = SchoolYear::with('academic_year')
             ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)

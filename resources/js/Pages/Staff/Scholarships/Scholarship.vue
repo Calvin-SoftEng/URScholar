@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -546,7 +546,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                }}</span>
+                                                    }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -558,7 +558,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                    }}</span>
+                                                        }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -619,9 +619,10 @@
                                                 <div class="flex flex-col px-5">
                                                     <span class="text-lg font-semibold text-gray-800">Batch {{
                                                         batch.batch_no
-                                                    }}</span>
+                                                        }}</span>
                                                     <span class="text-md font-medium text-gray-600">
-                                                        {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
+                                                        {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester
+                                                        }}
                                                         Semester
                                                     </span>
                                                 </div>
@@ -630,38 +631,35 @@
                                                     class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
                                                     <!-- Validation Status -->
                                                     <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="w-5 h-5 text-yellow-400" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
                                                                     d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
                                                             </svg>
                                                             <span class="text-primary">Completed Payouts</span>
                                                         </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow">
+                                                        <span class="text-xl font-bold text-primary drop-shadow">
                                                             {{
-                                                            batch.grantees.length }}</span>
+                                                                batch.grantees.length }}</span>
                                                     </div>
 
                                                     <!-- Number of Students -->
                                                     <div class="flex flex-col items-center space-y-1">
-                                                        <div
-                                                            class="flex items-center gap-2 text-sm text-gray-100">
+                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
                                                                 class="w-5 h-5 text-blue-400" fill="none"
                                                                 viewBox="0 0 24 24" stroke="currentColor">
-                                                                <path stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
                                                                     d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                                             </svg>
                                                             <span class="text-primary">Missed Payouts</span>
                                                         </div>
-                                                        <span
-                                                            class="text-xl font-bold text-primary drop-shadow"> {{batch.grantees.filter(grantee =>
+                                                        <span class="text-xl font-bold text-primary drop-shadow">
+                                                            {{batch.grantees.filter(grantee =>
                                                                 !grantee.scholar?.is_verified).length}}</span>
                                                     </div>
 
@@ -709,7 +707,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                }}</span>
+                                                    }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -912,7 +910,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                                }}</div>
+                                                            }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -1512,7 +1510,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                        }}
+                                            }}
                                         </p>
                                         <p v-if="batch.validated" class="text-sm text-gray-500">
                                             {{batch.grantees.filter(grantee => grantee.scholar?.status ===
@@ -1595,7 +1593,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                            }}</p>
+                                        }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not
@@ -1733,7 +1731,7 @@
                                             (selectedReportBatches.length === filteredBatches.length &&
                                                 filteredBatches.length > 0 ?
                                                 'All Batches' :
-                                        `Selected (${selectedReportBatches.length})`) : 'Select Batch' }}
+                                                `Selected (${selectedReportBatches.length})`) : 'Select Batch' }}
                                     </button>
 
                                     <div v-if="openDropdown === 'batch'"
@@ -1780,12 +1778,11 @@
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-                <ToastTitle class="font-semibold dark:text-dtext">{{ toastMessage }}</ToastTitle>
-                <!-- <ToastDescription class="text-gray-100 dark:text-dtext"></ToastDescription> -->
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
             </ToastRoot>
-
             <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
+
 
     </AuthenticatedLayout>
 </template>
@@ -2577,19 +2574,21 @@ watchEffect(() => {
         selectedBatches.value.push('all');
     }
 
-    const flash = usePage().props.flash;
+    // const flash = usePage().props.flash;
 
-    if (flash?.message) {
-        console.log("Showing toast with message:", flash.message);
-        toastMessage.value = flash.message;
-        toastVisible.value = true;
+    // if (flash?.message) {
+    //     console.log("Showing toast with message:", flash.message);
+    //     toastMessage.value = flash.message;
+    //     toastVisible.value = true;
 
-        setTimeout(() => {
-            console.log("Hiding toast...");
-            toastVisible.value = false;
-        }, 3000);
-    }
+    //     setTimeout(() => {
+    //         console.log("Hiding toast...");
+    //         toastVisible.value = false;
+    //     }, 3000);
+    // }
 });
+
+
 
 const forwardBatches = async () => {
     isSubmitting.value = true;
@@ -2743,6 +2742,21 @@ const updateFile = (file) => {
 const toastVisible = ref(false);
 const toastMessage = ref("");
 
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
+});
+
 onMounted(() => {
     window.addEventListener('popstate', () => {
         window.location.reload();
@@ -2836,7 +2850,7 @@ const resetSelections = () => {
     selectedReportCampuses.value = [];
 };
 
-const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Payroll'];
+const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Transferees', 'Payroll'];
 const batchRef = ref(null);
 const campusRef = ref(null);
 
@@ -2893,6 +2907,9 @@ const handleGenerateReports = () => {
         // case 'Scholars List':
         //     generateScholarsList(filters);
         //     break;
+        case 'Transferred Grantee':
+             generateTransferredList(filters);
+             break;
         default:
             console.warn('No valid report type selected.');
     }
@@ -2905,7 +2922,7 @@ const generateEnrolleesSummary = async (filters) => {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-        
+
         // Instead of opening multiple windows, send all data in one request
         const url = `/scholarships/${props.scholarship.id}/enrollees-summary`;
         const queryParams = new URLSearchParams({
@@ -2914,7 +2931,7 @@ const generateEnrolleesSummary = async (filters) => {
             school_year_id: props.schoolyear.id,
             semester: props.selectedSem
         });
-        
+
         window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);
@@ -2928,7 +2945,7 @@ const generateEnrolledList = async (filters) => {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-        
+
         // Instead of opening multiple windows, send all data in one request
         const url = `/scholarships/${props.scholarship.id}/enrolled-scholars`;
         const queryParams = new URLSearchParams({
@@ -2937,7 +2954,7 @@ const generateEnrolledList = async (filters) => {
             school_year_id: props.schoolyear.id,
             semester: props.selectedSem
         });
-        
+
         window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);
@@ -2952,7 +2969,7 @@ const generateGraduateList = async (filters) => {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-        
+
         // Instead of opening multiple windows, send all data in one request
         const url = `/scholarships/${props.scholarship.id}/graduate-scholars`;
         const queryParams = new URLSearchParams({
@@ -2961,7 +2978,30 @@ const generateGraduateList = async (filters) => {
             school_year_id: props.schoolyear.id,
             semester: props.selectedSem
         });
-        
+
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+    }
+};
+
+const generateTransferredList = async (filters) => {
+    try {
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/transferred-grantees`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
+        });
+
         window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);
@@ -2975,7 +3015,7 @@ const generatePayroll = async (filters) => {
             console.warn('Campuses or batches are not selected properly.');
             return;
         }
-        
+
         // Instead of opening multiple windows, send all data in one request
         const url = `/scholarships/${props.scholarship.id}/payroll-report`;
         const queryParams = new URLSearchParams({
@@ -2984,7 +3024,7 @@ const generatePayroll = async (filters) => {
             school_year_id: props.schoolyear.id,
             semester: props.selectedSem
         });
-        
+
         window.open(`${url}?${queryParams.toString()}`, '_blank');
     } catch (err) {
         console.error('Failed to generate report:', err);

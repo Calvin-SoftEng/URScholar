@@ -530,7 +530,7 @@ class SettingsController extends Controller
             }
 
             // Prepare redirect with detailed information
-            $redirect = redirect()->back()->with('success', $flashMessage);
+            $redirect = redirect()->back()->with('success', 'Successfully imported students.');
 
             // Attach import errors if any
             if (!empty($importErrors)) {

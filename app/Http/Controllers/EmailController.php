@@ -288,10 +288,12 @@ class EmailController extends Controller
             'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name,
         ]);
 
-        return back()->with('flash', [
-            'type' => 'success',
-            'message' => "Successfully sent email to {$emailsSent} scholars out of {$totalScholarsProcessed} total scholars with " . count($uploadedFiles) . " attachment(s).",
-        ]);
+        return redirect()->back()->with('success', 'Emails sent successfully!');
+
+        // return back()->with('flash', [
+        //     'type' => 'success',
+        //     'message' => "Successfully sent email to {$emailsSent} scholars out of {$totalScholarsProcessed} total scholars with " . count($uploadedFiles) . " attachment(s).",
+        // ]);
     }
 
     public function notify(Request $request, Scholarship $scholarship)

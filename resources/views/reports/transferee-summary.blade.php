@@ -38,18 +38,7 @@
     </div>
 
     <!-- Title -->
-    <h2 class="font-bold text-lg text-center mb-4 uppercase">Certification of Enrolled Grantees</h2>
-
-    <!-- Paragraph -->
-    <p class="mb-4 ">
-        <span class="font-bold">TO WHOM IT MAY CONCERN:</span>
-        <br />
-    <p class="text-justify indent-5">This is to certify that the total number of Continuing {{ $scholarship->name }}
-        grantees by campus as shown below, are qualified to avail of the {{ $scholarship->name }} for the
-        <span class="font-bold text-red-600"> {{ $semester ?? '1st' }}</span> semester of Academic Year
-        {{ $schoolYear->year }}.
-    </p>
-    </p>
+    <h2 class="font-bold text-lg text-center mb-4 uppercase">Certification of Transferred Grantees</h2>
 
     <br>
 
@@ -58,7 +47,7 @@
         <thead class="bg-gray-100">
             <tr>
                 <th class="border border-gray-700 p-2">Name of Campus</th>
-                <th class="border border-gray-700 p-2">Number of {{ $scholarship->name }} Grantees</th>
+                <th class="border border-gray-700 p-2">Number of {{ $scholarship->name }} Transferee</th>
                 <th class="border border-gray-700 p-2">Total</th>
             </tr>
         </thead>
@@ -79,16 +68,69 @@
         </tbody>
     </table>
 
+    <!-- Summary Statistics -->
+    <div class="mt-8 mb-4">
+        <h3 class="font-bold">Summary:</h3>
+        <table class="w-full border border-gray-700 mb-4 text-center mt-2">
+        <!-- Table -->
+        <table class="w-full border border-gray-700 mb-4 text-center">
+            <thead class="bg-gray-100 text-xs">
+                <tr>
+                    <th class="border border-gray-700 p-2">Batch No.</th>
+                    <th class="border border-gray-700 p-2">Student ID</th>
+                    <th class="border border-gray-700 p-2">Last Name</th>
+                    <th class="border border-gray-700 p-2">First Name</th>
+                    <th class="border border-gray-700 p-2">Middle Name</th>
+                    <th class="border border-gray-700 p-2">Current Campus</th>
+                    <th class="border border-gray-700 p-2">Current Course</th>
+                    <th class="border border-gray-700 p-2">Year Level</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php
+                    $totalEnrolled = 0;
+                    $groupedScholars = $scholars->groupBy(['campus_name', 'batch_no']);
+                @endphp
+
+                @foreach($groupedScholars as $campusName => $batches)
+                            @foreach($batches as $batchNo => $batchScholars)
+                                        @php
+                                            $count = $batchScholars->count();
+                                            $totalEnrolled += $count;
+                                        @endphp
+                                        <tr class="text-sm">
+                                            <td class="border border-gray-700 p-2">{{ $campusName }}</td>
+                                            <td class="border border-gray-700 p-2">{{ $batchNo }}</td>
+                                            <td class="border border-gray-700 p-2">{{ $count }}</td>
+                                        </tr>
+                            @endforeach
+                @foreach($data['scholars'] as $index => $scholar)
+                    <tr class="text-sm">
+                        <td class="border border-gray-700 p-2">{{ $index + 1 }}</td>
+                        <td class="border border-gray-700 p-2">{{ $scholar->student_number }}</td>
+                        <td class="border border-gray-700 p-2">{{ $scholar->last_name }}</td>
+                        <td class="border border-gray-700 p-2">{{ $scholar->first_name }}</td>
+                        <td class="border border-gray-700 p-2">{{ $scholar->middle_name }}</td>
+                        <td class="border border-gray-700 p-2">{{ $scholar->course->name ?? 'N/A' }}</td>
+                        <td class="border border-gray-700 p-2">{{ $scholar->year_level }}</td>
+                        <td class="border border-gray-700 p-2">{{ $scholar->batch_no }}</td>
+                    </tr>
+                @endforeach
+
+                <tr class="font-bold bg-gray-100 text-sm">
+                    <td class="border border-gray-700 p-2" colspan="2">TOTAL</td>
+                    <td class="border border-gray-700 p-2">{{ $totalEnrolled }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
     <!-- Additional Cert Text -->
     <p class="mb-4">
         This further certifies that the student's information indicated in
         <span class="text-red-600 underline">{{ $scholarship->name }} Continuing Form </span> is accurate and complete.
     </p>
 
-    {{-- <p class="font-bold mb-6">
-        This certification is being issued in accordance with the CHED-UniFAST Memorandum Circular No. 01 Series of
-        2022, Amended Tertiary Education Subsidy (TES) Guidelines of 2022.
-    </p> --}}
 
     <!-- Signatories -->
     <div class="absolute bottom-0 right-0 flex justify-between mt-12">

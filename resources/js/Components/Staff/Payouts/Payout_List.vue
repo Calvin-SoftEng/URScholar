@@ -243,6 +243,97 @@ onMounted(() => {
   }
 });
 
+
+const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Payroll'];
+const batchRef = ref(null);
+const campusRef = ref(null);
+
+const selectedReportType = ref('');
+const selectedReportBatches = ref([]);
+const selectedReportCampuses = ref([]);
+
+// Improved click outside handler
+const handleClickOutside = (event) => {
+    // Make sure all refs are defined before using them
+    if (openDropdown.value) {
+        const campusEl = campusRef.value;
+        const batchEl = batchRef.value;
+        const reportEl = reportRef.value;
+
+        // Check if click is outside all active dropdowns
+        const clickedOutside = (
+            (campusEl && !campusEl.contains(event.target) || !campusEl) &&
+            (batchEl && !batchEl.contains(event.target) || !batchEl) &&
+            (reportEl && !reportEl.contains(event.target) || !reportEl)
+        );
+
+        if (clickedOutside) {
+            openDropdown.value = null;
+        }
+    }
+};
+
+// const handleGenerateReports = () => {
+//     const filters = {
+//         type: selectedReportType.value,
+//         campuses: selectedReportCampuses.value,
+//         batches: selectedReportBatches.value,
+//     };
+
+//     if (!filters.type || filters.campuses.length === 0 || filters.batches.length === 0) {
+//         console.warn('Please select a report type, campuses, and batches.');
+//         return;
+//     }
+
+//     switch (filters.type) {
+//         case 'Enrollees Summary':
+//             generateEnrolleesSummary(filters);
+//             break;
+//         case 'Enrolled List':
+//             generateEnrolledList(filters);
+//             break;
+//         case 'Graduate Summary':
+//             generateGraduateList(filters);
+//             break;
+//         case 'Payroll':
+//             generatePayroll(filters);
+//             break;
+//         // case 'Scholars List':
+//         //     generateScholarsList(filters);
+//         //     break;
+//         default:
+//             console.warn('No valid report type selected.');
+//     }
+// };
+
+const openReport = () => {
+    // Open the report generation modal
+    generatePayroll();
+};
+
+const generatePayroll = async (filters) => {
+    try {
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/payroll-report`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
+        });
+
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+    }
+};
+
 </script>
 
 

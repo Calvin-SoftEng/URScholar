@@ -5,7 +5,8 @@
             <div class="w-full p-4 h-full">
                 <div class="bg-white dark:bg-dcontainer w-full h-full rounded-xl flex flex-row">
                     <div class="w-[30%] border-r dark:border-gray-500">
-                        <h3 class="text-xl text-dprimary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold dark:text-dtext">
+                        <h3
+                            class="text-xl text-dprimary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold dark:text-dtext">
                             Messages</h3>
 
                         <!-- Tabs for DM and GC -->
@@ -53,9 +54,9 @@
                             <div class="">
                                 <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Sponsors</h4>
                                 <Link v-for="user in filteredUsers" :key="`user-${user.id}`"
-                                    :href="route('messaging.conversation', user.id)" :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100 dark:hover:bg-dnavy',
-                                        selectedUser && selectedUser.id === user.id ? 'bg-blue-50 dark:bg-dprimary' : '']"
-                                    @click.prevent="selectUser(user)">
+                                    :href="route('messaging.conversation', user.id)"
+                                    :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100 dark:hover:bg-dnavy',
+                                        selectedUser && selectedUser.id === user.id ? 'bg-blue-50 dark:bg-dprimary' : '']" @click.prevent="selectUser(user)">
                                 <div v-if="user.picture">
                                     <img class="h-10 w-10 rounded-full" :src="`/storage/user/profile/${user.picture}`"
                                         :alt="user.name">
@@ -104,7 +105,8 @@
                                 </div>
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
-                                        <span class="text-dprimary dark:text-dtext font-quicksand font-semibold">{{ group.name
+                                        <span class="text-dprimary dark:text-dtext font-quicksand font-semibold">{{
+                                            group.name
                                         }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
@@ -170,14 +172,14 @@
                     </div>
 
                     <div class="w-[70%] h-full flex flex-col">
-                        <div class="shadow-sm p-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-400">
+                        <div
+                            class="shadow-sm p-4 flex justify-between items-center border-b border-gray-200 dark:border-gray-400">
                             <h3 class="text-lg font-bold text-dprimary dark:text-dtext">
                                 {{ selectedData ? (selectedData.name || (selectedData.batch_no ? `Batch
                                 ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
                             </h3>
                             <!-- Three dots menu aligned with conversation text -->
-                            <button 
-                                v-if="selectedTab !== 'dm'"
+                            <button v-if="selectedTab !== 'dm'"
                                 class="text-gray-600 hover:text-primary transition-colors"
                                 @click="showMemberList = !showMemberList">
                                 <font-awesome-icon :icon="['fas', 'ellipsis-vertical']" />
@@ -312,7 +314,7 @@
                             </div>
                         </div>
 
-                        <div 
+                        <div
                             class="flex items-center box-border p-2 bg-white dark:bg-dcontainer z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
                             <!-- For the circle-plus button -->
                             <!-- <button class="px-2" @click="toggleAttachmentMenu"
@@ -341,32 +343,23 @@
                                     selectedData && selectedData.id && form.content.trim() ? 'text-primary' : 'text-gray-400 cursor-not-allowed'
                                 ]" />
                             </button> -->
-                            <button
-                                class="px-2 transition duration-200 group"
-                                @click="sendMessage"
-                                :disabled="!selectedData || !selectedData.id || !form.content.trim()"
-                                >
+                            <button class="px-2 transition duration-200 group" @click="sendMessage"
+                                :disabled="!selectedData || !selectedData.id || !form.content.trim()">
                                 <!-- Regular icon -->
-                                <font-awesome-icon
-                                    :icon="['far', 'paper-plane']"
-                                    class="w-6 h-6 group-hover:hidden"
+                                <font-awesome-icon :icon="['far', 'paper-plane']" class="w-6 h-6 group-hover:hidden"
                                     :class="[
-                                    selectedData && selectedData.id && form.content.trim()
-                                        ? 'text-dprimary dark:text-dtext'
-                                        : 'text-gray-400 cursor-not-allowed'
-                                    ]"
-                                />
+                                        selectedData && selectedData.id && form.content.trim()
+                                            ? 'text-dprimary dark:text-dtext'
+                                            : 'text-gray-400 cursor-not-allowed'
+                                    ]" />
 
                                 <!-- Hover icon -->
-                                <font-awesome-icon
-                                    :icon="['fas', 'paper-plane']"
-                                    class="w-6 h-6 hidden group-hover:inline-block"
-                                    :class="[
-                                    selectedData && selectedData.id && form.content.trim()
-                                        ? 'text-dprimary dark:text-dtext'
-                                        : 'text-gray-400 cursor-not-allowed'
-                                    ]"
-                                />
+                                <font-awesome-icon :icon="['fas', 'paper-plane']"
+                                    class="w-6 h-6 hidden group-hover:inline-block" :class="[
+                                        selectedData && selectedData.id && form.content.trim()
+                                            ? 'text-dprimary dark:text-dtext'
+                                            : 'text-gray-400 cursor-not-allowed'
+                                    ]" />
                             </button>
                         </div>
                     </div>
@@ -467,10 +460,10 @@ const groupedUsers = computed(() => {
 //         .join(' ');
 // };
 
-// const formatTimeOnly = (datetime) => {
-//     const date = new Date(datetime);
-//     return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-// };
+const formatTimeOnly = (datetime) => {
+    const date = new Date(datetime);
+    return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+};
 
 
 // Format timestamp for message display
@@ -507,8 +500,14 @@ const filteredUsers = computed(() => {
 
 // Add this function to handle user selection
 const selectUser = (user) => {
+    // Reset member list visibility
+    showMemberList.value = false;
+
     // Set the selected tab to direct messages
     selectedTab.value = 'dm';
+
+    // Store this as the last selected DM
+    lastSelectedDM.value = user;
 
     // Update selected user
     selectedUser.value = user;
@@ -549,6 +548,9 @@ const selectUser = (user) => {
 
 // Add this function to handle group selection
 const selectGroup = (group, type) => {
+    // Reset member list visibility
+    showMemberList.value = false;
+
     // Set the selected tab to group chats
     selectedTab.value = 'gc';
 
@@ -605,10 +607,17 @@ const sendMessage = () => {
     }
 
     // Set form values based on selected group
-    form.value.group_id = selectedData.value.id;
-    form.value.group_type = groupType.value;
+    const messageContent = form.value.content; // Store the content before clearing
 
-    router.post('/messaging/send', form.value, {
+    // Clear the input immediately for better UX
+    form.value.content = '';
+
+    router.post('/messaging/send',
+        {
+            content: messageContent,
+            group_id: selectedData.value.id,
+            group_type: groupType.value
+        }, {
         preserveScroll: true,
         onSuccess: (page) => {
             // Create a temporary message object to add to the UI immediately
@@ -644,13 +653,13 @@ const sendMessage = () => {
                     conversations.value = [...conversations.value]; // Force reactivity
                 }
             }
-
+            clearForm();
             // Reset form content
             form.value.content = '';
 
             // Scroll to bottom
             scrollToBottom();
-            clearForm();
+
             // Fetch messages to get the server-generated message with proper ID
             fetchMessages();
         },
@@ -661,9 +670,7 @@ const sendMessage = () => {
 };
 
 const clearForm = () => {
-    form.value = {
-        content: '',
-    };
+    form.value.content = '';
 };
 
 // Add these to your script setup
@@ -737,6 +744,8 @@ const fetchGroupMembers = async () => {
 watch([selectedData, groupType], ([newData, newType], [oldData, oldType]) => {
     if (newData && newData.id && (!oldData || newData.id !== oldData.id || newType !== oldType)) {
         // Fetch updated members for the newly selected group
+        showMemberList.value = false;
+        
         fetchGroupMembers();
     }
 });
@@ -930,22 +939,52 @@ watch([selectedData, groupType], ([newSelectedData, newGroupType], [oldSelectedD
     }
 });
 
-// Add this new watch function to handle tab persistence
+// Add these variables to store the last selected items for each tab
+const lastSelectedDM = ref(null);
+const lastSelectedGC = ref(null);
+const lastGroupType = ref(null);
+
+// Modify the watch function
 watch(selectedTab, (newTab) => {
-    // When tab changes, update the visible content but don't change the selection
-    if (newTab === 'dm' && selectedUser.value) {
-        // If switching to DM tab and we already have a selected user, keep that selection
-        selectedData.value = selectedConversation.value || { id: selectedUser.value.id };
-        groupType.value = 'conversation';
-    } else if (newTab === 'gc' && selectedData.value && groupType.value === 'conversation') {
-        // If switching to GC tab and we had a conversation selected, clear it
-        // Or optionally select the first group if available
-        if (staffGroupsData.value.length > 0) {
-            selectedData.value = staffGroupsData.value[0];
-            groupType.value = 'staff';
-        } else if (scholarshipGroupsData.value.length > 0) {
-            selectedData.value = scholarshipGroupsData.value[0];
-            groupType.value = 'scholarship';
+    // Reset member list visibility when switching tabs
+    showMemberList.value = false;
+
+    if (newTab === 'dm') {
+        // Save current group chat selection if we're coming from GC tab
+        if (selectedData.value && (groupType.value === 'staff' || groupType.value === 'scholarship')) {
+            lastSelectedGC.value = selectedData.value;
+            lastGroupType.value = groupType.value;
+        }
+
+        // Restore last DM selection
+        if (lastSelectedDM.value) {
+            selectedUser.value = lastSelectedDM.value;
+            selectedData.value = selectedConversation.value || { id: selectedUser.value.id };
+            groupType.value = 'conversation';
+        } else if (selectedUser.value) {
+            // If no previous DM selection but we have selectedUser
+            selectedData.value = selectedConversation.value || { id: selectedUser.value.id };
+            groupType.value = 'conversation';
+        }
+    } else if (newTab === 'gc') {
+        // Save current DM selection if we're coming from DM tab
+        if (selectedUser.value) {
+            lastSelectedDM.value = selectedUser.value;
+        }
+
+        // Restore last GC selection
+        if (lastSelectedGC.value && lastGroupType.value) {
+            selectedData.value = lastSelectedGC.value;
+            groupType.value = lastGroupType.value;
+        } else if (!(selectedData.value && (groupType.value === 'staff' || groupType.value === 'scholarship'))) {
+            // Only set a default if we don't already have a group chat selected
+            if (staffGroupsData.value.length > 0) {
+                selectedData.value = staffGroupsData.value[0];
+                groupType.value = 'staff';
+            } else if (scholarshipGroupsData.value.length > 0) {
+                selectedData.value = scholarshipGroupsData.value[0];
+                groupType.value = 'scholarship';
+            }
         }
     }
 });
