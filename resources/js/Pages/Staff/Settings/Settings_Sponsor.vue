@@ -608,6 +608,14 @@
                 </form>
             </div>
         </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </SettingsLayout>
 </template>
 

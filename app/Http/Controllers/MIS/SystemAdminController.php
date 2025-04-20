@@ -49,6 +49,7 @@ class SystemAdminController extends Controller
             'status' => 'required|in:Active,Inactive',
         ]);
 
+        dd($request->all());
         // Find existing active branding or create new
         $branding = PortalBranding::where('status', 'Active')->first();
         if (!$branding) {
@@ -145,7 +146,7 @@ class SystemAdminController extends Controller
             'description' => 'Campus ' . $request->name . ' has been created.',
         ]);
 
-        return redirect()->route('sa.campuses');
+        return redirect()->back()->with('success', 'Campus created successfully');
     }
 
     public function update_campus(Request $request)
@@ -169,8 +170,7 @@ class SystemAdminController extends Controller
             'description' => 'Campus ' . $request->name . ' has been updated.',
         ]);
 
-        return redirect()->back()
-            ->with('message', 'Campus updated successfully');
+        return redirect()->back()->with('success', 'Campus updated successfully');
     }
 
     public function assign_campus(Request $request, Campus $campus)
@@ -258,7 +258,7 @@ class SystemAdminController extends Controller
             'description' => 'Course ' . $request->name . ' has been created.',
         ]);
 
-        return back();
+        return redirect()->back()->with('success', 'Course created successfully');
     }
 
     public function sy_and_term()
@@ -275,8 +275,6 @@ class SystemAdminController extends Controller
     /**
      * Create a new semester for the given school year and set it as active
      * 
-     * @param Request $request
-     * @return JsonResponse
      */
     public function createAcademicSemester(Request $request)
     {
@@ -333,11 +331,7 @@ class SystemAdminController extends Controller
                     'description' => '1st semester created successfully.',
                 ]);
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'First semester created successfully and set as active',
-                    'academic_year' => $academicYear,
-                ]);
+                return back()->with('success', '1st semester created successfully');
             }
 
             // Check if 1st semester exists but 2nd doesn't
@@ -381,11 +375,7 @@ class SystemAdminController extends Controller
                 ]);
 
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'Second semester created successfully and set as active',
-                    'academic_year' => $academicYear,
-                ]);
+                return back()->with('success', '2nd semester created successfully');
             }
 
             // Both semesters already exist

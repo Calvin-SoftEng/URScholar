@@ -169,10 +169,12 @@ class SettingsController extends Controller
             'moa_file' => 'required|file|max:4096', // Max 4MB
         ]);
 
+        // dd($request->all());
+
         // Check if the current user is the assigned user for this sponsor
         $sponsor = Sponsor::findOrFail($request->sponsor_id);
 
-        if (Auth::id() != $sponsor->assign_id) {
+        if (Auth::id() != $sponsor->created_id) {
             return redirect()->back()->with('error', 'You do not have permission to add MOAs for this sponsor.');
         }
 
@@ -185,6 +187,7 @@ class SettingsController extends Controller
         $moa = new SponsorMoa();
         $moa->sponsor_id = $request->sponsor_id;
         $moa->moa = $moaFileName;
+        $moa->status = 'Active';
         $moa->save();
 
         return redirect()->back()->with('success', 'MOA uploaded successfully.');
@@ -657,7 +660,6 @@ class SettingsController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'scholarship_id' => 'required|exists:scholarships,id',
         ]);
 
         $eligibility->update($validated);

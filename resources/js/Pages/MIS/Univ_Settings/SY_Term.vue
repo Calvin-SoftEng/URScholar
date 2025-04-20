@@ -148,15 +148,23 @@
                 </form>
             </div>
         </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
 
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, Link, router, usePage} from '@inertiajs/vue3';
+import { ref, watchEffect } from 'vue';
 import CalendarPicker from "@/Components/MIS/CalendarPicker.vue";
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const selectedDate = ref({ month: "", day: "" });
 const props = defineProps({
@@ -167,6 +175,24 @@ const selectedYear = ref(null);
 const SchoolYear = ref(false);
 const statusValue = ref("");
 const semester = ref("1st");
+
+const toastVisible = ref(false);
+const toastMessage = ref("");
+
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
+});
 
 // Function to check if a school year already has a 2nd semester
 const hasSecondSemester = (year) => {
@@ -222,11 +248,6 @@ const submitForm = () => {
         schoolYearId: selectedYear.value?.id
     }, {
         onSuccess: (response) => {
-            // Show success message
-            alert(response.props.flash.message);
-
-            // Refresh or redirect using router
-            router.visit(window.location.href);
         },
         onError: (errors) => {
             console.error('Error creating semester:', errors);
