@@ -197,8 +197,6 @@ const showPayoutDetails = (payout) => {
   
   message += `Scholarship: ${payout.scholarship_name}\n`;
   message += `Semester: ${payout.semester}\n`;
-  message += `Total Scholars: ${payout.total_scholars || 0}\n`;
-  message += `Sub Total: ₱${(payout.sub_total || 0).toLocaleString()}\n`;
   message += `Payout Period: ${formatDateStr(payout.date_start)} - ${formatDateStr(payout.date_end)}\n`;
   
   if (payout.reminders) {
@@ -227,9 +225,7 @@ const showCombinedPayoutDetails = (payoutGroup, type) => {
   // Calculate totals
   const totalScholars = payoutGroup.reduce((sum, payout) => sum + (payout.total_scholars || 0), 0);
   const totalAmount = payoutGroup.reduce((sum, payout) => sum + (payout.sub_total || 0), 0);
-  
-  message += `\nTotal Scholars: ${totalScholars}\n`;
-  message += `Total Amount: ₱${totalAmount.toLocaleString()}\n`;
+
   
   if (type === 'start') {
     message += `\nPayout Period Starts: ${formatDateStr(payoutGroup[0].date_start)}`;
