@@ -465,6 +465,11 @@ class DatabaseSeeder extends Seeder
             'user_id' => '4',
             'staff_group_id' => '1',
         ]);
+        
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '6',
+            'staff_group_id' => '2',
+        ]);
 
         \App\Models\StaffGroupUser::factory()->create([
             'user_id' => '7',

@@ -447,7 +447,7 @@
                                                                                 d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                                                         </svg>
                                                                         <span class="text-primary">Enrolled
-                                                                            Students</span>
+                                                                            Grantees</span>
                                                                     </div>
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">{{
@@ -520,7 +520,7 @@
                                                                                 d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                                                         </svg>
                                                                         <span class="text-primary">No. of
-                                                                            Students</span>
+                                                                            Grantees</span>
                                                                     </div>
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">{{
