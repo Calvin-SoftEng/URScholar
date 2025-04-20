@@ -24,7 +24,11 @@ return new class extends Migration
             $table->string('middle_name')->nullable();
             $table->string('last_name')->nullable();
             $table->string('suffix_name')->nullable();
+            $table->string('age')->nullable();
+            $table->string('address')->nullable();
+            $table->string('contact')->nullable();
             $table->foreignId('campus_id')->nullable();;
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->rememberToken();
             $table->timestamps();
         });

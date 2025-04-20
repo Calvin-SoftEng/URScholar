@@ -368,8 +368,18 @@
 
                         <!-- Forward Button -->
                         <div class="mt-4">
-                            <button type="submit"
+                            <button type="submit" v-if="batches.length != 0 && allAccomplished"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200">
+                                <span v-if="isSubmitting" class="flex items-center justify-center">
+                                    <div
+                                        class="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent mr-2">
+                                    </div>
+                                    Processing...
+                                </span>
+                                <span v-else>Forward All Batches</span>
+                            </button>
+                            <button disabled v-else
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50">
                                 <span v-if="isSubmitting" class="flex items-center justify-center">
                                     <div
                                         class="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent mr-2">
@@ -384,9 +394,13 @@
             </div>
         </div>
 
-        <!-- Toast notifications - Keep as is -->
         <ToastProvider>
-            <!-- Toast content - Keep as is -->
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
     </AuthenticatedLayout>
 </template>
@@ -465,10 +479,11 @@ const props = defineProps({
     total_verified_grantees: Object,
     total_unverified_grantees: Object,
     payoutBatches: Array,
+    allAccomplished: Array,
 });
 
 // State
-const selectedCampus = ref('');
+const selectedCampus = ref(props.selectedCampus || '');
 const ForwardBatchList = ref(false);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
@@ -492,23 +507,21 @@ const EndPayout = ref("");   // Stores the selected end date
 const campusesWithBatches = computed(() => {
     // Filter campuses that have batches (or all if no campus filter is applied)
     return props.campuses.filter(campus => {
+        // If there's a campus filter, only include this campus if it matches
+        if (selectedCampus.value && selectedCampus.value !== '') {
+            if (campus.id.toString() !== selectedCampus.value.toString()) {
+                return false;
+            }
+        }
+
+        // Check if this campus has any batches
         const hasBatches = props.batches.some(batch =>
-            batch.campus_id === campus.id &&
-            (!selectedCampus.value || selectedCampus.value === '' ||
-                selectedCampus.value === campus.id.toString())
+            batch.campus_id === campus.id
         );
+
         return hasBatches;
     }).sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
 });
-
-const getBatchesForCampus = (campusId) => {
-    return props.batches.filter(batch =>
-        batch.campus_id === campusId &&
-        (!selectedCampus.value || selectedCampus.value === '' ||
-            selectedCampus.value === campusId.toString())
-    ).sort((a, b) => a.batch_no - b.batch_no); // Sort by batch number
-};
-
 // Add this computed method after your other computed properties
 const getPayoutForCampus = (campusId) => {
     // Find the payout for this campus
@@ -631,10 +644,7 @@ const forwardBatches = async () => {
             semester: props.selectedSem
         }, {
             onSuccess: () => {
-                toastMessage.value = {
-                    title: 'Success!',
-                    description: 'Batches have been forwarded to the cashier.'
-                };
+                toastMessage.value = 'Payouts successfully forwarded to campus cashiers.';
                 toastVisible.value = true;
                 closeModal();
                 setTimeout(() => {
@@ -650,6 +660,12 @@ const forwardBatches = async () => {
     } finally {
         isSubmitting.value = false;
     }
+};
+
+const getBatchesForCampus = (campusId) => {
+    return props.batches.filter(batch =>
+        batch.campus_id === campusId
+    ).sort((a, b) => a.batch_no - b.batch_no); // Sort by batch number
 };
 
 const goBack = () => {
@@ -797,6 +813,17 @@ watch(ForwardBatchList, (newValue) => {
             initFlowbite(); // Initialize the modal components
         }, 200);
     }
+});
+
+// Watch for changes to the campus filter
+watch(selectedCampus, (newValue) => {
+    // When the filter changes, update the URL with the new filter value
+    router.get(route('cashier.all_payouts', {
+        scholarship: props.scholarship.id,
+        selectedSem: props.selectedSem,
+        selectedYear: props.schoolyear.id,
+        selectedCampus: newValue // Pass the selected campus value
+    }), {}, { preserveState: true, preserveScroll: true });
 });
 </script>
 

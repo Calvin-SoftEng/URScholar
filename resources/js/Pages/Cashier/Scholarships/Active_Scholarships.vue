@@ -30,7 +30,7 @@
                             class="text-blue-600 text-2xl flex-shrink-0 w-16 h-16" />
                         <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No Payouts Available</h3>
                     </div>
-                    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <button v-for="scholarship in scholarships" :key="scholarship.id" class="w-full h-full">
                             <div v-for="payout in getPayoutsForScholarship(scholarship.id)" :key="payout.id">
                                 <Link :href="`/cashier/payouts/${payout.id}`" class="block h-full">

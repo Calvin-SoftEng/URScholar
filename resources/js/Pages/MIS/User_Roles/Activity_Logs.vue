@@ -3,14 +3,14 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
-        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
+        <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2 ">
             <div>
                 <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Activity Logs</h1>
             </div>
             <p class="font-quicksand text-base text-gray-600 dark:text-gray-400">
                 Here is the list of all the system activities. Listed are logs of each users.
             </p>
-            <div class="w-full mt-5">
+            <div class="w-full mt-5 overflow-y-auto ">
 
                 <div class="flex w-full border-b border-gray-200 dark:border-gray-700">
                     <a v-for="item in menuItems" :key="item.key" href="#" @click.prevent="selectMenu(item.key)" :class="[
@@ -25,16 +25,22 @@
 
                 <!-- Content Area -->
                 <div
-                    class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+                    class="bg-white dark:bg-dcontainer relative h-full overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0">
+
+                    <!-- Header inside content area -->
                     <div class="flex items-center justify-between bg-white dark:bg-dcontainer m-5">
                         <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
                             {{ getActivitiesTitle() }}
                         </h1>
                     </div>
 
-                    <div class="max-w-3xl mx-auto bg-white dark:bg-dcontainer py-5">
+                    <!-- Scrollable log list -->
+                    <div
+                        class="w-full mx-auto bg-white dark:bg-dcontainer py-5 pr-2 overflow-y-auto"
+                        style="max-height: calc(100vh - 300px);">
+
                         <div v-if="filteredLogs.length > 0" class="space-y-6">
-                            <div v-for="(log, index) in filteredLogs" :key="index">
+                            <div v-for="(log, index) in filteredLogs" :key="index" class="max-w-3xl mx-auto">
                                 <!-- Display Day Only Once -->
                                 <div class="text-gray-500 text-sm font-semibold mb-2">{{ log.date }}</div>
 
@@ -64,16 +70,16 @@
                                 </div>
                             </div>
                         </div>
+
                         <div v-else class="flex justify-center items-center py-10">
                             <div class="text-center">
-                                <span class="material-symbols-rounded text-4xl text-gray-400">
-                                    history
-                                </span>
+                                <span class="material-symbols-rounded text-4xl text-gray-400">history</span>
                                 <p class="text-gray-500 mt-2">No activity logs found for this user type.</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </AuthenticatedLayout>
@@ -93,6 +99,7 @@ const props = defineProps({
 // Updated menu items to match user types
 const menuItems = [
     { name: "All User Activities", key: "all_users" },
+    { name: "University MIS", key: "system_admin" },
     { name: "Super Admin", key: "super_admin" },
     { name: "Coordinators", key: "coordinator" },
     { name: "Cashier", key: "cashier" },

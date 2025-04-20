@@ -12,67 +12,108 @@
                             <span>Scholarships</span>
                         </li>
                         <li>
-                            <span class="text-blue-400 font-semibold">dbp RISE</span>
+                            <span class="text-blue-400 font-semibold">{{ scholarship?.name }}</span>
                         </li>
                     </ul>
                 </div>
 
                 <div class="flex justify-between">
                     <div class="text-3xl font-semibold text-gray-700">
-                        <!-- <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span> -->
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
-                            <!-- <span>{{ scholarship?.name }}</span>
-                            <span>{{ scholarship?.type }}</span> -->
+                            <span>{{ scholarship?.name }}</span>
+                            <span>{{ scholarship?.type }}</span>
                         </h1>
-                        <!-- <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester' }} Semester</span> -->
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
+                            }} Semester</span>
                     </div>
                 </div>
 
-                <div>
-                    <div class="w-full rounded-xl">
+                <div class="w-full mt-5 rounded-xl space-y-10">
+                    <!-- Stats Section -->
+                    <div class="w-full h-[1px] bg-gray-200"></div>
 
-                        <div class="w-full h-[1px] bg-gray-200 my-2"></div>
-
-                        <!-- Actions bar -->
-                        <div class="flex justify-between items-center mb-4">
-                            <div class="flex gap-2">
-                                <!-- Refresh button that only appears when data has changed -->
-                                <Button v-if="dataChanged" variant="outline" @click="refreshData"
-                                    class="flex items-center gap-2">
-                                    <font-awesome-icon :icon="['fas', 'sync']"
-                                        :class="{ 'animate-spin': refreshing }" />
-                                    Refresh Data
-                                </Button>
+                    <div class="grid grid-cols-2">
+                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Total Qualified Applicants</p>
+                            </div>
+                            <div class="w-full flex flex-row justify-between space-x-3 items-end">
+                                <p class="text-4xl font-semibold font-kanit">{{ grantees.length }}</p>
                             </div>
                         </div>
 
+                        <div class="flex flex-col items-start py-4 px-10">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
+                                <p class="text-gray-500 text-sm">Completed Payouts</p>
+                            </div>
+                            <p class="text-4xl font-semibold font-kanit">{{ DonePayout ?? 0 }}</p>
+                        </div>
+                    </div>
 
+                    <div class="w-full h-[1px] bg-gray-200"></div>
+                    <div>
+                        <!-- Forward to Cashier -->
+                        <div class="w-full flex justify-end gap-3">
+                            <div>
+                                <button @click="toggleView"
+                                    class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
+                                border border-green-300 dark:border-green-500 hover:bg-green-200 px-4 py-2 rounded-lg transition duration-200">
+                                    <font-awesome-icon :icon="['fas', 'receipt']" class="text-base" />
+                                    <span class="font-normal">
+                                        {{ showPayrolls ? 'View Scholar List' : 'View Payrolls' }}
+                                    </span>
+                                </button>
+                            </div>
+                            <button v-if="payouts" @click="toggleSendBatch"
+                                class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
+                                <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                <span class="font-normal">Forward to <span class="font-semibold">University
+                                        Cashier</span></span>
+                            </button>
+                            <div v-else>
+                                <button v-tooltip.left="'Complete all batches first'" disabled
+                                    class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                                border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
+                                    <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
+                                    <span class="font-normal">Forward to University Cashier</span>
+                                </button>
+                            </div>
+                        </div>
 
-                        <!-- <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
-
-                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                        <div v-if="!showPayrolls">
+                            <ListOfGrantees :scholarship="scholarship" :batches="batches" :grantees="grantees"
                                 :requirements="requirements" @update:stats="updateStats" />
                         </div>
+
                         <div v-else>
-                            <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                            :requirements="requirements" @update:stats="updateStats" />
-                        </div> -->
-                        <ListOfGrantees :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                            :requirements="requirements" @update:stats="updateStats" />
+                            <PayrollTable :scholarship="scholarship" :batch="batch" :disbursements="disbursements"
+                                :scholars="scholars" :payout="payout" @update:stats="updateStats" />
+                        </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
-        <!-- Simplified forwarding batch list modal -->
-        <div v-if="ForwardScholarList"
+
+        <!-- Forwarding batch list modal -->
+        <div v-if="ForwardBatchList"
             class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
             <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
                 <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
-                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Forwarding Scholars List</h2>
+                    <div class="flex items-center gap-3">
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Forward the list for Payouts
+                            </h2>
+                        </div>
+                    </div>
                     <button type="button" @click="closeModal"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal">
@@ -86,100 +127,53 @@
 
                 <!-- Form -->
                 <form @submit.prevent="forwardBatches">
-                    <div class="py-4 px-8 flex flex-col gap-3">
-                        <div class="mb-4">
-                            <label for="batchSelection"
-                                class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                                Select a Date:
-                            </label>
-                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
-                                <!-- Application Start Date -->
-                                <div class="flex flex-col w-full">
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                viewBox="0 0 20 20">
-                                                <path
-                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                            </svg>
-                                        </div>
-                                        <input v-model="StartPayout" id="datepicker-range-start" name="start"
-                                            type="text" autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Submission Start Date">
-                                    </div>
-                                </div>
+                    <div class="py-6 px-8 flex flex-col gap-6">
 
-                                <span class="text-gray-500">to</span>
+                        <h2 class="text-lg font-semibold text-gray-700 dark:text-white">
+                            Summary of Qualified Scholars for Forwarding
+                        </h2>
 
-                                <!-- Application Deadline -->
-                                <div class="flex flex-col w-full">
-                                    <div class="relative">
-                                        <div
-                                            class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                                viewBox="0 0 20 20">
-                                                <path
-                                                    d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                            </svg>
-                                        </div>
-                                        <input v-model="EndPayout" id="datepicker-range-end" name="end" type="text"
-                                            autocomplete="off" lang="en"
-                                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                            placeholder="Submission Start Date">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <label for="batchSelection"
-                            class="block mb-2 text-base font-medium text-gray-500 dark:text-white">
-                            Select a Batch to Forward:
-                        </label>
-
-                        <!-- Loading indicator -->
+                        <!-- Loader -->
                         <div v-if="isLoading" class="flex justify-center items-center py-4">
                             <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
+                            <span class="ml-2 text-gray-700 dark:text-gray-300">Loading campus batches...</span>
                         </div>
 
-                        <!-- Checkbox List -->
-                        <div v-if="!isLoading" class="flex flex-col gap-2">
-                            <label class="flex items-center space-x-2">
-                                <input type="checkbox" value="all" v-model="selectedBatches" @change="selectAllBatches"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <span class="text-gray-900 dark:text-white">Send All Batch List</span>
-                            </label>
+                        <!-- Campus Data -->
+                        <h3 class="text-md font-semibold text-blue-800 dark:text-blue-300 mb-2">
+                            {{ scholarship?.name }} SY {{ schoolyear?.year || '2024' }}
+                        </h3>
 
-                            <label v-for="batch in batchesWithScholars" :key="batch.id"
-                                class="flex items-center space-x-2">
-                                <input type="checkbox" :value="batch.id" v-model="selectedBatches"
-                                    class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500">
-                                <span class="text-gray-900 dark:text-white">Batch {{ batch.batch_no }}</span>
-                                <span class="text-sm text-gray-500">({{ batch.scholar_count }} scholars)</span>
-                            </label>
-                        </div>
+                        <!-- Campus List -->
+                        <ul class="space-y-3">
+                            <li v-for="campus in scholarsByCampus" :key="campus.name"
+                                class="flex justify-between items-center bg-gray-50 dark:bg-gray-800 p-3 rounded-md border border-gray-200 dark:border-gray-600">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-800 dark:text-white">
+                                        {{ campus.name }}
+                                    </p>
+                                    <p class="text-xs text-gray-500">
+                                        Scholars: {{ campus.count }}
+                                    </p>
+                                </div>
+                                <span
+                                    class="text-xs font-semibold px-3 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+                                    Ready to Send
+                                </span>
+                            </li>
+                        </ul>
 
-                        <!-- Forward Button -->
-                        <div v-if="completedBatches !== batches.length" class="mt-4">
-                            <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
+                        <div class="mt-4">
+                            <button v-tooltip.left="'Complete all batches'"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                {{ isSubmitting ? 'Processing...' : 'Forward' }}
-                            </button>
-                        </div>
-                        <div v-else class="mt-4">
-                            <button v-tooltip.left="'Complete all batches'" disabled
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-                                Foward
+                                Forward
                             </button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
+
 
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
@@ -197,642 +191,147 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed } from 'vue';
-import { useForm, Link, usePage, router } from '@inertiajs/vue3';
+import { defineProps, ref, watchEffect, onMounted, computed } from 'vue';
+import { useForm, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
-import { Checkbox } from '@/Components/ui/checkbox'
-import { Input } from '@/Components/ui/input'
-import { initFlowbite } from 'flowbite';
 import { Tooltip } from 'primevue';
-import InputError from '@/Components/InputError.vue';
+import { initFlowbite } from 'flowbite';
 import ListOfGrantees from '@/Components/Staff/OneTimeScholars/ListOfGrantees.vue';
-
+import PayrollTable from '@/Components/Staff/OneTimeScholars/PayrollTable.vue';
 
 // Define props to include scholars data
 const props = defineProps({
-    scholarship_form: Array,
-    scholarship_form_data: Array,
-    batches: Array,
+    batch: Object,
     scholarship: Object,
     schoolyear: Object,
     selectedSem: String,
-    scholars: Array, // Add scholars prop
-    campuses: Array,
-    courses: Array,
-    students: Array,
-    total_scholars: Array,
-    requirements: Array,
-    completedBatches: Array,
+    grantees: Array,
+    campus: Array,
+    disbursements: Array,
+    scholars: Array,
+    payout: Array,
+    DonePayout: Number,
 });
 
 const directives = {
     Tooltip,
 };
 
-const getFormData = (formId) => {
-    return props.scholarship_form_data.filter(data => data.scholarship_form_id === formId);
-};
-
-// Forward batch modal state
-const ForwardScholarsList = ref(false);
-const selectedBatches = ref([]);
+// UI State
+const showPayrolls = ref(false);
+const ForwardBatchList = ref(false);
 const isLoading = ref(false);
 const isSubmitting = ref(false);
-const batchesWithScholars = ref([]);
+const toastVisible = ref(false);
+const toastMessage = ref("");
 
-const selectedStart = ref(""); // Stores the selected start date
-const selectedEnd = ref("");   // Stores the selected end date
-
-const StartPayout = ref(""); // Stores the selected start date
-const EndPayout = ref("");   // Stores the selected end date
-
-// Count scholars with "Verified" status
-const verified_scholars = computed(() => {
-    return props.total_scholars.filter(scholar => scholar.status === "Verified").length;
+// Computed properties for stats
+const totalQualifiedScholars = computed(() => {
+    return props.grantees?.filter(scholar => scholar.status === "Verified").length || 0;
 });
 
-// Count scholars with "Unverified" status
-const unverified_scholars = computed(() => {
-    return props.total_scholars.filter(scholar => scholar.status === "Unverified").length;
+const completedPayouts = computed(() => {
+    // This would be calculated based on your actual data structure
+    // For now returning a placeholder value
+    return 0;
 });
 
-const total_scholars = computed(() => {
-    return props.total_scholars.filter(scholar => {
-        // Add your conditions here, for example:
-        // return scholar.isActive === true;
-        return true; // Count all scholars by default
-    }).length;
-});
+// Compute scholars grouped by campus, sorted alphabetically
+const scholarsByCampus = computed(() => {
+    if (!props.grantees) return [];
 
+    // Group grantees by campus
+    const campusMap = {};
 
-const toggleSendBatch = async () => {
-    ForwardScholarsList.value = true;
+    props.grantees.forEach(grantee => {
+        const campusName = grantee.campus || 'Unknown';
+        if (!campusMap[campusName]) {
+            campusMap[campusName] = 0;
+        }
+        campusMap[campusName]++;
+    });
 
-    // Load batches with scholar counts
-    await loadBatchesData();
-};
-
-const loadBatchesData = async () => {
-    isLoading.value = true;
-
-    try {
-        // Calculate scholar counts for each batch using the scholars prop
-        setTimeout(() => {
-            // Group scholars by batch_id and count them
-            const scholarCountsByBatch = props.scholars.reduce((counts, scholar) => {
-                if (scholar.batch_id) {
-                    counts[scholar.batch_id] = (counts[scholar.batch_id] || 0) + 1;
-                }
-                return counts;
-            }, {});
-
-            // Map batches with their scholar counts
-            batchesWithScholars.value = props.batches.map(batch => {
-                return {
-                    ...batch,
-                    scholar_count: scholarCountsByBatch[batch.id] || 0
-                };
-            });
-
-            // Automatically select all batches when data is loaded
-            selectedBatches.value = ['all', ...batchesWithScholars.value.map(batch => batch.id)];
-
-            isLoading.value = false;
-        }, 300);
-    } catch (error) {
-        console.error('Error loading batch data:', error);
-        toastMessage.value = 'Failed to load batch data';
-        toastVisible.value = true;
-        isLoading.value = false;
-    }
-};
-
-const selectAllBatches = () => {
-    if (selectedBatches.value.includes('all')) {
-        // If 'all' is selected, select all batch IDs
-        selectedBatches.value = ['all', ...batchesWithScholars.value.map(batch => batch.id)];
-    } else {
-        // If 'all' is unselected, clear all selections
-        selectedBatches.value = [];
-    }
-};
-
-// Form data
-const form = ref({
-    name: '',
-    scholarshipType: '',
-    totalRecipients: 0,
-    requirements: [],
-    criteria: [],
-    grade: 0.0,
-    amount: 0,
-    appplication: '',
-    deadline: '',
-    payoutStartInput: '',
-    payoutEndInput: '',
-});
-
-const clearForm = () => {
-    form.value = {
-        name: '',
-        scholarshipType: '',
-        totalRecipients: 0,
-        requirements: [],
-        criteria: [],
-        grade: 0.0,
-        amount: 0,
-        appplication: '',
-        deadline: '',
-    };
-};
-
-
-
-// Safe check if criteria includes an ID
-const criteriaIncludes = (dataId) => {
-    return form.value && form.value.criteria && Array.isArray(form.value.criteria)
-        ? form.value.criteria.includes(dataId)
-        : false;
-};
-
-// Handle criteria selection
-const toggleCriteria = (dataId) => {
-    // Ensure criteria is initialized
-    if (!form.value.criteria) {
-        form.value.criteria = [];
-    }
-
-    const index = form.value.criteria.indexOf(dataId);
-    if (index === -1) {
-        // Add to criteria if not already present
-        form.value.criteria.push(dataId);
-    } else {
-        // Remove from criteria if already present
-        form.value.criteria.splice(index, 1);
-    }
-};
-
-const newReq = ref("");
-const reqs = ref([]);
-
-// dynamic requirements
-const newItem = ref('');
-const items = ref([]);
-
-const addItem = () => {
-    if (newItem.value.trim() !== '') {
-        items.value.push(newItem.value.trim());
-        form.value.requirements = items.value;
-        newItem.value = '';
-    }
-};
-
-const removeItem = (index) => {
-    items.value = items.value.filter((_, i) => i !== index);
-};
-
-
-// Create reactive campus array from props with selection state
-const campusesData = ref([]);
-
-// Initialize campus data from props
-onMounted(() => {
-    // Make sure form.criteria is initialized
-    if (!form.value.criteria) {
-        form.value.criteria = [];
-    }
-
-    // Transform props.campuses into the format we need
-    if (props.campuses && props.campuses.length > 0) {
-        campusesData.value = props.campuses.map(campus => ({
-            id: campus.id,
-            name: campus.name,
-            selected: false,
-            recipients: 0,
-            // Get courses associated with this campus
-            courses: props.courses
-                ? props.courses.filter(course => course.campus_id === campus.id)
-                    .map(course => course.name)
-                : []
+    // Convert to array and sort alphabetically
+    return Object.keys(campusMap)
+        .sort((a, b) => a.localeCompare(b))
+        .map(name => ({
+            name,
+            count: campusMap[name]
         }));
-    }
-
-    if (props.batches && props.batches.length > 0) {
-        expandedBatches.value = props.batches[0].id;
-    }
-
-    // Initialize Flowbite Datepicker
-    const dateInput = document.getElementById("datepicker-autohide");
-    if (dateInput) {
-        const datepicker = new Datepicker(dateInput, {
-            autohide: true,
-            format: "yyyy-mm-dd", // Adjust format as needed
-        });
-
-        dateInput.addEventListener("changeDate", (event) => {
-            form.value.birthdate = event.target.value;
-        });
-    }
-
-    const startInput = document.getElementById("datepicker-range-start");
-    if (startInput) {
-        startInput.value = selectedStart.value; // Keep the previous value
-        startInput.addEventListener("changeDate", (event) => {
-            const date = new Date(event.target.value);
-
-            // Correct for time zone issues
-            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-
-            form.value.appplication = date.toISOString().split("T")[0]; // Keeps the correct local date
-            console.log("Application:", form.value.application);
-            selectedStart.value = event.target.value;
-        });
-    }
-
-    const endInput = document.getElementById("datepicker-range-end");
-    if (endInput) {
-        endInput.value = selectedEnd.value; // Keep the previous value
-        endInput.addEventListener("changeDate", (event) => {
-            const date = new Date(event.target.value);
-
-            // Correct for time zone issues
-            date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-
-            form.value.deadline = date.toISOString().split("T")[0]; // Keeps the correct local date
-            selectedEnd.value = event.target.value;
-        });
-    }
-
-    watch(ForwardScholarsList, (newValue) => {
-        if (newValue) {
-            setTimeout(() => {
-                initFlowbite(); // Initialize Flowbite when modal is accessed
-
-                const startInput = document.getElementById("datepicker-range-start");
-                if (startInput) {
-                    startInput.value = StartPayout.value; // Keep the previous value
-                    startInput.addEventListener("changeDate", (event) => {
-                        const date = new Date(event.target.value); // ✅ Get selected date
-                        form.value.payoutStartInput = date.toISOString().split("T")[0];
-                        console.log("Application:", form.value.payoutStartInput);
-                        StartPayout.value = event.target.value;
-                    });
-                } else {
-                    console.warn("Start datepicker not found.");
-                }
-
-                const endInput = document.getElementById("datepicker-range-end");
-                if (endInput) {
-                    endInput.value = EndPayout.value; // Keep the previous value
-                    endInput.addEventListener("changeDate", (event) => {
-                        const date = new Date(event.target.value); // ✅ Get selected date
-                        form.value.payoutEndInput = date.toISOString().split("T")[0];
-                        EndPayout.value = event.target.value;
-                    });
-                } else {
-                    console.warn("End datepicker not found.");
-                }
-
-                // Initial distribution
-                distributeRecipients();
-
-            }, 200); // Small delay to ensure modal is in the DOM
-        }
-    });
-
-
-    // Initial distribution
-    distributeRecipients();
-    initFlowbite();
 });
 
-
-watch(selectedStart, (newVal) => {
-    document.getElementById("datepicker-range-start").value = newVal;
-});
-
-watch(selectedEnd, (newVal) => {
-    document.getElementById("datepicker-range-end").value = newVal;
-});
-
-// 🎯 Sync Input Values
-watch(() => StartPayout.value, (newVal) => {
-    const input = document.getElementById("datepicker-range-start");
-    if (input) input.value = newVal;
-});
-
-watch(() => EndPayout.value, (newVal) => {
-    const input = document.getElementById("datepicker-range-end");
-    if (input) input.value = newVal;
-});
-
-
-watch(ForwardScholarsList, (newValue) => {
-    if (newValue) {
-        setTimeout(() => {
-            initFlowbite(); // Initialize the modal components
-        }, 200);
-    }
-});
-
-// Compute selected campuses dynamically
-const selectedCampuses = computed(() =>
-    campusesData.value.filter(campus => campus.selected)
-);
-
-// Calculate total allocated recipients
-const allocatedRecipients = computed(() => {
-    return campusesData.value.reduce(
-        (sum, campus) => sum + parseInt(campus.recipients || 0), 0
-    );
-});
-
-// Helper to access the total recipients value
-const totalRecipients = computed(() => parseInt(form.value.totalRecipients) || 0);
-
-// Function to distribute recipients equally when checking/unchecking a campus
-const distributeRecipients = () => {
-    const selectedCount = selectedCampuses.value.length;
-
-    if (selectedCount === 0 || totalRecipients.value === 0) {
-        campusesData.value.forEach(campus => campus.recipients = 0);
-        return;
-    }
-
-    const share = Math.floor(totalRecipients.value / selectedCount);
-    const remainder = totalRecipients.value % selectedCount;
-
-    campusesData.value.forEach(campus => {
-        if (!campus.selected) {
-            campus.recipients = 0;
-            return;
-        }
-
-        // Find the index in the selected campuses array
-        const index = selectedCampuses.value.findIndex(c => c.id === campus.id);
-        campus.recipients = share + (index < remainder ? 1 : 0);
-    });
+// UI toggle functions
+const toggleView = () => {
+    showPayrolls.value = !showPayrolls.value;
 };
 
-// Handle manual change to a campus's recipients
-const onRecipientManualChange = (changedCampusId) => {
-    const changedCampus = campusesData.value.find(c => c.id === changedCampusId);
-
-    // Ensure value is a valid number and not less than 0
-    changedCampus.recipients = Math.max(0, parseInt(changedCampus.recipients) || 0);
-
-    // If changing this would exceed total, cap it
-    if (allocatedRecipients.value > totalRecipients.value) {
-        changedCampus.recipients = Math.max(0,
-            parseInt(changedCampus.recipients) - (allocatedRecipients.value - totalRecipients.value)
-        );
-    }
+const toggleSendBatch = () => {
+    ForwardBatchList.value = !ForwardBatchList.value;
 };
 
-// Watch total recipients and automatically redistribute
-watch(() => form.value.totalRecipients, distributeRecipients);
-
-// Initial distribution
-distributeRecipients();
-
-// Store selected courses
-const selectedCoursesMap = ref({});
-
-// Compute selected courses dynamically based on checked campuses
-const selectedCourses = computed(() => {
-    let courses = [];
-    campusesData.value.forEach((campus) => {
-        if (campus.selected) {
-            courses = [...new Set([...courses, ...campus.courses])]; // Remove duplicates
-        }
-    });
-
-    // Sync the selected courses in the map
-    selectedCoursesMap.value = courses.reduce((acc, course) => {
-        acc[course] = selectedCoursesMap.value[course] || false;
-        return acc;
-    }, {});
-
-    return courses;
-});
-
-// Compute selected courses dynamically based on checked checkboxes
-const selectedCoursesText = computed(() => {
-    return Object.keys(selectedCoursesMap.value)
-        .filter(course => selectedCoursesMap.value[course]) // Get only checked courses
-        .join(", "); // Convert to a comma-separated string
-});
-
-// Update selected courses whenever a campus is checked/unchecked
-const updateSelectedCourses = () => {
-    selectedCourses.value; // Triggers computed property update
+const closeModal = () => {
+    ForwardBatchList.value = false;
 };
-
-const submitForm = () => {
-
-    // Prepare campus recipients data for the backend
-    const campusRecipients = selectedCampuses.value.map(campus => ({
-        campus_id: campus.id,
-        slots: parseInt(campus.recipients),
-        remaining_slots: parseInt(campus.recipients),
-        selected_campus: JSON.stringify(
-            campus.courses
-                .filter(course => selectedCoursesMap.value[course])
-                .map(course => ({ course }))
-        ),
-    }));
-
-    // Create the payload
-    const payload = {
-        // name: form.value.name,
-        // scholarship_type: form.value.scholarshipType,
-        total_recipients: form.value.totalRecipients,
-        requirements: form.value.requirements,
-        criteria: form.value.criteria,
-        grade: form.value.grade,
-        application: form.value.application,
-        deadline: form.value.deadline,
-        amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
-        campus_recipients: campusRecipients,
-    };
-
-    // Submit the form to the backend
-    router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, payload, {
-        onSuccess: () => {
-            showToast('Success', 'Scholarship created successfully');
-            clearForm();
-            setTimeout(() => {
-                router.visit('/scholarships');
-            }, 1500);
-        },
-        onError: (errors) => {
-            showToast('Error', 'There was an error creating the scholarship');
-            errors.value = errors;
-            isSubmitting.value = false;
-        },
-    });
-
-}
-
-
-// Watch for changes in individual batch selections
-watchEffect(() => {
-    // If any individual batch is unselected and 'all' was selected, unselect 'all'
-    const allBatchIds = batchesWithScholars.value.map(batch => batch.id);
-
-    if (selectedBatches.value.includes('all') &&
-        !allBatchIds.every(id => selectedBatches.value.includes(id))) {
-        selectedBatches.value = selectedBatches.value.filter(id => id !== 'all');
-    }
-
-    // If all individual batches are selected, also select 'all'
-    if (allBatchIds.length > 0 &&
-        allBatchIds.every(id => selectedBatches.value.includes(id)) &&
-        !selectedBatches.value.includes('all')) {
-        selectedBatches.value.push('all');
-    }
-});
 
 const forwardBatches = async () => {
     isSubmitting.value = true;
 
     try {
-        // Prepare data for submission
-        const batchesToForward = selectedBatches.value.includes('all')
-            ? batchesWithScholars.value.map(batch => batch.id)
-            : selectedBatches.value;
-
-        // Create payload with selected batches
+        // Create payload that matches your controller's requirements
         const payload = {
             scholarship_id: props.scholarship.id,
-            scholars: batchesWithScholars.value.reduce((scholars, batch) => {
-                if (batchesToForward.includes(batch.id)) {
-                    scholars.push(...props.scholars.filter(s => s.batch_id === batch.id));
-                }
-                return scholars;
-            }, []),
-            batch_ids: batchesToForward,
-            date_start: form.value.payoutStartInput,
-            date_end: form.value.payoutEndInput,
-
+            grantees: [props.grantees],
+            batch_ids: [props.batch.id], // Wrap in array as per controller expectation
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
         };
 
-        await router.post(`/scholarship/forward-batches`, payload);
+        // Send the request
+        router.post(`/scholarship/forward-batches`, payload, {
+            preserveScroll: true,
+            onSuccess: () => {
+                closeModal();
+                // Show success message
+                toastMessage.value = `Successfully forwarded ${payload.grantees.length} scholars to University Cashier`;
+                toastVisible.value = true;
 
-        // In a real implementation, you would submit to the backend
-        setTimeout(() => {
-            // Simulate successful submission
-            const totalScholars = batchesToForward.reduce((total, batchId) => {
-                const batch = batchesWithScholars.value.find(b => b.id === batchId);
-                return total + (batch ? batch.scholar_count : 0);
-            }, 0);
-
-            toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
-            toastVisible.value = true;
-
-            // Close the modal and reset form
-            closeModal();
-
-            isSubmitting.value = false;
-        }, 1000);
-
-        // In a real implementation, you would use fetch or Inertia.js
+                // Refresh data if needed
+                updateStats();
+            },
+            onError: (errors) => {
+                console.error('Validation errors:', errors);
+                toastMessage.value = 'Failed to forward batch. Please check the form.';
+                toastVisible.value = true;
+            }
+        });
     } catch (error) {
-        console.error('Error forwarding batches:', error);
-        toastMessage.value = error.message || 'Failed to forward batches';
+        console.error('Error forwarding batch:', error);
+        toastMessage.value = error.message || 'Failed to forward batch';
         toastVisible.value = true;
+    } finally {
         isSubmitting.value = false;
     }
 };
 
-const closeModal = () => {
-    ForwardBatchList.value = false;
-    resetForm();
+// Update stats when needed
+const updateStats = () => {
+    // Logic to refresh statistics
 };
 
-const resetForm = () => {
-    selectedBatches.value = [];
-    batchesWithScholars.value = [];
-};
-
-// Existing code remains the same
-const addVisible = ref(false);
-const List = ref(true);
-
-const toggleAdd = () => {
-    addVisible.value = true;
-    List.value = false;
-};
-
-const toggleList = () => {
-    List.value = true;
-    addVisible.value = false;
-};
-
-// Reactive variables to track which tab is open
-const activeTab = ref("scholars"); // Default to Scholars
-
-// Functions to toggle the active tab
-const toggleScholars = () => {
-    activeTab.value = "scholars";
-};
-
-const toggleReqs = () => {
-    activeTab.value = "requirements";
-};
-
-const toggleMonitoring = () => {
-    activeTab.value = "monitoring";
-};
-
-const openBatch = (batchId) => {
-    router.visit(`/scholarships/${props.scholarship.id}/batch/${batchId}`, {
-        data: {
-            scholarship: props.scholarship.id,
-            selectedYear: props.schoolyear.id,
-            selectedSem: props.selectedSem
-        },
-        preserveState: true
-    });
-};
-
-const expandedBatches = ref(new Set([props.batches?.[0]?.id])) // First batch expanded by default
-
-
-const selectedSem = ref("");
-
-selectedSem.value = props.selectedSem;
-
-const openScholarship = () => {
-    router.visit(`/scholarships/${props.scholarship.id}/adding-scholars`, {
-        data: { selectedYear: props.schoolyear.id, selectedSem: props.selectedSem },
-        preserveState: true
-    });
-};
-
-const formData = ref({
-    file: null,
-    // other form fields...
+// Initialize flowbite components
+onMounted(() => {
+    initFlowbite();
 });
 
-const updateFile = (file) => {
-    formData.value.file = file;
-};
-
-const toastVisible = ref(false);
-const toastMessage = ref("");
-
+// Watch for flash messages
 watchEffect(() => {
     const flashMessage = usePage().props.flash?.success;
 
     if (flashMessage) {
-        console.log("Showing toast with message:", flashMessage);
         toastMessage.value = flashMessage;
         toastVisible.value = true;
 
         setTimeout(() => {
-            console.log("Hiding toast...");
             toastVisible.value = false;
         }, 3000);
     }
@@ -840,7 +339,7 @@ watchEffect(() => {
 </script>
 
 <style scoped>
-/* override the prime vue componentss */
+/* override the prime vue components */
 :root {
     --p-tooltip-background: #D97706 !important;
     /* Yellow warning color */
@@ -849,12 +348,6 @@ watchEffect(() => {
 .p-tooltip-text {
     font-size: 12px !important;
     color: white !important;
-}
-
-.p-fileupload-choose-button {
-    background-color: #003366 !important;
-    color: white !important;
-    border-radius: 4px;
 }
 
 .slide-enter-active,

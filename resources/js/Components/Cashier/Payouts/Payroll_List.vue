@@ -3,9 +3,10 @@
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
         <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Generate Report
+          class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+          @click="generateReport">
+          <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
+          Generate Report
         </button>
       </div>
       <form class="w-3/12">
@@ -49,8 +50,8 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img 
-                            :src="`/storage/user/profile/${scholar.user?.picture}` || '../../../../assets/images/no_userpic.png'" 
+                          <img
+                            :src="`/storage/user/profile/${scholar.user?.picture}` || '../../../../assets/images/no_userpic.png'"
                             alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
@@ -71,17 +72,15 @@
                     {{ scholar.campus }}
                   </td>
                   <td>
-                    <!-- This would be filled with actual claim time data -->
-                    N/A
+                    {{ formatDate(scholar.claimed_time) }}
                   </td>
                   <td>
-                    <span 
-                      :class="{
-                        'bg-green-100 text-green-800 border border-green-400': scholar.claimed_status === 'Claimed',
-                        'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.claimed_status === 'Pending',
-                        'bg-red-100 text-red-800 border border-red-400': scholar.claimed_status === 'Not Claimed'
-                      }" 
-                      class="text-xs font-medium px-2.5 py-0.5 rounded">
+                    <span :class="{
+                      'bg-green-100 text-green-800 border border-green-400': scholar.claimed_status === 'Claimed',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.claimed_status === 'Pending',
+                      'bg-red-100 text-red-800 border border-red-400': scholar.claimed_status === 'Not Claimed'
+                    }"
+                      class="text-xs font-medium px-2.5 py-0.5 rounded bg-gray-200 text-gray-500 border border-gray-400">
                       {{ scholar.claimed_status ?? 'Pending' }}
                     </span>
                   </td>
@@ -130,7 +129,8 @@
             <div class="p-4 flex flex-col space-y-4">
               <div class="relative space-y-3">
                 <h3 class="font-semibold text-gray-900 dark:text-white">
-                  As per Scholar: <span>{{ selectedScholar ? `${selectedScholar.first_name} ${selectedScholar.last_name}` : '' }}</span>
+                  As per Scholar: <span>{{ selectedScholar ? `${selectedScholar.first_name}
+                    ${selectedScholar.last_name}` : '' }}</span>
                 </h3>
                 <textarea id="subject" rows="4" v-model="reasonText"
                   class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-dsecondary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -193,6 +193,8 @@ const props = defineProps({
   errors: Object,
   flash: Object,
   scholar: Object,
+  schoolyear: Object,
+  selectedSem: String,
 });
 
 const components = {
@@ -221,10 +223,10 @@ const uploadedFiles = ref([]);
 // Filtered scholars based on search query
 const filteredScholars = computed(() => {
   if (!props.scholars) return [];
-  
+
   return props.scholars.filter(scholar => {
     if (!scholar) return false;
-    
+
     return (
       scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
@@ -281,6 +283,25 @@ const restartScan = () => {
   isScanning.value = true;
   errorMessage.value = null;
   successMessage.value = null;
+};
+
+
+const generateReport = async () => {
+  try {
+
+    // Instead of opening multiple windows, send all data in one request
+    const url = `/scholarships/${props.scholarship.id}/payroll-report`;
+    const queryParams = new URLSearchParams({
+      batch_ids: props.batch.id,
+      campus_ids: props.batch.campus_id,
+      school_year_id: props.schoolyear.id,
+      semester: props.selectedSem
+    });
+
+    window.open(`${url}?${queryParams.toString()}`, '_blank');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+  }
 };
 
 // Open batch report

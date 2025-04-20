@@ -15,7 +15,7 @@
                 <div v-if="!isTableVisible" class="bg-white dark:bg-dcontainer relative overflow-x-auto border border-gray-200 rounded-lg">
                     <div class="flex items-center justify-between pb-4 bg-white dark:bg-dcontainer m-5">
                         <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext">
-                            University of the Rizal System
+                            University of Rizal System
                         </h1>
                         <button @click="toggleTable"
                             class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
@@ -211,15 +211,24 @@
                 </form>
             </div>
         </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
+import { ref, computed,watchEffect } from 'vue';
 import { Tooltip } from 'primevue';
 import { User } from 'lucide-vue-next';
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
     campuses: Array,
@@ -347,4 +356,22 @@ const submitAssign = async () => {
         console.error("Error submitting form:", error);
     }
 };
+
+const toastVisible = ref(false);
+const toastMessage = ref("");
+
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
+});
 </script>

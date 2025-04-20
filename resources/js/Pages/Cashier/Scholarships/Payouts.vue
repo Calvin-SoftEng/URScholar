@@ -27,8 +27,8 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <span
-                                class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }}</span>
-                            <span>Grant</span>
+                                class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }} </span>
+                            <span> Grant</span>
                         </h1>
                         <span class="text-xl">SY {{ batch.school_year.year }} - {{ batch.semester }} Semester</span>
                     </div>
@@ -57,11 +57,11 @@
                 <div class="w-full h-[1px] bg-gray-200"></div>
 
                 <div v-if="$page.props.auth.user.usertype == 'head_cashier'">
-                    <Payroll_List :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
+                    <Payroll_List :selectedSem="selectedSem" :schoolyear="schoolyear" :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
                         :scholars="scholars" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout" />
                 </div>
                 <div v-else>
-                    <Payout_List :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
+                    <Payout_List :selectedSem="selectedSem" :schoolyear="schoolyear" :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
                         :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash"
                         :payout="payout" />
                 </div>
@@ -149,6 +149,8 @@ const props = defineProps({
     flash: Object,
     totalClaimed: Object,
     payout_schedule: Object,
+    schoolyear: Object,
+    selectedSem: String,
 });
 
 const scannedScholar = ref(null);

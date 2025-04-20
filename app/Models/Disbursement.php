@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Disbursement extends Model
 {
-    protected $fillable = ['scholarship_id', 'batch_id', 'scholar_id', 'reasons_of_not_claimed', 'claimed_at', 'claimed_by', 'status'];
+    protected $fillable = ['scholarship_id', 'batch_id', 'scholar_id', 'reasons_of_not_claimed', 'school_year_id', 'semester', 'claimed_at', 'claimed_by', 'status'];
 
     public function scholar()
     {
@@ -23,8 +23,13 @@ class Disbursement extends Model
         return $this->belongsTo(Batch::class);
     }
 
+    public function schoolyear()
+    {
+        return $this->belongsTo(SchoolYear::class);
+    }
+
     public function claimedBy()
-{
-    return $this->belongsTo(User::class, 'claimed_by');
-}
+    {
+        return $this->belongsTo(User::class, 'claimed_by');
+    }
 }

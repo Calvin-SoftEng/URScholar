@@ -145,7 +145,7 @@
                                 <div class="grid grid-cols-3 items-center gap-3">
                                     <!-- Scholars Length -->
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ approvedCount }}
+                                        {{ totalSubTotal }}
                                     </p>
 
                                     <!-- Divider -->
@@ -153,7 +153,7 @@
 
                                     <!-- Total Scholars -->
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ total_approved.length }}
+                                        {{ total_verified_grantees }}
                                     </p>
                                 </div>
                             </div>
@@ -256,7 +256,7 @@
                                     <!-- Forward to Sponsor -->
                                     <div>
                                         <button @click="toggleForwardSponsor"
-                                            :disabled="accomplishedBatches  && !payouts"
+                                            :disabled="accomplishedBatches && !payouts"
                                             v-tooltip.left="accomplishedBatches ? 'Batches sent to Sponsor' : 'Payouts sent to Sponsor'"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                                             hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -433,7 +433,6 @@
                                                                         {{ validationStatus == true ? 'Complete' :
                                                                             'Pending' }}
                                                                     </span>
-
                                                                 </div>
 
                                                                 <!-- Number of Students -->
@@ -448,7 +447,7 @@
                                                                                 d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                                                         </svg>
                                                                         <span class="text-primary">Enrolled
-                                                                            Students</span>
+                                                                            Grantees</span>
                                                                     </div>
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">{{
@@ -521,7 +520,7 @@
                                                                                 d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
                                                                         </svg>
                                                                         <span class="text-primary">No. of
-                                                                            Students</span>
+                                                                            Grantees</span>
                                                                     </div>
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">{{
@@ -614,13 +613,59 @@
                                     <div v-else>
                                         <!-- Filter batches that belong to this campus -->
                                         <div v-for="batch in batchesByCampus[campusId]?.batches || []" :key="batch.id"
-                                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-6 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
+                                            class="bg-gradient-to-r from-[#F8F9FC] to-[#D2CFFE] w-full rounded-xl p-4 shadow-md hover:shadow-lg transition-all duration-300 cursor-pointer mb-3">
                                             <div @click="() => openPayroll(batch.id)"
                                                 class="flex justify-between items-center">
-                                                <span class="text-lg font-semibold text-gray-800">Batch {{
-                                                    batch.batch_no }}</span>
+                                                <div class="flex flex-col px-5">
+                                                    <span class="text-lg font-semibold text-gray-800">Batch {{
+                                                        batch.batch_no
+                                                    }}</span>
+                                                    <span class="text-md font-medium text-gray-600">
+                                                        {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester
+                                                        }}
+                                                        Semester
+                                                    </span>
+                                                </div>
 
-                                                <div class="grid grid-cols-2">
+                                                <div
+                                                    class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
+                                                    <!-- Validation Status -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-yellow-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M12 8v4m0 4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" />
+                                                            </svg>
+                                                            <span class="text-primary">Completed Payouts</span>
+                                                        </div>
+                                                        <span class="text-xl font-bold text-primary drop-shadow">
+                                                            {{
+                                                                batch.grantees.length }}</span>
+                                                    </div>
+
+                                                    <!-- Number of Students -->
+                                                    <div class="flex flex-col items-center space-y-1">
+                                                        <div class="flex items-center gap-2 text-sm text-gray-100">
+                                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                                class="w-5 h-5 text-blue-400" fill="none"
+                                                                viewBox="0 0 24 24" stroke="currentColor">
+                                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                                    stroke-width="2"
+                                                                    d="M17 20h5v-2a4 4 0 00-3-3.87M9 20h6M4 20h5v-2a4 4 0 00-3-3.87M15 10a3 3 0 11-6 0 3 3 0 016 0zM20 10a3 3 0 11-6 0 3 3 0 016 0zM4 10a3 3 0 116 0 3 3 0 01-6 0z" />
+                                                            </svg>
+                                                            <span class="text-primary">Missed Payouts</span>
+                                                        </div>
+                                                        <span class="text-xl font-bold text-primary drop-shadow">
+                                                            {{batch.grantees.filter(grantee =>
+                                                                !grantee.scholar?.is_verified).length}}</span>
+                                                    </div>
+
+                                                </div>
+
+                                                <!-- <div class="grid grid-cols-2">
                                                     <div class="flex flex-col items-center">
                                                         <span class="text-sm text-gray-600">Completed Payouts</span>
                                                         <span class="text-xl font-bold text-blue-600">{{
@@ -630,10 +675,10 @@
                                                         <span class="text-sm text-gray-600">Missed Payouts</span>
                                                         <span class="text-xl font-bold text-red-500">
                                                             {{batch.grantees.filter(grantee =>
-                                                                !grantee.scholar.is_verified).length}}
+                                                                !grantee.scholar?.is_verified).length}}
                                                         </span>
                                                     </div>
-                                                </div>
+                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
@@ -1455,15 +1500,17 @@
 
                         <!-- Batch List -->
                         <div v-else>
-                            <div v-for="(campusData, campusId) in batchesByCampus"
-                                :key="campusId" class="flex flex-col divide-y divide-gray-300">
+                            <div v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
+                                class="flex flex-col divide-y divide-gray-300">
                                 <p>
                                     {{ campusData.campus.name }}
                                 </p>
                                 <div v-for="batch in campusData.batches" :key="batch.id"
                                     class="py-3 px-4 flex justify-between items-center">
                                     <div>
-                                        <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{ batch.batch_no }}
+                                        <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
+                                            batch.batch_no
+                                        }}
                                         </p>
                                         <p v-if="batch.validated" class="text-sm text-gray-500">
                                             {{batch.grantees.filter(grantee => grantee.scholar?.status ===
@@ -1479,7 +1526,7 @@
                                     </div>
                                     <span
                                         :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                        {{batch.sub_total === batch.total_scholars
+                                        {{ batch.sub_total === batch.total_scholars
                                             ? 'Ready to Send' : 'Incomplete'
                                         }}
                                     </span>
@@ -1541,7 +1588,7 @@
                             <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-3">Batch Disbursement Status
                             </h3>
                             <div class="space-y-3">
-                                <div v-for="batch in batchesWithScholars" :key="batch.id"
+                                <div v-for="batch in payoutBatches" :key="batch.id"
                                     class="py-3 px-4 flex justify-between items-center bg-gray-50 dark:bg-gray-700 rounded-lg">
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
@@ -1600,7 +1647,7 @@
                             </span>
                         </div>
                     </div>
-                    <button type="button" @click="closeModal"
+                    <button type="button" @click="closeReportGeneration"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
                         data-modal-hide="default-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -1611,38 +1658,115 @@
                     </button>
                 </div>
 
-                <form>
+                <form @submit.prevent="handleGenerateReports">
                     <div class="py-4 px-8 flex flex-col gap-3">
                         <!-- Batch Disbursement Status -->
                         <div>
                             <!-- Filters -->
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                            <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-4">
                                 <!-- Report Type Filter -->
-                                <div class="relative">
+                                <div class="relative" ref="reportRef">
                                     <label class="block text-xs font-medium mb-1">Report Type</label>
                                     <button type="button"
                                         class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
                                         @click="toggleDropdown('reportType')">
-                                        {{ selectedReportTypes.length ? selectedReportTypes.join(', ') : 'Select ReportTypes' }}
+                                        {{ selectedReportType ? selectedReportType : 'Select Report type' }}
                                     </button>
+
                                     <div v-if="openDropdown === 'reportType'"
                                         class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
                                         <label v-for="type in reportTypeOptions" :key="type"
-                                            class="block px-4 py-2 hover:bg-gray-100">
-                                            <input type="checkbox"
-                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                                                :value="type" v-model="selectedReportTypes" />
+                                            class="block px-4 py-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap text-sm">
+                                            <input type="radio"
+                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                                                :value="type" v-model="selectedReportType" name="reportType" />
                                             {{ type }}
                                         </label>
                                     </div>
                                 </div>
 
+                                <!-- Campus Filter -->
+                                <div class="relative" ref="campusRef">
+                                    <label class="block text-xs font-medium mb-1">Campus</label>
+                                    <button type="button"
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        @click="toggleDropdown('campus')">
+                                        {{ selectedReportCampuses.length ?
+                                            (selectedReportCampuses.length === campuses.length ? 'All Campuses' : `Selected
+                                        (${selectedReportCampuses.length})`)
+                                            : 'Select Campus' }}
+                                    </button>
 
+                                    <div v-if="openDropdown === 'campus'"
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+
+                                        <!-- Select All -->
+                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium">
+                                            <input type="checkbox" class="mr-2 w-4 h-4"
+                                                :checked="selectedReportCampuses.length === campuses.length"
+                                                @change="toggleAll('campus')" />
+                                            All
+                                        </label>
+
+                                        <!-- Individual Campuses -->
+                                        <label v-for="campus in campuses" :key="campus.id"
+                                            class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                            <input type="checkbox" class="mr-2 w-4 h-4" :value="campus.id"
+                                                v-model="selectedReportCampuses" />
+                                            {{ campus.name }}
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                <!-- Batch Filter -->
+                                <div class="relative" ref="batchRef">
+                                    <label class="block text-xs font-medium mb-1">Batch</label>
+                                    <button type="button"
+                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                                        @click="selectedReportCampuses.length > 0 ? toggleDropdown('batch') : null"
+                                        :class="{ 'opacity-50 cursor-not-allowed': selectedReportCampuses.length === 0 }"
+                                        :disabled="selectedReportCampuses.length === 0">
+                                        {{ selectedReportBatches.length ?
+                                            (selectedReportBatches.length === filteredBatches.length &&
+                                                filteredBatches.length > 0 ?
+                                                'All Batches' :
+                                                `Selected (${selectedReportBatches.length})`) : 'Select Batch' }}
+                                    </button>
+
+                                    <div v-if="openDropdown === 'batch'"
+                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+
+                                        <!-- All Option -->
+                                        <label class="block px-4 py-2 hover:bg-gray-100 font-medium"
+                                            v-if="filteredBatches.length > 0">
+                                            <input type="checkbox" class="mr-2 w-4 h-4"
+                                                :checked="selectedReportBatches.length === filteredBatches.length && filteredBatches.length > 0"
+                                                @change="toggleAllBatches" />
+                                            All
+                                        </label>
+
+                                        <!-- Individual Batches -->
+                                        <label v-for="batch in filteredBatches" :key="batch.id"
+                                            class="block px-4 py-2 hover:bg-gray-100 whitespace-nowrap">
+                                            <input type="checkbox" class="mr-2 w-4 h-4" :value="batch.id"
+                                                v-model="selectedReportBatches" />
+                                            Batch {{ batch.batch_no }}
+                                        </label>
+
+                                        <!-- No batches message -->
+                                        <div v-if="filteredBatches.length === 0"
+                                            class="px-4 py-2 text-sm text-gray-500">
+                                            No batches available for selected campus
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="mt-6">
                             <button type="button" @click="handleGenerateReports"
-                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                :disabled="!selectedReportType || selectedReportCampuses.length === 0 || selectedReportBatches.length === 0">
                                 Generate Report
                             </button>
                         </div>
@@ -1654,12 +1778,12 @@
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-                <ToastTitle class="font-semibold dark:text-dtext">Scholars Added Successfully!</ToastTitle>
                 <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
             </ToastRoot>
 
             <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
+
 
     </AuthenticatedLayout>
 </template>
@@ -1667,7 +1791,7 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed, onUnmounted } from 'vue';
+import { defineProps, ref, watchEffect, onBeforeMount, reactive, onMounted, watch, computed, onUnmounted, onBeforeUnmount } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 // import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select';
@@ -1678,6 +1802,7 @@ import { Tooltip } from 'primevue';
 import InputError from '@/Components/InputError.vue';
 import BackLink from '@/Components/BackLink.vue'
 import { generate } from '@syncfusion/ej2-vue-schedule';
+import { nextTick } from 'vue';
 
 
 // Define props to include scholars data
@@ -1705,9 +1830,11 @@ const props = defineProps({
     total_scholars: Array,
     requirements: Array,
     completedBatches: Array,
+    payoutBatches: Array,
     errors: Object,
     userType: String,
     userCampusId: Number,
+    totalSubTotal: Number,
     approvedCount: Number,
     allBatches: Array,
     disableSendEmailButton: Boolean,
@@ -2356,7 +2483,6 @@ const updateSelectedCourses = () => {
 };
 
 const submitForm = () => {
-
     // Prepare campus recipients data for the backend
     const campusRecipients = selectedCampuses.value.map(campus => ({
         campus_id: campus.id,
@@ -2369,39 +2495,67 @@ const submitForm = () => {
         ),
     }));
 
-    // Create the payload
-    const payload = {
-        // name: form.value.name,
-        // scholarship_type: form.value.scholarshipType,
-        total_recipients: form.value.totalRecipients,
-        requirements: form.value.requirements,
-        criteria: form.value.criteria,
-        conditions: form.value.conditions,
-        grade: form.value.grade,
-        application: form.value.application,
-        deadline: form.value.deadline,
-        amount: form.value.scholarshipType === 'One-Time' ? form.value.amount : null,
-        campus_recipients: campusRecipients,
-        semester: props.selectedSem,
-        school_year: props.schoolyear.id
-    };
+    // Create FormData object to handle files
+    const formData = new FormData();
 
-    // Submit the form to the backend
-    router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, payload, {
+    // Add all non-file fields to FormData
+    formData.append('total_recipients', form.value.totalRecipients);
+    formData.append('grade', form.value.grade);
+    formData.append('application', form.value.application);
+    formData.append('deadline', form.value.deadline);
+    formData.append('semester', props.selectedSem);
+    formData.append('school_year', props.schoolyear.id);
+
+    // Add amount if scholarship type is One-Time
+    if (form.value.scholarshipType === 'One-Time') {
+        formData.append('amount', form.value.amount);
+    }
+
+    // Add requirements as array
+    form.value.requirements.forEach((req, index) => {
+        formData.append(`requirements[${index}]`, req);
+    });
+
+    // Add criteria as array
+    form.value.criteria.forEach((criteriaId, index) => {
+        formData.append(`criteria[${index}]`, criteriaId);
+    });
+
+    // Add conditions as array
+    form.value.conditions.forEach((conditionId, index) => {
+        formData.append(`conditions[${index}]`, conditionId);
+    });
+
+    // Add campus recipients as JSON
+    campusRecipients.forEach((recipient, index) => {
+        formData.append(`campus_recipients[${index}][campus_id]`, recipient.campus_id);
+        formData.append(`campus_recipients[${index}][slots]`, recipient.slots);
+        formData.append(`campus_recipients[${index}][remaining_slots]`, recipient.remaining_slots);
+        formData.append(`campus_recipients[${index}][selected_campus]`, recipient.selected_campus);
+    });
+
+    // Add template files
+    selectedFiles.value.forEach((file, index) => {
+        formData.append(`templates[${index}]`, file);
+    });
+
+    // Submit the form using FormData
+    router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        },
         onSuccess: () => {
-            showToast('Success', 'Scholarship created successfully');
+            showToast('Success', 'Scholarship with templates created successfully');
             clearForm();
             setTimeout(() => {
                 router.visit('/scholarships');
             }, 1500);
         },
         onError: (errors) => {
-            // showToast('Error', 'There was an error creating the scholarship');
             errors.value = errors;
             isSubmitting.value = false;
         },
     });
-
 }
 
 
@@ -2421,7 +2575,22 @@ watchEffect(() => {
         !selectedBatches.value.includes('all')) {
         selectedBatches.value.push('all');
     }
+
+    // const flash = usePage().props.flash;
+
+    // if (flash?.message) {
+    //     console.log("Showing toast with message:", flash.message);
+    //     toastMessage.value = flash.message;
+    //     toastVisible.value = true;
+
+    //     setTimeout(() => {
+    //         console.log("Hiding toast...");
+    //         toastVisible.value = false;
+    //     }, 3000);
+    // }
 });
+
+
 
 const forwardBatches = async () => {
     isSubmitting.value = true;
@@ -2465,7 +2634,7 @@ const forwardBatches = async () => {
                     return total + (batch ? batch.scholar_count : 0);
                 }, 0);
 
-                toastMessage.value = `Successfully forwarded ${totalScholars} scholars from ${batchesToForward.length} batch(es)`;
+                toastMessage.value = `Successfully forwarded to University Cashier`;
                 toastVisible.value = true;
 
 
@@ -2594,6 +2763,8 @@ onMounted(() => {
     window.addEventListener('popstate', () => {
         window.location.reload();
     });
+
+    document.addEventListener('click', handleClickOutside);
 });
 
 onUnmounted(() => {
@@ -2602,92 +2773,285 @@ onUnmounted(() => {
     });
 });
 
+onBeforeMount(() => {
+    document.addEventListener('click', handleClickOutside);
+})
+
 const openDropdown = ref('');
 
 const toggleDropdown = (dropdownName) => {
     openDropdown.value = openDropdown.value === dropdownName ? null : dropdownName
 }
 
-// Detect outside click
-function handleClickOutside(event) {
-    const clickedOutside =
-        !reportTypeRef.value?.contains(event.target) &&
-        !batchRef.value?.contains(event.target) &&
-        !campusRef.value?.contains(event.target)
+// Computed property to filter batches based on selected campuses
+const filteredBatches = computed(() => {
+    // If no campuses selected, return empty array
+    if (selectedReportCampuses.value.length === 0) {
+        return [];
+    }
 
-    if (clickedOutside) {
-        openDropdown.value = ''
+    // Filter batches that belong to selected campuses
+    return props.batches.filter(batch => {
+        // Look for batches with matching campus_id
+        return selectedReportCampuses.value.includes(batch.campus_id) ||
+            // Or check if any scholars in the batch belong to selected campuses
+            batch.scholars?.some(scholar =>
+                selectedReportCampuses.value.includes(scholar.campus_id)
+            );
+    });
+});
+
+
+// Update the toggleAll function to work with filtered batches
+function toggleAll(type) {
+    if (type === 'batch') {
+        toggleAllBatches();
+    } else if (type === 'campus') {
+        const allIds = props.campuses.map(c => c.id);
+        if (selectedReportCampuses.value.length === allIds.length) {
+            // If all campuses are selected, deselect all and clear batch selection
+            selectedReportCampuses.value = [];
+            selectedReportBatches.value = [];
+        } else {
+            // Otherwise, select all campuses
+            selectedReportCampuses.value = [...allIds];
+        }
     }
 }
 
-const reportTypeOptions = ['Enrolled List', 'Graduate List', 'Payroll', 'Scholars List'];
-const batchOptions = ['Batch 1', 'Batch 2', 'Batch 3'];
-const campusOptions = ['Main Campus', 'Tanay Campus', 'Morong Campus'];
+// Add a function to toggle all batches
+const toggleAllBatches = () => {
+    if (filteredBatches.value.length === 0) return;
 
-const selectedReportTypes = ref([]);
+    if (selectedReportBatches.value.length === filteredBatches.value.length) {
+        // If all batches are selected, deselect all
+        selectedReportBatches.value = [];
+    } else {
+        // Otherwise, select all filtered batches
+        selectedReportBatches.value = filteredBatches.value.map(batch => batch.id);
+    }
+};
 
-// // Generate Reports handler
-// const handleGenerateReports = () => {
-//     if (selectedReportTypes.value.includes('Scholars List')) {
-//         generateScholarsList()
-//     }
-//     if (selectedReportTypes.value.includes('Enrolled List')) {
-//         generateEnrolledList()
-//     }
-//     if (selectedReportTypes.value.includes('Graduate List')) {
-//         generateGraduateList()
-//     }
-//     if (selectedReportTypes.value.includes('Payroll')) {
-//         generatePayroll()
-//     }
-// }
+// Detect outside click
+const GenerateReport = ref(false);
+
+const generateReportModal = () => {
+    GenerateReport.value = !GenerateReport.value;
+}
+
+// Close modal function
+const closeReportGeneration = () => {
+    GenerateReport.value = false;
+    resetSelections();
+};
+
+// Reset all selections
+const resetSelections = () => {
+    selectedReportType.value = '';
+    selectedReportBatches.value = [];
+    selectedReportCampuses.value = [];
+};
+
+const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Transferees', 'Payroll'];
+const batchRef = ref(null);
+const campusRef = ref(null);
+
+const selectedReportType = ref('');
+const selectedReportBatches = ref([]);
+const selectedReportCampuses = ref([]);
+
+// Improved click outside handler
+const handleClickOutside = (event) => {
+    // Make sure all refs are defined before using them
+    if (openDropdown.value) {
+        const campusEl = campusRef.value;
+        const batchEl = batchRef.value;
+        const reportEl = reportRef.value;
+
+        // Check if click is outside all active dropdowns
+        const clickedOutside = (
+            (campusEl && !campusEl.contains(event.target) || !campusEl) &&
+            (batchEl && !batchEl.contains(event.target) || !batchEl) &&
+            (reportEl && !reportEl.contains(event.target) || !reportEl)
+        );
+
+        if (clickedOutside) {
+            openDropdown.value = null;
+        }
+    }
+};
+
+const handleGenerateReports = () => {
+    const filters = {
+        type: selectedReportType.value,
+        campuses: selectedReportCampuses.value,
+        batches: selectedReportBatches.value,
+    };
+
+    if (!filters.type || filters.campuses.length === 0 || filters.batches.length === 0) {
+        console.warn('Please select a report type, campuses, and batches.');
+        return;
+    }
+
+    switch (filters.type) {
+        case 'Enrollees Summary':
+            generateEnrolleesSummary(filters);
+            break;
+        case 'Enrolled List':
+            generateEnrolledList(filters);
+            break;
+        case 'Graduate Summary':
+            generateGraduateList(filters);
+            break;
+        case 'Payroll':
+            generatePayroll(filters);
+            break;
+        // case 'Scholars List':
+        //     generateScholarsList(filters);
+        //     break;
+        case 'Transferred Grantee':
+            generateTransferredList(filters);
+            break;
+        default:
+            console.warn('No valid report type selected.');
+    }
+};
+
+const generateEnrolleesSummary = async (filters) => {
+    try {
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/enrollees-summary`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
+        });
+
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+    }
+};
+
+const generateEnrolledList = async (filters) => {
+    try {
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
+
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/enrolled-scholars`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
+        });
+
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+    }
+};
 
 
-// const GenerateReport = ref(false);
+const generateGraduateList = async (filters) => {
+    try {
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
 
-// const generateReportModal = () => {
-//     GenerateReport.value = !GenerateReport.value;
-// }
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/graduate-scholars`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
+        });
 
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+    }
+};
 
-// // Generate report function
-// const generateScholarsList = async () => {
-//     window.open(`/scholarships/1/batch/1/scholar-summary`, '_blank');
+const generateTransferredList = async (filters) => {
+    try {
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
 
-// };
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/transferred-grantees`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
+        });
 
-// const generateEnrolledList = async () => {
-//     try {
-//         // Open PDF report in new tab
-//         window.open(`/scholarships/1/batch/1/enrolled-scholars`, '_blank'); // Dummy ID values
-//         showToast('Report Generated', 'Your report is being downloaded');
-//     } catch (err) {
-//         console.error('Failed to generate report:', err);
-//         showToast('Error', 'Failed to generate report', 'error');
-//     }
-// };
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+    }
+};
 
-// const generateGraduateList = async () => {
-//     try {
-//         // Open PDF report in new tab
-//         window.open(`/scholarships/1/batch/1/graduate-scholars`, '_blank'); // Dummy ID values
-//         showToast('Report Generated', 'Your report is being downloaded');
-//     } catch (err) {
-//         console.error('Failed to generate report:', err);
-//         showToast('Error', 'Failed to generate report', 'error');
-//     }
-// };
+const generatePayroll = async (filters) => {
+    try {
+        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
+            !Array.isArray(filters.batches) || filters.batches.length === 0) {
+            console.warn('Campuses or batches are not selected properly.');
+            return;
+        }
 
-// const generatePayroll = async () => {
-//     try {
-//         // Open PDF report in new tab
-//         window.open(`/scholarships/1/batch/1/payroll-report`, '_blank'); // Dummy ID values
-//         showToast('Report Generated', 'Your report is being downloaded');
-//     } catch (err) {
-//         console.error('Failed to generate report:', err);
-//         showToast('Error', 'Failed to generate report', 'error');
-//     }
-// };
+        // Instead of opening multiple windows, send all data in one request
+        const url = `/scholarships/${props.scholarship.id}/payroll-report`;
+        const queryParams = new URLSearchParams({
+            batch_ids: filters.batches.join(','),
+            campus_ids: filters.campuses.join(','),
+            school_year_id: props.schoolyear.id,
+            semester: props.selectedSem
+        });
+
+        window.open(`${url}?${queryParams.toString()}`, '_blank');
+    } catch (err) {
+        console.error('Failed to generate report:', err);
+    }
+};
+
+// Watch for changes in selected campuses
+watch(selectedReportCampuses, (newCampuses) => {
+    // If campus selection changes, filter batch selection to only keep valid batches
+    if (newCampuses.length > 0) {
+        // Let filteredBatches compute first
+        nextTick(() => {
+            // Get IDs of valid batches based on selected campuses
+            const validBatchIds = filteredBatches.value.map(batch => batch.id);
+
+            // Filter selected batches to only include valid ones
+            selectedReportBatches.value = selectedReportBatches.value.filter(
+                batchId => validBatchIds.includes(batchId)
+            );
+        });
+    } else {
+        // If no campuses selected, clear batch selection
+        selectedReportBatches.value = [];
+    }
+});
 
 </script>
 

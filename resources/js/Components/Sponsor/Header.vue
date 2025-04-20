@@ -8,7 +8,8 @@
 
           <div class="flex flex-row  items-center justify-center gap-2">
             <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
-            <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] hidden dark:block">
+            <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo"
+              class="w-[40px] h-[40px] hidden dark:block">
 
             <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
           </div>
@@ -19,22 +20,22 @@
         <ul class="flex pl-10 space-x-10 font-inter font-semibold text-navy">
           <li class="relative">
             <Link :href="route('sponsor.dashboard')" class="flex items-center space-x-2">
-              <p class="text-primary-foreground hover:text-primary transition">Dashboard</p>
-              <!-- Notification Badge (only shows if unreadMessages > 0) -->
-              <span 
-                class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
-                1
-              </span>
+            <p class="text-primary-foreground hover:text-primary transition">Dashboard</p>
+            <!-- Notification Badge (only shows if unreadMessages > 0) -->
+            <span
+              class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
+              1
+            </span>
             </Link>
           </li>
           <li class="relative">
             <Link :href="route('messaging.index')" class="flex items-center space-x-2">
-              <p class="text-primary-foreground hover:text-primary transition">Messaging</p>
-              <!-- Notification Badge (only shows if unreadMessages > 0) -->
-              <span 
-                class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
-                1
-              </span>
+            <p class="text-primary-foreground hover:text-primary transition">Messaging</p>
+            <!-- Notification Badge (only shows if unreadMessages > 0) -->
+            <span
+              class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
+              1
+            </span>
             </Link>
           </li>
         </ul>
@@ -78,26 +79,26 @@
 
         <!-- Avatar with Red Notification Dot -->
         <div v-if="$page.props.auth.user.picture">
-            <div class="relative">
-                <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
-                    data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
-                <!-- Red Notification Dot -->
-                <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
-            </div>
+          <div class="relative">
+            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+              data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+              :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+            <!-- Red Notification Dot -->
+            <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+          </div>
         </div>
         <div v-else>
           <div class="relative">
-              <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
-                  data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-                  :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
-              <!-- Red Notification Dot -->
-              <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+            <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+              data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+              :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+            <!-- Red Notification Dot -->
+            <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
           </div>
         </div>
       </div>
     </div>
-  
+
     <div id="dropdownNotificationWeb"
       class="z-20 hidden w-full max-w-sm bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-700"
       aria-labelledby="dropdownNotificationButton">
@@ -114,12 +115,12 @@
         No notifications
       </div>
       <div v-else
-        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-90 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
+        class="divide-y divide-gray-100 dark:divide-gray-700 max-h-80 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer">
         <div v-for="notification in filteredNotifications" :key="notification.id"
-          class="flex px-4 py-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+          class="flex px-4 py-3 bg-white hover:bg-gray-100 dark:hover:bg-gray-700"
           :class="{ 'bg-blue-50 dark:bg-blue-900/10': !notification.read }">
           <div class="w-full">
-            <div >{{ notification.title }}</div>
+            <div>{{ notification.title }}</div>
             <div class="flex justify-between items-start mb-1.5">
               <div class="text-gray-500 text-sm dark:text-gray-400" v-html="notification.message"></div>
               <button @click.stop="deleteNotification(notification.id)"
@@ -133,7 +134,7 @@
             <div class="flex justify-between items-center">
               <div class="text-xs text-blue-600 dark:text-blue-500">{{ formatTime(notification.created_at) }}</div>
               <button v-if="!notification.read" @click="markAsRead(notification.id)"
-                class="text-xs text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
+                class="text-xs font-semibold text-blue-600 hover:text-blue-800 dark:text-blue-500 dark:hover:text-blue-400">
                 Mark as read
               </button>
             </div>
@@ -152,17 +153,17 @@
       </div>
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
         <li class="relative">
-            <Link :href="route('student.profile')"
-                class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                Profile
-            </Link>
-            <!-- Notification Dot with FontAwesome Icon -->
-            <div class="absolute top-0 right-1 flex items-center space-x-2">
-                <!-- Red Notification Icon with FontAwesome -->
-                <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
-                    <font-awesome-icon :icon="['fas', 'exclamation']" />
-                </div>
+          <Link :href="route('sponsor.account')"
+            class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+          Account Settings
+          </Link>
+          <!-- Notification Dot with FontAwesome Icon -->
+          <div class="absolute top-0 right-1 flex items-center space-x-2">
+            <!-- Red Notification Icon with FontAwesome -->
+            <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
+              <font-awesome-icon :icon="['fas', 'exclamation']" />
             </div>
+          </div>
         </li>
       </ul>
       <div class="py-1 text-left">
@@ -172,8 +173,8 @@
         </Link>
       </div>
     </div>
-  
-    
+
+
   </div>
 </template>
 

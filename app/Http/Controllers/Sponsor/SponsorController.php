@@ -44,24 +44,105 @@ class SponsorController extends Controller
         $sponsor = Sponsor::where('assign_id', Auth::user()->id)
             ->first();
 
-        $scholarship = $sponsor->scholarship;
+        $scholarships = $sponsor->scholarship;
+
+        // Count batches for each scholarship and collect unique campuses
+        $scholarshipData = [];
+        $uniqueCampuses = [];
+
+        foreach ($scholarships as $scholarship) {
+            // Get batches for this scholarship
+            $batches = Batch::where('scholarship_id', $scholarship->id)->get();
+
+            // Count batches
+            $batchCount = $batches->count();
+
+            // Get unique campus IDs from these batches
+            $campusIds = $batches->pluck('campus_id')->unique()->toArray();
+
+            // Add to unique campuses collection
+            $uniqueCampuses = array_merge($uniqueCampuses, $campusIds);
+
+            // Store data for this scholarship
+            $scholarshipData[] = [
+                'scholarship_id' => $scholarship->id,
+                'scholarship_name' => $scholarship->name,
+                'batch_count' => $batchCount,
+                'campus_ids' => $campusIds
+            ];
+        }
+
+        // Get unique campuses count across all batches
+        $uniqueCampusesCount = count(array_unique($uniqueCampuses));
 
         // Disbursement Listing
         $payout = Payout::whereIn('scholarship_id', $sponsor->scholarship->pluck('id'))
-            ->with(['campus'])
+            ->with([
+                'campus',
+                'scholarship',
+                'disbursement',
+                'school_year'
+            ])
+            ->get()
+            ->map(function ($payout) {
+                // Count disbursements by status
+                $disbursementCounts = $payout->disbursement->groupBy('status')
+                    ->map(function ($group) {
+                    return $group->count();
+                });
+
+                return array_merge($payout->toArray(), [
+                    'claimed_count' => $disbursementCounts['Claimed'] ?? 0,
+                    'pending_count' => $disbursementCounts['Pending'] ?? 0,
+                    'not_claimed_count' => $disbursementCounts['Not Claimed'] ?? 0
+                ]);
+            });
+
+        // Get all unique campuses
+        $campuses = Campus::whereIn('id', $payout->pluck('campus_id')->unique())
             ->get();
 
         $school_year = SchoolYear::with('academic_year')
-            ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
+            ->orderBy('id', 'asc')
             ->get();
+
+        $academicYear = AcademicYear::where('status', 'Active')
+            ->with('school_year')
+            ->first();
+
+        $scholars = Scholar::with('user', 'campus', 'course', 'batch')
+            ->whereHas('grantees', function ($query) use ($academicYear) {
+                $query->where('status', 'Accomplished')
+                    ->where('semester', $academicYear->semester)
+                    ->where('school_year_id', $academicYear->school_year_id);
+            })
+            ->where('status', 'Verified')
+            ->where('student_status', 'Enrolled')
+            ->where('campus_id', Auth::user()->campus_id)
+            ->get();
+
+        $allscholars = Scholar::with('user', 'campus', 'course', 'batch')
+            ->whereHas('grantees', function ($query) use ($academicYear) {
+                $query->where('status', 'Accomplished');
+            })
+            ->where('status', 'Verified')
+            ->where('student_status', 'Enrolled')
+            ->where('campus_id', Auth::user()->campus_id)
+            ->get();
+
 
         return Inertia::render('Sponsor/Dashboard', [
             'sponsor' => $sponsor,
-            'scholarships' => $scholarship,
-            'payouts' => $payout,  // Don't forget to pass this to your view
+            'scholarships' => $scholarships,
+            'scholarshipData' => $scholarshipData,
+            'uniqueCampusesCount' => $uniqueCampusesCount,
+            'payouts' => $payout,
+            'campuses' => $campuses,
             'schoolyears' => $school_year,
+            'scholars' => $scholars,
+            'allscholars' => $allscholars,
+            'academicYear' => $academicYear,
         ]);
-
     }
 
     public function index()
@@ -267,9 +348,9 @@ class SponsorController extends Controller
                 $userVerified = User::where('id', $scholar->user_id)->first();
 
                 $grade = Grade::where('scholar_id', $scholar->id)
-                ->where('status', 'Active')
-                ->first();
-                
+                    ->where('status', 'Active')
+                    ->first();
+
                 // Determine status
                 $status = 'No submission';
                 if ($totalRequirements > 0) {
@@ -306,6 +387,7 @@ class SponsorController extends Controller
                         'grant' => $scholar->grant,
                         'grade' => $grade->grade ?? null,
                         'status' => $status,
+                        'student_status' => $scholar->student_status,
                         'submittedRequirements' => $approvedRequirements,
                         'totalRequirements' => $totalRequirements,
                         'progress' => $progress,
@@ -329,6 +411,7 @@ class SponsorController extends Controller
                         'grant' => $scholar->grant,
                         'grade' => $grade->grade ?? null,
                         'status' => $status,
+                        'student_status' => $scholar->student_status,
                         'submittedRequirements' => $approvedRequirements,
                         'totalRequirements' => $totalRequirements,
                         'progress' => $progress,
@@ -471,6 +554,15 @@ class SponsorController extends Controller
             'submittedRequirements' => $submittedRequirements,
             'grade' => $grade,
             'notify' => $notify,
+        ]);
+    }
+
+    public function account()
+    {
+        $user = Auth::user();
+
+        return Inertia::render('Sponsor/Account_Settings', [
+            'user' => $user,
         ]);
     }
 }

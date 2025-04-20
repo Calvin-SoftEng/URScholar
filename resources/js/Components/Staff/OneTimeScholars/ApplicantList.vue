@@ -1,28 +1,28 @@
 <template>
   <div class="w-full mt-5 bg-white rounded-xl">
+    <!-- Header section with buttons remains unchanged -->
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
         <!-- Publish Button -->
-        <Link :href="(route('scholarship.onetime_scholars'))">
-        <button @click="generateReport" class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
+        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="togglePublish" class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
           <span class="font-normal">Publish <span class="font-semibold">Applicant List</span></span>
         </button>
-        </Link>
 
         <!-- Forward to Sponsor -->
-        <div>
+        <!-- <div>
           <button @click="toggleForwardSponsor" class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed">
             <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
             <span class="font-normal">Forward to <span class="font-semibold">Sponsor</span></span>
           </button>
-        </div>
+        </div> -->
       </div>
 
-      <!-- Applicant Status Filter -->
+      <!-- Filter Controls -->
       <div class="flex items-center space-x-4">
+        <!-- Status Filter -->
         <span class="text-sm font-medium text-gray-700">Filter by Status:</span>
         <div class="flex space-x-3">
           <label class="inline-flex items-center">
@@ -158,7 +158,7 @@
                     </tr>
                   </template>
 
-                  <!-- Cut-Off Line - Always show if there are scholars outside limit -->
+                  <!-- Cut-Off Line - Always show if there are scholars outside limit, even when filtered -->
                   <tr v-if="hasScholarsOutsideLimitFiltered">
                     <td colspan="8" class="text-center font-semibold text-red-600 py-4 bg-red-50">
                       Cut-Off Line: Below applicants are NOT within the required {{ recipientLimit }} recipients.
@@ -199,8 +199,8 @@
                       <template v-if="applicantStatusFilter === 'pending'">
                         <td>
                           <span :class="{
-                            'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.applicant_status === 'pending',
-                            'bg-green-100 text-green-800 border border-green-400': scholar.applicant_status === 'approved',
+                            'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.applicant_status === 'Pending',
+                            'bg-green-100 text-green-800 border border-green-400': scholar.applicant_status === 'Approved',
                             'bg-red-100 text-red-800 border border-red-400': scholar.applicant_status === 'rejected'
                           }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                             {{ scholar.applicant_status }}
@@ -246,7 +246,8 @@
               </table>
             </div>
           </div>
-          <!-- Pagination controls -->
+
+          <!-- Pagination controls - no changes needed -->
           <div v-if="totalScholars > itemsPerPage" class="mt-5 flex justify-between items-center">
             <span class="text-sm text-gray-700 dark:text-gray-400">
               Showing
@@ -278,7 +279,7 @@
   </div>
 
   <!-- Simplified forwarding batch list modal -->
-  <div v-if="ForwardtoSponsor"
+  <div v-if="Publish"
     class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
     <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
       <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
@@ -289,10 +290,10 @@
           <!-- Title and Description -->
           <div class="flex flex-col">
             <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-              Forward to Sponsor
+              Publishing Applicant List
             </h2>
             <span class="text-sm text-gray-600 dark:text-gray-400">
-              Send the applicant list to the sponsor account
+              Publish and Forward the applicant list to the Sponsor
             </span>
           </div>
         </div>
@@ -307,32 +308,57 @@
       </div>
 
       <!-- Form -->
-      <form>
+      <form @submit.prevent="publishApplicantList">
         <div class="py-4 px-8 flex flex-col gap-3">
-          <!-- Loading Indicator -->
-          <!-- <div class="flex justify-center items-center py-4">
-                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-700"></div>
-                    <span class="ml-2 text-gray-700 dark:text-gray-300">Loading batches...</span>
-                </div> -->
+          <!-- Title -->
+          <div>
+            <p class="text-lg font-semibold text-gray-800 dark:text-white">
+              Applicants for <span class="text-blue-600 dark:text-blue-400">{{ scholarship.name }}</span>
+            </p>
+          </div>
+
+          <!-- Summary per Campus -->
+          <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Summary of Approved Applicants per
+              Campus:</p>
+
+            <!-- No approved applicants message -->
+            <p v-if="approvedApplicantsByCanvas.length === 0" class="text-sm text-gray-600 dark:text-gray-400 italic">
+              No approved applicants found.
+            </p>
+
+            <!-- Campus list -->
+            <ul v-else class="text-sm text-gray-600 dark:text-gray-400 list-disc list-inside space-y-1">
+              <li v-for="campus in approvedApplicantsByCanvas" :key="campus.name">
+                {{ campus.name }} Campus – {{ campus.count }} Applicant{{ campus.count !== 1 ? 's' : '' }}
+              </li>
+            </ul>
+
+            <!-- Total approved applicants -->
+            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mt-3 border-t pt-2 dark:border-gray-700">
+              Total Approved Applicants: {{ totalApprovedApplicants }}
+            </p>
+          </div>
 
           <!-- Batch List -->
-          <div class="flex flex-col divide-y divide-gray-300">
-            <p>
-              rgsrgrsg
-            </p>
+          <div class="flex flex-col divide-y divide-gray-300 dark:divide-gray-600">
             <div class="py-3 px-4 flex justify-between items-center">
               <div>
-                <p class="text-base font-medium text-gray-900 dark:text-white">Batch fefef</p>
-                <p class="text-sm text-gray-500">Completed:fefefef</p>
+                <p class="text-base font-medium text-gray-900 dark:text-white">
+                  {{ schoolyear ? `Year ${schoolyear.year}` : '' }} - {{ selectedSem ? `${selectedSem} Sem` : '' }}
+                </p>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Number of Applicants: {{ totalApprovedApplicants }}
+                </p>
               </div>
             </div>
           </div>
 
           <!-- Forward Button -->
           <div class="mt-4">
-            <button v-tooltip.left="'Complete all batches'" disabled
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
-              Forward
+            <button type="submit"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200"
+              :disabled="totalApprovedApplicants === 0">
+              Publish
             </button>
           </div>
         </div>
@@ -353,7 +379,7 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport } from 'radix-vue';
 
 // Props definition
@@ -363,6 +389,8 @@ const props = defineProps({
   totalSlots: Number,
   campusRecipients: Array,
   currentUser: Object,
+  schoolyear: Object,
+  selectedSem: Object,
   itemsPerPage: {
     type: Number,
     default: 10
@@ -371,7 +399,7 @@ const props = defineProps({
 
 // State variables
 const loading = ref(false);
-const ForwardtoSponsor = ref(false);
+const Publish = ref(false);
 const toast = ref({
   visible: false,
   title: '',
@@ -381,8 +409,8 @@ const toast = ref({
 // Pagination state
 const currentPage = ref(1);
 
-// Filter state - default to 'approved' instead of 'all'
-const applicantStatusFilter = ref('approved');
+// Filter state - default to 'pending' to match your screenshot
+const applicantStatusFilter = ref('pending');
 
 // Computed values for recipient limits and filtering
 const recipientLimit = computed(() => {
@@ -392,13 +420,54 @@ const recipientLimit = computed(() => {
   return campusRecipient ? campusRecipient.slots : 0;
 });
 
-// Filter scholars by applicant status - matching the case in database (Pending, Approved, Rejected)
+// Computed property to count approved applicants by campus, sorted alphabetically
+const approvedApplicantsByCanvas = computed(() => {
+  // Filter scholars by approved status
+  const approvedScholars = props.scholars.filter(scholar =>
+    scholar.applicant_status === 'Approved'
+  );
+
+  // Group by campus
+  const campusCounts = {};
+
+  approvedScholars.forEach(scholar => {
+    const campusName = scholar.campus;
+    if (!campusCounts[campusName]) {
+      campusCounts[campusName] = 0;
+    }
+    campusCounts[campusName]++;
+  });
+
+  // Convert to array of objects for sorting
+  const campusArray = Object.keys(campusCounts).map(campus => ({
+    name: campus,
+    count: campusCounts[campus]
+  }));
+
+  // Sort alphabetically by campus name
+  return campusArray.sort((a, b) => a.name.localeCompare(b.name));
+});
+
+// First, let's handle the core filtering logic
 const filteredByStatus = computed(() => {
   // Convert the filter value to match database case (capitalize first letter)
   const filterValue = applicantStatusFilter.value.charAt(0).toUpperCase() +
     applicantStatusFilter.value.slice(1).toLowerCase();
 
-  return props.scholars.filter(scholar => scholar.applicant_status === filterValue);
+  // Start with all scholars
+  let filtered = props.scholars;
+
+  // Apply the status filter
+  filtered = filtered.filter(scholar => scholar.applicant_status === filterValue);
+
+  // Filter by campus_id based on status and user type
+  if (applicantStatusFilter.value === 'pending' || props.currentUser.usertype !== 'super_admin') {
+    // For pending applicants OR any non-super_admin user, filter by campus
+    filtered = filtered.filter(scholar => scholar.campus_id === props.currentUser.campus_id);
+  }
+  // For approved applicants viewed by super_admin, no additional filtering needed
+
+  return filtered;
 });
 
 // Total number of scholars after filtering
@@ -411,27 +480,42 @@ const totalPages = computed(() => Math.ceil(totalScholars.value / props.itemsPer
 const startIndex = computed(() => (currentPage.value - 1) * props.itemsPerPage + 1);
 const endIndex = computed(() => Math.min(currentPage.value * props.itemsPerPage, totalScholars.value));
 
-// Scholars within recipient limit (with pagination and status filtering)
+// Then we handle the pagination and limits for scholars within the slot limit
 const scholarsWithinLimitFiltered = computed(() => {
   const start = (currentPage.value - 1) * props.itemsPerPage;
   const end = start + props.itemsPerPage;
 
-  // First get all scholars within limit after filtering by status
-  const scholarsWithinLimit = filteredByStatus.value
-    .slice(0, recipientLimit.value);
+  // Get the appropriate recipient limit (either campus-specific or total)
+  let limit = props.totalSlots;
+  if (props.currentUser.usertype !== 'super_admin') {
+    const campusRecipient = props.campusRecipients.find(
+      campus => campus.campus_id === props.currentUser.campus_id
+    );
+    limit = campusRecipient ? campusRecipient.slots : 0;
+  }
 
-  // Then apply pagination
+  // Get scholars within the limit
+  const scholarsWithinLimit = filteredByStatus.value.slice(0, limit);
+
+  // Apply pagination
   return scholarsWithinLimit.slice(start, end);
 });
 
-// Scholars outside recipient limit (with pagination and status filtering)
+// And for scholars outside the limit
 const scholarsOutsideLimitFiltered = computed(() => {
   const start = (currentPage.value - 1) * props.itemsPerPage;
-  const end = start + props.itemsPerPage;
 
-  // First get all scholars outside limit after filtering by status
-  const scholarsOutsideLimit = filteredByStatus.value
-    .slice(recipientLimit.value);
+  // Get the appropriate recipient limit (either campus-specific or total)
+  let limit = props.totalSlots;
+  if (props.currentUser.usertype !== 'super_admin') {
+    const campusRecipient = props.campusRecipients.find(
+      campus => campus.campus_id === props.currentUser.campus_id
+    );
+    limit = campusRecipient ? campusRecipient.slots : 0;
+  }
+
+  // Get scholars outside the limit
+  const scholarsOutsideLimit = filteredByStatus.value.slice(limit);
 
   // Calculate how many scholars within limit are shown on this page
   const shownWithinLimit = scholarsWithinLimitFiltered.value.length;
@@ -444,26 +528,71 @@ const scholarsOutsideLimitFiltered = computed(() => {
   }
 
   // Return the appropriate slice of outside-limit scholars
-  const outsideLimitStart = Math.max(0, start - recipientLimit.value);
+  const outsideLimitStart = Math.max(0, start - limit);
   return scholarsOutsideLimit.slice(outsideLimitStart, outsideLimitStart + remainingSlots);
 });
 
-// Check if there are any scholars outside the limit after filtering
+// Detect if we need to show the cut-off line
 const hasScholarsOutsideLimitFiltered = computed(() => {
-  return filteredByStatus.value.length > recipientLimit.value;
+  // Get the appropriate recipient limit (either campus-specific or total)
+  let limit = props.totalSlots;
+  if (props.currentUser.usertype !== 'super_admin') {
+    const campusRecipient = props.campusRecipients.find(
+      campus => campus.campus_id === props.currentUser.campus_id
+    );
+    limit = campusRecipient ? campusRecipient.slots : 0;
+  }
+
+  return filteredByStatus.value.length > limit && limit > 0;
 });
 
+const form = ref({
+  school_year_id: props.schoolyear?.id,
+  semester: null
+});
+
+// Total approved applicants
+const totalApprovedApplicants = computed(() => {
+  return props.scholars.filter(scholar => scholar.applicant_status === 'Approved').length;
+});
+
+function publishApplicantList() {
+  loading.value = true;
+
+  // Use explicit hard-coded values for testing
+  const data = {
+    school_year_id: props.schoolyear?.id, // Hard-code a test value
+    semester: props.selectedSem    // Hard-code a test value
+  };
+
+  console.log("Sending data:", data);
+
+  router.post(`/scholarships/${props.scholarship.id}/one-time/publish-applicants`, data, {
+    preserveScroll: true,
+    onSuccess: () => {
+      closeModal();
+      showToast('Success', 'Applicant list has been published successfully.');
+    },
+    onError: (errors) => {
+      console.error('Errors:', errors);
+      showToast('Error', Object.values(errors)[0] || 'Failed to publish applicant list.');
+    },
+    onFinish: () => {
+      loading.value = false;
+    }
+  });
+}
+
 // Methods
-function toggleForwardSponsor() {
-  ForwardtoSponsor.value = !ForwardtoSponsor.value;
+function togglePublish() {
+  Publish.value = !Publish.value;
 }
 
 function closeModal() {
-  ForwardtoSponsor.value = false;
+  Publish.value = false;
 }
 
 function generateReport() {
-  // Implementation of report generation
   showToast('Report Generated', 'Applicant list has been published successfully.');
 }
 
@@ -498,9 +627,11 @@ function prevPage() {
   }
 }
 
-// Lifecycle hooks
+// Initialize component
 onMounted(() => {
-  // Any initialization code
+  // Initialize form with proper values
+  form.value.school_year_id = props.schoolyear?.id;
+  form.value.semester = props.selectedSem;
 });
 </script>
 

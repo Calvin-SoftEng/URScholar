@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full bg-[F8F8FA] shadow-lg">
+  <div class="w-full bg-white border-b dark:border-gray-700 dark:bg-dprimary ">
     <!-- desktop -->
     <div class="hidden lg:flex justify-between items-center h-[50px] place-content-center px-10">
       <div class="flex items-center space-x-4">
@@ -18,41 +18,67 @@
               class="w-[180px] h-[40px] hidden dark:block"> -->
         </div>
         <div class="absolute left-1/2 -translate-x-1/2">
-          <ul class="flex pl-10 space-x-10 font-inter font-semibold text-navy">
-            <!-- <li>
-            <Link :href="(route('student.dashboard'))">
-            <p class="text-primary-foreground hover:text-primary-foreground transition">Feed</p>
-            </Link>
-          </li> -->
+          <ul class="flex pl-10 space-x-10 font-inter font-semibold text-gray-500 dark:text-gray-500">
             <li>
-              <Link :href="(route('student.dashboard'))">
-              <p class="text-primary-foreground hover:text-primary-foreground transition">Dashboard</p>
+              <Link :href="route('student.dashboard')">
+                <p
+                  class="transition duration-200 "
+                  :class="[
+                    ' hover:text-primary-foreground',
+                    $page.url.startsWith('/dashboard')
+                      ? 'text-dprimary dark:text-dtext border-b-2 border-primary dark:border-dtext pb-0.5 font-semibold'
+                      : ''
+                  ]"
+                >
+                  Dashboard
+                </p>
               </Link>
             </li>
+
             <li class="relative">
-                <Link :href="route('feed.grantee_feed')" class="flex items-center space-x-2">
-                    <p class="text-primary-foreground hover:text-primary transition">Feed</p>
-                    <!-- Notification Badge (only shows if unreadMessages > 0) -->
-                    <span 
-                        class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
-                        1
-                    </span>
-                </Link>
-            </li>
-            <li class="relative">
-                <Link :href="route('messaging.index')" class="flex items-center space-x-2">
-                    <p class="text-primary-foreground hover:text-primary transition">Groupchats</p>
-                    <!-- Notification Badge (only shows if unreadMessages > 0) -->
-                    <span 
-                        class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
-                        1
-                    </span>
-                </Link>
+              <Link :href="route('feed.grantee_feed')" class="flex items-center space-x-2">
+                <p
+                  class="transition duration-200"
+                  :class="[
+                    'hover:text-primary-foreground',
+                    $page.url.startsWith('/student/feed')
+                      ? 'text-dprimary dark:text-dtext border-b-2 border-primary dark:border-dtext pb-0.5 font-semibold'
+                      : ''
+                  ]"
+                >
+                  Feed
+                </p>
+                <span
+                  class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md"
+                >
+                  1
+                </span>
+              </Link>
             </li>
 
-
+            <li class="relative">
+              <Link :href="route('messaging.index')" class="flex items-center space-x-2">
+                <p
+                  class="transition duration-200"
+                  :class="[
+                    ' hover:text-primary-foreground',
+                    $page.url.startsWith('/messaging')
+                      ? 'text-dprimary dark:text-dtext border-b-2 border-primary dark:border-dtext pb-0.5 font-semibold'
+                      : ''
+                  ]"
+                >
+                  Communication
+                </p>
+                <span
+                  class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md"
+                >
+                  1
+                </span>
+              </Link>
+            </li>
           </ul>
         </div>
+
 
       </div>
 
@@ -60,21 +86,18 @@
       <div class="flex items-center space-x-4 pr-5">
         <!-- Theme Toggle -->
         <div
-          class="border border-gray-300 inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg"
-          type="button">
-          <label class="swap swap-rotate h-[25px] w-[25px]">
-            <!-- Hidden Checkbox -->
-            <input type="checkbox" class="theme-controller hidden" value="synthwave" @change="toggleTheme" />
-            <!-- Sun Icon -->
-            <svg class="swap-off h-full w-full fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path
-                d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z" />
-            </svg>
-            <!-- Moon Icon -->
-            <svg class="swap-on h-full w-full fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              <path
-                d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z" />
-            </svg>
+          class="border border-gray-300 inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-200 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg">
+          <label class="swap swap-rotate h-[35px] w-[35px] cursor-pointer">
+            <!-- Hidden Checkbox to Toggle Theme -->
+            <input type="checkbox" class="theme-controller hidden" :checked="isDark" @change="toggleTheme" />
+
+            <!-- Light Icon (Visible when in light mode) -->
+            <font-awesome-icon v-if="!isDark" :icon="['fas', 'lightbulb']"
+              class="text-blue-500 text-lg transition-all duration-300 ease-in-out" />
+
+            <!-- Moon Icon (Visible when in dark mode) -->
+            <font-awesome-icon v-if="isDark" :icon="['fas', 'moon']"
+              class="text-gray-400 text-lg transition-all duration-300 ease-in-out" />
           </label>
         </div>
 
@@ -123,16 +146,31 @@
           <div class="pl-3">
             <div class="flex flex-row  items-center justify-center gap-2">
               <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo"
-                class="w-[40px] h-[40px] dark:hidden">
+                class="w-[35px] h-[35px] dark:hidden">
               <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo"
-                class="w-[40px] h-[40px] hidden dark:block">
+                class="w-[35px] h-[35px] hidden dark:block">
 
-              <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
+              <span class="font-poppins text-2xl font-bold text-navy tracking-tight dark:text-white">URScholar</span>
             </div>
           </div>
         </div>
 
         <div>
+          <div
+            class="relative inline-flex items-center justify-center w-10 h-8 text-sm font-medium text-center text-gray-500 hover:text-gray-200 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg">
+            <label class="swap swap-rotate h-[20px] w-[35px] cursor-pointer">
+              <!-- Hidden Checkbox to Toggle Theme -->
+              <input type="checkbox" class="theme-controller hidden" :checked="isDark" @change="toggleTheme" />
+
+              <!-- Light Icon (Visible when in light mode) -->
+              <font-awesome-icon v-if="!isDark" :icon="['fas', 'lightbulb']"
+                class="text-blue-500 text-lg transition-all duration-300 ease-in-out" />
+
+              <!-- Moon Icon (Visible when in dark mode) -->
+              <font-awesome-icon v-if="isDark" :icon="['fas', 'moon']"
+                class="text-gray-400 text-lg transition-all duration-300 ease-in-out" />
+            </label>
+          </div>
           <!-- notification -->
           <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotificationMobile"
             class="relative inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg"
@@ -199,13 +237,19 @@
           <!-- Menu Links with animation -->
           <ul class="text-white text-2xl font-medium space-y-8 text-center font-poppins">
             <li class="transform transition-transform duration-300 hover:scale-110">
-              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Feed</a>
+              <Link :href="(route('student.dashboard'))" class="block py-2 px-6 hover:text-gray-300 transition-colors">Dashboard</Link>
             </li>
             <li class="transform transition-transform duration-300 hover:scale-110">
-              <a href="#" class="block py-2 px-6 hover:text-gray-300 transition-colors">Scholarship</a>
+              <Link :href="route('feed.grantee_feed')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Feed</Link>
+            </li>
+            <li class="transform transition-transform duration-300 hover:scale-110">
+              <Link :href="route('messaging.index')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Groupchats</Link>
             </li>
             <li class="transform transition-transform duration-300 hover:scale-110">
               <Link :href="route('student.profile')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Profile</Link>
+            </li>
+            <li class="transform transition-transform duration-300 hover:scale-110">
+              <Link :href="route('student.account')" class="block py-2 px-6 hover:text-gray-300 transition-colors">Account</Link>
             </li>
             <li class="transform transition-transform duration-300 hover:scale-110">
               <Link :href="route('logout')" method="post" as="button">
@@ -339,9 +383,6 @@
         </Link>
       </div>
     </div>
-
-
-
   </div>
 </template>
 
@@ -375,6 +416,18 @@ const items = ref([
   }
 ]);
 
+const isDark = ref(false);
+
+const toggleTheme = () => {
+  isDark.value = !isDark.value
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+    localStorage.setItem('theme', 'dark')
+  } else {
+    document.documentElement.classList.remove('dark')
+    localStorage.setItem('theme', 'light')
+  }
+};
 
 const notifications = ref([]);
 const isDropdownVisible = ref(false);
@@ -532,6 +585,35 @@ onMounted(() => {
   setupPusher();
 
   document.addEventListener('click', closeDropdown);
+
+  // First check localStorage
+  const savedTheme = localStorage.getItem('theme')
+
+  if (savedTheme) {
+    // If user has a saved preference, use that
+    isDark.value = savedTheme === 'dark'
+  } else {
+    // If no saved preference, check system preference
+    isDark.value = window.matchMedia('(prefers-color-scheme: dark)').matches
+  }
+
+  // Apply the theme
+  if (isDark.value) {
+    document.documentElement.classList.add('dark')
+  }
+
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    // Only update if user hasn't set a preference
+    if (!localStorage.getItem('theme')) {
+      isDark.value = e.matches
+      if (e.matches) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    }
+  })
 });
 
 // Clean up event listener when component is unmounted

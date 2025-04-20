@@ -3,17 +3,29 @@
         <div
             class="sm:px-0 lg:px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
             <div class="w-full p-4 h-full">
-                <div class="bg-white w-full h-full rounded-xl flex flex-row">
-                    <div class="w-[30%] border-r">
-                        <h3 class="text-xl text-primary mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold">
+                <div class="bg-white dark:bg-dcontainer w-full h-full rounded-xl flex flex-row">
+                    <div
+                        class="border-r sm:w-full lg:w-[30%]"
+                        :class="{
+                            'hidden': isChatOpen,
+                            'block': !isChatOpen,
+                            'md:block': true
+                        }"
+                        >
+                        <h3 class="text-xl text-[#003366] dark:text-dtext mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold">
                             Messages</h3>
 
-                        <!-- Removed DM tab and now only showing Group Chats -->
-                        <div class="mt-4 border-b border-gray-100 dark:border-gray-600">
-                            <div
-                                class="w-full p-2 text-center text-sm font-medium text-primary border-b-2 border-primary">
+                        <!-- Tabs for DM and GC -->
+                        <div class="mt-4 flex border-b border-gray-100 dark:border-gray-600">
+                           
+                            <!-- GC Tab -->
+                            <button type="button"
+                                class="w-full p-2 text-center text-sm font-medium focus:outline-none transition" :class="selectedTab === 'gc'
+                                    ? 'border-b-2 border-primary text-[#003366] dark:text-dtext '
+                                    : 'text-gray-600 hover:bg-gray-200 dark:text-white dark:hover:bg-gray-600'"
+                                @click="selectedTab = 'gc'">
                                 Group Chats
-                            </div>
+                            </button>
                         </div>
 
                         <!-- search -->
@@ -29,8 +41,8 @@
                                     </svg>
                                 </div>
                                 <input type="search" id="default-search" v-model="searchTerm"
-                                    class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Search group chats" />
+                                    class="block w-full p-3 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-dprimary dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    placeholder="Search group chats and scholars" />
                             </div>
                         </form>
 
@@ -51,7 +63,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                        }}</span>
+                                            }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -65,38 +77,41 @@
                                             No messages yet
                                         </p>
                                     </div>
+                                    <!-- <div class="flex items-center">
+                                        <span class="text-xs text-gray-400">{{ group.users_count }} members</span>
+                                    </div> -->
                                 </div>
                                 </Link>
                             </div>
 
-                            <!-- Scholarship Batches Section -->
+                            <!-- Scholarship Group Section -->
                             <div class="py-2">
-                                <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Scholarship Batches
+                                <h4 class="text-xs uppercase text-gray-500 font-semibold px-4 py-2">Scholarship Groups
                                 </h4>
-                                <Link v-for="batch in filteredBatches" :key="`batch-${batch.id}`"
-                                    :href="route('messaging.batch', batch.id)"
+                                <Link v-for="group in filteredScholarshipGroups" :key="`scholarship-${group.id}`"
+                                    :href="route('messaging.scholarship', group.id)"
                                     :class="['w-full flex items-center space-x-3 p-4 hover:bg-gray-100',
-                                        selectedData && selectedData.id === batch.id && groupType === 'batch' ? 'bg-blue-50' : '']"
-                                    @click.prevent="selectGroup(batch, 'batch')">
+                                        selectedData && selectedData.id === group.id && groupType === 'scholarship' ? 'bg-blue-50' : '']"
+                                    @click.prevent="selectGroup(group, 'scholarship'); openChat(group);">
                                 <div
                                     class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                    {{ batch.batch_no || 'B' }}
+                                    {{ group.name ? group.name.slice(0, 2).toUpperCase() : 'SG' }}
                                 </div>
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">
-                                            {{ batch.name || `Batch ${batch.batch_no}` }}
+                                            {{ group.name || 'Scholarship Group' }}
                                             <span class="text-xs text-gray-500">
-                                                ({{ batch.scholarship ? batch.scholarship.name : 'Scholarship' }})
+                                                ({{ group.scholarship ? group.scholarship.name : 'Scholarship' }})
                                             </span>
                                         </span>
-                                        <span v-if="batch.latest_message" class="text-xs text-gray-400">
-                                            {{ formatTimestamp(batch.latest_message.created_at) }}
+                                        <span v-if="group.latest_message" class="text-xs text-gray-400">
+                                            {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
                                     </div>
                                     <div class="flex-grow">
-                                        <p class="text-xs text-gray-500 truncate" v-if="batch.latest_message">
-                                            {{ batch.latest_message.user.first_name }}: {{ batch.latest_message.content
+                                        <p class="text-xs text-gray-500 truncate" v-if="group.latest_message">
+                                            {{ group.latest_message.user.first_name }}: {{ group.latest_message.content
                                             }}
                                         </p>
                                         <p class="text-xs text-gray-500 italic" v-else>
@@ -104,7 +119,7 @@
                                         </p>
                                     </div>
                                     <div class="flex items-center">
-                                        <span class="text-xs text-gray-400">{{ batch.users_count }} members</span>
+                                        <span class="text-xs text-gray-400">{{ group.users_count }} members</span>
                                     </div>
                                 </div>
                                 </Link>
@@ -112,12 +127,25 @@
                         </div>
                     </div>
 
-                    <div class="w-[70%] h-full flex flex-col">
+                    <div class="sm:w-full lg:w-[70%] h-full flex flex-col"
+                        :class="{
+                            'hidden': !isChatOpen,
+                            'flex': isChatOpen,
+                            'lg:flex': true
+                        }">
                         <div class="shadow-sm p-4 flex justify-between items-center">
+                            <div class="flex flex-row space-x-3 items-center">
+                            <button class="flex items-center justify-center" @click="closeChat">
+                                <span class="material-symbols-rounded">
+                                keyboard_arrow_left
+                                </span>
+                            </button>
                             <h3 class="text-lg font-bold text-primary">
-                                {{ selectedData ? (selectedData.name || (selectedData.batch_no ? `Batch
-                                ${selectedData.batch_no}` : 'Conversation')) : 'Conversation' }}
+                                {{ selectedData ? (selectedData.name  || (selectedData.batch_no ? `Batch
+                                ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
                             </h3>
+                            </div>
+
                             <!-- Three dots menu aligned with conversation text -->
                             <button class="text-gray-600 hover:text-primary transition-colors"
                                 @click="showMemberList = !showMemberList">
@@ -157,7 +185,7 @@
                                         </div>
                                         <div v-else>
                                             <img class="w-8 h-8 rounded-full mt-6 border"
-                                                :src="`/storage/user/profile/male.png`" alt="picture">
+                                                :src="`/storage/user/profile/no_userpic.png`" alt="picture">
                                         </div>
                                         <div class="flex flex-col gap-1 w-full justify-start max-w-[320px] mb-3">
                                             <div class="flex justify-start items-center space-x-1 rtl:space-x-reverse">
@@ -204,7 +232,7 @@
                                         </div>
                                         <div v-else>
                                             <img class="w-8 h-8 rounded-full mt-6 border"
-                                                :src="`/storage/user/profile/male.png`" alt="picture">
+                                                :src="`/storage/user/profile/no_userpic.png`" alt="picture">
                                         </div>
                                     </template>
                                 </div>
@@ -212,21 +240,33 @@
 
                             <!-- Member list sidebar - conditionally shown -->
                             <div v-if="showMemberList" class="w-64 border-l overflow-y-auto">
-                                <div class="p-4">
+                                <div class="p-2">
                                     <h4 class="font-bold text-primary mb-3">Members</h4>
 
-                                    <div v-if="members.length > 0">
+                                    <div>
                                         <!-- Group members by usertype -->
-                                        <template v-for="member in members" :key="member">
                                             <div class="mb-4">
-                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">ewan ko
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">Grantees
                                                 </h5>
+                                                <div 
+                                                    class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
+                                                    <div >
+                                                            <img class="h-8 w-8 rounded-full"
+                                                            src="../../../../assets/images/no_userpic.png">
+                                                    </div>
+                                                    <!-- <div 
+                                                        class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
+                                                       eafeafef
+                                                    </div> -->
+                                                    <span class="text-sm font-medium">
+                                                        Manalo, Daughtry
+                                                        </span>
+                                                </div>
                                             </div>
-                                        </template>
                                     </div>
-                                    <div v-else class="text-center text-gray-500 py-4">
+                                    <!-- <div v-else class="text-center text-gray-500 py-4">
                                         <p>No member information available</p>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                         </div>
@@ -234,13 +274,13 @@
                         <div
                             class="flex items-center box-border p-2 bg-white z-100 shadow-[0_-2px_5px_rgba(0,0,0,0.1)]">
                             <!-- For the circle-plus button -->
-                            <button class="px-2" @click="toggleAttachmentMenu"
+                            <!-- <button class="px-2" @click="toggleAttachmentMenu"
                                 :disabled="!selectedData || !selectedData.id">
                                 <font-awesome-icon :icon="['fas', 'circle-plus']" :class="[
                                     'w-6 h-6 transition',
                                     selectedData && selectedData.id ? 'text-primary hover:text-primary/80' : 'text-gray-400 cursor-not-allowed'
                                 ]" />
-                            </button>
+                            </button> -->
 
                             <!-- For the text input -->
                             <input type="text" placeholder="Type your message..."
@@ -281,21 +321,41 @@ const props = defineProps({
     messages: Array,
     currentUser: Object,
     staffGroups: Array,
-    batches: Array,
+    scholarshipGroups: Array,
+    users: Array,
+    conversations: Array,
     selectedGroup: Object,
     groupType: String,
+    selectedUser: Object,
+    selectedConversation: Object,
     members: Array,
 });
 
+
+const isChatOpen = ref(false)
+
+function openChat() {
+  isChatOpen.value = true;
+}
+
+const closeChat = () => {
+  isChatOpen.value = false
+}
+
+
+const selectedTab = ref('gc'); // Default to 'gc' tab for group chats
 const messageData = ref(props.messages || []);
 const selectedData = ref(props.selectedGroup);
 const groupType = ref(props.groupType || null);
 const searchTerm = ref('');
 const showMemberList = ref(false);
+const conversations = ref(props.conversations || []);
+const selectedUser = ref(props.selectedUser || null);
+const selectedConversation = ref(props.selectedConversation || null);
 
-// Create reactive refs for staff groups and batches
+// Create reactive refs for staff groups and scholarship groups
 const staffGroupsData = ref(props.staffGroups || []);
-const batchesData = ref(props.batches || []);
+const scholarshipGroupsData = ref(props.scholarshipGroups || []);
 
 // Form data for sending messages
 const form = ref({
@@ -314,15 +374,15 @@ const filteredStaffGroups = computed(() => {
     );
 });
 
-// Filter batches based on search term
-const filteredBatches = computed(() => {
-    if (!batchesData.value) return [];
-    if (!searchTerm.value) return batchesData.value;
+// Filter Scholarships based on search term
+const filteredScholarshipGroups = computed(() => {
+    if (!scholarshipGroupsData.value) return [];
+    if (!searchTerm.value) return scholarshipGroupsData.value;
 
-    return batchesData.value.filter(batch => {
-        const batchName = batch.name || `Batch ${batch.batch_no}`;
-        const scholarshipName = batch.scholarship ? batch.scholarship.name : '';
-        return batchName.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
+    return scholarshipGroupsData.value.filter(group => {
+        const groupName = group.name || `Scholarship Group`;
+        const scholarshipName = group.scholarship ? group.scholarship.name : '';
+        return groupName.toLowerCase().includes(searchTerm.value.toLowerCase()) ||
             scholarshipName.toLowerCase().includes(searchTerm.value.toLowerCase());
     });
 });
@@ -356,6 +416,7 @@ const formatTimeOnly = (datetime) => {
     return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
 };
 
+
 // Format timestamp for message display
 const formatTimestamp = (timestamp) => {
     if (!timestamp) return '';
@@ -374,8 +435,67 @@ const formatTimestamp = (timestamp) => {
     }
 };
 
+
+// Add this to your script's computed properties
+const filteredUsers = computed(() => {
+    if (!props.users) return [];
+    if (!searchTerm.value) return props.users;
+
+    return props.users.filter(user => {
+        const fullName = `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase();
+        const userName = user.name ? user.name.toLowerCase() : '';
+        return fullName.includes(searchTerm.value.toLowerCase()) ||
+            userName.includes(searchTerm.value.toLowerCase());
+    });
+});
+
+// Add this function to handle user selection
+const selectUser = (user) => {
+    // Set the selected tab to direct messages
+    selectedTab.value = 'dm';
+
+    // Update selected user
+    selectedUser.value = user;
+
+    // Clear previous messages while loading new ones
+    messageData.value = [];
+
+    // Find existing conversation if any
+    const existingConvo = conversations.value.find(convo =>
+        convo.other_user && convo.other_user.id === user.id
+    );
+
+    if (existingConvo) {
+        selectedConversation.value = existingConvo;
+        selectedData.value = existingConvo;
+    } else {
+        // Create a temporary conversation object
+        selectedConversation.value = null;
+        selectedData.value = { id: user.id, name: user.first_name || user.name };
+    }
+
+    // Set the group type to conversation
+    groupType.value = 'conversation';
+
+    // Navigate to the conversation route
+    router.get(route('messaging.conversation', user.id), {}, {
+        preserveState: true,
+        preserveScroll: true,
+        only: ['messages', 'selectedUser', 'selectedConversation'],
+        onSuccess: (page) => {
+            if (page.props.messages) {
+                messageData.value = page.props.messages;
+                scrollToBottom();
+            }
+        }
+    });
+};
+
 // Add this function to handle group selection
 const selectGroup = (group, type) => {
+    // Set the selected tab to group chats
+    selectedTab.value = 'gc';
+
     // Clear previous messages while loading new ones
     messageData.value = [];
 
@@ -383,8 +503,12 @@ const selectGroup = (group, type) => {
     selectedData.value = group;
     groupType.value = type;
 
+    // Clear user selection
+    selectedUser.value = null;
+    selectedConversation.value = null;
+
     // Navigate to the appropriate route
-    const routeName = type === 'staff' ? 'messaging.staff' : 'messaging.batch';
+    const routeName = type === 'staff' ? 'messaging.staff' : 'messaging.scholarship';
     router.get(route(routeName, group.id), {}, {
         preserveState: true,
         preserveScroll: true,
@@ -397,6 +521,20 @@ const selectGroup = (group, type) => {
         }
     });
 };
+
+// Helper function to get latest message for a user
+const getUserLatestMessage = (userId) => {
+    if (!conversations.value) return null;
+
+    // Find the conversation with this user
+    const conversation = conversations.value.find(convo =>
+        convo.other_user && convo.other_user.id === userId
+    );
+
+    // Return the latest message if found
+    return conversation && conversation.latest_message ? conversation.latest_message : null;
+};
+
 
 // Toggle attachment menu (placeholder for future functionality)
 const toggleAttachmentMenu = () => {
@@ -435,11 +573,19 @@ const sendMessage = () => {
                     staffGroupsData.value[groupIndex].latest_message = tempMessage;
                     staffGroupsData.value = [...staffGroupsData.value]; // Force reactivity
                 }
-            } else if (groupType.value === 'batch' && selectedData.value) {
-                const batchIndex = batchesData.value.findIndex(b => b.id === selectedData.value.id);
-                if (batchIndex !== -1) {
-                    batchesData.value[batchIndex].latest_message = tempMessage;
-                    batchesData.value = [...batchesData.value]; // Force reactivity
+            } else if (groupType.value === 'scholarship' && selectedData.value) {
+                const groupIndex = scholarshipGroupsData.value.findIndex(g => g.id === selectedData.value.id);
+                if (groupIndex !== -1) {
+                    scholarshipGroupsData.value[groupIndex].latest_message = tempMessage;
+                    scholarshipGroupsData.value = [...scholarshipGroupsData.value]; // Force reactivity
+                }
+            } else if (groupType.value === 'conversation' && selectedUser.value) {
+                const convoIndex = conversations.value.findIndex(c =>
+                    c.other_user && c.other_user.id === selectedUser.value.id
+                );
+                if (convoIndex !== -1) {
+                    conversations.value[convoIndex].latest_message = tempMessage;
+                    conversations.value = [...conversations.value]; // Force reactivity
                 }
             }
 
@@ -448,10 +594,9 @@ const sendMessage = () => {
 
             // Scroll to bottom
             scrollToBottom();
-
+            clearForm();
             // Fetch messages to get the server-generated message with proper ID
             fetchMessages();
-            clearForm();
         },
         onError: (errors) => {
             console.error('Error sending message:', errors);
@@ -492,7 +637,9 @@ const setupRealTimeListeners = () => {
 
     // Listen for new messages in the active chat
     if (selectedData.value && selectedData.value.id) {
-        const channelName = `chat.${selectedData.value.id}`;
+        const channelName = groupType.value === 'conversation'
+            ? `conversation.${selectedData.value.id}`
+            : `chat.${selectedData.value.id}`;
 
         echo.private(channelName)
             .listen('.message.sent', (e) => {
@@ -503,6 +650,26 @@ const setupRealTimeListeners = () => {
                     scrollToBottom();
                 }
             });
+    }
+
+    // Listen for new messages in all conversations
+    if (conversations.value && conversations.value.length > 0) {
+        conversations.value.forEach(convo => {
+            echo.private(`chat.${convo.id}`)
+                .listen('.message.sent', (e) => {
+                    fetchMessages();
+                    console.log('New message received in conversation:', e);
+                    if (e.message) {
+                        // Update the latest message for this conversation
+                        const convoIndex = conversations.value.findIndex(c => c.id === convo.id);
+                        if (convoIndex !== -1) {
+                            conversations.value[convoIndex].latest_message = e.message;
+                            // Force Vue to recognize the change
+                            conversations.value = [...conversations.value];
+                        }
+                    }
+                });
+        });
     }
 
     // Listen for new messages in all staff groups
@@ -524,33 +691,35 @@ const setupRealTimeListeners = () => {
     });
 
     // Listen for new messages in all batches
-    batchesData.value.forEach(batch => {
-        echo.private(`chat.${batch.id}`)
+    scholarshipGroupsData.value.forEach(group => {
+        echo.private(`chat.${group.id}`)
             .listen('.message.sent', (e) => {
                 fetchMessages();
-                console.log('New message received in batch:', e);
+                console.log('New message received in scholarship group:', e);
                 if (e.message) {
-                    // Update the latest message for this batch
-                    const batchIndex = batchesData.value.findIndex(b => b.id === batch.id);
-                    if (batchIndex !== -1) {
-                        batchesData.value[batchIndex].latest_message = e.message;
+                    // Update the latest message for this group
+                    const groupIndex = scholarshipGroupsData.value.findIndex(g => g.id === group.id);
+                    if (groupIndex !== -1) {
+                        scholarshipGroupsData.value[groupIndex].latest_message = e.message;
                         // Force Vue to recognize the change
-                        batchesData.value = [...batchesData.value];
+                        scholarshipGroupsData.value = [...scholarshipGroupsData.value];
                     }
                 }
             });
     });
 };
 
-// Update the fetchMessages function to handle only group messages
+// Update the fetchMessages function to handle conversations
 const fetchMessages = async () => {
     if (!selectedData.value || !selectedData.value.id) return;
 
     let url;
-    if (groupType.value === 'batch') {
-        url = route("messaging.batch", { batch: selectedData.value.id });
+    if (groupType.value === 'scholarship') {
+        url = route("messaging.scholarship", { scholarshipGroup: selectedData.value.id });
     } else if (groupType.value === 'staff') {
         url = route("messaging.staff", { staffGroup: selectedData.value.id });
+    } else if (groupType.value === 'conversation' && selectedUser.value) {
+        url = route("messaging.conversation", { userId: selectedUser.value.id });
     } else {
         return;
     }
@@ -579,24 +748,39 @@ const fetchMessages = async () => {
 const cleanupListeners = () => {
     if (echo) {
         if (selectedData.value && selectedData.value.id) {
-            const channelName = `private-chat.${selectedData.value.id}`;
+            const channelName = groupType.value === 'conversation'
+                ? `private-conversation.${selectedData.value.id}`
+                : `private-chat.${selectedData.value.id}`;
+
             echo.leave(channelName);
+        }
+
+        if (conversations.value && conversations.value.length > 0) {
+            conversations.value.forEach(convo => {
+                echo.leave(`private-conversation.${convo.id}`);
+            });
         }
 
         staffGroupsData.value.forEach(group => {
             echo.leave(`private-chat.${group.id}`);
         });
 
-        batchesData.value.forEach(batch => {
-            echo.leave(`private-chat.${batch.id}`);
+        scholarshipGroupsData.value.forEach(scholarship => {
+            echo.leave(`private-chat.${scholarship.id}`);
         });
     }
 };
 
+// Update the initialization to include selectedUser from props
 onMounted(() => {
     // Initial setup
     setupRealTimeListeners();
     scrollToBottom();
+
+    // Initialize selectedUser if it exists in props
+    if (props.selectedUser) {
+        selectedUser.value = props.selectedUser;
+    }
 });
 
 watch([selectedData, groupType], ([newSelectedData, newGroupType], [oldSelectedData, oldGroupType]) => {
@@ -615,6 +799,25 @@ watch([selectedData, groupType], ([newSelectedData, newGroupType], [oldSelectedD
     }
 });
 
+// Add this new watch function to handle tab persistence
+watch(selectedTab, (newTab) => {
+    // When tab changes, update the visible content but don't change the selection
+    if (newTab === 'dm' && selectedUser.value) {
+        // If switching to DM tab and we already have a selected user, keep that selection
+        selectedData.value = selectedConversation.value || { id: selectedUser.value.id };
+        groupType.value = 'conversation';
+    } else if (newTab === 'gc' && selectedData.value && groupType.value === 'conversation') {
+        // If switching to GC tab and we had a conversation selected, clear it
+        // Or optionally select the first group if available
+        if (staffGroupsData.value.length > 0) {
+            selectedData.value = staffGroupsData.value[0];
+            groupType.value = 'staff';
+        } else if (scholarshipGroupsData.value.length > 0) {
+            selectedData.value = scholarshipGroupsData.value[0];
+            groupType.value = 'scholarship';
+        }
+    }
+});
 // Clean up when component is unmounted
 onUnmounted(() => {
     cleanupListeners();

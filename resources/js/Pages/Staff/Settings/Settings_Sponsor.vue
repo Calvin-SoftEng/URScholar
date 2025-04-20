@@ -46,7 +46,7 @@
                             class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
                             <thead
                                 class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                <tr class="dark:text-dtext dark:bg-dcontainer">
+                                <tr class="dark:text-dtext dark:bg-dcontainer tracking-wider">
                                     <th scope="col" class="px-1 py-3">
                                         <span class="sr-only">Image</span>
                                     </th>
@@ -57,7 +57,7 @@
                                         Since
                                     </th>
                                     <th scope="col" class="px-6 py-3">
-                                        Memorandum of Agreement
+                                        Focal Person
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Date Created
@@ -70,7 +70,7 @@
                             <tbody>
                                 <template v-for="sponsor in sponsors" :key="sponsor.id">
                                     <tr
-                                        class="bg-white border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200">
+                                        class="bg-white text-lg border-b dark:bg-dcontainer dark:border-gray-700 border-gray-200">
                                         <th scope="row"
                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"
@@ -83,7 +83,12 @@
                                             {{ sponsor.since }}
                                         </td>
                                         <td class="px-6 py-4">
-                                            {{ sponsor.moa_file }}
+                                            <span v-if="!sponsor.assign.first_name && !sponsor.assign.last_name">
+                                                Not Registered
+                                            </span>
+                                            <span v-else>
+                                                {{ sponsor.assign.first_name }} {{ sponsor.assign.last_name }}
+                                            </span>
                                         </td>
                                         <td class="px-6 py-4">
                                             {{ formatDate(sponsor.created_at) }}
@@ -111,7 +116,7 @@
                                     class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5">
                                     Go Back
                                 </button>
-                                <button @click="updateSponsor"
+                                <button v-if="form.created_id == $page.props.auth.user.id" @click="updateSponsor"
                                     class="btn bg-primary text-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5">
                                     Edit
                                 </button>
@@ -125,7 +130,7 @@
                                         <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Image</h3>
                                         <div class="mb-2 flex flex-col items-center gap-4">
                                             <div
-                                                class="w-40 h-40 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                                                class="w-60 h-60 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                                                 <img :src="form.imgPreview || (form.imgName ? `/storage/sponsor/logo/${form.imgName}` : '')"
                                                     alt="Sponsor Logo" class="object-cover w-full h-full">
                                             </div>
@@ -136,21 +141,27 @@
                                     <div class="flex flex-col gap-4">
                                         <div>
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Name</h3>
-                                            <p class="mt-1 text-gray-800 dark:text-dtext">{{ form.name || 'N/A' }}</p>
+                                            <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{
+                                                form.name || 'N/A' }}
+                                            </p>
                                         </div>
 
                                         <div class="grid grid-cols-2 gap-4">
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                 </h3>
-                                                <p class="mt-1 text-gray-800 dark:text-dtext">{{ form.abbreviation ||
+                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{
+                                                    form.abbreviation
+                                                    ||
                                                     'N/A' }}</p>
                                             </div>
 
                                             <div>
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Partnered Since
                                                 </h3>
-                                                <p class="mt-1 text-gray-800 dark:text-dtext">{{ form.since || 'N/A' }}
+                                                <p class="mt-1 text-lg font-poppins text-gray-800 dark:text-dtext">{{
+                                                    form.since ||
+                                                    'N/A' }}
                                                 </p>
                                             </div>
                                         </div>
@@ -158,7 +169,7 @@
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Background
                                                 Information</h3>
                                             <p
-                                                class="mt-1 text-sm text-gray-800 dark:text-dtext bg-gray-50 dark:bg-gray-900 p-3 rounded-lg max-h-44 overflow-y-auto">
+                                                class="mt-1 text-base font-poppins text-gray-800 dark:text-dtext bg-gray-50 dark:bg-gray-900 p-3 rounded-lg max-h-44 overflow-y-auto">
                                                 {{ form.description || 'No description available.' }}
                                             </p>
                                         </div>
@@ -168,9 +179,14 @@
 
                             <div class="h-0.5 bg-gray-200 dark:bg-gray-700 my-6"></div>
 
-                            <!-- MOA Title -->
-                            <div class="pt-4 text-left text-lg font-semibold text-gray-900 dark:text-white">
-                                Memorandum of Agreements History
+                            <div
+                                class="pt-4 text-left text-lg font-semibold text-gray-900 dark:text-white flex justify-between items-center">
+                                <span>Memorandum of Agreements History</span>
+                                <button v-if="form.created_id == $page.props.auth.user.id" @click="toggleUploadMOA"
+                                    class="inline-flex items-center gap-1 text-sm font-medium bg-primary hover:bg-blue-700 text-white py-1.5 px-3 rounded-lg transition duration-200">
+                                    <span class="material-symbols-rounded text-base">upload_file</span>
+                                    Add MOA
+                                </button>
                             </div>
 
                             <!-- MOA History Section -->
@@ -181,7 +197,7 @@
                                     <div class="w-full md:col-span-1 flex items-center">
                                         <span class="font-semibold text-gray-900 dark:text-white">{{
                                             formatDate(moaItem.created_at)
-                                            }}</span>
+                                        }}</span>
                                     </div>
 
                                     <!-- File name column -->
@@ -191,9 +207,11 @@
                                 </div>
                             </div>
 
+                            <!-- Empty state -->
                             <div v-else class="text-center py-4 text-gray-500 dark:text-gray-400">
                                 No previous MOA records found.
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -222,6 +240,8 @@
                                     <div class="flex flex-col w-full gap-2 h-full">
                                         <div class="w-full">
                                             <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor</h3>
+                                            <InputError v-if="errors?.name" :message="errors.name"
+                                                class="text-2xs text-red-500" />
                                             <input v-model="form.name" type="text" id="name"
                                                 placeholder="Enter a Partnership or Sponsor"
                                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -231,6 +251,8 @@
                                                 <div class="w-full">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                     </h3>
+                                                    <InputError v-if="errors?.abbreviation"
+                                                        :message="errors.abbreviation" class="text-2xs text-red-500" />
                                                     <input v-model="form.abbreviation" type="text" id="name"
                                                         placeholder="e.g., CHED"
                                                         class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -238,6 +260,8 @@
                                                 <div class="w-full">
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Partnered
                                                         Since</h3>
+                                                    <InputError v-if="errors?.since" :message="errors.since"
+                                                        class="text-2xs text-red-500" />
                                                     <input v-model="form.since" type="text" id="name"
                                                         placeholder="e.g., Since 2012"
                                                         class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -246,6 +270,8 @@
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor
                                                         Background
                                                         Information</h3>
+                                                    <InputError v-if="errors?.description" :message="errors.description"
+                                                        class="text-2xs text-red-500" />
                                                     <textarea v-model="form.description" id="description"
                                                         placeholder="Enter Description"
                                                         class="textarea textarea-bordered h-64 bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
@@ -256,6 +282,8 @@
                                                     <h3 class="font-semibold text-gray-900 dark:text-white">Attach
                                                         Memorandum of
                                                         Agreement</h3>
+                                                    <InputError v-if="errors?.file" :message="errors.file"
+                                                        class="text-2xs text-red-500" />
                                                     <label for="dropzone-file"
                                                         class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                                         :class="{ 'border-blue-500 bg-blue-50': isDragging }"
@@ -299,6 +327,8 @@
                                                     <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Upload
                                                         Photo (Optional
                                                         for Displaying)</h3>
+                                                    <InputError v-if="errors?.img" :message="errors.img"
+                                                        class="text-2xs text-red-500" />
                                                     <label for="dropzone-img"
                                                         class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
                                                         :class="{ 'border-blue-500 bg-blue-50': isDragging }"
@@ -342,13 +372,17 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full
                                                     Name</h3>
+                                                <InputError v-if="errors?.sponsor_name" :message="errors.sponsor_name"
+                                                    class="text-2xs text-red-500" />
                                                 <input v-model="form.sponsor_name" type="text" id="name"
                                                     placeholder="name"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                             <div class="w-full">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponson Email
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Email
                                                 </h3>
+                                                <InputError v-if="errors?.email" :message="errors.email"
+                                                    class="text-2xs text-red-500" />
                                                 <input v-model="form.email" type="email" id="name"
                                                     placeholder="sponsor@test.com"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -510,12 +544,84 @@
                 </div>
 
 
-
-
             </div>
         </div>
-    </SettingsLayout>
+        <!-- creating a sponsor -->
+        <div v-if="uploadMOA"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
 
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                New Memorandum of Agreement
+                            </h2>
+                            <!-- <span class="text-sm text-gray-600 dark:text-gray-400">
+                                Provide the necessary details to set up a scholarship.
+                            </span> -->
+                        </div>
+                    </div>
+
+
+                    <!-- Close Button -->
+                    <button type="button" @click="closeAdding"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+                <!-- Form -->
+                <form @submit.prevent="submitMOA" class="p-6 flex flex-col gap-10">
+
+                    <!-- Page 1: Basic Information -->
+                    <div>
+                        <div class="flex flex-col gap-3">
+                            <div class="w-full flex flex-col space-y-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Upload Memorandum of Agreement
+                                </h3>
+                                <input
+                                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                                    @change="moaupload" type="file">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Buttons -->
+                    <div class="mt-2 flex justify-between gap-2">
+                        <div class="flex w-full justify-end gap-2">
+                            <!-- Cancel Button (Always Visible) -->
+                            <button type="button" @click="closeAdding"
+                                class="text-gray-700 bg-gray-200 w-full hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 shadow-sm rounded-lg text-sm px-5 py-2.5">
+                                Cancel
+                            </button>
+
+                            <!-- Direct "Create Scholarship" Button if Grant-Based is Selected -->
+                            <button type="submit"
+                                class="text-white bg-gradient-to-r w-full from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
+    </SettingsLayout>
 </template>
 
 <script setup>
@@ -527,11 +633,14 @@ import { usePage } from "@inertiajs/vue3";
 import { Tooltip } from 'primevue';
 import { DatePicker } from 'primevue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import InputError from '@/Components/InputError.vue';
 
 
 const props = defineProps({
     sponsors: Array,
     moa: Array,
+    errors: Object,
+    flash: Object,
 });
 
 const directives = {
@@ -541,9 +650,15 @@ const directives = {
 
 const isTableVisible = ref(false);
 
-// const toggleTable = () => {
-//     isTableVisible.value = !isTableVisible.value;
-// };
+const uploadMOA = ref(false);
+
+const toggleUploadMOA = () => {
+    uploadMOA.value = !uploadMOA.value;
+};
+
+const closeAdding = () => {
+    uploadMOA.value = false;
+}
 
 // const toggleupdateMOA = () => {
 //     UpdateMOA.value = !UpdateMOA.value;
@@ -577,6 +692,7 @@ const ViewSponsor = (sponsor) => {
         fileName: sponsor.moa_file,
         sponsor_name: sponsor.sponsor_name,
         email: sponsor.email,
+        created_id: sponsor.created_id,
         // Set these to null as they are for file upload handling
         file: null,
         filePreview: null,
@@ -617,6 +733,10 @@ const isCreating = ref(false);
 const isEditing = ref(false);
 const Showcase = ref(false);
 
+function moaupload(event) {
+    form.value.file = event.target.files[0]
+}
+
 const form = ref({
     id: null,
     name: null,
@@ -625,6 +745,7 @@ const form = ref({
     fileName: null,
     filePreview: null,
     img: null,
+    created_id: null,
     imgName: null,
     imgPreview: null,
     abbreviation: null,
@@ -718,6 +839,36 @@ const toggleCreate = () => {
     isCreating.value = !isCreating.value;
     if (isCreating.value) {
         resetForm();
+    }
+};
+
+const canManageSponsor = computed(() => {
+    const currentUser = usePage().props.auth.user;
+
+    // Find the current sponsor from props
+    const currentSponsor = props.sponsors.find(s => s.id === form.value.id);
+
+    // Check if current user is the assigned user for this sponsor
+    return currentSponsor && currentSponsor.assign_id === currentUser.id;
+});
+
+const submitMOA = async () => {
+    try {
+        // Create FormData to handle file upload
+        const formData = new FormData();
+        formData.append('sponsor_id', form.value.id);
+        formData.append('moa_file', form.value.file);
+
+        // Post the MOA to the server
+        router.post("/settings/sponsors/moa", formData, {
+            onSuccess: () => {
+                // Close the modal and show success message
+                uploadMOA.value = false;
+                form.value.file = null;
+            }
+        });
+    } catch (error) {
+        console.error("Error uploading MOA:", error);
     }
 };
 

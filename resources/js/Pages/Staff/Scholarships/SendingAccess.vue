@@ -30,8 +30,7 @@
                         <div class="flex justify-between items-center mb-4">
                             <h1
                                 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                                <span
-                                    class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>
+                                <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>
                                     Student Email Notifications</span>
                             </h1>
 
@@ -76,7 +75,7 @@
                                                     provide further assistance with the application process if needed.
                                                 </p>
                                             </div>
-                                            
+
                                         </div>
                                         <!-- <div class="w-full">
                                                 <div class="mb-3">
@@ -243,12 +242,12 @@
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
                 class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
-                <ToastTitle class="font-semibold dark:text-dtext">Sent Successfully!</ToastTitle>
                 <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
             </ToastRoot>
 
             <ToastViewport class="fixed bottom-4 right-4" />
         </ToastProvider>
+
     </AuthenticatedLayout>
 </template>
 

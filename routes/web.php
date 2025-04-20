@@ -75,6 +75,8 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     Route::get('/system_admin/user-settings/users', [SystemAdminController::class, 'system_users'])->name('sa.users');
     Route::post('/system_admin/user-settings/users/create', [SystemAdminController::class, 'create_users'])->name('sa.users_create');
     Route::put('/system_admin/user-settings/users/{user}/update', [SystemAdminController::class, 'update_users'])->name('sa.users_update');
+    Route::put('/system_admin/user-settings/users/{id}/deactivate', [SystemAdminController::class, 'deactivateUser'])
+        ->name('users.deactivate');
     Route::get('/system_admin/user-settings/activity-logs', [SystemAdminController::class, 'activity_logs'])->name('sa.activity_logs');
 
     // univ settings
@@ -93,6 +95,8 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     // security and backup
     Route::get('/system_admin/security-and-backup/archives', [SystemAdminController::class, 'backup_and_restore'])->name('sa.archives');
 
+    Route::get('/system_admin/my-account', [SystemAdminController::class, 'account'])->name('sa.account');
+
 });
 
 Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,sponsor,head_cashier'])->group(function () {
@@ -100,10 +104,13 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,spo
     Route::get('/messaging', [MessageController::class, 'index'])->name('messaging.index');
 
     // Show specific batch or staff group
-    Route::get('/messaging/batch/{batch}', [MessageController::class, 'showBatch'])->name('messaging.batch');
+    Route::get('/messaging/scholarship/{scholarshipGroup}', [MessageController::class, 'showScholarshipGroup'])->name('messaging.scholarship');
     Route::get('/messaging/staff/{staffGroup}', [MessageController::class, 'showStaffGroup'])->name('messaging.staff');
     // Add this to your existing routes
     Route::get('/messaging/conversation/{userId}', [MessageController::class, 'showConversation'])->name('messaging.conversation');
+    // Add this to your routes/web.php file
+
+    Route::post('/messaging/get-members', [MessageController::class, 'getGroupMembers'])->name('messaging.getMembers');
 
 
 
@@ -117,6 +124,22 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,spo
 
     Route::post('/posts', [FeedController::class, 'createPost'])->name('posts.create');
     Route::get('/posts', [FeedController::class, 'getPosts']);
+
+
+    //Reports
+        // Reports
+        Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
+        Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
+            ->name('scholarships.enrollees-summary');
+        Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
+            ->name('scholarships.enrolled-scholars');
+        Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
+            ->name('scholarships.graduate-scholars');
+            Route::get('/scholarships/{scholarship}/transferred=grantees', [ReportsController::class, 'TransferredSummaryReport'])
+            ->name('scholarships.transferred-scholars');
+        Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
+            ->name('scholarships.payroll-report');
+    
 });
 
 
@@ -126,6 +149,10 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/staff/dashboard', [StaffController::class, 'dashboard'])
         ->name('staff.dashboard');
+    Route::get('/staff/account-verify', [StaffController::class, 'verify_account'])
+        ->name('staff.verify_account');
+    // In web.php or routes file
+    Route::post('/staff/verify-account/verifying', [StaffController::class, 'verifyAccount'])->name('staff_verify_account');
 
     //Sponsors
     Route::get('/sponsors', [SponsorController::class, 'index'])->name('sponsor.index');
@@ -165,7 +192,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     //Scholars
     Route::get('/urs-scholars', [ScholarController::class, 'scholars'])->name('scholars.show');
 
-    Route::get('/urs-scholars/scholar-information', [ScholarController::class, 'scholar_information'])->name('scholars.scholar_information');
+    Route::get('/urs-scholars/scholar-information/{scholar}', [ScholarController::class, 'scholar_information'])->name('scholars.scholar_information');
 
     Route::get('/scholarships/{scholarship}/adding-scholars', [ScholarController::class, 'adding'])->name('scholars.adding');
 
@@ -196,6 +223,9 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     //One-time Payment Applicants
     Route::get('/scholarships/{scholarshipId}/applicant', [ScholarshipController::class, 'onetime_list'])->name('scholarship.onetime_list');
+    Route::post('/scholarships/{scholarshipId}/one-time/publish-applicants', [ScholarshipController::class, 'publishApplicantList'])->name('scholarships.publish-applicants');
+
+    Route::get('/scholarships/{scholarshipId}/one-time/{batchId}', [ScholarshipController::class, 'showBatch'])->name('scholarship.onetime_batch');
     Route::get('/scholarships/one-time/scholars', [ScholarshipController::class, 'onetime_scholars'])->name('scholarship.onetime_scholars');
 
     Route::get('/scholarships/scholar={id}/one-time', [ScholarController::class, 'scholar_onetime'])->name('scholarship.applicant_details');
@@ -204,6 +234,7 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     //Settings
     Route::get('/settings/sponsors', [SettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings/sponsors/create', [SettingsController::class, 'create_sponsor'])->name('settings.sponsor');
+    Route::post('/settings/sponsors/moa', [SettingsController::class, 'storeMOA'])->name('sponsors.moa.store');
     Route::put('/settings/sponsors/{id}', [SettingsController::class, 'sponsor_update'])->name('settings.sponsors.update');
 
     Route::get('/settings/adding-students', [SettingsController::class, 'adding'])->name('settings.adding');
@@ -238,14 +269,12 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::get('/payouts/{scholarshipId}/batch/{batchId}', [PayoutsController::class, 'student_payouts'])->name('payouts.payroll');
     Route::get('/payouts/list', [PayoutsController::class, 'payouts_list'])->name('payouts_list.payouts');
 
-
-    // Reports
-    Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
     // Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ScholarshipController::class, 'ScholarSummaryReport']);
-    Route::get('/scholarships/{scholarship}/batch/{batch}/scholar-summary', [ReportsController::class, 'ScholarSummaryReport']);
-    Route::get('/scholarships/{scholarship}/batch/{batch}/enrolled-scholars', [ReportsController::class, 'EnrolledSummaryReport']);
+    // Route::get('/scholarships/{scholarship}/batch/{batch}/grantee-summary', [ReportsController::class, 'GranteeSummaryReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport']);
     Route::get('/scholarships/{scholarship}/batch/{batch}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport']);
-    Route::get('/scholarships/{scholarship}/batch/{batch}/payroll', [ReportsController::class, 'PayrollReport']);
+    Route::get('/scholarships/{scholarship}/batch/{batch}/payroll-report', [ReportsController::class, 'PayrollReport']);
 
 
 });
@@ -259,6 +288,8 @@ Route::middleware(['auth', 'usertype:sponsor'])->group(function () {
     // view scholars
     Route::get('/sponsor/scholarships/{scholarship}', [SponsorController::class, 'view_scholars'])->name('sponsor.scholars');
     Route::get('/sponsor/scholarships/scholar/{id}', [SponsorController::class, 'sponsor_scholar'])->name('sponsor.sponsor_scholar');
+
+    Route::get('/sponsor/my-account', [SponsorController::class, 'account'])->name('sponsor.account');
 });
 
 // CASHIER -------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -302,6 +333,21 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
 // Staff and Cashier Profile -------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Route::get('/account/profile', [ProfileController::class, 'view_profile'])->name('view.profile');
+
+
+// New routes for email verification process
+Route::post('/profile/send-old-email-code', [ProfileController::class, 'sendOldEmailCode'])->name('profile.send.old.email.code');
+Route::post('/profile/verify-old-email', [ProfileController::class, 'verifyOldEmail'])->name('profile.verify.old.email');
+Route::post('/profile/send-new-email-code', [ProfileController::class, 'sendNewEmailCode'])->name('profile.send.new.email.code');
+Route::post('/profile/update-email', [ProfileController::class, 'updateEmail'])->name('profile.update.email');
+
+// Password change routes
+Route::post('/profile/send-password-code', [ProfileController::class, 'sendPasswordVerificationCode'])->name('profile.send.password.code');
+Route::post('/profile/verify-password-code', [ProfileController::class, 'verifyPasswordCode'])->name('profile.verify.password.code');
+Route::post('/profile/update-password', [ProfileController::class, 'updatePassword'])->name('profile.update.password');
+
+Route::post('/profile/update', [ProfileController::class, 'updateProfile'])->name('profile.update');
+Route::post('/profile/update/picture', [ProfileController::class, 'updateProfilePicture'])->name('profile.update.picture');
 
 
 // STUDENT -------------------------------------------------------------------------------------------------------------------------------------------------------

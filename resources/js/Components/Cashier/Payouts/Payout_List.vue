@@ -2,17 +2,19 @@
   <div class="w-full mt-5 bg-white rounded-xl">
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="toggleCamera">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Open Camera
+        <button @click="toggleCamera"
+          class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200">
+          <font-awesome-icon :icon="['fas', 'camera']" class="text-base" />
+          <span class="font-normal font-poppins">Open Camera</span>
         </button>
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
+
+        <button @click="openReport"
+          class="flex items-center gap-2 border-2 border-amber-500 text-amber-500 px-4 py-2 rounded-lg hover:bg-amber-200 transition duration-200">
+          <font-awesome-icon :icon="['fas', 'file-export']" class="text-base" />
+          <span class="font-normal font-poppins">Export</span>
         </button>
       </div>
+
       <form class="w-3/12">
         <label for="default-search"
           class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
@@ -39,7 +41,7 @@
           <div v-show="!showRequirements" class="overflow-x-auto font-poppins border rounded-lg">
             <table class="table rounded-lg">
               <!-- head -->
-              <thead class="justify-center items-center bg-gray-100">
+              <thead class="justify-center items-center bg-gray-50">
                 <tr class="text-xs uppercase">
                   <th>URScholar ID</th>
                   <th>Scholar</th>
@@ -90,10 +92,9 @@
                   </td>
                   <!-- Modified button that only shows for Pending status -->
                   <td>
-                    <button v-if="disbursement.status === 'Pending'" @click="checkAndToggleReason(disbursement)"
+                    <button @click="checkAndToggleReason(disbursement)"
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
-                      :class="{ 'opacity-50 cursor-not-allowed': !dateCheckResult, 'animate-pulse': isNearEndDate }"
-                      :disabled="!dateCheckResult" aria-label="View Details">
+                      aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
                   </td>
@@ -294,7 +295,8 @@
                     <p class="text-gray-600 text-xl">{{ pendingScholar.course?.name }}</p>
                     <p class="text-gray-600 text-xl">{{ pendingScholar.year_level }}{{
                       getYearSuffix(pendingScholar.year_level) }} Year - {{ pendingScholar.campus?.name }}</p>
-                    <p class="text-gray-600 text-xl">Scholar ID: <span class="font-semibold">{{ pendingScholar.urscholar_id }}</span></p>
+                    <p class="text-gray-600 text-xl">Scholar ID: <span class="font-semibold">{{
+                        pendingScholar.urscholar_id }}</span></p>
                   </div>
                 </div>
 
@@ -393,6 +395,7 @@ const props = defineProps({
   scholar: Object,
   payout: Object, // Add the payout object prop
   payout_schedule: Object,
+  selectedSem: String,
 });
 
 const components = {
@@ -505,19 +508,15 @@ const inactiveTabClass = computed(() =>
 
 // Modified checkAndToggleReason function to properly set the pendingScholar data
 const checkAndToggleReason = (disbursement) => {
-  if (dateCheckResult.value) {
-    currentDisbursement.value = disbursement;
-    pendingScholar.value = disbursement.scholar; // Set the pendingScholar to the selected disbursement's scholar
-    form.disbursement_id = disbursement.id;
-    form.reason = '';
-    form.document = null;
-    Reasoning.value = true;
+  currentDisbursement.value = disbursement;
+  pendingScholar.value = disbursement.scholar; // Set the pendingScholar to the selected disbursement's scholar
+  form.disbursement_id = disbursement.id;
+  form.reason = '';
+  form.document = null;
+  Reasoning.value = true;
 
-    // Also set the selectedScholar for the reason tab
-    selectedScholar.value = disbursement.scholar;
-  } else {
-    showToast('Not Available', 'Reason can only be provided on or after the end date of the payout period.');
-  }
+  // Also set the selectedScholar for the reason tab
+  selectedScholar.value = disbursement.scholar;
 };
 
 // Submit reason form

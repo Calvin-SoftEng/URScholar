@@ -27,7 +27,7 @@ class Role
             // Redirect based on user type
             switch ($user->usertype) {
                 case 'system_admin':
-                    return redirect()->route('system_admin.dashboard');
+                    return redirect()->route('sa.portal_branding');
                 case 'super_admin':
                     return redirect()->route('staff.dashboard');
                 case 'coordinator':

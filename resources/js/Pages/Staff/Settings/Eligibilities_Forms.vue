@@ -13,7 +13,8 @@
                         <!-- Eligibility Forms Section -->
                         <div class="mb-5 space-y-5">
                             <div class="flex flex-row justify-between border-b items-center pb-3">
-                                <h2 class="text-lg font-semibold text-gray-700 dark:text-dtext">Scholarship Eligibility Categories</h2>
+                                <h2 class="text-lg font-semibold text-gray-700 dark:text-dtext">Scholarship Eligibility
+                                    Categories</h2>
                                 <button @click="toggleNewEligibility" class="text-blue-600 text-sm hover:underline">Add
                                     New Category</button>
                             </div>
@@ -28,22 +29,26 @@
                                 class="bg-white dark:bg-dsecondary border border-gray-100 shadow-sm w-full block rounded-lg mb-3">
                                 <div class="flex justify-between items-center p-5 border-b border-b-blue-100 border-1">
                                     <div>
-                                        <span class="font-semibold font-quicksand text-lg dark:text-dtext">{{ item.name }}</span>
+                                        <span class="font-semibold font-quicksand text-lg dark:text-dtext">{{ item.name
+                                            }}</span>
                                     </div>
                                     <div class="flex gap-2 items-center">
-                                        <button @click="toggleEditEligibility(item)" class="text-blue-600 text-sm hover:underline">
+                                        <button @click="toggleEditEligibility(item)"
+                                            class="text-blue-600 text-sm hover:underline">
                                             Edit Category
                                         </button>
-                                        
+
                                         <div class="h-4 border-l border-gray-400"></div> <!-- Vertical Line -->
 
-                                        <button @click="toggleAddCondition(item.id)" class="text-blue-600 text-sm hover:underline">
+                                        <button @click="toggleAddCondition(item.id)"
+                                            class="text-blue-600 text-sm hover:underline">
                                             Add Condition
                                         </button>
-                                        
+
                                         <div class="h-4 border-l border-gray-400"></div> <!-- Vertical Line -->
 
-                                        <button @click="deleteEligibility(item.id)" class="text-red-600 text-sm hover:underline">
+                                        <button @click="deleteEligibility(item.id)"
+                                            class="text-red-600 text-sm hover:underline">
                                             Delete
                                         </button>
                                     </div>
@@ -107,6 +112,8 @@
                         <h3 class="font-semibold text-gray-900 dark:text-white">
                             Category Name
                         </h3>
+                        <InputError v-if="errors?.name" :message="errors.name"
+                            class="text-2xs text-red-500" />
                         <input v-model="eligibilityData.name" type="text" id="name" placeholder="Enter category name"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                     </div>
@@ -145,6 +152,8 @@
                         <h3 class="font-semibold text-gray-900 dark:text-white">
                             Condition Name
                         </h3>
+                        <InputError v-if="errors?.name" :message="errors.name"
+                            class="text-2xs text-red-500" />
                         <input v-model="conditionData.name" type="text" id="condition-name"
                             placeholder="Enter condition name"
                             class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
@@ -159,11 +168,15 @@
             </div>
         </div>
 
-        <!-- Toast Notification -->
-        <div v-if="toastVisible"
-            class="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg transition-opacity duration-300">
-            {{ toastMessage }}
-        </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastTitle class="font-semibold dark:text-dtext">{{ toastMessage }}</ToastTitle>
+                <!-- <ToastDescription class="text-gray-100 dark:text-dtext"></ToastDescription> -->
+            </ToastRoot>
+
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </SettingsLayout>
 </template>
 
@@ -172,10 +185,13 @@ import { useForm, Link, router } from '@inertiajs/vue3';
 import { ref, computed, watch } from 'vue';
 import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { usePage } from "@inertiajs/vue3";
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
     eligibility: Array,
     condition: Array,
+    errors: Object,
+    flash: Object,
 });
 
 // Function to filter conditions based on eligibility ID

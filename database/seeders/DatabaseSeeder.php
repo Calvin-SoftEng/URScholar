@@ -50,7 +50,12 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'system_admin',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'men.png',
         ]);
 
         //Super Admin
@@ -62,7 +67,12 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'B',
             'password' => bcrypt('password'),
             'usertype' => 'super_admin',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'head_admin_pic.jpg',
         ]);
 
 
@@ -75,7 +85,12 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
-            'campus_id' => '2'
+            'campus_id' => '2',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'bcoor_pic.jpg',
         ]);
 
         User::factory()->create([
@@ -86,7 +101,12 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'Dolorian',
             'password' => bcrypt('password'),
             'usertype' => 'coordinator',
-            'campus_id' => '4'
+            'campus_id' => '4',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'pcoor_pic.png',
         ]);
 
         //sponsor
@@ -98,7 +118,12 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'De Guzman',
             'password' => bcrypt('password'),
             'usertype' => 'sponsor',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'ched_pic.jpg',
         ]);
 
         //cashier
@@ -110,7 +135,12 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'head_cashier',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'univ_cashier_pic.jpg',
         ]);
 
         User::factory()->create([
@@ -121,7 +151,12 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
-            'campus_id' => '2'
+            'campus_id' => '2',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'bcashier_pic.jpg',
         ]);
 
         User::factory()->create([
@@ -132,34 +167,40 @@ class DatabaseSeeder extends Seeder
             'middle_name' => 'N/A',
             'password' => bcrypt('password'),
             'usertype' => 'cashier',
-            'campus_id' => '1'
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'men.png',
         ]);
 
         //student
-        User::factory()->create([
-            'name' => 'student1',
-            'email' => 'student1@gmail.com',
-            'first_name' => 'Carl Vincent',
-            'last_name' => 'Catahimican',
-            'middle_name' => 'Soriano',
-            'password' => bcrypt('password'),
-            'usertype' => 'student',
-            'campus_id' => '1'
-        ]);
+        // User::factory()->create([
+        //     'name' => 'student1',
+        //     'email' => 'student1@gmail.com',
+        //     'first_name' => 'Carl Vincent',
+        //     'last_name' => 'Catahimican',
+        //     'middle_name' => 'Soriano',
+        //     'password' => bcrypt('password'),
+        //     'usertype' => 'student',
+        //     'campus_id' => '1',
+        //     'status' => 'Active',
+        // ]);
 
         //Campus
         Campus::create([
             'name' => 'Morong',
             'location' => 'Sumulong St, Morong, Rizal',
-            'coordinator_id' => '4',
-            'cashier_id' => '7',
+            'coordinator_id' => '2',
+            'cashier_id' => '8',
         ]);
 
         Campus::create([
             'name' => 'Binangonan',
             'location' => '601: Manila East Rd, Binangonan, Philippines',
             'coordinator_id' => '3',
-            'cashier_id' => '6',
+            'cashier_id' => '7',
         ]);
 
         Campus::create([
@@ -180,7 +221,7 @@ class DatabaseSeeder extends Seeder
         $logopath = 'storage/sponsor/logo/images.png';
         //sponsor
         Sponsor::factory()->create([
-            'name' => 'Commissioner of Higher Education',
+            'name' => 'Commissioner on Higher Education',
             'created_id' => 2,
             'assign_id' => 5,
             'abbreviation' => 'CHED',
@@ -404,6 +445,12 @@ class DatabaseSeeder extends Seeder
             'user_id' => '2',
         ]);
 
+        StaffGroup::factory()->create([
+            'name' => 'Scholarship Cashiers',
+            'user_id' => '6',
+        ]);
+
+
         \App\Models\StaffGroupUser::factory()->create([
             'user_id' => '2',
             'staff_group_id' => '1',
@@ -417,6 +464,21 @@ class DatabaseSeeder extends Seeder
         \App\Models\StaffGroupUser::factory()->create([
             'user_id' => '4',
             'staff_group_id' => '1',
+        ]);
+        
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '6',
+            'staff_group_id' => '2',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '7',
+            'staff_group_id' => '2',
+        ]);
+
+        \App\Models\StaffGroupUser::factory()->create([
+            'user_id' => '8',
+            'staff_group_id' => '2',
         ]);
 
 

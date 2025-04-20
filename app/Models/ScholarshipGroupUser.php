@@ -8,11 +8,16 @@ use Illuminate\Notifications\Notifiable;
 class ScholarshipGroupUser extends Model
 {
     use HasFactory, Notifiable;
-    protected $fillable = ['user_id', 'scholarshscholarship_group_idip_id'];
+    protected $fillable = ['user_id', 'scholarship_group_id'];
 
-    public function scholarshipGroups()
+    public function staffGroup()
     {
-        return $this->belongsToMany(ScholarshipGroup::class);
+        return $this->belongsToMany(StaffGroup::class);
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class);
     }
 
 }

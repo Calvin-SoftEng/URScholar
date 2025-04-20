@@ -1,24 +1,5 @@
 <template>
-  <div class="w-full mt-5 bg-white rounded-xl">
-    <div class="px-4 pt-4 flex flex-row justify-between items-center">
-      <!-- <form class="w-3/12">
-        <label for="default-search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-          </div>
-          <input type="search" id="default-search" v-model="searchQuery"
-            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
-        </div>
-      </form> -->
-    </div>
-
+  <div class="w-full bg-white rounded-xl">
     <div>
       <div>
         <div class="w-full bg-white h-full p-4">
@@ -36,77 +17,74 @@
                   <th>URScholar ID</th>
                   <th>Scholar Name</th>
                   <th>Campus</th>
+                  <th>Course</th>
+                  <th>Year Level</th>
+                  <th>Student Status</th>
                   <th>Status</th>
                   <th></th>
                 </tr>
               </thead>
               <tbody>
                 <!-- No results message -->
-                <!-- <tr v-if="paginatedScholars.length === 0">
-                  <td colspan="7" class="text-center py-6 text-gray-500">
-                    No scholars found matching your search criteria
+                <tr v-if="paginatedGrantees.length === 0">
+                  <td colspan="8" class="text-center py-6 text-gray-500">
+                    No grantees found matching your search criteria
                   </td>
-                </tr> -->
-                <!-- Scholar rows -->
-                <tr v-for="scholar in eligibleScholars" :key="scholar.id" class="text-sm">
-                  <td>{{ scholar.urscholar_id }}</td>
+                </tr>
+                <!-- Grantee rows -->
+                <tr v-for="grantee in paginatedGrantees" :key="grantee.id" class="text-sm">
+                  <td>{{ grantee.urscholar_id }}</td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img :src="scholar.profile_image || '../../../../assets/images/no_userpic.png'"
-                            :alt="`${scholar.first_name}'s profile`" />
+                          <img src="../../../../assets/images/no_userpic.png" :alt="`${grantee.full_name}'s profile`" />
                         </div>
                       </div>
                       <div>
                         <div class="font-normal">
-                          {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
-                          <span v-if="scholar.status === 'Verified'"
-                            class="material-symbols-rounded text-sm text-blue-600">verified</span>
-                        </div>
-                        <div class="text-sm opacity-50">
-                          {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }}
+                          {{ grantee.full_name }}
                         </div>
                       </div>
                     </div>
                   </td>
-                  <td>
-                    {{ scholar.campus }}
-                  </td>
+                  <td>{{ grantee.campus }}</td>
+                  <td>{{ grantee.course }}</td>
+                  <td>{{ grantee.year_level }}{{ getYearSuffix(grantee.year_level) }}</td>
+                  <td>{{ grantee.student_status }}</td>
                   <td>
                     <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                      'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete'
+                      'bg-green-100 text-green-800 border border-green-400': grantee.status === 'Accepted',
+                      'bg-gray-200 text-gray-500 border border-gray-400': grantee.status === 'Pending',
+                      'bg-red-100 text-red-800 border border-red-400': grantee.status === 'Rejected'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
-                      {{ scholar.status }}
+                      {{ grantee.status }}
                     </span>
                   </td>
                   <th>
-                    <Link :href="`/scholarships/scholar=${scholar.id}`">
-                    <button
-                      class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
-                      aria-label="View Details">
-                      <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
-                    </button>
+                    <Link :href="`/scholarships/scholar=${grantee.scholar_id}`">
+                      <button
+                        class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
+                        aria-label="View Details">
+                        <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
+                      </button>
                     </Link>
                   </th>
                 </tr>
-
-
               </tbody>
             </table>
           </div>
+          
           <!-- Pagination controls -->
-          <div v-if="totalScholars > itemsPerPage" class="mt-5 flex justify-between items-center">
+          <div v-if="totalGrantees > itemsPerPage" class="mt-5 flex justify-between items-center">
             <span class="text-sm text-gray-700 dark:text-gray-400">
               Showing
               <span class="font-semibold text-gray-900 dark:text-white">{{ startIndex }}</span>
               to
               <span class="font-semibold text-gray-900 dark:text-white">{{ endIndex }}</span>
               of
-              <span class="font-semibold text-gray-900 dark:text-white">{{ totalScholars }}</span>
-              Scholars
+              <span class="font-semibold text-gray-900 dark:text-white">{{ totalGrantees }}</span>
+              Grantees
             </span>
             <div class="inline-flex">
               <button @click="prevPage" :disabled="currentPage === 1" :class="[
@@ -146,11 +124,11 @@ import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, To
 
 const props = defineProps({
   scholarship: Object,
+  batch: Object,
   schoolyear: Object,
+  campus: Array,
   selectedSem: Object,
-  batches: Array,
-  scholars: Array,
-  requirements: Array,
+  grantees: Array,
 });
 
 // Data loading state
@@ -169,46 +147,40 @@ const toast = ref({
   type: 'success'
 });
 
-// Computed properties for scholars filtering and pagination
-const filteredScholars = computed(() => {
-  const allScholars = props.scholars || [];
+// Computed properties for grantees filtering and pagination
+const filteredGrantees = computed(() => {
+  const allGrantees = props.grantees || [];
 
   if (!searchQuery.value) {
-    return [...allScholars].sort((a, b) =>
-      a.status === 'Verified' ? -1 : b.status === 'Verified' ? 1 : 0
-    );
+    return [...allGrantees];
   }
 
   const query = searchQuery.value.toLowerCase();
-  return allScholars.filter(scholar =>
-    scholar.first_name?.toLowerCase().includes(query) ||
-    scholar.last_name?.toLowerCase().includes(query) ||
-    scholar.middle_name?.toLowerCase().includes(query) ||
-    scholar.email?.toLowerCase().includes(query) ||
-    scholar.course?.toLowerCase().includes(query) ||
-    scholar.campus?.toLowerCase().includes(query) ||
-    scholar.grant?.toLowerCase().includes(query) ||
-    scholar.urscholar_id?.toLowerCase().includes(query)
-  ).sort((a, b) =>
-    a.status === 'Verified' ? -1 : b.status === 'Verified' ? 1 : 0
+  return allGrantees.filter(grantee =>
+    grantee.full_name?.toLowerCase().includes(query) ||
+    grantee.urscholar_id?.toLowerCase().includes(query) ||
+    grantee.campus?.toLowerCase().includes(query) ||
+    grantee.course?.toLowerCase().includes(query) ||
+    grantee.student_status?.toLowerCase().includes(query) ||
+    grantee.status?.toLowerCase().includes(query)
   );
 });
 
-const totalScholars = computed(() => filteredScholars.value.length);
-const totalPages = computed(() => Math.ceil(totalScholars.value / itemsPerPage));
+const totalGrantees = computed(() => filteredGrantees.value.length);
+const totalPages = computed(() => Math.ceil(totalGrantees.value / itemsPerPage));
 
-const paginatedScholars = computed(() => {
+const paginatedGrantees = computed(() => {
   const startIdx = (currentPage.value - 1) * itemsPerPage;
   const endIdx = startIdx + itemsPerPage;
-  return filteredScholars.value.slice(startIdx, endIdx);
+  return filteredGrantees.value.slice(startIdx, endIdx);
 });
 
 const startIndex = computed(() =>
-  totalScholars.value === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1
+  totalGrantees.value === 0 ? 0 : (currentPage.value - 1) * itemsPerPage + 1
 );
 
 const endIndex = computed(() =>
-  Math.min(currentPage.value * itemsPerPage, totalScholars.value)
+  Math.min(currentPage.value * itemsPerPage, totalGrantees.value)
 );
 
 // Pagination methods
@@ -230,23 +202,22 @@ watch(searchQuery, () => {
 });
 
 // Fetch fresh data from the server
-const fetchScholars = async () => {
+const fetchGrantees = async () => {
   loading.value = true;
   try {
     // Using Inertia's router.reload() to refresh the current page data
-    // This will maintain the current URL and just refresh the data
     await router.reload({
-      only: ['scholars', 'requirements'],
+      only: ['grantees'],
       onSuccess: () => {
-        showToast('Data Updated', 'Scholar data has been refreshed');
+        showToast('Data Updated', 'Grantee data has been refreshed');
       },
       onError: () => {
-        showToast('Error', 'Failed to refresh scholar data', 'error');
+        showToast('Error', 'Failed to refresh grantee data', 'error');
       }
     });
   } catch (error) {
-    console.error('Error fetching scholars:', error);
-    showToast('Error', 'Failed to refresh scholar data', 'error');
+    console.error('Error fetching grantees:', error);
+    showToast('Error', 'Failed to refresh grantee data', 'error');
   } finally {
     loading.value = false;
   }
@@ -256,7 +227,7 @@ const fetchScholars = async () => {
 const generateReport = async () => {
   loading.value = true;
   try {
-    const batchId = props.batches?.[0]?.id;
+    const batchId = props.batch?.id;
     if (!batchId) {
       showToast('Error', 'No batch selected', 'error');
       return;
@@ -300,13 +271,13 @@ const getYearSuffix = (year) => {
 // Lifecycle hooks
 onMounted(() => {
   // Initial data load
-  if (!props.scholars || props.scholars.length === 0) {
-    fetchScholars();
+  if (!props.grantees || props.grantees.length === 0) {
+    fetchGrantees();
   }
 
   // Set up polling to refresh data every 5 minutes (adjust as needed)
   const dataRefreshInterval = setInterval(() => {
-    fetchScholars();
+    fetchGrantees();
   }, 300000); // 5 minutes
 
   // Clean up interval on component unmount
@@ -314,34 +285,6 @@ onMounted(() => {
     clearInterval(dataRefreshInterval);
   };
 });
-
-
-
-
-
-// Define the required number of recipients
-const requiredRecipients = 10;
-
-// Dummy scholars data
-const scholars = ref([
-  { id: 1, urscholar_id: "URS001", first_name: "John", last_name: "Doe", middle_name: "A", campus: "Main", grant: "2024-03-10", submittedRequirements: 5, totalRequirements: 5, progress: 100, status: "Complete", profile_image: "" },
-  { id: 2, urscholar_id: "URS002", first_name: "Jane", last_name: "Smith", middle_name: "B", campus: "West", grant: "2024-03-11", submittedRequirements: 3, totalRequirements: 5, progress: 60, status: "Incomplete", profile_image: "" },
-  { id: 3, urscholar_id: "URS003", first_name: "Alice", last_name: "Brown", middle_name: "C", campus: "North", grant: "2024-03-12", submittedRequirements: 0, totalRequirements: 5, progress: 0, status: "No submission", profile_image: "" },
-  { id: 4, urscholar_id: "URS004", first_name: "Bob", last_name: "Johnson", middle_name: "D", campus: "South", grant: "2024-03-13", submittedRequirements: 4, totalRequirements: 5, progress: 80, status: "Complete", profile_image: "" },
-  { id: 5, urscholar_id: "URS005", first_name: "Michael", last_name: "Williams", middle_name: "E", campus: "East", grant: "2024-03-14", submittedRequirements: 2, totalRequirements: 5, progress: 40, status: "Incomplete", profile_image: "" },
-  { id: 6, urscholar_id: "URS006", first_name: "Emma", last_name: "Taylor", middle_name: "F", campus: "Central", grant: "2024-03-15", submittedRequirements: 5, totalRequirements: 5, progress: 100, status: "Complete", profile_image: "" },
-  { id: 7, urscholar_id: "URS007", first_name: "David", last_name: "Anderson", middle_name: "G", campus: "Main", grant: "2024-03-16", submittedRequirements: 1, totalRequirements: 5, progress: 20, status: "Incomplete", profile_image: "" },
-  { id: 8, urscholar_id: "URS008", first_name: "Sophia", last_name: "Martinez", middle_name: "H", campus: "West", grant: "2024-03-17", submittedRequirements: 0, totalRequirements: 5, progress: 0, status: "No submission", profile_image: "" },
-  { id: 9, urscholar_id: "URS009", first_name: "Daniel", last_name: "Clark", middle_name: "I", campus: "North", grant: "2024-03-18", submittedRequirements: 4, totalRequirements: 5, progress: 80, status: "Complete", profile_image: "" },
-  { id: 10, urscholar_id: "URS010", first_name: "Olivia", last_name: "Lee", middle_name: "J", campus: "South", grant: "2024-03-19", submittedRequirements: 3, totalRequirements: 5, progress: 60, status: "Incomplete", profile_image: "" },
-  // Cut-off applicants
-  { id: 11, urscholar_id: "URS011", first_name: "Lucas", last_name: "Hall", middle_name: "K", campus: "East", grant: "2024-03-20", submittedRequirements: 5, totalRequirements: 5, progress: 100, status: "Complete", profile_image: "" },
-  { id: 12, urscholar_id: "URS012", first_name: "Mia", last_name: "Lopez", middle_name: "L", campus: "Central", grant: "2024-03-21", submittedRequirements: 2, totalRequirements: 5, progress: 40, status: "Incomplete", profile_image: "" }
-]);
-
-// Compute the scholars that are within the required recipients
-const eligibleScholars = computed(() => scholars.value.slice(0, requiredRecipients));
-const cutoffScholars = computed(() => scholars.value.slice(requiredRecipients));
 </script>
 
 <style>

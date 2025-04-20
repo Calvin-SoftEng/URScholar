@@ -10,6 +10,7 @@ use App\Models\Campus; // Added Campus model
 use App\Models\PayoutSchedule;
 use App\Models\Scholarship;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
 class PayoutsController extends Controller
@@ -17,22 +18,25 @@ class PayoutsController extends Controller
     public function payouts_index()
     {
         $scholarships = Scholarship::all();
-
+    
         // Get payouts with date information
         $payouts = Payout::all();
-
+    
         // Get batches with school year and campus information
         $batches = Batch::with(['school_year', 'campus'])->get();
-
+    
         // Get all disbursements to track claims
         $disbursements = Disbursement::all();
-
+    
         // Get scheduled payout dates
         $payout_schedule = PayoutSchedule::all();
-
+    
         $academic_years = AcademicYear::all();
         $campuses = Campus::all();
-
+        
+        // Pass the current user type to the frontend
+        $userType = Auth::user()->usertype;
+    
         return Inertia::render('Staff/Payouts/Payout_Records', [
             'scholarships' => $scholarships,
             'payouts' => $payouts,
@@ -41,6 +45,7 @@ class PayoutsController extends Controller
             'payout_schedule' => $payout_schedule,
             'academic_years' => $academic_years,
             'campuses' => $campuses,
+            'userType' => $userType,
         ]);
     }
 
@@ -71,6 +76,9 @@ class PayoutsController extends Controller
             ])
             ->get();
 
+        $schoolyear = AcademicYear::find($batch->school_year_id);
+        $selectedSem = $batch->semester;
+
 
         // Count total claimed disbursements
         $totalClaimed = Disbursement::where('payout_id', $payout->id)
@@ -83,6 +91,8 @@ class PayoutsController extends Controller
             'batch' => $batch,
             'disbursements' => $disbursements,
             'payout' => $payout,
+            'schoolyear' => $schoolyear,
+            'selectedSem' => $selectedSem,
             'totalClaimed' => $totalClaimed, // Pass the total claimed count to the view
         ]);
     }

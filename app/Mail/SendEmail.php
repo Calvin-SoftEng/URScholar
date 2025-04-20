@@ -31,7 +31,7 @@ class SendEmail extends Mailable
     {
         return new Envelope(
             from: new Address('urscholar@ursbinangonan.com', 'URS Scholarship Unit'),
-            subject: 'You have been selected as a scholar!',
+            subject: 'You are on your way to becoming a scholar!',
         );
     }
 

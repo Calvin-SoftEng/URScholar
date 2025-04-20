@@ -1,23 +1,26 @@
 <template>
     <!-- sys admin ---------------------------------------------------------------------------------------------------------------------------------------- -->
+    <!-- system admin layout -->
     <div v-if="$page.props.auth.user.usertype == 'system_admin'">
-        <div class="w-full h-screen flex flex-col overflow-hidden">
-        <!-- Header -->
-        <MIS_Header class="w-full h-[50px] z-50" />
+        <div class="w-full h-screen flex flex-col">
+            <!-- Header -->
+            <MIS_Header class="w-full h-[50px] flex-none" />
 
-            <!-- Content Area -->
-            <div class="pl-96 bg-white dark:bg-dprimary flex flex-col lg:flex-row w-full h-[calc(100vh-50px)]">
-                <!-- Sidebar --> 
-                <MIS_Sidebar class="lg:w-5/12 w-full lg:h-full h-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
+            <!-- Content: Sidebar + Main -->
+            <div class="pl-96 flex-1 flex overflow-hidden bg-white dark:bg-dprimary">
+                <!-- Sidebar -->
+                <MIS_Sidebar
+                    class="lg:w-5/12 flex-shrink-0 h-full overflow-y-auto dark:bg-dprimary dark:border-r dark:border-gray-600"
                 />
 
                 <!-- Main Content -->
-                <div class="pr-96 bg-dirtywhite dark:bg-dprimary flex-1 lg:h-full h-auto lg:ml-0 dark:text-dprimary">
-                <slot></slot>
+                <div class="pr-96 flex-1 h-full overflow-y-auto bg-dirtywhite dark:bg-dprimary">
+                    <slot></slot>
                 </div>
             </div>
         </div>
     </div>
+
 
     <!-- super_admin ---------------------------------------------------------------------------------------------------------------------------------------- -->
     <div v-if="$page.props.auth.user.usertype == 'super_admin'">

@@ -25,12 +25,21 @@ class User extends Authenticatable
         'last_name',
         'password',
         'usertype',
-        'campus_id'
+        'campus_id',
+        'age',
+        'address',
+        'contact',
+        'status',
     ];
 
     public function studentrecord()
     {
         return $this->hasMany(StudentRecord::class);
+    }
+
+    public function posting()
+    {
+        return $this->hasMany(Posting::class);
     }
 
     public function scholar()

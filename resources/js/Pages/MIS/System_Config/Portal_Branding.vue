@@ -44,7 +44,8 @@
                   class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                   <img v-if="tempLogoLight" :src="tempLogoLight" alt="Light Mode Logo"
                     class="object-cover w-full h-full">
-                  <span v-else class="text-gray-500">No Logo</span>
+                  <img v-else src="../../../../assets/images/main_logo.png" alt="Light Mode Logo">
+                  <!-- <span v-else" class="text-gray-500"><img src="../../assets/images/main_logo.png" alt="Light Mode Logo" class="object-cover w-full h-full"></span> -->
                 </div>
                 <div class="w-full">
                   <input type="file" ref="logoLightInput" @change="previewLogo('light', $event)" accept="image/*"
@@ -58,7 +59,8 @@
                 <div
                   class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
                   <img v-if="tempLogoDark" :src="tempLogoDark" alt="Dark Mode Logo" class="object-cover w-full h-full">
-                  <span v-else class="text-gray-500">No Logo</span>
+                  <img v-else src="../../../../assets/images/main_logo_white.png" alt="Light Mode Logo">
+                  <!-- <span v-else class="text-gray-500">No Logo</span> -->
                 </div>
                 <div class="w-full">
                   <input type="file" ref="logoDarkInput" @change="previewLogo('dark', $event)" accept="image/*"
@@ -109,17 +111,26 @@
         </div>
       </form>
     </div>
+    <ToastProvider>
+      <ToastRoot v-if="toastVisible"
+        class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+        <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+      </ToastRoot>
+
+      <ToastViewport class="fixed bottom-4 right-4" />
+    </ToastProvider>
   </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
-import { ref, reactive, computed, onMounted } from 'vue';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
+import { ref, reactive, computed, onMounted,watchEffect } from 'vue';
 import { Tooltip } from 'primevue';
 import { User } from 'lucide-vue-next';
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
   campuses: Array,
@@ -136,7 +147,8 @@ const faviconInput = ref(null);
 // Temporary state for form inputs
 const tempLogoLight = ref(null);
 const tempLogoDark = ref(null);
-const tempBrandingName = ref('');
+// const tempBrandingName = ref('');
+const tempBrandingName = 'URScholar';
 const tempFavicon = ref(null);
 
 // Final state (what's actually applied/saved)
@@ -289,4 +301,22 @@ const cancelChanges = () => {
   finalBrandingName.value = originalState.brandingName;
   finalFavicon.value = originalState.favicon;
 };
+
+const toastVisible = ref(false);
+const toastMessage = ref("");
+
+watchEffect(() => {
+  const flashMessage = usePage().props.flash?.success;
+
+  if (flashMessage) {
+    console.log("Showing toast with message:", flashMessage);
+    toastMessage.value = flashMessage;
+    toastVisible.value = true;
+
+    setTimeout(() => {
+      console.log("Hiding toast...");
+      toastVisible.value = false;
+    }, 3000);
+  }
+});
 </script>

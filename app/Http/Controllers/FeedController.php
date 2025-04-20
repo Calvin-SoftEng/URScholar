@@ -115,7 +115,10 @@ class FeedController extends Controller
                 'created_at' => $posting ? $posting->created_at->diffForHumans() : $page->created_at->diffForHumans(),
                 'user' => [
                     'name' => $user->name ?? 'Unknown User',
-                    'id' => $user->id
+                    'first_name' => $user->first_name ?? 'Unknown',
+                    'last_name' => $user->last_name ?? 'User',
+                    'id' => $user->id,
+                    'picture' => $user->picture ?? null,
                 ],
                 'filters' => [
                     'scholarships' => $scholarships,
@@ -248,13 +251,19 @@ class FeedController extends Controller
                 $campuses = Campus::whereIn('id', $campusIds)
                     ->pluck('name')
                     ->toArray();
+                    
+
+                $user = User::find($post->user_id);
+
 
                 return [
                     'id' => $post->id,
                     'content' => $post->content,
                     'user' => [
-                        'name' => $post->user->name,
-                        'avatar' => $post->user->profile_photo_path ?? null,
+                        'name' => $user->name ?? 'Unknown User',
+                        'first_name' => $user->first_name ?? 'Unknown',
+                        'last_name' => $user->last_name ?? 'User',
+                        'picture' => $user->picture ?? null,
                     ],
                     'filters' => [
                         'scholarships' => $scholarships,

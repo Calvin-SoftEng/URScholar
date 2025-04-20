@@ -1,42 +1,11 @@
 <template>
-  <div class="w-full mt-5 bg-white rounded-xl">
-    <div class="px-4 pt-4 flex flex-row justify-between items-center">
-      <div class="flex flex-row gap-2">
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Print Payroll
-        </button>
-        <button
-          class="bg-white hover:bg-gray-200 text-gray-600 border border-2-gray-300 font-normal text-sm py-2 px-4 rounded"
-          @click="openReport">
-          <font-awesome-icon :icon="['fas', 'file-export']" class="mr-2 text-sm" />Export
-        </button>
-      </div>
-      <form class="w-3/12">
-        <label for="default-search"
-          class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-        <div class="relative">
-          <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-              fill="none" viewBox="0 0 20 20">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-            </svg>
-          </div>
-          <input type="search" id="default-search" v-model="searchQuery"
-            class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search Scholar" required />
-        </div>
-      </form>
-    </div>
-
+  <div class="w-full bg-white rounded-xl">
     <div>
       <div>
         <div class="w-full bg-white h-full p-4">
-
-          <!-- table -->
-          <div v-show="!showRequirements" class="overflow-x-auto font-poppins border rounded-lg">
-            <table class="table rounded-lg">
+          <!-- Disbursements table -->
+          <div class="overflow-x-auto font-poppins border rounded-lg">
+            <table class="table w-full rounded-lg">
               <!-- head -->
               <thead class="justify-center items-center bg-gray-100">
                 <tr class="text-xs uppercase">
@@ -44,95 +13,75 @@
                   <th>Scholar</th>
                   <th>Grant</th>
                   <th>Campus</th>
-                  <th>Payout</th>
+                  <th>Status</th>
                   <th>Date Claimed</th>
-                  <th></th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="payout in payout" :key="payout.id" class="text-sm">
+                <tr v-for="disbursement in filteredDisbursements" :key="disbursement.id" class="text-sm">
                   <td>
-                    <!-- {{ payout.scholar.urscholar_id }} -->
-                      id
+                    {{ getScholarDetails(disbursement.scholar_id).urscholar_id }}
                   </td>
                   <td>
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar" />
                         </div>
                       </div>
                       <div>
                         <div class="font-normal">
-                          {{ getScholarDetails(payout.scholar_id).last_name }}, {{ getScholarDetails(payout.scholar_id).first_name }} {{ getScholarDetails(payout.scholar_id).middle_name }}
+                          {{ getScholarDetails(disbursement.scholar_id).last_name }}, 
+                          {{ getScholarDetails(disbursement.scholar_id).first_name }} 
+                          {{ getScholarDetails(disbursement.scholar_id).middle_name }}
                         </div>
                         <div class="text-sm opacity-50">
-                          {{ getScholarDetails(payout.scholar_id).year_level }}{{ getYearSuffix(getScholarDetails(payout.scholar_id).year_level) }} year,
-                          {{ getScholarDetails(payout.scholar_id).course }}
+                          {{ getScholarDetails(disbursement.scholar_id).year_level }}{{ getYearSuffix(getScholarDetails(disbursement.scholar_id).year_level) }} year,
+                          {{ getScholarDetails(disbursement.scholar_id).course }}
                         </div>
                       </div>
                     </div>
                   </td>
                   <td>
-                    {{ getScholarDetails(payout.scholar_id).grant }}
+                    {{ getScholarDetails(disbursement.scholar_id).grant }}
                   </td>
                   <td>
-                    {{ getScholarDetails(payout.scholar_id).campus }}
+                    {{ getScholarDetails(disbursement.scholar_id).campus.name }}
                   </td>
                   <td>
                     <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': payout.status === 'Claimed',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400': payout.status === 'Pending'
+                      'bg-green-100 text-green-800 border border-green-400': disbursement.status === 'Claimed',
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400': disbursement.status === 'Pending',
+                      'bg-red-100 text-red-800 border border-red-400': disbursement.status === 'Not Claimed'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                      {{ payout.status }}
+                      {{ disbursement.status }}
                     </span>
                   </td>
                   <td>
-                    {{ payout.claimted_at }}
+                    {{ disbursement.claimed_at ? formatDate(disbursement.claimed_at) : 'Not claimed yet' }}
+                  </td>
+                </tr>
+                
+                <!-- Empty state when no results -->
+                <tr v-if="filteredDisbursements.length === 0">
+                  <td colspan="7" class="text-center py-4">
+                    <div class="flex flex-col items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p class="mt-2 text-gray-500">No disbursements found</p>
+                    </div>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
-        <!-- open cam -->
-        <div v-if="OpenCamera"
-          class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300 ">
-          <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-4/12">
-            <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-              <span class="text-xl font-semibold text-gray-900 dark:text-white">
-                <h2 class="text-2xl font-bold">Scan QR here</h2>
-              </span>
-              <button type="button" @click="closeCamera"
-                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                data-modal-hide="default-modal">
-                <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                  viewBox="0 0 14 14">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                </svg>
-              </button>
-            </div>
-
-            <!-- QR Code Scanner -->
-            <div class="p-4 flex flex-col space-y-4">
-              <QrcodeStream @detect="onDetect" v-if="isScanning" class="border p-2" />
-
-              <div v-if="scannedResult" class="mt-4">
-                <p v-if="successMessage" class="text-green-500 font-medium">{{ successMessage }}</p>
-                <p v-if="errorMessage" class="text-red-500 font-medium">{{ errorMessage }}</p>
-                <div class="mt-4 flex justify-center">
-                  <button @click="restartScan" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                    Scan Again
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        
       </div>
     </div>
 
+    <!-- Toast notifications -->
     <ToastProvider>
       <ToastRoot v-if="toastVisible"
         class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
@@ -148,30 +97,16 @@
 <script setup>
 import { ref, onBeforeMount, reactive, defineEmits, watchEffect, onMounted, computed, watch } from 'vue';
 import { useForm, Link, usePage, router } from '@inertiajs/vue3';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import Button from 'primevue/button';
-import FileUpload from 'primevue/fileupload';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 import { QrcodeStream } from "vue-qrcode-reader";
 
 const props = defineProps({
   scholarship: Object,
   batch: Object,
-  payout: Array,
+  disbursements: Array, // Changed from payout to disbursements
   scholars: Array,
+  payout: Object,
 });
-
-const components = {
-  DataTable,
-  Column,
-  Button,
-  FileUpload,
-};
-
-const getScholarDetails = (scholarsID) => {
-    return props.scholars.find(s => s.id === scholarsID) || { name: 'Unknown scholar' };
-};
 
 const searchQuery = ref('');
 const showRequirements = ref(false);
@@ -184,16 +119,49 @@ const toastVisible = ref(false);
 const toastTitle = ref('');
 const toastMessage = ref('');
 
-// Filtered payouts based on search query
-const filteredPayouts = computed(() => {
-  return props.payouts.filter(payout =>
-    payout.scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
-    payout.scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
+// Get scholar details by ID
+const getScholarDetails = (scholarId) => {
+  return props.scholars.find(s => s.id === scholarId) || { 
+    urscholar_id: 'Unknown',
+    last_name: 'Unknown',
+    first_name: '',
+    middle_name: '',
+    year_level: 0,
+    course: 'Unknown',
+    campus: 'Unknown',
+    grant: 'Unknown'
+  };
+};
+
+// Format date for display
+const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', { 
+    year: 'numeric', 
+    month: 'short', 
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+};
+
+// Filtered disbursements based on search query
+const filteredDisbursements = computed(() => {
+  if (!props.disbursements) return [];
+  
+  return props.disbursements.filter(disbursement => {
+    const scholar = getScholarDetails(disbursement.scholar_id);
+    return (
+      scholar.first_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.last_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.middle_name?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.urscholar_id?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.course?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      scholar.grant?.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+      disbursement.status?.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+  });
 });
 
 // Toggle camera visibility
@@ -218,7 +186,11 @@ const onDetect = async (detectedCodes) => {
     isScanning.value = false;
 
     // Send scanned QR code data to Laravel
-    router.post("/cashier/verify-qr", { scanned_data: scannedResult.value }, {
+    router.post("/cashier/verify-qr", { 
+      scanned_data: scannedResult.value,
+      batch_id: props.batch.id,
+      payout_id: props.payout?.id
+    }, {
       onSuccess: (page) => {
         const flashMessage = page.props.flash.message;
         successMessage.value = flashMessage;
@@ -227,7 +199,7 @@ const onDetect = async (detectedCodes) => {
         // Show toast notification
         showToast('Success', flashMessage);
 
-        // If successful, refresh the payouts list
+        // If successful, refresh the disbursements list
         if (page.props.flash.type === 'success') {
           router.reload();
         }
@@ -241,6 +213,25 @@ const onDetect = async (detectedCodes) => {
       }
     });
   }
+};
+
+// Process disbursement manually
+const processDisbursement = (disbursementId) => {
+  router.post(`/cashier/process-disbursement/${disbursementId}`, {}, {
+    onSuccess: (page) => {
+      const flashMessage = page.props.flash?.message || 'Disbursement processed successfully';
+      showToast('Success', flashMessage);
+      router.reload();
+    },
+    onError: (errors) => {
+      showToast('Error', errors.message || 'Failed to process disbursement');
+    }
+  });
+};
+
+// View disbursement details
+const viewDetails = (disbursementId) => {
+  router.get(`/disbursements/${disbursementId}/details`);
 };
 
 // Restart QR scanner
@@ -275,6 +266,7 @@ const showToast = (title, message) => {
 
 // Helper function for year level suffix
 const getYearSuffix = (year) => {
+  if (!year) return '';
   if (year === 1) return "st";
   if (year === 2) return "nd";
   if (year === 3) return "rd";
@@ -288,9 +280,7 @@ onMounted(() => {
     showToast(flash.type === 'success' ? 'Success' : 'Error', flash.message);
   }
 });
-
 </script>
-
 
 <style>
 .qr-scanner {
@@ -327,15 +317,7 @@ onMounted(() => {
   border-radius: 5px;
 }
 
-
-/* override the prime vue componentss */
-
-.p-fileupload-choose-button {
-  background-color: #003366 !important;
-  color: white !important;
-  border-radius: 4px;
-}
-
+/* Transitions */
 .slide-enter-active,
 .slide-leave-active {
   transition: transform 0.3s ease;
@@ -351,7 +333,6 @@ onMounted(() => {
   transform: translateX(0);
 }
 
-/* Fade transition for backdrop */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.3s ease;

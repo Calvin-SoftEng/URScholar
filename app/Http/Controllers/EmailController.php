@@ -2,18 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\NewNotification;
+use App\Mail\ForgetMail;
 use App\Models\Campus;
 use App\Models\Disbursement;
 use App\Models\PayoutSchedule;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use App\Models\Scholarship;
+use App\Models\Notification;
 use App\Models\Requirements;
 use App\Models\User;
 use App\Models\Scholar;
 use App\Models\Batch;
 use Inertia\Inertia;
 use App\Mail\SendEmail;
+use App\Mail\PayoutEmail;
 use App\Models\ActivityLog;
 use App\Models\ScholarshipTemplate;
 use App\Models\Payout;
@@ -113,7 +117,7 @@ class EmailController extends Controller
         if ($request->hasFile('templates')) {
             foreach ($request->file('templates') as $file) {
                 // Generate a unique filename
-                $filename =  $file->getClientOriginalName();
+                $filename = $file->getClientOriginalName();
 
                 // Store file in public storage for easy access - alternatively use private storage
                 $path = $file->storeAs('scholarship_templates/' . $scholarship->id, $filename, 'public');
@@ -182,7 +186,6 @@ class EmailController extends Controller
                 ->map(fn($grantee) => $grantee->scholar)
                 ->filter(); // Remove null scholars (if any)
 
-
             $totalScholarsProcessed += $scholars->count();
 
             // Process each scholar in the batch
@@ -192,6 +195,7 @@ class EmailController extends Controller
                     $password = null;
 
                     if (!$userExists) {
+                        // Create new user
                         $password = Str::random(8);
                         $user = User::create([
                             'name' => $scholar->first_name . ' ' . $scholar->last_name,
@@ -199,63 +203,94 @@ class EmailController extends Controller
                             'first_name' => $scholar->first_name,
                             'last_name' => $scholar->last_name,
                             'password' => bcrypt($password),
+                            'campus_id' => $scholar->campus_id
                         ]);
 
                         // Update scholar's user_id
                         $scholar->update([
                             'user_id' => $user->id
                         ]);
-
-                        // Check if scholarship group already exists
-                        $scholarshipGroupExists = ScholarshipGroup::where('user_id', $user->id)
-                            ->where('scholarship_id', $scholarship->id)
-                            ->exists();
-
-                        if (!$scholarshipGroupExists) {
-                            ScholarshipGroup::create([
-                                'user_id' => $user->id,
-                                'scholarship_id' => $scholarship->id,
-                                'batch_id' => $batch->id,
-                                'campus_id' => $batch->campus_id
-                            ]);
-                        }
                     } else {
+                        // Use existing user
+                        $user = $userExists;
+
                         // If user already exists, update the scholar with existing user's ID if needed
                         if (!$scholar->user_id) {
                             $scholar->update([
-                                'user_id' => $userExists->id
-                            ]);
-                        }
-
-                        // Check if scholarship group already exists
-                        $scholarshipGroupExists = ScholarshipGroup::where('user_id', $userExists->id)
-                            ->where('scholarship_id', $scholarship->id)
-                            ->exists();
-
-                        if (!$scholarshipGroupExists) {
-                            ScholarshipGroup::create([
-                                'user_id' => $userExists->id,
-                                'scholarship_id' => $scholarship->id,
+                                'user_id' => $user->id
                             ]);
                         }
                     }
 
-                    // Sending Emails
-                    $mailData = [
-                        'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
-                        'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
-                            "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
-                            "Here are your login credentials:\n\n" .
-                            "*Email: " . $scholar['email'] . "\n" .
-                            "*Password: " . $password . "\n\n" .
-                            "*Next Steps:\n" .
-                            " - Log in to your account using the details above.\n" .
-                            " - Complete your application by submitting the required documents.\n" .
-                            " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                            "*Application Deadline: " . $request['deadline'] . "\n\n" .
-                            "Click the following link to access your portal: " .
-                            "https://urscholar.up.railway.app\n\n"
-                    ];
+                    // Find existing group for this campus and batch
+                    $groupName = "Batch " . $batch->batch_no;
+
+                    // Look for existing group for this campus
+                    $scholarshipGroup = ScholarshipGroup::where('name', $groupName)
+                        ->where('campus_id', $scholar->campus_id)
+                        ->first();
+
+                    if ($scholarshipGroup) {
+                        // Check if user is already a member of this group
+                        $isAlreadyMember = $scholarshipGroup->users()
+                            ->where('user_id', $user->id)
+                            ->exists();
+
+                        // Add user to group if not already a member
+                        if (!$isAlreadyMember) {
+                            $scholarshipGroup->users()->attach($user->id);
+                        }
+                    }
+
+                    // Prepare requirements list for email
+                    $requirementsList = "";
+                    $counter = 1;
+                    foreach ($requirements as $requirement) {
+                        $requirementsList .= "  {$counter}. {$requirement}\n";
+                        $counter++;
+                    }
+
+                    // Prepare email content based on whether user is new or existing
+                    if (!$userExists) {
+                        // For new users - include credentials and requirements
+                        $mailData = [
+                            'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                            'body' => "Dear " . $scholar->first_name . ",\n\n" .
+                                "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
+                                "Here are your login credentials:\n\n" .
+                                "* Email: " . $scholar->email . "\n" .
+                                "* Password: " . $password . "\n\n" .
+                                "NEW REQUIREMENTS SUBMISSION:\n" .
+                                "Please submit the following requirements for your scholarship:\n\n" .
+                                $requirementsList . "\n" .
+                                "* Next Steps:\n" .
+                                "  - Log in to your account using the details above.\n" .
+                                "  - Complete your application by submitting all the required documents listed above.\n" .
+                                "  - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                                "* Application Deadline: " . $request->deadline . "\n\n" .
+                                "Click the following link to access your portal: " .
+                                "https://urscholar.up.railway.app\n\n"
+                        ];
+                    } else {
+                        // For existing users - focus on new requirements
+                        $mailData = [
+                            'title' => $scholarship->name . ' - New Requirements Submission',
+                            'body' => "Dear " . $scholar->first_name . ",\n\n" .
+                                "This is a notification that new requirements have been added to your scholarship application.\n\n" .
+                                "REQUIRED DOCUMENTS:\n" .
+                                $requirementsList . "\n" .
+                                "* Important Information:\n" .
+                                "  - Log in to your account to submit these documents.\n" .
+                                "  - All requirements must be submitted before the deadline.\n" .
+                                "  - Make sure all documents are complete and properly formatted.\n\n" .
+                                "* Submission Deadline: " . $request->deadline . "\n\n" .
+                                "Click the following link to access your portal: " .
+                                "https://urscholar.up.railway.app\n\n" .
+                                "If you have any questions or need assistance, please contact the scholarship office.\n\n" .
+                                "Thank you,\n" .
+                                "The Scholarship Management Team"
+                        ];
+                    }
 
                     // Create mailable instance
                     $email = new SendEmail($mailData);
@@ -268,7 +303,6 @@ class EmailController extends Controller
                         ]);
                     }
 
-                    // Mail::to($scholar->email)->send(new SendEmail($mailData));
                     // Send email with attachments
                     Mail::to($scholar->email)->send($email);
                     $emailsSent++;
@@ -283,13 +317,10 @@ class EmailController extends Controller
         ActivityLog::create([
             'user_id' => Auth::user()->id,
             'activity' => 'Email',
-            'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name,
+            'description' => 'Scholar has been sent an email for scholarship ' . $scholarship->name . ' with requirement details',
         ]);
 
-        return back()->with('flash', [
-            'type' => 'success',
-            'message' => "Successfully sent email to {$emailsSent} scholars out of {$totalScholarsProcessed} total scholars with " . count($uploadedFiles) . " attachment(s).",
-        ]);
+        return redirect()->back()->with('success', 'Emails sent successfully!');
     }
 
     public function notify(Request $request, Scholarship $scholarship)
@@ -330,25 +361,43 @@ class EmailController extends Controller
             if ($scholar->email) {
                 //Sending Emails
                 $mailData = [
-                    'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                    'title' => 'Good Day Scholar!',
                     'body' => "Dear " . $scholar['first_name'] . ",\n\n" .
-                        "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
-                        "Here are your login credentials:\n\n" .
-                        "*Email: " . $scholar['email'] . "\n" .
+                        "Great news! Your scholarship payout has been set, you can claim your grant by following the instructions below.\n\n\n" .
                         "*Next Steps:\n" .
-                        " - Log in to your account using the details above.\n" .
-                        " - Complete your application by submitting the required documents.\n" .
-                        " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                        "*Bigayan  Date: " . $request['scheduled_date'] . "\n\n" .
-                        "*Bigayan Oras: " . $request['scheduled_time'] . "\n\n" .
-                        "*Reminders be: " . $request['reminders'] . "\n\n" .
+                        // " - Log in to your account using the details above.\n" .
+                        // " - Complete your application by submitting the required documents.\n" .
+                        // " - Stay updated with announcements and notifications regarding your application status.\n\n" .
+                        "*Payout Date: " . $request['scheduled_date'] . "\n\n" .
+                        "*Time: " . $request['scheduled_time'] . "\n\n" .
+                        "*Reminders: " . $request['reminders'] . "\n\n" .
                         "Click the following link to access your portal: " .
                         "urscholar.up.railway.app\n\n"
                 ];
 
-                Mail::to($scholar->email)->send(new SendEmail($mailData));
+                Mail::to($scholar->email)->send(new PayoutEmail($mailData));
             }
         }
+
+        // Create notification for scholars
+        $scholarNotification = Notification::create([
+            'title' => 'Scholarship Payout Scheduled',
+            'message' => 'Your scholarship payout has been scheduled for ' . $request['scheduled_date'] . ' at ' . $request['scheduled_time'],
+            'type' => 'payout_scheduled',
+        ]);
+
+        // Attach scholars to the notification
+        $scholarNotification->users()->attach($scholars->pluck('user_id')); // Assuming scholars have a user_id field
+
+        // Notify users from the same campus as the current user
+        $campusUsers = User::where('campus_id', Auth::user()->campus_id)->pluck('id');
+        $scholarNotification->users()->attach($campusUsers);
+
+        // Broadcast the notification
+        broadcast(new NewNotification($scholarNotification))->toOthers();
+
+        // Trigger event for scholar notification
+        event(new NewNotification($scholarNotification));
 
         ActivityLog::create([
             'user_id' => Auth::user()->id,
@@ -395,7 +444,7 @@ class EmailController extends Controller
             ]);
 
             $mailData = [
-                'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
+                'title' => 'Welcome to the URScholar',
                 'body' => "Dear " . $studentEmail['first_name'] . ",\n\n" .
                     "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
                     "Here are your login credentials:\n\n" .
@@ -405,7 +454,7 @@ class EmailController extends Controller
                     " - Log in to your account using the details above.\n" .
                     " - Complete your application by submitting the required documents.\n" .
                     " - Stay updated with announcements and notifications regarding your application status.\n\n" .
-                    "*Application Deadline: " . ($request->has('deadline') ? $request['deadline'] : 'Please check the website for details') . "\n\n" .
+                    // "*Application Deadline: " . ($request->has('deadline') ? $request['deadline'] : 'Please check the website for details') . "\n\n" .
                     "Click the following link to access your portal: " .
                     "urscholar.up.railway.app\n\n"
             ];
@@ -422,6 +471,72 @@ class EmailController extends Controller
             // If email and campus don't match, return with error message
             return back()->withErrors([
                 'email' => 'The provided email and campus do not match our records.',
+            ])->withInput();
+        }
+    }
+
+    public function forget(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        // Check if student exists with the provided email
+        $userEmail = User::where('email', $request->email)->first();
+
+        // Check if student exists and belongs to the selected campus
+        if ($userEmail) {
+            // Generate random password
+            $password = Str::random(8);
+
+            $userExists = User::where('email', $userEmail->email)->exists();
+
+            if ($userExists) {
+
+
+                $user = User::find($userEmail->id);
+
+
+                $user->update([
+                    'password' => Hash::make($password),
+                ]);
+
+                $mailData = [
+                    'title' => 'Password Reset Request – URScholar',
+                    'body' => "Dear " . $userEmail['first_name'] . ",\n\n" .
+                        "We received a request to reset the password for your URScholar account.\n\n" .
+                        "Here are your updated login credentials:\n\n" .
+                        "* Email: " . $userEmail['email'] . "\n" .
+                        "* Temporary Password: " . $password . "\n\n" .
+                        "* What to do next:\n" .
+                        " - Log in using the temporary password above.\n" .
+                        " - You’ll be prompted to create a new password for your account.\n\n" .
+                        "Access your portal here: urscholar.up.railway.app\n\n" .
+                        "If you did not request this change, please contact support immediately.\n\n" .
+                        "Best regards,\n" .
+                        "URScholar Team"
+                ];
+
+
+                // Send email
+                Mail::to($userEmail->email)->send(new ForgetMail($mailData));
+
+                // Update or create user account here if needed
+                // You might want to save the hashed password to your users table
+
+                //return redirect(route('dashboard', absolute: false))->with('success', 'Registration email sent successfully!');
+                return back()->with('success', 'New password sent successfully!');
+            }
+
+            return back()->withErrors([
+                'existing' => 'We couldn’t find any account associated with that email. Please make sure you entered the correct email address or register if you haven’t already.',
+            ])->withInput();
+
+
+        } else {
+            // If email and campus don't match, return with error message
+            return back()->withErrors([
+                'email' => 'The provided email do not match our records.',
             ])->withInput();
         }
     }

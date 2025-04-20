@@ -53,9 +53,25 @@
         </button>
 
         <!-- avatar -->
-        <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" data-dropdown-placement="bottom-start"
-          class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
-          src="" alt="User dropdown">
+       <!-- Avatar with Red Notification Dot -->
+       <div v-if="$page.props.auth.user.picture">
+            <div class="relative">
+                <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+                    data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
+                <!-- Red Notification Dot -->
+                <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+            </div>
+        </div>
+        <div v-else>
+          <div class="relative">
+              <img id="avatarButton" type="button" data-dropdown-toggle="userDropdown" @click.stop="toggleUserDropdown"
+                  data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                  :src="`/storage/user/profile/no_userpic.png`" alt="picture">
+              <!-- Red Notification Dot -->
+              <!-- <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div> -->
+          </div>
+        </div>
 
         <!-- Notifs Dropdown menu -->
         <div id="dropdownNotification"
@@ -111,7 +127,7 @@
           </div>
           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
             <li>
-              <Link :href="(route('student.profile'))" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Profile</Link>
+              <Link :href="(route('sa.account'))" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Account Settings</Link>
             </li>
           </ul>
           <div class="py-1 text-left">

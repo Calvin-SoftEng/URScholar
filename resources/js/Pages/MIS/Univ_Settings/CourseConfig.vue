@@ -60,7 +60,8 @@
                             </thead>
                             <tbody>
                                 <template v-for="course in courses" :key="course.id">
-                                    <tr class="bg-white dark:bg-dcontainer border-b  dark:border-gray-700 border-gray-200">
+                                    <tr
+                                        class="bg-white dark:bg-dcontainer border-b  dark:border-gray-700 border-gray-200">
                                         <td class="px-6 py-4">
                                             {{ course.name }}
                                         </td>
@@ -118,7 +119,8 @@
                     </div>
                     <div>
                         <label for="abbreviation"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Course Abbreviation</label>
+                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Course
+                            Abbreviation</label>
                         <input v-model="form.abbreviation" type="text" id="last_name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required />
@@ -173,14 +175,21 @@
                 </div>
             </div>
         </div>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
 
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, router } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { ref, watchEffect } from 'vue';
 
 const props = defineProps({
     campuses: Object,
@@ -195,7 +204,7 @@ const campusid = ref(null);
 
 const toggleModal = (campusID) => {
     isCoursesVisible.value = !isCoursesVisible.value;
-    
+
     campusid.value = campusID;
     form.value.id = campusid;
 };
@@ -242,4 +251,22 @@ const submitForm = async () => {
         console.error("Error submitting form:", error);
     }
 };
+
+const toastVisible = ref(false);
+const toastMessage = ref("");
+
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
+});
 </script>

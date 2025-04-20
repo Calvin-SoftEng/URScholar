@@ -11,41 +11,41 @@
             <span class="text-gray-500 dark:text-gray-300 text-sm">No active scholarships available.</span>
         </div>
 
-            <!-- Scrollable Scholarships -->
-            <div v-else class="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded flex flex-col justify-start gap-2">
-                <div v-for="scholarship in scholarships" :key="scholarship.id" class="space-y-1">
-                    <div class="flex flex-row p-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 border border-blue-400 shadow-lg 
-                        hover:shadow-xl transition-all duration-300 justify-between items-center text-white 
-                        dark:from-dsecondary dark:to-dprimary dark:border-gray-600">
-                    
-                        <div class="flex flex-col">
-                            <span class="font-semibold text-lg">
-                                {{ scholarship.name }}
-                            </span>
-                            <div class="flex flex-row gap-1">
-                                <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2 py-0.5 rounded-sm 
-                                    dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
-                                    {{ getSponsorDetails(scholarship.sponsor_id).abbreviation }}
-                                </span>
-
-                                <span class="font-normal text-sm">
-                                    {{ scholarship.scholarshipType }} Scholarship
-                                </span>
-                            </div>
-                        </div>
-                        <div class="flex flex-row items-center gap-2">
-                            <span v-if="scholarship.status === 'Active'" 
-                                class="w-3 h-3 bg-green-500 rounded-full shadow-md">
+        <!-- Scrollable Scholarships -->
+        <div v-else class="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded flex flex-col justify-start gap-2">
+            <div v-for="scholarship in scholarships" :key="scholarship.id" class="space-y-1">
+                <div class="flex flex-row p-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 border border-blue-400 shadow-lg 
+                    hover:shadow-xl transition-all duration-300 justify-between items-center text-white 
+                    dark:from-dsecondary dark:to-dprimary dark:border-gray-600">
+                
+                    <div class="flex flex-col">
+                        <span class="font-semibold text-lg">
+                            {{ scholarship.name }}
+                        </span>
+                        <div class="flex flex-row gap-1">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2 py-0.5 rounded-sm 
+                                dark:bg-gray-700 dark:text-blue-400 border border-blue-400">
+                                {{ getSponsorDetails(scholarship.sponsor_id).abbreviation }}
                             </span>
 
-                            <span class="text-sm font-medium">
-                                {{ scholarship.status }}
+                            <span class="font-normal text-sm">
+                                {{ scholarship.scholarshipType }} Scholarship
                             </span>
                         </div>
+                    </div>
+                    <div class="flex flex-row items-center gap-2">
+                        <span v-if="scholarship.status === 'Active'" 
+                            class="w-3 h-3 bg-green-500 rounded-full shadow-md">
+                        </span>
+
+                        <span class="text-sm font-medium">
+                            {{ scholarship.status }}
+                        </span>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
 
         <!-- Button Stays at Bottom Inside the Card -->
         <div class="sticky bottom-0 left-0 w-full bg-white dark:bg-dcontainer">

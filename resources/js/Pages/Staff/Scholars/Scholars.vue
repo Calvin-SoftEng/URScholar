@@ -17,10 +17,6 @@
 
         <!-- Header section with title and search -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
-          <!-- <h1 class="text-2xl sm:text-4xl font-poppins font-extrabold text-[darkblue] text-left">
-              <span>{{ scholarship.name }}</span> Scholars 2024-2025
-            </h1> -->
-
           <div class="flex flex-row items-center gap-4">
             <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
               <!-- Icon -->
@@ -31,14 +27,14 @@
               <!-- Text Content -->
               <div class="flex flex-col">
                 <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
-                <span class="font-semibold text-xl text-gray-900">{{ props.scholars.length }}</span>
+                <span class="font-semibold text-xl text-gray-900">{{ filteredScholars.length }}</span>
               </div>
             </div>
 
             <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
               <!-- Icon -->
               <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
-                <font-awesome-icon :icon="['fas', 'users']" class="text-2xl" />
+                <font-awesome-icon :icon="['fab', 'google-scholar']" class="text-2xl" />
               </div>
 
               <!-- Text Content -->
@@ -49,18 +45,74 @@
             </div>
           </div>
 
+          <div class="flex flex-row items-center gap-4">
+            <div class="flex flex-row items-center gap-3 w-full sm:w-auto">
+              <span class="mb-2">Filter:</span>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                <div>
+                  <label for="year-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">School
+                    Year</label>
+                  <Select v-model="selectedSchoolYear">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="selectedSchoolYear || 'Select year'" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem v-for="year in academicYearOptions" :key="year.id" :value="year.id">
+                          {{ year.name }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-          <!-- Search Bar -->
-          <div class="flex items-center justify-end w-full sm:w-auto sm:max-w-md">
-            <div class="relative w-full">
-              <input type="text" v-model="searchQuery" placeholder="Search scholars..."
-                class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
-              <span class="absolute right-3 top-2.5 text-gray-400">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </span>
+                <div>
+                  <label for="semester-select"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Semester</label>
+                  <Select v-model="selectedSemester">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="selectedSemester || 'Select Semester'" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="1st">First Semester</SelectItem>
+                        <SelectItem value="2nd">Second Semester</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <label for="campus-select"
+                    class="block text-sm font-medium text-gray-700 dark:text-gray-300">Campus</label>
+                  <Select v-model="selectedCampus">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="selectedCampus || 'Select Campus'" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem v-for="camp in props.campus" :key="camp.id" :value="camp.id">
+                          {{ camp.name }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </div>
+            <div>
+              <!-- Search Bar -->
+              <div class="flex items-center justify-end w-full sm:w-auto sm:max-w-md">
+                <div class="relative w-full">
+                  <input type="text" v-model="searchQuery" placeholder="Search grantee..."
+                    class="w-full px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500" />
+                  <span class="absolute right-3 top-2.5 text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -68,7 +120,7 @@
         <!-- table -->
         <!-- Empty state message when no students are available -->
         <div class="w-full mt-5">
-          <div v-if="!scholars || scholars.length === 0"
+          <div v-if="!filteredScholars || filteredScholars.length === 0"
             class="flex flex-col items-center justify-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
             <font-awesome-icon :icon="['fas', 'graduation-cap']"
               class="text-blue-600 text-2xl flex-shrink-0 w-16 h-16" />
@@ -77,7 +129,7 @@
 
           <div v-else
             class="relative overflow-x-auto border border-gray-200 dark:border-gray-600 scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded rounded-lg w-full">
-            
+
             <!-- Horizontal scroll container -->
             <div class="overflow-x-auto w-full">
               <table class="table-auto w-full whitespace-nowrap">
@@ -93,90 +145,87 @@
                     <th class="border-x border-gray-100 px-4 py-2">Email</th>
                     <th class="border-x border-gray-100 px-4 py-2">Phone</th>
                     <th class="border-x border-gray-100 px-4 py-2">Status</th>
-                    <th class="sticky right-0 z-30 bg-white px-6 py-2 border-l border-gray-200 text-sm font-semibold text-center">
+                    <th
+                      class="sticky right-0 z-30 bg-white px-6 py-2 border-l border-gray-200 text-sm font-semibold text-center">
                       <span class="sr-only">Actions</span>
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr v-for="scholar in filteredScholars" :key="scholar.id" class="text-sm bg-white">
-                      <td class="px-10 py-8">{{ scholar.urscholar_id }}</td>
-                      <td class="px-10">
-                        <div class="flex items-center gap-3">
-                          <div class="avatar">
-                            <div class="mask rounded-full h-12 w-12">
-                              <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture"
-                                class="w-full h-full object-cover">
-                            </div>
-                          </div>
-                          <div>
-                            <div class="font-normal">
-                              {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
-                              <font-awesome-icon v-if="scholar.sex === 'Male'" :icon="['fas', 'mars']"
-                                class="text-blue-500" />
-                              <font-awesome-icon v-if="scholar.sex === 'Female'" :icon="['fas', 'venus']"
-                                class="text-pink-500" />
-                            </div>
-
-                            <div class="text-sm opacity-50">
-                              <!-- {{ scholar.year_level }}{{ getYearSuffix(scholar.year_level) }} year, {{ scholar.course }} -->
-                              <span> <font-awesome-icon :icon="['far', 'calendar']"
-                                  class="mr-1 text-gray-500" /> {{ formatDate(scholar.birthdate) }}</span>
-                            </div>
+                    <td class="px-10 py-8">{{ scholar.urscholar_id }}</td>
+                    <td class="px-10">
+                      <div class="flex items-center gap-3">
+                        <div class="avatar">
+                          <div class="mask rounded-full h-12 w-12">
+                            <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture"
+                              class="w-full h-full object-cover">
                           </div>
                         </div>
-                      </td>
-                      <td class="px-10 items-center">
-                        <span class="material-symbols-rounded text-sm text-gray-400 mr-1">
-                          local_library
-                        </span> {{ scholar.course.name }}
-                        <br />
-                        <span class="badge badge-ghost badge-base">{{ scholar.year_level }}{{
-                          getYearSuffix(scholar.year_level) }} year</span>
-                      </td>
-                      <td class="px-10">
-                        {{ scholar.campus.name }}
-                      </td>
-                      <td class="px-10">
-                       Tulong Dunong
-                        <br />
-                        <span class="badge badge-ghost badge-sm">{{ scholar.grant }}</span>
-                      </td>
-                      <td class="px-10">
-                        Batch {{ scholar.batch ? scholar.batch.batch_no : 'N/A' }}
-                        <br />
-                        <span class="badge badge-ghost badge-sm">1st sem - 2023-2024</span>
-                      </td>
-                      <td class="px-5">
-                        <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500" /> {{ scholar.email ?
-                          scholar.email : 'dummy@gmail.com' }}
-                      </td>
-                      <td class="px-5">
-                        <font-awesome-icon :icon="['fas', 'phone']" class="mr-1 text-gray-500" /> 0493245293
-                      </td>
-                      <td class="px-5">
-                        <span :class="{
-                          'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
-                          'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
-                        }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                          {{ scholar.status }}
-                        </span>
-                      </td>
-                      <td class="sticky right-0 z-20 bg-white px-6 py-2 border-gray-200 text-center"
-                          style="box-shadow: -4px 0 6px -2px rgba(0,0,0,1);">
-                        <Link :href="route('scholars.scholar_information')">
-                          <button
-                            class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                            aria-label="View Details"
-                          >
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                          </button>
-                        </Link>
-                      </td>
-                    </tr>
+                        <div>
+                          <div class="font-normal">
+                            {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
+                            <font-awesome-icon v-if="scholar.sex === 'Male'" :icon="['fas', 'mars']"
+                              class="text-blue-500" />
+                            <font-awesome-icon v-if="scholar.sex === 'Female'" :icon="['fas', 'venus']"
+                              class="text-pink-500" />
+                          </div>
+
+                          <div class="text-sm opacity-50">
+                            <span> <font-awesome-icon :icon="['far', 'calendar']" class="mr-1 text-gray-500" /> {{
+                              formatDate(scholar.birthdate) }}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="px-10 items-center">
+                      <span class="material-symbols-rounded text-sm text-gray-400 mr-1">
+                        local_library
+                      </span> {{ scholar.course.name }}
+                      <br />
+                      <span class="badge badge-ghost badge-base">{{ scholar.year_level }}{{
+                        getYearSuffix(scholar.year_level) }} year</span>
+                    </td>
+                    <td class="px-10">
+                      {{ scholar.campus.name }}
+                    </td>
+                    <td class="px-10">
+                      Tulong Dunong
+                      <br />
+                      <span class="badge badge-ghost badge-sm">{{ scholar.grant }}</span>
+                    </td>
+                    <td class="px-10">
+                      Batch {{ scholar.batch_no }}
+                      <br />
+                      <span class="badge badge-ghost badge-sm">{{ getScholarSemester(scholar) }}</span>
+                    </td>
+                    <td class="px-5">
+                      <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500" /> {{ scholar.email ?
+                        scholar.email : 'dummy@gmail.com' }}
+                    </td>
+                    <td class="px-5">
+                      <font-awesome-icon :icon="['fas', 'phone']" class="mr-1 text-gray-500" /> 0493245293
+                    </td>
+                    <td class="px-5">
+                      <span :class="{
+                        'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
+                        'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
+                      }" class="text-xs font-medium px-2.5 py-0.5 rounded">
+                        {{ scholar.status }}
+                      </span>
+                    </td>
+                    <td class="sticky right-0 z-20 bg-white px-6 py-2 border-gray-200 text-center"
+                      style="box-shadow: -4px 0 6px -2px rgba(0,0,0,1);">
+                      <button @click="() => openScholar(scholar)"
+                        class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                        aria-label="View Details">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                      </button>
+                    </td>
+                  </tr>
                 </tbody>
               </table>
             </div>
@@ -190,27 +239,33 @@
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { defineProps, ref, computed, onBeforeMount, reactive } from 'vue';
-import { useForm, Link } from '@inertiajs/vue3';
+import { defineProps, ref, computed, onMounted } from 'vue';
+import { useForm, Link, router } from '@inertiajs/vue3';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';
 import FileUpload from 'primevue/fileupload';
-import Papa from 'papaparse';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/Components/ui/select';
 
 const components = {
   DataTable,
   Column,
   Button,
   FileUpload,
-  Papa,
 };
 
+const openScholar = (scholar) => {
+  router.visit(`/urs-scholars/scholar-information/${scholar.id}`, {
+    preserveState: true
+  });
+};
 
 // Props definition with user type and coordinator campus
 const props = defineProps({
   scholarship: Object,
   scholars: Array,
+  academicYear: Array,
+  campus: Array,
   userType: {
     type: String,
     required: true,
@@ -223,15 +278,56 @@ const props = defineProps({
   }
 });
 
-// Computed property for filtered scholars
-// Add search functionality
+// Filter state variables
+const selectedSchoolYear = ref(null);
+const selectedSemester = ref(null);
+const selectedCampus = ref(props.coordinatorCampus ? parseInt(props.coordinatorCampus) : null);
 const searchQuery = ref('');
 
-// Replace the existing filteredScholars computed property with this:
+// Create academic year options
+const academicYearOptions = computed(() => {
+  if (!props.academicYear) return [];
+  
+  return props.academicYear.map(year => ({
+    id: year.school_year_id,
+    name: year.school_year ? year.school_year.year : 'Unknown Year'
+  })).filter((v, i, a) => a.findIndex(t => t.id === v.id) === i); // Remove duplicates
+});
+
+// Get semester info for a scholar
+const getScholarSemester = (scholar) => {
+  if (!scholar.semester || !scholar.school_year_id) return 'Unknown';
+  
+  const academicYear = props.academicYear.find(ay => 
+    ay.school_year_id === scholar.school_year_id && ay.semester === scholar.semester
+  );
+  
+  if (!academicYear || !academicYear.school_year) return 'Unknown';
+  
+  const semesterText = scholar.semester === '1st' ? 'First Semester' : 'Second Semester';
+  return `${semesterText} - ${academicYear.school_year.name}`;
+};
+
+// Filtered scholars based on all criteria
 const filteredScholars = computed(() => {
   if (!props.scholars) return [];
 
-  let filtered = props.scholars;  // No filtering by userType anymore
+  let filtered = props.scholars;
+
+  // Apply school year filter
+  if (selectedSchoolYear.value) {
+    filtered = filtered.filter(scholar => scholar.school_year_id === selectedSchoolYear.value);
+  }
+
+  // Apply semester filter
+  if (selectedSemester.value) {
+    filtered = filtered.filter(scholar => scholar.semester === selectedSemester.value);
+  }
+
+  // Apply campus filter
+  if (selectedCampus.value) {
+    filtered = filtered.filter(scholar => scholar.campus_id === selectedCampus.value);
+  }
 
   // Apply search filter
   if (searchQuery.value) {
@@ -242,8 +338,8 @@ const filteredScholars = computed(() => {
       scholar.last_name?.toLowerCase().includes(query) ||
       scholar.middle_name?.toLowerCase().includes(query) ||
       scholar.email?.toLowerCase().includes(query) ||
-      scholar.course?.toLowerCase().includes(query) ||
-      scholar.campus?.toLowerCase().includes(query) ||
+      scholar.course?.name?.toLowerCase().includes(query) ||
+      scholar.campus?.name?.toLowerCase().includes(query) ||
       scholar.grant?.toLowerCase().includes(query)
     );
   }
@@ -268,15 +364,22 @@ const formatDate = (dateString) => {
   });
 };
 
+// If coordinator, pre-select their campus
+onMounted(() => {
+  if (props.userType === 'coordinator' && props.coordinatorCampus) {
+    selectedCampus.value = parseInt(props.coordinatorCampus);
+  }
+});
+
+const form = useForm({
+  file: null,
+});
+
 const expandedRows = ref([]);
 const showPanel = ref(false);
 const previewData = ref([]);
 const headers = ref([]);
 const error = ref('');
-
-const form = useForm({
-  file: null,
-});
 
 function expandAll() {
   expandedRows.value = products.value.reduce((acc, p) => (acc[p.id] = true) && acc, {});

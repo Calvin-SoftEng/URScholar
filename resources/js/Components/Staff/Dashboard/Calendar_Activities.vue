@@ -8,7 +8,7 @@
         <div class="flex flex-col flex-grow mt-3 overflow-hidden">
         <!-- Scrollable container -->
         <div
-            class="flex-1 h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded dark:border-gray-600 rounded-lg px-3 py-2 space-y-2">
+            class="flex-1 max-h-[27rem] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer scrollbar-thumb-rounded dark:border-gray-600 rounded-lg px-3 py-2 space-y-2">
             
             <!-- Activity List -->
             <ul class="w-full space-y-1 ">

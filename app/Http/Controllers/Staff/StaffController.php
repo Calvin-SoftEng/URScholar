@@ -7,24 +7,32 @@ use App\Models\ActivityLog;
 use App\Models\Sponsor;
 use App\Models\Student;
 use App\Models\SubmittedRequirements;
-use Inertia\Inertia;
 use App\Http\Controllers\Controller;
 use App\Models\Grantees;
 use App\Models\Requirements;
 use App\Models\Scholarship;
 use App\Models\Scholar;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Inertia\Inertia;
 use Illuminate\Http\Request;
 
 class StaffController extends Controller
 {
     public function dashboard()
     {
+        if (Auth::check() && Auth::user()->email_verified_at === null) {
+            return redirect()->route('staff.verify_account');
+        }
+
         $sponsor = Sponsor::all();
         $activeScholarships = Scholarship::where('status', 'active')->get();
 
         // Get the latest 5 submitted requirements
         $latestSubmissions = SubmittedRequirements::with(['scholar', 'requirement.scholarship'])
+            ->whereHas('scholar', function ($query) {
+                $query->where('campus_id', Auth::user()->campus_id);
+            })
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get()
@@ -66,18 +74,21 @@ class StaffController extends Controller
                 ];
             });
 
-            $active_scholars = Grantees::where('status', 'Active')
-            ->get();
 
-            $enrolled = Student::all();
+        $enrolled = Student::all();
 
-            $activity_logs = ActivityLog::where('user_id', Auth::user()->id)->get();
+        $activity_logs = ActivityLog::where('user_id', Auth::user()->id)->get();
 
-            $academic_year = AcademicYear::where('status', 'Active')
+        $academic_year = AcademicYear::where('status', 'Active')
             ->with('school_year')
             ->first();
 
-            $univ_students = Student::where('academic_year_id', $academic_year->id)
+        $active_scholars = Grantees::where('status', 'Accomplished')
+            ->where('semester', $academic_year->semester)
+            ->where('school_year_id', $academic_year->school_year_id)
+            ->get();
+
+        $univ_students = Student::where('academic_year_id', $academic_year->id)
             ->where('campus_id', Auth::user()->campus_id)
             ->count();
 
@@ -90,5 +101,64 @@ class StaffController extends Controller
             'academic_year' => $academic_year,
             'univ_students' => $univ_students,
         ]);
+    }
+
+    public function verify_account()
+    {
+        if (Auth::user()->email_verified_at !== null) {
+            return redirect()->route('staff.dashboard');
+        }
+
+        return Inertia::render('Staff/Account/Verification', [
+
+        ]);
+    }
+
+    public function verifyAccount(Request $request)
+    {
+        // Validate the form data
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'middle_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'age' => 'required|numeric',
+            'address' => 'required|string',
+            'contact' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+            'img' => 'required|image|max:4096', // Max 4MB
+        ]);
+
+        // Update the user profile
+        $user = Auth::user();
+
+        // Handle image upload if provided
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imageName = $image->getClientOriginalName();
+            $image->storeAs('public/profile_pictures', $imageName);
+            $user->picture = $imageName;
+        }
+
+        // Update user information
+        $user->first_name = $validated['first_name'];
+        $user->middle_name = $validated['middle_name'];
+        $user->last_name = $validated['last_name'];
+        $user->name = $validated['first_name'] . ' ' . $validated['last_name'];
+        $user->age = $validated['age'];
+        $user->address = $validated['address'];
+        $user->contact = $validated['contact'];
+
+        // Update password if provided
+        if (!empty($validated['password'])) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        // Set email as verified
+        $user->email_verified_at = now();
+
+        $user->save();
+
+        // Redirect with success message
+        return redirect()->route('staff.dashboard')->with('success', 'Account verification completed successfully!');
     }
 }

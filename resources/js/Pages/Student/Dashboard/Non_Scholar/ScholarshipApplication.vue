@@ -373,18 +373,16 @@ const prevStep = () => {
 // Scholarship Criteria (Dummy Data)
 const criteria = ref([
     "Must be a Filipino citizen",
-    "Must have a General Weighted Average (GWA) of at least 85%",
+    "Must have a General Weighted Average (GWA) of at least 2",
     "Must belong to a low-income household",
-    "Must not have any failing grades",
     "Must be enrolled in an accredited university"
 ]);
 
 // User's Eligible Details (Dummy Data)
 const userDetails = ref([
     "You are a Filipino citizen",
-    "Your GWA is 88%",
+    "Your GWA is 1.2",
     "Your household income is within the required range",
-    "You have no failing grades",
     "You are enrolled at University of Rizal System"
 ]);
 

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col gap-2 w-full h-1/12 justify-center items-center">
-        <span class="text-4xl font-bold">Tulong Dunong Program</span>
-        <span class="text-xl">Grantee</span>
+        <span class="text-4xl font-bold">RISE</span>
+        <span class="text-xl">Applicant</span>
     </div>
     <!--Pending Req-->
 

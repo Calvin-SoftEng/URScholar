@@ -280,6 +280,10 @@ const props = defineProps({
     campuses: {
         type: Array,
         default: () => []
+    },
+    userType: {
+        type: String,
+        default: ''
     }
 });
 
@@ -296,6 +300,11 @@ const selectedMenu = ref('active');
 const selectMenu = (key) => {
     selectedMenu.value = key;
 };
+
+// Check if user is super_admin
+const isSuperAdmin = computed(() => {
+    return props.userType === 'super_admin';
+});
 
 // Function to get campus name by ID
 const getCampusName = (campusId) => {
@@ -507,6 +516,11 @@ const combinedPayoutData = computed(() => {
 
 // Filtered data based on the selected menu tab
 const filteredPayoutData = computed(() => {
+    // If user is super_admin, show all payouts regardless of status
+    if (isSuperAdmin.value) {
+        return combinedPayoutData.value;
+    }
+    
     const filtered = {};
 
     Object.entries(combinedPayoutData.value).forEach(([scholarshipId, scholarship]) => {

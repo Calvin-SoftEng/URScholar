@@ -20,7 +20,8 @@
                             <Link href="/scholarships">Scholarships</Link>
                         </li>
                         <li class="hover:text-gray-600">
-                            <span class="text-blue-400 font-semibold dark:text-gray-300">{{ scholarship?.name }} Applicants</span>
+                            <span class="text-blue-400 font-semibold dark:text-gray-300">{{ scholarship?.name }}
+                                Applicants</span>
                         </li>
                         <!-- <li>
                             <span class="text-blue-400 font-semibold">{{ currentBatch ? `Batch ${currentBatch.batch_no}`
@@ -38,7 +39,7 @@
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
                         </h1>
-                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{selectedSem}} Semester</span>
+                        <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ selectedSem }} Semester</span>
                     </div>
 
                     <!-- Stats Section -->
@@ -49,10 +50,11 @@
                                 <font-awesome-icon :icon="['fas', 'calendar-alt']" class="text-red-600 text-base" />
                                 <p class="text-gray-500 text-sm">Application Deadline</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins text-red-600">{{ new Date(requirements[0].date_end).toLocaleDateString('en-US', {
-                                                    year:
-                                                        'numeric', month: 'long', day: 'numeric'
-                                                }) }}</p>
+                            <p class="text-3xl font-semibold font-poppins text-red-600">{{ new
+                                Date(requirements[0].date_end).toLocaleDateString('en-US', {
+                                    year:
+                                        'numeric', month: 'long', day: 'numeric'
+                                }) }}</p>
                         </div>
 
                         <!-- Approved Applicants -->
@@ -61,7 +63,7 @@
                                 <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
                                 <p class="text-gray-500 text-sm">Approved Applicants</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins text-green-600">{{ stats.completedCount }}</p>
+                            <p class="text-3xl font-semibold font-poppins text-green-600">{{ totalApprovedApplicants }}</p>
                         </div>
 
                         <!-- Total Scholars -->
@@ -112,8 +114,9 @@
 
                 <div>
                     <!-- Scholar List -->
-                    <ApplicantList :currentUser="currentUser" :scholarship="scholarship" :batches="batches" :applicants="applicants" :scholars="scholars"
-                        :requirements="requirements" :campusRecipients="campusRecipients" :totalSlots="totalSlots" @update:stats="updateStats" />
+                    <ApplicantList :currentUser="currentUser" :scholarship="scholarship" :batches="batches"
+                        :applicants="applicants" :scholars="scholars" :requirements="requirements"
+                        :campusRecipients="campusRecipients" :totalSlots="totalSlots" @update:stats="updateStats" :schoolyear="schoolyear" :selectedSem="selectedSem"/>
                 </div>
 
             </div>
@@ -198,6 +201,11 @@ const toast = ref({
     title: '',
     message: '',
     type: 'success'
+});
+
+// Total approved applicants
+const totalApprovedApplicants = computed(() => {
+    return props.scholars.filter(scholar => scholar.applicant_status === 'Approved').length;
 });
 
 // Computed property
