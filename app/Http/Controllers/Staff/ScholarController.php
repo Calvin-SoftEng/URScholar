@@ -313,15 +313,17 @@ class ScholarController extends Controller
     {
         // Validate the incoming request
         $validated = $request->validate([
-            'status' => 'required|in:Dropped,Graduated',
+            'status' => 'required|in:Dropped,Graduated,Transferred,Enrolled,Unenrolled',
         ]);
 
         // Find the scholar by ID
         $scholar = Scholar::findOrFail($id);
         $originalStatus = $scholar->student_status; // Store original status for comparison
 
-        if ($scholar->student_status == 'Unenrolled' && $validated['status'] == 'Enrolled') {
+        if ($scholar->student_status == 'Unenrolled' && ($validated['status'] == 'Enrolled'  || $validated['status'] == 'Transferred')) {
             // Update the scholar's status
+
+            dd($validated['status']);
             $scholar->student_status = $validated['status'];
             $scholar->save();
         } elseif ($scholar->student_status == 'Enrolled' && $validated['status'] == 'Dropped') {
