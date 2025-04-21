@@ -2704,7 +2704,6 @@ const handleImgChange = (event) => {
 
 const submit = async () => {
     try {
-
         router.post(`myProfile/update`, form.value);
         //await useForm(form.value).post(`/sponsors/create-scholarship`);
         // await form.post(`/sponsors/${props.sponsor.id}/create`)
