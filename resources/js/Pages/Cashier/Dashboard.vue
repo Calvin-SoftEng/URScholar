@@ -18,7 +18,6 @@ const props = defineProps({
 </script>
 
 <template>
-    <Head title="Dashboard" />
 
     <AuthenticatedLayout>
         <template #default>

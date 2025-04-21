@@ -14,6 +14,7 @@ const props = defineProps({
     campus: Array,
     errors: Object,
     flash: Object,
+    branding: Object,
 });
 
 const directives = {
@@ -72,9 +73,9 @@ const resendEmail = async () => {
             <div class="relative flex items-center justify-center w-full px-10 py-2">
                 <Link :href="(route('welcome'))">
                     <div class="flex flex-row items-center justify-center gap-2 p-2" v-tooltip="'Back to Home Page'">
-                        <img src="../../../assets/images/main_logo.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+                        <img :src="`/storage/branding/logos/${branding.logo_light}`" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
 
-                        <span class="font-poppins text-3xl font-bold text-navy tracking-tight">URScholar</span>
+                        <span class="font-poppins text-3xl font-bold text-navy tracking-tight">{{branding.branding_name}}</span>
                     </div>
                 </Link>
                 
@@ -82,7 +83,7 @@ const resendEmail = async () => {
 
             <div class="w-full fit-content relative flex flex-col gap-1 px-10 py-9">
                 <div class="flex flex-col items-start justify-start mb-8">
-                    <p class="font-extrabold font-sora text-2xl">Register to URScholar</p>
+                    <p class="font-extrabold font-sora text-2xl">Register to {{branding.branding_name}}</p>
                     <span class="max-w-[90%] text-sm">Enter the needed details in order to create your account</span>
                 </div>
 
@@ -164,7 +165,7 @@ const resendEmail = async () => {
             </div>
 
             <div class="mt-10 mb-3 font-poppins text-sm text-gray-500">
-                URScholar 2024. All rights reserved
+                {{branding.branding_name}} 2024. All rights reserved
             </div>
         </form>
 

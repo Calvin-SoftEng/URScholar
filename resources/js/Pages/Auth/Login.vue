@@ -239,7 +239,7 @@ const unblockUser = () => {
 
             <!-- Footer -->
             <div class="mt-10 mb-3 font-poppins text-sm text-gray-500">
-                URScholar 2024. All rights reserved 
+                {{branding.branding_name}} 2024. All rights reserved 
             </div>
         </form>
 

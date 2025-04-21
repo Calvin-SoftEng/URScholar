@@ -5,7 +5,7 @@
     <AuthenticatedLayout class="shadow-md z-10 min-h-screen overflow-auto">
         <div class="w-full bg-dirtywhite shadow-sm">
             <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
-                Confirmation
+                Resubmission
             </h1>
         </div>
         <div class="pt-3 pb-24 sm:overflow-auto sm:max-h-[90vh] sm:scroll-py-2">

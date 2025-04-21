@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Campus;
 use App\Models\Student;
 use App\Models\User;
+use App\Models\PortalBranding;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,10 +26,13 @@ class RegisteredUserController extends Controller
      */
     public function create(): Response
     {
+        $branding = PortalBranding::where('status', 'Active')->first();
+
         $campus = Campus::all();
 
         return Inertia::render('Auth/Register', [
             'campus' => $campus,
+            'branding' => $branding,
         ]);
     }
 
