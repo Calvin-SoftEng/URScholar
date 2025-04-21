@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -310,23 +310,25 @@
 
                                     <div v-if="!noScholars">
                                         <div
-                                        v-if="requirements != 0 && allBatchesInactive === false && myInactive == false">
-                                        <button @click="toggleForwardRequirements"
-                                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                            <span class="font-normal">Forward Requirements</span>
-                                        </button>
-                                    </div>
-                                    <div v-else>
-                                        <button v-tooltip.left="'Scholars already submitted'" disabled
-                                            class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                            v-if="requirements != 0 && allBatchesInactive === false && myInactive == false">
+                                            <button @click="toggleForwardRequirements"
+                                                class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                                <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                                    class="text-base" />
+                                                <span class="font-normal">Forward Requirements</span>
+                                            </button>
+                                        </div>
+                                        <div v-else>
+                                            <button v-tooltip.left="'Scholars already submitted'" disabled
+                                                class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
                                                 border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
-                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                            <span class="font-normal">Forward Requirements</span>
-                                        </button>
+                                                <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                                    class="text-base" />
+                                                <span class="font-normal">Forward Requirements</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    </div>
-                                    
+
 
                                     <div v-if="payouts">
                                         <button @click="toggleView"
@@ -506,9 +508,14 @@
                                                                     </div>
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">
-                                                                        {{ batch.total_scholars
-                                                                            === batch.sub_total ? 'Complete' :
-                                                                            'Pending' }}</span>
+                                                                        {{
+                                                                            batch.status === 'Inactive'
+                                                                        ? 'Complete'
+                                                                        : (batch.total_scholars === batch.sub_total ?
+                                                                        'Complete' : 'Pending')
+                                                                        }}
+                                                                    </span>
+
                                                                 </div>
 
                                                                 <!-- Number of Students -->
@@ -549,7 +556,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -561,7 +568,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -622,7 +629,7 @@
                                                 <div class="flex flex-col px-5">
                                                     <span class="text-lg font-semibold text-gray-800">Batch {{
                                                         batch.batch_no
-                                                        }}</span>
+                                                    }}</span>
                                                     <span class="text-md font-medium text-gray-600">
                                                         {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester
                                                         }}
@@ -710,7 +717,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -868,7 +875,7 @@
                                                 <label for="datepicker-range-end"
                                                     class="text-sm font-medium text-gray-700 mb-1 dark:text-dtext">Application
                                                     Deadline</label>
-                                                    <InputError v-if="errors?.deadline" :message="errors.deadline"
+                                                <InputError v-if="errors?.deadline" :message="errors.deadline"
                                                     class="text-2xs text-red-500" />
                                                 <div class="relative">
                                                     <div
@@ -917,7 +924,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -942,8 +949,8 @@
                                                 </div>
 
                                                 <!-- Campus Selection List -->
-                                                    <InputError v-if="errors?.campus_recipients" :message="errors.campus_recipients"
-                                                    class="text-2xs text-red-500" />
+                                                <InputError v-if="errors?.campus_recipients"
+                                                    :message="errors.campus_recipients" class="text-2xs text-red-500" />
                                                 <div class="space-y-2">
                                                     <div v-for="campus in campusesData" :key="campus.id"
                                                         class="flex items-center justify-between border p-2 rounded-md">
@@ -1025,7 +1032,7 @@
                                                 </div>
 
                                                 <InputError v-if="errors?.conditions" :message="errors.conditions"
-                                                class="text-2xs text-red-500" />
+                                                    class="text-2xs text-red-500" />
                                                 <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
                                                     class="flex flex-col justify-center space-y-2 items-start">
                                                     <span
@@ -1048,7 +1055,7 @@
                                         </div>
 
                                         <InputError v-if="errors?.criteria" :message="errors.criteria"
-                                                class="text-2xs text-red-500" />
+                                            class="text-2xs text-red-500" />
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
                                             <div class="p-4 ">
                                                 <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
@@ -1078,7 +1085,7 @@
                                                 List Requirements
                                             </label>
                                             <InputError v-if="errors?.requirements" :message="errors.requirements"
-                                            class="text-2xs text-red-500" />
+                                                class="text-2xs text-red-500" />
                                             <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                                 <div class="flex items-center mb-4 w-full">
                                                     <form @submit.prevent="addItem" class="flex items-center w-full">
@@ -1336,8 +1343,7 @@
                                                     grantee.scholar?.student_status ===
                                                     'Enrolled').length}} Enrolled, {{batch.grantees.filter(grantee =>
                                                         grantee.scholar?.student_status ===
-                                                        'Unenrolled').length}} Unenrolled, {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
-                                                    'Transferred').length}} Transferred</p>
+                                                        'Unenrolled').length}} Unenrolled, {{batch.grantees.filter(grantee=>grantee.scholar?.student_status ==='Transferred').length}} Transferred</p>
                                             </div>
                                         </div>
                                         <span
@@ -1526,7 +1532,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                            }}
+                                        }}
                                         </p>
                                         <p v-if="batch.validated" class="text-sm text-gray-500">
                                             {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
@@ -1612,7 +1618,7 @@
                                     <div>
                                         <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
                                             batch.batch_no
-                                        }}</p>
+                                            }}</p>
                                         <p class="text-sm text-gray-500 dark:text-gray-400">
                                             Includes {{ batch.claimed_count }} Claimed, {{ batch.not_claimed_count }}
                                             Not

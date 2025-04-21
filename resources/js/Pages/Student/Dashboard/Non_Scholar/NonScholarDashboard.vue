@@ -67,7 +67,7 @@
 
     <!--Approved yung application mo pero di pa requirements-->
 
-    <div v-if="submitApproved != 0 && applicant.status == 'Approved'">
+    <div v-if="submitApproved != 0 && applicant.status == 'Pending'">
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">
@@ -230,7 +230,7 @@
 
 
     <!--Isa ka ng ganap na grantee-->
-    <div v-if="applicant.status == 'Approved' && submitApproved === 0 ">
+    <div v-if="applicant.status == 'Approved' && submitApproved != 0">
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">

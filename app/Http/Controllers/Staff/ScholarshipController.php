@@ -449,7 +449,7 @@ class ScholarshipController extends Controller
                                                 ) {
                                                     // Update batch status to Validated
                                                     $newBatch->update([
-                                                        'status' => 'Validated',
+                                                        'status' => 'Pending',
                                                         'validated' => true
                                                     ]);
                                                 }
@@ -746,7 +746,7 @@ class ScholarshipController extends Controller
 
         foreach ($Mybatches as $batch) {
             if (
-                $batch && $batch->status == 'Inactive' || $batch->status == 'Pending'
+                $batch && $batch->status == 'Inactive'
             ) {
                 $noScholars = true;
                 break;
