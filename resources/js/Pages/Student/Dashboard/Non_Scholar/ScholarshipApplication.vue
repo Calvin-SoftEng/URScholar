@@ -76,7 +76,7 @@
                                                         class="flex items-center space-x-2">
                                                         <span class="text-blue-600 font-medium">✔</span>
                                                         <span class="text-gray-700 dark:text-gray-300">{{ criterion
-                                                            }}</span>
+                                                        }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -91,7 +91,7 @@
                                                         class="flex items-center space-x-2">
                                                         <span class="text-green-600">✅</span>
                                                         <span class="text-gray-700 dark:text-gray-300">{{ detail
-                                                            }}</span>
+                                                        }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -122,6 +122,8 @@
                                                 Answer the following question briefly and concisely</p>
                                         </div>
 
+                                        <InputError v-if="errors?.essay" :message="errors.essay"
+                                            class="text-2xs text-red-500" />
                                         <div class="col-span-3 md:col-span-2">
                                             <label for="essay"
                                                 class="block text-sm font-semibold text-gray-900 dark:text-white mb-1">
@@ -162,6 +164,8 @@
 
                                         </div>
 
+                                        <InputError v-if="errors?.files" :message="errors.files"
+                                            class="text-2xs text-red-500" />
                                         <div class="col-span-2 md:col-span-2">
                                             <div v-for="(requirement, index) in requirements" :key="requirement.id"
                                                 class="border rounded-lg p-4 bg-white shadow-sm mb-3 max-w-xl">
@@ -203,7 +207,7 @@
                                                                 title="{{ form.files[requirement.id].name }}">
                                                                 {{ form.files[requirement.id].name.length > 30 ?
                                                                     form.files[requirement.id].name.substring(0, 30) + '...'
-                                                                : form.files[requirement.id].name }}
+                                                                    : form.files[requirement.id].name }}
                                                             </p>
                                                             <p class="text-xs text-gray-500">{{
                                                                 form.files[requirement.id].size }}</p>
@@ -280,7 +284,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref } from 'vue';
 import { Head, Link, useForm } from '@inertiajs/vue3';
-import { onMounted, watchEffect, watch, computed, nextTick } from 'vue';
+import { onMounted, onUnmounted, watchEffect, watch, computed, nextTick } from 'vue';
+import InputError from '@/Components/InputError.vue';
 
 
 const activeTab = ref("eligibility");
@@ -322,6 +327,10 @@ const props = defineProps({
     },
     templates: {
         type: Array,
+        required: true
+    },
+    errors: {
+        type: Object,
         required: true
     }
 });
@@ -460,8 +469,50 @@ const userDetails = ref([
 //   file.value = null;
 // };
 
+onMounted(() => {
+    // Set up event listeners for user activity to adjust reload interval
+    const activityEvents = ['mousedown', 'keydown', 'touchstart', 'scroll'];
+    activityEvents.forEach(event => {
+        window.addEventListener(event, handleUserActivity);
+    });
 
+    // Start the auto reload
+    startAutoReload(60000); // Check every minute by default
 
+    // Original event listener
+    window.addEventListener('popstate', () => {
+        window.location.reload();
+    });
+
+    // If handleClickOutside is used in the original code
+    if (typeof handleClickOutside === 'function') {
+        document.addEventListener('click', handleClickOutside);
+    }
+});
+
+onUnmounted(() => {
+    // Clean up all event listeners and intervals
+    stopAutoReload();
+
+    const activityEvents = ['mousedown', 'keydown', 'touchstart', 'scroll'];
+    activityEvents.forEach(event => {
+        window.removeEventListener(event, handleUserActivity);
+    });
+
+    if (userActivityTimeout.value) {
+        clearTimeout(userActivityTimeout.value);
+    }
+
+    // Original event listener cleanup
+    window.removeEventListener('popstate', () => {
+        window.location.reload();
+    });
+
+    // If handleClickOutside is used in the original code
+    if (typeof handleClickOutside === 'function') {
+        document.removeEventListener('click', handleClickOutside);
+    }
+});
 
 </script>
 

@@ -38,7 +38,9 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" :alt="`${grantee.full_name}'s profile`" />
+                          <img
+                            :src="`/storage/user/profile/${grantee.picture}` || '../../../../assets/images/no_userpic.png'"
+                            alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
                       <div>

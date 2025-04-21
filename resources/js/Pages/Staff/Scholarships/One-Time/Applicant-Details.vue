@@ -77,7 +77,8 @@
                                                         <span
                                                             class="text-xs font-semibold uppercase text-gray-500">Email
                                                             Address</span>
-                                                        <p class="text-lg font-poppins text-primary">{{ scholar.email }}</p>
+                                                        <p class="text-lg font-poppins text-primary">{{ scholar.email }}
+                                                        </p>
                                                     </div>
                                                     <div class="text-black">
                                                         <span
@@ -117,12 +118,14 @@
                                     <div class="flex flex-col p-2 space-y-2">
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">Program</span>
-                                            <span class="text-lg font-poppins text-primary">{{ scholar.course.name }}</span>
+                                            <span class="text-lg font-poppins text-primary">{{ scholar.course.name
+                                                }}</span>
                                         </div>
                                         <div class="flex flex-col text-black">
                                             <span class="font-semibold uppercase text-xs text-gray-500">General Weighted
                                                 Average</span>
-                                            <span class="text-2xl font-bold" :class="grade ? 'text-primary' : 'text-red-500'">
+                                            <span class="text-2xl font-bold"
+                                                :class="grade ? 'text-primary' : 'text-red-500'">
                                                 {{ grade ? grade.grade : 'No grade Uploaded' }}
                                             </span>
 
@@ -157,7 +160,8 @@
                                         <div v-if="mother.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl font-poppins text-primary">{{ mother.occupation }}</span>
+                                            <span class="text-xl font-poppins text-primary">{{ mother.occupation
+                                                }}</span>
                                         </div>
                                     </div>
 
@@ -179,7 +183,8 @@
                                         <div v-if="father.first_name !== 'n\/a'" class="flex flex-col text-black">
                                             <span
                                                 class="font-semibold uppercase text-xs text-gray-500">Occupation</span>
-                                            <span class="text-xl font-poppins text-primary">{{ father.occupation }}</span>
+                                            <span class="text-xl font-poppins text-primary">{{ father.occupation
+                                                }}</span>
                                         </div>
                                     </div>
 
@@ -289,12 +294,11 @@
 
                                     </div>
                                     <div class="flex flex-row w-full gap-3">
-                                    <!-- Approve Button -->
-                                    <button @click="updateApplicantStatus('Approve')"
-                                        class="w-full px-4 py-2 border-2 border-green-600 text-green-600 font-semibold text-base rounded-md hover:bg-green-400 transition"
-                                    >
-                                        Approve
-                                    </button>
+                                        <!-- Approve Button -->
+                                        <button @click="updateApplicantStatus('Approve')"
+                                            class="w-full px-4 py-2 border-2 border-green-600 text-green-600 font-semibold text-base rounded-md hover:bg-green-400 transition">
+                                            Approve
+                                        </button>
 
                                         <!-- Reject Button -->
                                         <button type="button" @click="updateApplicantStatus('Reject')"
@@ -464,7 +468,7 @@
                     </div>
 
                     <!-- Close Button -->
-                    <div v-if="props.scholar.campus_id === $page.props.auth.user.campus_id"
+                    <div v-if="props.scholar.campus_id === $page.props.auth.user.campus_id && applicant.status === 'Approved'"
                         class="mt-2 flex flex-row justify-between">
                         <button type="button" @click="updateRequirementStatus('Returned')"
                             class="text-white font-sans w-full bg-gradient-to-r from-red-700 via-red-800 to-red-900 hover:bg-gradient-to-br focus:ring-4 focus:outline-none shadow-lg font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
@@ -662,8 +666,8 @@ const closeModal = () => {
 const returnMessage = ref('');
 
 const updateApplicantStatus = (status) => {
-// Send an update request to the backend
-router.post('/scholarships/scholar/update-applicant', {
+    // Send an update request to the backend
+    router.post('/scholarships/scholar/update-applicant', {
         scholar_id: props.scholar.id,
         status: status,
     }, {

@@ -1496,6 +1496,8 @@ class ScholarshipController extends Controller
             'batch' => $batch,
             'grantees' => $batch->grantees->map(function ($grantee) {
                 $scholar = $grantee->scholar;
+
+                $user = User::where('id', $scholar->user_id)->first();
                 return [
                     'id' => $grantee->id,
                     'scholar_id' => $scholar->id,
@@ -1505,6 +1507,7 @@ class ScholarshipController extends Controller
                     'course' => $scholar->course->name ?? 'N/A',
                     'year_level' => $scholar->year_level,
                     'student_status' => $grantee->student_status,
+                    'picture' => $user->picture,
                     'status' => $grantee->status,
                 ];
             }),
@@ -1657,7 +1660,7 @@ class ScholarshipController extends Controller
                 $originalName = $file->getClientOriginalName();
 
                 // Generate unique filename
-                $filename = time() . '_' . $originalName;
+                $filename = $originalName;
 
                 // Store the file in storage/app/public/templates
                 $path = $file->storeAs('templates', $filename, 'public');

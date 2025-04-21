@@ -1665,9 +1665,18 @@ class StudentController extends Controller
         $request->validate([
             'scholarship_id' => 'required|exists:scholarships,id',
             'essay' => 'required|string',
-            'files.*' => 'required|file|',
+            'files.*' => 'required|file',
+            'files' => 'required|array',
             'req' => 'array'
+        ], [
+            'scholarship_id.required' => 'Please select a scholarship.',
+            'scholarship_id.exists' => 'The selected scholarship is invalid.',
+            'essay.required' => 'Your essay is required.',
+            'essay.string' => 'The essay must be a valid text.',
+            'files.required' => 'Each file is required.',
+            'files.*.file' => 'Each uploaded item must be a valid file.',
         ]);
+        
 
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
 
