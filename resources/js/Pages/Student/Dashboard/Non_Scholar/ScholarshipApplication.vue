@@ -386,7 +386,6 @@ const steps = ref([
 const goToStep = (index) => {
     activeStep.value = index;
     nextTick(() => {
-        initDatepicker(); // Reinitialize datepicker after the step changes
         restoreFileInput();
     });
 };
@@ -395,7 +394,6 @@ const nextStep = () => {
     if (activeStep.value < steps.value.length - 1) {
         activeStep.value++;
         nextTick(() => {
-            initDatepicker(); // Reinitialize datepicker after the step changes
             restoreFileInput();
         });
     }
@@ -405,7 +403,6 @@ const prevStep = () => {
     if (activeStep.value > 0) {
         activeStep.value--;
         nextTick(() => {
-            initDatepicker(); // Reinitialize datepicker after the step changes
             restoreFileInput();
         });
     }
@@ -443,50 +440,6 @@ const userDetails = ref([
 //   file.value = null;
 // };
 
-onMounted(() => {
-    // Set up event listeners for user activity to adjust reload interval
-    const activityEvents = ['mousedown', 'keydown', 'touchstart', 'scroll'];
-    activityEvents.forEach(event => {
-        window.addEventListener(event, handleUserActivity);
-    });
-
-    // Start the auto reload
-    startAutoReload(60000); // Check every minute by default
-
-    // Original event listener
-    window.addEventListener('popstate', () => {
-        window.location.reload();
-    });
-
-    // If handleClickOutside is used in the original code
-    if (typeof handleClickOutside === 'function') {
-        document.addEventListener('click', handleClickOutside);
-    }
-});
-
-onUnmounted(() => {
-    // Clean up all event listeners and intervals
-    stopAutoReload();
-
-    const activityEvents = ['mousedown', 'keydown', 'touchstart', 'scroll'];
-    activityEvents.forEach(event => {
-        window.removeEventListener(event, handleUserActivity);
-    });
-
-    if (userActivityTimeout.value) {
-        clearTimeout(userActivityTimeout.value);
-    }
-
-    // Original event listener cleanup
-    window.removeEventListener('popstate', () => {
-        window.location.reload();
-    });
-
-    // If handleClickOutside is used in the original code
-    if (typeof handleClickOutside === 'function') {
-        document.removeEventListener('click', handleClickOutside);
-    }
-});
 
 </script>
 

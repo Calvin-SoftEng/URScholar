@@ -35,8 +35,10 @@ class SystemAdminController extends Controller
     public function portal_branding()
     {
 
-
-        return Inertia::render('MIS/System_Config/Portal_Branding');
+        $branding = PortalBranding::where('status', 'Active')->first();
+        return Inertia::render('MIS/System_Config/Portal_Branding', [
+            'branding' => $branding,
+        ]);
     }
 
     public function portal_branding_store(Request $request)
