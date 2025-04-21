@@ -39,7 +39,7 @@
                 connection, and continuous support.
             </p>
             <Link :href="route('login')">
-                <button class="btn bg-white shadow text-primary sm:text-sm lg:text-2xl font-bold font-sora sm:mt-5 lg:mt-8 sm:px-5 lg:px-12">
+                <button class="bg-white shadow text-primary rounded-lg sm:text-sm lg:text-2xl font-bold py-3 font-sora sm:mt-5 lg:mt-8 sm:px-5 lg:px-12">
                     Check Now
                 </button>
             </Link>
