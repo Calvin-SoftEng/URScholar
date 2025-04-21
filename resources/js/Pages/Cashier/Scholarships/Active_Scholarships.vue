@@ -33,22 +33,21 @@
                     <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         <button v-for="scholarship in scholarships" :key="scholarship.id" class="w-full h-full">
                             <div v-for="payout in getPayoutsForScholarship(scholarship.id)" :key="payout.id">
-                                <Link :href="`/cashier/payouts/${payout.id}`" class="block h-full">
+                                <Link :href="`/cashier/payouts/${payout.id}`" class=" h-full">
                                 <div class="card relative border bg-white hover:shadow-xl hover:border-gray-400 dark:bg-dcontainer 
                                             dark:border-gray-600 dark:hover:border-gray-400 flex flex-col h-full">
                                     <div class="card-body p-5 space-y-2 flex flex-col flex-grow">
-                                        <!-- Sponsor Badge -->
+
                                         <div class="badge badge-info text-[12px] badge-outline">
                                             {{ getSponsorName(scholarship.sponsor_id) }}
                                         </div>
 
-                                        <!-- Scholarship Title -->
                                         <h2
                                             class="card-title text-4xl text-gray-800 font-sora font-semibold dark:text-dtext">
                                             {{ scholarship.name }}
                                         </h2>
 
-                                        <!-- Sponsoring Since -->
+
                                         <p class="text-sm text-gray-400">
                                             Sponsoring Since:
                                             {{ new Date(scholarship.created_at).toLocaleDateString('en-US', {
@@ -56,22 +55,12 @@
                                             }) }}
                                         </p>
 
-                                        <!-- Active Payouts -->
+
                                         <div class="flex flex-col flex-grow mt-4 justify-end">
                                             <p class="text-sm text-gray-400 mb-2 text-start">Payouts:</p>
 
                                             <div
                                                 class="max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-dprimary dark:scrollbar-track-dcontainer flex flex-col gap-2">
-                                                <!-- No Scholarships Available -->
-                                                <!-- <div v-if="sponsor.scholarship.length === 0" 
-                                                    class="p-3 text-gray-500 text-center bg-gray-100 rounded-lg border border-gray-300 shadow-sm 
-                                                        dark:bg-dsecondary dark:text-gray-400 dark:border-gray-600 flex items-center justify-center h-full">
-                                                    No scholarships available.
-                                                </div> -->
-
-                                                <!-- Scholarships List -->
-                                                <!-- <div v-for="scholarship in sponsor.scholarship" :key="scholarship.id"> -->
-
                                                 <div>
                                                     <div class="flex flex-row p-3 rounded-xl bg-gradient-to-r from-blue-500 to-blue-700 border border-blue-400 shadow-lg 
                                                         hover:shadow-xl transition-all duration-300 justify-between items-center text-white 
