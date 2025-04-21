@@ -375,6 +375,7 @@ class ScholarController extends Controller
                 // Only decrease if the total is greater than 0
                 if ($batch->total_scholars > 0) {
                     $batch->total_scholars = $batch->total_scholars - 1;
+                    $batch->sub_total = $batch->sub_total - 1;
                 }
             }
 

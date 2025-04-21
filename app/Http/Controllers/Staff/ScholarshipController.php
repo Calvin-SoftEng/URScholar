@@ -801,6 +801,17 @@ class ScholarshipController extends Controller
             }
         }
 
+        $myvalidated = false;
+
+        foreach ($Mybatches as $batch) {
+            if (
+                $batch && $batch->validated == true
+            ) {
+                $myvalidated = true;
+                break;
+            }
+        }
+
         // Change the logic to check if all batches are validated
         $AllvalidationStatus = true; // Start by assuming all are validated
 
@@ -987,6 +998,7 @@ class ScholarshipController extends Controller
             'completedBatches' => $completedBatches,
             'inactiveBatches' => $inactiveBatches,
             'accomplishedBatches' => $accomplishedBatches,
+            'myvalidated' => $myvalidated,
             'activeBatches' => $activeBatches,
             'allInactive' => $allInactive,
             'myInactive' => $myInactive,
