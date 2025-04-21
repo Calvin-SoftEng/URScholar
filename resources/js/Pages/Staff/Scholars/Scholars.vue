@@ -9,15 +9,27 @@
               Home
             </li>
             <li>
-              <span class="text-blue-400 font-semibold">Scholars</span>
+              <span class="text-blue-400 font-semibold">Grantees</span>
             </li>
           </ul>
         </div>
 
-
         <!-- Header section with title and search -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
           <div class="flex flex-row items-center gap-4">
+            <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
+              <!-- Icon -->
+              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
+                <font-awesome-icon :icon="['fas', 'award']" class="text-2xl" />
+              </div>
+
+              <!-- Text Content -->
+              <div class="flex flex-col">
+                <span class="font-normal text-base text-gray-600">Total Active Grantees</span>
+                <span class="font-semibold text-xl text-gray-900">{{ filteredGrantees.length }}</span>
+              </div>
+            </div>
+
             <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
               <!-- Icon -->
               <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
@@ -26,21 +38,8 @@
 
               <!-- Text Content -->
               <div class="flex flex-col">
-                <span class="font-normal text-base text-gray-600">Total Active Scholars</span>
-                <span class="font-semibold text-xl text-gray-900">{{ filteredScholars.length }}</span>
-              </div>
-            </div>
-
-            <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
-              <!-- Icon -->
-              <div class="bg-blue-100 text-blue-600 p-3 rounded-full">
-                <font-awesome-icon :icon="['fab', 'google-scholar']" class="text-2xl" />
-              </div>
-
-              <!-- Text Content -->
-              <div class="flex flex-col">
-                <span class="font-normal text-base text-gray-600">Total Active Scholarships</span>
-                <span class="font-semibold text-xl text-gray-900">{{ props.scholars.length }}</span>
+                <span class="font-normal text-base text-gray-600">Total Scholars</span>
+                <span class="font-semibold text-xl text-gray-900">{{ uniqueScholarsCount }}</span>
               </div>
             </div>
           </div>
@@ -118,13 +117,13 @@
         </div>
 
         <!-- table -->
-        <!-- Empty state message when no students are available -->
+        <!-- Empty state message when no grantees are available -->
         <div class="w-full mt-5">
-          <div v-if="!filteredScholars || filteredScholars.length === 0"
+          <div v-if="!filteredGrantees || filteredGrantees.length === 0"
             class="flex flex-col items-center justify-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-            <font-awesome-icon :icon="['fas', 'graduation-cap']"
+            <font-awesome-icon :icon="['fas', 'award']"
               class="text-blue-600 text-2xl flex-shrink-0 w-16 h-16" />
-            <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No Scholar Available</h3>
+            <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No Grantees Available</h3>
           </div>
 
           <div v-else
@@ -136,14 +135,14 @@
                 <!-- head -->
                 <thead class="sticky top-0 z-10 shadow-sm bg-white">
                   <tr class="font-normal text-xs uppercase">
-                    <th class="border-x border-gray-100 px-4 py-2">URScholar ID</th>
+                    <th class="border-x border-gray-100 px-4 py-2">Grantee ID</th>
                     <th class="border-x border-gray-100 px-4 py-2">Scholar</th>
                     <th class="border-x border-gray-100 px-4 py-2">Course</th>
                     <th class="border-x border-gray-100 px-4 py-2">Campus</th>
                     <th class="border-x border-gray-100 px-4 py-2">Scholarship</th>
-                    <th class="border-x border-gray-100 px-4 py-2">Grant</th>
-                    <th class="border-x border-gray-100 px-4 py-2">Email</th>
-                    <th class="border-x border-gray-100 px-4 py-2">Phone</th>
+                    <th class="border-x border-gray-100 px-4 py-2">Batch</th>
+                    <th class="border-x border-gray-100 px-4 py-2">Academic Year</th>
+                    <th class="border-x border-gray-100 px-4 py-2">Semester</th>
                     <th class="border-x border-gray-100 px-4 py-2">Status</th>
                     <th
                       class="sticky right-0 z-30 bg-white px-6 py-2 border-l border-gray-200 text-sm font-semibold text-center">
@@ -152,28 +151,30 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="scholar in filteredScholars" :key="scholar.id" class="text-sm bg-white">
-                    <td class="px-10 py-8">{{ scholar.urscholar_id }}</td>
+                  <tr v-for="grantee in filteredGrantees" :key="grantee.id" class="text-sm bg-white">
+                    <td class="px-10 py-8">{{ grantee.id }}</td>
                     <td class="px-10">
                       <div class="flex items-center gap-3">
                         <div class="avatar">
                           <div class="mask rounded-full h-12 w-12">
-                            <img :src="`/storage/user/profile/${scholar.user?.picture}`" alt="Profile Picture"
+                            <img :src="`/storage/user/profile/${grantee.scholar?.user?.picture}`" alt="Profile Picture"
                               class="w-full h-full object-cover">
                           </div>
                         </div>
                         <div>
                           <div class="font-normal">
-                            {{ scholar.last_name }}, {{ scholar.first_name }} {{ scholar.middle_name }}
-                            <font-awesome-icon v-if="scholar.sex === 'Male'" :icon="['fas', 'mars']"
+                            {{ grantee.scholar?.last_name }}, {{ grantee.scholar?.first_name }} {{ grantee.scholar?.middle_name }}
+                            <font-awesome-icon v-if="grantee.scholar?.sex === 'Male'" :icon="['fas', 'mars']"
                               class="text-blue-500" />
-                            <font-awesome-icon v-if="scholar.sex === 'Female'" :icon="['fas', 'venus']"
+                            <font-awesome-icon v-if="grantee.scholar?.sex === 'Female'" :icon="['fas', 'venus']"
                               class="text-pink-500" />
                           </div>
-
                           <div class="text-sm opacity-50">
-                            <span> <font-awesome-icon :icon="['far', 'calendar']" class="mr-1 text-gray-500" /> {{
-                              formatDate(scholar.birthdate) }}</span>
+                            <span>URScholar ID: {{ grantee.scholar?.urscholar_id }}</span>
+                          </div>
+                          <div class="text-sm opacity-50">
+                            <span><font-awesome-icon :icon="['far', 'calendar']" class="mr-1 text-gray-500" /> {{
+                              formatDate(grantee.scholar?.birthdate) }}</span>
                           </div>
                         </div>
                       </div>
@@ -181,42 +182,51 @@
                     <td class="px-10 items-center">
                       <span class="material-symbols-rounded text-sm text-gray-400 mr-1">
                         local_library
-                      </span> {{ scholar.course.name }}
+                      </span> {{ grantee.scholar?.course?.name }}
                       <br />
-                      <span class="badge badge-ghost badge-base">{{ scholar.year_level }}{{
-                        getYearSuffix(scholar.year_level) }} year</span>
+                      <span class="badge badge-ghost badge-base">{{ grantee.scholar?.year_level }}{{
+                        getYearSuffix(grantee.scholar?.year_level) }} year</span>
                     </td>
                     <td class="px-10">
-                      {{ scholar.campus.name }}
+                      {{ grantee.scholar?.campus?.name }}
                     </td>
                     <td class="px-10">
-                      Tulong Dunong
+                      {{ grantee.scholarship?.name || "Tulong Dunong" }}
                       <br />
-                      <span class="badge badge-ghost badge-sm">{{ scholar.grant }}</span>
+                      <span class="badge badge-ghost badge-sm">{{ grantee.scholar?.grant }}</span>
                     </td>
                     <td class="px-10">
-                      Batch {{ scholar.batch_no }}
-                      <br />
-                      <span class="badge badge-ghost badge-sm">{{ getScholarSemester(scholar) }}</span>
+                      Batch {{ grantee.batch?.name || grantee.batch?.batch_no }}
                     </td>
-                    <td class="px-5">
-                      <font-awesome-icon :icon="['fas', 'at']" class="mr-1 text-gray-500" /> {{ scholar.email ?
-                        scholar.email : 'dummy@gmail.com' }}
+                    <td class="px-10">
+                      {{ getAcademicYearName(grantee.school_year_id) }}
                     </td>
-                    <td class="px-5">
-                      <font-awesome-icon :icon="['fas', 'phone']" class="mr-1 text-gray-500" /> 0493245293
+                    <td class="px-10">
+                      {{ grantee.semester === '1st' ? 'First Semester' : 'Second Semester' }}
                     </td>
                     <td class="px-5">
                       <span :class="{
-                        'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': scholar.status === 'Verified',
-                        'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': scholar.status !== 'Verified'
+                        'bg-green-100 text-green-800 dark:bg-gray-700 dark:text-green-400 border border-green-400': grantee.status === 'Active',
+                        'bg-blue-100 text-blue-800 dark:bg-gray-700 dark:text-blue-400 border border-blue-400': grantee.status === 'Accomplished',
+                        'bg-yellow-100 text-yellow-800 dark:bg-gray-700 dark:text-yellow-400 border border-yellow-400': grantee.status === 'Pending',
+                        'bg-red-100 text-red-800 dark:bg-gray-700 dark:text-red-400 border border-red-400': grantee.status === 'Inactive'
                       }" class="text-xs font-medium px-2.5 py-0.5 rounded">
-                        {{ scholar.status }}
+                        {{ grantee.status }}
+                      </span>
+                      <br>
+                      <span class="text-xs font-medium mt-1 inline-block">
+                        Scholar Status: 
+                        <span :class="{
+                          'text-green-600': grantee.scholar?.status === 'Verified',
+                          'text-red-600': grantee.scholar?.status !== 'Verified'
+                        }">
+                          {{ grantee.scholar?.status }}
+                        </span>
                       </span>
                     </td>
                     <td class="sticky right-0 z-20 bg-white px-6 py-2 border-gray-200 text-center"
                       style="box-shadow: -4px 0 6px -2px rgba(0,0,0,1);">
-                      <button @click="() => openScholar(scholar)"
+                      <button @click="() => openGranteeDetails(grantee)"
                         class="p-2 border bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                         aria-label="View Details">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -254,16 +264,15 @@ const components = {
   FileUpload,
 };
 
-const openScholar = (scholar) => {
-  router.visit(`/urs-scholars/scholar-information/${scholar.id}`, {
+const openGranteeDetails = (grantee) => {
+  router.visit(`/urs-scholars/grantee-information/${grantee.id}`, {
     preserveState: true
   });
 };
 
 // Props definition with user type and coordinator campus
 const props = defineProps({
-  scholarship: Object,
-  scholars: Array,
+  grantees: Array,
   academicYear: Array,
   campus: Array,
   userType: {
@@ -285,69 +294,87 @@ const selectedCampus = ref(props.coordinatorCampus ? parseInt(props.coordinatorC
 const searchQuery = ref('');
 
 // Create academic year options
+// Create academic year options
 const academicYearOptions = computed(() => {
-  if (!props.academicYear) return [];
+  if (!props.academicYear || props.academicYear.length === 0) return [];
   
-  return props.academicYear.map(year => ({
-    id: year.school_year_id,
-    name: year.school_year ? year.school_year.year : 'Unknown Year'
-  })).filter((v, i, a) => a.findIndex(t => t.id === v.id) === i); // Remove duplicates
+  // Make sure we're properly accessing the school year data
+  return props.academicYear
+    .filter(year => year.school_year) // Make sure school_year exists
+    .map(year => ({
+      id: year.school_year_id,
+      name: year.school_year.name || year.school_year.year || `${year.school_year_id}`
+    }))
+    .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i); // Remove duplicates
 });
 
-// Get semester info for a scholar
-const getScholarSemester = (scholar) => {
-  if (!scholar.semester || !scholar.school_year_id) return 'Unknown';
+// Count of unique scholars
+const uniqueScholarsCount = computed(() => {
+  if (!props.grantees) return 0;
   
-  const academicYear = props.academicYear.find(ay => 
-    ay.school_year_id === scholar.school_year_id && ay.semester === scholar.semester
-  );
+  const uniqueScholarIds = new Set();
+  props.grantees.forEach(grantee => {
+    if (grantee.scholar?.id) {
+      uniqueScholarIds.add(grantee.scholar.id);
+    }
+  });
   
-  if (!academicYear || !academicYear.school_year) return 'Unknown';
-  
-  const semesterText = scholar.semester === '1st' ? 'First Semester' : 'Second Semester';
-  return `${semesterText} - ${academicYear.school_year.name}`;
+  return uniqueScholarIds.size;
+});
+
+// Get academic year name by ID
+const getAcademicYearName = (schoolYearId) => {
+  const year = props.academicYear.find(year => year.school_year_id === schoolYearId);
+  return year?.school_year?.name || 'Unknown Academic Year';
 };
 
-// Filtered scholars based on all criteria
-const filteredScholars = computed(() => {
-  if (!props.scholars) return [];
+// Filtered grantees based on all criteria
+const filteredGrantees = computed(() => {
+  if (!props.grantees) return [];
 
-  let filtered = props.scholars;
+  let filtered = props.grantees;
 
   // Apply school year filter
   if (selectedSchoolYear.value) {
-    filtered = filtered.filter(scholar => scholar.school_year_id === selectedSchoolYear.value);
+    filtered = filtered.filter(grantee => grantee.school_year_id === selectedSchoolYear.value);
   }
 
   // Apply semester filter
   if (selectedSemester.value) {
-    filtered = filtered.filter(scholar => scholar.semester === selectedSemester.value);
+    filtered = filtered.filter(grantee => grantee.semester === selectedSemester.value);
   }
 
   // Apply campus filter
   if (selectedCampus.value) {
-    filtered = filtered.filter(scholar => scholar.campus_id === selectedCampus.value);
+    filtered = filtered.filter(grantee => grantee.scholar?.campus_id === selectedCampus.value);
   }
 
   // Apply search filter
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase();
 
-    filtered = filtered.filter(scholar =>
-      scholar.first_name?.toLowerCase().includes(query) ||
-      scholar.last_name?.toLowerCase().includes(query) ||
-      scholar.middle_name?.toLowerCase().includes(query) ||
-      scholar.email?.toLowerCase().includes(query) ||
-      scholar.course?.name?.toLowerCase().includes(query) ||
-      scholar.campus?.name?.toLowerCase().includes(query) ||
-      scholar.grant?.toLowerCase().includes(query)
+    filtered = filtered.filter(grantee =>
+      grantee.scholar?.first_name?.toLowerCase().includes(query) ||
+      grantee.scholar?.last_name?.toLowerCase().includes(query) ||
+      grantee.scholar?.middle_name?.toLowerCase().includes(query) ||
+      grantee.scholar?.email?.toLowerCase().includes(query) ||
+      grantee.scholar?.course?.name?.toLowerCase().includes(query) ||
+      grantee.scholar?.campus?.name?.toLowerCase().includes(query) ||
+      grantee.scholar?.grant?.toLowerCase().includes(query) ||
+      grantee.batch?.name?.toLowerCase().includes(query) ||
+      grantee.status?.toLowerCase().includes(query)
     );
   }
 
-  return filtered.sort((a, b) => (a.status === 'Verified' ? -1 : 1));
+  // Sort by grantee status (Active and Accomplished first)
+  return filtered.sort((a, b) => {
+    const statusOrder = { 'Active': 0, 'Accomplished': 1, 'Pending': 2, 'Inactive': 3 };
+    return statusOrder[a.status] - statusOrder[b.status];
+  });
 });
 
 const getYearSuffix = (year) => {
+  if (!year) return "";
   if (year === 1) return "st";
   if (year === 2) return "nd";
   if (year === 3) return "rd";
@@ -382,7 +409,7 @@ const headers = ref([]);
 const error = ref('');
 
 function expandAll() {
-  expandedRows.value = products.value.reduce((acc, p) => (acc[p.id] = true) && acc, {});
+  expandedRows.value = filteredGrantees.value.reduce((acc, p) => (acc[p.id] = true) && acc, {});
 }
 
 function collapseAll() {
@@ -460,21 +487,20 @@ const clearPreview = () => {
 
 const onUpload = async (event) => {
   form.file = event.files[0];
-
-  const response = await form.post(`/scholarships/${props.scholarship.id}/upload`);
-
-  if (response.ok) {
+  
+  try {
+    await form.post(`/grantees/upload`);
     headers.value = [];
     previewData.value = [];
     error.value = "";
     document.getElementById('file-upload').value = null;
-  } else {
+  } catch (err) {
     error.value = "Failed to upload file. Please try again.";
   }
 };
 
 const uploadCSV = () => {
-  form.post(`/scholarships/${props.scholarship.id}/upload`, {
+  form.post(`/grantees/upload`, {
     preserveScroll: true,
   });
 };
