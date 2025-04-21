@@ -20,6 +20,10 @@ defineProps({
     status: {
         type: String,
     },
+    branding: {
+        type: Object,
+        required: true,
+    },
 });
 
 const showPassword = ref(false);
@@ -122,8 +126,9 @@ const unblockUser = () => {
                 <Link :href="(route('welcome'))" class="absolute z-10 flex justify-center items-center w-full h-full" >
                     <!-- logo and branding -->
                     <div class="flex flex-row gap-2 justify-center items-center px-2" v-tooltip="'Back to Home Page'">
-                        <img src="../../../assets/images/main_logo_white.png" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
-                        <span class="font-poppins text-3xl font-bold text-white tracking-tight">URScholar</span>
+                        <img :src="`/storage/branding/logos/${branding.logo_light}`" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+                        <span class="font-poppins text-3xl font-bold text-white tracking-tight">{{branding.branding_name}}
+</span>
                     </div>
                 </Link>
                 <!-- background -->

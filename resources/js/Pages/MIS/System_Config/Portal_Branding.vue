@@ -20,7 +20,7 @@
       <div class="flex flex-row justify-between w-full">
         <h1 class="text-xl font-semibold font-quicksand text-dprimary dark:text-dtext mb-4">Branding Settings</h1>
         <div class="space-x-2">
-          <button @click="cancelChanges" type="button"
+          <button v-if="changesApplied" @click="cancelChanges" type="button"
             class="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors">
             Cancel
           </button>

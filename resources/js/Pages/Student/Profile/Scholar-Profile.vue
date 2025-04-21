@@ -3,7 +3,7 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <form @submit.prevent="submit" class="w-full h-full overflow-hidden">
+        <div class="w-full h-full overflow-hidden">
             <div class="w-full bg-dirtywhite dark:bg-dcontainer shadow-sm justify-between flex flex-row">
                 <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
                     My Profile
@@ -55,6 +55,7 @@
                     <!-- Mobile Display------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
 
                     <!-- Mobile Wrapper: Visible on mobile screens -->
+                    
                     <div class="block md:hidden">
                         <!-- Content for Mobile -->
                         <div v-if="!EditProfileMobile"
@@ -424,7 +425,7 @@
                         </div>
 
                         <!-- Mobile Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
+                        <form @submit.prevent="submit">
                         <div v-if="EditProfileMobile"
                             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
                             <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
@@ -1032,6 +1033,7 @@
 
                             </div>
                         </div>
+                        </form>
                     </div>
 
                     <!-- Web------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -1451,7 +1453,7 @@
                     </div>
 
                     <!-- Web Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
-
+                    <form @submit.prevent="submit">
                     <div v-if="EditProfileWeb" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
                         <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                             <!-- Upload & Preview Section -->
@@ -2145,10 +2147,12 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
+                    </form>
                 </div>
             </div>
-        </form>
+        </div>
 
         <!-- closing form ------------------------------------------------------------------------------------------------------------------------------------------------------------------ -->
 

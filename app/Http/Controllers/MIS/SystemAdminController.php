@@ -51,7 +51,7 @@ class SystemAdminController extends Controller
             'status' => 'required|in:Active,Inactive',
         ]);
 
-        dd($request->all());
+
         // Find existing active branding or create new
         $branding = PortalBranding::where('status', 'Active')->first();
         if (!$branding) {

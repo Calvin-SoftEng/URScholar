@@ -64,6 +64,6 @@ function handleImageError() {
         <Section_3 />
         <Section_4 :sponsors="sponsors" />
         <Section_5 :scholarships="scholarships" :sponsors="sponsors" :schoolyears="schoolyears" />
-        <SectionFooter />
+        <SectionFooter :branding="branding" />
     </div>
 </template>
