@@ -28,10 +28,11 @@
                         </div>
 
                         <!-- Recent Activities Section (Hidden on Mobile) -->
-                        <div
-                            class="hidden sm:block w-full space-y-3 bg-white dark:bg-dcontainer shadow-lg rounded-lg p-3">
+                        <div class="hidden sm:block w-full space-y-3 bg-white dark:bg-dcontainer shadow-lg rounded-lg p-3">
                             <span class="pl-2 font-semibold text-gray-700 dark:text-dtext">Recent Activities</span>
-                            <div class="w-full space-y-3 flex flex-col">
+
+                            <!-- Scrollable Activity Log -->
+                            <div class="w-full space-y-3 flex flex-col max-h-64 overflow-y-auto pr-2">
                                 <div v-for="(log, index) in activity" :key="index"
                                     class="w-full text-dtext bg-dsecondary dark:bg-dprimary rounded-lg flex items-center gap-2 p-3">
                                     {{ log.description }} {{ new Date(log.created_at).toLocaleDateString('en-US', {
@@ -43,6 +44,7 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
 
                     <!-- Section When Scholar Exists -->

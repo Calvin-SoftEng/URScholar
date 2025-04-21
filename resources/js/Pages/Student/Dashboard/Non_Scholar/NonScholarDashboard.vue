@@ -3,7 +3,7 @@
         <span class="text-4xl font-bold">RISE</span>
         <span class="text-xl">Applicant</span>
     </div>
-    <!--Pending Req-->
+    <!--Pending application -->
 
     <div v-if="submitPending.length == total_subreq.length || (submitReq.length <= 0 && submitApproved == false)">
         <div class="flex items-center justify-center my-8 ">
@@ -65,6 +65,66 @@
     </div>
 
 
+    <!--Approved yung application mo pero di pa requirements-->
+
+    <div v-if="submitApproved != 0 && applicant.status == 'Approved'">
+        <div class="flex items-center justify-center my-8 ">
+            <!-- Step 1 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Application</span>
+            </div>
+
+            <!-- Line -->
+            <div class="w-16 h-1 bg-primary relative -top-4"></div>
+
+            <!-- Step 2 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Under Review</span>
+            </div>
+
+
+            <!-- Line -->
+            <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+
+            <!-- Step 3 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
+                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
+                </div>
+                <span class="mt-2 text-sm text-gray-700">Approved</span>
+            </div>
+
+
+            <!-- Line -->
+            <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
+
+            <!-- Step 4 -->
+            <div class="relative flex flex-col items-center">
+                <div
+                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
+                    4</div>
+                <span class="mt-2 text-sm text-gray-700">Qualification</span>
+            </div>
+        </div>
+        <div class="bg-green-100 border-l-4 border-green-500 text-green-900 p-4 mt-4 shadow-sm">
+            <h2 class="text-xl font-semibold">Application Approved</h2>
+            <p class="mt-2">
+                <p>Your application has been approved and is now moving to the requirements verification stage.</p> 
+                <p>This means you have passed the initial screening.</p> 
+                <p>Please note that approval does not guarantee qualification.</p> 
+                <p>Final results will be released after the verification, evaluation, and ranking process is completed.</p>
+            </p>
+        </div>
+    </div>
 
 
     <!--Req to-->
@@ -169,74 +229,8 @@
 
 
 
-
-    <!--Approved-->
-
-    <div v-if="submitApproved != 0 && applicant.status == 'Pending'">
-        <div class="flex items-center justify-center my-8 ">
-            <!-- Step 1 -->
-            <div class="relative flex flex-col items-center">
-                <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
-                </div>
-                <span class="mt-2 text-sm text-gray-700">Application</span>
-            </div>
-
-            <!-- Line -->
-            <div class="w-16 h-1 bg-primary relative -top-4"></div>
-
-            <!-- Step 2 -->
-            <div class="relative flex flex-col items-center">
-                <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
-                </div>
-                <span class="mt-2 text-sm text-gray-700">Under Review</span>
-            </div>
-
-
-            <!-- Line -->
-            <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
-
-            <!-- Step 3 -->
-            <div class="relative flex flex-col items-center">
-                <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-primary border-4 border-primary text-primary font-bold text-lg">
-                    <font-awesome-icon :icon="['fas', 'check']" class="text-white" />
-                </div>
-                <span class="mt-2 text-sm text-gray-700">Approved</span>
-            </div>
-
-
-            <!-- Line -->
-            <div class="w-16 h-1 bg-gray-300 relative -top-4"></div>
-
-            <!-- Step 4 -->
-            <div class="relative flex flex-col items-center">
-                <div
-                    class="w-10 h-10 flex items-center justify-center rounded-full bg-white border-4 border-primary text-primary font-bold text-lg">
-                    4</div>
-                <span class="mt-2 text-sm text-gray-700">Qualification</span>
-            </div>
-        </div>
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-900 p-4 mt-4 shadow-sm">
-            <h2 class="text-xl font-semibold">Application Approved</h2>
-            <p class="mt-2">
-            <p>Your application has been reviewed and approved, and all requirements have been verified.</p>
-            <p>This means you have moved forward in the evaluation process.</p>
-            <p>Please note that approval does not automatically mean qualification.</p>
-            <p>Final results will be released once the evaluation and ranking are completed.</p>
-            </p>
-        </div>
-    </div>
-
-
-
-
-
     <!--Isa ka ng ganap na grantee-->
-    <div v-if="applicant.status == 'Approved'">
+    <div v-if="applicant.status == 'Approved' && submitApproved === 0 ">
         <div class="flex items-center justify-center my-8 ">
             <!-- Step 1 -->
             <div class="relative flex flex-col items-center">

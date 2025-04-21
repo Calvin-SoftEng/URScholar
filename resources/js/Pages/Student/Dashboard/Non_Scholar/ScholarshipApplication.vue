@@ -1,6 +1,6 @@
 <template>
 
-    <Head title="Dashboard" />
+    <Head title="URScholar" />
 
     <AuthenticatedLayout class="shadow-md z-10">
         <div class="w-full bg-white shadow-sm ">
@@ -149,38 +149,35 @@
 
                                 <!-- Step Content -->
                                 <div v-if="activeStep === 2">
-                                    <div class="bg-white grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3
-                                    gap-6 rounded-lg h-1/2 items-center justify-start p-10 sm:p-5 xl:p-10 ">
+                                    <div class="bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 rounded-lg items-start justify-start p-5 sm:p-6 md:p-8 xl:p-10">
 
-                                        <div class="sm:col-span-3 md:col-span-2 lg:col-span-3 xl:col-span-3">
-                                            <h3
-                                                class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4 sm:text-white">
+                                        <!-- Header Section -->
+                                        <div class="col-span-full">
+                                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
                                                 Scholarship Requirements
                                             </h3>
-                                            <p
-                                                class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
+                                            <p class="font-semibold text-xs uppercase text-gray-400 dark:text-white mb-4">
                                                 Upload the needed file requirements
                                             </p>
-
                                         </div>
 
-                                        <InputError v-if="errors?.files" :message="errors.files"
-                                            class="text-2xs text-red-500" />
-                                        <div class="col-span-2 md:col-span-2">
+                                        <!-- Error Message -->
+                                        <div class="col-span-full">
+                                            <InputError v-if="errors?.files" :message="errors.files" class="text-2xs text-red-500" />
+                                        </div>
+
+                                        <!-- Upload Requirements Section -->
+                                        <div class="col-span-full grid grid-cols-1 md:grid-cols-2 lg:col-span-4 gap-4">
                                             <div v-for="(requirement, index) in requirements" :key="requirement.id"
-                                                class="border rounded-lg p-4 bg-white shadow-sm mb-3 max-w-xl">
-                                                <!-- Header -->
-                                                <div class="flex justify-between items-center">
+                                                class="border rounded-lg p-4 bg-white shadow-sm">
+                                                <div class="flex justify-between items-center mb-2">
                                                     <div class="flex items-center space-x-2">
-                                                        <span
-                                                            class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
+                                                        <span class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
                                                             {{ String.fromCharCode(65 + index) }}
                                                         </span>
-                                                        <span class="font-semibold text-gray-800 min-w-72">{{
-                                                            requirement.requirements }}</span>
+                                                        <span class="font-semibold text-gray-800">{{ requirement.requirements }}</span>
                                                     </div>
-                                                    <label
-                                                        class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                                                    <label class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
                                                         Add File
                                                         <input type="file" class="hidden"
                                                             @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
@@ -188,85 +185,62 @@
                                                     </label>
                                                 </div>
 
-                                                <!-- Uploaded File Preview -->
+                                                <!-- File Preview -->
                                                 <div v-if="form.files[requirement.id]"
-                                                    class="border border-dashed border-purple-400 rounded-lg p-3 mt-2 flex items-center justify-between min-w-[250px]">
-                                                    <!-- <div class="flex items-center space-x-3">
+                                                    class="border border-dashed border-purple-400 rounded-lg p-3 mt-2 flex items-center justify-between">
+                                                    <div class="flex items-center space-x-3">
                                                         <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" class="w-8 h-8" alt="PDF Icon">
                                                         <div>
-                                                            <p class="text-sm font-medium">{{ form.files[requirement.id].name }}</p>
-                                                            <p class="text-xs text-gray-500">{{ form.files[requirement.id].size }}</p>
-                                                        </div>
-                                                    </div> -->
-
-                                                    <div class="flex items-center space-x-3">
-                                                        <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
-                                                            class="w-8 h-8" alt="PDF Icon">
-                                                        <div>
-                                                            <p class="text-sm font-medium truncate overflow-hidden max-w-xs"
-                                                                title="{{ form.files[requirement.id].name }}">
-                                                                {{ form.files[requirement.id].name.length > 30 ?
-                                                                    form.files[requirement.id].name.substring(0, 30) + '...'
+                                                            <p class="text-sm font-medium truncate max-w-[150px]" :title="form.files[requirement.id].name">
+                                                                {{ form.files[requirement.id].name.length > 30
+                                                                    ? form.files[requirement.id].name.substring(0, 30) + '...'
                                                                     : form.files[requirement.id].name }}
                                                             </p>
-                                                            <p class="text-xs text-gray-500">{{
-                                                                form.files[requirement.id].size }}</p>
+                                                            <p class="text-xs text-gray-500">{{ form.files[requirement.id].size }}</p>
                                                         </div>
                                                     </div>
                                                     <button type="button" @click="removeFile(requirement.id)"
-                                                        class="ml-4 text-red-600 hover:text-red-800">
-                                                        Remove
-                                                    </button>
+                                                        class="ml-4 text-red-600 hover:text-red-800">Remove</button>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="flex flex-col space-y-3 pt-5">
+                                        <!-- Download Templates -->
+                                        <div class="col-span-full pt-5">
                                             <span v-if="templates.length > 0"
-                                                class="text-lg font-inter font-normal text-dsecondary text-left">For the
-                                                other documents, you can download them below</span>
+                                                class="text-base font-inter font-normal text-dsecondary text-left block mb-3">
+                                                For the other documents, you can download them below:
+                                            </span>
 
-                                            <div class="col-span-1 flex flex-col space-y-3">
+                                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                                 <div v-for="(template, index) in templates" :key="template.id"
-                                                    class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
-
-                                                    <!-- Header -->
-                                                    <div class="flex justify-between items-center gap-5">
+                                                    class="border rounded-lg p-3 bg-white shadow-sm">
+                                                    <div class="flex justify-between items-center gap-4">
                                                         <div class="flex items-center space-x-2">
-                                                            <span
-                                                                class="bg-green-400 text-black font-bold px-2 py-1 rounded">
+                                                            <span class="bg-green-400 text-black font-bold px-2 py-1 rounded">
                                                                 {{ String.fromCharCode(65 + index) }}
                                                             </span>
-                                                            <span class="font-semibold text-gray-800">
-                                                                {{ template.filename }}
-                                                            </span>
+                                                            <span class="font-semibold text-gray-800">{{ template.filename }}</span>
                                                         </div>
                                                         <a :href="`/storage/scholarship_templates/${template.requirement_id}/${template.filename}`"
                                                             target="_blank"
                                                             class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
                                                             Download
                                                         </a>
-                                                        <!-- <a target="_blank"
-                                                    class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
-                                                    Download
-                                                </a> -->
                                                     </div>
-
-                                                    <!-- Optional description or file info -->
-                                                    <!-- <div v-if="template.description" class="mt-2 text-sm text-gray-600">
-                                                {{ template.description }}
-                                            </div> -->
                                                 </div>
                                             </div>
                                         </div>
 
-
-                                        <div class="col-span-3 flex justify-end mt-4">
+                                        <!-- Submit Button -->
+                                        <div class="col-span-full flex justify-end mt-6">
                                             <button type="submit"
-                                                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
-                                                Submit</button>
+                                                class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                                Submit
+                                            </button>
                                         </div>
-                                    </div>
+                                        </div>
+
 
                                 </div>
                             </div>
