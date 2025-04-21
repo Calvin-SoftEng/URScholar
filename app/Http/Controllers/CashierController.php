@@ -232,6 +232,9 @@ class CashierController extends Controller
             }
         }
 
+        $totalSubTotal = $payouts->sum('sub_total') ?? 0;
+        $total_scholars = $payouts->sum('total_scholars') ?? 0;
+
         return Inertia::render('Cashier/Scholarships/Payroll_Scholarship', [
             'scholarship' => $scholarship,
             'schoolyear' => $schoolyear,
@@ -241,6 +244,8 @@ class CashierController extends Controller
             'campuses' => $campuses,
             'currentUser' => $currentUser,
             'payouts' => $payouts,
+            'totalSubTotal' => $totalSubTotal,
+            'total_scholars' => $total_scholars,
             'payoutsByCampus' => $payoutsByCampus,
             'allAccomplished' => $allAccomplished,
         ]);

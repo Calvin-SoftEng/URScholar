@@ -680,7 +680,8 @@ class ScholarshipController extends Controller
 
         $inactiveBatches = $allBatchesOriginal->every(fn($batch) => $batch->status === 'Inactive');
 
-        $accomplishedBatches = $allBatchesOriginal->every(fn($batch) => $batch->status === 'Accomplished');
+        $accomplishedBatches = $allBatchesOriginal->every(fn($batch) => in_array($batch->status, ['Accomplished', 'Inactive']));
+
 
         $allPayouts = Payout::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $request->input('selectedYear'))
@@ -1081,7 +1082,6 @@ class ScholarshipController extends Controller
             return redirect()->back()->with('success', 'Forwarded Successfully');
         }
 
-
         $ready = false;
         foreach ($batches as $batch) {
             if ($batch->total_scholars == $batch->sub_total) {
@@ -1090,43 +1090,32 @@ class ScholarshipController extends Controller
             }
         }
 
-        if ($ready) {
-            // Update each batch individually using the requested format
-            foreach ($batches as $batch) {
+        // Process each batch individually
+        foreach ($batches as $batch) {
+            // Only update status if it's not already "Inactive"
+            if ($batch->status !== 'Inactive') {
+                $newStatus = $ready ? 'Accomplished' : 'Inactive';
+
                 // Update batch status
                 Batch::where('id', $batch->id)->update([
-                    'status' => 'Accomplished',
+                    'status' => $newStatus,
                     'validated' => true
                 ]);
-
-                Grantees::where('batch_id', $batch->id)
-                    ->where('school_year_id', $schoolYearId)
-                    ->where('semester', $selectedSem)
-                    ->update([
-                        'status' => 'Active'
-                    ]);
-            }
-        } else {
-
-            // Update each batch individually using the requested format
-            foreach ($batches as $batch) {
-                // Update batch status
+            } else {
+                // For "Inactive" batches, only update validated flag
                 Batch::where('id', $batch->id)->update([
-                    'status' => 'Inactive',
                     'validated' => true
                 ]);
-
-                Grantees::where('batch_id', $batch->id)
-                    ->where('school_year_id', $schoolYearId)
-                    ->where('semester', $selectedSem)
-                    ->update([
-                        'status' => 'Active'
-                    ]);
             }
+
+            // Update grantees status (this happens regardless of batch status)
+            Grantees::where('batch_id', $batch->id)
+                ->where('school_year_id', $schoolYearId)
+                ->where('semester', $selectedSem)
+                ->update([
+                    'status' => 'Active'
+                ]);
         }
-
-
-
 
         $currentUser = Auth::user();
         $campus = Campus::where('id', $currentUser->campus_id)->first();
@@ -1175,10 +1164,10 @@ class ScholarshipController extends Controller
                 ->count();
 
             // If all grantees are either dropped or graduated, set batch status to Inactive
-            if ($totalGrantees > 0 || $droppedOrGraduatedGrantees == $totalGrantees) {
+            if ($totalGrantees > 0 && $droppedOrGraduatedGrantees == $totalGrantees) {
                 Batch::where('id', $batch->id)->update([
                     'validated' => true,
-                    'status' => 'Validated'
+                    'status' => 'Inactive'
                 ]);
             } else {
                 // Otherwise proceed with the original "Active" status

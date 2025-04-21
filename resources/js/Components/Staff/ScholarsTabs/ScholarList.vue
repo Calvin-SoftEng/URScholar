@@ -129,7 +129,8 @@
                       'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
                       'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled',
                       'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Dropped',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Graduated'
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Graduated',
+                      'bg-blue-100 text-blue-800 border border-blue-400 font-bold': scholar.student_status === 'Transferred'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       <span v-if="scholar.student_status === 'Unenrolled'" class="inline-flex items-center">
                         {{ scholar.student_status }}
@@ -254,6 +255,7 @@
           <select v-model="statusValue" id="scholarshipType"
             class="bg-gray-50 border border-gray-300 rounded-lg p-3 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400">
             <option value="" disabled selected>Select Status</option>
+            <option value="Transferred">Transferred</option>
             <option value="Dropped">Dropped</option>
             <option value="Graduated">Graduated</option>
           </select>

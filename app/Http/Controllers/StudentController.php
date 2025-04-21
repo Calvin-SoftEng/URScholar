@@ -434,6 +434,7 @@ class StudentController extends Controller
             'school_year' => [''],
             'semester' => [''],
         ]);
+        
 
         $scholar = Scholar::where('id', $urscholar_id)->first();
 

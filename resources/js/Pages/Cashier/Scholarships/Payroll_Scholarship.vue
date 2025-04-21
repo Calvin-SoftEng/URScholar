@@ -57,11 +57,11 @@
                                 </div>
                                 <div class="grid grid-cols-3 items-center gap-3">
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ totalClaimed }}
+                                        {{ totalSubTotal }}
                                     </p>
                                     <div class="h-5 w-[2px] bg-gray-400 mx-auto"></div>
                                     <p class="text-4xl font-semibold font-kanit text-center">
-                                        {{ totalPending }}
+                                        {{ total_scholars }}
                                     </p>
                                 </div>
                             </div>
@@ -480,6 +480,8 @@ const props = defineProps({
     total_unverified_grantees: Object,
     payoutBatches: Array,
     allAccomplished: Array,
+    totalSubTotal: Number,
+    total_scholars: Number,
 });
 
 // State
@@ -583,7 +585,7 @@ const totalPending = computed(() => {
 });
 
 const completedBatchesCount = computed(() => {
-    return props.batches.filter(batch => batch.status === 'Completed').length;
+    return props.payouts.filter(payout => payout.status === 'Inactive').length;
 });
 
 const forwardableBatches = computed(() => {

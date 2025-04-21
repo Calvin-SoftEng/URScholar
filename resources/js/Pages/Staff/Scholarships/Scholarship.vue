@@ -266,7 +266,7 @@
                                         </button>
                                     </div>
                                     <!-- Forward to Cashier -->
-                                    <div v-if="accomplishedBatches">
+                                    <div v-if="accomplishedBatches || inactiveBatches">
                                         <div v-if="accomplishedBatches && !payouts">
                                             <button @click="toggleSendBatch"
                                                 class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
@@ -1318,10 +1318,12 @@
                                                 <p class="text-base font-medium text-gray-900 dark:text-white">Batch 1
                                                 </p>
                                                 <p class="text-sm text-gray-500"> {{batch.grantees.filter(grantee =>
-                                                    grantee.scholar?.status ===
-                                                    'Verified').length}} Enrolled, {{batch.grantees.filter(grantee =>
-                                                        grantee.scholar?.status ===
-                                                        'Unverified').length}} Unenrolled</p>
+                                                    grantee.scholar?.student_status ===
+                                                    'Enrolled').length}} Enrolled, {{batch.grantees.filter(grantee =>
+                                                        grantee.scholar?.student_status ===
+                                                        'Unenrolled').length}} Unenrolled, {{batch.grantees.filter(grantee =>
+                                                        grantee.scholar?.student_status ===
+                                                        'Transferred').length}} Transferred</p>
                                             </div>
                                         </div>
                                         <span
@@ -1513,12 +1515,15 @@
                                         }}
                                         </p>
                                         <p v-if="batch.validated" class="text-sm text-gray-500">
-                                            {{batch.grantees.filter(grantee => grantee.scholar?.status ===
-                                                'Verified').length}}
+                                            {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
+                                                'Enrolled').length}}
                                             Enrolled,
-                                            {{batch.grantees.filter(grantee => grantee.scholar?.status ===
-                                                'Unverified').length}}
-                                            Unenrolled
+                                            {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
+                                                'Unenrolled').length}}
+                                            Unenrolled,
+                                            {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
+                                                'Transferred').length}}
+                                            Transferred
                                         </p>
                                         <p v-else class="text-sm text-gray-500">
                                             Validating...
