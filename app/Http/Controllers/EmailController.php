@@ -172,6 +172,10 @@ class EmailController extends Controller
         // Process each batch
         foreach ($batches as $batch) {
 
+            if ($batch->status === 'Inactive') {
+                continue; // Skip inactive batches
+            }
+            
             $batch->status = 'Pending';
             $batch->save();
 

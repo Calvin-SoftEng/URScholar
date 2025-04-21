@@ -742,6 +742,17 @@ class ScholarshipController extends Controller
             }
         }
 
+        $noScholars = false;
+
+        foreach ($Mybatches as $batch) {
+            if (
+                $batch && $batch->status == 'Inactive' || $batch->status == 'Pending'
+            ) {
+                $noScholars = true;
+                break;
+            }
+        }
+
         $allInactive = false;
 
         foreach ($allInactivewithoutmeeee as $batch) {
@@ -948,6 +959,7 @@ class ScholarshipController extends Controller
             'totalSubTotal' => $totalSubTotal,
             'batchesByCampus' => $batchesByCampus,
             'allBatchesInactive' => $allBatchesInactive,
+            'noScholars' => $noScholars,
             'total_scholars' => $total_scholars,
             'total_approved' => $total_approved,
             'payoutsByCampus' => $payoutsByCampus,

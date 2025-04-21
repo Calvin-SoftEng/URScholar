@@ -308,7 +308,8 @@
                                         </button>
                                     </div>
 
-                                    <div
+                                    <div v-if="!noScholars">
+                                        <div
                                         v-if="requirements != 0 && allBatchesInactive === false && myInactive == false">
                                         <button @click="toggleForwardRequirements"
                                             class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
@@ -324,6 +325,8 @@
                                             <span class="font-normal">Forward Requirements</span>
                                         </button>
                                     </div>
+                                    </div>
+                                    
 
                                     <div v-if="payouts">
                                         <button @click="toggleView"
@@ -1854,6 +1857,7 @@ const props = defineProps({
     approvedCount: Number,
     allBatches: Array,
     disableSendEmailButton: Boolean,
+    noScholars: Boolean,
     inactiveBatches: Boolean,
     accomplishedBatches: Boolean,
     inactivePayouts: Boolean,
