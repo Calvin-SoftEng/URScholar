@@ -22,12 +22,19 @@
         </div>
       </div> -->
 
-      <button @click="generateReportModal"
+      <!-- <button @click="generateReportModal"
           class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
           border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200"
           type="button">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="mr-2 text-sm" />Generate
           Report
+      </button> -->
+
+      <button
+        class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+        @click="generateReportModal">
+        <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
+        Generate Report
       </button>
 
       </div>
@@ -573,7 +580,7 @@ const resetSelections = () => {
     selectedReportCampuses.value = [];
 };
 
-const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Transferees', 'Payroll'];
+const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Transferees'];
 const batchRef = ref(null);
 const campusRef = ref(null);
 
