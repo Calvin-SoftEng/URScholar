@@ -1,6 +1,5 @@
 <template>
 
-    <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10 min-h-screen overflow-auto">
         <div class="w-full bg-dirtywhite shadow-sm">
