@@ -41,7 +41,7 @@
                 <div class="text-sm mt-2">
                     <p>Scholarship and Financial Assistance Unit</p>
                     <p>University of Rizal System - Morong Campus</p>
-                    <p>Email: support@urscholar.edu.ph</p>
+                    <p>Email: ursscholarship.unit@gmail.com</p>
                 </div>
             </div>
         </div>
