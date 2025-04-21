@@ -3,8 +3,19 @@
     <!-- desktop -->
     <div class="hidden lg:flex justify-between items-center h-[50px] place-content-center px-10">
       <div class="flex items-center space-x-4">
-        <div class="pl-1">
-          <img src="../../../assets/images/logo-hori.png" alt="" class="w-[180px] h-[40px]">
+        <div class="pl-3">
+          <!-- <img src="../../../assets/images/logo-hori.png" alt="Light Mode Logo" class="w-[180px] h-[40px] dark:hidden"> -->
+
+          <div class="flex flex-row  items-center justify-center gap-2">
+            <img :src="`/storage/branding/logos/${branding.logo_light}`" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+            <img :src="`/storage/branding/logos/${branding.logo_light}`" alt="Light Mode Logo"
+              class="w-[40px] h-[40px] hidden dark:block">
+
+            <span class="font-poppins text-3xl font-bold text-navy tracking-tight dark:text-white">{{branding.branding_name}}</span>
+          </div>
+          <!-- Dark Mode Logo -->
+          <!-- <img src="../../../assets/images/logo-hori-white.png" alt="Dark Mode Logo"
+              class="w-[180px] h-[40px] hidden dark:block"> -->
         </div>
       </div>
 
@@ -201,6 +212,13 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { Link } from '@inertiajs/vue3';
 import { ref, onMounted } from 'vue';
+
+const props = defineProps({
+  branding: {
+        type: Object,
+        required: true,
+    },
+})
 
 const isDark = ref(false)
 

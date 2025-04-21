@@ -240,10 +240,21 @@
                                     </SelectTrigger>
                                     <SelectContent class="dark:bg-white dark:text-dprimary">
                                         <SelectGroup>
-                                            <SelectItem class="dark:hover:bg-gray-700" v-for="semester in availableSemesters" :key="semester.id"
-                                                :value="semester.semester">
+                                            <SelectItem
+                                            class="dark:hover:bg-gray-700 flex justify-between items-center"
+                                            v-for="semester in availableSemesters"
+                                            :key="semester.id"
+                                            :value="semester.semester"
+                                            >
+                                            <div class="flex items-center gap-2">
                                                 {{ semester.semester === '1st' ? 'First Semester' : 'Second Semester' }}
-                                                {{ semester.status === 'Active' ? '(Active)' : '(Inactive)' }}
+                                                <span
+                                                class="text-xs px-2 py-0.5 rounded-full font-semibold"
+                                                :class="semester.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'"
+                                                >
+                                                {{ semester.status }}
+                                                </span>
+                                            </div>
                                             </SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
