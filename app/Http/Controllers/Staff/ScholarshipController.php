@@ -692,6 +692,13 @@ class ScholarshipController extends Controller
 
         $accomplishedBatches = $allBatchesOriginal->every(fn($batch) => in_array($batch->status, ['Accomplished', 'Inactive']));
 
+        $activeBatches = Batch::where('scholarship_id', $scholarship->id)
+        ->where('status', '!=', 'Inactive')
+        ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+        ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+        ->get();
+
+
 
         $allPayouts = Payout::where('scholarship_id', $scholarship->id)
             ->where('school_year_id', $request->input('selectedYear'))
@@ -980,6 +987,7 @@ class ScholarshipController extends Controller
             'completedBatches' => $completedBatches,
             'inactiveBatches' => $inactiveBatches,
             'accomplishedBatches' => $accomplishedBatches,
+            'activeBatches' => $activeBatches,
             'allInactive' => $allInactive,
             'myInactive' => $myInactive,
             'inactivePayouts' => $inactivePayouts,

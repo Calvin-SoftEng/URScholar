@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 class ScholarshipGroupUser extends Model
 {
     use HasFactory, Notifiable;
-    protected $fillable = ['user_id', 'scholarship_group_id'];
+    protected $fillable = ['user_id', 'scholarship_group_id', 'status'];
 
     public function staffGroup()
     {

@@ -85,7 +85,7 @@ class StudentController extends Controller
         if ($pendingRequirements->isNotEmpty()) {
             return redirect()->route('student.resubmission');
         }
-        
+
         // Filter out requirements that have already been submitted
         $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
             return in_array($requirement->id, $submittedRequirementIds);
@@ -1332,7 +1332,7 @@ class StudentController extends Controller
         $academic_year = AcademicYear::where('status', 'Active')->first();
 
 
-
+        $canUpload = false;
         if ($scholar) {
             $grades = Grade::where('scholar_id', $scholar->id)->with('school_year')->get();
             $latestgrade = Grade::where('scholar_id', $scholar->id)
@@ -1340,6 +1340,14 @@ class StudentController extends Controller
                 ->with('school_year')
                 ->latest()
                 ->first();
+
+
+            if ($latestgrade) {
+                if ($latestgrade->academic_year_id == $academic_year->id) {
+                    $canUpload = true;
+                }
+            }
+
 
 
             //generate qr_code
@@ -1474,6 +1482,7 @@ class StudentController extends Controller
             ]);
         }
 
+
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
             'education' => $education,
@@ -1481,6 +1490,7 @@ class StudentController extends Controller
             'siblings' => $siblings,
             'scholar' => $scholar,
             'grades' => $grades,
+            'canUpload' => $canUpload,
             'latestgrade' => $latestgrade,
             'semesterGrade' => $grantee_semester,
             'schoolyear_grade' => $school_year,
