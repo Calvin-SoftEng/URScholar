@@ -275,7 +275,7 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         SchoolYear::factory()->create([
-            'year' => '2022-2023',
+            'year' => '2023-2024',
         ]);
 
         SchoolYear::factory()->create([
