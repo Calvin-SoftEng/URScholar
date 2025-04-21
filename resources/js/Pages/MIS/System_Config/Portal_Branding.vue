@@ -185,18 +185,18 @@ onMounted(() => {
     finalBrandingName.value = props.branding.branding_name || '';
 
     if (props.branding.light_path) {
-      tempLogoLight.value = props.branding.light_path;
-      finalLogoLight.value = props.branding.light_path;
+      tempLogoLight.value = "/" + props.branding.light_path;
+      finalLogoLight.value = "/" + props.branding.light_path;
     }
 
     if (props.branding.dark_path) {
-      tempLogoDark.value = props.branding.dark_path;
-      finalLogoDark.value = props.branding.dark_path;
+      tempLogoDark.value = "/" + props.branding.dark_path;
+      finalLogoDark.value = "/" + props.branding.dark_path;
     }
 
     if (props.branding.favicon_path) {
-      tempFavicon.value = props.branding.favicon_path;
-      finalFavicon.value = props.branding.favicon_path;
+      tempFavicon.value = "/" + props.branding.favicon_path;
+      finalFavicon.value = "/" + props.branding.favicon_path;
     }
 
     // Store initial values for cancel functionality
