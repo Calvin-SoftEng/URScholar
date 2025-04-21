@@ -48,11 +48,11 @@
                 >
                   Feed
                 </p>
-                <span
+                <!-- <span
                   class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md"
                 >
                   1
-                </span>
+                </span> -->
               </Link>
             </li>
 
@@ -69,11 +69,11 @@
                 >
                   Communication
                 </p>
-                <span
+                <!-- <span
                   class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md"
                 >
                   1
-                </span>
+                </span> -->
               </Link>
             </li>
           </ul>
@@ -124,7 +124,7 @@
                     data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
                     :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
                 <!-- Red Notification Dot -->
-                <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+                <!-- <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div> -->
             </div>
         </div>
         <div v-else>
@@ -133,7 +133,7 @@
                   data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
                   :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
               <!-- Red Notification Dot -->
-              <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+              <!-- <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div> -->
           </div>
         </div>
       </div>
@@ -369,9 +369,9 @@
             <!-- Notification Dot with FontAwesome Icon -->
             <div class="absolute top-0 right-1 flex items-center space-x-2">
                 <!-- Red Notification Icon with FontAwesome -->
-                <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
+                <!-- <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
                     <font-awesome-icon :icon="['fas', 'exclamation']" />
-                </div>
+                </div> -->
             </div>
         </li>
       </ul>

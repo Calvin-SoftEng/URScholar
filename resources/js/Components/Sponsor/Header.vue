@@ -22,20 +22,20 @@
             <Link :href="route('sponsor.dashboard')" class="flex items-center space-x-2">
             <p class="text-primary-foreground hover:text-primary transition">Dashboard</p>
             <!-- Notification Badge (only shows if unreadMessages > 0) -->
-            <span
+            <!-- <span
               class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
               1
-            </span>
+            </span> -->
             </Link>
           </li>
           <li class="relative">
             <Link :href="route('messaging.index')" class="flex items-center space-x-2">
             <p class="text-primary-foreground hover:text-primary transition">Messaging</p>
             <!-- Notification Badge (only shows if unreadMessages > 0) -->
-            <span
+            <!-- <span
               class="absolute -top-1 -right-3 flex items-center justify-center w-4 h-4 bg-red-600 text-white text-xs font-normal rounded-full shadow-md">
               1
-            </span>
+            </span> -->
             </Link>
           </li>
         </ul>
@@ -84,7 +84,7 @@
               data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
               :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
             <!-- Red Notification Dot -->
-            <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+            <!-- <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div> -->
           </div>
         </div>
         <div v-else>
@@ -93,7 +93,7 @@
               data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
               :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
             <!-- Red Notification Dot -->
-            <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+            <!-- <div class="absolute top-0 right-1 w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div> -->
           </div>
         </div>
       </div>
@@ -148,7 +148,7 @@
     <div id="userDropdown" v-show="isDropdownOpen"
       class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
       <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-        <div>{{ $page.props.auth.user.name }}</div>
+        <div>{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name }}</div>
         <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
       </div>
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
@@ -160,9 +160,9 @@
           <!-- Notification Dot with FontAwesome Icon -->
           <div class="absolute top-0 right-1 flex items-center space-x-2">
             <!-- Red Notification Icon with FontAwesome -->
-            <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
+            <!-- <div class="bg-red-600 text-white text-xs font-semibold py-1 px-2 rounded-full flex items-center">
               <font-awesome-icon :icon="['fas', 'exclamation']" />
-            </div>
+            </div> -->
           </div>
         </li>
       </ul>

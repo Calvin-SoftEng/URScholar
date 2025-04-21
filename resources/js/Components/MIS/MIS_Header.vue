@@ -38,7 +38,7 @@
         </div>
 
         <!-- notification -->
-        <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification"
+        <!-- <button id="dropdownNotificationButton" data-dropdown-toggle="dropdownNotification"
           class="relative border border-gray-300 inline-flex items-center justify-center w-10 h-10 text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400 rounded-lg"
           type="button">
           <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
@@ -50,7 +50,7 @@
           <div
             class="absolute block w-3.5 h-3.5 bg-red-500 border-2 border-white rounded-full -top-0.5 start-7 dark:border-gray-900">
           </div>
-        </button>
+        </button> -->
 
         <!-- avatar -->
        <!-- Avatar with Red Notification Dot -->
@@ -60,7 +60,7 @@
                     data-dropdown-placement="bottom-start" class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
                     :src="`/storage/user/profile/${$page.props.auth.user.picture}`" alt="picture">
                 <!-- Red Notification Dot -->
-                <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div>
+                <!-- <div class="absolute top-[-5px] right-[-5px] w-4 h-4 bg-red-600 rounded-full border-2 border-white"></div> -->
             </div>
         </div>
         <div v-else>
@@ -122,8 +122,8 @@
         <div id="userDropdown"
           class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
           <div class="px-4 py-3 text-sm text-gray-900 dark:text-white">
-            <div>Bonnie Green</div>
-            <div class="font-medium truncate">name@flowbite.com</div>
+            <div>{{ $page.props.auth.user.first_name }} {{ $page.props.auth.user.last_name }}</div>
+        <div class="font-medium truncate">{{ $page.props.auth.user.email }}</div>
           </div>
           <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="avatarButton">
             <li>

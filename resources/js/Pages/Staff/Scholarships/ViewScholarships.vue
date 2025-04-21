@@ -69,7 +69,7 @@
                                                 Sponsoring Since:
                                                 {{ scholarship.since }}
                                             </p>
-                                            <p>
+                                            <!-- <p>
                                                 <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
                                                     class="font-medium">Requirements Deadline: </span>
                                                 <span
@@ -83,7 +83,7 @@
                                                     }) }}
                                                 </span>
                                                 <span v-else>No Deadline</span>
-                                            </p>
+                                            </p> -->
                                         </div>
                                     </div>
 
@@ -164,12 +164,12 @@
                                     </div>
 
                                     <!-- Additional Info -->
-                                    <div class="flex flex-row gap-8 text-center">
-                                        <div>
-                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
-                                            <p class="text-xl font-bold text-gray-800 dark:text-dtext">{{scholarship.batches ? scholarship.batches.length : 0 }}</p>
+                                    <!-- <div class="flex items-center gap-6 text-center px-4 py-3 bg-white dark:bg-dcontainer rounded-xl shadow-sm border border-gray-200 dark:border-gray-600">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 dark:text-gray-400">Total Batches</span>
+                                            <span class="text-2xl font-semibold text-gray-900 dark:text-dtext">{{scholarship.batches ? scholarship.batches.length : 0 }}</span>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </button>
                         </template>
