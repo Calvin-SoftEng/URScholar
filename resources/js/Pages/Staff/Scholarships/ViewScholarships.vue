@@ -145,7 +145,7 @@
                                                     class="mr-1" /> Sponsoring Since:
                                                 {{ scholarship.since }}
                                             </p>
-                                            <p>
+                                            <!-- <p>
                                                 <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
                                                     class="font-medium">Requirements Deadline: </span>
                                                 <span
@@ -159,7 +159,7 @@
                                                             }) }}
                                                 </span>
                                                 <span v-else>No Deadline</span>
-                                            </p>
+                                            </p> -->
                                         </div>
                                     </div>
 
