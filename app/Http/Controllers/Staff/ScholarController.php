@@ -54,23 +54,14 @@ class ScholarController extends Controller
                 ->get();
         }
 
-        $scholars = $grantees->map(function ($grantee) {
-            $scholar = $grantee->scholar;
-            // Since Scholar doesn't have a direct relationship with Batch,
-            // we'll add the batch information from the grantee
-            $scholar->batch_no = $grantee->batch->batch_no;
-            $scholar->batch_id = $grantee->batch_id;
-            $scholar->semester = $grantee->semester;
-            $scholar->school_year_id = $grantee->school_year_id;
-
-            return $scholar;
-        })->unique('id');
+        // Instead of transforming grantees to scholars collection,
+        // we'll keep the grantees collection and pass it directly
 
         $academicYear = AcademicYear::with('school_year')->get();
         $campus = Campus::all();
 
         return Inertia::render('Staff/Scholars/Scholars', [
-            'scholars' => $scholars,
+            'grantees' => $grantees, // Changed from 'scholars' to 'grantees'
             'userType' => Auth::user()->usertype,
             'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null,
             'academicYear' => $academicYear,
