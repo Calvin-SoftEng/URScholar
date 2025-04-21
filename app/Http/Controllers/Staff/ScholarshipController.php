@@ -350,6 +350,12 @@ class ScholarshipController extends Controller
                 if (!$secondSemBatchesExist && $firstSemBatches->isNotEmpty()) {
                     // Create a new 2nd semester batch for each 1st semester batch
                     foreach ($firstSemBatches as $firstSemBatch) {
+
+                        if ($firstSemBatch->status == 'Inactive') {
+                            // Skip creating a new batch if the first semester batch is inactive
+                            continue;
+                        }
+
                         $newBatch = Batch::create([
                             'scholarship_id' => $firstSemBatch->scholarship_id,
                             'campus_id' => $firstSemBatch->campus_id,
@@ -427,15 +433,19 @@ class ScholarshipController extends Controller
                                             ->first();
 
                                         if ($scholarEnrolled) {
-                                            Grantees::create([
-                                                'scholarship_id' => $oldGrantee->scholarship_id,
-                                                'batch_id' => $newBatch->id, // Use the new batch ID
-                                                'scholar_id' => $scholarEnrolled->id,
-                                                'school_year_id' => $school_year,
-                                                'semester' => $semester,
-                                                'student_status' => $scholarEnrolled->student_status,
-                                                'status' => 'Pending',
-                                            ]);
+
+                                            if ($oldGrantee->student_status == 'Enrolled') {
+                                                // Check if the grantee already exists in the new batch
+                                                Grantees::create([
+                                                    'scholarship_id' => $oldGrantee->scholarship_id,
+                                                    'batch_id' => $newBatch->id, // Use the new batch ID
+                                                    'scholar_id' => $scholarEnrolled->id,
+                                                    'school_year_id' => $school_year,
+                                                    'semester' => $semester,
+                                                    'student_status' => $scholarEnrolled->student_status,
+                                                    'status' => 'Pending',
+                                                ]);
+                                            }
 
                                             if ($newBatch->campus_id == Auth::user()->campus_id) {
                                                 // Get all grantees for this new batch
