@@ -3,12 +3,16 @@
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
 
-        <button
-          class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-          @click="generateReport">
-          <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
-          Generate Report
-        </button>
+        <div class="relative inline-block text-left">
+          <select v-model="selectedReportType"
+                  @change="generateReport"
+                  class="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 appearance-none pr-10">
+            <option disabled value="">Generate Report</option>
+            <option value="grantees">Grantees</option>
+            <option value="transfers">Transfers</option>
+            <option value="graduates">Graduates</option>
+          </select>
+        </div>
 
       </div>
       <form class="w-3/12">
@@ -128,9 +132,8 @@
                     <span :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
                       'bg-red-100 text-red-800 border border-red-400 font-bold': scholar.student_status === 'Unenrolled',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Dropped',
-                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Graduated',
-                      'bg-blue-100 text-blue-800 border border-blue-400 font-bold': scholar.student_status === 'Transferred'
+                      'bg-yellow-100 text-yellow-800 border border-yellow-400 font-bold': scholar.student_status === 'Dropped' || scholar.student_status === 'Graduated',
+                      'bg-blue-100 text-blue-800 border border-blue-400 font-bold': scholar.student_status === 'Transferred',
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
                       <span v-if="scholar.student_status === 'Unenrolled'" class="inline-flex items-center">
                         {{ scholar.student_status }}

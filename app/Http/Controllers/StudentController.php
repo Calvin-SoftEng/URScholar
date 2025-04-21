@@ -66,6 +66,31 @@ class StudentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
+        $scholarship = SCholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
+
+        // Get all requirements for this scholarship
+        $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+        // Get requirements that this scholar has already submitted
+        $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->pluck('requirement_id')
+            ->toArray();
+
+        // Filter out requirements that have already been submitted
+        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+            return in_array($requirement->id, $submittedRequirementIds);
+        })->values();
+
+
+        if ($pendingRequirements->isNotEmpty()) {
+            return redirect()->route('student.resubmission');
+        }
+
+        // Filter out requirements that have already been submitted
+        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+            return in_array($requirement->id, $submittedRequirementIds);
+        })->values();
+
         $academic_year = AcademicYear::where('status', 'Active')->first();
 
         if ($grantee) {
@@ -434,7 +459,7 @@ class StudentController extends Controller
             'school_year' => [''],
             'semester' => [''],
         ]);
-        
+
 
         $scholar = Scholar::where('id', $urscholar_id)->first();
 
@@ -1212,7 +1237,7 @@ class StudentController extends Controller
                 'status' => $submitted->status,
             ];
         });
-        
+
 
         return Inertia::render('Student/Grant-in/Grant-In', [
             'scholarship' => $scholarship,
@@ -1253,6 +1278,37 @@ class StudentController extends Controller
         ]);
     }
 
+    public function resubmission()
+    {
+        $scholar = Scholar::where('email', Auth::user()->email)->first();
+
+        $grantee = Grantees::where('scholar_id', $scholar->id)->first();
+
+        $scholarship = Scholarship::where('id', $grantee->scholarship_id)->first();
+
+        // Get all requirements for this scholarship
+        $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+        // Get requirements that this scholar has already submitted
+        $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
+            ->pluck('requirement_id')
+            ->toArray();
+
+        // Filter out requirements that have already been submitted
+        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+            return in_array($requirement->id, $submittedRequirementIds);
+        })->values();
+
+        $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
+
+        return Inertia::render('Student/Grant-in/Grant-In-Resubmission', [
+            'scholarship' => $scholarship,
+            'scholar' => $scholar,
+            'requirements' => $pendingRequirements, // Pass only pending requirements
+            'templates' => $templates,
+        ]);
+    }
+
     public function scholarships()
     {
         $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
@@ -1276,7 +1332,7 @@ class StudentController extends Controller
         $academic_year = AcademicYear::where('status', 'Active')->first();
 
 
-
+        $canUpload = false;
         if ($scholar) {
             $grades = Grade::where('scholar_id', $scholar->id)->with('school_year')->get();
             $latestgrade = Grade::where('scholar_id', $scholar->id)
@@ -1284,6 +1340,14 @@ class StudentController extends Controller
                 ->with('school_year')
                 ->latest()
                 ->first();
+
+
+            if ($latestgrade) {
+                if ($latestgrade->academic_year_id == $academic_year->id) {
+                    $canUpload = true;
+                }
+            }
+
 
 
             //generate qr_code
@@ -1418,6 +1482,7 @@ class StudentController extends Controller
             ]);
         }
 
+
         return Inertia::render('Student/Profile/Scholar-Profile', [
             'student' => $student,
             'education' => $education,
@@ -1425,6 +1490,7 @@ class StudentController extends Controller
             'siblings' => $siblings,
             'scholar' => $scholar,
             'grades' => $grades,
+            'canUpload' => $canUpload,
             'latestgrade' => $latestgrade,
             'semesterGrade' => $grantee_semester,
             'schoolyear_grade' => $school_year,
@@ -1646,6 +1712,8 @@ class StudentController extends Controller
 
         $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
 
+        $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
+
         return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipApplication', [
             'scholarship' => $scholarship,
             'sponsor' => $sponsor,
@@ -1653,6 +1721,7 @@ class StudentController extends Controller
             'deadline' => $deadline,
             'selectedCampus' => $selectedCampus,
             'criterias' => $criteria,
+            'templates' => $templates,
             'grade' => $grade,
         ]);
     }
@@ -1662,9 +1731,18 @@ class StudentController extends Controller
         $request->validate([
             'scholarship_id' => 'required|exists:scholarships,id',
             'essay' => 'required|string',
-            'files.*' => 'required|file|',
+            'files.*' => 'required|file',
+            'files' => 'required|array',
             'req' => 'array'
+        ], [
+            'scholarship_id.required' => 'Please select a scholarship.',
+            'scholarship_id.exists' => 'The selected scholarship is invalid.',
+            'essay.required' => 'Your essay is required.',
+            'essay.string' => 'The essay must be a valid text.',
+            'files.required' => 'Each file is required.',
+            'files.*.file' => 'Each uploaded item must be a valid file.',
         ]);
+
 
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
 

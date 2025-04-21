@@ -126,6 +126,22 @@ class DatabaseSeeder extends Seeder
             'picture' => 'ched_pic.jpg',
         ]);
 
+        User::factory()->create([
+            'name' => 'sponsor2',
+            'email' => 'dbpsponsor@gmail.com',
+            'first_name' => 'Jose',
+            'last_name' => 'Manalo',
+            'middle_name' => 'De Guzman',
+            'password' => bcrypt('password'),
+            'usertype' => 'sponsor',
+            'campus_id' => '1',
+            'age' => '25',
+            'address' => 'Morong, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'ched_pic.jpg',
+        ]);
+
         //cashier
         User::factory()->create([
             'name' => 'head_cashier1',
@@ -239,7 +255,7 @@ class DatabaseSeeder extends Seeder
         Sponsor::factory()->create([
             'name' => 'Development Bank of the Philippines',
             'created_id' => 2,
-            'assign_id' => 5,
+            'assign_id' => 6,
             'abbreviation' => 'DBP',
             'since' => '2001',
             'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',

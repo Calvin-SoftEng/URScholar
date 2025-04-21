@@ -4,20 +4,18 @@
             class="sm:px-0 lg:px-48 border-box w-full h-full flex flex-row bg-gradient-to-b from-[#E9F4FF] via-white to-white dark:bg-gradient-to-b dark:from-[#1C2541] dark:via-[#0B132B] dark:to-[#0B132B]">
             <div class="w-full p-4 h-full">
                 <div class="bg-white dark:bg-dcontainer w-full h-full rounded-xl flex flex-row">
-                    <div
-                        class="border-r sm:w-full lg:w-[30%]"
-                        :class="{
-                            'hidden': isChatOpen,
-                            'block': !isChatOpen,
-                            'md:block': true
-                        }"
-                        >
-                        <h3 class="text-xl text-[#003366] dark:text-dtext mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold">
+                    <div class="border-r sm:w-full lg:w-[30%]" :class="{
+                        'hidden': isChatOpen,
+                        'block': !isChatOpen,
+                        'md:block': true
+                    }">
+                        <h3
+                            class="text-xl text-[#003366] dark:text-dtext mb-1 px-4 pt-4 pb-0 font-poppins font-extrabold">
                             Messages</h3>
 
                         <!-- Tabs for DM and GC -->
                         <div class="mt-4 flex border-b border-gray-100 dark:border-gray-600">
-                           
+
                             <!-- GC Tab -->
                             <button type="button"
                                 class="w-full p-2 text-center text-sm font-medium focus:outline-none transition" :class="selectedTab === 'gc'
@@ -63,7 +61,7 @@
                                 <div class="flex flex-col space-y-1 flex-grow">
                                     <div class="flex justify-between">
                                         <span class="text-primary-foreground font-quicksand font-semibold">{{ group.name
-                                            }}</span>
+                                        }}</span>
                                         <span v-if="group.latest_message" class="text-xs text-gray-400">
                                             {{ formatTimestamp(group.latest_message.created_at) }}
                                         </span>
@@ -127,23 +125,22 @@
                         </div>
                     </div>
 
-                    <div class="sm:w-full lg:w-[70%] h-full flex flex-col"
-                        :class="{
-                            'hidden': !isChatOpen,
-                            'flex': isChatOpen,
-                            'lg:flex': true
-                        }">
+                    <div class="sm:w-full lg:w-[70%] h-full flex flex-col" :class="{
+                        'hidden': !isChatOpen,
+                        'flex': isChatOpen,
+                        'lg:flex': true
+                    }">
                         <div class="shadow-sm p-4 flex justify-between items-center">
                             <div class="flex flex-row space-x-3 items-center">
-                            <button class="flex items-center justify-center" @click="closeChat">
-                                <span class="material-symbols-rounded">
-                                keyboard_arrow_left
-                                </span>
-                            </button>
-                            <h3 class="text-lg font-bold text-primary">
-                                {{ selectedData ? (selectedData.name  || (selectedData.batch_no ? `Batch
-                                ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
-                            </h3>
+                                <button class="flex items-center justify-center" @click="closeChat">
+                                    <span class="material-symbols-rounded">
+                                        keyboard_arrow_left
+                                    </span>
+                                </button>
+                                <h3 class="text-lg font-bold text-primary">
+                                    {{ selectedData ? (selectedData.name || (selectedData.batch_no ? `Batch
+                                    ${selectedData.batch_no} ` : 'Conversation')) : 'Conversation' }}
+                                </h3>
                             </div>
 
                             <!-- Three dots menu aligned with conversation text -->
@@ -243,30 +240,39 @@
                                 <div class="p-2">
                                     <h4 class="font-bold text-primary mb-3">Members</h4>
 
-                                    <div>
+                                    <div v-if="groupMembers && groupMembers.length">
                                         <!-- Group members by usertype -->
+                                        <template v-for="(users, userType) in groupedMembers" :key="userType">
                                             <div class="mb-4">
-                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">Grantees
+                                                <h5 class="text-xs uppercase text-gray-500 font-semibold mb-2">
+                                                    {{ formatUserType(userType) }}
                                                 </h5>
-                                                <div 
+                                                <div v-for="user in users" :key="user.id"
                                                     class="flex items-center space-x-2 p-2 hover:bg-gray-50 rounded-lg">
-                                                    <div >
-                                                            <img class="h-8 w-8 rounded-full"
-                                                            src="../../../../assets/images/no_userpic.png">
+                                                    <!-- User with profile picture -->
+                                                    <div v-if="user.picture">
+                                                        <img class="h-8 w-8 rounded-full border"
+                                                            :src="`/storage/user/profile/${user.picture}`"
+                                                            :alt="user.first_name || user.name">
                                                     </div>
-                                                    <!-- <div 
+                                                    <!-- User without profile picture (show initials) -->
+                                                    <div v-else
                                                         class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-500 font-semibold">
-                                                       eafeafef
-                                                    </div> -->
+                                                        {{ (user.first_name ? user.first_name.charAt(0) :
+                                                            user.name.charAt(0)).toUpperCase() }}
+                                                    </div>
                                                     <span class="text-sm font-medium">
-                                                        Manalo, Daughtry
-                                                        </span>
+                                                        {{ user.last_name && user.first_name ?
+                                                            `${user.last_name}, ${user.first_name}` :
+                                                            user.name }}
+                                                    </span>
                                                 </div>
                                             </div>
+                                        </template>
                                     </div>
-                                    <!-- <div v-else class="text-center text-gray-500 py-4">
+                                    <div v-else class="text-center text-gray-500 py-4">
                                         <p>No member information available</p>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -335,11 +341,11 @@ const props = defineProps({
 const isChatOpen = ref(false)
 
 function openChat() {
-  isChatOpen.value = true;
+    isChatOpen.value = true;
 }
 
 const closeChat = () => {
-  isChatOpen.value = false
+    isChatOpen.value = false
 }
 
 
@@ -542,6 +548,68 @@ const toggleAttachmentMenu = () => {
     // Implementation for attachment menu would go here
 };
 
+// Add these to your script setup
+const groupMembers = computed(() => {
+    if (!selectedData.value || !selectedData.value.users) {
+        return [];
+    }
+    return selectedData.value.users;
+});
+
+// Group members by usertype
+const groupedMembers = computed(() => {
+    if (!groupMembers.value || groupMembers.value.length === 0) {
+        return {};
+    }
+
+    return groupMembers.value.reduce((acc, user) => {
+        const usertype = user.usertype || 'other';
+        if (!acc[usertype]) {
+            acc[usertype] = [];
+        }
+        acc[usertype].push(user);
+        return acc;
+    }, {});
+});
+
+
+// Add this method to your Vue component script
+
+const fetchGroupMembers = async () => {
+    if (!selectedData.value || !selectedData.value.id || !groupType.value) {
+        return;
+    }
+
+    try {
+        const response = await axios.post('/messaging/get-members', {
+            group_id: selectedData.value.id,
+            group_type: groupType.value,
+        });
+
+        if (response.data && response.data.members) {
+            // Update the selected data with the fetched members
+            selectedData.value = {
+                ...selectedData.value,
+                users: response.data.members
+            };
+        }
+    } catch (error) {
+        console.error('Error fetching group members:', error);
+    }
+};
+
+// Call this in the watch function when selectedData changes
+watch([selectedData, groupType], ([newData, newType], [oldData, oldType]) => {
+    if (newData && newData.id && (!oldData || newData.id !== oldData.id || newType !== oldType)) {
+        // Fetch updated members for the newly selected group
+        showMemberList.value = false;
+        
+        fetchGroupMembers();
+    }
+});
+
+
+
 // Update the sendMessage function to handle conversations
 const sendMessage = () => {
     if (!selectedData.value || !selectedData.value.id || !form.value.content.trim()) {
@@ -552,7 +620,17 @@ const sendMessage = () => {
     form.value.group_id = selectedData.value.id;
     form.value.group_type = groupType.value;
 
-    router.post('/messaging/send', form.value, {
+    // Set form values based on selected group
+    const messageContent = form.value.content; // Store the content before clearing
+
+    // Clear the input immediately for better UX
+    form.value.content = '';
+
+    router.post('/messaging/send', {
+            content: messageContent,
+            group_id: selectedData.value.id,
+            group_type: groupType.value
+        },{
         preserveScroll: true,
         onSuccess: (page) => {
             // Create a temporary message object to add to the UI immediately

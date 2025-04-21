@@ -41,7 +41,7 @@
                 <div class="text-sm mt-2">
                     <p>Scholarship and Financial Assistance Unit</p>
                     <p>University of Rizal System - Morong Campus</p>
-                    <p>Email: support@urscholar.edu.ph</p>
+                    <p>Email: ursscholarship.unit@gmail.com</p>
                 </div>
             </div>
         </div>
@@ -52,8 +52,37 @@
 
         <!-- Logo positioned at bottom right -->
         <div class="absolute bottom-0 right-0 transform translate-x-4 translate-y-4">
-            <img src="../../../assets/images/ursportallogoonly.png" alt="URS Logo" class="w-80 opacity-15">
+            <img :src="`/storage/branding/logos/${branding.logo_light}`" alt="URS Logo" class="w-80 opacity-15">
         </div>
     </footer>
 
 </template>
+
+<script setup>
+import { ref, onMounted, onUnmounted } from 'vue';
+import { Head, Link } from '@inertiajs/vue3';
+import { initFlowbite } from 'flowbite';
+
+const isHovered = ref(false);
+
+defineProps({
+    canLogin: {
+        type: Boolean,
+    },
+    canRegister: {
+        type: Boolean,
+    },
+    laravelVersion: {
+        type: String,
+        required: true,
+    },
+    phpVersion: {
+        type: String,
+        required: true,
+    },
+    branding: {
+        type: Object,
+        required: true,
+    },
+});
+</script>

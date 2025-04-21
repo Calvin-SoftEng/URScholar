@@ -163,6 +163,8 @@
                                                 Upload the needed file requirements</p>
                                         </div>
 
+                                        <InputError v-if="errors?.req" :message="errors.req"
+                                        class="text-2xs text-red-500" />
                                         <div class="col-span-1 flex flex-col space-y-3">
                                             <div v-for="(requirement, index) in requirements" :key="requirement.id"
                                                 class="border rounded-lg p-3 bg-white shadow-sm w-full max-w-xl">
@@ -269,7 +271,8 @@ const props = defineProps({
     grade: {
         type: Object,
         required: true
-    }
+    },
+    errors: Object,
 });
 
 const form = useForm({

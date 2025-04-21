@@ -10,7 +10,7 @@
                 <div class="w-full mt-5 h-full mx-auto">
                     <div class="w-10/12 h-full relative mx-auto overflow-x-auto rounded-lg p-5 bg-white dark:bg-dcontainer">
                         <!-- Scholarship Forms Section -->
-                        <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
+                        <!-- <div class="flex w-full border-b border-gray-200 dark:border-gray-700 dark:bg-gray-800">
                             <a v-for="item in menuItems" :key="item.key"
                                 href="#"
                                 @click.prevent="selectMenu(item.key)"
@@ -23,119 +23,18 @@
                             >
                                 {{ item.name }}
                             </a>
-                        </div>
+                        </div> -->
 
                         <!-- Content Area -->
-                        <div class="bg-white relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg border-t-0 mt-4">
-                            <div v-if="selectedMenu === 'scholarships'" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <h3 class="text-lg font-bold p-4">Archived Scholarships</h3>
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">
-                                                Time
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Item
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Status
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                <span class="sr-only">Actions</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                10:00 AM
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                TDP
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Status 1
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <div class="space-x-2">
-                                                    <button class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">Restore</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                10:00 AM
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                TDP
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Status 2
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <div class="space-x-2">
-                                                    <button class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">Restore</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="bg-white relative overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-b-lg mt-4">
 
-                            <div v-if="selectedMenu === 'scholars'" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <h3 class="text-lg font-bold p-4">Archived Scholars List</h3>
+                            <div  class="relative overflow-x-auto shadow-md sm:rounded-lg">
+                                <h3 class="text-lg font-bold p-4">Scholarship Eligibility Categories</h3>
                                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                         <tr>
                                             <th scope="col" class="px-6 py-3">
-                                                Scholar Id
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Full Name
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Campus
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Year and Course
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                <span class="sr-only">Actions</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                URS-0000
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                Si ano
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Binangonan
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                4th Yr BSIt
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <div class="space-x-2">
-                                                    <button class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">Restore</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div v-if="selectedMenu === 'sponsors'" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <h3 class="text-lg font-bold p-4">Sponsors</h3>
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">
-                                                Activity
+                                                Condition
                                             </th>
                                             <th scope="col" class="px-6 py-3">
                                                 User
@@ -151,8 +50,8 @@
                                     <tbody>
                                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
                                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Updated an Account
-                                            </th>
+                                                Must be a Filipino Citizen
+                                                                                        </th>
                                             <td class="px-6 py-4">
                                                 Ms. Maam
                                             </td>
@@ -161,87 +60,7 @@
                                             </td>
                                             <td class="px-6 py-4 text-right">
                                                 <div class="space-x-2">
-                                                    <button class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">Restore</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div v-if="selectedMenu === 'reports'" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <h3 class="text-lg font-bold p-4">Reports List</h3>
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">
-                                                Activity
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                User
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Date
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                <span class="sr-only">Actions</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Updated an Account
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                Ms. Maam
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Kahapon
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <div class="space-x-2">
-                                                    <button class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">Restore</button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div v-if="selectedMenu === 'payouts'" class="relative overflow-x-auto shadow-md sm:rounded-lg">
-                                <h3 class="text-lg font-bold p-4">Payouts List</h3>
-                                <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3">
-                                                Activity
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                User
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                Date
-                                            </th>
-                                            <th scope="col" class="px-6 py-3">
-                                                <span class="sr-only">Actions</span>
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                                            <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                                Updated an Account
-                                            </th>
-                                            <td class="px-6 py-4">
-                                                Ms. Maam
-                                            </td>
-                                            <td class="px-6 py-4">
-                                                Kahapon
-                                            </td>
-                                            <td class="px-6 py-4 text-right">
-                                                <div class="space-x-2">
-                                                    <button class="bg-green-500 text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">Restore</button>
+                                                    <button class="bg-primary text-white px-3 py-1 rounded-md text-sm hover:bg-green-600 transition">Restore</button>
                                                 </div>
                                             </td>
                                         </tr>

@@ -173,7 +173,6 @@
                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                                     <option value="" disabled>Select Scholarship Type</option>
                                     <option value="Grant-Based">Grant-Based</option>
-                                    <option value="Academic Scholarship">Academic Scholarship</option>
                                     <option value="One-time Payment">One-time Payment</option>
                                 </select>
                             </div>

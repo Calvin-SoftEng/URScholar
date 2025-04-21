@@ -71,7 +71,7 @@ class PayoutsController extends Controller
             ->where('batch_id', $batchId)
             ->with([
                 'scholar' => function ($subQuery) {
-                    $subQuery->with(['course', 'campus']);
+                    $subQuery->with(['course', 'campus', 'user']);
                 }
             ])
             ->get();

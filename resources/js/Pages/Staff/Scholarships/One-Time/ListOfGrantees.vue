@@ -68,7 +68,7 @@
                                     </span>
                                 </button>
                             </div>
-                            <button v-if="payouts" @click="toggleSendBatch"
+                            <button v-if="!payouts" @click="toggleSendBatch"
                                 class="flex items-center gap-2 bg-green-500 font-poppins text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
                                 <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
                                 <span class="font-normal">Forward to <span class="font-semibold">University

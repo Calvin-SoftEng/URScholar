@@ -3,14 +3,14 @@
     <Head title="Dashboard" />
 
     <AuthenticatedLayout class="shadow-md z-10">
-        <form @submit.prevent="submit" class="w-full h-full overflow-hidden">
+        <div class="w-full h-full overflow-hidden">
             <div class="w-full bg-dirtywhite shadow-sm justify-between flex flex-row">
                 <h1 class="xl:text-2xl sm:text-sm font-bold font-sora text-left p-3 mx-10 sm:mx-3 md:mx-20">
                     My Account
                 </h1>
             </div>
             <div
-                class="pt-3 sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
+                class="sm:pb-5 lg:pb-24 overflow-auto h-full scroll-py-2 bg-gradient-to-b from-[#E9F4FF] via-white to-white">
                 <div class="mx-auto sm:w-11/12 lg:w-7/12 sm:px-1 lg:px-8 ">
 
                     <!-- Mobile Display------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
@@ -23,10 +23,10 @@
 
                     <div class="hidden md:block">
                         <!-- Content for Web -->
-                        <div  class="mx-auto max-w-xl h-full bg-white p-5 justify-center items-center flex flex-col gap-3">
+                        <div  class="mx-auto mt-5 max-w-3xl h-full bg-white p-5 justify-center items-center flex flex-col gap-3">
                             <div class="w-full h-full col-span-1 space-y-4 flex flex-col items-center">
 
-                                <div class="relative w-full mx-auto mt-5 p-6 border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-gray-800">
+                                <div class="relative w-full mx-auto  p-6 border border-gray-100 rounded-lg shadow-sm bg-white dark:bg-gray-800">
 
                                     <!-- Grid Layout -->
                                     <div class="grid grid-cols-2 gap-5">
@@ -75,7 +75,7 @@
                     
                 </div>
             </div>
-        </form>
+        </div>
 
 
         <!-- Email Change Modal -->

@@ -308,22 +308,27 @@
                                         </button>
                                     </div>
 
-                                    <div
-                                        v-if="requirements != 0 && allBatchesInactive === false && myInactive == false">
-                                        <button @click="toggleForwardRequirements"
-                                            class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
-                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                            <span class="font-normal">Forward Requirements</span>
-                                        </button>
-                                    </div>
-                                    <div v-else>
-                                        <button v-tooltip.left="'Scholars already submitted'" disabled
-                                            class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
+                                    <div v-if="myvalidated">
+                                        <div
+                                            v-if="requirements != 0 && allBatchesInactive === false && myInactive == false && valitedScholars == true">
+                                            <button @click="toggleForwardRequirements"
+                                                class="flex items-center gap-2 bg-blue-600 font-poppins text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                                                <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                                    class="text-base" />
+                                                <span class="font-normal">Forward Requirements</span>
+                                            </button>
+                                        </div>
+                                        <div v-else>
+                                            <button v-tooltip.left="'Scholars already submitted'" disabled
+                                                class="flex items-center gap-2 dark:text-dtext bg-blue-100 dark:bg-blue-800 
                                                 border border-blue-300 dark:border-blue-500  hover:bg-blue-200 px-4 py-2 rounded-lg  transition duration-200">
-                                            <font-awesome-icon :icon="['fas', 'share-from-square']" class="text-base" />
-                                            <span class="font-normal">Forward Requirements</span>
-                                        </button>
+                                                <font-awesome-icon :icon="['fas', 'share-from-square']"
+                                                    class="text-base" />
+                                                <span class="font-normal">Forward Requirements</span>
+                                            </button>
+                                        </div>
                                     </div>
+
 
                                     <div v-if="payouts">
                                         <button @click="toggleView"
@@ -503,9 +508,14 @@
                                                                     </div>
                                                                     <span
                                                                         class="text-xl font-bold text-primary drop-shadow">
-                                                                        {{ batch.total_scholars
-                                                                            === batch.sub_total ? 'Complete' :
-                                                                            'Pending' }}</span>
+                                                                        {{
+                                                                            batch.status === 'Inactive'
+                                                                                ? 'Complete'
+                                                                                : (batch.total_scholars === batch.sub_total ?
+                                                                                    'Complete' : 'Pending')
+                                                                        }}
+                                                                    </span>
+
                                                                 </div>
 
                                                                 <!-- Number of Students -->
@@ -839,6 +849,8 @@
                                                 <label for="datepicker-range-start"
                                                     class="text-sm font-medium text-gray-700 mb-1 dark:text-dtext">Application
                                                     Start</label>
+                                                <InputError v-if="errors?.application" :message="errors.application"
+                                                    class="text-2xs text-red-500" />
                                                 <div class="relative">
                                                     <div
                                                         class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -863,6 +875,8 @@
                                                 <label for="datepicker-range-end"
                                                     class="text-sm font-medium text-gray-700 mb-1 dark:text-dtext">Application
                                                     Deadline</label>
+                                                <InputError v-if="errors?.deadline" :message="errors.deadline"
+                                                    class="text-2xs text-red-500" />
                                                 <div class="relative">
                                                     <div
                                                         class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
@@ -935,6 +949,8 @@
                                                 </div>
 
                                                 <!-- Campus Selection List -->
+                                                <InputError v-if="errors?.campus_recipients"
+                                                    :message="errors.campus_recipients" class="text-2xs text-red-500" />
                                                 <div class="space-y-2">
                                                     <div v-for="campus in campusesData" :key="campus.id"
                                                         class="flex items-center justify-between border p-2 rounded-md">
@@ -1015,6 +1031,8 @@
                                     </textarea>
                                                 </div>
 
+                                                <InputError v-if="errors?.conditions" :message="errors.conditions"
+                                                    class="text-2xs text-red-500" />
                                                 <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
                                                     class="flex flex-col justify-center space-y-2 items-start">
                                                     <span
@@ -1036,6 +1054,8 @@
                                             </div>
                                         </div>
 
+                                        <InputError v-if="errors?.criteria" :message="errors.criteria"
+                                            class="text-2xs text-red-500" />
                                         <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
                                             <div class="p-4 ">
                                                 <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
@@ -1064,6 +1084,8 @@
                                                 class="text-sm font-medium text-gray-700 dark:text-dtext">
                                                 List Requirements
                                             </label>
+                                            <InputError v-if="errors?.requirements" :message="errors.requirements"
+                                                class="text-2xs text-red-500" />
                                             <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                                 <div class="flex items-center mb-4 w-full">
                                                     <form @submit.prevent="addItem" class="flex items-center w-full">
@@ -1187,25 +1209,31 @@
 
                         <!-- Batch List -->
                         <!-- Batch List -->
-                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
-                            class="flex flex-col divide-y divide-gray-300">
-                            <p>
-                                {{ campusData.campus.name }}
-                            </p>
-                            <div v-for="batch in campusData.batches" :key="batch.id"
-                                class="py-3 px-4 flex justify-between items-center">
-                                <div>
-                                    <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
-                                        batch.batch_no }}</p>
-                                    <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId">
+                            <!-- Check if campus has at least one active batch -->
+                            <template v-if="campusData.batches.some(batch => batch.status !== 'Inactive')">
+                                <p>{{ campusData.campus.name }}</p>
+
+                                <!-- Loop through only active batches -->
+                                <div v-for="batch in campusData.batches.filter(batch => batch.status !== 'Inactive')"
+                                    :key="batch.id" class="py-3 px-4 flex justify-between items-center">
+                                    <div>
+                                        <p class="text-base font-medium text-gray-900 dark:text-white">
+                                            Batch {{ batch.batch_no }}
+                                        </p>
+                                        <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                    </div>
+
+                                    <span :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars
+                                        ? 'text-green-700 bg-green-100'
+                                        : 'text-yellow-700 bg-yellow-100'
+                                        }`">
+                                        {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete' }}
+                                    </span>
                                 </div>
-                                <span
-                                    :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                    {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete'
-                                    }}
-                                </span>
-                            </div>
+                            </template>
                         </div>
+
 
                         <!-- Forward Button -->
                         <div v-if="completedBatches === batches.length || allInactive" class="mt-4">
@@ -1321,9 +1349,9 @@
                                                     grantee.scholar?.student_status ===
                                                     'Enrolled').length}} Enrolled, {{batch.grantees.filter(grantee =>
                                                         grantee.scholar?.student_status ===
-                                                        'Unenrolled').length}} Unenrolled, {{batch.grantees.filter(grantee =>
-                                                        grantee.scholar?.student_status ===
-                                                        'Transferred').length}} Transferred</p>
+                                                        'Unenrolled').length}} Unenrolled,
+                                                    {{batch.grantees.filter(grantee => grantee.scholar?.student_status
+                                                        === 'Transferred').length}} Transferred</p>
                                             </div>
                                         </div>
                                         <span
@@ -1501,43 +1529,31 @@
                         </div>
 
                         <!-- Batch List -->
-                        <div v-else>
-                            <div v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
-                                class="flex flex-col divide-y divide-gray-300">
-                                <p>
-                                    {{ campusData.campus.name }}
-                                </p>
-                                <div v-for="batch in campusData.batches" :key="batch.id"
-                                    class="py-3 px-4 flex justify-between items-center">
+                        <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId">
+                            <!-- Check if campus has at least one active batch -->
+                            <template v-if="campusData.batches.some(batch => batch.status !== 'Inactive')">
+                                <p>{{ campusData.campus.name }}</p>
+
+                                <!-- Loop through only active batches -->
+                                <div v-for="batch in campusData.batches.filter(batch => batch.status !== 'Inactive')"
+                                    :key="batch.id" class="py-3 px-4 flex justify-between items-center">
                                     <div>
-                                        <p class="text-base font-medium text-gray-900 dark:text-white">Batch {{
-                                            batch.batch_no
-                                        }}
+                                        <p class="text-base font-medium text-gray-900 dark:text-white">
+                                            Batch {{ batch.batch_no }}
                                         </p>
-                                        <p v-if="batch.validated" class="text-sm text-gray-500">
-                                            {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
-                                                'Enrolled').length}}
-                                            Enrolled,
-                                            {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
-                                                'Unenrolled').length}}
-                                            Unenrolled,
-                                            {{batch.grantees.filter(grantee => grantee.scholar?.student_status ===
-                                                'Transferred').length}}
-                                            Transferred
-                                        </p>
-                                        <p v-else class="text-sm text-gray-500">
-                                            Validating...
-                                        </p>
+                                        <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
                                     </div>
-                                    <span
-                                        :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                        {{ batch.sub_total === batch.total_scholars
-                                            ? 'Ready to Send' : 'Incomplete'
-                                        }}
+
+                                    <span :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars
+                                            ? 'text-green-700 bg-green-100'
+                                            : 'text-yellow-700 bg-yellow-100'
+                                        }`">
+                                        {{ batch.sub_total === batch.total_scholars ? 'Ready to Send' : 'Incomplete' }}
                                     </span>
                                 </div>
-                            </div>
+                            </template>
                         </div>
+
 
 
                         <!-- <div v-else v-for="(campusData, campusId) in batchesByCampus" :key="campusId"
@@ -1564,7 +1580,7 @@
                         </div> -->
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length || accomplishedBatches" class="mt-4">
+                        <div v-if="completedBatches === batches.length && AllvalidationStatus || accomplishedBatches" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 @click="forwardSponsor"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -1843,14 +1859,17 @@ const props = defineProps({
     approvedCount: Number,
     allBatches: Array,
     disableSendEmailButton: Boolean,
+    noScholars: Boolean,
     inactiveBatches: Boolean,
     accomplishedBatches: Boolean,
+    activeBatches: Array,
     inactivePayouts: Boolean,
     hasActiveGrantees: Boolean,
     valitedScholars: Boolean,
     myInactive: Boolean,
     allInactive: Boolean,
     valitedBatches: Boolean,
+    myvalidated: Boolean,
     checkValidated: Boolean,
     granteeInactive: Boolean,
     validationStatus: Boolean,

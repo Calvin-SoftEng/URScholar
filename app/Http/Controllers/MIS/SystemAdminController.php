@@ -35,8 +35,10 @@ class SystemAdminController extends Controller
     public function portal_branding()
     {
 
-
-        return Inertia::render('MIS/System_Config/Portal_Branding');
+        $branding = PortalBranding::where('status', 'Active')->first();
+        return Inertia::render('MIS/System_Config/Portal_Branding', [
+            'branding' => $branding,
+        ]);
     }
 
     public function portal_branding_store(Request $request)
@@ -49,7 +51,7 @@ class SystemAdminController extends Controller
             'status' => 'required|in:Active,Inactive',
         ]);
 
-        dd($request->all());
+
         // Find existing active branding or create new
         $branding = PortalBranding::where('status', 'Active')->first();
         if (!$branding) {

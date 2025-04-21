@@ -362,6 +362,7 @@ Route::middleware(['auth', 'usertype:student', 'verified'])->group(function () {
     Route::post('/student/application/re-upload', [StudentController::class, 'applicationReupload'])->name('student.application.reupload');
 
     Route::get('/student/confirmation', [StudentController::class, 'confirmation'])->name('student.confirmation');
+    Route::get('/student/resubmission', [StudentController::class, 'resubmission'])->name('student.resubmission');
     Route::post('/student/application/upload', [StudentController::class, 'applicationUpload'])->name('student.application.upload');
 
     //profile

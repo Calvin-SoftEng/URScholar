@@ -4,8 +4,7 @@
       <div class="flex flex-row gap-2">
         <button
           class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-          @click="generateReport"
-        >
+          @click="generateReport">
           <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
           Generate Report
         </button>
@@ -55,7 +54,9 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                          <img
+                            :src="`/storage/user/profile/${disbursement.scholar.user?.picture}` || '../../../../assets/images/no_userpic.png'"
+                            alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
                       <div>
