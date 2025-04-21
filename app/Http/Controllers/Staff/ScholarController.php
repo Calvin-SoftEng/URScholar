@@ -50,7 +50,7 @@ class ScholarController extends Controller
                 ->get();
         } else {
             $grantees = Grantees::with('scholar', 'scholar.user', 'scholar.campus', 'scholar.course', 'batch')
-                ->where('status', 'Accomplished')
+                ->whereIn('status', ['Accomplished', 'Active'])
                 ->get();
         }
 
@@ -320,7 +320,7 @@ class ScholarController extends Controller
         $scholar = Scholar::findOrFail($id);
         $originalStatus = $scholar->student_status; // Store original status for comparison
 
-        if ($scholar->student_status == 'Unenrolled' && ($validated['status'] == 'Enrolled'  || $validated['status'] == 'Transferred')) {
+        if ($scholar->student_status == 'Unenrolled' && ($validated['status'] == 'Enrolled' || $validated['status'] == 'Transferred')) {
             // Update the scholar's status
 
             dd($validated['status']);
