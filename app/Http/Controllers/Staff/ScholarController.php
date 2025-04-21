@@ -640,7 +640,7 @@ class ScholarController extends Controller
 
         if ($validator->fails()) {
             return back()->withErrors([
-                'nofile' => 'Wrong file ya',
+                'nofile' => 'Please upload a CSV file.',
             ])->withInput();
         }
 
