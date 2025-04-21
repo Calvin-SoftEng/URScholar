@@ -1646,6 +1646,8 @@ class StudentController extends Controller
 
         $grade = Criteria::where('scholarship_id', $scholarship->id)->first();
 
+        $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
+
         return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipApplication', [
             'scholarship' => $scholarship,
             'sponsor' => $sponsor,
@@ -1653,6 +1655,7 @@ class StudentController extends Controller
             'deadline' => $deadline,
             'selectedCampus' => $selectedCampus,
             'criterias' => $criteria,
+            'templates' => $templates,
             'grade' => $grade,
         ]);
     }

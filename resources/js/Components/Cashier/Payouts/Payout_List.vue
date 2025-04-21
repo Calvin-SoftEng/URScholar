@@ -58,7 +58,9 @@
                     <div class="flex items-center gap-3">
                       <div class="avatar">
                         <div class="mask rounded-full h-10 w-10">
-                          <img src="../../../../assets/images/no_userpic.png" alt="Avatar Tailwind CSS Component" />
+                          <img
+                            :src="`/storage/user/profile/${disbursement.scholar.user?.picture}` || '../../../../assets/images/no_userpic.png'"
+                            alt="Avatar Tailwind CSS Component" />
                         </div>
                       </div>
                       <div>
@@ -296,7 +298,7 @@
                     <p class="text-gray-600 text-xl">{{ pendingScholar.year_level }}{{
                       getYearSuffix(pendingScholar.year_level) }} Year - {{ pendingScholar.campus?.name }}</p>
                     <p class="text-gray-600 text-xl">Scholar ID: <span class="font-semibold">{{
-                        pendingScholar.urscholar_id }}</span></p>
+                      pendingScholar.urscholar_id }}</span></p>
                   </div>
                 </div>
 

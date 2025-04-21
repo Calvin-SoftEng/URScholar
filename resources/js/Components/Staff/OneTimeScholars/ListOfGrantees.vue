@@ -54,7 +54,7 @@
                   <td>{{ grantee.student_status }}</td>
                   <td>
                     <span :class="{
-                      'bg-green-100 text-green-800 border border-green-400': grantee.status === 'Accepted',
+                      'bg-green-100 text-green-800 border border-green-400': grantee.status === 'Accomplished',
                       'bg-gray-200 text-gray-500 border border-gray-400': grantee.status === 'Pending',
                       'bg-red-100 text-red-800 border border-red-400': grantee.status === 'Rejected'
                     }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
