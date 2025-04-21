@@ -651,6 +651,39 @@ class ScholarController extends Controller
 
             $firstRecord = $csv->fetchOne();
 
+            // Check if required columns exist in the CSV
+            $requiredColumns = [
+                'HEI NAME',
+                'CAMPUS',
+                'GRANT',
+                'BATCH NO.',
+                'APP NO',
+                'AWARD NO.',
+                'LASTNAME',
+                'FIRSTNAME',
+                'EXTNAME',
+                'MIDDLENAME',
+                'SEX',
+                'BIRTHDATE',
+                'COURSE/PROGRAM ENROLLED',
+                'YEAR LEVEL',
+                'TOTAL UNITS ENROLLED',
+                'STREET',
+                'MUNICIPALITY',
+                'PROVINCE',
+                'CLASSIFICATION OF PWD'
+            ];
+
+            $headers = array_keys($firstRecord);
+            $missingColumns = array_diff($requiredColumns, $headers);
+
+            if (!empty($missingColumns)) {
+                return back()->withErrors([
+                    'nofile' => 'CSV file is missing required columns: ' . implode(', ', $missingColumns),
+                ])->withInput();
+            }
+
+
             // Get all records
             $records = iterator_to_array($csv->getRecords());
 
@@ -1423,11 +1456,10 @@ class ScholarController extends Controller
                 ->with('success', 'Scholars successfully added!');
 
         } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Error processing CSV file: ' . $e->getMessage(),
-                'stack' => $e->getTraceAsString(),
-                'status' => 'error'
-            ], 500);
+            // Catch any other exceptions that might occur
+            return back()->withErrors([
+                'error' => 'Error processing CSV file: ' . $e->getMessage(),
+            ])->withInput();
         }
     }
 
