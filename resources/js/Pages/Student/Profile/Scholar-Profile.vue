@@ -17,9 +17,9 @@
                     </button>
 
                     <!-- Save Button -->
-                    <button v-else type="submit" class="text-dprimary dark:text-dtext font-medium text-sm">
+                    <!-- <button v-else type="submit" class="text-dprimary dark:text-dtext font-medium text-sm">
                         Save Updates
-                    </button>
+                    </button> -->
 
                     <!-- Cancel Button -->
                     <button v-if="EditProfileWeb" type="button" @click="cancelWebEdit"
@@ -1044,6 +1044,9 @@
 
                                 </div>
                             </div>
+                            <button type="submit" class="text-dprimary dark:text-dtext font-medium text-sm">
+                                Save Updates
+                            </button>
                         </form>
                     </div>
 
@@ -2171,6 +2174,13 @@
                             </div>
 
                         </div>
+                        <button
+                            type="submit"
+                            class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg shadow-md hover:from-blue-700 hover:to-blue-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                            >
+                            Save Updates
+                            </button>
+
                     </form>
                 </div>
             </div>
