@@ -351,7 +351,6 @@ class ScholarController extends Controller
                         ->where('status', 'Pending')
                         ->first();
 
-                    dd($grantee);
                     if ($grantee) {
                         $grantee->status = 'Active';
                         $grantee->student_status = $validated['status'];
