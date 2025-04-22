@@ -251,7 +251,7 @@ class ScholarshipController extends Controller
                 : null,
             'selectedSem' => $request->input('selectedSem', ''),
             'totalScholars' => $totalScholars,
-            
+
         ]);
     }
 
@@ -695,6 +695,7 @@ class ScholarshipController extends Controller
 
         if ($currentUser->usertype == 'super_admin') {
             $completedBatches = Batch::where('scholarship_id', $scholarship->id)
+                ->where('status', '!=', 'Inactive')
                 ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
                 ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
                 ->whereRaw('total_scholars = sub_total')
@@ -702,6 +703,7 @@ class ScholarshipController extends Controller
 
         } else {
             $completedBatches = Batch::where('scholarship_id', $scholarship->id)
+                ->where('status', '!=', 'Inactive')
                 ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
                 ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
                 ->where('campus_id', $currentUser->campus_id)
@@ -1026,7 +1028,7 @@ class ScholarshipController extends Controller
         $totalSubTotal = $batches->sum('sub_total') ?? 0;
 
         $allBatchesAccomplished = Batch::where('scholarship_id', $scholarship->id)
-        ->where('status', '!=', 'Inactive')
+            ->where('status', '!=', 'Inactive')
             ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->get();
