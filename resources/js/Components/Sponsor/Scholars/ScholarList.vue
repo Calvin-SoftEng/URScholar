@@ -109,7 +109,8 @@
                     <span class="px-2 py-1 rounded-md text-xs" :class="{
                       'bg-green-100 text-green-800 border border-green-400': scholar.student_status === 'Enrolled',
                       'bg-yellow-100 text-yellow-800 border border-yellow-400': scholar.student_status === 'Dropped' || scholar.student_status === 'Graduated',
-                      'bg-red-100 text-red-800 border border-red-400': scholar.student_status === 'Unenrolled' || scholar.student_status === 'Unenrolled'
+                      'bg-red-100 text-red-800 border border-red-400': scholar.student_status === 'Unenrolled' || scholar.student_status === 'Unenrolled',
+                      'bg-blue-100 text-blue-800 border border-blue-400': scholar.student_status === 'Transferred',
                     }">
                       {{ scholar.student_status }}
                     </span>

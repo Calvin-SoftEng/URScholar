@@ -116,13 +116,13 @@
                     </span>
                   </td>
                   <th>
-                    <Link :href="`/scholarships/scholar=${scholar.id}`">
+                    <!-- <Link :href="`/scholarships/scholar=${scholar.id}`">
                     <button
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
                     </button>
-                    </Link>
+                    </Link> -->
                   </th>
                 </tr>
               </tbody>
