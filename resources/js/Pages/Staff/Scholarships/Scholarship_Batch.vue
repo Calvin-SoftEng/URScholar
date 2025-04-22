@@ -86,11 +86,11 @@
 
                 <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
 
-                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                    <ScholarList :error="errors" :scholarship="scholarship" :batches="batches" :scholars="scholars"
                         :requirements="requirements" :schoolyear="schoolyear" @update:stats="updateStats" />
                 </div>
                 <div v-else>
-                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                    <ScholarList :error="errors" :scholarship="scholarship" :batches="batches" :scholars="scholars"
                     :requirements="requirements" @update:stats="updateStats" />
                 </div>
 
@@ -135,6 +135,7 @@ const props = defineProps({
     requirements: Array,
     payout: Array,
     totalScholars: Number,
+    errors: Object,
 });
 
 const total_scholars = computed(() => {

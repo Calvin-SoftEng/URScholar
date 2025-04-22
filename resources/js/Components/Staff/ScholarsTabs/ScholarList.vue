@@ -287,6 +287,9 @@
           </select>
         </div>
 
+        <div v-if="errors?.no_match" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+          <p class="text-red-600 text-sm">{{ errors.no_match }}</p>
+        </div>
         <!-- Submit Button -->
         <div class="mt-4">
           <button type="submit"
@@ -382,6 +385,7 @@ const props = defineProps({
   batches: Object,
   scholars: Array,
   requirements: Array,
+  errors: Object,
 });
 
 // Data loading state

@@ -307,16 +307,71 @@ class ScholarController extends Controller
             'status' => 'required|in:Dropped,Graduated,Transferred,Enrolled,Unenrolled',
         ]);
 
+
         // Find the scholar by ID
         $scholar = Scholar::findOrFail($id);
         $originalStatus = $scholar->student_status; // Store original status for comparison
 
         if ($scholar->student_status == 'Unenrolled' && ($validated['status'] == 'Enrolled' || $validated['status'] == 'Transferred')) {
-            // Update the scholar's status
+            // Get all students
+            $students = Student::all();
 
-            dd($validated['status']);
-            $scholar->student_status = $validated['status'];
-            $scholar->save();
+            // Check if scholar has matching student data
+            $hasMatchingStudent = false;
+            $matchedStudent = null;
+
+            foreach ($students as $student) {
+                // Match based on student_number if available
+                if ($scholar->student_number && $scholar->student_number == $student->student_number) {
+                    $hasMatchingStudent = true;
+                    $matchedStudent = $student;
+                    break;
+                }
+
+                // Alternative matching based on name and other identifiers if student_number is not available
+                if (
+                    !$scholar->student_number &&
+                    strtolower($scholar->first_name) == strtolower($student->first_name) &&
+                    strtolower($scholar->last_name) == strtolower($student->last_name) &&
+                    $scholar->campus_id == $student->campus_id
+                ) {
+                    $hasMatchingStudent = true;
+                    $matchedStudent = $student;
+                    break;
+                }
+            }
+
+            // If validated status is 'Transferred' and there's matching student data
+            if ($validated['status'] == 'Transferred') {
+                if ($hasMatchingStudent) {
+                    $scholar->student_status = 'Transferred';
+
+                    // Update the scholar's status for other cases
+                    $grantee = Grantees::where('scholar_id', $scholar->id)
+                        ->where('status', 'Pending')
+                        ->first();
+
+                    dd($grantee);
+                    if ($grantee) {
+                        $grantee->status = 'Active';
+                        $grantee->student_status = $validated['status'];
+                        $grantee->save();
+                    }
+
+                    // Update scholar's course and campus with matched student data
+                    $scholar->course_id = $matchedStudent->course_id;
+                    $scholar->campus_id = $matchedStudent->campus_id;
+                    $scholar->save();
+                } else {
+                    // No matching student found for transfer
+                    return back()->withErrors([
+                        'no_match' => 'No matching student record found for transfer. Please verify the scholar data.',
+                    ])->withInput();
+                }
+            } else {
+                $scholar->student_status = $validated['status'];
+                $scholar->save();
+            }
         } elseif ($scholar->student_status == 'Enrolled' && $validated['status'] == 'Dropped') {
             // Update the scholar's status
             $grantee = Grantees::where('scholar_id', $scholar->id)->first();
