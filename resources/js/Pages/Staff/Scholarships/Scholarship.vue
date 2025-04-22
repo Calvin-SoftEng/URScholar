@@ -1219,7 +1219,7 @@
 
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length || allInactive" class="mt-4">
+                        <div v-if="completedBatches === allBatchesAccomplished.length || allInactive" class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                                 {{ isSubmitting ? 'Processing...' : 'Forward' }}
@@ -1563,7 +1563,7 @@
                         </div> -->
 
                         <!-- Forward Button -->
-                        <div v-if="completedBatches === batches.length && AllvalidationStatus || accomplishedBatches"
+                        <div v-if="completedBatches === allBatchesAccomplished.length && AllvalidationStatus || accomplishedBatches"
                             class="mt-4">
                             <button type="submit" :disabled="isSubmitting || selectedBatches.length === 0"
                                 @click="forwardSponsor"
@@ -1855,6 +1855,7 @@ const props = defineProps({
     inactiveBatches: Boolean,
     accomplishedBatches: Boolean,
     activeBatches: Array,
+    allBatchesAccomplished: Array,
     inactivePayouts: Boolean,
     hasActiveGrantees: Boolean,
     valitedScholars: Boolean,

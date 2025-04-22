@@ -1025,6 +1025,12 @@ class ScholarshipController extends Controller
 
         $totalSubTotal = $batches->sum('sub_total') ?? 0;
 
+        $allBatchesAccomplished = Batch::where('scholarship_id', $scholarship->id)
+        ->where('status', '!=', 'Inactive')
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->get();
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'total_verified_grantees' => $total_verified_grantees,
             'total_unverified_grantees' => $total_unverified_grantees,
@@ -1046,6 +1052,7 @@ class ScholarshipController extends Controller
             'accomplishedBatches' => $accomplishedBatches,
             'myvalidated' => $myvalidated,
             'activeBatches' => $activeBatches,
+            'allBatchesAccomplished' => $allBatchesAccomplished,
             'allInactive' => $allInactive,
             'myInactive' => $myInactive,
             'inactivePayouts' => $inactivePayouts,
