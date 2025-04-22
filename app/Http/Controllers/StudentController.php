@@ -57,43 +57,50 @@ class StudentController extends Controller
             ->with('campus')
             ->with('course')
             ->first();
+
         $grantee = Grantees::where('scholar_id', $scholar->id)
             ->with('school_year')
-            ->first();
+            ->first(); 
+
+            if ($grantee) {
+            
+            }
 
         $activity = ActivityLog::where('user_id', Auth::user()->id)
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $scholarship = SCholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
+            $academic_year = AcademicYear::where('status', 'Active')->first();
 
-        // Get all requirements for this scholarship
-        $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-        // Get requirements that this scholar has already submitted
-        $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->pluck('requirement_id')
-            ->toArray();
-
-        // Filter out requirements that have already been submitted
-        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
-            return in_array($requirement->id, $submittedRequirementIds);
-        })->values();
-
-
-        if ($pendingRequirements->isNotEmpty()) {
-            return redirect()->route('student.resubmission');
-        }
-
-        // Filter out requirements that have already been submitted
-        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
-            return in_array($requirement->id, $submittedRequirementIds);
-        })->values();
-
-        $academic_year = AcademicYear::where('status', 'Active')->first();
 
         if ($grantee) {
+            $scholarship = SCholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
+
+            // Get all requirements for this scholarship
+            $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+    
+            // Get requirements that this scholar has already submitted
+            $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->pluck('requirement_id')
+                ->toArray();
+    
+            // Filter out requirements that have already been submitted
+            $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+                return in_array($requirement->id, $submittedRequirementIds);
+            })->values();
+    
+    
+            if ($pendingRequirements->isNotEmpty()) {
+                return redirect()->route('student.resubmission');
+            }
+    
+            // Filter out requirements that have already been submitted
+            $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+                return in_array($requirement->id, $submittedRequirementIds);
+            })->values();
+    
+
             $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
 
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
