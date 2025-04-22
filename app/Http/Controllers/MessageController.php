@@ -228,7 +228,6 @@ class MessageController extends Controller
             'group_type' => 'required|in:scholarship,staff,conversation',
         ]);
 
-        dd($request->all());
         $user = Auth::user()->id;
 
         $messageData = [
