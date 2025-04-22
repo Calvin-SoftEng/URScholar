@@ -408,6 +408,11 @@ class ScholarController extends Controller
                     // Update scholar's course and campus with matched student data
                     $scholar->course_id = $matchedStudent->course_id;
                     $scholar->campus_id = $matchedStudent->campus_id;
+                    $scholar->student_number = $matchedStudent->student_number;
+                    $scholar->email = $matchedStudent->email;
+                    $scholar->first_name = $matchedStudent->first_name;
+                    $scholar->last_name = $matchedStudent->last_name;
+                    $scholar->middle_name = $matchedStudent->middle_name;
                     $scholar->student_status = 'Transferred';
                     $scholar->status = 'Verified';
                     $scholar->save();
