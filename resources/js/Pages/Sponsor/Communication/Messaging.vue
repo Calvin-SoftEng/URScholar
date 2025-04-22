@@ -248,6 +248,7 @@ import { ref, onMounted, watch, computed, onUnmounted } from 'vue';
 import axios from 'axios';
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
+import { useWindowScroll } from '@vueuse/core';
 
 const props = defineProps({
     messages: Array,
@@ -403,6 +404,7 @@ const selectUser = (user) => {
         preserveScroll: true,
         only: ['messages', 'selectedUser', 'selectedConversation'],
         onSuccess: (page) => {
+            window.location.reload();
             if (page.props.messages) {
                 messageData.value = page.props.messages;
                 scrollToBottom();
