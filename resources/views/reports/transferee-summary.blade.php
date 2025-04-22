@@ -108,7 +108,7 @@
                             <td class="border border-gray-700 p-2">{{ $data['campus']->name }}</td>
                             <td class="border border-gray-700 p-2">{{ $grantee->scholar->course->name ?? 'N/A' }}</td>
                             <td class="border border-gray-700 p-2">{{ $grantee->scholar->year_level }}</td>
-                            <td class="border border-gray-700 p-2">{{ $grantee->batch->batch_number }}</td>
+                            <td class="border border-gray-700 p-2">{{ $grantee->batch->batch_no }}</td>
                         </tr>
                     @endforeach
                 @endforeach
