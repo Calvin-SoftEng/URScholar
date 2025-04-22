@@ -308,13 +308,14 @@ const openBatchPayroll = (batchId) => {
     // Find the scholarship ID associated with this batch
     const batch = props.batches.find(b => b.id === batchId);
     const scholarshipId = batch ? batch.scholarship_id : null;
+    console.log('Scholarship ID:', batchId);
 
     if (scholarshipId) {
-        router.visit(`/cashier/payout/${scholarshipId}/batch/${batchId}`, {
+        router.visit(`/cashier/payrolls/${scholarshipId}/batch/${batchId}`, {
             data: {
                 scholarship: scholarshipId,
-                selectedYear: props.schoolyear.id,
-                selectedSem: props.selectedSem
+                selectedYear: batch.school_year_id,
+                selectedSem: batch.semester,
             },
             preserveState: true
         });

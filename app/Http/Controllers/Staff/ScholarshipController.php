@@ -693,10 +693,10 @@ class ScholarshipController extends Controller
         $accomplishedBatches = $allBatchesOriginal->every(fn($batch) => in_array($batch->status, ['Accomplished', 'Inactive']));
 
         $activeBatches = Batch::where('scholarship_id', $scholarship->id)
-        ->where('status', '!=', 'Inactive')
-        ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-        ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
-        ->get();
+            ->where('status', '!=', 'Inactive')
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->get();
 
 
 
@@ -877,23 +877,39 @@ class ScholarshipController extends Controller
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->first();
 
-        // Update payout batches with proper semester filtering
         $payoutBatches = $batches->map(function ($batch) use ($request) {
-            return array_merge($batch->toArray(), [
-                'claimed_count' => $batch->disbursement()
-                    ->whereHas('payout', function ($query) use ($request) {
-                        $query->where('semester', $request->input('selectedSem'));
-                    })
-                    ->where('status', 'Claimed')
-                    ->count(),
-                'not_claimed_count' => $batch->disbursement()
-                    ->whereHas('payout', function ($query) use ($request) {
-                        $query->where('semester', $request->input('selectedSem'));
-                    })
-                    ->whereIn('status', ['Pending', 'Not Claimed'])
-                    ->count()
-            ]);
+            $semester = $request->input('selectedSem');
+
+            $claimedCount = $batch->disbursement()
+                ->whereHas('payout', function ($query) use ($semester) {
+                    $query->where('semester', $semester);
+                })
+                ->where('status', 'Claimed')
+                ->count();
+
+            $notClaimedCount = $batch->disbursement()
+                ->whereHas('payout', function ($query) use ($semester) {
+                    $query->where('semester', $semester);
+                })
+                ->whereIn('status', ['Pending', 'Not Claimed'])
+                ->count();
+
+            $payoutStatus = Payout::where('scholarship_id', $batch->scholarship_id)
+                ->where('campus_id', $batch->campus_id)
+                ->where('semester', $semester)
+                ->where('school_year_id', $batch->school_year_id)
+                ->first();
+
+            return [
+                ...$batch->toArray(),
+                'claimed_count' => $claimedCount,
+                'not_claimed_count' => $notClaimedCount,
+                'payout_status' => [
+                    'status' => $payoutStatus->status ?? null,
+                ]
+            ];
         });
+
 
         // Update grantees query for payout section
         $grantees = collect();

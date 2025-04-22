@@ -67,7 +67,7 @@
                                             <p><font-awesome-icon :icon="['fas', 'circle-dollar-to-slot']"
                                                     class="mr-1" />
                                                 Sponsoring Since:
-                                                {{ scholarship.since }}
+                                                {{ getSponsorNSince(scholarship.sponsor_id) }}
                                             </p>
                                             <!-- <p>
                                                 <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
@@ -366,6 +366,11 @@ const form = ref({
 const getSponsorName = (sponsorId) => {
     const sponsor = props.sponsors.find(s => s.id === sponsorId);
     return sponsor ? sponsor.name : 'Unknown Sponsor';
+};
+
+const getSponsorNSince = (sponsorId) => {
+    const sponsor = props.sponsors.find(s => s.id === sponsorId);
+    return sponsor ? sponsor.since : 'Unknown Sponsor';
 };
 
 // const formatDate = (date) => {

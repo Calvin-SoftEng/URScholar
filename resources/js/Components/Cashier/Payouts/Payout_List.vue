@@ -337,6 +337,8 @@
                 <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" />
 
                 <div>
+                  <InputError v-if="errors?.document" :message="errors.document"
+                            class="text-2xs text-red-500" />
                   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     for="file_input">Additional
                     Document for reason</label>
