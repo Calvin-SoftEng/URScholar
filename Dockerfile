@@ -24,9 +24,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy Laravel app files
 COPY . .
 
-# Install dependencies
-RUN composer install --no-interaction --prefer-dist --optimize-autoloader
-
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www
 
