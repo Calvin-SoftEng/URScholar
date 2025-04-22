@@ -37,9 +37,9 @@
                     </button>
 
                     <!-- Save Button -->
-                    <button v-else type="submit" class="text-primary font-medium text-xs">
+                    <!-- <button v-else type="submit" class="text-primary font-medium text-xs">
                         Save Updates
-                    </button>
+                    </button> -->
 
                     <!-- Cancel Button -->
                     <button v-if="EditProfileMobile" type="button" @click="cancelMobileEdit"
@@ -428,6 +428,12 @@
                         <form @submit.prevent="submit">
                             <div v-if="EditProfileMobile"
                                 class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                <button
+                                type="submit"
+                                class="col-span-3 px-4 py-3 bg-gradient-to-r from-blue-700 to-primary text-white text-sm font-medium rounded-lg shadow-md hover:from-blue-700 hover:to-blue-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                                >
+                                Save Updates
+                                </button>
                                 <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                                     <!-- Profile Picture -->
                                     <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
@@ -1044,9 +1050,6 @@
 
                                 </div>
                             </div>
-                            <button type="submit" class="text-dprimary dark:text-dtext font-medium text-sm">
-                                Save Updates
-                            </button>
                         </form>
                     </div>
 
@@ -1469,7 +1472,14 @@
 
                     <!-- Web Update------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- -->
                     <form @submit.prevent="submit">
+                        
                         <div v-if="EditProfileWeb" class="grid grid-cols-3 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <button
+                            type="submit"
+                            class="col-span-3 px-4 py-3 bg-gradient-to-r from-blue-700 to-primary text-white text-sm font-medium rounded-lg shadow-md hover:from-blue-700 hover:to-blue-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                            >
+                            Save Updates
+                            </button>
                             <div class="w-full h-full col-span-1 space-y-3 flex flex-col items-center">
                                 <!-- Upload & Preview Section -->
                                 <div class="w-full sm:w-[30%] flex flex-col items-center gap-1.5">
@@ -2174,12 +2184,7 @@
                             </div>
 
                         </div>
-                        <button
-                            type="submit"
-                            class="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-sm font-medium rounded-lg shadow-md hover:from-blue-700 hover:to-blue-800 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
-                            >
-                            Save Updates
-                            </button>
+                        
 
                     </form>
                 </div>
