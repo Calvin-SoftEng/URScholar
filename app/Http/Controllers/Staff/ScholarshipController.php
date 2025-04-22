@@ -1014,7 +1014,7 @@ class ScholarshipController extends Controller
         }
 
         $total_verified_grantees = $grantees->filter(function ($grantee) {
-            return $grantee && $grantee->student_status === 'Enrolled';
+            return $grantee && $grantee->student_status === 'Enrolled' || $grantee->student_status === 'Transferred';
         })->count();
 
 
