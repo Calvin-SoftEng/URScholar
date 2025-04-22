@@ -347,7 +347,7 @@ class ScholarController extends Controller
                     !$scholar->student_number &&
                     strtolower($scholar->first_name) == strtolower($student->first_name) &&
                     strtolower($scholar->last_name) == strtolower($student->last_name) &&
-                    $scholar->campus_id == $student->campus_id
+                    $scholar->email == $student->email
                 ) {
                     $hasMatchingStudent = true;
                     $matchedStudent = $student;
