@@ -1524,7 +1524,7 @@
                                         <p class="text-base font-medium text-gray-900 dark:text-white">
                                             Batch {{ batch.batch_no }}
                                         </p>
-                                        <p class="text-sm text-gray-500">Completed: {{ batch.sub_total }}</p>
+                                        <p class="text-sm text-gray-500">Completed: {{ batch.sub_total ?? 0}}</p>
                                     </div>
 
                                     <span :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.sub_total === batch.total_scholars

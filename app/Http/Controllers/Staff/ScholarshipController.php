@@ -444,7 +444,7 @@ class ScholarshipController extends Controller
                                                     'school_year_id' => $school_year,
                                                     'semester' => $semester,
                                                     'student_status' => $scholarEnrolled->student_status,
-                                                    'status' => 'Pending',
+                                                    'status' => 'Active',
                                                 ]);
                                             }
 
@@ -455,7 +455,9 @@ class ScholarshipController extends Controller
                                                 // Check if there are grantees and if all of them have "Enrolled" status
                                                 if (
                                                     $batchGrantees->isNotEmpty() && $batchGrantees->every(function ($grantee) {
-                                                        return $grantee->student_status === 'Enrolled';
+                                                        return [
+                                                            $grantee->student_status === 'Enrolled',
+                                                    ];
                                                     })
                                                 ) {
                                                     // Update batch status to Validated

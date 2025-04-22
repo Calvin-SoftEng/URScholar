@@ -380,6 +380,7 @@ class ScholarController extends Controller
 
                         if ($oldbatch->total_scholars == 0) {
                             $oldbatch->status = 'Inactive';
+                            $oldbatch->validated = true;
                         }
                         
                         $oldbatch->save();

@@ -61,9 +61,8 @@
                         :scholars="scholars" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout" />
                 </div>
                 <div v-else>
-                    <Payout_List :selectedSem="selectedSem" :schoolyear="schoolyear" :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
-                        :disbursements="disbursements" :scholar="scholar" :errors="errors" :flash="flash"
-                        :payout="payout" />
+                    <Payroll_List :selectedSem="selectedSem" :schoolyear="schoolyear" :payout_schedule="payout_schedule" :scholarship="scholarship" :batch="batch"
+                        :scholars="scholars" :scholar="scholar" :errors="errors" :flash="flash" :payout="payout" />
                 </div>
 
 
