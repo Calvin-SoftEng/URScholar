@@ -502,6 +502,7 @@ const submitForm = () => {
     },
     onError: () => {
       showToast('Error', 'Failed to update scholar status', 'error');
+      console.log('Error updating status:', props.errors);
     },
     onFinish: () => {
       loading.value = false;

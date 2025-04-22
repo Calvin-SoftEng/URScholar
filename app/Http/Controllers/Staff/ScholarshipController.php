@@ -251,6 +251,7 @@ class ScholarshipController extends Controller
                 : null,
             'selectedSem' => $request->input('selectedSem', ''),
             'totalScholars' => $totalScholars,
+            
         ]);
     }
 
