@@ -372,6 +372,31 @@ class ScholarController extends Controller
                         $grantee->save();
                     }
 
+                    $oldbatch = Batch::where('id', $grantee->batch_id)->first();
+
+                    if ($oldbatch->campus_id != $matchedStudent->campus_id) {
+                        $oldbatch->total_scholars = $oldbatch->total_scholars - 1;
+                        $oldbatch->sub_total = $oldbatch->sub_total - 1;
+                        $oldbatch->save();
+
+                        $newbatch = Batch::where('campus_id', $matchedStudent->campus_id)
+                            ->where('school_year_id', $batch->school_year_id)
+                            ->where('semester', $batch->semester)
+                            ->first();
+
+                        $approvedScholarsQuery = Scholar::whereIn('id', $scholar->pluck('id'))
+                            ->whereHas('submittedRequirements', fn($q) => $q->where('status', 'Approved'))
+                            ->whereDoesntHave('submittedRequirements', fn($q) => $q->whereIn('status', ['Pending', 'Returned']));
+
+                        $approvedCount = $approvedScholarsQuery->count();
+                        $newbatch->total_scholars = $newbatch->total_scholars + 1;
+                        $newbatch->sub_total = $newbatch->sub_total + $approvedCount;
+
+
+                        $grantee->batch_id = $newbatch->id;
+                        $grantee->save();
+                    }
+
 
                     // Update scholar's course and campus with matched student data
                     $scholar->course_id = $matchedStudent->course_id;
