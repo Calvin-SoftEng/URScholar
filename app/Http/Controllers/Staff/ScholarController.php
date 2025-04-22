@@ -377,6 +377,11 @@ class ScholarController extends Controller
                     if ($oldbatch->campus_id != $matchedStudent->campus_id) {
                         $oldbatch->total_scholars = $oldbatch->total_scholars - 1;
                         $oldbatch->sub_total = $oldbatch->sub_total - 1;
+
+                        if ($oldbatch->total_scholars == 0) {
+                            $oldbatch->status = 'Inactive';
+                        }
+                        
                         $oldbatch->save();
 
                         $newbatch = Batch::where('campus_id', $matchedStudent->campus_id)
