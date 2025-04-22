@@ -391,6 +391,7 @@ class ScholarController extends Controller
                         $approvedCount = $approvedScholarsQuery->count();
                         $newbatch->total_scholars = $newbatch->total_scholars + 1;
                         $newbatch->sub_total = $newbatch->sub_total + $approvedCount;
+                        $newbatch->save();
 
 
                         $grantee->batch_id = $newbatch->id;
