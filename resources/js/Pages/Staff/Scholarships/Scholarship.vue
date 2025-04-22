@@ -29,7 +29,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                        }} Semester</span>
+                            }} Semester</span>
                     </div>
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
@@ -556,7 +556,7 @@
                                             <div class="flex flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-md font-medium text-gray-600">
                                                     {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester }}
                                                     Semester
@@ -568,7 +568,7 @@
                                                     <span class="text-sm text-gray-600">No. of Scholars</span>
                                                     <span class="text-xl font-bold text-blue-600">{{
                                                         batch.grantees.length
-                                                        }}</span>
+                                                    }}</span>
                                                 </div>
                                                 <div class="flex flex-col items-center">
                                                     <span class="text-sm text-gray-600">Unverified Scholars</span>
@@ -628,8 +628,7 @@
                                                 class="flex justify-between items-center">
                                                 <div class="flex flex-col px-5">
                                                     <span class="text-lg font-semibold text-gray-800">Batch {{
-                                                        batch.batch_no
-                                                        }}</span>
+                                                        batch.batch_no }}</span>
                                                     <span class="text-md font-medium text-gray-600">
                                                         {{ schoolyear ? batch.school_year.year : '' }} {{ batch.semester
                                                         }}
@@ -639,7 +638,7 @@
 
                                                 <div
                                                     class="grid grid-cols-2 gap-4 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg p-4 border border-white/20">
-                                                    <!-- Validation Status -->
+                                                    <!-- Completed Payouts -->
                                                     <div class="flex flex-col items-center space-y-1">
                                                         <div class="flex items-center gap-2 text-sm text-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -652,11 +651,11 @@
                                                             <span class="text-primary">Completed Payouts</span>
                                                         </div>
                                                         <span class="text-xl font-bold text-primary drop-shadow">
-                                                            {{
-                                                                batch.grantees.length }}</span>
+                                                            {{ batch.claimed_disbursements }}
+                                                        </span>
                                                     </div>
 
-                                                    <!-- Number of Students -->
+                                                    <!-- Missed Payouts -->
                                                     <div class="flex flex-col items-center space-y-1">
                                                         <div class="flex items-center gap-2 text-sm text-gray-100">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
@@ -669,26 +668,10 @@
                                                             <span class="text-primary">Missed Payouts</span>
                                                         </div>
                                                         <span class="text-xl font-bold text-primary drop-shadow">
-                                                            {{batch.grantees.filter(grantee =>
-                                                                !grantee.scholar?.is_verified).length}}</span>
-                                                    </div>
-
-                                                </div>
-
-                                                <!-- <div class="grid grid-cols-2">
-                                                    <div class="flex flex-col items-center">
-                                                        <span class="text-sm text-gray-600">Completed Payouts</span>
-                                                        <span class="text-xl font-bold text-blue-600">{{
-                                                            batch.grantees.length }}</span>
-                                                    </div>
-                                                    <div class="flex flex-col items-center">
-                                                        <span class="text-sm text-gray-600">Missed Payouts</span>
-                                                        <span class="text-xl font-bold text-red-500">
-                                                            {{batch.grantees.filter(grantee =>
-                                                                !grantee.scholar?.is_verified).length}}
+                                                            {{ batch.not_claimed_disbursements }}
                                                         </span>
                                                     </div>
-                                                </div> -->
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -717,7 +700,7 @@
                                             <div class="felx flex-col">
                                                 <span class="text-lg font-semibold text-gray-800">Batch {{
                                                     batch.batch_no
-                                                    }}</span>
+                                                }}</span>
                                                 <span class="text-lg font-semibold text-gray-800">
                                                     1st Semesters (2023-2024)
                                                 </span>
@@ -924,7 +907,7 @@
                                                         <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                             <div>Allocated: {{ allocatedRecipients }} of {{
                                                                 form.totalRecipients
-                                                            }}</div>
+                                                                }}</div>
                                                             <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
