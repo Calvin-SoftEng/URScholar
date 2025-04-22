@@ -34,7 +34,7 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
                             <!-- Use a dropdown if batch array has items -->
-                            <Select v-if="batch && batch.length > 0" v-model="manual.batch_id">
+                            <!-- <Select v-if="batch && batch.length > 0" v-model="manual.batch_id">
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Batch" class="text-black" />
                                 </SelectTrigger>
@@ -46,9 +46,9 @@
                                         </SelectItem>
                                     </SelectGroup>
                                 </SelectContent>
-                            </Select>
+                            </Select> -->
                             <!-- Use a text input if batch array is empty -->
-                            <input v-else type="text" id="batch_id" placeholder="Enter Batch No"
+                            <input type="text" id="batch_id" placeholder="Enter Batch No"
                                 v-model="manual.batch_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />

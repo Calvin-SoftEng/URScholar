@@ -1594,7 +1594,7 @@ class ScholarController extends Controller
 
                 Scholar::insert($scholarData);
 
-                $batch = Batch::where('id', $request->batch_id)
+                $batch = Batch::where('batch_no', $request->batch_id)
                     ->where('school_year_id', $request->schoolyear)
                     ->where('semester', $request->semester)
                     ->where('campus_id', $request->campus_id)
