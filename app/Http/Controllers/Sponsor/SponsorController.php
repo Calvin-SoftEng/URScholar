@@ -110,24 +110,24 @@ class SponsorController extends Controller
             ->with('school_year')
             ->first();
 
+
         $scholars = Scholar::with('user', 'campus', 'course', 'batch')
             ->whereHas('grantees', function ($query) use ($academicYear) {
                 $query->where('status', 'Accomplished')
                     ->where('semester', $academicYear->semester)
-                    ->where('school_year_id', $academicYear->school_year_id);
+                    ->where('school_year_id', $academicYear->school_year_id); // Changed from school_year_id to academic_year_id
             })
             ->where('status', 'Verified')
-            ->where('student_status', 'Enrolled')
-            ->where('campus_id', Auth::user()->campus_id)
+            ->whereIn('student_status', ['Enrolled', 'Transferred'])
             ->get();
+
 
         $allscholars = Scholar::with('user', 'campus', 'course', 'batch')
             ->whereHas('grantees', function ($query) use ($academicYear) {
                 $query->where('status', 'Accomplished');
             })
             ->where('status', 'Verified')
-            ->where('student_status', 'Enrolled')
-            ->where('campus_id', Auth::user()->campus_id)
+            ->whereIn('student_status', ['Enrolled', 'Transferred'])
             ->get();
 
 

@@ -90,8 +90,10 @@ class MessageController extends Controller
         // Get the authenticated user
         $currentUser = Auth::user();
 
+
         // Find or create conversation between current user and selected user
         $conversation = $this->findOrCreateConversation($currentUser->id, $userId);
+
 
         // Get other user's details
         $otherUser = User::find($userId);
@@ -249,6 +251,7 @@ class MessageController extends Controller
 
             // Find the conversation - handle case when it might not exist
             $conversation = Conversation::find($request->group_id);
+
 
             // If conversation doesn't exist, create it
             if (!$conversation) {
