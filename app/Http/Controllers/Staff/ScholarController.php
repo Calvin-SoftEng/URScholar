@@ -360,8 +360,6 @@ class ScholarController extends Controller
 
                 if ($hasMatchingStudent) {
 
-                    dd($matchedStudent->campus_id);
-
                     // Update the scholar's status for other cases
                     $grantee = Grantees::where('scholar_id', $scholar->id)
                         ->where('status', 'Pending')
