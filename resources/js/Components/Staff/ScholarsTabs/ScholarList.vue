@@ -343,10 +343,11 @@
                 <div v-if="openDropdown === 'reportType'"
                   class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
                   <label v-for="type in reportTypeOptions" :key="type"
-                    class="block px-4 py-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap text-sm">
+                    class="block px-4 py-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap text-sm"
+                    @click="selectReportType(type)">
                     <input type="radio"
                       class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" :value="type"
-                      v-model="selectedReportType" name="reportType" />
+                      :checked="selectedReportType === type" name="reportType" />
                     {{ type }}
                   </label>
                 </div>
@@ -556,6 +557,11 @@ const fetchScholars = async () => {
 //     console.error('Failed to generate report:', err);
 //   }
 // };
+
+const selectReportType = (type) => {
+  selectedReportType.value = type;
+  openDropdown.value = null; // Close the dropdown after selection
+};
 
 // Detect outside click
 const GenerateReport = ref(false);
