@@ -9,6 +9,8 @@ class Condition extends Model
     protected $fillable = [
         'eligibility_id',
         'name',
+        'status',
+        'user_id'
     ];
 
     public function elibility()
@@ -19,5 +21,10 @@ class Condition extends Model
     public function eligible()
     {
         return $this->hasMany(Eligible::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

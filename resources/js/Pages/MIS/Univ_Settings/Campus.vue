@@ -2,7 +2,7 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :branding="branding">
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
                 <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Campus</h1>
@@ -234,6 +234,7 @@ const props = defineProps({
     campuses: Array,
     coor: Array,
     cashier: Array,
+    branding: Object,
 });
 
 const isTableVisible = ref(false);

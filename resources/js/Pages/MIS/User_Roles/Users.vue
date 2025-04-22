@@ -2,7 +2,7 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :branding="branding">
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
             <div>
                 <h1 class="text-2xl font-bold mb-5 dark:text-dtext">System Users</h1>
@@ -152,14 +152,16 @@
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">
                                 First Name</h3>
-                                <InputError v-if="errors?.first_name" :message="errors.first_name" class="text-2xs text-red-500" />
+                            <InputError v-if="errors?.first_name" :message="errors.first_name"
+                                class="text-2xs text-red-500" />
                             <input v-model="form.first_name" type="text" id="firstname"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                         </div>
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">
                                 Last Name</h3>
-                                <InputError v-if="errors?.last_name" :message="errors.last_name" class="text-2xs text-red-500" />
+                            <InputError v-if="errors?.last_name" :message="errors.last_name"
+                                class="text-2xs text-red-500" />
                             <input v-model="form.last_name" type="text" id="lastname"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
                         </div>
@@ -167,7 +169,8 @@
                     <div class="w-full flex flex-row gap-2">
                         <div class="w-full flex flex-col space-y-2">
                             <h3 class="font-semibold text-gray-900 dark:text-white">Campus</h3>
-                            <InputError v-if="errors?.campus_id" :message="errors.campus_id" class="text-2xs text-red-500" />
+                            <InputError v-if="errors?.campus_id" :message="errors.campus_id"
+                                class="text-2xs text-red-500" />
                             <select v-model="form.campus_id" id="campusSelect"
                                 class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
                                 <option value="" disabled>Select Campus</option>
@@ -303,23 +306,31 @@
                 </div>
             </div>
         </Teleport>
+        <ToastProvider>
+            <ToastRoot v-if="toastVisible"
+                class="fixed bottom-4 right-4 bg-primary text-white px-5 py-3 mb-5 mr-5 rounded-lg shadow-lg dark:bg-primary dark:text-dtext dark:border-gray-200 z-50 max-w-xs w-full">
+                <ToastDescription class="text-gray-100 dark:text-dtext">{{ toastMessage }}</ToastDescription>
+            </ToastRoot>
 
+            <ToastViewport class="fixed bottom-4 right-4" />
+        </ToastProvider>
     </AuthenticatedLayout>
 </template>
 
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, router } from '@inertiajs/vue3';
-import { ref, computed } from 'vue';
+import { Head, router, usePage } from '@inertiajs/vue3';
+import { ref, computed, watchEffect } from 'vue';
 import InputError from '@/Components/InputError.vue';
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue';
 
 const props = defineProps({
     errors: Object,
-    flash: Object,
     campuses: Array,
     users: Array,
     userType: String,
     coordinatorCampus: String,
+    branding: Object,
 });
 
 const searchQuery = ref('');
@@ -513,4 +524,22 @@ const selectMenu = (key) => {
     selectedMenu.value = key;
 };
 
+
+const toastVisible = ref(false);
+const toastMessage = ref("");
+
+watchEffect(() => {
+    const flashMessage = usePage().props.flash?.success;
+
+    if (flashMessage) {
+        console.log("Showing toast with message:", flashMessage);
+        toastMessage.value = flashMessage;
+        toastVisible.value = true;
+
+        setTimeout(() => {
+            console.log("Hiding toast...");
+            toastVisible.value = false;
+        }, 3000);
+    }
+});
 </script>

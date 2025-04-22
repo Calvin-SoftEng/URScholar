@@ -77,6 +77,8 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     Route::put('/system_admin/user-settings/users/{user}/update', [SystemAdminController::class, 'update_users'])->name('sa.users_update');
     Route::put('/system_admin/user-settings/users/{id}/deactivate', [SystemAdminController::class, 'deactivateUser'])
         ->name('users.deactivate');
+    Route::put('/system_admin/user-settings/users/{id}/activivate', [SystemAdminController::class, 'activateUser'])
+        ->name('users.activateUser');
     Route::get('/system_admin/user-settings/activity-logs', [SystemAdminController::class, 'activity_logs'])->name('sa.activity_logs');
 
     // univ settings
@@ -127,19 +129,19 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,spo
 
 
     //Reports
-        // Reports
-        Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
-        Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
-            ->name('scholarships.enrollees-summary');
-        Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
-            ->name('scholarships.enrolled-scholars');
-        Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
-            ->name('scholarships.graduate-scholars');
-            Route::get('/scholarships/{scholarship}/transferred=grantees', [ReportsController::class, 'TransferredSummaryReport'])
-            ->name('scholarships.transferred-scholars');
-        Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
-            ->name('scholarships.payroll-report');
-    
+    // Reports
+    Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
+    Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
+        ->name('scholarships.enrollees-summary');
+    Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
+        ->name('scholarships.enrolled-scholars');
+    Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
+        ->name('scholarships.graduate-scholars');
+    Route::get('/scholarships/{scholarship}/transferred-grantees', [ReportsController::class, 'TransferredSummaryReport'])
+        ->name('scholarships.transferred-scholars');
+    Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
+        ->name('scholarships.payroll-report');
+
 });
 
 
@@ -249,6 +251,11 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::put('/settings/eligibilities/{eligibility}', [SettingsController::class, 'eligibilities_update']);
     Route::delete('/settings/eligibilities/{eligibility}', [SettingsController::class, 'eligibilities_destroy']);
 
+
+    // Restore routes for conditions and eligibilities
+    Route::put('/settings/conditions/{condition}/restore', [SettingsController::class, 'conditions_restore'])->name('conditions.restore');
+    Route::put('/settings/eligibilities/{eligibility}/restore', [SettingsController::class, 'eligibilities_restore'])->name('eligibilities.restore');
+
     Route::post('/settings/conditions', [SettingsController::class, 'conditions_store']);
     Route::put('/settings/conditions/{condition}', [SettingsController::class, 'conditions_update']);
     Route::delete('/settings/conditions/{condition}', [SettingsController::class, 'conditions_destroy']);
@@ -304,7 +311,32 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
 
 
     // Scholarship_Payouts
-    Route::get('/cashier/active_scholarships', [CashierController::class, 'scholarships'])->name('cashier.active_scholarships');
+    // Route::get('/cashier/payout/active_scholarships', [CashierController::class, 'scholarships'])->name('cashier.active_scholarships');
+
+    // Route::get('/cashier/scholarships', [CashierController::class, 'view_scholarship'])->name('cashier.view_scholarship');
+    // Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'all_payouts'])->name('cashier.all_payouts');
+    // Route::post('/cashier/scholarship/forward-batches', [CashierController::class, 'forward'])->name('cashier.forward');
+
+    // Route::get('/cashier/payouts/{payout}', [CashierController::class, 'payout_batches'])->name('cashier.payout_batches');
+    // Route::post('/cashier/scholarships/{scholarshipId}/forward', [CashierController::class, 'forward_payout'])->name('cashier.forward_payout');
+
+    // Route::get('/cashier/scholarships/{scholarshipId}/batch/{batchId}', [CashierController::class, 'student_payouts'])->name('cashier.payouts');
+    // Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/submit-reason', [CashierController::class, 'submitReason'])->name('cashier.submit-reason');
+    // Route::post('/cashier/scholarships/{scholarshipId}/batch/{batchId}/manual-claim', [CashierController::class, 'manualClaim'])->name('cashier.manual-claim');
+
+    // Route::post('/cashier/verify-qr', [CashierController::class, 'verifyQr'])->name('cashier.verify_qr');
+    // Route::post('/cashier/confirm-claim', [CashierController::class, 'confirmClaim'])->name('cashier.confirmClaim');
+    // Route::post('/cashier/get-scholar-info', [CashierController::class, 'getScholarInfo'])->name('cashier.getScholarInfo');
+
+    // Route::get('/cashier/scholarships/payroll', [CashierController::class, 'payrolls'])->name('cashier.payroll');
+
+    // Route::get('/cashier/payouts', [CashierController::class, 'payouts_index'])->name('cashier.payouts_index');
+    // Route::get('/cashier/payout/{scholarshipId}/batch/{batchId}', [CashierController::class, 'payouts_disbursement'])->name('cashier.payouts_disbursement');
+
+    // Route::get('/cashier/pending-payouts/{scholarshipId}/batch/{batchId}', [CashierController::class, 'pending_payouts'])->name('cashier.pending_payouts');
+
+
+    Route::get('/cashier/payouts/active_scholarships', [CashierController::class, 'scholarships'])->name('cashier.active_scholarships');
 
     Route::get('/cashier/scholarships', [CashierController::class, 'view_scholarship'])->name('cashier.view_scholarship');
     Route::get('/cashier/scholarships/{scholarship}', [CashierController::class, 'all_payouts'])->name('cashier.all_payouts');
@@ -323,10 +355,10 @@ Route::middleware(['auth', 'usertype:cashier,head_cashier'])->group(function () 
 
     Route::get('/cashier/scholarships/payroll', [CashierController::class, 'payrolls'])->name('cashier.payroll');
 
-    Route::get('/cashier/payouts', [CashierController::class, 'payouts_index'])->name('cashier.payouts_index');
-    Route::get('/cashier/payout/{scholarshipId}/batch/{batchId}', [CashierController::class, 'payouts_disbursement'])->name('cashier.payouts_disbursement');
+    Route::get('/cashier/payrolls', [CashierController::class, 'payouts_index'])->name('cashier.payouts_index');
+    Route::get('/cashier/payrolls/{scholarshipId}/batch/{batchId}', [CashierController::class, 'payouts_disbursement'])->name('cashier.payouts_disbursement');
 
-    Route::get('/cashier/pending-payouts/{scholarshipId}/batch/{batchId}', [CashierController::class, 'pending_payouts'])->name('cashier.pending_payouts');
+    Route::get('/cashier/payrolls/{scholarshipId}/batch/{batchId}', [CashierController::class, 'pending_payouts'])->name('cashier.pending_payouts');
 
 });
 

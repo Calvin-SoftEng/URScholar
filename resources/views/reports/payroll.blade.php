@@ -59,7 +59,7 @@
             <th class="border border-gray-700 p-2">Campus</th>
             <th class="border border-gray-700 p-2">Course</th>
             <th class="border border-gray-700 p-2">Year Level</th>
-            <th class="border border-gray-700 p-2">Batch Name</th>
+            <th class="border border-gray-700 p-2">Batch</th>
             <th class="border border-gray-700 p-2">Status</th>
         </tr>
         </thead>
@@ -73,7 +73,7 @@
                 <td class="border border-gray-700 p-2">{{ $scholar['campus'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['course'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['year_level'] }}</td>
-                <td class="border border-gray-700 p-2">{{ $scholar['batch_name'] ?? $scholar['batch_id'] }}</td>
+                <td class="border border-gray-700 p-2">{{ $scholar['batch_no'] ?? $scholar['batch_no'] }}</td>
                 <td class="border border-gray-700 p-2">{{ $scholar['status'] }}</td>
             </tr>
         @endforeach

@@ -289,17 +289,18 @@ const props = defineProps({
 
 // Filter state variables
 const selectedSchoolYear = ref(null);
-const selectedSemester = ref(null);
+const selectedSemester = ref('1st')
 const selectedCampus = ref(props.coordinatorCampus ? parseInt(props.coordinatorCampus) : null);
 const searchQuery = ref('');
 
 // Create academic year options
+// Create academic year options
 const academicYearOptions = computed(() => {
-  if (!props.academicYear) return [];
+  if (!props.academicYear || props.academicYear.length === 0) return [];
   
   return props.academicYear.map(year => ({
-    id: year.school_year,
-    name: year.school_year ? year.school_year.name : 'Unknown Year'
+    id: year.school_year_id,
+    name: year.school_year ? year.school_year.year : 'Unknown Year'
   })).filter((v, i, a) => a.findIndex(t => t.id === v.id) === i); // Remove duplicates
 });
 

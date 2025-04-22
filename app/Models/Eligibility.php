@@ -8,6 +8,8 @@ class Eligibility extends Model
 {
     protected $fillable = [
         'name',
+        'status',
+        'user_id'
     ];
 
     public function scholarship()
@@ -18,6 +20,11 @@ class Eligibility extends Model
     public function condition()
     {
         return $this->hasMany(Condition::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

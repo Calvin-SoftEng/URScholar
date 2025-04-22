@@ -119,9 +119,11 @@ class SystemAdminController extends Controller
     public function courses()
     {
         $campuses = Campus::with('courses')->get();
+        $branding = PortalBranding::where('status', 'Active')->first();
 
         return Inertia::render('MIS/Univ_Settings/Course', [
             'campuses' => $campuses,
+            'branding' => $branding,
         ]);
     }
 
@@ -204,6 +206,7 @@ class SystemAdminController extends Controller
     public function campuses()
     {
         $campuses = Campus::all();
+        $branding = PortalBranding::where('status', 'Active')->first();
 
         // Get coordinators that are only assigned to specific campuses
         $coor = User::where('usertype', 'coordinator')
@@ -223,6 +226,7 @@ class SystemAdminController extends Controller
             'campuses' => Campus::with(['coordinator', 'cashier'])->get(),
             'coor' => $coor,
             'cashier' => $cashier,
+            'branding' => $branding,
         ]);
     }
 
@@ -233,9 +237,11 @@ class SystemAdminController extends Controller
 
         $course = $campuses->courses;
 
+        $branding = PortalBranding::where('status', 'Active')->first();
         return Inertia::render('MIS/Univ_Settings/CourseConfig', [
             'campuses' => $campuses,
             'courses' => $course,
+            'branding' => $branding,
         ]);
     }
 
@@ -269,8 +275,11 @@ class SystemAdminController extends Controller
             ->orderBy('id', 'asc')  // Sort by ID in ascending order (assuming lower IDs are older years)
             ->get();
 
+        $branding = PortalBranding::where('status', 'Active')->first();
+
         return Inertia::render('MIS/Univ_Settings/SY_Term', [
             'scholar_year' => $scholar_year,
+            'branding' => $branding,
         ]);
     }
 
@@ -406,21 +415,27 @@ class SystemAdminController extends Controller
 
     public function system_user_roles()
     {
-        return Inertia::render('MIS/User_Roles/Roles');
+        $branding = PortalBranding::where('status', 'Active')->first();
+        return Inertia::render('MIS/User_Roles/Roles', [
+            'branding' => $branding,
+        ]);
     }
 
     public function system_users()
     {
         $currentUser = Auth::user();
+        $branding = PortalBranding::where('status', 'Active')->first();
 
         $campuses = Campus::all();
         $users = User::where('id', '!=', $currentUser->id) // Exclude current user
+            ->where('status', '!=', 'Inactive') // Exclude inactive users
             ->with('campus') // This eager loads the campus relationship
             ->get();
 
         return Inertia::render('MIS/User_Roles/Users', [
             'campuses' => $campuses,
             'users' => $users,
+            'branding' => $branding,
         ]);
     }
 
@@ -439,6 +454,29 @@ class SystemAdminController extends Controller
 
 
             return back()->with('success', 'Deactivated user successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to deactivate user: ' . $e->getMessage());
+        }
+    }
+
+    public function activateUser(Request $request, $id)
+    {
+
+        try {
+            $user = User::findOrFail($id);
+
+            $user->status = 'Active';
+            $user->save();
+
+
+            ActivityLog::create([
+                'user_id' => Auth::user()->id,
+                'activity' => 'Activated user',
+                'description' => 'User ' . $user->name . ' has been activated.',
+            ]);
+
+
+            return back()->with('success', 'Activated user successfully');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Failed to deactivate user: ' . $e->getMessage());
         }
@@ -544,8 +582,10 @@ class SystemAdminController extends Controller
     public function activity_logs()
     {
         $activity = ActivityLog::with('user')->get();
+        $branding = PortalBranding::where('status', 'Active')->first();
         return Inertia::render('MIS/User_Roles/Activity_Logs', [
             'activity' => $activity,
+            'branding' => $branding,
         ]);
     }
 
@@ -554,9 +594,30 @@ class SystemAdminController extends Controller
 
     public function backup_and_restore()
     {
-        return Inertia::render('MIS/Security&Backup/Backup_Restore');
-    }
+        $currentUser = Auth::user();
 
+        // Get system stakeholders (all user types except students)
+        $stakeholders = User::where('id', '!=', $currentUser->id)
+            ->where('status', '=', 'Inactive') // Get only inactive users for archive
+            ->where('usertype', '!=', 'student') // Exclude students
+            ->with('campus')
+            ->get();
+
+        // Get scholars (only student user type)
+        $scholars = User::where('id', '!=', $currentUser->id)
+            ->where('status', '=', 'Inactive') // Get only inactive users for archive
+            ->where('usertype', '=', 'student') // Only students
+            ->with('campus')
+            ->get();
+
+        $branding = PortalBranding::where('status', 'Active')->first();
+
+        return Inertia::render('MIS/Security&Backup/Backup_Restore', [
+            'branding' => $branding,
+            'stakeholders' => $stakeholders,
+            'scholars' => $scholars,
+        ]);
+    }
     // public function roles() {
     //     return Inertia::render('MIS/User_Roles/Roles');
     // }
@@ -564,9 +625,11 @@ class SystemAdminController extends Controller
     public function account()
     {
         $user = Auth::user();
+        $branding = PortalBranding::where('status', 'Active')->first();
 
         return Inertia::render('MIS/Account_Settings', [
             'user' => $user,
+            'branding' => $branding,
         ]);
     }
 

@@ -23,6 +23,7 @@ class ReportsController extends Controller
         $schoolYearId = $request->query('school_year_id');
         $semester = $request->query('semester');
 
+
         // Query batches with the given IDs that belong to the scholarship
         $batches = Batch::whereIn('id', $batchIds)
             ->where('scholarship_id', $scholarship->id)
@@ -97,6 +98,7 @@ class ReportsController extends Controller
         $batches = Batch::whereIn('id', $batchIds)
             ->where('scholarship_id', $scholarship->id)
             ->get();
+
         $sponsor = Sponsor::find($scholarship->sponsor_id);
 
         // Get campuses with the given IDs
@@ -272,7 +274,7 @@ class ReportsController extends Controller
                     $scholars = $batch->grantees()
                         ->whereHas('scholar', function ($query) use ($campusId) {
                             $query->where('campus_id', $campusId)
-                                ->where('student_status', 'Graduated');
+                                ->where('student_status', 'Transferred');
                         })
                         ->with('scholar')
                         ->get();
@@ -289,7 +291,7 @@ class ReportsController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('reports.graduates-report', [
+        $pdf = PDF::loadView('reports.transferee-summary', [
             'scholarship' => $scholarship,
             'schoolYear' => $schoolYear,
             'semester' => $semester,
@@ -299,7 +301,7 @@ class ReportsController extends Controller
             'batch' => $batches->first() // Pass the first batch for backward compatibility
         ]);
 
-        return $pdf->stream("graduates-report-{$scholarship->name}.pdf");
+        return $pdf->stream("transferee-summary-{$scholarship->name}.pdf");
     }
 
     public function PayrollReport(Scholarship $scholarship, Request $request)
@@ -355,8 +357,8 @@ class ReportsController extends Controller
                             'course' => $scholar['course'],
                             'year_level' => $scholar['year_level'],
                             'campus' => $scholar['campus'],
-                            'batch_name' => $batch->name,
-                            'batch_id' => $batch->id,
+                            'batch_name' => $batch->batch_no,
+                            'batch_id' => $batch->batch_no,
                             'disbursements' => [],
                             'status' => $scholar['status'], // Default to claimed, will update if not claimed
                         ];
@@ -449,7 +451,7 @@ class ReportsController extends Controller
                         'course' => $scholar->course->name ?? 'N/A',
                         'year_level' => $scholar->year_level ?? 'N/A',
                         'campus' => $scholar->campus->name ?? 'N/A',
-                        'status' => $scholarDisbursement ? $scholarDisbursement->status : 'Pending',
+                        'status' => $scholarDisbursement->status,
                         'date_received' => $scholarDisbursement ? $scholarDisbursement->date_received : null
                     ];
                 }

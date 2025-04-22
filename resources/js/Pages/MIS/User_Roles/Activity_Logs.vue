@@ -2,7 +2,7 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :branding="branding">
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2 ">
             <div>
                 <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Activity Logs</h1>
@@ -94,6 +94,7 @@ import { User } from 'lucide-vue-next';
 
 const props = defineProps({
     activity: Array,
+    branding: Object,
 });
 
 // Updated menu items to match user types

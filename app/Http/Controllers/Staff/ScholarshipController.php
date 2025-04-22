@@ -554,12 +554,38 @@ class ScholarshipController extends Controller
                 ->orderBy('batch_no')
                 ->get();
 
-            // REMOVED: Filter out batches where all grantees are dropped or graduated
+            $totalClaimedDisbursements = 0;
+            $totalNotClaimedDisbursements = 0;
+
+            // Enhance each batch with its claimed/not claimed disbursements
+            foreach ($campusBatches as $batch) {
+                $claimedCount = Disbursement::where('batch_id', $batch->id)
+                    ->where('school_year_id', $request->input('selectedYear'))
+                    ->where('semester', $request->input('selectedSem'))
+                    ->where('status', 'Claimed')
+                    ->count();
+
+                $notClaimedCount = Disbursement::where('batch_id', $batch->id)
+                    ->where('school_year_id', $request->input('selectedYear'))
+                    ->where('semester', $request->input('selectedSem'))
+                    ->where('status', 'Not Claimed')
+                    ->count();
+
+                // Add the counts as properties to each batch object
+                $batch->claimed_disbursements = $claimedCount;
+                $batch->not_claimed_disbursements = $notClaimedCount;
+
+                // Add to campus totals
+                $totalClaimedDisbursements += $claimedCount;
+                $totalNotClaimedDisbursements += $notClaimedCount;
+            }
 
             if ($campusBatches->isNotEmpty()) {
                 $batchesByCampus[$campus->id] = [
                     'campus' => $campus,
-                    'batches' => $campusBatches
+                    'batches' => $campusBatches,
+                    'claimeddisbursements' => $totalClaimedDisbursements,
+                    'notclaimeddisbursements' => $totalNotClaimedDisbursements,
                 ];
             }
         }
@@ -657,6 +683,7 @@ class ScholarshipController extends Controller
             Batch::where('id', $batch->id)
                 ->where('school_year_id', $request->input('selectedYear'))
                 ->where('semester', $request->input('selectedSem'))
+                ->where('status', '!=', 'Inactive')
                 ->update([
                     'sub_total' => $approvedCount,
                     'status' => $newStatus
@@ -693,10 +720,10 @@ class ScholarshipController extends Controller
         $accomplishedBatches = $allBatchesOriginal->every(fn($batch) => in_array($batch->status, ['Accomplished', 'Inactive']));
 
         $activeBatches = Batch::where('scholarship_id', $scholarship->id)
-        ->where('status', '!=', 'Inactive')
-        ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
-        ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
-        ->get();
+            ->where('status', '!=', 'Inactive')
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->get();
 
 
 
@@ -877,29 +904,46 @@ class ScholarshipController extends Controller
             ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
             ->first();
 
-        // Update payout batches with proper semester filtering
         $payoutBatches = $batches->map(function ($batch) use ($request) {
-            return array_merge($batch->toArray(), [
-                'claimed_count' => $batch->disbursement()
-                    ->whereHas('payout', function ($query) use ($request) {
-                        $query->where('semester', $request->input('selectedSem'));
-                    })
-                    ->where('status', 'Claimed')
-                    ->count(),
-                'not_claimed_count' => $batch->disbursement()
-                    ->whereHas('payout', function ($query) use ($request) {
-                        $query->where('semester', $request->input('selectedSem'));
-                    })
-                    ->whereIn('status', ['Pending', 'Not Claimed'])
-                    ->count()
-            ]);
+            $semester = $request->input('selectedSem');
+
+            $claimedCount = $batch->disbursement()
+                ->whereHas('payout', function ($query) use ($semester) {
+                    $query->where('semester', $semester);
+                })
+                ->where('status', 'Claimed')
+                ->count();
+
+            $notClaimedCount = $batch->disbursement()
+                ->whereHas('payout', function ($query) use ($semester) {
+                    $query->where('semester', $semester);
+                })
+                ->whereIn('status', ['Pending', 'Not Claimed'])
+                ->count();
+
+            $payoutStatus = Payout::where('scholarship_id', $batch->scholarship_id)
+                ->where('campus_id', $batch->campus_id)
+                ->where('semester', $semester)
+                ->where('school_year_id', $batch->school_year_id)
+                ->first();
+
+            return [
+                ...$batch->toArray(),
+                'claimed_count' => $claimedCount,
+                'not_claimed_count' => $notClaimedCount,
+                'payout_status' => [
+                    'status' => $payoutStatus->status ?? null,
+                ]
+            ];
         });
+
 
         // Update grantees query for payout section
         $grantees = collect();
         if ($payoutBatches->isNotEmpty()) {
             $grantees = $scholarship->grantees()
                 ->whereIn('batch_id', $payoutBatches->pluck('id'))
+                ->where('school_year_id', $request->input('selectedYear'))
                 ->where('semester', $request->input('selectedSem'))
                 ->with('scholar.campus', 'scholar.course')
                 ->get();
@@ -968,14 +1012,15 @@ class ScholarshipController extends Controller
             return $grantee && $grantee->student_status === 'Enrolled';
         })->count();
 
+
         $total_unverified_grantees = $grantees->filter(function ($grantee) {
+
             return $grantee && $grantee->student_status && (
-                $grantee->scholar->status === 'Dropped' ||
-                $grantee->scholar->status === 'Unenrolled' ||
-                $grantee->scholar->status === 'Graduated'
+                $grantee->student_status === 'Dropped' ||
+                $grantee->student_status === 'Unenrolled' ||
+                $grantee->student_status === 'Graduated'
             );
         })->count();
-
 
         $totalSubTotal = $batches->sum('sub_total') ?? 0;
 

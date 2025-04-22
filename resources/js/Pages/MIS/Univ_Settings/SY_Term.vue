@@ -2,7 +2,7 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :branding="branding" :user="user" :auth="auth" :errors="errors">
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-10">
             <div>
                 <div class="flex justify-between items-center">
@@ -169,6 +169,7 @@ import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, To
 const selectedDate = ref({ month: "", day: "" });
 const props = defineProps({
     scholar_year: Array,
+    branding: Object,
 });
 
 const selectedYear = ref(null);

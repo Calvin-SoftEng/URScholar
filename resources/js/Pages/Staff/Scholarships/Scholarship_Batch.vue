@@ -130,7 +130,7 @@ const props = defineProps({
     scholarship: Object,
     schoolyear: Object,
     selectedSem: Object,
-    batches: Array,
+    batches: Object,
     scholars: Array,
     requirements: Array,
     payout: Array,

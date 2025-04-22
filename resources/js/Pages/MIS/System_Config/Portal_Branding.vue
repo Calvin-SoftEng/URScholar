@@ -3,7 +3,7 @@
 
   <Head title="Dashboard" />
 
-  <AuthenticatedLayout>
+  <AuthenticatedLayout :branding="branding">
     <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full space-y-2">
       <!-- Branding Header -->
       <div>

@@ -67,9 +67,9 @@
                                             <p><font-awesome-icon :icon="['fas', 'circle-dollar-to-slot']"
                                                     class="mr-1" />
                                                 Sponsoring Since:
-                                                {{ scholarship.since }}
+                                                {{ getSponsorNSince(scholarship.sponsor_id) }}
                                             </p>
-                                            <p>
+                                            <!-- <p>
                                                 <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
                                                     class="font-medium">Requirements Deadline: </span>
                                                 <span
@@ -83,7 +83,7 @@
                                                     }) }}
                                                 </span>
                                                 <span v-else>No Deadline</span>
-                                            </p>
+                                            </p> -->
                                         </div>
                                     </div>
 
@@ -145,7 +145,7 @@
                                                     class="mr-1" /> Sponsoring Since:
                                                 {{ scholarship.since }}
                                             </p>
-                                            <p>
+                                            <!-- <p>
                                                 <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
                                                     class="font-medium">Requirements Deadline: </span>
                                                 <span
@@ -159,17 +159,17 @@
                                                             }) }}
                                                 </span>
                                                 <span v-else>No Deadline</span>
-                                            </p>
+                                            </p> -->
                                         </div>
                                     </div>
 
                                     <!-- Additional Info -->
-                                    <div class="flex flex-row gap-8 text-center">
-                                        <div>
-                                            <p class="text-gray-500 dark:text-gray-400 text-sm">Batches</p>
-                                            <p class="text-xl font-bold text-gray-800 dark:text-dtext">{{scholarship.batches ? scholarship.batches.length : 0 }}</p>
+                                    <!-- <div class="flex items-center gap-6 text-center px-4 py-3 bg-white dark:bg-dcontainer rounded-xl shadow-sm border border-gray-200 dark:border-gray-600">
+                                        <div class="flex flex-col">
+                                            <span class="text-sm text-gray-500 dark:text-gray-400">Total Batches</span>
+                                            <span class="text-2xl font-semibold text-gray-900 dark:text-dtext">{{scholarship.batches ? scholarship.batches.length : 0 }}</span>
                                         </div>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </button>
                         </template>
@@ -240,10 +240,21 @@
                                     </SelectTrigger>
                                     <SelectContent class="dark:bg-white dark:text-dprimary">
                                         <SelectGroup>
-                                            <SelectItem class="dark:hover:bg-gray-700" v-for="semester in availableSemesters" :key="semester.id"
-                                                :value="semester.semester">
+                                            <SelectItem
+                                            class="dark:hover:bg-gray-700 flex justify-between items-center"
+                                            v-for="semester in availableSemesters"
+                                            :key="semester.id"
+                                            :value="semester.semester"
+                                            >
+                                            <div class="flex items-center gap-2">
                                                 {{ semester.semester === '1st' ? 'First Semester' : 'Second Semester' }}
-                                                {{ semester.status === 'Active' ? '(Active)' : '(Inactive)' }}
+                                                <span
+                                                class="text-xs px-2 py-0.5 rounded-full font-semibold"
+                                                :class="semester.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'"
+                                                >
+                                                {{ semester.status }}
+                                                </span>
+                                            </div>
                                             </SelectItem>
                                         </SelectGroup>
                                     </SelectContent>
@@ -355,6 +366,11 @@ const form = ref({
 const getSponsorName = (sponsorId) => {
     const sponsor = props.sponsors.find(s => s.id === sponsorId);
     return sponsor ? sponsor.name : 'Unknown Sponsor';
+};
+
+const getSponsorNSince = (sponsorId) => {
+    const sponsor = props.sponsors.find(s => s.id === sponsorId);
+    return sponsor ? sponsor.since : 'Unknown Sponsor';
 };
 
 // const formatDate = (date) => {
