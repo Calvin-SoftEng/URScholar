@@ -357,7 +357,7 @@ class ReportsController extends Controller
                             'course' => $scholar['course'],
                             'year_level' => $scholar['year_level'],
                             'campus' => $scholar['campus'],
-                            'batch_name' => $batch->batch_no,
+                            'batch_no' => $batch->batch_no,
                             'batch_id' => $batch->batch_no,
                             'disbursements' => [],
                             'status' => $scholar['status'], // Default to claimed, will update if not claimed
@@ -422,6 +422,8 @@ class ReportsController extends Controller
 
         // Get all disbursements for this batch
         $disbursements = Disbursement::where('batch_id', $batch->id)
+            ->where('semester', $batch->semester)
+            ->where('school_year_id', $batch->school_year_id)
             ->get();
 
         $sponsor = Sponsor::find($scholarship->sponsor_id);
@@ -451,7 +453,7 @@ class ReportsController extends Controller
                         'course' => $scholar->course->name ?? 'N/A',
                         'year_level' => $scholar->year_level ?? 'N/A',
                         'campus' => $scholar->campus->name ?? 'N/A',
-                        'status' => $scholarDisbursement->status,
+                        'status' => $scholarDisbursement->status ?? 'Pending',
                         'date_received' => $scholarDisbursement ? $scholarDisbursement->date_received : null
                     ];
                 }

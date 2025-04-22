@@ -8,7 +8,7 @@
           <span class="font-normal font-poppins">Open Camera</span>
         </button>
 
-        <button @click="openReport"
+        <button @click="generateReport"
           class="flex items-center gap-2 border-2 border-amber-500 text-amber-500 px-4 py-2 rounded-lg hover:bg-amber-200 transition duration-200">
           <font-awesome-icon :icon="['fas', 'file-export']" class="text-base" />
           <span class="font-normal font-poppins">Export</span>
@@ -94,7 +94,7 @@
                   </td>
                   <!-- Modified button that only shows for Pending status -->
                   <td>
-                    <button @click="checkAndToggleReason(disbursement)"
+                    <button v-if="payout.status == 'Active'" @click="checkAndToggleReason(disbursement)"
                       class="p-2 border bg-white text-primary rounded-lg hover:bg-blue-200 transition-colors shadow-sm"
                       aria-label="View Details">
                       <font-awesome-icon :icon="['fas', 'ellipsis']" class="px-1" />
@@ -337,8 +337,7 @@
                 <InputError v-if="errors.reason" :message="errors.reason" class="mt-1" />
 
                 <div>
-                  <InputError v-if="errors?.document" :message="errors.document"
-                            class="text-2xs text-red-500" />
+                  <InputError v-if="errors?.document" :message="errors.document" class="text-2xs text-red-500" />
                   <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     for="file_input">Additional
                     Document for reason</label>
@@ -621,6 +620,24 @@ const toggleCamera = () => {
 //     });
 //   }
 // };
+
+const generateReport = async () => {
+  try {
+
+    // Instead of opening multiple windows, send all data in one request
+    const url = `/scholarships/${props.scholarship.id}/payroll-report`;
+    const queryParams = new URLSearchParams({
+      batch_ids: props.batch.id,
+      campus_ids: props.batch.campus_id,
+      school_year_id: props.batch.school_year_id,
+      semester: props.batch.semester
+    });
+
+    window.open(`${url}?${queryParams.toString()}`, '_blank');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+  }
+};
 
 const onDetect = async (detectedCodes) => {
   if (detectedCodes.length > 0) {

@@ -35,7 +35,7 @@
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
                             <Link>
-                                <button @click="goBack"
+                            <button @click="goBack"
                                 class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
                                 < </button>
                                     </Link>
@@ -43,7 +43,7 @@
                                     <span>{{ scholarship?.type }}</span>
                         </h1>
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
-                            }} Semester</span>
+                        }} Semester</span>
                     </div>
 
                     <!-- Stats Section -->
@@ -83,15 +83,16 @@
                         </Button>
                     </div>
                 </div>
-
+                
                 <div v-if="props.batches.campus_id === $page.props.auth.user.campus_id">
 
-                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                    <ScholarList :errors="errors" :scholarship="scholarship" :batches="batches" :scholars="scholars"
                         :requirements="requirements" :schoolyear="schoolyear" @update:stats="updateStats" />
                 </div>
+
                 <div v-else>
-                    <ScholarList :scholarship="scholarship" :batches="batches" :scholars="scholars"
-                    :requirements="requirements" @update:stats="updateStats" />
+                    <ScholarList :errors="errors" :scholarship="scholarship" :batches="batches" :scholars="scholars"
+                        :requirements="requirements" @update:stats="updateStats" />
                 </div>
 
 
@@ -135,6 +136,7 @@ const props = defineProps({
     requirements: Array,
     payout: Array,
     totalScholars: Number,
+    errors: Object,
 });
 
 const total_scholars = computed(() => {

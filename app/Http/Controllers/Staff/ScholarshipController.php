@@ -251,6 +251,7 @@ class ScholarshipController extends Controller
                 : null,
             'selectedSem' => $request->input('selectedSem', ''),
             'totalScholars' => $totalScholars,
+
         ]);
     }
 
@@ -443,7 +444,7 @@ class ScholarshipController extends Controller
                                                     'school_year_id' => $school_year,
                                                     'semester' => $semester,
                                                     'student_status' => $scholarEnrolled->student_status,
-                                                    'status' => 'Pending',
+                                                    'status' => 'Active',
                                                 ]);
                                             }
 
@@ -454,7 +455,9 @@ class ScholarshipController extends Controller
                                                 // Check if there are grantees and if all of them have "Enrolled" status
                                                 if (
                                                     $batchGrantees->isNotEmpty() && $batchGrantees->every(function ($grantee) {
-                                                        return $grantee->student_status === 'Enrolled';
+                                                        return [
+                                                            $grantee->student_status === 'Enrolled',
+                                                    ];
                                                     })
                                                 ) {
                                                     // Update batch status to Validated
@@ -694,6 +697,7 @@ class ScholarshipController extends Controller
 
         if ($currentUser->usertype == 'super_admin') {
             $completedBatches = Batch::where('scholarship_id', $scholarship->id)
+                ->where('status', '!=', 'Inactive')
                 ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
                 ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
                 ->whereRaw('total_scholars = sub_total')
@@ -701,6 +705,7 @@ class ScholarshipController extends Controller
 
         } else {
             $completedBatches = Batch::where('scholarship_id', $scholarship->id)
+                ->where('status', '!=', 'Inactive')
                 ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
                 ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
                 ->where('campus_id', $currentUser->campus_id)
@@ -1024,6 +1029,12 @@ class ScholarshipController extends Controller
 
         $totalSubTotal = $batches->sum('sub_total') ?? 0;
 
+        $allBatchesAccomplished = Batch::where('scholarship_id', $scholarship->id)
+            ->where('status', '!=', 'Inactive')
+            ->when($request->input('selectedYear'), fn($q, $year) => $q->where('school_year_id', $year))
+            ->when($request->input('selectedSem'), fn($q, $sem) => $q->where('semester', $sem))
+            ->get();
+
         return Inertia::render('Staff/Scholarships/Scholarship', [
             'total_verified_grantees' => $total_verified_grantees,
             'total_unverified_grantees' => $total_unverified_grantees,
@@ -1045,6 +1056,7 @@ class ScholarshipController extends Controller
             'accomplishedBatches' => $accomplishedBatches,
             'myvalidated' => $myvalidated,
             'activeBatches' => $activeBatches,
+            'allBatchesAccomplished' => $allBatchesAccomplished,
             'allInactive' => $allInactive,
             'myInactive' => $myInactive,
             'inactivePayouts' => $inactivePayouts,

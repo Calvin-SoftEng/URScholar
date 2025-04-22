@@ -305,18 +305,127 @@ class ScholarController extends Controller
         // Validate the incoming request
         $validated = $request->validate([
             'status' => 'required|in:Dropped,Graduated,Transferred,Enrolled,Unenrolled',
+            'batch_id' => 'required',
         ]);
+
 
         // Find the scholar by ID
         $scholar = Scholar::findOrFail($id);
+        $batch = Batch::findOrFail($validated['batch_id']);
         $originalStatus = $scholar->student_status; // Store original status for comparison
+        $academicYear = AcademicYear::where('school_year_id', $batch->school_year_id)
+            ->where('semester', $batch->semester)
+            ->first();
 
         if ($scholar->student_status == 'Unenrolled' && ($validated['status'] == 'Enrolled' || $validated['status'] == 'Transferred')) {
-            // Update the scholar's status
+            // Get all students
 
-            dd($validated['status']);
-            $scholar->student_status = $validated['status'];
-            $scholar->save();
+            $students = Student::where('academic_year_id', $academicYear->id)
+                ->get();
+
+
+            // if ($students->isEmpty()) {
+            //     return back()->withErrors([
+            //         'no_match' => 'No students found for the selected academic year and semester.',
+            //     ])->withInput();
+            // }
+
+            // Check if scholar has matching student data
+            $hasMatchingStudent = false;
+            $matchedStudent = null;
+
+            foreach ($students as $student) {
+                // Match based on student_number if available
+                if ($scholar->student_number && $scholar->student_number == $student->student_number) {
+                    $hasMatchingStudent = true;
+                    $matchedStudent = $student;
+                    break;
+                }
+
+                // Alternative matching based on name and other identifiers if student_number is not available
+                if (
+                    !$scholar->student_number &&
+                    strtolower($scholar->first_name) == strtolower($student->first_name) &&
+                    strtolower($scholar->last_name) == strtolower($student->last_name) ||
+                    $scholar->email == $student->email
+                ) {
+                    $hasMatchingStudent = true;
+                    $matchedStudent = $student;
+                    break;
+                }
+            }
+
+            // If validated status is 'Transferred' and there's matching student data
+            if ($validated['status'] == 'Transferred') {
+
+                if ($hasMatchingStudent) {
+
+                    // Update the scholar's status for other cases
+                    $grantee = Grantees::where('scholar_id', $scholar->id)
+                        ->where('status', 'Pending')
+                        ->where('student_status', 'Unenrolled')
+                        ->first();
+
+                    if ($grantee) {
+                        $grantee->status = 'Active';
+                        $grantee->student_status = $validated['status'];
+                        $grantee->save();
+                    }
+
+                    $oldbatch = Batch::where('id', $grantee->batch_id)->first();
+
+                    if ($oldbatch->campus_id != $matchedStudent->campus_id) {
+                        $oldbatch->total_scholars = $oldbatch->total_scholars - 1;
+                        $oldbatch->sub_total = $oldbatch->sub_total - 1;
+
+                        if ($oldbatch->total_scholars == 0) {
+                            $oldbatch->status = 'Inactive';
+                            $oldbatch->validated = true;
+                        }
+                        
+                        $oldbatch->save();
+
+                        $newbatch = Batch::where('campus_id', $matchedStudent->campus_id)
+                            ->where('school_year_id', $batch->school_year_id)
+                            ->where('semester', $batch->semester)
+                            ->first();
+
+                        $approvedScholarsQuery = Scholar::whereIn('id', $scholar->pluck('id'))
+                            ->whereHas('submittedRequirements', fn($q) => $q->where('status', 'Approved'))
+                            ->whereDoesntHave('submittedRequirements', fn($q) => $q->whereIn('status', ['Pending', 'Returned']));
+
+                        $approvedCount = $approvedScholarsQuery->count();
+                        $newbatch->total_scholars = $newbatch->total_scholars + 1;
+                        $newbatch->sub_total = $newbatch->sub_total + $approvedCount;
+                        $newbatch->save();
+
+
+                        $grantee->batch_id = $newbatch->id;
+                        $grantee->save();
+                    }
+
+
+                    // Update scholar's course and campus with matched student data
+                    $scholar->course_id = $matchedStudent->course_id;
+                    $scholar->campus_id = $matchedStudent->campus_id;
+                    $scholar->student_number = $matchedStudent->student_number;
+                    $scholar->email = $matchedStudent->email;
+                    $scholar->first_name = $matchedStudent->first_name;
+                    $scholar->last_name = $matchedStudent->last_name;
+                    $scholar->middle_name = $matchedStudent->middle_name;
+                    $scholar->student_status = 'Transferred';
+                    $scholar->status = 'Verified';
+                    $scholar->save();
+                } else {
+                    // No matching student found for transfer
+                    return back()->withErrors([
+                        'no_match' => 'No matching student record found for transfer. Please verify the scholar data.',
+                    ])->withInput();
+                }
+            } else {
+                $scholar->student_status = $validated['status'];
+                $scholar->save();
+            }
         } elseif ($scholar->student_status == 'Enrolled' && $validated['status'] == 'Dropped') {
             // Update the scholar's status
             $grantee = Grantees::where('scholar_id', $scholar->id)->first();
@@ -1539,7 +1648,7 @@ class ScholarController extends Controller
 
                 Scholar::insert($scholarData);
 
-                $batch = Batch::where('id', $request->batch_id)
+                $batch = Batch::where('batch_no', $request->batch_id)
                     ->where('school_year_id', $request->schoolyear)
                     ->where('semester', $request->semester)
                     ->where('campus_id', $request->campus_id)

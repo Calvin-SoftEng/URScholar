@@ -266,12 +266,16 @@ class CashierController extends Controller
             'date_end.required' => 'Set a Date end',
         ]);
 
+
         $scholarshipId = $request->input('scholarship_id');
         $batchIds = $request->input('batch_ids');
         $user = Auth::user();
 
         // Get all the batches we need to process
-        $batches = Batch::whereIn('id', $batchIds)->get();
+        $batches = Batch::whereIn('id', $batchIds)
+            ->where('status', '!=', 'Inactive')
+            ->get();
+
 
         // Group batches by campus
         $batchesByCampus = $batches->groupBy('campus_id');
@@ -299,7 +303,7 @@ class CashierController extends Controller
                 // Find active grantees for this batch
                 $grantees = Grantees::where('batch_id', $batch->id)
                     ->where('scholarship_id', $scholarshipId)
-                    ->where('student_status', 'Enrolled')
+                    ->whereIn('student_status', ['Enrolled', 'Transferred'])
                     ->where('status', 'Active')
                     ->get();
 
@@ -403,10 +407,12 @@ class CashierController extends Controller
         // Get disbursements related to the payout, with scholars and their grantees
         $disbursements = Disbursement::where('payout_id', $payout->id)
             ->whereHas('scholar', function ($query) {
-                $query->where('student_status', 'Enrolled');
+                $query->whereIn('student_status', ['Enrolled', 'Transferred']);
             })
             ->with('scholar.grantees.batch')
             ->get();
+
+
 
         return Inertia::render('Cashier/Scholarships/Scheduling', [
             'scholarship' => $scholarship,
@@ -499,7 +505,7 @@ class CashierController extends Controller
         $canForward = $activePayout->total_scholars == $activePayout->sub_total;
 
         $allDisbursementsClaimed = $activePayout->disbursement->every(function ($disbursement) {
-            return $disbursement->status === 'Claimed';
+            return $disbursement->status === 'Claimed' || $disbursement->status === 'Not Claimed';
         });
 
 
@@ -608,11 +614,11 @@ class CashierController extends Controller
         $disbursements = Disbursement::where('payout_id', $payout->id)
             ->where('batch_id', $batchId)
             ->whereHas('scholar', function ($query) {
-                $query->where('student_status', 'Enrolled');
+                $query->whereIn('student_status', ['Enrolled', 'Transferred']);
             })
             ->with([
                 'scholar' => function ($subQuery) {
-                    $subQuery->with(['course', 'campus']);
+                    $subQuery->with(['course', 'campus', 'user']);
                 }
             ])
             ->get();
@@ -1024,6 +1030,8 @@ class CashierController extends Controller
 
         $selectedSem = $batch->semester;
 
+        dd($payout);
+
 
         // Optimize query to reduce N+1 problem
         $disbursements = Disbursement::where('payout_id', $payout->id)
@@ -1146,10 +1154,23 @@ class CashierController extends Controller
         }
 
 
+        $disbursements = Disbursement::where('payout_id', $payout->id)
+            ->where('batch_id', $batchId)
+            ->whereHas('scholar', function ($query) {
+                $query->whereIn('student_status', ['Enrolled', 'Transferred']);
+            })
+            ->with([
+                'scholar' => function ($subQuery) {
+                    $subQuery->with(['course', 'campus', 'user']);
+                }
+            ])
+            ->get();
+
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars,
+            'disbursements' => $disbursements,
             'payout' => $payout,
             'schoolyear' => $schoolyear,
             'totalClaimed' => $totalClaimed ?? null,

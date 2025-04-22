@@ -292,8 +292,8 @@
                                                 {{ batch.not_claimed_count }} Not Claimed</p>
                                         </div>
                                         <span
-                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${batch.not_claimed_count === 0 ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
-                                            {{ batch.not_claimed_count === 0 ? 'Ready to Send' : 'Incomplete' }}
+                                            :class="`text-sm font-medium px-3 py-1 rounded-full ${AllClaimed ? 'text-green-700 bg-green-100' : 'text-yellow-700 bg-yellow-100'}`">
+                                            {{ AllClaimed ? 'Ready to Send' : 'Incomplete' }}
                                         </span>
                                     </div>
                                 </div>
