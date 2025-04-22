@@ -98,6 +98,7 @@ class ReportsController extends Controller
         $batches = Batch::whereIn('id', $batchIds)
             ->where('scholarship_id', $scholarship->id)
             ->get();
+
         $sponsor = Sponsor::find($scholarship->sponsor_id);
 
         // Get campuses with the given IDs
@@ -356,8 +357,8 @@ class ReportsController extends Controller
                             'course' => $scholar['course'],
                             'year_level' => $scholar['year_level'],
                             'campus' => $scholar['campus'],
-                            'batch_name' => $batch->name,
-                            'batch_id' => $batch->id,
+                            'batch_name' => $batch->batch_no,
+                            'batch_id' => $batch->batch_no,
                             'disbursements' => [],
                             'status' => $scholar['status'], // Default to claimed, will update if not claimed
                         ];

@@ -657,6 +657,7 @@ class ScholarshipController extends Controller
             Batch::where('id', $batch->id)
                 ->where('school_year_id', $request->input('selectedYear'))
                 ->where('semester', $request->input('selectedSem'))
+                ->where('status', '!=', 'Inactive')
                 ->update([
                     'sub_total' => $approvedCount,
                     'status' => $newStatus
@@ -986,8 +987,8 @@ class ScholarshipController extends Controller
 
         $total_unverified_grantees = $grantees->filter(function ($grantee) {
             return $grantee && $grantee->student_status && (
-                $grantee->scholar->status === 'Dropped' ||
-                $grantee->scholar->status === 'Unenrolled' ||
+                $grantee->scholar->student_status === 'Dropped' ||
+                $grantee->scholar->student_status === 'Unenrolled' ||
                 $grantee->scholar->status === 'Graduated'
             );
         })->count();
