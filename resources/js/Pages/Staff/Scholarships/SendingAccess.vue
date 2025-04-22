@@ -30,7 +30,9 @@
                         <div class="flex justify-between items-center mb-4">
                             <h1
                                 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                                <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>
+                                <button @click="goBack"
+                                class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
+                                < </button><span>
                                     Student Email Notifications</span>
                             </h1>
 
@@ -294,6 +296,10 @@ const form = ref({
     semester: props.semester,
     school_year: props.school_year,
 });
+
+const goBack = () => {
+    window.history.back();
+};
 
 
 const toggleRequirements = () => {

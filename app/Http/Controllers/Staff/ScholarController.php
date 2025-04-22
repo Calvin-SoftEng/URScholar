@@ -343,12 +343,15 @@ class ScholarController extends Controller
 
             // If validated status is 'Transferred' and there's matching student data
             if ($validated['status'] == 'Transferred') {
+                
                 if ($hasMatchingStudent) {
-                    $scholar->student_status = 'Transferred';
+                    
+                    dd($matchedStudent->campus_id);
 
                     // Update the scholar's status for other cases
                     $grantee = Grantees::where('scholar_id', $scholar->id)
                         ->where('status', 'Pending')
+                        ->where('student_status', 'Unenrolled')
                         ->first();
 
                     if ($grantee) {
@@ -357,9 +360,12 @@ class ScholarController extends Controller
                         $grantee->save();
                     }
 
+                    
                     // Update scholar's course and campus with matched student data
                     $scholar->course_id = $matchedStudent->course_id;
                     $scholar->campus_id = $matchedStudent->campus_id;
+                    $scholar->student_status = 'Transferred';
+                    $scholar->status = 'Verified';
                     $scholar->save();
                 } else {
                     // No matching student found for transfer
