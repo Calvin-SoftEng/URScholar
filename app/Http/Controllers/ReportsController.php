@@ -450,7 +450,7 @@ class ReportsController extends Controller
                         'course' => $scholar->course->name ?? 'N/A',
                         'year_level' => $scholar->year_level ?? 'N/A',
                         'campus' => $scholar->campus->name ?? 'N/A',
-                        'status' => $scholarDisbursement ? $scholarDisbursement->status : 'Pending',
+                        'status' => $scholarDisbursement->status,
                         'date_received' => $scholarDisbursement ? $scholarDisbursement->date_received : null
                     ];
                 }
