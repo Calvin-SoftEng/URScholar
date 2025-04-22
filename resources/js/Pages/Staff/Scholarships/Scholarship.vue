@@ -2933,7 +2933,7 @@ const handleGenerateReports = () => {
         // case 'Scholars List':
         //     generateScholarsList(filters);
         //     break;
-        case 'Transferred Grantee':
+        case 'Transferees':
             generateTransferredList(filters);
             break;
         default:

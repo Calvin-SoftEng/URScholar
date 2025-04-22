@@ -289,7 +289,7 @@ const props = defineProps({
 
 // Filter state variables
 const selectedSchoolYear = ref(null);
-const selectedSemester = ref(null);
+const selectedSemester = ref('1st')
 const selectedCampus = ref(props.coordinatorCampus ? parseInt(props.coordinatorCampus) : null);
 const searchQuery = ref('');
 
