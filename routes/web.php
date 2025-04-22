@@ -127,19 +127,19 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator,cashier,student,spo
 
 
     //Reports
-        // Reports
-        Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
-        Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
-            ->name('scholarships.enrollees-summary');
-        Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
-            ->name('scholarships.enrolled-scholars');
-        Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
-            ->name('scholarships.graduate-scholars');
-            Route::get('/scholarships/{scholarship}/transferred=grantees', [ReportsController::class, 'TransferredSummaryReport'])
-            ->name('scholarships.transferred-scholars');
-        Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
-            ->name('scholarships.payroll-report');
-    
+    // Reports
+    Route::get('/scholarships/{scholarship}/batch/{batch}/report', [ScholarshipController::class, 'downloadBatchReport']);
+    Route::get('/scholarships/{scholarship}/enrollees-summary', [ReportsController::class, 'EnrolleesSummaryReport'])
+        ->name('scholarships.enrollees-summary');
+    Route::get('/scholarships/{scholarship}/enrolled-scholars', [ReportsController::class, 'EnrolledListReport'])
+        ->name('scholarships.enrolled-scholars');
+    Route::get('/scholarships/{scholarship}/graduate-scholars', [ReportsController::class, 'GraduateSummaryReport'])
+        ->name('scholarships.graduate-scholars');
+    Route::get('/scholarships/{scholarship}/transferred-grantees', [ReportsController::class, 'TransferredSummaryReport'])
+        ->name('scholarships.transferred-scholars');
+    Route::get('/scholarships/{scholarship}/payroll-report', [ReportsController::class, 'PayrollReport'])
+        ->name('scholarships.payroll-report');
+
 });
 
 

@@ -23,6 +23,7 @@ class ReportsController extends Controller
         $schoolYearId = $request->query('school_year_id');
         $semester = $request->query('semester');
 
+
         // Query batches with the given IDs that belong to the scholarship
         $batches = Batch::whereIn('id', $batchIds)
             ->where('scholarship_id', $scholarship->id)
@@ -272,7 +273,7 @@ class ReportsController extends Controller
                     $scholars = $batch->grantees()
                         ->whereHas('scholar', function ($query) use ($campusId) {
                             $query->where('campus_id', $campusId)
-                                ->where('student_status', 'Graduated');
+                                ->where('student_status', 'Transferred');
                         })
                         ->with('scholar')
                         ->get();
@@ -289,7 +290,7 @@ class ReportsController extends Controller
             }
         }
 
-        $pdf = PDF::loadView('reports.graduates-report', [
+        $pdf = PDF::loadView('reports.transferee-summary', [
             'scholarship' => $scholarship,
             'schoolYear' => $schoolYear,
             'semester' => $semester,
@@ -299,7 +300,7 @@ class ReportsController extends Controller
             'batch' => $batches->first() // Pass the first batch for backward compatibility
         ]);
 
-        return $pdf->stream("graduates-report-{$scholarship->name}.pdf");
+        return $pdf->stream("transferee-summary-{$scholarship->name}.pdf");
     }
 
     public function PayrollReport(Scholarship $scholarship, Request $request)

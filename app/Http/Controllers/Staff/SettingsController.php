@@ -463,20 +463,20 @@ class SettingsController extends Controller
             ActivityLog::create([
                 'user_id' => Auth::user()->id,
                 'activity' => 'Create',
-                'description' => "Imported {$successCount} students, matched {$matchedScholars} scholars (Skipped {$skipCount})",
+                'description' => "Imported {$successCount} students)",
             ]);
     
             // Prepare success message
             $flashMessage = "Successfully imported {$successCount} students";
-            if ($matchedScholars > 0) {
-                $flashMessage .= ", verified {$matchedScholars} scholars";
-            }
-            if ($unmatchedScholars > 0) {
-                $flashMessage .= ", {$unmatchedScholars} scholars remain unverified";
-            }
-            if ($skipCount > 0) {
-                $flashMessage .= " (Skipped {$skipCount} rows with errors)";
-            }
+            // if ($matchedScholars > 0) {
+            //     $flashMessage .= ", verified {$matchedScholars} scholars";
+            // }
+            // if ($unmatchedScholars > 0) {
+            //     $flashMessage .= ", {$unmatchedScholars} scholars remain unverified";
+            // }
+            // if ($skipCount > 0) {
+            //     $flashMessage .= " (Skipped {$skipCount} rows with errors)";
+            // }
     
             // Prepare redirect with detailed information
             $redirect = redirect()->back()->with('success', $flashMessage);

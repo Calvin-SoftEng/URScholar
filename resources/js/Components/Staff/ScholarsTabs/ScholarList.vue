@@ -22,7 +22,7 @@
         </div>
       </div> -->
 
-      <!-- <button @click="generateReportModal"
+        <!-- <button @click="generateReportModal"
           class="flex items-center gap-2 dark:text-dtext bg-white dark:bg-white 
           border border-gray-300 dark:border-gray-500 hover:bg-gray-200 px-4 py-2 rounded-lg transition duration-200"
           type="button">
@@ -30,12 +30,12 @@
           Report
       </button> -->
 
-      <button
-        class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
-        @click="generateReportModal">
-        <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
-        Generate Report
-      </button>
+        <button
+          class="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-medium text-sm px-5 py-2.5 rounded-lg shadow-md hover:shadow-lg transition-all duration-300"
+          @click="generateReportModal">
+          <font-awesome-icon :icon="['fas', 'file-lines']" class="text-base" />
+          Generate Report
+        </button>
 
       </div>
       <form class="w-3/12">
@@ -299,75 +299,72 @@
   </div>
 
   <div v-if="GenerateReport"
-            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
-            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
-                <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
-                    <div class="flex items-center gap-3">
-                        <!-- Icon -->
-                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
-                            class="text-blue-600 text-2xl flex-shrink-0" />
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+    <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
+      <div class="flex items-center justify-between p-4 border-b rounded-t dark:border-gray-600">
+        <div class="flex items-center gap-3">
+          <!-- Icon -->
+          <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-blue-600 text-2xl flex-shrink-0" />
 
-                        <!-- Title and Description -->
-                        <div class="flex flex-col">
-                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
-                                Generate a Report Document
-                            </h2>
-                            <span class="text-sm text-gray-600 dark:text-gray-400">
-                                Select what is needed to be generated
-                            </span>
-                        </div>
-                    </div>
-                    <button type="button" @click="closeReportGeneration"
-                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
-                        data-modal-hide="default-modal">
-                        <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
-                            viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
-                        </svg>
-                    </button>
-                </div>
-
-                <form @submit.prevent="handleGenerateReports">
-                    <div class="py-4 px-8 flex flex-col gap-3">
-                        <!-- Batch Disbursement Status -->
-                        <div>
-                            <!-- Filters -->
-                            <div class=" mb-4">
-                                <!-- Report Type Filter -->
-                                <div class="relative" ref="reportRef">
-                                    <label class="block text-xs font-medium mb-1">Report Type</label>
-                                    <button type="button"
-                                        class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
-                                        @click="toggleDropdown('reportType')">
-                                        {{ selectedReportType ? selectedReportType : 'Select Report type' }}
-                                    </button>
-
-                                    <div v-if="openDropdown === 'reportType'"
-                                        class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
-                                        <label v-for="type in reportTypeOptions" :key="type"
-                                            class="block px-4 py-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap text-sm">
-                                            <input type="radio"
-                                                class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
-                                                :value="type" v-model="selectedReportType" name="reportType" />
-                                            {{ type }}
-                                        </label>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                        <div class="mt-6">
-                            <button type="button" @click="handleGenerateReports"
-                                class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                                :disabled="!selectedReportType || selectedReportCampuses.length === 0 || selectedReportBatches.length === 0">
-                                Generate Report
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+          <!-- Title and Description -->
+          <div class="flex flex-col">
+            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+              Generate a Report Document
+            </h2>
+            <span class="text-sm text-gray-600 dark:text-gray-400">
+              Select what is needed to be generated
+            </span>
+          </div>
         </div>
+        <button type="button" @click="closeReportGeneration"
+          class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+          data-modal-hide="default-modal">
+          <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+          </svg>
+        </button>
+      </div>
+
+      <form @submit.prevent="handleGenerateReports">
+        <div class="py-4 px-8 flex flex-col gap-3">
+          <!-- Batch Disbursement Status -->
+          <div>
+            <!-- Filters -->
+            <div class=" mb-4">
+              <!-- Report Type Filter -->
+              <div class="relative" ref="reportRef">
+                <label class="block text-xs font-medium mb-1">Report Type</label>
+                <button type="button" class="w-full text-left border border-gray-200 text-sm rounded-lg p-2 bg-white"
+                  @click="toggleDropdown('reportType')">
+                  {{ selectedReportType ? selectedReportType : 'Select Report type' }}
+                </button>
+
+                <div v-if="openDropdown === 'reportType'"
+                  class="absolute z-50 mt-1 w-full bg-white border border-gray-200 rounded-lg shadow-md max-h-60 overflow-y-auto">
+                  <label v-for="type in reportTypeOptions" :key="type"
+                    class="block px-4 py-2 hover:bg-gray-100 cursor-pointer whitespace-nowrap text-sm">
+                    <input type="radio"
+                      class="mr-2 w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500" :value="type"
+                      v-model="selectedReportType" name="reportType" />
+                    {{ type }}
+                  </label>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="mt-6">
+            <button type="button" @click="handleGenerateReports"
+              class="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2.5 px-4 rounded-lg transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              :disabled="!selectedReportType">
+              Generate Report
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -381,7 +378,7 @@ const props = defineProps({
   scholarship: Object,
   schoolyear: Object,
   selectedSem: Object,
-  batches: Array,
+  batches: Object,
   scholars: Array,
   requirements: Array,
 });
@@ -542,9 +539,129 @@ const fetchScholars = async () => {
 };
 
 // Generate report function
-const generateReport = async () => {
+// const generateReport = async () => {
+//   try {
+
+//     // Instead of opening multiple windows, send all data in one request
+//     const url = `/scholarships/${props.scholarship.id}/enrolled-scholars`;
+//     const queryParams = new URLSearchParams({
+//       batch_ids: props.batches.id,
+//       campus_ids: props.batches.campus_id,
+//       school_year_id: props.schoolyear.id,
+//       semester: props.selectedSem
+//     });
+
+//     window.open(`${url}?${queryParams.toString()}`, '_blank');
+//   } catch (err) {
+//     console.error('Failed to generate report:', err);
+//   }
+// };
+
+// Detect outside click
+const GenerateReport = ref(false);
+
+const generateReportModal = () => {
+  GenerateReport.value = !GenerateReport.value;
+}
+
+// Close modal function
+const closeReportGeneration = () => {
+  GenerateReport.value = false;
+  resetSelections();
+};
+
+// Reset all selections
+const resetSelections = () => {
+  selectedReportType.value = '';
+  selectedReportBatches.value = [];
+  selectedReportCampuses.value = [];
+};
+
+const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Transferees'];
+const batchRef = ref(null);
+const campusRef = ref(null);
+
+const selectedReportType = ref('');
+const selectedReportBatches = ref([]);
+const selectedReportCampuses = ref([]);
+
+// Improved click outside handler
+const handleClickOutside = (event) => {
+  // Make sure all refs are defined before using them
+  if (openDropdown.value) {
+    const campusEl = campusRef.value;
+    const batchEl = batchRef.value;
+    const reportEl = reportRef.value;
+
+    // Check if click is outside all active dropdowns
+    const clickedOutside = (
+      (campusEl && !campusEl.contains(event.target) || !campusEl) &&
+      (batchEl && !batchEl.contains(event.target) || !batchEl) &&
+      (reportEl && !reportEl.contains(event.target) || !reportEl)
+    );
+
+    if (clickedOutside) {
+      openDropdown.value = null;
+    }
+  }
+};
+
+const handleGenerateReports = () => {
+  const filters = {
+    type: selectedReportType.value,
+    campuses: props.batches.campus_id,
+    batches: props.batches.id,
+  };
+
+  // if (!filters.type || filters.campuses.length === 0 || filters.batches.length === 0) {
+  //   console.warn('Please select a report type, campuses, and batches.');
+  //   return;
+  // }
+
+  switch (filters.type) {
+    case 'Enrollees Summary':
+      generateEnrolleesSummary(filters);
+      break;
+    case 'Enrolled List':
+      generateEnrolledList(filters);
+      break;
+    case 'Graduate Summary':
+      generateGraduateList(filters);
+      break;
+    case 'Payroll':
+      generatePayroll(filters);
+      break;
+    // case 'Scholars List':
+    //     generateScholarsList(filters);
+    //     break;
+    case 'Transferred Grantee':
+      generateTransferredList(filters);
+      break;
+    default:
+      console.warn('No valid report type selected.');
+  }
+};
+
+const generateEnrolleesSummary = async (filters) => {
   try {
 
+    // Instead of opening multiple windows, send all data in one request
+    const url = `/scholarships/${props.scholarship.id}/enrollees-summary`;
+    const queryParams = new URLSearchParams({
+      batch_ids: props.batches.id,
+      campus_ids: props.batches.campus_id,
+      school_year_id: props.schoolyear.id,
+      semester: props.selectedSem
+    });
+
+    window.open(`${url}?${queryParams.toString()}`, '_blank');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+  }
+};
+
+const generateEnrolledList = async (filters) => {
+  try {
     // Instead of opening multiple windows, send all data in one request
     const url = `/scholarships/${props.scholarship.id}/enrolled-scholars`;
     const queryParams = new URLSearchParams({
@@ -560,182 +677,40 @@ const generateReport = async () => {
   }
 };
 
-// Detect outside click
-const GenerateReport = ref(false);
-
-const generateReportModal = () => {
-    GenerateReport.value = !GenerateReport.value;
-}
-
-// Close modal function
-const closeReportGeneration = () => {
-    GenerateReport.value = false;
-    resetSelections();
-};
-
-// Reset all selections
-const resetSelections = () => {
-    selectedReportType.value = '';
-    selectedReportBatches.value = [];
-    selectedReportCampuses.value = [];
-};
-
-const reportTypeOptions = ['Enrollees Summary', 'Enrolled List', 'Graduate Summary', 'Transferees'];
-const batchRef = ref(null);
-const campusRef = ref(null);
-
-const selectedReportType = ref('');
-const selectedReportBatches = ref([]);
-const selectedReportCampuses = ref([]);
-
-// Improved click outside handler
-const handleClickOutside = (event) => {
-    // Make sure all refs are defined before using them
-    if (openDropdown.value) {
-        const campusEl = campusRef.value;
-        const batchEl = batchRef.value;
-        const reportEl = reportRef.value;
-
-        // Check if click is outside all active dropdowns
-        const clickedOutside = (
-            (campusEl && !campusEl.contains(event.target) || !campusEl) &&
-            (batchEl && !batchEl.contains(event.target) || !batchEl) &&
-            (reportEl && !reportEl.contains(event.target) || !reportEl)
-        );
-
-        if (clickedOutside) {
-            openDropdown.value = null;
-        }
-    }
-};
-
-const handleGenerateReports = () => {
-    const filters = {
-        type: selectedReportType.value,
-        campuses: selectedReportCampuses.value,
-        batches: selectedReportBatches.value,
-    };
-
-    if (!filters.type || filters.campuses.length === 0 || filters.batches.length === 0) {
-        console.warn('Please select a report type, campuses, and batches.');
-        return;
-    }
-
-    switch (filters.type) {
-        case 'Enrollees Summary':
-            generateEnrolleesSummary(filters);
-            break;
-        case 'Enrolled List':
-            generateEnrolledList(filters);
-            break;
-        case 'Graduate Summary':
-            generateGraduateList(filters);
-            break;
-        case 'Payroll':
-            generatePayroll(filters);
-            break;
-        // case 'Scholars List':
-        //     generateScholarsList(filters);
-        //     break;
-        case 'Transferred Grantee':
-            generateTransferredList(filters);
-            break;
-        default:
-            console.warn('No valid report type selected.');
-    }
-};
-
-const generateEnrolleesSummary = async (filters) => {
-    try {
-        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
-            !Array.isArray(filters.batches) || filters.batches.length === 0) {
-            console.warn('Campuses or batches are not selected properly.');
-            return;
-        }
-
-        // Instead of opening multiple windows, send all data in one request
-        const url = `/scholarships/${props.scholarship.id}/enrollees-summary`;
-        const queryParams = new URLSearchParams({
-            batch_ids: filters.batches.join(','),
-            campus_ids: filters.campuses.join(','),
-            school_year_id: props.schoolyear.id,
-            semester: props.selectedSem
-        });
-
-        window.open(`${url}?${queryParams.toString()}`, '_blank');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-    }
-};
-
-const generateEnrolledList = async (filters) => {
-    try {
-        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
-            !Array.isArray(filters.batches) || filters.batches.length === 0) {
-            console.warn('Campuses or batches are not selected properly.');
-            return;
-        }
-
-        // Instead of opening multiple windows, send all data in one request
-        const url = `/scholarships/${props.scholarship.id}/enrolled-scholars`;
-        const queryParams = new URLSearchParams({
-            batch_ids: filters.batches.join(','),
-            campus_ids: filters.campuses.join(','),
-            school_year_id: props.schoolyear.id,
-            semester: props.selectedSem
-        });
-
-        window.open(`${url}?${queryParams.toString()}`, '_blank');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-    }
-};
-
 
 const generateGraduateList = async (filters) => {
-    try {
-        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
-            !Array.isArray(filters.batches) || filters.batches.length === 0) {
-            console.warn('Campuses or batches are not selected properly.');
-            return;
-        }
+  try {
 
-        // Instead of opening multiple windows, send all data in one request
-        const url = `/scholarships/${props.scholarship.id}/graduate-scholars`;
-        const queryParams = new URLSearchParams({
-            batch_ids: filters.batches.join(','),
-            campus_ids: filters.campuses.join(','),
-            school_year_id: props.schoolyear.id,
-            semester: props.selectedSem
-        });
+    // Instead of opening multiple windows, send all data in one request
+    const url = `/scholarships/${props.scholarship.id}/graduate-scholars`;
+    const queryParams = new URLSearchParams({
+      batch_ids: props.batches.id,
+      campus_ids: props.batches.campus_id,
+      school_year_id: props.schoolyear.id,
+      semester: props.selectedSem
+    });
 
-        window.open(`${url}?${queryParams.toString()}`, '_blank');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-    }
+    window.open(`${url}?${queryParams.toString()}`, '_blank');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+  }
 };
 
 const generateTransferredList = async (filters) => {
-    try {
-        if (!Array.isArray(filters.campuses) || filters.campuses.length === 0 ||
-            !Array.isArray(filters.batches) || filters.batches.length === 0) {
-            console.warn('Campuses or batches are not selected properly.');
-            return;
-        }
+  try {
+    // Instead of opening multiple windows, send all data in one request
+    const url = `/scholarships/${props.scholarship.id}/transferred-grantees`;
+    const queryParams = new URLSearchParams({
+      batch_ids: props.batches.id,
+      campus_ids: props.batches.campus_id,
+      school_year_id: props.schoolyear.id,
+      semester: props.selectedSem
+    });
 
-        // Instead of opening multiple windows, send all data in one request
-        const url = `/scholarships/${props.scholarship.id}/transferred-grantees`;
-        const queryParams = new URLSearchParams({
-            batch_ids: filters.batches.join(','),
-            campus_ids: filters.campuses.join(','),
-            school_year_id: props.schoolyear.id,
-            semester: props.selectedSem
-        });
-
-        window.open(`${url}?${queryParams.toString()}`, '_blank');
-    } catch (err) {
-        console.error('Failed to generate report:', err);
-    }
+    window.open(`${url}?${queryParams.toString()}`, '_blank');
+  } catch (err) {
+    console.error('Failed to generate report:', err);
+  }
 };
 
 
@@ -784,18 +759,18 @@ onMounted(() => {
   return () => {
     clearInterval(dataRefreshInterval);
   };
-  
+
 });
 
 
 onBeforeMount(() => {
-    document.addEventListener('click', handleClickOutside);
+  document.addEventListener('click', handleClickOutside);
 })
 
 const openDropdown = ref('');
 
 const toggleDropdown = (dropdownName) => {
-    openDropdown.value = openDropdown.value === dropdownName ? null : dropdownName
+  openDropdown.value = openDropdown.value === dropdownName ? null : dropdownName
 }
 </script>
 
