@@ -494,6 +494,7 @@ const submitForm = () => {
   loading.value = true;
   router.post(`/scholars/${currentScholar.value.id}/update-status`, {
     status: statusValue.value,
+    batch_id: props.batches.id,
   }, {
     onSuccess: () => {
       showToast('Success', `Scholar status updated to ${statusValue.value}`, 'success');

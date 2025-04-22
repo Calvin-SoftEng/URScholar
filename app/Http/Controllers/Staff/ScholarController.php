@@ -305,16 +305,30 @@ class ScholarController extends Controller
         // Validate the incoming request
         $validated = $request->validate([
             'status' => 'required|in:Dropped,Graduated,Transferred,Enrolled,Unenrolled',
+            'batch_id' => 'required',
         ]);
 
 
         // Find the scholar by ID
         $scholar = Scholar::findOrFail($id);
+        $batch = Batch::findOrFail($validated['batch_id']);
         $originalStatus = $scholar->student_status; // Store original status for comparison
+        $academicYear = AcademicYear::where('school_year_id', $batch->school_year_id)
+            ->where('semester', $batch->semester)
+            ->first();
 
         if ($scholar->student_status == 'Unenrolled' && ($validated['status'] == 'Enrolled' || $validated['status'] == 'Transferred')) {
             // Get all students
-            $students = Student::all();
+
+            $students = Student::where('academic_year_id', $academicYear->id)
+                ->get();
+
+
+            // if ($students->isEmpty()) {
+            //     return back()->withErrors([
+            //         'no_match' => 'No students found for the selected academic year and semester.',
+            //     ])->withInput();
+            // }
 
             // Check if scholar has matching student data
             $hasMatchingStudent = false;
@@ -343,9 +357,9 @@ class ScholarController extends Controller
 
             // If validated status is 'Transferred' and there's matching student data
             if ($validated['status'] == 'Transferred') {
-                
+
                 if ($hasMatchingStudent) {
-                    
+
                     dd($matchedStudent->campus_id);
 
                     // Update the scholar's status for other cases
@@ -360,7 +374,7 @@ class ScholarController extends Controller
                         $grantee->save();
                     }
 
-                    
+
                     // Update scholar's course and campus with matched student data
                     $scholar->course_id = $matchedStudent->course_id;
                     $scholar->campus_id = $matchedStudent->campus_id;
