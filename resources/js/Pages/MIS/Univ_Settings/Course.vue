@@ -2,7 +2,7 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :branding="branding">
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full">
             <div>
                 <h1 class="text-2xl font-bold mb-5 text-dprimary dark:text-dtext">Course List</h1>
@@ -50,6 +50,7 @@ import { ref } from 'vue';
 defineProps({
     campuses: Array,
     courses: Array,
+    branding: Object,
 });
 
 

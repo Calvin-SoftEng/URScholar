@@ -77,6 +77,8 @@ Route::middleware(['auth', 'usertype:system_admin'])->group(function () {
     Route::put('/system_admin/user-settings/users/{user}/update', [SystemAdminController::class, 'update_users'])->name('sa.users_update');
     Route::put('/system_admin/user-settings/users/{id}/deactivate', [SystemAdminController::class, 'deactivateUser'])
         ->name('users.deactivate');
+    Route::put('/system_admin/user-settings/users/{id}/activivate', [SystemAdminController::class, 'activateUser'])
+        ->name('users.activateUser');
     Route::get('/system_admin/user-settings/activity-logs', [SystemAdminController::class, 'activity_logs'])->name('sa.activity_logs');
 
     // univ settings

@@ -9,7 +9,7 @@
     <title inertia>{{ config('app.name', 'URScholar') }}</title>
     <!-- Replace the static favicon -->
     @if($portalBranding && $portalBranding->favicon)
-        <link rel="icon" href="{{ asset('storage/' . $portalBranding->favicon) }}"
+        <link rel="icon" href="{{ asset('storage/branding/favicons/' . $portalBranding->favicon) }}"
             type="{{ $portalBranding->favicon ? 'image/' . pathinfo($portalBranding->favicon, PATHINFO_EXTENSION) : 'image/png' }}">
     @else
         <link rel="icon" href="{{ asset('image/web_logo.png') }}" type="image/png">

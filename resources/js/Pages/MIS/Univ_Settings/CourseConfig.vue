@@ -2,7 +2,7 @@
 
     <Head title="Dashboard" />
 
-    <AuthenticatedLayout>
+    <AuthenticatedLayout :auth="auth" :branding="branding">
         <div class="bg-dirtywhite dark:bg-dprimary p-6 h-full w-full">
             <div class="relative">
                 <h1 class="text-2xl font-bold mb-5 dark:text-dtext">Course List</h1>
@@ -194,6 +194,7 @@ import { ref, watchEffect } from 'vue';
 const props = defineProps({
     campuses: Object,
     courses: Array,
+    branding: Object,
 });
 
 
