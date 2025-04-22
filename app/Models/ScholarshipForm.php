@@ -8,7 +8,7 @@ use Illuminate\Notifications\Notifiable;
 class ScholarshipForm extends Model
 {
     use HasFactory, Notifiable;
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'status'];
 
     public function scholarshipformdata()
     {

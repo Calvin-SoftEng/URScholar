@@ -49,7 +49,7 @@
 
                                         <button @click="deleteEligibility(item.id)"
                                             class="text-red-600 text-sm hover:underline">
-                                            Delete
+                                            Archive
                                         </button>
                                     </div>
                                 </div>
@@ -301,22 +301,22 @@ const submitConditionData = () => {
 };
 
 const deleteEligibility = (id) => {
-    if (confirm('Are you sure you want to delete this eligibility category? All associated conditions will also be deleted.')) {
+    if (confirm('Are you sure you want to archive this eligibility category? All associated conditions will also be archive.')) {
         router.delete(`/settings/eligibilities/${id}`, {
             preserveScroll: true,
             onSuccess: () => {
-                showToast('Eligibility category deleted successfully');
+                showToast('Eligibility category archived successfully');
             },
         });
     }
 };
 
 const deleteCondition = (id) => {
-    if (confirm('Are you sure you want to delete this condition?')) {
+    if (confirm('Are you sure you want to archive this condition?')) {
         router.delete(`/settings/conditions/${id}`, {
             preserveScroll: true,
             onSuccess: () => {
-                showToast('Condition deleted successfully');
+                showToast('Condition archived successfully');
             },
         });
     }

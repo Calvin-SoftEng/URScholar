@@ -47,6 +47,16 @@ class User extends Authenticatable
         return $this->hasMany(Scholar::class);
     }
 
+    public function eligibility()
+    {
+        return $this->hasMany(Eligibility::class);
+    }
+
+    public function condition()
+    {
+        return $this->hasMany(Condition::class);
+    }
+
     public function message()
     {
         return $this->hasMany(Message::class);

@@ -45,12 +45,14 @@ return new class extends Migration {
         Schema::create('scholarship_forms', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });
 
         Schema::create('scholarship_form_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('scholarship_form_id')->constrained()->onDelete('cascade');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->string('name');
             $table->timestamps();
         });
@@ -78,6 +80,8 @@ return new class extends Migration {
         Schema::create('eligibilities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
 
@@ -85,6 +89,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('eligibility_id')->constrained()->onDelete('cascade');
             $table->string('name');
+            $table->enum('status', ['Active', 'Inactive'])->default('Active');
+            $table->foreignId('user_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();   
         });
 

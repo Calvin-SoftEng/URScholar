@@ -249,6 +249,11 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
     Route::put('/settings/eligibilities/{eligibility}', [SettingsController::class, 'eligibilities_update']);
     Route::delete('/settings/eligibilities/{eligibility}', [SettingsController::class, 'eligibilities_destroy']);
 
+
+    // Restore routes for conditions and eligibilities
+    Route::put('/settings/conditions/{condition}/restore', [SettingsController::class, 'conditions_restore'])->name('conditions.restore');
+    Route::put('/settings/eligibilities/{eligibility}/restore', [SettingsController::class, 'eligibilities_restore'])->name('eligibilities.restore');
+
     Route::post('/settings/conditions', [SettingsController::class, 'conditions_store']);
     Route::put('/settings/conditions/{condition}', [SettingsController::class, 'conditions_update']);
     Route::delete('/settings/conditions/{condition}', [SettingsController::class, 'conditions_destroy']);

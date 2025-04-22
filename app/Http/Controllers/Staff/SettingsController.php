@@ -190,6 +190,13 @@ class SettingsController extends Controller
         $moa->status = 'Active';
         $moa->save();
 
+        
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Store Sponsor MOA',
+            'description' => 'Uploaded a new MOA for sponsor: ' . $sponsor->name,
+        ]);
+
         return redirect()->back()->with('success', 'MOA uploaded successfully.');
     }
 
@@ -239,6 +246,13 @@ class SettingsController extends Controller
         }
 
         $sponsor->save();
+
+        
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update Sponsor',
+            'description' => 'Updated sponsor: ' . $sponsor->name,
+        ]);
 
         return redirect()->route('sponsor.index')->with('success', 'Sponsor added successfully!');
     }
@@ -603,8 +617,8 @@ class SettingsController extends Controller
     public function eligibilities_forms()
     {
 
-        $eligibility = Eligibility::all();
-        $condition = Condition::all();
+        $eligibility = Eligibility::where('status', 'Active')->get();
+        $condition = Condition::where('status', 'Active')->get();
 
         return Inertia::render('Staff/Settings/Eligibilities_Forms', [
             'eligibility' => $eligibility,
@@ -624,6 +638,14 @@ class SettingsController extends Controller
 
         Eligibility::create($validated);
 
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Create',
+            'description' => 'Created a new eligibility category: ' . $request->name,
+        ]);
+        
+
         return redirect()->back()->with('success', 'Eligibility category created successfully');
     }
 
@@ -638,6 +660,13 @@ class SettingsController extends Controller
 
         $eligibility->update($validated);
 
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update',
+            'description' => 'Updated eligibility category: ' . $request->name,
+        ]);
+
         return redirect()->back()->with('success', 'Eligibility category updated successfully');
     }
 
@@ -646,9 +675,42 @@ class SettingsController extends Controller
      */
     public function eligibilities_destroy(Eligibility $eligibility)
     {
-        $eligibility->delete();
+        $eligibility->update([
+            'status' => 'Inactive',
+            'user_id' => Auth::user()->id,
+        ]);
 
-        return redirect()->back()->with('success', 'Eligibility category deleted successfully');
+        $eligibility->condition()->update([
+            'status' => 'Inactive',
+            'user_id' => Auth::user()->id,
+        ]);
+
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Archive',
+            'description' => 'Archived eligibility category: ' . $eligibility->name,
+        ]);
+
+        return redirect()->back()->with('success', 'Eligibility category archived successfully');
+    }
+
+    public function eligibilities_restore(Eligibility $eligibility)
+    {
+        
+        $eligibility->update([
+            'status' => 'Active',
+            'user_id' => null,
+        ]);
+
+        
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Archive',
+            'description' => 'Restored eligibility category: ' . $eligibility->name,
+        ]);
+
+        return redirect()->back()->with('success', 'Eligibility category restored successfully');
     }
 
     /**
@@ -662,6 +724,13 @@ class SettingsController extends Controller
         ]);
 
         Condition::create($validated);
+
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Create',
+            'description' => 'Created a new condition: ' . $request->name,
+        ]);
 
         return redirect()->back()->with('success', 'Condition created successfully');
     }
@@ -678,6 +747,13 @@ class SettingsController extends Controller
 
         $condition->update($validated);
 
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update',
+            'description' => 'Updated condition: ' . $request->name,
+        ]);
+
         return redirect()->back()->with('success', 'Condition updated successfully');
     }
 
@@ -686,9 +762,36 @@ class SettingsController extends Controller
      */
     public function conditions_destroy(Condition $condition)
     {
-        $condition->delete();
+        $condition->update([
+            'status' => 'Inactive',
+            'user_id' => Auth::user()->id,
+        ]);
 
-        return redirect()->back()->with('success', 'Condition deleted successfully');
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Archive',
+            'description' => 'Archived condition: ' . $condition->name,
+        ]);
+
+        return redirect()->back()->with('success', 'Condition archived successfully');
+    }
+
+    public function conditions_restore(Condition $condition)
+    {
+        $condition->update([
+            'status' => 'Active',
+            'user_id' => null,
+        ]);
+
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Archive',
+            'description' => 'Restored condition: ' . $condition->name,
+        ]);
+
+        return redirect()->back()->with('success', 'Condition restored successfully');
     }
 
     public function verification_forms()
@@ -714,6 +817,14 @@ class SettingsController extends Controller
 
         ScholarshipForm::create($validated);
 
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Create',
+            'description' => 'Created a new scholarship form: ' . $request->name,
+        ]);
+
+
         return redirect()->back()->with('success', 'Scholarship form created successfully.');
     }
 
@@ -727,6 +838,12 @@ class SettingsController extends Controller
         ]);
 
         $scholarshipForm->update($validated);
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Update',
+            'description' => 'Updated scholarship form: ' . $request->name,
+        ]);
 
         return redirect()->back()->with('success', 'Scholarship form updated successfully.');
     }
@@ -736,9 +853,17 @@ class SettingsController extends Controller
      */
     public function destroy(ScholarshipForm $scholarshipForm)
     {
-        $scholarshipForm->delete();
+        $scholarshipForm->update([
+            'status' => 'Inactive'
+        ]);
+        // Create a new activity log entry
+        ActivityLog::create([
+            'user_id' => Auth::user()->id,
+            'activity' => 'Archive',
+            'description' => 'Archived scholarship form: ' . $scholarshipForm->name,
+        ]);
 
-        return redirect()->back()->with('success', 'Scholarship form deleted successfully.');
+        return redirect()->back()->with('success', 'Scholarship form arhived successfully.');
     }
 
     /**
@@ -776,16 +901,28 @@ class SettingsController extends Controller
      */
     public function destroyData(ScholarshipFormData $scholarshipFormData)
     {
-        $scholarshipFormData->delete();
+        $scholarshipFormData->update([
+            'status' => 'Inactive'
+        ]);
 
-        return redirect()->back()->with('success', 'Criteria deleted successfully.');
+        return redirect()->back()->with('success', 'Criteria Archived successfully.');
     }
 
     public function archives()
     {
+        
+        $eligibility = Eligibility::where('status', 'Inactive')
+        ->with('user')
+        ->get();
+        $condition = Condition::where('status', 'Inactive')
+        ->with('user')
+        ->get();
 
         return Inertia::render(
-            'Staff/Settings/Archives'
+            'Staff/Settings/Archives', [
+                'eligibility' => $eligibility,
+                'condition' => $condition,
+            ]
         );
     }
 
