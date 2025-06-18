@@ -250,7 +250,7 @@
 
                             <!-- Direct "Create Scholarship" Button if Grant-Based is Selected -->
                             <button v-if="form.scholarshipType === 'Grant-Based'" type="submit"
-                                class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
+                                class="text-white bg-navy hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
                                 Create Scholarship
                             </button>
                         </div>
