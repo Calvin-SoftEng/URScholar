@@ -53,7 +53,7 @@
                                     <th scope="col" class="px-6 py-3">
                                         Sponsor Name
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-3 py-3">
                                         Since
                                     </th>
                                     <th scope="col" class="px-6 py-3">
@@ -61,6 +61,14 @@
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Date Created
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Agreement
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Validity
                                     </th>
                                     <th>
                                         <span class="sr-only">Edit</span>
@@ -74,15 +82,15 @@
                                         <th scope="row"
                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"
-                                                class="w-20 h-20 rounded-full" />
+                                                class="w-14 h-14 rounded-full" />
                                         </th>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 text-sm">
                                             {{ sponsor.name }} <span>({{ sponsor.abbreviation }})</span>
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-3 py-4 text-sm">
                                             {{ sponsor.since }}
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 text-sm">
                                             <span v-if="!sponsor.assign.first_name && !sponsor.assign.last_name">
                                                 Not Registered
                                             </span>
@@ -90,8 +98,14 @@
                                                 {{ sponsor.assign.first_name }} {{ sponsor.assign.last_name }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 text-sm">
                                             {{ formatDate(sponsor.created_at) }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm">
+                                            August 1, 2023
+                                        </td>
+                                        <td class="px-3 py-4 text-sm">
+                                            August 1, 2023
                                         </td>
                                         <td class="px-6 py-4">
                                             <button @click="ViewSponsor(sponsor)"
