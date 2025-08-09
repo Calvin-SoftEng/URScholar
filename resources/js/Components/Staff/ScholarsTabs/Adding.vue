@@ -1,6 +1,6 @@
 <template>
-    <div class="bg-white dark:bg-gray-800 p-4">
-        <div class="w-full h-full flex flex-row justify-center items-center gap-4 text-black mx-auto py-1 ">
+    <div class="bg-white dark:bg-gray-800 px-10 py-5">
+        <div class="w-full h-full flex flex-row justify-center items-center gap-4 text-black mx-auto pt-1 pb-5 ">
             <button @click="toggleManual"
                 class="font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200" :class="{
                     'bg-primary text-white border-primary': ManualAdding,
@@ -16,13 +16,13 @@
             </button>
         </div>
 
-        <div v-if="ManualAdding" class="mx-auto w-full h-full justify-center items-center flex flex-col gap-3">
-            <form @submit.prevent="submitManual" class="w-full flex flex-col gap-2">
+        <div v-if="ManualAdding" class="mx-auto w-full h-full justify-center items-center flex flex-col gap-5">
+            <form @submit.prevent="submitManual" class="w-full flex flex-col gap-5">
                 <div v-if="errors?.student" class="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
                     <p class="text-red-600 text-sm">{{ errors.student }}</p>
                 </div>
-                <div class="flex flex-col w-full gap-2">
-                    <div class="w-full flex flex-row items-center gap-3">
+                <div class="flex flex-col w-full gap-5">
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
@@ -33,26 +33,21 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <!-- Use a dropdown if batch array has items -->
-                            <!-- <Select v-if="batch && batch.length > 0" v-model="manual.batch_id">
-                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Batch" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem v-for="batchItem in batch" :key="batchItem.id"
-                                            :value="batchItem.id">
-                                            {{ batchItem.batch_no }}
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select> -->
-                            <!-- Use a text input if batch array is empty -->
                             <input type="text" id="batch_id" placeholder="Enter Batch No"
                                 v-model="manual.batch_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Endorsed By</label>
+                            <input type="text" id="batch_id"
+                                v-model="manual.batch_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                    </div>
+                    <div class="w-full flex flex-row items-center gap-5">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Higher Education
@@ -62,8 +57,6 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required value="University of Rizal System" readonly />
                         </div>
-                    </div>
-                    <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
@@ -125,7 +118,7 @@
 
                     <div class="w-full h-0.5 bg-gray-200 my-2"></div>
 
-                    <div class="w-full flex flex-row items-center gap-3">
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Application
@@ -144,7 +137,10 @@
                                 required />
                         </div>
                     </div>
-                    <div class="w-full flex flex-row items-center gap-3">
+
+                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
+
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
@@ -159,8 +155,6 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
-                    </div>
-                    <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
@@ -189,10 +183,14 @@
                             </Select>
                         </div>
                     </div>
-                    <div class="w-full flex flex-row items-center gap-3">
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
                         <div class="w-full">
-                            <Label for="birthdate">Date of Birth</Label>
-                            <div class="relative">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
+                            <DatePicker
+                            v-model:modelValueStart="startDate"
+                            />
+                            <!-- <div class="relative">
                                 <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                                     <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
                                         xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
@@ -204,7 +202,7 @@
                                     autocomplete="off"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                     placeholder="Select Birthdate">
-                            </div>
+                            </div> -->
                         </div>
                         <div class="w-full">
                             <label for="first_name"
@@ -213,8 +211,6 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
-                    </div>
-                    <div class="w-full flex flex-row items-center gap-3">
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Municipality</label>
@@ -342,6 +338,8 @@ import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { initFlowbite } from 'flowbite';
 import InputError from '@/Components/InputError.vue';
 
+import DatePicker from '@/Components/DatePickerManual.vue';
+
 const df = new DateFormatter('en-US', {
     dateStyle: 'long',
 })
@@ -376,6 +374,22 @@ const props = defineProps({
 });
 
 const isLoading = ref(false);
+
+const startDate = ref(null);
+
+const endDate = ref(null);
+
+// Helper functions
+function formatModelDate(date) {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+}
+
+const formattedStartDate = computed(() => formatModelDate(startDate.value));
+const formattedEndDate = computed(() => formatModelDate(endDate.value));
 
 /**
  * Downloads a file from Laravel storage via controller
@@ -447,7 +461,7 @@ const manual = ref({
     last_name: '',
     middle_name: '',
     sex: '',
-    birthdate: null,
+    birthdate: formattedStartDate,
     province: '',
     municipality: '',
     street: '',
@@ -457,9 +471,6 @@ const manual = ref({
 
 const submitManual = async () => {
     try {
-
-
-
         router.post(`/scholarships/${props.scholarship.id}/manual-upload`, manual.value, {
             onSuccess: () => {
                 // Show success message
