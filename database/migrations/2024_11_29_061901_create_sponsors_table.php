@@ -40,6 +40,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('sponsor_id')->constrained()->onDelete('cascade');
             $table->string('moa');
+            $table->date('validity');
             $table->enum('status', ['Active', 'Inactive'])->default('Active');
             $table->timestamps();
         });

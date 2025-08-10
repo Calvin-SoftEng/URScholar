@@ -249,6 +249,7 @@ class DatabaseSeeder extends Seeder
         SponsorMoa::factory()->create([
             'sponsor_id' => '1',
             'moa' => 'moa1.pdf',
+            'validity' => '2025-09-03',
             'status' => 'Active',
         ]);
 
@@ -265,6 +266,7 @@ class DatabaseSeeder extends Seeder
         SponsorMoa::factory()->create([
             'sponsor_id' => '2',
             'moa' => 'moa1.pdf',
+            'validity' => '2025-09-03',
             'status' => 'Active',
         ]);
 

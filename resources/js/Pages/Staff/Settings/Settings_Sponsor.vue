@@ -122,7 +122,8 @@
 
                 <!-- View Sponsor Details -->
                 <div v-if="UpdateMOA && !isEditMode" class="w-full h-full space-y-5 mb-3">
-                    <div class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border pb-10">
+                    <div
+                        class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border pb-10">
                         <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-5 py-5">
                             <h2 class="text-lg font-semibold text-primary">Sponsor Information</h2>
                             <div class="flex items-center gap-2">
@@ -210,7 +211,7 @@
                                     <!-- Date column -->
                                     <div class="w-full md:col-span-2 flex items-center">
                                         <span class="font-semibold text-gray-900 dark:text-white">
-                                            {{ formatDate(moaItem.created_at)}} - December 23, 2023
+                                            {{ formatDate(moaItem.created_at) }} - {{ formatDate(moaItem.validity) }}
                                         </span>
                                     </div>
 
@@ -305,8 +306,8 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                 </h3>
-                                                <InputError v-if="errors?.abbreviation"
-                                                    :message="errors.abbreviation" class="text-2xs text-red-500" />
+                                                <InputError v-if="errors?.abbreviation" :message="errors.abbreviation"
+                                                    class="text-2xs text-red-500" />
                                                 <input v-model="form.abbreviation" type="text" id="name"
                                                     placeholder="e.g., CHED"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -328,13 +329,9 @@
                                             Information</h3>
                                         <InputError v-if="errors?.description" :message="errors.description"
                                             class="text-2xs text-red-500" />
-                                        <textarea 
-                                        v-model="form.description" 
-                                        id="description"
-                                        placeholder="Enter Description"
-                                        rows="3"
-                                        class="textarea textarea-bordered bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"
-                                        ></textarea>
+                                        <textarea v-model="form.description" id="description"
+                                            placeholder="Enter Description" rows="3"
+                                            class="textarea textarea-bordered bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
 
                                     </div>
                                     <div class="w-full space-y-5">
@@ -396,9 +393,7 @@
                                             <div class="w-[60%]">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">
                                                     Effectivity</h3>
-                                                <DatePicker
-                                                v-model:modelValueStart="startDate"
-                                                />
+                                                <DatePicker v-model:modelValueStart="startDate" />
                                             </div>
                                         </div>
                                     </div>
@@ -543,7 +538,7 @@
                                                         alt="Document Icon" class="h-32 mb-2" />
                                                 </template>
                                                 <p class="text-sm text-gray-500">{{ form.fileName || 'Current MOA File'
-                                                    }}</p>
+                                                }}</p>
                                             </div>
                                             <input id="update-dropzone-file" type="file" class="hidden"
                                                 accept=".svg, .png, .jpg, .docx, .doc, .pdf"
@@ -567,7 +562,7 @@
                                         <div class="w-full md:col-span-1 flex items-center">
                                             <span class="font-semibold text-gray-900 dark:text-white">{{
                                                 formatDate(moaItem.created_at)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <!-- File name column -->
@@ -638,9 +633,7 @@
                     <div class="w-full">
                         <h3 class="font-semibold text-gray-900 dark:text-white">
                             Effectivity</h3>
-                        <DatePicker
-                        v-model:modelValueStart="startDate"
-                        />
+                        <DatePicker v-model:modelValueStart="startDate" />
                     </div>
                     <!-- Buttons -->
                     <div class="mt-2 flex justify-between gap-2">
@@ -803,6 +796,7 @@ function moaupload(event) {
 }
 
 const form = ref({
+    validity: formattedStartDate,
     id: null,
     name: null,
     description: null,
@@ -817,7 +811,7 @@ const form = ref({
     since: null,
     sponsor_name: null,
     email: null,
-    validity: formattedStartDate,
+
 });
 
 const scholarships = ref({
@@ -969,8 +963,8 @@ const editScholarship = (scholarship) => {
 };
 
 
-// Modify the existing submitForm function to handle updates\
 const submitForm = async () => {
+    form.value.validity = formattedStartDate.value; // Use .value to get the actual computed value
     try {
         if (UpdateMOA.value) {
             router.put(`/settings/sponsors/${form.value.id}`, form.value);
