@@ -1523,6 +1523,130 @@
                                     </div>
                                 </div>
                                 <div v-if="activeStep === 4">
+                                    <div class="bg-white border-box overflow-x-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 
+                                        gap-6 rounded-lg h-1/2 items-center justify-start p-10 sm:p-5 xl:p-10">
+
+                                        <div class="sm:col-span-4 md:col-span-4 lg:col-span-4 xl:col-span-4">
+                                            <h3
+                                                class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4 sm:text-white">
+                                                Other Scholarship Information</h3>
+                                            <p
+                                                class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
+                                                Please fill-up missing required fields. Leave Blank if none</p>
+                                        </div>
+
+                                        <!-- Do you have other Scholarships? -->
+                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="gender" class="items-center flex mb-1">
+                                                <span class="text-red-900 font-bold mr-1">*</span>
+                                                Do you have any other Scholarships?
+                                                </Label>
+                                            </div>
+
+                                            <div class="relative w-full">
+                                                <Select v-model="form.scholarornot">
+                                                <SelectTrigger
+                                                    id="gender"
+                                                    class="w-full border pr-10"
+                                                    :class="{ 'border-gray-200': !errors?.scholarornot }"
+                                                    @focus="errors.scholarornot = null"
+                                                >
+                                                    <SelectValue placeholder="Yes or No" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectGroup>
+                                                    <SelectItem value="Yes">Yes</SelectItem>
+                                                    <SelectItem value="No">No</SelectItem>
+                                                    </SelectGroup>
+                                                </SelectContent>
+                                                </Select>
+
+                                                <InputError
+                                                v-if="errors?.scholarornot"
+                                                :message="errors.scholarornot"
+                                                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <!-- If Yes, What Scholarship? -->
+                                        <div
+                                        class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2"
+                                        >
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label for="scholarship_name" class="items-center flex mb-1">
+                                            <span class="text-red-900 font-bold mr-1">*</span>
+                                            If Yes, What is the Scholarship?
+                                            </Label>
+                                        </div>
+
+                                        <div class="relative w-full">
+                                            <Input
+                                            id="scholarship_name"
+                                            type="text"
+                                            placeholder="Scholarship Name"
+                                            
+                                            class="w-full border border-gray-200 pr-10"
+                                            :disabled="form.scholarornot !== 'Yes'"
+                                            />
+                                            <InputError
+                                            
+                                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500"
+                                            />
+                                        </div>
+                                        </div>
+
+                                        <!-- How much do you get? -->
+                                        <div
+                                        class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2"
+                                        >
+                                        <div class="flex flex-row items-center gap-2">
+                                            <Label for="scholarship_amount" class="items-center flex mb-1">
+                                            <span class="text-red-900 font-bold mr-1">*</span>
+                                            How much do you get?
+                                            </Label>
+                                        </div>
+
+                                        <div class="relative w-full">
+                                            <Input
+                                            id="scholarship_amount"
+                                            type="text"
+                                            placeholder="P 2000.00"
+                                           
+                                            class="w-full border border-gray-200 pr-10"
+                                            :disabled="form.scholarornot !== 'Yes'"
+                                            />
+                                            <InputError
+                                           
+                                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500"
+                                            />
+                                        </div>
+                                        </div>
+
+
+
+                                        <div class="col-span-4 space-x-2 flex justify-end mt-4">
+                                            <!-- Back Button -->
+                                            <button type="button" @click="prevStep" :disabled="activeStep === 0"
+                                                class="text-white bg-gray-400 hover:bg-gray-500 focus:ring-4 focus:outline-none 
+                                                focus:ring-gray-300 dark:focus:ring-gray-800 font-medium rounded-lg 
+                                                text-sm px-5 py-2.5 text-center mb-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                                                Back
+                                            </button>
+
+                                            <!-- Next Button -->
+                                            <button type="submit" @click="nextStep"
+                                                :disabled="activeStep === steps.length - 1" class="text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 
+                                                hover:bg-gradient-to-br focus:ring-4 focus:outline-none 
+                                                focus:ring-blue-300 dark:focus:ring-blue-800 font-medium 
+                                                rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                                                Next
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="activeStep === 5">
                                     <form @submit.prevent="submit">
                                         <div class="bg-white border-box overflow-x-auto grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 
                                             gap-6 rounded-lg h-1/2 items-center justify-start p-10 sm:p-5 xl:p-10">
@@ -1535,16 +1659,6 @@
                                                     class="font-semibold text-[12px] font-inter uppercase text-gray-400 dark:text-white mb-4">
                                                     Please change and update you password to your preference</p>
                                             </div>
-                                            <!-- <div
-                                            class="bg-white grid grid-cols-2 gap-2 rounded-lg h-1/2 items-center justify-start p-10">
-                                            <div class="col-span-2">
-                                                <h3
-                                                    class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
-                                                    Account Setup</h3>
-                                                <p
-                                                    class="font-semibold text-[11px] font-inter uppercase text-gray-400 dark:text-white mb-4">
-                                                    Please change and update you password to your preference</p>
-                                            </div> -->
 
                                             <div class="col-span-3 flex flex-col sm:flex-row px-4 sm:px-24 gap-6">
                                                 <!-- Image Upload Column -->
@@ -2001,6 +2115,7 @@ const steps = ref([
     { label: 'Education', icon: 'history_edu' },
     { label: 'Family', icon: 'diversity_2' },
     { label: 'Organization', icon: 'groups' },
+    { label: 'Scholarship', icon: 'school' },
     { label: 'Account', icon: 'identity_platform' },
 ]);
 
