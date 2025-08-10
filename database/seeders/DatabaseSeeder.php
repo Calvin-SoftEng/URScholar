@@ -502,5 +502,6 @@ class DatabaseSeeder extends Seeder
 
         //sponsor 
         $this->call(FormTableSeeder::class);
+        $this->call(StudentSeeder::class);
     }
 }
