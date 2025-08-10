@@ -918,6 +918,7 @@ const submitMOA = async () => {
         const formData = new FormData();
         formData.append('sponsor_id', form.value.id);
         formData.append('moa_file', form.value.file);
+        formData.append('validity', formattedStartDate.value);
 
         // Post the MOA to the server
         router.post("/settings/sponsors/moa", formData, {

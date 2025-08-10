@@ -169,6 +169,7 @@ class SettingsController extends Controller
         $request->validate([
             'sponsor_id' => 'required|exists:sponsors,id',
             'moa_file' => 'required|file|max:4096', // Max 4MB
+            'validity' => 'required|date',
         ]);
 
         // dd($request->all());
@@ -189,6 +190,7 @@ class SettingsController extends Controller
         $moa = new SponsorMoa();
         $moa->sponsor_id = $request->sponsor_id;
         $moa->moa = $moaFileName;
+        $moa->validity = $request->validity;
         $moa->status = 'Active';
         $moa->save();
 
