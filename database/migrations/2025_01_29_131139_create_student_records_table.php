@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -26,6 +25,9 @@ return new class extends Migration
             $table->string('religion')->nullable();
             $table->string('guardian')->nullable();
             $table->string('relationship')->nullable();
+            $table->boolean('has_other_scholarship')->default(false);
+            $table->string('other_scholarship_name')->nullable();
+            $table->decimal('other_scholarship_amount', 10, 2)->nullable();
             $table->timestamps();
         });
 

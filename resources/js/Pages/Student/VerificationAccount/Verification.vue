@@ -348,7 +348,7 @@
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="first_name" type="text" placeholder="Street Address" 
+                                                <Input id="first_name" type="text" placeholder="Street Address"
                                                     v-model="form.street" @focus="errors.street = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.street" :message="errors.street"
@@ -429,13 +429,15 @@
                                             class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="guardian_name" class="items-center flex mb-1">
-                                                    <span class="text-red-900 font-bold mr-1">*</span>Relationship with Guardian
+                                                    <span class="text-red-900 font-bold mr-1">*</span>Relationship with
+                                                    Guardian
                                                 </Label>
                                             </div>
 
                                             <div class="relative w-full">
-                                                <Input id="guardian_name" type="text" placeholder="Relationship with Guardian"
-                                                    v-model="form.relationship" @focus="errors.relationship = null"
+                                                <Input id="guardian_name" type="text"
+                                                    placeholder="Relationship with Guardian" v-model="form.relationship"
+                                                    @focus="errors.relationship = null"
                                                     class="w-full border border-gray-200 pr-10" />
                                                 <InputError v-if="errors?.relationship" :message="errors.relationship"
                                                     class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
@@ -468,7 +470,8 @@
                                             class="col-span-3 whitespace-nowrap gap-2 relative flex flex-row justify-center items-center mb-2">
                                             <h3
                                                 class="font-semibold whitespace-nowrap text-[12px] text-blue-900 dark:text-white text-center">
-                                                General Weighted Average <span class="italic">(you can set this up later)</span>
+                                                General Weighted Average <span class="italic">(you can set this up
+                                                    later)</span>
                                             </h3>
                                             <div
                                                 class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
@@ -1146,8 +1149,8 @@
                                                 </Label>
                                             </div>
                                             <div class="relative w-full">
-                                                <Input type="text" placeholder="Permanent Address" v-model="form.father.address" 
-                                                    :disabled="form.father.isDeceased"
+                                                <Input type="text" placeholder="Permanent Address"
+                                                    v-model="form.father.address" :disabled="form.father.isDeceased"
                                                     :class="{ 'bg-gray-200 text-gray-500 cursor-not-allowed': form.father.isDeceased }"
                                                     class="w-full border border-gray-200 pr-10" />
                                             </div>
@@ -1271,9 +1274,10 @@
                                             class="col-span-4 sm:col-span-4 xl:col-span-2 grid w-full items-center gap-1.5">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="marital-status" class="text-gray-500">C.2 Monthly Family
-                                                Income</Label>
-                                                <InputError v-if="errors?.monthly_income" :message="errors.monthly_income"
-                                                class="items-center flex text-xs" />
+                                                    Income</Label>
+                                                <InputError v-if="errors?.monthly_income"
+                                                    :message="errors.monthly_income"
+                                                    class="items-center flex text-xs" />
                                             </div>
                                             <RadioGroup default-value="comfortable"
                                                 class="grid sm:grid-cols-1 md:grid-cols-2 gap-2"
@@ -1536,92 +1540,73 @@
                                         </div>
 
                                         <!-- Do you have other Scholarships? -->
-                                        <div class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                        <div
+                                            class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
                                             <div class="flex flex-row items-center gap-2">
                                                 <Label for="gender" class="items-center flex mb-1">
-                                                <span class="text-red-900 font-bold mr-1">*</span>
-                                                Do you have any other Scholarships?
+                                                    <span class="text-red-900 font-bold mr-1">*</span>
+                                                    Do you have any other Scholarships?
                                                 </Label>
                                             </div>
 
                                             <div class="relative w-full">
                                                 <Select v-model="form.scholarornot">
-                                                <SelectTrigger
-                                                    id="gender"
-                                                    class="w-full border pr-10"
-                                                    :class="{ 'border-gray-200': !errors?.scholarornot }"
-                                                    @focus="errors.scholarornot = null"
-                                                >
-                                                    <SelectValue placeholder="Yes or No" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectGroup>
-                                                    <SelectItem value="Yes">Yes</SelectItem>
-                                                    <SelectItem value="No">No</SelectItem>
-                                                    </SelectGroup>
-                                                </SelectContent>
+                                                    <SelectTrigger id="gender" class="w-full border pr-10"
+                                                        :class="{ 'border-gray-200': !errors?.scholarornot }"
+                                                        @focus="errors.scholarornot = null">
+                                                        <SelectValue placeholder="Yes or No" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectGroup>
+                                                            <SelectItem value="Yes">Yes</SelectItem>
+                                                            <SelectItem value="No">No</SelectItem>
+                                                        </SelectGroup>
+                                                    </SelectContent>
                                                 </Select>
 
-                                                <InputError
-                                                v-if="errors?.scholarornot"
-                                                :message="errors.scholarornot"
-                                                class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500"
-                                                />
+                                                <InputError v-if="errors?.scholarornot" :message="errors.scholarornot"
+                                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
                                             </div>
                                         </div>
 
                                         <!-- If Yes, What Scholarship? -->
                                         <div
-                                        class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2"
-                                        >
-                                        <div class="flex flex-row items-center gap-2">
-                                            <Label for="scholarship_name" class="items-center flex mb-1">
-                                            <span class="text-red-900 font-bold mr-1">*</span>
-                                            If Yes, What is the Scholarship?
-                                            </Label>
-                                        </div>
+                                            class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="scholarship_name" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>
+                                                    If Yes, What is the Scholarship?
+                                                </Label>
+                                            </div>
 
-                                        <div class="relative w-full">
-                                            <Input
-                                            id="scholarship_name"
-                                            type="text"
-                                            placeholder="Scholarship Name"
-                                            
-                                            class="w-full border border-gray-200 pr-10"
-                                            :disabled="form.scholarornot !== 'Yes'"
-                                            />
-                                            <InputError
-                                            
-                                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500"
-                                            />
-                                        </div>
+                                            <div class="relative w-full">
+                                                <Input id="scholarship_name" type="text" placeholder="Scholarship Name"
+                                                    v-model="form.scholarship_name"
+                                                    class="w-full border border-gray-200 pr-10"
+                                                    :disabled="form.scholarornot !== 'Yes'" />
+                                                <InputError
+                                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
                                         <!-- How much do you get? -->
                                         <div
-                                        class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2"
-                                        >
-                                        <div class="flex flex-row items-center gap-2">
-                                            <Label for="scholarship_amount" class="items-center flex mb-1">
-                                            <span class="text-red-900 font-bold mr-1">*</span>
-                                            How much do you get?
-                                            </Label>
-                                        </div>
+                                            class="w-full max-w-sm items-center gap-1.5 col-span-3 sm:col-span-1 md:col-span-2">
+                                            <div class="flex flex-row items-center gap-2">
+                                                <Label for="scholarship_amount" class="items-center flex mb-1">
+                                                    <span class="text-red-900 font-bold mr-1">*</span>
+                                                    How much do you get?
+                                                </Label>
+                                            </div>
 
-                                        <div class="relative w-full">
-                                            <Input
-                                            id="scholarship_amount"
-                                            type="text"
-                                            placeholder="P 2000.00"
-                                           
-                                            class="w-full border border-gray-200 pr-10"
-                                            :disabled="form.scholarornot !== 'Yes'"
-                                            />
-                                            <InputError
-                                           
-                                            class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500"
-                                            />
-                                        </div>
+                                            <div class="relative w-full">
+                                                <Input id="scholarship_amount" type="text" placeholder="P 2000.00"
+                                                    v-model="form.scholarship_get"
+                                                    class="w-full border border-gray-200 pr-10"
+                                                    :disabled="form.scholarornot !== 'Yes'" />
+                                                <InputError
+                                                    class="absolute right-2 top-1/2 transform -translate-y-1/2 text-2xs text-red-500" />
+                                            </div>
                                         </div>
 
 
@@ -1737,8 +1722,7 @@
                                                         <div class="flex flex-col gap-1.5">
                                                             <div class="flex flex-row items-center gap-2">
                                                                 <Label for="first_name" class="items-center flex">
-                                                                    <span
-                                                                        class="text-red-900 font-bold mr-1">*</span>
+                                                                    <span class="text-red-900 font-bold mr-1">*</span>
                                                                     Email
                                                                 </Label>
                                                                 <InputError v-if="errors?.email" :message="errors.email"
@@ -1753,7 +1737,8 @@
                                                             <div class="flex flex-row items-center gap-2">
                                                                 <Label for="last_name" class="items-center flex">
                                                                     <span
-                                                                        class="text-red-900 font-bold mr-1">*</span>Student ID
+                                                                        class="text-red-900 font-bold mr-1">*</span>Student
+                                                                    ID
                                                                 </Label>
                                                                 <InputError v-if="errors?.last_name"
                                                                     :message="errors.student_number"
@@ -1914,6 +1899,9 @@ const form = ref({
     religion: props.studentData?.religion ?? '',
     guardian_name: '',
     relationship: '',
+    scholarornot: '',
+    scholarship_name: '',
+    scholarship_get: '',
     grade: '',
     cog: '',
     semester: '',

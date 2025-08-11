@@ -57,6 +57,7 @@ class StudentController extends Controller
             ->with('campus')
             ->with('course')
             ->first();
+
         $grantee = Grantees::where('scholar_id', $scholar->id)
             ->with('school_year')
             ->first();
@@ -66,34 +67,35 @@ class StudentController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        $scholarship = SCholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
-
-        // Get all requirements for this scholarship
-        $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
-
-        // Get requirements that this scholar has already submitted
-        $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
-            ->pluck('requirement_id')
-            ->toArray();
-
-        // Filter out requirements that have already been submitted
-        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
-            return in_array($requirement->id, $submittedRequirementIds);
-        })->values();
-
-
-        if ($pendingRequirements->isNotEmpty()) {
-            return redirect()->route('student.resubmission');
-        }
-
-        // Filter out requirements that have already been submitted
-        $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
-            return in_array($requirement->id, $submittedRequirementIds);
-        })->values();
 
         $academic_year = AcademicYear::where('status', 'Active')->first();
 
         if ($grantee) {
+            $scholarship = SCholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
+
+            // Get all requirements for this scholarship
+            $allRequirements = Requirements::where('scholarship_id', $scholarship->id)->get();
+
+            // Get requirements that this scholar has already submitted
+            $submittedRequirementIds = SubmittedRequirements::where('scholar_id', $scholar->id)
+                ->pluck('requirement_id')
+                ->toArray();
+
+            // Filter out requirements that have already been submitted
+            $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+                return in_array($requirement->id, $submittedRequirementIds);
+            })->values();
+
+
+            if ($pendingRequirements->isNotEmpty()) {
+                return redirect()->route('student.resubmission');
+            }
+
+            // Filter out requirements that have already been submitted
+            $pendingRequirements = $allRequirements->reject(function ($requirement) use ($submittedRequirementIds) {
+                return in_array($requirement->id, $submittedRequirementIds);
+            })->values();
+
             $scholarship = Scholarship::where('id', $grantee->scholarship_id)->with('sponsor')->first();
 
             $disbursement = Disbursement::where('scholar_id', $scholar->id)
@@ -517,6 +519,9 @@ class StudentController extends Controller
             'religion' => ['string', 'max:255'],
             'guardian_name' => ['string', 'max:255'],
             'relationship' => ['string', 'max:255'],
+            'scholarornot' => ['string', 'max:255'],
+            'scholarship_name' => ['string', 'max:255'],
+            'scholarship_get' => ['numeric'],
 
             // Education Information
             'education.elementary.name' => ['string'],
@@ -594,7 +599,10 @@ class StudentController extends Controller
                 'civil' => $request->input('civil_status'),
                 'religion' => $request->input('religion'),
                 'guardian' => $request->input('guardian_name'),
-                'relationship' => $request->input('relationship')
+                'relationship' => $request->input('relationship'),
+                'scholarornot' => $request->input('scholarornot'),
+                'scholarship_name' => $request->input('scholarship_name'),
+                'scholarship_get' => $request->input('scholarship_get'),
             ]
         );
 
@@ -750,6 +758,9 @@ class StudentController extends Controller
             'religion' => ['required', 'string', 'max:255'],
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
+            'scholarornot' => ['string', 'max:255'],
+            'scholarship_name' => ['string', 'max:255'],
+            'scholarship_get' => ['numeric'],
 
             //Grade Information
             'grade' => [''],
@@ -1108,6 +1119,9 @@ class StudentController extends Controller
             'religion' => $request->religion,
             'guardian' => $request->guardian_name,
             'relationship' => $request->relationship,
+            'has_other_scholarship' => $request->scholarornot,
+            'other_scholarship_name' => $request->scholarship_name,
+            'other_scholarship_amount' => $request->scholarship_get,
         ]);
 
         $studentrecord = StudentRecord::where('scholar_id', $newScholar->id)->get();
