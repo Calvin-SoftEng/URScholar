@@ -39,6 +39,9 @@ use Inertia\Inertia;
 // })->name('welcome');
 
 Route::get('/', [LandingPageController::class, 'index'])->name('welcome');
+Route::get('/test-predict', [LandingPageController::class, 'predict']);
+Route::post('/predict', [LandingPageController::class, 'predict']);
+
 
 // Route::get('/dashboard', function () {
 //     return Inertia::render('Dashboard');
