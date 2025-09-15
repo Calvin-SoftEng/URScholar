@@ -78,7 +78,9 @@
                                                 class="flex items-center px-6 py-4 text-gray-900 whitespace-nowrap dark:text-white">
                                                 <img class="w-10 h-10 rounded-lg border border-gray-300 cursor-pointer"
                                                     :src="`/storage/user/profile/${user.picture || 'no_userpic.png'}`"
-                                                    alt="User Avatar" />
+                                                    alt="User Avatar"
+                                                    @error="($event) => $event.target.src = '/storage/user/profile/no_userpic.png'" />
+
                                                 <div class="ps-3">
                                                     <div class="text-base font-semibold">{{ user.first_name }}</div>
                                                     <div class="font-normal text-gray-500">{{ user.email }}</div>
