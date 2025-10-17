@@ -19,6 +19,9 @@ class StudentRecord extends Model
         'religion',
         'guardian',
         'relationship',
+        'has_other_scholarship',
+        'other_scholarship_name',
+        'other_scholarship_amount',
     ];
 
     public function scholar()

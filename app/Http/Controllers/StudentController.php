@@ -524,6 +524,9 @@ class StudentController extends Controller
             'religion' => ['string', 'max:255'],
             'guardian_name' => ['string', 'max:255'],
             'relationship' => ['string', 'max:255'],
+            'scholarornot' => ['string', 'max:255'],
+            'scholarship_name' => ['string', 'max:255'],
+            'scholarship_get' => ['numeric'],
 
             // Education Information
             'education.elementary.name' => ['string'],
@@ -601,7 +604,10 @@ class StudentController extends Controller
                 'civil' => $request->input('civil_status'),
                 'religion' => $request->input('religion'),
                 'guardian' => $request->input('guardian_name'),
-                'relationship' => $request->input('relationship')
+                'relationship' => $request->input('relationship'),
+                'scholarornot' => $request->input('scholarornot'),
+                'scholarship_name' => $request->input('scholarship_name'),
+                'scholarship_get' => $request->input('scholarship_get'),
             ]
         );
 
@@ -757,6 +763,9 @@ class StudentController extends Controller
             'religion' => ['required', 'string', 'max:255'],
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
+            'scholarornot' => ['string', 'max:255'],
+            'scholarship_name' => ['string', 'max:255'],
+            'scholarship_get' => ['numeric'],
 
             //Grade Information
             'grade' => [''],
@@ -1115,6 +1124,9 @@ class StudentController extends Controller
             'religion' => $request->religion,
             'guardian' => $request->guardian_name,
             'relationship' => $request->relationship,
+            'has_other_scholarship' => $request->scholarornot,
+            'other_scholarship_name' => $request->scholarship_name,
+            'other_scholarship_amount' => $request->scholarship_get,
         ]);
 
         $studentrecord = StudentRecord::where('scholar_id', $newScholar->id)->get();

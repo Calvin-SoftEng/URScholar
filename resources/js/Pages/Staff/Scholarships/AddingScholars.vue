@@ -23,6 +23,9 @@
                     <div class="w-full flex justify-between ">
                         <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
+                                <button @click="goBack"
+                                class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
+                                < </button>
                                 <span>{{ scholarship.name }}</span> <span>{{schoolyear.year}} {{props.selectedSem}} Semester</span>
                             </h1>
                         </div>
@@ -89,6 +92,10 @@ import Adding from '../../../Components/Staff/ScholarsTabs/Adding.vue';
 import ScholarList from '../../../Components/Staff/ScholarsTabs/ScholarList.vue';
 
 // components
+
+const goBack = () => {
+    window.history.back();
+};
 
 const components = {
     Button,

@@ -27,6 +27,47 @@
                     <br>
                     <p class="leading-loose indent-6">Congratulations! You are in the running for the {{ scholarship.name }} Scholarship through the URScholar System. Before we proceed with finalizing your eligibility, we need to verify your information and ensure that your enrollment status is up to date. Please complete the following steps to confirm your qualification.</p>
                     <br>
+                    <!-- Before Next Steps header -->
+                    <h1 class="font-bold">Scholarship Source Information</h1>
+                    <br>
+                    <p class="leading-loose indent-6">
+                        Before we proceed to the data validation stage, please let us know more about how you applied for this scholarship.
+                        These details will help us understand your application journey.
+                    </p>
+                    <br>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Where did you apply? -->
+                        <div class="flex flex-col space-y-1">
+                            <Label for="application_location" class="font-semibold text-gray-800">
+                                Where did you apply for the scholarship?
+                            </Label>
+                            <Input
+                                id="application_location"
+                                type="text"
+                                placeholder="e.g., Campus Office, Online Portal, External Organization"
+                                v-model="form.application_location"
+                                class="w-full border border-gray-200 rounded-lg px-3 py-2"
+                            />
+                        </div>
+
+                        <!-- Who endorsed your application? -->
+                        <div class="flex flex-col space-y-1">
+                            <Label for="endorser" class="font-semibold text-gray-800">
+                                Who endorsed your scholarship application?
+                            </Label>
+                            <Input
+                                id="endorser"
+                                type="text"
+                                placeholder="e.g., Professor's Name, Organization, Agency"
+                                v-model="form.endorser"
+                                class="w-full border border-gray-200 rounded-lg px-3 py-2"
+                            />
+                        </div>
+                    </div>
+                    <br>
+                    <br>
+
                     <h1 class="font-bold">Next Steps: Data Validation and Document Submission</h1>
                     <br>
                     <p class="leading-loose indent-6">To validate and finalize your scholarship application, please submit the following required documents no later than {{ requirements.deadline }}:</p>
@@ -110,16 +151,7 @@
                                                     class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
                                                     Download
                                                 </a>
-                                                <!-- <a target="_blank"
-                                                    class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
-                                                    Download
-                                                </a> -->
                                             </div>
-
-                                            <!-- Optional description or file info -->
-                                            <!-- <div v-if="template.description" class="mt-2 text-sm text-gray-600">
-                                                {{ template.description }}
-                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
@@ -139,15 +171,6 @@
                         </form>
                     </div>
                     <br>
-
-                    <!-- <h1 class="font-bold">How to Submit:</h1>
-                    <ul class="list-disc ml-6 text-left">
-                        <li>Log in to your URScholar account at [System URL] and navigate to the “Scholarship
-                            Requirements” section.</li>
-                        <li>Upload the required documents in the designated fields.</li>
-                        <li>Ensure all files are clear and readable before submission.</li>
-                        <li>Keep an eye on your URScholar notifications for further updates.</li>
-                    </ul> -->
 
                     <h1 class="font-bold">Important Reminders:</h1>
                     <ul class="list-disc ml-6 text-left">

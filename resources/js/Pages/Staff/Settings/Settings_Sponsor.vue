@@ -53,7 +53,7 @@
                                     <th scope="col" class="px-6 py-3">
                                         Sponsor Name
                                     </th>
-                                    <th scope="col" class="px-6 py-3">
+                                    <th scope="col" class="px-3 py-3">
                                         Since
                                     </th>
                                     <th scope="col" class="px-6 py-3">
@@ -61,6 +61,14 @@
                                     </th>
                                     <th scope="col" class="px-6 py-3">
                                         Date Created
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Latest Agreement
+                                    </th>
+
+                                    <th scope="col" class="px-6 py-3">
+                                        Validity
                                     </th>
                                     <th>
                                         <span class="sr-only">Edit</span>
@@ -74,15 +82,15 @@
                                         <th scope="row"
                                             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             <img :src="`/storage/sponsor/logo/${sponsor.logo}`" alt="logo"
-                                                class="w-20 h-20 rounded-full" />
+                                                class="w-14 h-14 rounded-full" />
                                         </th>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 text-sm">
                                             {{ sponsor.name }} <span>({{ sponsor.abbreviation }})</span>
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-3 py-4 text-sm">
                                             {{ sponsor.since }}
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 text-sm">
                                             <span v-if="!sponsor.assign.first_name && !sponsor.assign.last_name">
                                                 Not Registered
                                             </span>
@@ -90,8 +98,14 @@
                                                 {{ sponsor.assign.first_name }} {{ sponsor.assign.last_name }}
                                             </span>
                                         </td>
-                                        <td class="px-6 py-4">
+                                        <td class="px-6 py-4 text-sm">
                                             {{ formatDate(sponsor.created_at) }}
+                                        </td>
+                                        <td class="px-3 py-4 text-sm">
+                                            August 1, 2023
+                                        </td>
+                                        <td class="px-3 py-4 text-sm">
+                                            August 1, 2023
                                         </td>
                                         <td class="px-6 py-4">
                                             <button @click="ViewSponsor(sponsor)"
@@ -108,8 +122,9 @@
 
                 <!-- View Sponsor Details -->
                 <div v-if="UpdateMOA && !isEditMode" class="w-full h-full space-y-5 mb-3">
-                    <div class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border">
-                        <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-6 py-4">
+                    <div
+                        class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border pb-10">
+                        <div class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-5 py-5">
                             <h2 class="text-lg font-semibold text-primary">Sponsor Information</h2>
                             <div class="flex items-center gap-2">
                                 <button @click="goback" type="button"
@@ -122,7 +137,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="flex flex-col px-6 py-6 h-full">
+                        <div class="w-[80%] mx-auto flex flex-col gap-2 px-10 items-stretch h-full">
                             <div class="w-full">
                                 <!-- Sponsor Image and Description Section -->
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -185,19 +200,19 @@
                                 <button v-if="form.created_id == $page.props.auth.user.id" @click="toggleUploadMOA"
                                     class="inline-flex items-center gap-1 text-sm font-medium bg-primary hover:bg-blue-700 text-white py-1.5 px-3 rounded-lg transition duration-200">
                                     <span class="material-symbols-rounded text-base">upload_file</span>
-                                    Add MOA
+                                    Add new MOA
                                 </button>
                             </div>
 
                             <!-- MOA History Section -->
                             <div v-if="moa && moa.length > 0">
                                 <div v-for="moaItem in moa.filter(m => m.sponsor_id === form.id)" :key="moaItem.id"
-                                    class="grid grid-cols-1 md:grid-cols-3 gap-4 py-3 border-b border-gray-200 dark:border-gray-700">
+                                    class="grid grid-cols-1 md:grid-cols-4 gap-4 py-3 border-b border-gray-200 dark:border-gray-700">
                                     <!-- Date column -->
-                                    <div class="w-full md:col-span-1 flex items-center">
-                                        <span class="font-semibold text-gray-900 dark:text-white">{{
-                                            formatDate(moaItem.created_at)
-                                        }}</span>
+                                    <div class="w-full md:col-span-2 flex items-center">
+                                        <span class="font-semibold text-gray-900 dark:text-white">
+                                            {{ formatDate(moaItem.created_at) }} - {{ formatDate(moaItem.validity) }}
+                                        </span>
                                     </div>
 
                                     <!-- File name column -->
@@ -220,9 +235,9 @@
                 <div v-if="isTableVisible && !UpdateMOA" class="w-full h-full space-y-5 mb-3">
                     <form @submit.prevent="submitForm">
                         <div
-                            class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border">
+                            class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border pb-10">
                             <div
-                                class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-6 py-4">
+                                class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-5 py-5">
                                 <h2 class="text-lg font-semibold text-primary">Sponsor Information</h2>
                                 <div class="flex items-center gap-2">
                                     <button @click="addingcancel" type="button"
@@ -235,140 +250,162 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="flex flex-col gap-2 px-5 py-2 h-full">
-                                <div class="col-span-1">
-                                    <div class="flex flex-col w-full gap-2 h-full">
-                                        <div class="w-full">
-                                            <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor</h3>
-                                            <InputError v-if="errors?.name" :message="errors.name"
-                                                class="text-2xs text-red-500" />
-                                            <input v-model="form.name" type="text" id="name"
-                                                placeholder="Enter a Partnership or Sponsor"
-                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                            <div class="w-[80%] mx-auto flex flex-col gap-2 px-10 items-stretch h-full">
+
+                                <div class="mx-auto flex flex-col w-full gap-5 items-stretch h-full">
+                                    <div class="w-full flex gap-5 h-full items-stretch">
+                                        <div class="w-[40%] flex space-y-5 items-stretch h-full">
+                                            <div class="w-full flex flex-col items-stretch h-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Upload
+                                                    Photo (Optional
+                                                    for Displaying)</h3>
+                                                <InputError v-if="errors?.img" :message="errors.img"
+                                                    class="text-2xs text-red-500" />
+                                                <label for="dropzone-img"
+                                                    class="flex flex-col justify-center w-full h-[13.5rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                                    :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+                                                    @dragover.prevent="handleImgDragOver"
+                                                    @dragleave="handleImgDragLeave" @drop.prevent="handleImgDrop">
+                                                    <div v-if="!form.img"
+                                                        class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none" viewBox="0 0 20 16">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                        </svg>
+                                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                            <span class="font-semibold">Click to upload</span> or
+                                                            drag and drop
+                                                        </p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG
+                                                            (MAX. 800x400px
+                                                            - 2MB-4MB)</p>
+                                                    </div>
+                                                    <div v-else class="flex flex-col items-center justify-center">
+                                                        <img :src="form.imgPreview" alt="Uploaded Preview"
+                                                            class="max-h-24 mb-2 rounded-lg" />
+                                                        <p class="text-sm text-gray-500">{{ form.imgName }}</p>
+                                                    </div>
+                                                    <input id="dropzone-img" type="file" class="hidden"
+                                                        accept=".svg, .png, .jpg, .jpeg"
+                                                        @change="(e) => handleImg(e.target.files[0])" />
+                                                </label>
+                                            </div>
                                         </div>
-                                        <div class="w-full grid grid-cols-2 gap-4">
-                                            <div class="w-full space-y-5">
-                                                <div class="w-full">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
-                                                    </h3>
-                                                    <InputError v-if="errors?.abbreviation"
-                                                        :message="errors.abbreviation" class="text-2xs text-red-500" />
-                                                    <input v-model="form.abbreviation" type="text" id="name"
-                                                        placeholder="e.g., CHED"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
-                                                </div>
-                                                <div class="w-full">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Partnered
-                                                        Since</h3>
-                                                    <InputError v-if="errors?.since" :message="errors.since"
-                                                        class="text-2xs text-red-500" />
-                                                    <input v-model="form.since" type="text" id="name"
-                                                        placeholder="e.g., Since 2012"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
-                                                </div>
-                                                <div class="w-full flex flex-col space-y-1">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor
-                                                        Background
-                                                        Information</h3>
-                                                    <InputError v-if="errors?.description" :message="errors.description"
-                                                        class="text-2xs text-red-500" />
-                                                    <textarea v-model="form.description" id="description"
-                                                        placeholder="Enter Description"
-                                                        class="textarea textarea-bordered h-64 bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
-                                                </div>
+                                        <div class="w-[60%] space-y-5">
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor</h3>
+                                                <InputError v-if="errors?.name" :message="errors.name"
+                                                    class="text-2xs text-red-500" />
+                                                <input v-model="form.name" type="text" id="name"
+                                                    placeholder="Enter a Partnership or Sponsor"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
-                                            <div class="space-y-5">
-                                                <div class="w-full flex flex-col">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white">Attach
-                                                        Memorandum of
-                                                        Agreement</h3>
-                                                    <InputError v-if="errors?.file" :message="errors.file"
-                                                        class="text-2xs text-red-500" />
-                                                    <label for="dropzone-file"
-                                                        class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                                                        :class="{ 'border-blue-500 bg-blue-50': isDragging }"
-                                                        @dragover.prevent="handleFileDragOver"
-                                                        @dragleave="handleFileDragLeave" @drop.prevent="handleFileDrop">
-                                                        <div v-if="!form.file"
-                                                            class="flex flex-col items-center justify-center pt-5 pb-6">
-                                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 20 16">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                            </svg>
-                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload</span> or
-                                                                drag and drop
-                                                            </p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">SVG,
-                                                                PNG, JPG, DOCX
-                                                                (MAX. 2MB-4MB)</p>
-                                                        </div>
-                                                        <div v-else class="flex flex-col items-center justify-center">
-                                                            <template
-                                                                v-if="form.filePreview && !form.fileName.endsWith('.docx')">
-                                                                <img :src="form.filePreview" alt="Uploaded Preview"
-                                                                    class="h-32 mb-2 rounded-lg" />
-                                                            </template>
-                                                            <template v-else>
-                                                                <img src="../../../../assets/images/previewdocs.png"
-                                                                    alt="Document Icon" class="h-32 mb-2" />
-                                                            </template>
-                                                            <p class="text-sm text-gray-500">{{ form.fileName }}</p>
-                                                        </div>
-                                                        <input id="dropzone-file" type="file" class="hidden"
-                                                            accept=".svg, .png, .jpg, .docx"
-                                                            @change="(e) => handleFile(e.target.files[0])" />
-                                                    </label>
-                                                </div>
-                                                <div class="w-full flex flex-col">
-                                                    <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Upload
-                                                        Photo (Optional
-                                                        for Displaying)</h3>
-                                                    <InputError v-if="errors?.img" :message="errors.img"
-                                                        class="text-2xs text-red-500" />
-                                                    <label for="dropzone-img"
-                                                        class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
-                                                        :class="{ 'border-blue-500 bg-blue-50': isDragging }"
-                                                        @dragover.prevent="handleImgDragOver"
-                                                        @dragleave="handleImgDragLeave" @drop.prevent="handleImgDrop">
-                                                        <div v-if="!form.img"
-                                                            class="flex flex-col items-center justify-center pt-5 pb-6">
-                                                            <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                                fill="none" viewBox="0 0 20 16">
-                                                                <path stroke="currentColor" stroke-linecap="round"
-                                                                    stroke-linejoin="round" stroke-width="2"
-                                                                    d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
-                                                            </svg>
-                                                            <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                                                                <span class="font-semibold">Click to upload</span> or
-                                                                drag and drop
-                                                            </p>
-                                                            <p class="text-xs text-gray-500 dark:text-gray-400">PNG, JPG
-                                                                (MAX. 800x400px
-                                                                - 2MB-4MB)</p>
-                                                        </div>
-                                                        <div v-else class="flex flex-col items-center justify-center">
-                                                            <img :src="form.imgPreview" alt="Uploaded Preview"
-                                                                class="max-h-24 mb-2 rounded-lg" />
-                                                            <p class="text-sm text-gray-500">{{ form.imgName }}</p>
-                                                        </div>
-                                                        <input id="dropzone-img" type="file" class="hidden"
-                                                            accept=".svg, .png, .jpg, .jpeg"
-                                                            @change="(e) => handleImg(e.target.files[0])" />
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="col-span-4 gap-2 relative w-full flex items-center mt-4 whitespace-nowrap">
-                                                <h3 class="font-semibold text-sm text-blue-900 dark:text-white">
-                                                    Assigning Focal Person
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Abbreviation
                                                 </h3>
-                                                <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                                <InputError v-if="errors?.abbreviation" :message="errors.abbreviation"
+                                                    class="text-2xs text-red-500" />
+                                                <input v-model="form.abbreviation" type="text" id="name"
+                                                    placeholder="e.g., CHED"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Partnered
+                                                    Since</h3>
+                                                <InputError v-if="errors?.since" :message="errors.since"
+                                                    class="text-2xs text-red-500" />
+                                                <input v-model="form.since" type="text" id="name"
+                                                    placeholder="e.g., Since 2012"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-full flex flex-col space-y-1">
+                                        <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor
+                                            Background
+                                            Information</h3>
+                                        <InputError v-if="errors?.description" :message="errors.description"
+                                            class="text-2xs text-red-500" />
+                                        <textarea v-model="form.description" id="description"
+                                            placeholder="Enter Description" rows="3"
+                                            class="textarea textarea-bordered bg-gray-50 w-full border-gray-300 dark:bg-gray-900 dark:text-dtext"></textarea>
+
+                                    </div>
+                                    <div class="w-full space-y-5">
+                                        <div
+                                            class="col-span-4 gap-2 relative w-full flex items-center mt-4 whitespace-nowrap">
+                                            <h3 class="font-semibold text-sm text-blue-900 dark:text-white">
+                                                Sponsor Scholarship Effectivity
+                                            </h3>
+                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                        </div>
+
+                                        <div class="flex w-full items-stretch h-full gap-5">
+                                            <div class="w-[40%] flex flex-col">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Attach
+                                                    Memorandum of
+                                                    Agreement</h3>
+                                                <InputError v-if="errors?.file" :message="errors.file"
+                                                    class="text-2xs text-red-500" />
+                                                <label for="dropzone-file"
+                                                    class="flex flex-col items-center justify-center w-full h-48 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-gray-900 hover:bg-gray-100 dark:border-gray-600 dark:hover:border-gray-500 dark:hover:bg-gray-600"
+                                                    :class="{ 'border-blue-500 bg-blue-50': isDragging }"
+                                                    @dragover.prevent="handleFileDragOver"
+                                                    @dragleave="handleFileDragLeave" @drop.prevent="handleFileDrop">
+                                                    <div v-if="!form.file"
+                                                        class="flex flex-col items-center justify-center pt-5 pb-6">
+                                                        <svg class="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
+                                                            aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                                                            fill="none" viewBox="0 0 20 16">
+                                                            <path stroke="currentColor" stroke-linecap="round"
+                                                                stroke-linejoin="round" stroke-width="2"
+                                                                d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2" />
+                                                        </svg>
+                                                        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                                                            <span class="font-semibold">Click to upload</span> or
+                                                            drag and drop
+                                                        </p>
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">SVG,
+                                                            PNG, JPG, DOCX
+                                                            (MAX. 2MB-4MB)</p>
+                                                    </div>
+                                                    <div v-else class="flex flex-col items-center justify-center">
+                                                        <template
+                                                            v-if="form.filePreview && !form.fileName.endsWith('.docx')">
+                                                            <img :src="form.filePreview" alt="Uploaded Preview"
+                                                                class="h-32 mb-2 rounded-lg" />
+                                                        </template>
+                                                        <template v-else>
+                                                            <img src="../../../../assets/images/previewdocs.png"
+                                                                alt="Document Icon" class="h-32 mb-2" />
+                                                        </template>
+                                                        <p class="text-sm text-gray-500">{{ form.fileName }}</p>
+                                                    </div>
+                                                    <input id="dropzone-file" type="file" class="hidden"
+                                                        accept=".svg, .png, .jpg, .docx"
+                                                        @change="(e) => handleFile(e.target.files[0])" />
+                                                </label>
+                                            </div>
+
+                                            <div class="w-[60%]">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">
+                                                    Effectivity</h3>
+                                                <DatePicker v-model:modelValueStart="startDate" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="w-full space-y-5">
+                                        <div
+                                            class="col-span-4 gap-2 relative w-full flex items-center mt-4 whitespace-nowrap">
+                                            <h3 class="font-semibold text-sm text-blue-900 dark:text-white">
+                                                Assigning Focal Person
+                                            </h3>
+                                            <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
+                                        </div>
+                                        <div class="flex w-full items-stretch h-full gap-5">
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full
                                                     Name</h3>
@@ -398,9 +435,9 @@
                 <div v-if="UpdateMOA && isEditMode" class="w-full h-full space-y-5 mb-3">
                     <form @submit.prevent="submitForm">
                         <div
-                            class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border">
+                            class="w-full bg-white rounded-lg dark:bg-dsecondary dark:border dark:border-gray-200 border pb-10">
                             <div
-                                class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-6 py-4">
+                                class="w-full dark:bg-primary flex items-center justify-between rounded-t-lg px-5 py-5">
                                 <h2 class="text-lg font-semibold text-primary">Sponsor Information</h2>
                                 <div class="flex items-center gap-2">
                                     <button @click="updatecancel" type="button"
@@ -413,7 +450,7 @@
                                     </button>
                                 </div>
                             </div>
-                            <div class="flex flex-col px-6 py-6 h-full">
+                            <div class="w-[80%] mx-auto flex flex-col gap-2 px-10 items-stretch h-full">
                                 <div class="w-full">
                                     <!-- Sponsor Image and Name Section -->
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -501,7 +538,7 @@
                                                         alt="Document Icon" class="h-32 mb-2" />
                                                 </template>
                                                 <p class="text-sm text-gray-500">{{ form.fileName || 'Current MOA File'
-                                                    }}</p>
+                                                }}</p>
                                             </div>
                                             <input id="update-dropzone-file" type="file" class="hidden"
                                                 accept=".svg, .png, .jpg, .docx, .doc, .pdf"
@@ -525,7 +562,7 @@
                                         <div class="w-full md:col-span-1 flex items-center">
                                             <span class="font-semibold text-gray-900 dark:text-white">{{
                                                 formatDate(moaItem.created_at)
-                                                }}</span>
+                                            }}</span>
                                         </div>
 
                                         <!-- File name column -->
@@ -579,7 +616,7 @@
                     </button>
                 </div>
                 <!-- Form -->
-                <form @submit.prevent="submitMOA" class="p-6 flex flex-col gap-10">
+                <form @submit.prevent="submitMOA" class="p-6 flex flex-col gap-5">
 
                     <!-- Page 1: Basic Information -->
                     <div>
@@ -592,6 +629,11 @@
                                     @change="moaupload" type="file">
                             </div>
                         </div>
+                    </div>
+                    <div class="w-full">
+                        <h3 class="font-semibold text-gray-900 dark:text-white">
+                            Effectivity</h3>
+                        <DatePicker v-model:modelValueStart="startDate" />
                     </div>
                     <!-- Buttons -->
                     <div class="mt-2 flex justify-between gap-2">
@@ -631,9 +673,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import SettingsLayout from '@/Layouts/Settings_Layout.vue';
 import { usePage } from "@inertiajs/vue3";
 import { Tooltip } from 'primevue';
-import { DatePicker } from 'primevue';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 import InputError from '@/Components/InputError.vue';
+import DatePicker from '@/Components/DatePickerManual.vue';
 
 
 const props = defineProps({
@@ -647,6 +689,22 @@ const directives = {
     Tooltip,
     DatePicker,
 };
+
+const startDate = ref(null);
+
+const endDate = ref(null);
+
+// Helper functions
+function formatModelDate(date) {
+    if (!date) return '';
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}/${month}/${day}`;
+}
+
+const formattedStartDate = computed(() => formatModelDate(startDate.value));
+const formattedEndDate = computed(() => formatModelDate(endDate.value));
 
 const isTableVisible = ref(false);
 
@@ -738,6 +796,7 @@ function moaupload(event) {
 }
 
 const form = ref({
+    validity: formattedStartDate,
     id: null,
     name: null,
     description: null,
@@ -752,6 +811,7 @@ const form = ref({
     since: null,
     sponsor_name: null,
     email: null,
+
 });
 
 const scholarships = ref({
@@ -858,6 +918,7 @@ const submitMOA = async () => {
         const formData = new FormData();
         formData.append('sponsor_id', form.value.id);
         formData.append('moa_file', form.value.file);
+        formData.append('validity', formattedStartDate.value);
 
         // Post the MOA to the server
         router.post("/settings/sponsors/moa", formData, {
@@ -903,8 +964,8 @@ const editScholarship = (scholarship) => {
 };
 
 
-// Modify the existing submitForm function to handle updates\
 const submitForm = async () => {
+    form.value.validity = formattedStartDate.value; // Use .value to get the actual computed value
     try {
         if (UpdateMOA.value) {
             router.put(`/settings/sponsors/${form.value.id}`, form.value);
