@@ -192,17 +192,17 @@ class DatabaseSeeder extends Seeder
         ]);
 
         //student
-        // User::factory()->create([
-        //     'name' => 'student1',
-        //     'email' => 'student1@gmail.com',
-        //     'first_name' => 'Carl Vincent',
-        //     'last_name' => 'Catahimican',
-        //     'middle_name' => 'Soriano',
-        //     'password' => bcrypt('password'),
-        //     'usertype' => 'student',
-        //     'campus_id' => '1',
-        //     'status' => 'Active',
-        // ]);
+        User::factory()->create([
+            'name' => 'student1',
+            'email' => 'student1@gmail.com',
+            'first_name' => 'Carl Vincent',
+            'last_name' => 'Catahimican',
+            'middle_name' => 'Soriano',
+            'password' => bcrypt('password'),
+            'usertype' => 'student',
+            'campus_id' => '1',
+            'status' => 'Active',
+        ]);
 
         //Campus
         Campus::create([
