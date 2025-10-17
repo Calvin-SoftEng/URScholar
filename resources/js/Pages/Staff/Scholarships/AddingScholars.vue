@@ -14,12 +14,12 @@
                                 <span>Scholarship</span>
                         </li>
                         <li>
-                                <span class="text-blue-400 font-semibold">Adding Scholars</span>
+                            <span class="text-blue-400 font-semibold">Adding Scholars</span>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="w-full flex flex-row justify-between dark:bg-dcontainer dark:border dark:border-gray-600 rounded-xl mb-3">
+                <div class="w-full flex flex-row justify-between dark:bg-dcontainer rounded-xl mb-3">
                     <div class="w-full flex justify-between ">
                         <div class="flex flex-col space-y-1">
                             <h1 class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
@@ -37,10 +37,6 @@
                     :campuses="campuses" :course="course" :errors="errors"/>
                 </div>
                 
-
-                
-
-                
                 <!-- <div class="w-full mt-5">
                     <ul class="text-primary flex space-x-3 flex-grow justify-left">
                         <button @click="toggleList"><li class="px-4 py-2 border-b-2 cursor-pointer" :class="List ? 'border-blue-400 bg-white rounded-t-lg shadow-sm' : 'border-transparent'">Scholar List</li></button>
@@ -54,8 +50,6 @@
                 <div v-if="addVisible" class="w-full h-full">
                     <Adding :scholarship="scholarship" :scholars="scholars"/>
                 </div> -->
-
-
             </div>
         </div>
 
@@ -81,8 +75,7 @@ import { useForm, Link, usePage } from '@inertiajs/vue3';
 import Papa from 'papaparse';
 import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
 
-import { Input } from '@/Components/ui/input'
-import { Label } from '@/Components/ui/label'
+import Datepicker from '@/Components/RawComponents/Datepicker.vue';
 import { Button } from '@/Components/ui/button'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue,} from '@/Components/ui/select'

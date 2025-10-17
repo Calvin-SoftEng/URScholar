@@ -60,7 +60,7 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                            <Select v-model="manual.campus_id">
+                            <Select v-model="manual.campus_id" >
                                 <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
                                     <SelectValue placeholder="Select Campus" class="text-black" />
                                 </SelectTrigger>
@@ -184,26 +184,20 @@
                         </div>
                     </div>
                     <div class="w-full grid grid-cols-4 items-center gap-5">
-                        <div class="w-full">
+                        <!-- <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
                             <DatePicker
                             v-model:modelValueStart="startDate"
                             />
-                            <!-- <div class="relative">
-                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                    </svg>
-                                </div>
-                                <input v-model="manual.birthdate" id="datepicker-autohide" type="text"
-                                    autocomplete="off"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Select Birthdate">
-                            </div> -->
+                        </div> -->
+                        <div class="w-full">
+                            <Datepicker v-model="startDate" label="Date of Birth" />
+                            <!-- <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">
+                            Selected: {{ formatDate(startDate) }}
+                            </p> -->
                         </div>
+
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Province</label>
@@ -329,6 +323,7 @@ import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, To
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
 import { Button } from '@/Components/ui/button'
+import Datepicker from '@/Components/RawComponents/Datepicker.vue';
 import { Calendar } from '@/Components/ui/calendar'
 
 import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover'
@@ -338,7 +333,6 @@ import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { initFlowbite } from 'flowbite';
 import InputError from '@/Components/InputError.vue';
 
-import DatePicker from '@/Components/DatePickerManual.vue';
 
 const df = new DateFormatter('en-US', {
     dateStyle: 'long',
