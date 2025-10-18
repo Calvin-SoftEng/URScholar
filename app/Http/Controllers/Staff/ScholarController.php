@@ -1569,6 +1569,7 @@ class ScholarController extends Controller
         $request->validate([
             'grant' => 'required',
             'batch_id' => 'required',
+            'endorsed' => 'required',
             'hei_name' => 'required',
             'campus_id' => 'required',
             'course_id' => 'required',
@@ -1586,6 +1587,8 @@ class ScholarController extends Controller
             'semester' => 'required',
             'schoolyear' => 'required',
         ]);
+        
+        dd($request->all());
 
 
         $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')

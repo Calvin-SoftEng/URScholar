@@ -765,8 +765,8 @@ class StudentController extends Controller
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
             'scholarornot' => ['string', 'max:255'],
-            'scholarship_name' => ['string', 'max:255'],
-            'scholarship_get' => ['numeric'],
+            'scholarship_name' => ['nullable','string', 'max:255'],
+            'scholarship_get' => ['nullable','numeric'],
 
             //Grade Information
             'grade' => [''],
@@ -833,11 +833,9 @@ class StudentController extends Controller
 
         // dd($request->all());
 
-        // Custom error message handling to combine related fields
         if ($validator->fails()) {
             $errors = $validator->errors();
 
-            // Check if any elementary education fields failed validation
             if (
                 $errors->has('education.elementary.name') ||
                 $errors->has('education.elementary.years')

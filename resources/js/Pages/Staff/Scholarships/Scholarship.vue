@@ -67,11 +67,11 @@
                                 </button>
 
                                 <!-- Active Send Email Button -->
-                                <div v-if="batches.length === 0 || !AllvalidationStatus"
+                                <div v-if="batches.length === 0 || AllvalidationStatus"
                                     class="flex flex-row items-end gap-2">
                                     <button v-tooltip.left="students.length === 0
                                         ? 'You need to add scholars before sending emails'
-                                        : (!AllvalidationStatus
+                                        : (AllvalidationStatus
                                             ? 'Please validate all scholars before sending emails'
                                             : 'Send emails to validated scholars')" :disabled="students.length === 0"
                                         class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
@@ -94,17 +94,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <button @click="openSendEmail"  class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
-                                    border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2"
-                                        :class="{ 'opacity-50 cursor-not-allowed': disableSendEmailButton }">
-                                        <font-awesome-icon :icon="['far', 'envelope']"
-                                            class="text-sm dark:text-dtext" />
-                                        <span>Send Email</span>
-                                    </button>
-
-
-
                     </div>
                 </div>
 
