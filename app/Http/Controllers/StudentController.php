@@ -607,7 +607,7 @@ class StudentController extends Controller
                 'religion' => $request->input('religion'),
                 'guardian' => $request->input('guardian_name'),
                 'relationship' => $request->input('relationship'),
-                'has_other_scholarship' => $request->input('scholarornot'),
+                'has_other_scholarship' => $MayScholarship,
                 'other_scholarship_name' => $request->input('scholarship_name'),
                 'other_scholarship_amount' => $request->input('scholarship_get'),
             ]
