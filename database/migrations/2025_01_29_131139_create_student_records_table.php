@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->string('religion')->nullable();
             $table->string('guardian')->nullable();
             $table->string('relationship')->nullable();
-            $table->boolean('has_other_scholarship')->default(false);
+            $table->string('has_other_scholarship')->nullable();
             $table->string('other_scholarship_name')->nullable();
             $table->decimal('other_scholarship_amount', 10, 2)->nullable();
             $table->timestamps();

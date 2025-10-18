@@ -589,8 +589,7 @@ class StudentController extends Controller
         if ($request->input('scholarornot') == 'Yes') {
             $MayScholarship = true;
         }
-
-
+        
         // Update or create student record
         $studentRecord = StudentRecord::updateOrCreate(
             ['scholar_id' => $scholar->id],
