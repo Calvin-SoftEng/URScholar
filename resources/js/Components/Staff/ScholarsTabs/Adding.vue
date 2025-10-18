@@ -485,6 +485,7 @@ const closePanel = () => {
 const manual = ref({
     grant: '',
     batch_id: '',
+    endorsed: '',
     hei_name: 'University of Rizal System',
     campus: '',
     course: '',
