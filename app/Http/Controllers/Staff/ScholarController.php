@@ -1569,7 +1569,6 @@ class ScholarController extends Controller
         $request->validate([
             'grant' => 'required',
             'batch_id' => 'required',
-            'endorsed' => 'required',
             'hei_name' => 'required',
             'campus_id' => 'required',
             'course_id' => 'required',
