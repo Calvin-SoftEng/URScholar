@@ -689,6 +689,13 @@ class ScholarController extends Controller
         $campuses = Campus::all();
         $course = Course::all();
 
+
+
+        $getAcademicYear = AcademicYear::where('school_year_id', $selectedYear)->first();
+
+        $students = Student::where("academic_year_id", $getAcademicYear->id)->where("semester", $selectedSem)->get();
+
+
         return Inertia::render(
             'Staff/Scholarships/AddingScholars',
             [
@@ -699,6 +706,7 @@ class ScholarController extends Controller
                 'batch' => $batch,
                 'campuses' => $campuses,
                 'course' => $course,
+                'students' => $students,
             ]
         );
     }

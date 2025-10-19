@@ -376,6 +376,7 @@ const props = defineProps({
     selectedSem: Object,
     batch: Array,
     campuses: Array,
+    students: Array,
     course: Array,
     errors: Object,
     filePath: {
