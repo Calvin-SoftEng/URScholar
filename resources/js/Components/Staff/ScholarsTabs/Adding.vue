@@ -22,31 +22,122 @@
                     <p class="text-red-600 text-sm">{{ errors.student }}</p>
                 </div>
                 <div class="flex flex-col w-full gap-5">
+                    <div class="relative w-1/2">
+                        <div class="w-full flex flex-col gap-0 font-rethink">
+                            <span class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search for Students</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <input v-model="searchQuery" type="text" placeholder="Search student..." @focus="
+                                () =>
+                                    setTimeout(
+                                        () => (dropdownIsOpen = true),
+                                        50
+                                    )
+                            " @blur="
+                                () =>
+                                    setTimeout(
+                                        () => (dropdownIsOpen = false),
+                                        150
+                                    )
+                            "
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                            <button class="bg-primary text-white border-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
+                                @click="selectFirstMatch">
+                                Search
+                            </button>
+                        </div>
+
+                        <ul v-if="dropdownIsOpen && searchQuery !== ''"
+                            class="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+                            <li v-if="filteredStudents.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                                No results found.
+                            </li>
+                            <li v-for="student in filteredStudents" :key="student.id"
+                                @click="selectStudent(student)"
+                                class="px-4 py-2 hover:bg-blue-100 cursor-pointer text-base font-medium font-rethink text-darker">
+                                <div class="flex flex-row items-center gap-3 leading-tight">
+                                    <span>{{ student.name }}</span>
+                                    <span class="text-xs text-gray-500">{{
+                                        student.email
+                                        }}</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
+
                     <div class="w-full grid grid-cols-4 items-center gap-5">
                         <div class="w-full">
                             <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
-                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="manual.grant"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+                            <input v-model="manual.first_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <input type="text" id="batch_id" placeholder="Enter Batch No"
-                                v-model="manual.batch_id"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+                            <input v-model="manual.last_name" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Endorsed By</label>
-                            <input type="text" id="batch_id"
-                                v-model="manual.endorsed"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
+                            <input v-model="manual.middle_name" type="text" id="first_name"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <SelectBox
+                                v-model="manual.sex"
+                                :options="sex"
+                                label="Sex"
+                                placeholder="Select sex"
+                            />
+                        </div>
+                    </div>
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
+                        <!-- <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
+                            <DatePicker
+                            v-model:modelValueStart="startDate"
+                            />
+                        </div> -->
+                        <div class="w-full">
+                            <Datepicker v-model="startDate" label="Date of Birth" />
+                            <!-- <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">
+                            Selected: {{ formatDate(startDate) }}
+                            </p> -->
+                        </div>
+
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Province</label>
+                            <input v-model="manual.province" type="text" id="first_name"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Municipality</label>
+                            <input v-model="manual.municipality" type="text" id="first_name"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
+                            <input v-model="manual.street" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                     </div>
+
+                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
+
                     <div class="w-full flex flex-row items-center gap-5">
                         <div class="w-full">
                             <label for="first_name"
@@ -114,30 +205,40 @@
                             />
                         </div>
                         <div class="w-full">
+                            <div class="w-full">
+                                <SelectBox
+                                    v-model="manual.year"
+                                    :options="years"
+                                    label="Year Level"
+                                    placeholder="Select Year Level"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
+                        <div class="w-full">
                             <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Year Level</label>
-                            <Select v-model="manual.year">
-                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Year" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                        <SelectItem value="1">
-                                            1st
-                                        </SelectItem>
-                                        <SelectItem value="2">
-                                            2nd
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            3rd
-                                        </SelectItem>
-                                        <SelectItem value="4">
-                                            4th
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
+                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="manual.grant"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
+                            <input type="text" id="batch_id" placeholder="Enter Batch No"
+                                v-model="manual.batch_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Endorsed By</label>
+                            <input type="text" id="batch_id"
+                                v-model="manual.endorsed"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
                         </div>
                     </div>
 
@@ -158,89 +259,6 @@
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Award No.</label>
                             <input v-model="manual.award_no" type="text" id="first_name"
                                 placeholder="###-00-00-00000-0000-00000"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                    </div>
-
-                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
-
-                    <div class="w-full grid grid-cols-4 items-center gap-5">
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
-                            <input v-model="manual.first_name" type="text" id="first_name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
-                            <input v-model="manual.last_name" type="text" id="first_name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Middle Name</label>
-                            <input v-model="manual.middle_name" type="text" id="first_name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
-                            <Select v-model="manual.sex">
-                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Sex" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                        <SelectItem value="Male">
-                                            Male
-                                        </SelectItem>
-                                        <SelectItem value="Female">
-                                            Female
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                    <div class="w-full grid grid-cols-4 items-center gap-5">
-                        <!-- <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
-                            <DatePicker
-                            v-model:modelValueStart="startDate"
-                            />
-                        </div> -->
-                        <div class="w-full">
-                            <Datepicker v-model="startDate" label="Date of Birth" />
-                            <!-- <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">
-                            Selected: {{ formatDate(startDate) }}
-                            </p> -->
-                        </div>
-
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Province</label>
-                            <input v-model="manual.province" type="text" id="first_name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Municipality</label>
-                            <input v-model="manual.municipality" type="text" id="first_name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
-                            <input v-model="manual.street" type="text" id="first_name"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -337,37 +355,18 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect, computed, watch, onMounted } from 'vue';
-import { useForm, Link, usePage, router } from '@inertiajs/vue3';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import FileUpload from 'primevue/fileupload';
-import Papa from 'papaparse';
-import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue';
+import { usePage, router } from '@inertiajs/vue3';
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastViewport } from 'radix-vue'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
-import { Button } from '@/Components/ui/button'
 import Datepicker from '@/Components/RawComponents/Datepicker.vue';
 import SelectBox from '@/Components/RawComponents/SelectBox.vue';
-import { Calendar } from '@/Components/ui/calendar'
 
-import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover'
-import { cn } from '@/lib/utils'
 import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
-import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { initFlowbite } from 'flowbite';
-import InputError from '@/Components/InputError.vue';
 
-
-const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
-})
-
-const formatDate = (date) => {
-    if (!date) return "Pick a date";
-    return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(date));
-};
 
 //File download
 const props = defineProps({
@@ -463,14 +462,67 @@ const toggleBulk = () => {
     ManualAdding.value = false;
 };
 
+//Populate Student Name
+//palit props ikaw na dito
+const searchQuery = ref("");
+const selectedCustomer = ref(null);
+const dropdownIsOpen = ref(false);
+let skipNextWatch = false;
 
-const components = {
-    DataTable,
-    Column,
-    Button,
-    FileUpload,
-    Papa,
-};
+watch(searchQuery, (newVal) => {
+    if (skipNextWatch) {
+        skipNextWatch = false;
+        return;
+    }
+    dropdownIsOpen.value = newVal !== "";
+});
+
+const filteredStudents = computed(() =>
+    props.student.filter(
+        (customer) =>
+            student.name
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase()) ||
+            student.email
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase())
+    )
+);
+
+// Add this method to your existing methods section
+function resetSelection() {
+    selectedStudent.value = null;
+    searchQuery.value = "";
+    dropdownIsOpen.value = false;
+
+    // Clear the form fields
+    form.first_name = "";
+    form.last_name = "";
+    form.email = "";
+    form.contact = "";
+    form.address = "";
+}
+
+function selectedStudent(student) {
+    selectedStudent.value = student;
+    form.user_id = student.id;
+    searchQuery.value = student.name;
+    dropdownIsOpen.value = false;
+    skipNextWatch = true;
+
+    // Auto-fill form with customer data directly from props
+    form.first_name = student.first_name || "";
+    form.last_name = student.last_name || "";
+    form.email = student.email || "";
+    form.contact = student.contact || "";
+    form.address = student.address || "";
+}
+
+function selectFirstMatch() {
+    if (filteredStudents.value.length > 0) {
+        selectStudent(filteredStudents.value[0]);
+    }
+}
 
 
 const closePanel = () => {
@@ -480,6 +532,19 @@ const closePanel = () => {
     addingPanel.value = false;
     entries.value = false;
 };
+
+const sex = [
+    { id: 'male', name: 'Male' },
+    { id: 'female', name: 'Female' },
+]
+
+const years = [
+    { id: '1', name: '1st Year' },
+    { id: '2', name: '2nd Year' },
+    { id: '3', name: '3rd Year' },
+    { id: '4', name: '4th Year' },
+]
+
 
 
 const manual = ref({
@@ -505,6 +570,7 @@ const manual = ref({
 });
 
 const submitManual = async () => {
+    console.log(manual.birthdate);
     try {
         router.post(`/scholarships/${props.scholarship.id}/manual-upload`, manual.value, {
             onSuccess: () => {
