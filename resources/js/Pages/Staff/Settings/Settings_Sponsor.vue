@@ -405,14 +405,32 @@
                                             </h3>
                                             <div class="flex-1 h-0.5 bg-gray-200 rounded-lg"></div>
                                         </div>
-                                        <div class="flex w-full items-stretch h-full gap-5">
+                                        <div class="grid grid-cols-2 gap-5">
                                             <div class="w-full">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Full
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor First
                                                     Name</h3>
                                                 <InputError v-if="errors?.sponsor_name" :message="errors.sponsor_name"
                                                     class="text-2xs text-red-500" />
                                                 <input v-model="form.sponsor_name" type="text" id="name"
-                                                    placeholder="name"
+                                                    placeholder="First Name"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                                            </div>
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Middle
+                                                    Name</h3>
+                                                <InputError v-if="errors?.sponsor_name" :message="errors.sponsor_name"
+                                                    class="text-2xs text-red-500" />
+                                                <input v-model="form.sponsor_name" type="text" id="name"
+                                                    placeholder="Middle Name"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                                            </div>
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Last
+                                                    Name</h3>
+                                                <InputError v-if="errors?.sponsor_name" :message="errors.sponsor_name"
+                                                    class="text-2xs text-red-500" />
+                                                <input v-model="form.sponsor_name" type="text" id="name"
+                                                    placeholder="Last Name"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                             <div class="w-full">
@@ -422,6 +440,15 @@
                                                     class="text-2xs text-red-500" />
                                                 <input v-model="form.email" type="email" id="name"
                                                     placeholder="sponsor@test.com"
+                                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
+                                            </div>
+                                            <div class="w-full">
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Contact No.
+                                                </h3>
+                                                <InputError v-if="errors?.email" :message="errors.email"
+                                                    class="text-2xs text-red-500" />
+                                                <input v-model="form.email" type="email" id="name"
+                                                    placeholder="e.g. 09XXXXXXXXX"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                         </div>

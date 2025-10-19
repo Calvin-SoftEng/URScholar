@@ -43,14 +43,14 @@
                     </div>
 
                     <!-- Stats Section -->
-                    <div class="grid grid-cols-3 shadow-sm rounded-lg border">
+                    <div class="grid grid-cols-4 shadow-sm rounded-lg border">
                         <!-- Deadline -->
-                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300 space-y-2">
+                        <div class="flex flex-col items-start py-4 px-8 border-r border-gray-300 space-y-2">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'calendar-alt']" class="text-red-600 text-base" />
-                                <p class="text-gray-500 text-sm">Application Deadline</p>
+                                <font-awesome-icon :icon="['fas', 'calendar-alt']" class="text-red-600 text-sm" />
+                                <p class="text-gray-500 text-xs">Application Deadline</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins text-red-600">{{ new
+                            <p class="text-2xl font-semibold font-poppins text-red-600">{{ new
                                 Date(requirements[0].date_end).toLocaleDateString('en-US', {
                                     year:
                                         'numeric', month: 'long', day: 'numeric'
@@ -58,21 +58,30 @@
                         </div>
 
                         <!-- Approved Applicants -->
-                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300 space-y-2">
+                        <div class="flex flex-col items-start py-4 px-8 border-r border-gray-300 space-y-2">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
-                                <p class="text-gray-500 text-sm">Approved Applicants</p>
+                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-sm" />
+                                <p class="text-gray-500 text-xs">Approved Applicants</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins text-green-600">{{ totalApprovedApplicants }}</p>
+                            <p class="text-2xl font-semibold font-poppins text-green-600">{{ totalApprovedApplicants }}</p>
                         </div>
 
                         <!-- Total Scholars -->
-                        <div class="flex flex-col items-start py-4 px-10 space-y-2">
+                        <div class="flex flex-col items-start py-4 px-8 border-r border-gray-300 space-y-2">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Number of Applicants</p>
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-sm" />
+                                <p class="text-gray-500 text-xs">Number of Applicants</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins">{{ total_applicants }}</p>
+                            <p class="text-2xl font-semibold font-poppins">{{ total_applicants }}</p>
+                        </div>
+
+                        <!-- Approved Applicants -->
+                        <div class="flex flex-col items-start py-4 px-8 space-y-2">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'check-to-slot']" class="text-myblack text-sm" />
+                                <p class="text-gray-500 text-xs">Allotted Slots</p>
+                            </div>
+                            <p class="text-2xl font-semibold font-poppins text-myblack">{{ totalApprovedApplicants }}</p>
                         </div>
                     </div>
 

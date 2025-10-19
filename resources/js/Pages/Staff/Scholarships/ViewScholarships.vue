@@ -38,7 +38,7 @@
                                     class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                     <!-- Notification Badge -->
                                     <span v-if="scholarship.read !== 1"
-                                        class="absolute -top-3 right-4 bg-dprimary dark:bg-white dark:text-dprimary  text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                                        class="absolute -top-3 left-4 bg-dprimary dark:bg-white dark:text-dprimary  text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                                         New
                                     </span>
 
@@ -69,29 +69,26 @@
                                                 Sponsoring Since:
                                                 {{ getSponsorNSince(scholarship.sponsor_id) }}
                                             </p>
-                                            <!-- <p>
-                                                <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span
-                                                    class="font-medium">Requirements Deadline: </span>
-                                                <span
-                                                    v-if="scholarship.requirements && scholarship.requirements.length > 0 && scholarship.requirements[0].date_end">
-                                                    {{ new
-                                                        Date(scholarship.requirements[0].date_end).toLocaleDateString('en-US',
-                                                            {
-                                                                year: 'numeric',
-                                                                month: 'long',
-                                                                day: 'numeric'
-                                                    }) }}
-                                                </span>
-                                                <span v-else>No Deadline</span>
-                                            </p> -->
                                         </div>
                                     </div>
 
-                                    <!-- Additional Info -->
-                                    <div class="flex items-center gap-6 text-center px-4 py-3 bg-white dark:bg-dcontainer rounded-xl shadow-sm border border-gray-200 dark:border-gray-600">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-gray-500 dark:text-gray-400">Total Batches</span>
-                                            <span class="text-2xl font-semibold text-gray-900 dark:text-dtext">{{scholarship.batches ? scholarship.batches.length : 0 }}</span>
+                                    <div class="flex flex-col items-end">
+                                        <!-- 3-dot menu -->
+                                        <div class="relative">
+                                            <button
+                                            @click="toggleMenu"
+                                            class="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition absolute right-0 -top-3 translate-y-[-100%] translate-x-[20px]"
+                                            >
+                                            <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-myblack" />
+                                            </button>
+
+                                        </div>
+                                        <!-- Additional Info -->
+                                        <div class="flex justify-end items-end gap-6 text-center px-4 py-3 bg-white dark:bg-dcontainer rounded-xl shadow-sm border border-gray-200 dark:border-gray-600">
+                                            <div class="flex flex-col">
+                                                <span class="text-sm text-gray-500 dark:text-gray-400">Total Batches</span>
+                                                <span class="text-2xl font-semibold text-gray-900 dark:text-dtext">{{scholarship.batches ? scholarship.batches.length : 0 }}</span>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -116,7 +113,7 @@
                                     class="relative border rounded-2xl bg-white dark:bg-dcontainer dark:border-gray-700 hover:shadow-lg transition-all duration-300 p-6 md:p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                                     <!-- Notification Badge -->
                                     <span
-                                        class="absolute -top-3 right-4 bg-dprimary dark:bg-white dark:text-dprimary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
+                                        class="absolute -top-3 left-4 bg-dprimary dark:bg-white dark:text-dprimary text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
                                         New Activities
                                     </span>
 
@@ -162,14 +159,16 @@
                                             </p> -->
                                         </div>
                                     </div>
+                                    <!-- 3-dot menu -->
+                                    <div class="relative">
+                                        <button
+                                        @click="toggleMenu"
+                                        class="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition absolute right-0 -top-12 translate-y-[-100%] translate-x-[20px]"
+                                        >
+                                        <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-myblack" />
+                                        </button>
 
-                                    <!-- Additional Info -->
-                                    <!-- <div class="flex items-center gap-6 text-center px-4 py-3 bg-white dark:bg-dcontainer rounded-xl shadow-sm border border-gray-200 dark:border-gray-600">
-                                        <div class="flex flex-col">
-                                            <span class="text-sm text-gray-500 dark:text-gray-400">Total Batches</span>
-                                            <span class="text-2xl font-semibold text-gray-900 dark:text-dtext">{{scholarship.batches ? scholarship.batches.length : 0 }}</span>
-                                        </div>
-                                    </div> -->
+                                    </div>
                                 </div>
                             </button>
                         </template>
@@ -277,6 +276,100 @@
                 </div>
             </div>
         </div>
+
+        <!-- editing scholarship name -->
+        <div v-if="isEditing"
+            class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-65 dark:bg-primary dark:bg-opacity-50 transition-opacity-ease-in duration-300">
+            <div class="bg-white dark:bg-gray-900 dark:border-gray-200 rounded-lg shadow-xl w-3/12">
+                <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+
+                    <div class="flex items-center gap-3">
+                        <!-- Icon -->
+                        <font-awesome-icon :icon="['fas', 'graduation-cap']"
+                            class="text-blue-600 text-2xl flex-shrink-0" />
+
+                        <!-- Title and Description -->
+                        <div class="flex flex-col">
+                            <h2 class="text-xl md:text-2xl font-semibold text-gray-900 dark:text-white">
+                                Edit the Scholarship
+                            </h2>
+                        </div>
+                    </div>
+
+
+                    <!-- Close Button -->
+                    <button type="button" @click="closeModal"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                        <svg class="w-3 h-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Form -->
+                <form @submit.prevent="submitForm" class="p-6 flex flex-col gap-10">
+
+                    <!-- Page 1: Basic Information -->
+                    <div>
+                        <div class="flex flex-col gap-3">
+                            <div class="w-full flex flex-col space-y-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Name</h3>
+                                <input v-model="form.name" type="text" id="name" placeholder="Enter Scholarship Name" autocomplete="off"
+                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                            </div>
+                            <div class="w-full flex flex-col space-y-2">
+                                <h3 class="font-semibold text-gray-900 dark:text-white">Scholarship Type</h3>
+                                <select v-model="form.scholarshipType" id="scholarshipType"
+                                    class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600">
+                                    <option value="" disabled>Select Scholarship Type</option>
+                                    <option value="Grant-Based">Grant-Based</option>
+                                    <option value="One-time Payment">One-time Payment</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="mt-2 flex justify-between gap-2">
+                        <div class="flex items-center gap-2">
+                            <span v-for="index in totalPages" :key="index"
+                                class="h-2 rounded-full transition-all duration-300"
+                                :class="isActive(index).value ? 'bg-blue-500 w-7' : 'bg-gray-300 w-2'">
+                            </span>
+                        </div>
+
+                        <div class="flex justify-end gap-2">
+                            <!-- Cancel Button (Always Visible) -->
+                            <button type="button" @click="cancel"
+                                class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 shadow-sm rounded-lg text-sm px-5 py-2.5">
+                                Cancel
+                            </button>
+
+                            <!-- Next Button: Only Show if Scholarship Type is Selected & Not Grant-Based -->
+                            <!-- <template v-if="form.scholarshipType && form.scholarshipType !== 'Grant-Based'">
+                                <button v-if="currentPage < totalPages" type="submit"
+                                    class="text-white bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-7 py-2.5">
+                                    Proceed to Setup
+                                </button>
+                            </template> -->
+
+                            <button 
+                                class="text-white bg-[#8E0000] hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
+                                Delete
+                            </button>
+
+                            <!-- Direct "Create Scholarship" Button if Grant-Based is Selected -->
+                            <button 
+                                class="text-white bg-navy hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
+                                Update
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 
         <ToastProvider>
             <ToastRoot v-if="toastVisible"
@@ -421,6 +514,15 @@ const updateSemesters = () => {
     selectedSem.value = "";
 };
 
+const isEditing = ref(false);
+
+const toggleMenu = () => {
+    isEditing.value = !isEditing.value;
+    ScholarshipSpecification.value = true;
+};
+
+
+
 const date_end = new Date(props.scholarships.date_end).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -458,6 +560,7 @@ const closeModal = () => {
     selectedSem.value = "";
     formErrors.value.selectedSem = "";
     formErrors.value.selectedYear = "";
+    isEditing.value = false;
     resetForm();
 };
 

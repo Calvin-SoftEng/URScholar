@@ -15,7 +15,7 @@
         </div>
 
         <!-- Header section with title and search -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
           <div class="flex flex-row items-center gap-4">
             <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
               <!-- Icon -->
@@ -46,8 +46,26 @@
 
           <div class="flex flex-row items-center gap-4">
             <div class="flex flex-row items-center gap-3 w-full sm:w-auto">
-              <span class="mb-2">Filter:</span>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <span class="mb-2 text-xs">Filter:</span>
+              <div class="grid grid-cols-4 gap-4 mb-4">
+                <div>
+                  <label for="year-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Scholarship
+                  </label>
+                  <Select v-model="selectedSchoolYear">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="selectedSchoolYear || 'Select year'" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem v-for="year in academicYearOptions" :key="year.id" :value="year.id">
+                          {{ year.name }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div>
                   <label for="year-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">School
                     Year</label>
