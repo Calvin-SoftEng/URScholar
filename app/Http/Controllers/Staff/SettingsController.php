@@ -81,10 +81,15 @@ class SettingsController extends Controller
             'imgName' => 'required|string',
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
-            'sponsor_name' => 'required|string|max:255',
+            'sponsor_first_name' => 'required|string|max:255',
+            'sponsor_middle_name' => 'required|string|max:255',
+            'sponsor_last_name' => 'required|string|max:255',
+            'sponsor_number' => 'required|string|max:255',
             'email' => 'required|email',
             'validity' => 'required|date',
         ]);
+
+        //d($request);
 
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
@@ -112,15 +117,20 @@ class SettingsController extends Controller
         $password = Str::random(8);
 
         $user = User::create([
-            'name' => $request->sponsor_name,
+            'name' => $request->sponsor_first_name . " " . $request->sponsor_last_name,
+            'first_name' => $request->sponsor_first_name,
+            'middle_name' => $request->sponsor_middle_name,
+            'last_name' => $request->sponsor_last_name,
             'email' => $request->email,
+            'usertype' => 'sponsor',
             'password' => bcrypt($password),
         ]);
 
         // Sending Emails
         $mailData = [
+            'subject' => 'Welcome to URScholar, ' . $request->sponsor_first_name . '!',
             'title' => 'Welcome to the URScholar Portal',
-            'body' => "Dear " . $request->sponsor_name . ",\n\n" .
+            'body' => "Dear " . $request->sponsor_first_name . " " . $request->sponsor_last_name . ",\n\n" .
                 "Welcome to the URScholar Portal! We’re excited to have you on board as a valued sponsor in our scholarship program.\n\n" .
                 "Below are your login credentials to access the system:\n\n" .
                 "Email: " . $request->email . "\n" .
@@ -131,10 +141,9 @@ class SettingsController extends Controller
                 "URScholar Team"
         ];
 
-        // Create mailable instance
         $email = new SendEmail($mailData);
-
         Mail::to($request->email)->send($email);
+
 
         $sponsor = Sponsor::create([
             'name' => $request->name,
@@ -517,7 +526,6 @@ class SettingsController extends Controller
             }
 
             return $redirect;
-
         } catch (\Exception $e) {
             // Log the full error for debugging
             \Log::error('Student import error: ' . $e->getMessage(), [

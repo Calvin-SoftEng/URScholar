@@ -258,6 +258,7 @@ class EmailController extends Controller
                     if (!$userExists) {
                         // For new users - include credentials and requirements
                         $mailData = [
+                            'subject' => 'You are on your way to becoming a scholar!',
                             'title' => 'Welcome to the Scholarship Program – Your Login Credentials',
                             'body' => "Dear " . $scholar->first_name . ",\n\n" .
                                 "Congratulations! You have been successfully registered for the scholarship application program.\n\n" .
@@ -278,6 +279,7 @@ class EmailController extends Controller
                     } else {
                         // For existing users - focus on new requirements
                         $mailData = [
+                            'subject' => 'Important: Submit Your New Scholarship Requirements Before the Deadline',
                             'title' => $scholarship->name . ' - New Requirements Submission',
                             'body' => "Dear " . $scholar->first_name . ",\n\n" .
                                 "This is a notification that new requirements have been added to your scholarship application.\n\n" .
