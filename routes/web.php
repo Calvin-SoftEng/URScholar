@@ -169,7 +169,10 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/scholarships', [ScholarshipController::class, 'scholarship'])->name('scholarships.index');
     // Route::post('/scholarships', [ScholarshipController::class, 'store'])->name('scholarships.store');
-    Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
+    //Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
+    Route::put('/scholarships/{id}', [ScholarshipController::class, 'update_scholarship'])
+    ->name('scholarships.update');
+
 
 
     //Scholarship One-Time

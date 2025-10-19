@@ -76,7 +76,7 @@
                                         <!-- 3-dot menu -->
                                         <div class="relative">
                                             <button
-                                            @click="toggleMenu"
+                                            @click="toggleMenu(scholarship)"
                                             class="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition absolute right-0 -top-3 translate-y-[-100%] translate-x-[20px]"
                                             >
                                             <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-myblack" />
@@ -162,7 +162,7 @@
                                     <!-- 3-dot menu -->
                                     <div class="relative">
                                         <button
-                                        @click="toggleMenu"
+                                        @click="toggleMenu(scholarship)"
                                         class="w-8 h-8 flex items-center justify-center border rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition absolute right-0 -top-12 translate-y-[-100%] translate-x-[20px]"
                                         >
                                         <font-awesome-icon :icon="['fas', 'pen-to-square']" class="text-myblack" />
@@ -198,7 +198,7 @@
                 <div class="bg-white dark:bg-dprimary flex justify-center items-center p-5 rounded-lg">
                     <div class="flex flex-col space-y-2 items-center">
                         <h1 class="text-4xl font-sora font-extrabold text-[darkblue] text-center dark:text-dtext">
-                            {{ selectedScholarship.name }}<span> Scholars</span>
+                            {{ selectedScholarship?.name || ""}}<span> Scholars</span>
                         </h1>
 
                         <div class="py-5 text-gray-500 dark:text-gray-300">
@@ -341,7 +341,7 @@
 
                         <div class="flex justify-end gap-2">
                             <!-- Cancel Button (Always Visible) -->
-                            <button type="button" @click="cancel"
+                            <button type="button" @click="closeModal"
                                 class="text-gray-700 bg-gray-200 hover:bg-gray-300 focus:ring-4 focus:ring-gray-400 shadow-sm rounded-lg text-sm px-5 py-2.5">
                                 Cancel
                             </button>
@@ -360,7 +360,7 @@
                             </button>
 
                             <!-- Direct "Create Scholarship" Button if Grant-Based is Selected -->
-                            <button 
+                            <button @click="updateScholarship"
                                 class="text-white bg-navy hover:bg-gradient-to-br focus:ring-4 focus:ring-blue-300 shadow-lg rounded-lg text-sm px-5 py-2.5">
                                 Update
                             </button>
@@ -449,12 +449,7 @@ const oneTimeScholarships = computed(() =>
 
 const errorMessage = ref(null);
 
-const form = ref({
-    id: null,
-    name: '',
-    description: '',
-    sponsor_id: ''
-});
+
 
 const getSponsorName = (sponsorId) => {
     const sponsor = props.sponsors.find(s => s.id === sponsorId);
@@ -491,6 +486,48 @@ const toggleSpecification = (Scholarship) => {
     resetForm();
 };
 
+const toEditScholarship = ref(null)
+
+const form = useForm({
+    id: null,
+    name: '',
+    scholarshipType: '',
+    description: '',
+    sponsor_id: ''
+});
+
+const toggleMenu = (scholarship) => {
+    isEditing.value = !isEditing.value;
+    ScholarshipSpecification.value = true;
+
+    toEditScholarship.value = scholarship;
+    
+    // Populate the form with scholarship data
+    form.id = scholarship.id;
+    form.name = scholarship.name;
+    form.scholarshipType = scholarship.scholarshipType;
+    form.description = scholarship.description || '';
+    form.sponsor_id = scholarship.sponsor_id;
+};
+
+const updateScholarship = () => {
+  form.put(route('scholarships.update', form.id), {
+    preserveScroll: true,
+    onSuccess: () => {
+      console.log('Scholarship updated successfully');
+      closeModal();
+      // Optional: Show toast notification
+      toastMessage.value = "Scholarship updated successfully!";
+      toastVisible.value = true;
+      setTimeout(() => {
+        toastVisible.value = false;
+      }, 3000);
+    },
+    onError: (errors) => {
+      console.error('Validation errors:', errors);
+    },
+  });
+};
 const availableSemesters = ref([]);
 
 const updateSemesters = () => {
@@ -516,10 +553,7 @@ const updateSemesters = () => {
 
 const isEditing = ref(false);
 
-const toggleMenu = () => {
-    isEditing.value = !isEditing.value;
-    ScholarshipSpecification.value = true;
-};
+
 
 
 
