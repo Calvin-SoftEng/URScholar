@@ -32,6 +32,8 @@ class Scholar extends Model
         'province',
         'pwd_classification',
         'email',
+        'apply_scholarship',
+        'endorsed_scholarship',
         'status',
         'student_status',
     ];
