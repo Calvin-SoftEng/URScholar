@@ -59,6 +59,7 @@ class ScholarController extends Controller
 
         $academicYear = AcademicYear::with('school_year')->get();
         $campus = Campus::all();
+        $scholarships = Scholarship::all();
 
         return Inertia::render('Staff/Scholars/Scholars', [
             'grantees' => $grantees, // Changed from 'scholars' to 'grantees'
@@ -66,6 +67,7 @@ class ScholarController extends Controller
             'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null,
             'academicYear' => $academicYear,
             'campus' => $campus,
+            'scholarships'=> $scholarships
         ]);
     }
 
