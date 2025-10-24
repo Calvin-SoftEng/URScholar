@@ -140,7 +140,7 @@
                                                 }) }}</p>
                                             <p><font-awesome-icon :icon="['fas', 'circle-dollar-to-slot']"
                                                     class="mr-1" /> Sponsoring Since:
-                                                {{ scholarship.since }}
+                                                {{ getSponsorNSince(scholarship.sponsor_id) }}
                                             </p>
                                             <!-- <p>
                                                 <font-awesome-icon :icon="['fas', 'clock']" class="mr-1" /> <span

@@ -47,7 +47,7 @@
                                 <div
                                     class="flex flex-col sm:flex-col lg:flex-row lg:flex-wrap gap-6 pt-4 sm:items-center sm:text-center lg:text-left lg:items-start">
 
-                                    <div class="flex flex-col items-center lg:items-start text-center lg:text-left">
+                                    <div class="flex flex-col items-left lg:items-start text-center lg:text-left">
                                         <span class="text-gray-500 text-sm">Scholarship for</span>
                                         <span
                                         class="font-medium text-gray-800 truncate overflow-hidden whitespace-nowrap max-w-[200px]">
@@ -55,12 +55,12 @@
                                         </span>
                                     </div>
 
-                                    <div class="flex flex-col items-center lg:items-start text-center lg:text-left">
+                                    <div class="flex flex-col items-left lg:items-start text-center lg:text-left">
                                         <span class="text-gray-500 text-sm">Application</span>
                                         <span class="font-medium text-green-600">Ongoing</span>
                                     </div>
 
-                                    <div class="flex flex-col items-center lg:items-start text-center lg:text-left">
+                                    <div class="flex flex-col items-left lg:items-start text-center lg:text-left">
                                         <span class="text-gray-500 text-sm">Deadline</span>
                                         <span class="font-medium text-red-500">April 29, 2025</span>
                                     </div>

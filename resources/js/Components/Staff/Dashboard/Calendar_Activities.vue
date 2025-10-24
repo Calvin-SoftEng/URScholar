@@ -20,7 +20,7 @@
                 {{ activity.activity }}
                 </span>
                 <span class="text-dprimary font-quicksand font-semibold text-sm dark:text-dtext">
-                {{ activity.description }}
+                You {{ activity.description }}
                 </span>
                 <span class="text-gray-500 text-xs">
                 {{ new Date(activity.created_at).toLocaleString('en-US', {
@@ -56,11 +56,5 @@ const getSponsorDetails = (sponsorId) => {
     return props.sponsors.find(s => s.id === sponsorId) || { name: 'Unknown Sponsor' };
 };
 
-// Sample Activities Data
-const activities = ref([
-    { title: "Scholarship Application Deadline", date: "March 25, 2025" },
-    { title: "Payout Release", date: "April 5, 2025" },
-    { title: "Document Submission Deadline", date: "April 10, 2025" },
 
-]);
 </script>
