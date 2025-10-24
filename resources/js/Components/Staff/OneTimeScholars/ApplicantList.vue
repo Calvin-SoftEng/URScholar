@@ -3,6 +3,12 @@
     <!-- Header section with buttons remains unchanged -->
     <div class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
+        <!-- edit scholarship -->
+        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="togglePublish" class="flex items-center gap-2 border border-blue-600 bg-primary font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+                  hover:bg-white hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+          <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-base" />
+          <span class="font-normal">Edit <span class="font-semibold">Scholarship</span></span>
+        </button>
         <!-- Publish Button -->
         <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="togglePublish" class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
