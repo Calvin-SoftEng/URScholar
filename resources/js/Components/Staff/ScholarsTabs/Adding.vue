@@ -11,7 +11,7 @@
             <button @click="toggleBulk"
                 class="font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200" :class="{
                     'bg-primary text-white border-primary': BulkAdding,
-                    'text-primary bg-white border border-blue-700 hover:bg-gray-200': !BulkAdding
+                    'text-primary bg-white border border-primary hover:bg-gray-200': !BulkAdding
                 }">Bulk Upload
             </button>
         </div>
@@ -22,46 +22,54 @@
                     <p class="text-red-600 text-sm">{{ errors.student }}</p>
                 </div>
                 <div class="flex flex-col w-full gap-5">
-                    <div class="relative w-1/2">
-                        <div class="w-full flex flex-col gap-0 font-rethink">
-                            <span class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search for
-                                Students</span>
-                        </div>
-                        <div class="flex gap-2">
-                            <input v-model="searchQuery" type="text" placeholder="Search student..." @focus="
-                                () =>
-                                    setTimeout(
-                                        () => (dropdownIsOpen = true),
-                                        50
-                                    )
-                            " @blur="
-                                () =>
-                                    setTimeout(
-                                        () => (dropdownIsOpen = false),
-                                        150
-                                    )
-                            "
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                            <button
-                                class="bg-primary text-white border-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
-                                @click="selectFirstMatch">
-                                Search
-                            </button>
-                        </div>
+                     <div class="w-full flex items-end gap-5">
+                        <div class="relative w-1/2">
+                            <div class="w-full flex flex-col gap-0 font-rethink">
+                                <span class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search for
+                                    Students</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <input v-model="searchQuery" type="text" placeholder="Search student..." @focus="
+                                    () =>
+                                        setTimeout(
+                                            () => (dropdownIsOpen = true),
+                                            50
+                                        )
+                                " @blur="
+                                    () =>
+                                        setTimeout(
+                                            () => (dropdownIsOpen = false),
+                                            150
+                                        )
+                                "
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                <button
+                                    class="bg-primary text-white border-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
+                                    @click="selectFirstMatch">
+                                    Search
+                                </button>
+                            </div>
 
-                        <ul v-if="dropdownIsOpen && searchQuery !== ''"
-                            class="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-y-auto">
-                            <li v-if="filteredStudents.length === 0" class="px-4 py-2 text-sm text-gray-500">
-                                No results found.
-                            </li>
-                            <li v-for="student in filteredStudents" :key="student.id" @click="selectStudent(student)"
-                                class="px-4 py-2 hover:bg-blue-100 cursor-pointer text-base font-medium font-rethink text-darker">
-                                <div class="flex flex-row items-center gap-3 leading-tight">
-                                    <span>{{ student.first_name }} {{ student.last_name }}</span>
-                                    <span class="text-xs text-gray-500">{{ student.email }}</span>
-                                </div>
-                            </li>
-                        </ul>
+                            <ul v-if="dropdownIsOpen && searchQuery !== ''"
+                                class="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+                                <li v-if="filteredStudents.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                                    No results found.
+                                </li>
+                                <li v-for="student in filteredStudents" :key="student.id" @click="selectStudent(student)"
+                                    class="px-4 py-2 hover:bg-blue-100 cursor-pointer text-base font-medium font-rethink text-darker">
+                                    <div class="flex flex-row items-center gap-3 leading-tight">
+                                        <span>{{ student.first_name }} {{ student.last_name }}</span>
+                                        <span class="text-xs text-gray-500">{{ student.email }}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            
+                        </div>
+                        <button type="button"
+                            class="bg-white hover:bg-gray-200 border border-primary text-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
+                            @click="clearFirstMatch">
+                            Clear Selection
+                        </button>
                     </div>
 
                     <div class="w-full h-0.5 bg-gray-200 my-2"></div>
@@ -505,17 +513,13 @@ function selectStudent(student) {
 }
 
 // Add this method to your existing methods section
-function resetSelection() {
+function clearFirstMatch() {
     selectedStudent.value = null;
     searchQuery.value = "";
     dropdownIsOpen.value = false;
 
     // Clear the form fields
-    form.first_name = "";
-    form.last_name = "";
-    form.email = "";
-    form.contact = "";
-    form.address = "";
+    manual.value = {}; // Reset the form data
 }
 
 function selectedStudent(student) {
