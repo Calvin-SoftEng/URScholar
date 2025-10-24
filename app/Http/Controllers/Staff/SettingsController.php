@@ -326,7 +326,6 @@ class SettingsController extends Controller
             $missingHeaders = array_diff($requiredHeaders, $headers);
 
             if (!empty($missingHeaders)) {
-                // return redirect()->back()->with('error', 'Missing required columns: ' . implode(', ', $missingHeaders));
                 return back()->withErrors([
                     'file' => 'Missing required columns: ' . implode(', ', $missingHeaders),
                 ])->withInput();
@@ -337,6 +336,8 @@ class SettingsController extends Controller
             $importErrors = [];
             $successCount = 0;
             $skipCount = 0;
+            $duplicateCount = 0;
+            $updatedCount = 0;
 
             // Get current academic year
             $current_year = AcademicYear::where('status', 'Active')->first();
@@ -346,6 +347,15 @@ class SettingsController extends Controller
 
             // Get the current user's campus ID
             $userCampusId = Auth::user()->campus_id;
+
+            // Get all existing student numbers for efficient duplicate checking
+            $existingStudents = Student::whereIn(
+                'student_number',
+                array_column(iterator_to_array($csv->getRecords()), 'student_number')
+            )->get()->keyBy('student_number');
+
+            // Reset CSV reader
+            $csv->setHeaderOffset(0);
 
             // Process each record for student import
             foreach ($csv->getRecords() as $index => $record) {
@@ -358,6 +368,16 @@ class SettingsController extends Controller
                         'errors' => $validationErrors
                     ];
                     $skipCount++;
+                    continue;
+                }
+
+                // Check if student already exists
+                if (isset($existingStudents[$record['student_number']])) {
+                    $importErrors[] = [
+                        'row' => $index + 2,
+                        'errors' => ["Student with number '{$record['student_number']}' already exists"]
+                    ];
+                    $duplicateCount++;
                     continue;
                 }
 
@@ -416,7 +436,11 @@ class SettingsController extends Controller
             if (!empty($insertData)) {
                 Student::insert($insertData);
             } else {
-                return redirect()->back()->with('error', 'No valid student records found for import.');
+                $errorMessage = 'No valid student records found for import.';
+                if ($duplicateCount > 0) {
+                    $errorMessage .= " {$duplicateCount} duplicate(s) were skipped.";
+                }
+                return redirect()->back()->with('error', $errorMessage);
             }
 
             // Get all the student numbers we just imported
@@ -502,20 +526,14 @@ class SettingsController extends Controller
             ActivityLog::create([
                 'user_id' => Auth::user()->id,
                 'activity' => 'Create',
-                'description' => "Imported {$successCount} students)",
+                'description' => "Imported {$successCount} students",
             ]);
 
             // Prepare success message
             $flashMessage = "Successfully imported {$successCount} students";
-            // if ($matchedScholars > 0) {
-            //     $flashMessage .= ", verified {$matchedScholars} scholars";
-            // }
-            // if ($unmatchedScholars > 0) {
-            //     $flashMessage .= ", {$unmatchedScholars} scholars remain unverified";
-            // }
-            // if ($skipCount > 0) {
-            //     $flashMessage .= " (Skipped {$skipCount} rows with errors)";
-            // }
+            if ($duplicateCount > 0) {
+                $flashMessage .= " ({$duplicateCount} duplicate(s) skipped)";
+            }
 
             // Prepare redirect with detailed information
             $redirect = redirect()->back()->with('success', $flashMessage);
@@ -536,7 +554,6 @@ class SettingsController extends Controller
             return redirect()->back()->with('error', 'An unexpected error occurred during import: ' . $e->getMessage());
         }
     }
-
     /**
      * Helper method to update or create a grantee record
      */

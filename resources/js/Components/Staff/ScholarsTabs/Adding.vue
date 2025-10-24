@@ -24,7 +24,8 @@
                 <div class="flex flex-col w-full gap-5">
                     <div class="relative w-1/2">
                         <div class="w-full flex flex-col gap-0 font-rethink">
-                            <span class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search for Students</span>
+                            <span class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search for
+                                Students</span>
                         </div>
                         <div class="flex gap-2">
                             <input v-model="searchQuery" type="text" placeholder="Search student..." @focus="
@@ -41,7 +42,8 @@
                                     )
                             "
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                            <button class="bg-primary text-white border-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
+                            <button
+                                class="bg-primary text-white border-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
                                 @click="selectFirstMatch">
                                 Search
                             </button>
@@ -52,14 +54,11 @@
                             <li v-if="filteredStudents.length === 0" class="px-4 py-2 text-sm text-gray-500">
                                 No results found.
                             </li>
-                            <li v-for="student in filteredStudents" :key="student.id"
-                                @click="selectStudent(student)"
+                            <li v-for="student in filteredStudents" :key="student.id" @click="selectStudent(student)"
                                 class="px-4 py-2 hover:bg-blue-100 cursor-pointer text-base font-medium font-rethink text-darker">
                                 <div class="flex flex-row items-center gap-3 leading-tight">
-                                    <span>{{ student.name }}</span>
-                                    <span class="text-xs text-gray-500">{{
-                                        student.email
-                                        }}</span>
+                                    <span>{{ student.first_name }} {{ student.last_name }}</span>
+                                    <span class="text-xs text-gray-500">{{ student.email }}</span>
                                 </div>
                             </li>
                         </ul>
@@ -90,12 +89,7 @@
                                 required />
                         </div>
                         <div class="w-full">
-                            <SelectBox
-                                v-model="manual.sex"
-                                :options="sex"
-                                label="Sex"
-                                placeholder="Select sex"
-                            />
+                            <SelectBox v-model="manual.sex" :options="sex" label="Sex" placeholder="Select sex" />
                         </div>
                     </div>
                     <div class="w-full grid grid-cols-4 items-center gap-5">
@@ -159,12 +153,8 @@
                                 <option disabled value="">Select campus</option>
                                 <option v-for="campus in campuses" :key="campus.id" :value="campus.id">{{ campus.name }}</option>
                             </select> -->
-                            <SelectBox
-                                v-model="manual.campus_id"
-                                :options="campuses"
-                                label="Campus"
-                                placeholder="Select Campus"
-                            />
+                            <SelectBox v-model="manual.campus_id" :options="campuses" label="Campus"
+                                placeholder="Select Campus" />
                         </div>
 
                         <!-- <div class="w-full">
@@ -197,21 +187,13 @@
                                     </SelectGroup>
                                 </SelectContent>
                             </Select> -->
-                            <SelectBox
-                                v-model="manual.course_id"
-                                :options="course"
-                                label="Course"
-                                placeholder="Select Course"
-                            />
+                            <SelectBox v-model="manual.course_id" :options="course" label="Course"
+                                placeholder="Select Course" />
                         </div>
                         <div class="w-full">
                             <div class="w-full">
-                                <SelectBox
-                                    v-model="manual.year"
-                                    :options="years"
-                                    label="Year Level"
-                                    placeholder="Select Year Level"
-                                />
+                                <SelectBox v-model="manual.year" :options="years" label="Year Level"
+                                    placeholder="Select Year Level" />
                             </div>
                         </div>
                     </div>
@@ -227,16 +209,14 @@
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <input type="text" id="batch_id" placeholder="Enter Batch No"
-                                v-model="manual.batch_id"
+                            <input type="text" id="batch_id" placeholder="Enter Batch No" v-model="manual.batch_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Endorsed By</label>
-                            <input type="text" id="batch_id"
-                                v-model="manual.endorsed"
+                            <input type="text" id="batch_id" v-model="manual.endorsed"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -432,9 +412,9 @@ const downloadFile = async () => {
     try {
         isLoading.value = true;
 
-        // Option 1: Use direct download link
+        // Corrected path: remove "/public"
         const link = document.createElement('a');
-        link.href = '/storage/system_files/URSCHOLAR-SCHOLAR_FORMAT.csv';
+        link.href = '/assets/URSCHOLAR-SCHOLAR_FORMAT.csv'; // ✅ served from public/
         link.download = 'URSCHOLAR-SCHOLAR_FORMAT.csv';
         document.body.appendChild(link);
         link.click();
@@ -446,6 +426,7 @@ const downloadFile = async () => {
         isLoading.value = false;
     }
 };
+
 
 
 
@@ -478,10 +459,14 @@ watch(searchQuery, (newVal) => {
     dropdownIsOpen.value = newVal !== "";
 });
 
+
 const filteredStudents = computed(() =>
-    props.student.filter(
-        (customer) =>
-            student.name
+    props.students.filter(
+        (student) =>
+            student.first_name
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase()) ||
+            student.last_name
                 .toLowerCase()
                 .includes(searchQuery.value.toLowerCase()) ||
             student.email
@@ -489,6 +474,35 @@ const filteredStudents = computed(() =>
                 .includes(searchQuery.value.toLowerCase())
     )
 );
+
+function selectStudent(student) {
+    selectedStudent.value = student;
+    searchQuery.value = `${student.first_name} ${student.last_name}`;
+    dropdownIsOpen.value = false;
+    skipNextWatch = true;
+
+    // Auto-fill form with student data
+    manual.value.first_name = student.first_name || "";
+    manual.value.last_name = student.last_name || "";
+    manual.value.middle_name = ""; // Not in students table
+    manual.value.sex = ""; // Not in students table
+    manual.value.campus_id = student.campus_id || "";
+    manual.value.course_id = student.course_id || "";
+    manual.value.year = student.year_level || "";
+
+    // Parse birthdate if exists
+    if (student.birthdate) {
+        startDate.value = new Date(student.birthdate);
+    }
+
+    // Parse permanent_address if exists (assuming format: "street, municipality, province")
+    if (student.permanent_address) {
+        const addressParts = student.permanent_address.split(',').map(s => s.trim());
+        manual.value.street = addressParts[0] || "";
+        manual.value.municipality = addressParts[1] || "";
+        manual.value.province = addressParts[2] || "";
+    }
+}
 
 // Add this method to your existing methods section
 function resetSelection() {
