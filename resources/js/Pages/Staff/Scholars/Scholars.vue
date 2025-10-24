@@ -79,7 +79,7 @@
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem :value="null">All Years</SelectItem>
+                        <SelectItem value="null">All Years</SelectItem>
                         <SelectItem v-for="year in academicYearOptions" :key="year.id" :value="year.id">
                           {{ year.name }}
                         </SelectItem>
@@ -98,7 +98,7 @@
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem :value="null">All Semesters</SelectItem>
+                        <SelectItem value="null">All Semesters</SelectItem>
                         <SelectItem value="1st">First Semester</SelectItem>
                         <SelectItem value="2nd">Second Semester</SelectItem>
                       </SelectGroup>
@@ -114,7 +114,7 @@
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
-                        <SelectItem :value="null">All Campuses</SelectItem>
+                        <SelectItem value="null">All Campuses</SelectItem>
                         <SelectItem v-for="camp in props.campus" :key="camp.id" :value="camp.id">
                           {{ camp.name }}
                         </SelectItem>
@@ -329,6 +329,21 @@ const displayedScholarshipName = computed(() => {
     s => s.id === selectedScholarship.value
   )
   return found ? found.name : 'Select Scholarship'
+})
+
+const displayedSchoolYear = computed(() => {
+  if (!selectedSchoolYear.value) return 'All Years'
+  return getAcademicYearName(selectedSchoolYear.value)
+})
+
+const displayedSemester = computed(() => {
+  if (!selectedSemester.value) return 'All Semesters'
+  return selectedSemester.value === '1st' ? 'First Semester' : 'Second Semester'
+})
+
+const displayedCampus = computed(() => {
+  if (!selectedCampus.value) return 'All Campuses'
+  return getCampusName(selectedCampus.value)
 })
 
 // Create academic year options
