@@ -1,10 +1,17 @@
 <template>
   <div class="w-full mt-5 bg-white rounded-xl">
+    <div v-if="EditOneTime">
+      <OneTimeScholarship
+        :editonetime="EditOneTime"
+        @update-editonetime="updateEditonetime"
+      />
+    </div>
+
     <!-- Header section with buttons remains unchanged -->
-    <div class="px-4 pt-4 flex flex-row justify-between items-center">
+    <div v-if="OneTimeApplicants" class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
         <!-- edit scholarship -->
-        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="togglePublish" class="flex items-center gap-2 border border-blue-600 bg-primary font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="toggleEdit" class="flex items-center gap-2 border border-blue-600 bg-primary font-poppins text-white px-4 py-2 rounded-lg transition duration-200
                   hover:bg-white hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
           <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-base" />
           <span class="font-normal">Edit <span class="font-semibold">Scholarship</span></span>
@@ -387,6 +394,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport } from 'radix-vue';
+import OneTimeScholarship from '@/Components/Staff/OneTimeScholars/OneTimeScholarship.vue';
 
 // Props definition
 const props = defineProps({
@@ -402,6 +410,18 @@ const props = defineProps({
     default: 10
   }
 });
+
+const EditOneTime = ref(false);
+const OneTimeApplicants = ref(true);
+
+const toggleEdit = () => {
+  EditOneTime.value = !EditOneTime.value;
+  OneTimeApplicants.value = false;
+};
+
+const updateEditonetime = (newValue) => {
+  EditOneTime.value = newValue; // Sync changes from child to parent
+}
 
 // State variables
 const loading = ref(false);
