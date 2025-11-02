@@ -24,8 +24,8 @@
                                 <!-- <input id="suffixName" :value="scholarship.name" readonly type="text"
                                     placeholder="Scholarship Name"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" /> -->
-                                <input id="suffixName" readonly type="text"
-                                    placeholder="Scholarship Name" :value="props.scholarship?.name"
+                                <input id="suffixName" readonly type="text" placeholder="Scholarship Name"
+                                    :value="props.scholarship?.name"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
                             </div>
 
@@ -36,8 +36,8 @@
                                 <!-- <input id="suffixName" :value="scholarship.scholarshipType" readonly
                                     type="text" placeholder="Scholarship Type"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" /> -->
-                                <input id="suffixName" readonly :value="props.scholarship?.scholarshipType"
-                                    type="text" placeholder="Scholarship Type"
+                                <input id="suffixName" readonly :value="props.scholarship?.scholarshipType" type="text"
+                                    placeholder="Scholarship Type"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
                             </div>
                         </div>
@@ -45,8 +45,7 @@
                         <div class="w-full border-t border-gray-200 my-4"></div>
 
                         <div class="flex flex-row w-6/12 gap-3 pr-2">
-                            <div id="date-range-picker" date-rangepicker
-                                class="flex items-center gap-4 w-full">
+                            <div id="date-range-picker" date-rangepicker class="flex items-center gap-4 w-full">
                                 <!-- Application Start Date -->
                                 <div class="flex flex-col w-full">
                                     <label for="datepicker-range-start"
@@ -57,15 +56,14 @@
                                     <div class="relative">
                                         <div
                                             class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor" viewBox="0 0 20 20">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
                                                 <path
                                                     d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
-                                        <input id="datepicker-range-start" name="start" type="text"
-                                            autocomplete="off"
+                                        <input id="datepicker-range-start" name="start" type="text" autocomplete="off"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Select start date">
                                     </div>
@@ -83,15 +81,14 @@
                                     <div class="relative">
                                         <div
                                             class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400"
-                                                aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                                                fill="currentColor" viewBox="0 0 20 20">
+                                            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                                xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                                viewBox="0 0 20 20">
                                                 <path
                                                     d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
                                             </svg>
                                         </div>
-                                        <input id="datepicker-range-end" name="end" type="text"
-                                            autocomplete="off"
+                                        <input id="datepicker-range-end" name="end" type="text" autocomplete="off"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                             placeholder="Select end date">
                                     </div>
@@ -110,8 +107,8 @@
                                         class="text-sm font-medium text-gray-700 dark:text-dtext">
                                         Number of Recipients
                                     </label>
-                                    <input id="totalRecipients" type="number" v-model="form.totalRecipients"
-                                        min="1" placeholder="Enter total recipients"
+                                    <input id="totalRecipients" type="number" v-model="form.totalRecipients" min="1"
+                                        placeholder="Enter total recipients"
                                         class="w-full h-10 bg-gray-50 border border-gray-300 px-4 py-2 mt-1 rounded-lg"
                                         @input="distributeRecipients" />
                                 </div>
@@ -152,14 +149,14 @@
                                     </div>
 
                                     <!-- Campus Selection List -->
-                                    <InputError v-if="errors?.campus_recipients"
-                                        :message="errors.campus_recipients" class="text-2xs text-red-500" />
+                                    <InputError v-if="errors?.campus_recipients" :message="errors.campus_recipients"
+                                        class="text-2xs text-red-500" />
                                     <div class="space-y-2">
                                         <div v-for="campus in campusesData" :key="campus.id"
                                             class="flex items-center justify-between border p-2 rounded-md">
 
-                                            <input type="checkbox" :id="`campus-${campus.id}`"
-                                                v-model="campus.selected" @change="distributeRecipients"
+                                            <input type="checkbox" :id="`campus-${campus.id}`" v-model="campus.selected"
+                                                @change="distributeRecipients"
                                                 class="w-5 h-5 rounded border-gray-300 cursor-pointer" />
 
 
@@ -180,19 +177,24 @@
                             </div>
 
                             <!-- Right Side: Course List Display Grouped by Campus -->
-                            <div class="flex flex-col space-y-4 overflow-y-auto flex-grow scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded"> <!-- You can adjust max-h based on your needs -->
-                                <div v-for="campus in selectedCampuses" :key="campus.id" class="py-3 px-4 bg-gray-50 dark:bg-dnavy border rounded-md">
+                            <div
+                                class="flex flex-col space-y-4 overflow-y-auto flex-grow scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded">
+                                <!-- You can adjust max-h based on your needs -->
+                                <div v-for="campus in selectedCampuses" :key="campus.id"
+                                    class="py-3 px-4 bg-gray-50 dark:bg-dnavy border rounded-md">
                                     <!-- Selected Campus Name -->
                                     <div class="text-sm font-semibold text-gray-700 mb-2 dark:text-dtext">
-                                    {{ campus.name }}
+                                        {{ campus.name }}
                                     </div>
 
                                     <!-- Courses Offered for this Campus -->
                                     <div v-for="course in campus.courses" :key="course" class="mt-1">
-                                    <input type="checkbox" :id="`course-${campus.id}-${course}`" v-model="selectedCoursesMap[course]" class="rounded" />
-                                    <label :for="`course-${campus.id}-${course}`" class="text-sm ml-2 cursor-pointer dark:text-dtext">
-                                        {{ course }}
-                                    </label>
+                                        <input type="checkbox" :id="`course-${campus.id}-${course}`"
+                                            v-model="selectedCoursesMap[course]" class="rounded" />
+                                        <label :for="`course-${campus.id}-${course}`"
+                                            class="text-sm ml-2 cursor-pointer dark:text-dtext">
+                                            {{ course }}
+                                        </label>
                                     </div>
                                 </div>
                             </div>
@@ -204,90 +206,87 @@
 
                         <h3 class="text-base font-medium text-black dark:text-dtext">List
                             Criteria and Eligibility</h3>
-                            <div class="grid grid-cols-2 space-x-2">
-                                <div class="w-full flex flex-col p-2">
+                        <div class="grid grid-cols-2 space-x-2">
+                            <div class="w-full flex flex-col p-2">
 
-                                    <div class="space-y-4">
-                                        <div class="flex flex-col justify-center items-start">
-                                            <div class="flex flex-row space-x-3 items-start">
-                                                <span
-                                                    class="text-sm font-medium text-black whitespace-nowrap mb-2 dark:text-dtext">General
-                                                    Weighted Average must be:
-                                                </span>
-                                                
+                                <div class="space-y-4">
+                                    <div class="flex flex-col justify-center items-start">
+                                        <div class="flex flex-row space-x-3 items-start">
+                                            <span
+                                                class="text-sm font-medium text-black whitespace-nowrap mb-2 dark:text-dtext">General
+                                                Weighted Average must be:
+                                            </span>
+
                                             <InputError v-if="errors?.conditions" :message="errors.conditions"
                                                 class="text-2xs text-red-500" />
-                                            </div>  
-
-                                            <input v-model="form.grade" type="text" id="name"
-                                                placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
-                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
-
                                         </div>
 
-                                        <div class="flex flex-col space-y-2 justify-center items-start">
-                                            <span
-                                                class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
-                                                Must be enrolled in:
-                                            </span>
+                                        <input v-model="form.grade" type="text" id="name"
+                                            placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
 
-                                            <textarea v-model="selectedCoursesText" id="name" rows="3"
-                                                placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
-                                                class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
-                                                readonly>
-                                        </textarea>
-                                        </div>
-
-                                        <InputError v-if="errors?.conditions" :message="errors.conditions"
-                                            class="text-2xs text-red-500" />
-                                        <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
-                                            class="flex flex-col justify-center space-y-2 items-start">
-                                            <span
-                                                class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
-                                                {{ eligiblity.name }}
-                                            </span>
-                                            <div v-for="conditions in getFormData(eligiblity.id)"
-                                                :key="conditions.id" class="flex items-center space-x-2 mb-1">
-                                                <input id="accept-terms-{{ conditions.id }}" type="checkbox"
-                                                    class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                    :checked="conditionIncludes(conditions.id)"
-                                                    @change="toggleCondition(conditions.id)">
-                                                <label
-                                                    class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                    {{ conditions.name }}
-                                                </label>
-                                            </div>
-                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                                    <div class="p-4 ">
-                                        <div class="flex flex-row space-x-3 items-center mb-2">
-                                        <!-- <h4 class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
-                                                {{ scholarship_form.name }}</h4> -->
-                                            <h4 class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
-                                                Scholarship Name</h4>
-                                            <InputError v-if="errors?.criteria" :message="errors.criteria"
-                                            class="text-2xs text-red-500" />
-                                        </div>
+                                    <div class="flex flex-col space-y-2 justify-center items-start">
+                                        <span class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
+                                            Must be enrolled in:
+                                        </span>
 
-                                        <div v-for="data in scholarship_form_data" :key="data.id"
+                                        <textarea v-model="selectedCoursesText" id="name" rows="3"
+                                            placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
+                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
+                                            readonly>
+                                        </textarea>
+                                    </div>
+
+                                    <InputError v-if="errors?.conditions" :message="errors.conditions"
+                                        class="text-2xs text-red-500" />
+                                    <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
+                                        class="flex flex-col justify-center space-y-2 items-start">
+                                        <span class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
+                                            {{ eligiblity.name }}
+                                        </span>
+                                        <div v-for="conditions in getFormData(eligiblity.id)" :key="conditions.id"
                                             class="flex items-center space-x-2 mb-1">
-                                            <input id="accept-terms-{{ data.id }}" type="checkbox"
+                                            <input id="accept-terms-{{ conditions.id }}" type="checkbox"
                                                 class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                :checked="criteriaIncludes(data.id)"
-                                                @change="toggleCriteria(data.id)">
-                                            <label :for="'accept-terms-' + data.id"
-                                                class="text-sm font-medium text-gray-700 cursor-pointer dark:text-dtext">
-                                                {{ data.name }}
+                                                :checked="conditionIncludes(conditions.id)"
+                                                @change="toggleCondition(conditions.id)">
+                                            <label
+                                                class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                {{ conditions.name }}
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-
-                            
                             </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                                <div class="p-4 ">
+                                    <div class="flex flex-row space-x-3 items-center mb-2">
+                                        <!-- <h4 class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
+                                                {{ scholarship_form.name }}</h4> -->
+                                        <h4 class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
+                                            Scholarship Name</h4>
+                                        <InputError v-if="errors?.criteria" :message="errors.criteria"
+                                            class="text-2xs text-red-500" />
+                                    </div>
+
+                                    <div v-for="data in scholarship_form_data" :key="data.id"
+                                        class="flex items-center space-x-2 mb-1">
+                                        <input id="accept-terms-{{ data.id }}" type="checkbox"
+                                            class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                            :checked="criteriaIncludes(data.id)" @change="toggleCriteria(data.id)">
+                                        <label :for="'accept-terms-' + data.id"
+                                            class="text-sm font-medium text-gray-700 cursor-pointer dark:text-dtext">
+                                            {{ data.name }}
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
 
                         <div class="w-full border-t border-gray-200 my-4"></div>
 
@@ -331,8 +330,7 @@
                             </div>
 
                             <div>
-                                <label for="totalRecipients"
-                                    class="text-sm font-medium text-gray-700 dark:text-dtext">
+                                <label for="totalRecipients" class="text-sm font-medium text-gray-700 dark:text-dtext">
                                     Upload multiple file templates
                                 </label>
                                 <!-- <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="multiple_files">
@@ -351,9 +349,8 @@
                                     <ul class="space-y-2">
                                         <li v-for="(file, index) in selectedFiles" :key="index"
                                             class="flex items-center justify-between text-sm bg-white dark:bg-gray-700 p-2 rounded-lg">
-                                            <span
-                                                class="text-gray-700 dark:text-gray-300 truncate max-w-xs">{{
-                                                    file.name
+                                            <span class="text-gray-700 dark:text-gray-300 truncate max-w-xs">{{
+                                                file.name
                                                 }}</span>
                                             <button @click="removeFile(index)"
                                                 class="text-red-500 hover:text-red-700 text-xs">
@@ -841,72 +838,140 @@ const removeItem = (index) => {
 // Create reactive campus array from props with selection state
 const campusesData = ref([]);
 
-// Initialize campus data from props
 onMounted(() => {
     initFlowbite();
     document.addEventListener('click', handleClickOutside)
+
     // Make sure form.criteria is initialized
     if (!form.value.criteria) {
         form.value.criteria = [];
     }
 
-    // Transform props.campuses into the format we need
-    if (props.campuses && props.campuses.length > 0) {
-        campusesData.value = props.campuses.map(campus => ({
-            id: campus.id,
-            name: campus.name,
-            selected: false,
-            recipients: 0,
-            // Get courses associated with this campus
-            courses: props.courses
-                ? props.courses.filter(course => course.campus_id === campus.id)
-                    .map(course => course.name)
-                : []
-        }));
+    // Populate form with existing scholarship data
+    if (props.scholarship) {
+        form.value.name = props.scholarship.name;
+        form.value.scholarshipType = props.scholarship.scholarshipType;
     }
 
+    // Debug: Log what we're receiving
+    console.log('Props campusRecipients:', props.campusRecipients);
+    console.log('Props scholarship:', props.scholarship);
+    console.log('Props campuses:', props.campuses);
+
+    // Populate campus recipients data
+    if (props.campuses && props.campuses.length > 0) {
+        campusesData.value = props.campuses.map(campus => {
+            // Find matching campus recipient from props
+            const campusRecipient = props.campusRecipients?.find(
+                cr => cr.campus_id === campus.id
+            );
+
+            console.log(`Campus ${campus.name}:`, campusRecipient);
+
+            // Get courses for this campus
+            const campusCourses = props.courses
+                ? props.courses.filter(course => course.campus_id === campus.id)
+                    .map(course => course.name)
+                : [];
+
+            return {
+                id: campus.id,
+                name: campus.name,
+                selected: !!campusRecipient,
+                recipients: campusRecipient ? parseInt(campusRecipient.slots) : 0,
+                courses: campusCourses
+            };
+        });
+
+        // Set total recipients from sum of all campus slots
+        form.value.totalRecipients = campusesData.value.reduce(
+            (sum, campus) => sum + (campus.recipients || 0), 0
+        );
+
+        console.log('Final campusesData:', campusesData.value);
+        console.log('Total recipients:', form.value.totalRecipients);
+    }
+
+    // Get scholarship requirements if they exist
+    if (props.requirements && props.requirements.length > 0) {
+        const requirement = props.requirements[0];
+        form.value.application = requirement.date_start;
+        form.value.deadline = requirement.date_end;
+        selectedStart.value = requirement.date_start;
+        selectedEnd.value = requirement.date_end;
+
+        // Populate requirements list
+        items.value = props.requirements.map(req => req.requirements);
+        form.value.requirements = items.value;
+    }
+
+    // Populate selected courses from campus recipients
+    if (props.campusRecipients && props.campusRecipients.length > 0) {
+        props.campusRecipients.forEach(cr => {
+            if (cr.selected_campus) {
+                try {
+                    const courses = typeof cr.selected_campus === 'string'
+                        ? JSON.parse(cr.selected_campus)
+                        : cr.selected_campus;
+
+                    if (Array.isArray(courses)) {
+                        courses.forEach(item => {
+                            if (item.course) {
+                                selectedCoursesMap.value[item.course] = true;
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.error('Error parsing selected courses:', e);
+                }
+            }
+        });
+
+        console.log('Selected courses:', selectedCoursesMap.value);
+    }
+
+    // Populate criteria from scholarship
+    if (props.scholarship?.criterias && props.scholarship.criterias.length > 0) {
+        props.scholarship.criterias.forEach(criteria => {
+            if (criteria.scholarship_form_data_id) {
+                form.value.criteria.push(criteria.scholarship_form_data_id);
+            }
+            if (criteria.grade) {
+                form.value.grade = criteria.grade;
+            }
+        });
+    }
+
+    // Populate conditions/eligibilities from scholarship
+    if (props.scholarship?.eligibles && props.scholarship.eligibles.length > 0) {
+        form.value.conditions = props.scholarship.eligibles.map(
+            eligible => eligible.condition_id
+        );
+    }
+
+    // Rest of the initialization code...
     if (props.batches && props.batches.length > 0) {
         expandedBatches.value = props.batches[0].id;
     }
 
-    // Initialize Flowbite Datepicker
-    const dateInput = document.getElementById("datepicker-autohide");
-    if (dateInput) {
-        const datepicker = new Datepicker(dateInput, {
-            autohide: true,
-            format: "yyyy-mm-dd", // Adjust format as needed
-        });
-
-        dateInput.addEventListener("changeDate", (event) => {
-            form.value.birthdate = event.target.value;
-        });
-    }
-
     const startInput = document.getElementById("datepicker-range-start");
     if (startInput) {
-        startInput.value = selectedStart.value; // Keep the previous value
+        startInput.value = selectedStart.value;
         startInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value);
-
-            // Correct for time zone issues
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-
-            form.value.application = date.toISOString().split("T")[0]; // Keeps the correct local date
-            console.log("Application:", form.value.application);
+            form.value.application = date.toISOString().split("T")[0];
             selectedStart.value = event.target.value;
         });
     }
 
     const endInput = document.getElementById("datepicker-range-end");
     if (endInput) {
-        endInput.value = selectedEnd.value; // Keep the previous value
+        endInput.value = selectedEnd.value;
         endInput.addEventListener("changeDate", (event) => {
             const date = new Date(event.target.value);
-
-            // Correct for time zone issues
             date.setMinutes(date.getMinutes() - date.getTimezoneOffset());
-
-            form.value.deadline = date.toISOString().split("T")[0]; // Keeps the correct local date
+            form.value.deadline = date.toISOString().split("T")[0];
             selectedEnd.value = event.target.value;
         });
     }
@@ -914,43 +979,30 @@ onMounted(() => {
     watch(ForwardBatchList, (newValue) => {
         if (newValue) {
             setTimeout(() => {
-                initFlowbite(); // Initialize Flowbite when modal is accessed
+                initFlowbite();
 
                 const startInput = document.getElementById("datepicker-range-start");
                 if (startInput) {
-                    startInput.value = StartPayout.value; // Keep the previous value
+                    startInput.value = StartPayout.value;
                     startInput.addEventListener("changeDate", (event) => {
-                        const date = new Date(event.target.value); // ✅ Get selected date
+                        const date = new Date(event.target.value);
                         form.value.payoutStartInput = date.toISOString().split("T")[0];
-                        console.log("Application:", form.value.payoutStartInput);
                         StartPayout.value = event.target.value;
                     });
-                } else {
-                    console.warn("Start datepicker not found.");
                 }
 
                 const endInput = document.getElementById("datepicker-range-end");
                 if (endInput) {
-                    endInput.value = EndPayout.value; // Keep the previous value
+                    endInput.value = EndPayout.value;
                     endInput.addEventListener("changeDate", (event) => {
-                        const date = new Date(event.target.value); // ✅ Get selected date
+                        const date = new Date(event.target.value);
                         form.value.payoutEndInput = date.toISOString().split("T")[0];
                         EndPayout.value = event.target.value;
                     });
-                } else {
-                    console.warn("End datepicker not found.");
                 }
-
-                // Initial distribution
-                distributeRecipients();
-
-            }, 200); // Small delay to ensure modal is in the DOM
+            }, 200);
         }
     });
-
-
-    // Initial distribution
-    distributeRecipients();
 });
 
 // Watch errors.date_start and open the modal if an error exists
@@ -1098,6 +1150,9 @@ const submitForm = () => {
     // Create FormData object to handle files
     const formData = new FormData();
 
+    // Add _method for Laravel to recognize this as a PUT request
+    formData.append('_method', 'PUT');
+
     // Add all non-file fields to FormData
     formData.append('total_recipients', form.value.totalRecipients);
     formData.append('grade', form.value.grade);
@@ -1105,11 +1160,6 @@ const submitForm = () => {
     formData.append('deadline', form.value.deadline);
     formData.append('semester', props.selectedSem);
     formData.append('school_year', props.schoolyear.id);
-
-    // Add amount if scholarship type is One-Time
-    if (form.value.scholarshipType === 'One-Time') {
-        formData.append('amount', form.value.amount);
-    }
 
     // Add requirements as array
     form.value.requirements.forEach((req, index) => {
@@ -1134,25 +1184,24 @@ const submitForm = () => {
         formData.append(`campus_recipients[${index}][selected_campus]`, recipient.selected_campus);
     });
 
-    // Add template files
+    // Add template files if any
     selectedFiles.value.forEach((file, index) => {
         formData.append(`templates[${index}]`, file);
     });
 
-    // Submit the form using FormData
-    router.post(`/sholarships/${props.scholarship.id}/one-time-payment`, formData, {
+    // Submit the form using FormData with POST (Laravel will treat it as PUT)
+    router.post(`/scholarships/${props.scholarship.id}/one-time-payment`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         },
         onSuccess: () => {
-            showToast('Success', 'Scholarship with templates created successfully');
-            clearForm();
+            showToast('Success', 'Scholarship updated successfully');
             setTimeout(() => {
                 router.visit('/scholarships');
             }, 1500);
         },
         onError: (errors) => {
-            errors.value = errors;
+            console.error('Update errors:', errors);
             isSubmitting.value = false;
         },
     });
