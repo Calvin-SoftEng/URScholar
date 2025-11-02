@@ -124,7 +124,7 @@
                                             <div class="flex flex-row text-sm gap-4 dark:text-dtext">
                                                 <div>Allocated: {{ allocatedRecipients }} of {{
                                                     form.totalRecipients
-                                                    }}</div>
+                                                }}</div>
                                                 <div v-if="allocatedRecipients !== parseInt(form.totalRecipients)"
                                                     class="text-red-500 font-medium dark:text-dtext">
                                                     *{{ parseInt(form.totalRecipients) - allocatedRecipients
@@ -351,7 +351,7 @@
                                             class="flex items-center justify-between text-sm bg-white dark:bg-gray-700 p-2 rounded-lg">
                                             <span class="text-gray-700 dark:text-gray-300 truncate max-w-xs">{{
                                                 file.name
-                                                }}</span>
+                                            }}</span>
                                             <button @click="removeFile(index)"
                                                 class="text-red-500 hover:text-red-700 text-xs">
                                                 ✖ Remove
@@ -861,7 +861,7 @@ onMounted(() => {
     // Populate campus recipients data
     if (props.campuses && props.campuses.length > 0) {
         campusesData.value = props.campuses.map(campus => {
-            // Find matching campus recipient from props
+            // Find matching campus recipient from props.campusRecipients
             const campusRecipient = props.campusRecipients?.find(
                 cr => cr.campus_id === campus.id
             );
@@ -874,17 +874,31 @@ onMounted(() => {
                     .map(course => course.name)
                 : [];
 
+            // Parse selected_campus to get previously selected courses
+            let selectedCampusCourses = [];
+            if (campusRecipient && campusRecipient.selected_campus) {
+                try {
+                    const parsed = typeof campusRecipient.selected_campus === 'string'
+                        ? JSON.parse(campusRecipient.selected_campus)
+                        : campusRecipient.selected_campus;
+                    selectedCampusCourses = Array.isArray(parsed) ? parsed : [];
+                } catch (e) {
+                    console.error('Error parsing selected_campus:', e);
+                }
+            }
+
             return {
                 id: campus.id,
                 name: campus.name,
-                selected: !!campusRecipient,
+                selected: !!campusRecipient && campusRecipient.slots > 0,
                 recipients: campusRecipient ? parseInt(campusRecipient.slots) : 0,
-                courses: campusCourses
+                courses: campusCourses,
+                previouslySelectedCourses: selectedCampusCourses
             };
         });
 
-        // Set total recipients from sum of all campus slots
-        form.value.totalRecipients = campusesData.value.reduce(
+        // Set total recipients from totalSlots prop or sum of all campus slots
+        form.value.totalRecipients = props.totalSlots || campusesData.value.reduce(
             (sum, campus) => sum + (campus.recipients || 0), 0
         );
 
