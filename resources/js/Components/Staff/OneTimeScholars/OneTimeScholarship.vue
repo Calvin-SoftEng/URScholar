@@ -12,7 +12,7 @@
                         </span>
                         <button type="submit" @click="submitForm"
                             class="px-6 py-2 bg-gradient-to-r from-blue-700 via-blue-800 to-blue-900 hover:bg-gradient-to-br text-white rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all">
-                            Save Scholarship
+                            Save Scholarships
                         </button>
                     </div>
                     <div class="mt-5 font-inter text-lg space-y-3">
@@ -25,7 +25,7 @@
                                     placeholder="Scholarship Name"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" /> -->
                                 <input id="suffixName" readonly type="text"
-                                    placeholder="Scholarship Name"
+                                    placeholder="Scholarship Name" :value="props.scholarship?.name"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
                             </div>
 
@@ -36,7 +36,7 @@
                                 <!-- <input id="suffixName" :value="scholarship.scholarshipType" readonly
                                     type="text" placeholder="Scholarship Type"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" /> -->
-                                <input id="suffixName" readonly
+                                <input id="suffixName" readonly :value="props.scholarship?.scholarshipType"
                                     type="text" placeholder="Scholarship Type"
                                     class="w-full h-[43px] px-4 bg-gray-50 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:border-blue-400 outline-none" />
                             </div>

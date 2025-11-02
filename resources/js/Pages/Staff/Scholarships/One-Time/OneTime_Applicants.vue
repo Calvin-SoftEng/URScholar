@@ -63,7 +63,8 @@
                                 <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-sm" />
                                 <p class="text-gray-500 text-xs">Approved Applicants</p>
                             </div>
-                            <p class="text-2xl font-semibold font-poppins text-green-600">{{ totalApprovedApplicants }}</p>
+                            <p class="text-2xl font-semibold font-poppins text-green-600">{{ totalApprovedApplicants }}
+                            </p>
                         </div>
 
                         <!-- Total Scholars -->
@@ -81,7 +82,8 @@
                                 <font-awesome-icon :icon="['fas', 'check-to-slot']" class="text-myblack text-sm" />
                                 <p class="text-gray-500 text-xs">Allotted Slots</p>
                             </div>
-                            <p class="text-2xl font-semibold font-poppins text-myblack">{{ totalApprovedApplicants }}</p>
+                            <p class="text-2xl font-semibold font-poppins text-myblack">{{ totalApprovedApplicants }}
+                            </p>
                         </div>
                     </div>
 
@@ -123,9 +125,28 @@
 
                 <div>
                     <!-- Scholar List -->
-                    <ApplicantList :currentUser="currentUser" :scholarship="scholarship" :batches="batches"
-                        :applicants="applicants" :scholars="scholars" :requirements="requirements"
-                        :campusRecipients="campusRecipients" :totalSlots="totalSlots" @update:stats="updateStats" :schoolyear="schoolyear" :selectedSem="selectedSem"/>
+                    <ApplicantList :currentUser="currentUser" :scholarship="scholarship" :schoolyear="schoolyear"
+                        :selectedSem="selectedSem" :selectedYear="selectedYear" :selectedCampus="selectedCampus"
+                        :batches="batches" :scholars="scholars" :requirements="requirements" :payout="payout"
+                        :payouts="payouts" :payoutsByCampus="payoutsByCampus" :applicants="applicants"
+                        :applicantTrack="applicantTrack" :campusRecipients="campusRecipients" :totalSlots="totalSlots"
+                        :campuses="campuses" :courses="courses" :scholarship_form="scholarship_form"
+                        :scholarship_form_data="scholarship_form_data" :eligibilities="eligibilities"
+                        :conditions="conditions" :userType="userType" :userCampusId="userCampusId"
+                        :totalBatches="totalBatches" :batchesByCampus="batchesByCampus" :grantees="grantees"
+                        :students="students" :total_approved="total_approved" :total_scholars="total_scholars"
+                        :completedBatches="completedBatches" :payoutBatches="payoutBatches" :errors="errors"
+                        :totalSubTotal="totalSubTotal" :approvedCount="approvedCount" :allBatches="allBatches"
+                        :disableSendEmailButton="disableSendEmailButton" :noScholars="noScholars"
+                        :inactiveBatches="inactiveBatches" :accomplishedBatches="accomplishedBatches"
+                        :activeBatches="activeBatches" :allBatchesAccomplished="allBatchesAccomplished"
+                        :inactivePayouts="inactivePayouts" :hasActiveGrantees="hasActiveGrantees"
+                        :valitedScholars="valitedScholars" :myInactive="myInactive" :allInactive="allInactive"
+                        :valitedBatches="valitedBatches" :myvalidated="myvalidated" :checkValidated="checkValidated"
+                        :granteeInactive="granteeInactive" :validationStatus="validationStatus"
+                        :AllvalidationStatus="AllvalidationStatus" :total_verified_grantees="total_verified_grantees"
+                        :total_unverified_grantees="total_unverified_grantees" :allBatchesInactive="allBatchesInactive"
+                        @update:stats="updateStats" />
                 </div>
 
             </div>
@@ -159,15 +180,62 @@ import { cloneDeep, isEqual } from 'lodash';
 const props = defineProps({
     scholarship: Object,
     schoolyear: Object,
-    selectedSem: Object,
-    batch: Object,
-    currentUser: Object,
-    applicants: Array,
+    selectedSem: String,
+    selectedYear: String,
+    selectedCampus: String,
+    batches: Array,
     scholars: Array,
     requirements: Array,
     payout: Array,
+
+    // Additional props for full functionality
+    totalBatches: Number,
+    scholarship_form: Object,
+    scholarship_form_data: Array,
+    eligibilities: Array,
+    conditions: Array,
+    batchesByCampus: Array,
+    allBatchesInactive: Object,
+    grantees: Array,
+    campuses: Array,
+    courses: Array,
+    students: Array,
+    payoutsByCampus: Array,
+    total_approved: Array,
+    total_scholars: Array,
+    completedBatches: Array,
+    payoutBatches: Array,
+    errors: Object,
+    userType: String,
+    userCampusId: Number,
+    totalSubTotal: Number,
+    approvedCount: Number,
+    allBatches: Array,
+    disableSendEmailButton: Boolean,
+    noScholars: Boolean,
+    inactiveBatches: Boolean,
+    accomplishedBatches: Boolean,
+    activeBatches: Array,
+    allBatchesAccomplished: Array,
+    inactivePayouts: Boolean,
+    hasActiveGrantees: Boolean,
+    valitedScholars: Boolean,
+    myInactive: Boolean,
+    allInactive: Boolean,
+    valitedBatches: Boolean,
+    myvalidated: Boolean,
+    checkValidated: Boolean,
+    granteeInactive: Boolean,
+    validationStatus: Boolean,
+    AllvalidationStatus: Boolean,
+    total_verified_grantees: Number,
+    total_unverified_grantees: Number,
+    payouts: Object,
     campusRecipients: Array,
     totalSlots: Number,
+    applicantTrack: Object,
+    applicants: Array,
+    currentUser: Object,
 });
 
 const total_applicants = computed(() => {

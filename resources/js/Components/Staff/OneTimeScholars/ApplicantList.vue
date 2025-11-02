@@ -1,10 +1,12 @@
 <template>
   <div class="w-full mt-5 bg-white rounded-xl">
     <div v-if="EditOneTime">
-      <OneTimeScholarship
-        :editonetime="EditOneTime"
-        @update-editonetime="updateEditonetime"
-      />
+      <OneTimeScholarship :editonetime="EditOneTime" :scholarship="scholarship" :schoolyear="schoolyear"
+        :selectedSem="selectedSem" :selectedYear="selectedYear" :selectedCampus="selectedCampus" :campuses="campuses"
+        :courses="courses" :scholarship_form="scholarship_form" :scholarship_form_data="scholarship_form_data"
+        :eligibilities="eligibilities" :conditions="conditions" :requirements="requirements"
+        :campusRecipients="campusRecipients" :totalSlots="totalSlots" :errors="errors" :userType="userType"
+        :userCampusId="userCampusId" @update-editonetime="updateEditonetime" />
     </div>
 
     <!-- Header section with buttons remains unchanged -->
@@ -398,17 +400,81 @@ import OneTimeScholarship from '@/Components/Staff/OneTimeScholars/OneTimeSchola
 
 // Props definition
 const props = defineProps({
+  // Core props (original)
   scholars: Array,
   scholarship: Object,
   totalSlots: Number,
   campusRecipients: Array,
   currentUser: Object,
   schoolyear: Object,
-  selectedSem: Object,
+  selectedSem: String,
+  selectedYear: String,
+  selectedCampus: String,
   itemsPerPage: {
     type: Number,
     default: 10
-  }
+  },
+
+  // Additional data props
+  batches: Array,
+  requirements: Array,
+  payout: Array,
+  payouts: Object,
+  payoutsByCampus: Array,
+  applicants: Array,
+  applicantTrack: Object,
+  campuses: Array,
+  courses: Array,
+
+  // Form & eligibility data
+  scholarship_form: Object,
+  scholarship_form_data: Array,
+  eligibilities: Array,
+  conditions: Array,
+
+  // User data
+  userType: String,
+  userCampusId: Number,
+
+  // Batch data
+  totalBatches: Number,
+  batchesByCampus: Array,
+  completedBatches: Array,
+  payoutBatches: Array,
+  allBatches: Array,
+  activeBatches: Array,
+  allBatchesAccomplished: Array,
+
+  // Grantees & scholars data
+  grantees: Array,
+  students: Array,
+  total_approved: Array,
+  total_scholars: Array,
+  total_verified_grantees: Number,
+  total_unverified_grantees: Number,
+
+  // Status flags
+  allBatchesInactive: [Object, Boolean],
+  disableSendEmailButton: Boolean,
+  noScholars: Boolean,
+  inactiveBatches: Boolean,
+  accomplishedBatches: Boolean,
+  inactivePayouts: Boolean,
+  hasActiveGrantees: Boolean,
+  valitedScholars: Boolean,
+  myInactive: Boolean,
+  allInactive: Boolean,
+  valitedBatches: Boolean,
+  myvalidated: Boolean,
+  checkValidated: Boolean,
+  granteeInactive: Boolean,
+  validationStatus: Boolean,
+  AllvalidationStatus: Boolean,
+
+  // Other props
+  errors: Object,
+  totalSubTotal: Number,
+  approvedCount: Number,
 });
 
 const EditOneTime = ref(false);
