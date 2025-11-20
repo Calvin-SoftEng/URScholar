@@ -249,7 +249,7 @@ class DatabaseSeeder extends Seeder
         SponsorMoa::factory()->create([
             'sponsor_id' => '1',
             'moa' => 'moa1.pdf',
-            'validity' => '2025-11-03',
+            'validity' => '2026-11-03',
             'status' => 'Active',
         ]);
 
@@ -266,7 +266,7 @@ class DatabaseSeeder extends Seeder
         SponsorMoa::factory()->create([
             'sponsor_id' => '2',
             'moa' => 'moa1.pdf',
-            'validity' => '2025-11-03',
+            'validity' => '2026-11-03',
             'status' => 'Active',
         ]);
 
@@ -286,6 +286,8 @@ class DatabaseSeeder extends Seeder
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
         ]);
+
+        $this->call(ScholarshipSeeder::class);
 
         //school year
         // SchoolYear::factory()->create([
