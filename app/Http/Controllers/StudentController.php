@@ -1771,7 +1771,7 @@ class StudentController extends Controller
             'files.*.file' => 'Each uploaded item must be a valid file.',
         ]);
 
-        dd($request->all());
+        //dd($request->all());
 
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
 
