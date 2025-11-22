@@ -43,14 +43,14 @@
                     </div>
 
                     <!-- Stats Section -->
-                    <div class="grid grid-cols-3 shadow-sm rounded-lg border">
+                    <div class="grid grid-cols-4 shadow-sm rounded-lg border">
                         <!-- Deadline -->
-                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300 space-y-2">
+                        <div class="flex flex-col items-start py-4 px-8 border-r border-gray-300 space-y-2">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'calendar-alt']" class="text-red-600 text-base" />
-                                <p class="text-gray-500 text-sm">Application Deadline</p>
+                                <font-awesome-icon :icon="['fas', 'calendar-alt']" class="text-red-600 text-sm" />
+                                <p class="text-gray-500 text-xs">Application Deadline</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins text-red-600">{{ new
+                            <p class="text-2xl font-semibold font-poppins text-red-600">{{ new
                                 Date(requirements[0].date_end).toLocaleDateString('en-US', {
                                     year:
                                         'numeric', month: 'long', day: 'numeric'
@@ -58,21 +58,32 @@
                         </div>
 
                         <!-- Approved Applicants -->
-                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300 space-y-2">
+                        <div class="flex flex-col items-start py-4 px-8 border-r border-gray-300 space-y-2">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-base" />
-                                <p class="text-gray-500 text-sm">Approved Applicants</p>
+                                <font-awesome-icon :icon="['fas', 'circle-check']" class="text-green-600 text-sm" />
+                                <p class="text-gray-500 text-xs">Approved Applicants</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins text-green-600">{{ totalApprovedApplicants }}</p>
+                            <p class="text-2xl font-semibold font-poppins text-green-600">{{ totalApprovedApplicants }}
+                            </p>
                         </div>
 
                         <!-- Total Scholars -->
-                        <div class="flex flex-col items-start py-4 px-10 space-y-2">
+                        <div class="flex flex-col items-start py-4 px-8 border-r border-gray-300 space-y-2">
                             <div class="flex flex-row space-x-3 items-center">
-                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
-                                <p class="text-gray-500 text-sm">Number of Applicants</p>
+                                <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-sm" />
+                                <p class="text-gray-500 text-xs">Number of Applicants</p>
                             </div>
-                            <p class="text-3xl font-semibold font-poppins">{{ total_applicants }}</p>
+                            <p class="text-2xl font-semibold font-poppins">{{ total_applicants }}</p>
+                        </div>
+
+                        <!-- Approved Applicants -->
+                        <div class="flex flex-col items-start py-4 px-8 space-y-2">
+                            <div class="flex flex-row space-x-3 items-center">
+                                <font-awesome-icon :icon="['fas', 'check-to-slot']" class="text-myblack text-sm" />
+                                <p class="text-gray-500 text-xs">Allotted Slots</p>
+                            </div>
+                            <p class="text-2xl font-semibold font-poppins text-myblack">{{ totalApprovedApplicants }}
+                            </p>
                         </div>
                     </div>
 
@@ -114,9 +125,28 @@
 
                 <div>
                     <!-- Scholar List -->
-                    <ApplicantList :currentUser="currentUser" :scholarship="scholarship" :batches="batches"
-                        :applicants="applicants" :scholars="scholars" :requirements="requirements"
-                        :campusRecipients="campusRecipients" :totalSlots="totalSlots" @update:stats="updateStats" :schoolyear="schoolyear" :selectedSem="selectedSem"/>
+                    <ApplicantList :currentUser="currentUser" :scholarship="scholarship" :schoolyear="schoolyear"
+                        :selectedSem="selectedSem" :selectedYear="selectedYear" :selectedCampus="selectedCampus"
+                        :batches="batches" :scholars="scholars" :requirements="requirements" :payout="payout"
+                        :payouts="payouts" :payoutsByCampus="payoutsByCampus" :applicants="applicants"
+                        :applicantTrack="applicantTrack" :campusRecipients="campusRecipients" :totalSlots="totalSlots"
+                        :campuses="campuses" :courses="courses" :scholarship_form="scholarship_form"
+                        :scholarship_form_data="scholarship_form_data" :eligibilities="eligibilities"
+                        :conditions="conditions" :userType="userType" :userCampusId="userCampusId"
+                        :totalBatches="totalBatches" :batchesByCampus="batchesByCampus" :grantees="grantees"
+                        :students="students" :total_approved="total_approved" :total_scholars="total_scholars"
+                        :completedBatches="completedBatches" :payoutBatches="payoutBatches" :errors="errors"
+                        :totalSubTotal="totalSubTotal" :approvedCount="approvedCount" :allBatches="allBatches"
+                        :disableSendEmailButton="disableSendEmailButton" :noScholars="noScholars"
+                        :inactiveBatches="inactiveBatches" :accomplishedBatches="accomplishedBatches"
+                        :activeBatches="activeBatches" :allBatchesAccomplished="allBatchesAccomplished"
+                        :inactivePayouts="inactivePayouts" :hasActiveGrantees="hasActiveGrantees"
+                        :valitedScholars="valitedScholars" :myInactive="myInactive" :allInactive="allInactive"
+                        :valitedBatches="valitedBatches" :myvalidated="myvalidated" :checkValidated="checkValidated"
+                        :granteeInactive="granteeInactive" :validationStatus="validationStatus"
+                        :AllvalidationStatus="AllvalidationStatus" :total_verified_grantees="total_verified_grantees"
+                        :total_unverified_grantees="total_unverified_grantees" :allBatchesInactive="allBatchesInactive"
+                        @update:stats="updateStats" />
                 </div>
 
             </div>
@@ -150,15 +180,62 @@ import { cloneDeep, isEqual } from 'lodash';
 const props = defineProps({
     scholarship: Object,
     schoolyear: Object,
-    selectedSem: Object,
-    batch: Object,
-    currentUser: Object,
-    applicants: Array,
+    selectedSem: String,
+    selectedYear: String,
+    selectedCampus: String,
+    batches: Array,
     scholars: Array,
     requirements: Array,
     payout: Array,
+
+    // Additional props for full functionality
+    totalBatches: Number,
+    scholarship_form: Object,
+    scholarship_form_data: Array,
+    eligibilities: Array,
+    conditions: Array,
+    batchesByCampus: Array,
+    allBatchesInactive: Object,
+    grantees: Array,
+    campuses: Array,
+    courses: Array,
+    students: Array,
+    payoutsByCampus: Array,
+    total_approved: Array,
+    total_scholars: Array,
+    completedBatches: Array,
+    payoutBatches: Array,
+    errors: Object,
+    userType: String,
+    userCampusId: Number,
+    totalSubTotal: Number,
+    approvedCount: Number,
+    allBatches: Array,
+    disableSendEmailButton: Boolean,
+    noScholars: Boolean,
+    inactiveBatches: Boolean,
+    accomplishedBatches: Boolean,
+    activeBatches: Array,
+    allBatchesAccomplished: Array,
+    inactivePayouts: Boolean,
+    hasActiveGrantees: Boolean,
+    valitedScholars: Boolean,
+    myInactive: Boolean,
+    allInactive: Boolean,
+    valitedBatches: Boolean,
+    myvalidated: Boolean,
+    checkValidated: Boolean,
+    granteeInactive: Boolean,
+    validationStatus: Boolean,
+    AllvalidationStatus: Boolean,
+    total_verified_grantees: Number,
+    total_unverified_grantees: Number,
+    payouts: Object,
     campusRecipients: Array,
     totalSlots: Number,
+    applicantTrack: Object,
+    applicants: Array,
+    currentUser: Object,
 });
 
 const total_applicants = computed(() => {

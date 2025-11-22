@@ -88,6 +88,11 @@ class StudentController extends Controller
 
 
             if ($pendingRequirements->isNotEmpty()) {
+
+                if (empty($submittedRequirementIds)) {
+                    return redirect()->route('student.confirmation');
+                }
+
                 return redirect()->route('student.resubmission');
             }
 
@@ -496,7 +501,6 @@ class StudentController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Grade Uploaded Successfully');
-
     }
 
     public function updateProfile(Request $request)
@@ -584,6 +588,12 @@ class StudentController extends Controller
             'province' => $request->input('province'),
         ]);
 
+        $MayScholarship = false;
+
+        if ($request->input('scholarornot') == 'Yes') {
+            $MayScholarship = true;
+        }
+
         // Update or create student record
         $studentRecord = StudentRecord::updateOrCreate(
             ['scholar_id' => $scholar->id],
@@ -600,9 +610,9 @@ class StudentController extends Controller
                 'religion' => $request->input('religion'),
                 'guardian' => $request->input('guardian_name'),
                 'relationship' => $request->input('relationship'),
-                'scholarornot' => $request->input('scholarornot'),
-                'scholarship_name' => $request->input('scholarship_name'),
-                'scholarship_get' => $request->input('scholarship_get'),
+                'has_other_scholarship' => $MayScholarship,
+                'other_scholarship_name' => $request->input('scholarship_name'),
+                'other_scholarship_amount' => $request->input('scholarship_get'),
             ]
         );
 
@@ -759,8 +769,8 @@ class StudentController extends Controller
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
             'scholarornot' => ['string', 'max:255'],
-            'scholarship_name' => ['string', 'max:255'],
-            'scholarship_get' => ['numeric'],
+            'scholarship_name' => ['nullable', 'string', 'max:255'],
+            'scholarship_get' => ['nullable', 'numeric'],
 
             //Grade Information
             'grade' => [''],
@@ -827,11 +837,9 @@ class StudentController extends Controller
 
         // dd($request->all());
 
-        // Custom error message handling to combine related fields
         if ($validator->fails()) {
             $errors = $validator->errors();
 
-            // Check if any elementary education fields failed validation
             if (
                 $errors->has('education.elementary.name') ||
                 $errors->has('education.elementary.years')
@@ -1206,8 +1214,6 @@ class StudentController extends Controller
         } else {
             return redirect()->route('student.dashboard'); // or any default fallback
         }
-
-
     }
 
     public function scholarship()
@@ -1367,7 +1373,6 @@ class StudentController extends Controller
             //generate qr_code
             // Check if the scholar already has a QR code
             if ($scholar->qr_code) {
-
             }
 
             // Set up QR code options
@@ -1641,11 +1646,20 @@ class StudentController extends Controller
     public function applicationUpload(Request $request)
     {
         $request->validate([
+            'application_location' => 'required',
+            'endorser' => 'required',
             'files.*' => 'required|file',
             'requirements' => 'array'
         ]);
 
+        //dd($request);
+
         $scholar = Scholar::where('email', Auth::user()->email)->first();
+
+        $scholar->update([
+            "apply_scholarship" => $request->application_location,
+            "endorsed_scholarship" => $request->endorser,
+        ]);
 
         // Process each uploaded file
         foreach ($request->file('files') as $requirementId => $file) {
@@ -1757,6 +1771,7 @@ class StudentController extends Controller
             'files.*.file' => 'Each uploaded item must be a valid file.',
         ]);
 
+        //dd($request->all());
 
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
 

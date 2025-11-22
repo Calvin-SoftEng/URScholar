@@ -61,8 +61,50 @@
             <div v-for="(day, index) in daysOfWeek" :key="index">{{ day }}</div>
           </div>
           <div class="grid grid-cols-7 gap-2">
-            <div v-for="(day, index) in calendarDays" :key="index" class="h-28 border rounded p-1 relative"
-              :class="{ 'bg-blue-50 dark:bg-blue-900/20': isToday(day.date), 'bg-gray-50 dark:bg-gray-800/50': !isCurrentMonth(day.date) }">
+            <div
+              v-for="(day, index) in calendarDays"
+              :key="index"
+              class="h-28 border rounded px-1 pt-6 relative overflow-hidden"
+              :class="{
+                'bg-blue-50 dark:bg-blue-900/20': isToday(day.date),
+                'bg-gray-50 dark:bg-gray-800/50': !isCurrentMonth(day.date)
+              }"
+            >
+              <!-- Container for calendar content with scrolling behavior -->
+              <div class="h-full overflow-y-auto">
+                <!-- Scholarship Events -->
+                <div v-for="event in day.events" :key="`${event.id}-${event.type}`" class="mt-1 mb-1">
+                  <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate"
+                    :class="event.type === 'start' ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-green-500 text-white hover:bg-green-600'"
+                    @click="showDetails(event)">
+                    {{ event.displayText }}
+                  </div>
+                </div>
+
+                <!-- Payout Schedules -->
+                <div v-for="payout in day.payouts" :key="`payout-${payout.id}`" class="mt-1 mb-1">
+                  <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-yellow-500 text-white hover:bg-yellow-600"
+                    @click="showPayoutDetails(payout)">
+                    {{ payout.displayText }}
+                  </div>
+                </div>
+
+                <!-- Combined Payout Start Dates -->
+                <div v-for="(payoutGroup, scholarshipId) in day.combinedPayoutStarts" :key="`payoutStart-${scholarshipId}`" class="mt-1 mb-1">
+                  <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-orange-500 text-white hover:bg-orange-600"
+                    @click="showCombinedPayoutDetails(payoutGroup, 'start')">
+                    {{ payoutGroup[0].scholarship_name }} Payout Start
+                  </div>
+                </div>
+
+                <!-- Combined Payout End Dates -->
+                <div v-for="(payoutGroup, scholarshipId) in day.combinedPayoutEnds" :key="`payoutEnd-${scholarshipId}`" class="mt-1 mb-1">
+                  <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-red-500 text-white hover:bg-red-600"
+                    @click="showCombinedPayoutDetails(payoutGroup, 'end')">
+                    {{ payoutGroup[0].scholarship_name }} Payout End
+                  </div>
+                </div>
+              </div>
 
               <div class="absolute top-1 left-1 w-6 h-6 flex items-center justify-center text-xs"
                 :class="isToday(day.date)
@@ -71,38 +113,6 @@
                 {{ day.date.getDate() }}
               </div>
 
-              <!-- Scholarship Events -->
-              <div v-for="event in day.events" :key="`${event.id}-${event.type}`" class="mt-1 mb-1">
-                <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate"
-                  :class="event.type === 'start' ? 'bg-blue-500 text-white hover:bg-blue-600' : 'bg-green-500 text-white hover:bg-green-600'"
-                  @click="showDetails(event)">
-                  {{ event.displayText }}
-                </div>
-              </div>
-
-              <!-- Payout Schedules -->
-              <div v-for="payout in day.payouts" :key="`payout-${payout.id}`" class="mt-1 mb-1">
-                <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-yellow-500 text-white hover:bg-yellow-600"
-                  @click="showPayoutDetails(payout)">
-                  {{ payout.displayText }}
-                </div>
-              </div>
-
-              <!-- Combined Payout Start Dates -->
-              <div v-for="(payoutGroup, scholarshipId) in day.combinedPayoutStarts" :key="`payoutStart-${scholarshipId}`" class="mt-1 mb-1">
-                <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-orange-500 text-white hover:bg-orange-600"
-                  @click="showCombinedPayoutDetails(payoutGroup, 'start')">
-                  {{ payoutGroup[0].scholarship_name }} Payout Start
-                </div>
-              </div>
-
-              <!-- Combined Payout End Dates -->
-              <div v-for="(payoutGroup, scholarshipId) in day.combinedPayoutEnds" :key="`payoutEnd-${scholarshipId}`" class="mt-1 mb-1">
-                <div class="text-xs px-1 py-0.5 rounded cursor-pointer truncate bg-red-500 text-white hover:bg-red-600"
-                  @click="showCombinedPayoutDetails(payoutGroup, 'end')">
-                  {{ payoutGroup[0].scholarship_name }} Payout End
-                </div>
-              </div>
             </div>
           </div>
 

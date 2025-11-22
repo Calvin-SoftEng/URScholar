@@ -1,8 +1,23 @@
 <template>
   <div class="w-full mt-5 bg-white rounded-xl">
+    <div v-if="EditOneTime">
+      <OneTimeScholarship :editonetime="EditOneTime" :scholarship="scholarship" :schoolyear="schoolyear"
+        :selectedSem="selectedSem" :selectedYear="selectedYear" :selectedCampus="selectedCampus" :campuses="campuses"
+        :courses="courses" :scholarship_form="scholarship_form" :scholarship_form_data="scholarship_form_data"
+        :eligibilities="eligibilities" :conditions="conditions" :requirements="requirements"
+        :campusRecipients="campusRecipients" :totalSlots="totalSlots" :errors="errors" :userType="userType"
+        :userCampusId="userCampusId" @update-editonetime="updateEditonetime" />
+    </div>
+
     <!-- Header section with buttons remains unchanged -->
-    <div class="px-4 pt-4 flex flex-row justify-between items-center">
+    <div v-if="OneTimeApplicants" class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
+        <!-- edit scholarship -->
+        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="toggleEdit" class="flex items-center gap-2 border border-blue-600 bg-primary font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+                  hover:bg-white hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+          <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-base" />
+          <span class="font-normal">Edit <span class="font-semibold">Scholarship</span></span>
+        </button>
         <!-- Publish Button -->
         <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="togglePublish" class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -381,21 +396,98 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport } from 'radix-vue';
+import OneTimeScholarship from '@/Components/Staff/OneTimeScholars/OneTimeScholarship.vue';
 
 // Props definition
 const props = defineProps({
+  // Core props (original)
   scholars: Array,
   scholarship: Object,
   totalSlots: Number,
   campusRecipients: Array,
   currentUser: Object,
   schoolyear: Object,
-  selectedSem: Object,
+  selectedSem: String,
+  selectedYear: String,
+  selectedCampus: String,
   itemsPerPage: {
     type: Number,
     default: 10
-  }
+  },
+
+  // Additional data props
+  batches: Array,
+  requirements: Array,
+  payout: Array,
+  payouts: Object,
+  payoutsByCampus: Array,
+  applicants: Array,
+  applicantTrack: Object,
+  campuses: Array,
+  courses: Array,
+
+  // Form & eligibility data
+  scholarship_form: Object,
+  scholarship_form_data: Array,
+  eligibilities: Array,
+  conditions: Array,
+
+  // User data
+  userType: String,
+  userCampusId: Number,
+
+  // Batch data
+  totalBatches: Number,
+  batchesByCampus: Array,
+  completedBatches: Array,
+  payoutBatches: Array,
+  allBatches: Array,
+  activeBatches: Array,
+  allBatchesAccomplished: Array,
+
+  // Grantees & scholars data
+  grantees: Array,
+  students: Array,
+  total_approved: Array,
+  total_scholars: Array,
+  total_verified_grantees: Number,
+  total_unverified_grantees: Number,
+
+  // Status flags
+  allBatchesInactive: [Object, Boolean],
+  disableSendEmailButton: Boolean,
+  noScholars: Boolean,
+  inactiveBatches: Boolean,
+  accomplishedBatches: Boolean,
+  inactivePayouts: Boolean,
+  hasActiveGrantees: Boolean,
+  valitedScholars: Boolean,
+  myInactive: Boolean,
+  allInactive: Boolean,
+  valitedBatches: Boolean,
+  myvalidated: Boolean,
+  checkValidated: Boolean,
+  granteeInactive: Boolean,
+  validationStatus: Boolean,
+  AllvalidationStatus: Boolean,
+
+  // Other props
+  errors: Object,
+  totalSubTotal: Number,
+  approvedCount: Number,
 });
+
+const EditOneTime = ref(false);
+const OneTimeApplicants = ref(true);
+
+const toggleEdit = () => {
+  EditOneTime.value = !EditOneTime.value;
+  OneTimeApplicants.value = false;
+};
+
+const updateEditonetime = (newValue) => {
+  EditOneTime.value = newValue; // Sync changes from child to parent
+}
 
 // State variables
 const loading = ref(false);

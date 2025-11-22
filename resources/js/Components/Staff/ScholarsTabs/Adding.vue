@@ -11,7 +11,7 @@
             <button @click="toggleBulk"
                 class="font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200" :class="{
                     'bg-primary text-white border-primary': BulkAdding,
-                    'text-primary bg-white border border-blue-700 hover:bg-gray-200': !BulkAdding
+                    'text-primary bg-white border border-primary hover:bg-gray-200': !BulkAdding
                 }">Bulk Upload
             </button>
         </div>
@@ -22,120 +22,54 @@
                     <p class="text-red-600 text-sm">{{ errors.student }}</p>
                 </div>
                 <div class="flex flex-col w-full gap-5">
-                    <div class="w-full grid grid-cols-4 items-center gap-5">
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
-                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="manual.grant"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
-                            <input type="text" id="batch_id" placeholder="Enter Batch No"
-                                v-model="manual.batch_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Endorsed By</label>
-                            <input type="text" id="batch_id"
-                                v-model="manual.batch_id"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
-                    </div>
-                    <div class="w-full flex flex-row items-center gap-5">
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Higher Education
-                                Institution</label>
-                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System"
-                                v-model="manual.hei_name"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required value="University of Rizal System" readonly />
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
-                            <Select v-model="manual.campus_id">
-                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Campus" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem v-for="campus in campuses" :key="campus.id" :value="campus.id">
-                                        {{ campus.name }}
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Course and
-                                Program</label>
-                            <Select v-model="manual.course_id">
-                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Course" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <SelectItem v-for="course in course" :key="course.id" :value="course.id">
-                                            {{ course.name }}
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Year Level</label>
-                            <Select v-model="manual.year">
-                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Year" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                        <SelectItem value="1">
-                                            1st
-                                        </SelectItem>
-                                        <SelectItem value="2">
-                                            2nd
-                                        </SelectItem>
-                                        <SelectItem value="3">
-                                            3rd
-                                        </SelectItem>
-                                        <SelectItem value="4">
-                                            4th
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
+                     <div class="w-full flex items-end gap-5">
+                        <div class="relative w-1/2">
+                            <div class="w-full flex flex-col gap-0 font-rethink">
+                                <span class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Search for
+                                    Students</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <input v-model="searchQuery" type="text" placeholder="Search student..." @focus="
+                                    () =>
+                                        setTimeout(
+                                            () => (dropdownIsOpen = true),
+                                            50
+                                        )
+                                " @blur="
+                                    () =>
+                                        setTimeout(
+                                            () => (dropdownIsOpen = false),
+                                            150
+                                        )
+                                "
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                                <button
+                                    class="bg-primary text-white border-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
+                                    @click="selectFirstMatch">
+                                    Search
+                                </button>
+                            </div>
 
-                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
-
-                    <div class="w-full grid grid-cols-4 items-center gap-5">
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Application
-                                No.</label>
-                            <input v-model="manual.app_no" type="text" id="first_name"
-                                placeholder="00000-00000000-00000"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
+                            <ul v-if="dropdownIsOpen && searchQuery !== ''"
+                                class="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-y-auto">
+                                <li v-if="filteredStudents.length === 0" class="px-4 py-2 text-sm text-gray-500">
+                                    No results found.
+                                </li>
+                                <li v-for="student in filteredStudents" :key="student.id" @click="selectStudent(student)"
+                                    class="px-4 py-2 hover:bg-blue-100 cursor-pointer text-base font-medium font-rethink text-darker">
+                                    <div class="flex flex-row items-center gap-3 leading-tight">
+                                        <span>{{ student.first_name }} {{ student.last_name }}</span>
+                                        <span class="text-xs text-gray-500">{{ student.email }}</span>
+                                    </div>
+                                </li>
+                            </ul>
+                            
                         </div>
-                        <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Award No.</label>
-                            <input v-model="manual.award_no" type="text" id="first_name"
-                                placeholder="###-00-00-00000-0000-00000"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                required />
-                        </div>
+                        <button type="button"
+                            class="bg-white hover:bg-gray-200 border border-primary text-primary font-medium rounded-lg text-sm px-5 py-2.5 text-center transition-all duration-200"
+                            @click="clearFirstMatch">
+                            Clear Selection
+                        </button>
                     </div>
 
                     <div class="w-full h-0.5 bg-gray-200 my-2"></div>
@@ -163,47 +97,24 @@
                                 required />
                         </div>
                         <div class="w-full">
-                            <label for="first_name"
-                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Sex</label>
-                            <Select v-model="manual.sex">
-                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
-                                    <SelectValue placeholder="Select Sex" class="text-black" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        <!-- <SelectLabel>Gender</SelectLabel> -->
-                                        <SelectItem value="Male">
-                                            Male
-                                        </SelectItem>
-                                        <SelectItem value="Female">
-                                            Female
-                                        </SelectItem>
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
+                            <SelectBox v-model="manual.sex" :options="sex" label="Sex" placeholder="Select sex" />
                         </div>
                     </div>
                     <div class="w-full grid grid-cols-4 items-center gap-5">
-                        <div class="w-full">
+                        <!-- <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Date of Birth</label>
                             <DatePicker
                             v-model:modelValueStart="startDate"
                             />
-                            <!-- <div class="relative">
-                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
-                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                        <path
-                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
-                                    </svg>
-                                </div>
-                                <input v-model="manual.birthdate" id="datepicker-autohide" type="text"
-                                    autocomplete="off"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-md focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Select Birthdate">
-                            </div> -->
+                        </div> -->
+                        <div class="w-full">
+                            <Datepicker v-model="startDate" label="Date of Birth" />
+                            <!-- <p class="mt-3 text-sm text-gray-700 dark:text-gray-300">
+                            Selected: {{ formatDate(startDate) }}
+                            </p> -->
                         </div>
+
                         <div class="w-full">
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Province</label>
@@ -222,6 +133,120 @@
                             <label for="first_name"
                                 class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Street</label>
                             <input v-model="manual.street" type="text" id="first_name"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                    </div>
+
+                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
+
+                    <div class="w-full flex flex-row items-center gap-5">
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Higher Education
+                                Institution</label>
+                            <input type="text" id="first_name" placeholder="Ex. Unversity of Rizal System"
+                                v-model="manual.hei_name"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required value="University of Rizal System" readonly />
+                        </div>
+
+                        <div class="w-full">
+                            <!-- <label
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">
+                                Campus
+                            </label> -->
+                            <!-- <select v-model="manual.campus_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option disabled value="">Select campus</option>
+                                <option v-for="campus in campuses" :key="campus.id" :value="campus.id">{{ campus.name }}</option>
+                            </select> -->
+                            <SelectBox v-model="manual.campus_id" :options="campuses" label="Campus"
+                                placeholder="Select Campus" />
+                        </div>
+
+                        <!-- <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Campus</label>
+                            <Select v-model="manual.campus_id" >
+                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
+                                    <SelectValue placeholder="Select Campus" class="text-black" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="campus in campuses" :key="campus.id" :value="campus.id">
+                                        {{ campus.name }}
+                                    </SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div> -->
+                        <div class="w-full">
+                            <!-- <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Course and
+                                Program</label>
+                            <Select v-model="manual.course_id">
+                                <SelectTrigger class="w-full h-[42px] bg-gray-50 border border-gray-300">
+                                    <SelectValue placeholder="Select Course" class="text-black" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        <SelectItem v-for="course in course" :key="course.id" :value="course.id">
+                                            {{ course.name }}
+                                        </SelectItem>
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select> -->
+                            <SelectBox v-model="manual.course_id" :options="course" label="Course"
+                                placeholder="Select Course" />
+                        </div>
+                        <div class="w-full">
+                            <div class="w-full">
+                                <SelectBox v-model="manual.year" :options="years" label="Year Level"
+                                    placeholder="Select Year Level" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Grant</label>
+                            <input type="text" id="first_name" placeholder="Ex. LISTAHANAN" v-model="manual.grant"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Batch No</label>
+                            <input type="text" id="batch_id" placeholder="Enter Batch No" v-model="manual.batch_id"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Endorsed By</label>
+                            <input type="text" id="batch_id" v-model="manual.endorsed"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                    </div>
+
+                    <div class="w-full h-0.5 bg-gray-200 my-2"></div>
+
+                    <div class="w-full grid grid-cols-4 items-center gap-5">
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Application
+                                No.</label>
+                            <input v-model="manual.app_no" type="text" id="first_name"
+                                placeholder="00000-00000000-00000"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required />
+                        </div>
+                        <div class="w-full">
+                            <label for="first_name"
+                                class="block mb-1 text-sm font-medium text-gray-900 dark:text-white">Award No.</label>
+                            <input v-model="manual.award_no" type="text" id="first_name"
+                                placeholder="###-00-00-00000-0000-00000"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 required />
                         </div>
@@ -318,36 +343,18 @@
 </template>
 
 <script setup>
-import { ref, onBeforeMount, reactive, defineEmits, watchEffect, computed, watch, onMounted } from 'vue';
-import { useForm, Link, usePage, router } from '@inertiajs/vue3';
-import DataTable from 'primevue/datatable';
-import Column from 'primevue/column';
-import FileUpload from 'primevue/fileupload';
-import Papa from 'papaparse';
-import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastTitle, ToastViewport } from 'radix-vue'
+import { ref, reactive, computed, watch, onMounted } from 'vue';
+import { usePage, router } from '@inertiajs/vue3';
+import { ToastAction, ToastDescription, ToastProvider, ToastRoot, ToastViewport } from 'radix-vue'
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue, } from '@/Components/ui/select'
 
-import { Button } from '@/Components/ui/button'
-import { Calendar } from '@/Components/ui/calendar'
+import Datepicker from '@/Components/RawComponents/Datepicker.vue';
+import SelectBox from '@/Components/RawComponents/SelectBox.vue';
 
-import { Popover, PopoverContent, PopoverTrigger } from '@/Components/ui/popover'
-import { cn } from '@/lib/utils'
 import { DateFormatter, getLocalTimeZone, } from '@internationalized/date'
-import { Calendar as CalendarIcon } from 'lucide-vue-next'
 import { initFlowbite } from 'flowbite';
-import InputError from '@/Components/InputError.vue';
 
-import DatePicker from '@/Components/DatePickerManual.vue';
-
-const df = new DateFormatter('en-US', {
-    dateStyle: 'long',
-})
-
-const formatDate = (date) => {
-    if (!date) return "Pick a date";
-    return new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(date));
-};
 
 //File download
 const props = defineProps({
@@ -357,6 +364,7 @@ const props = defineProps({
     selectedSem: Object,
     batch: Array,
     campuses: Array,
+    students: Array,
     course: Array,
     errors: Object,
     filePath: {
@@ -382,11 +390,25 @@ const endDate = ref(null);
 // Helper functions
 function formatModelDate(date) {
     if (!date) return '';
+
+    // If it's a string, convert it to a Date object
+    if (typeof date === 'string') {
+        date = new Date(date);
+    }
+
+    // Check if it's a valid Date
+    if (isNaN(date.getTime())) {
+        console.warn('Invalid date:', date);
+        return '';
+    }
+
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
+
     return `${year}/${month}/${day}`;
 }
+
 
 const formattedStartDate = computed(() => formatModelDate(startDate.value));
 const formattedEndDate = computed(() => formatModelDate(endDate.value));
@@ -398,9 +420,9 @@ const downloadFile = async () => {
     try {
         isLoading.value = true;
 
-        // Option 1: Use direct download link
+        // Corrected path: remove "/public"
         const link = document.createElement('a');
-        link.href = '/storage/system_files/URSCHOLAR-SCHOLAR_FORMAT.csv';
+        link.href = '/assets/URSCHOLAR-SCHOLAR_FORMAT.csv'; // ✅ served from public/
         link.download = 'URSCHOLAR-SCHOLAR_FORMAT.csv';
         document.body.appendChild(link);
         link.click();
@@ -412,6 +434,7 @@ const downloadFile = async () => {
         isLoading.value = false;
     }
 };
+
 
 
 
@@ -429,14 +452,96 @@ const toggleBulk = () => {
     ManualAdding.value = false;
 };
 
+//Populate Student Name
+//palit props ikaw na dito
+const searchQuery = ref("");
+const selectedCustomer = ref(null);
+const dropdownIsOpen = ref(false);
+let skipNextWatch = false;
 
-const components = {
-    DataTable,
-    Column,
-    Button,
-    FileUpload,
-    Papa,
-};
+watch(searchQuery, (newVal) => {
+    if (skipNextWatch) {
+        skipNextWatch = false;
+        return;
+    }
+    dropdownIsOpen.value = newVal !== "";
+});
+
+
+const filteredStudents = computed(() =>
+    props.students.filter(
+        (student) =>
+            student.first_name
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase()) ||
+            student.last_name
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase()) ||
+            student.email
+                .toLowerCase()
+                .includes(searchQuery.value.toLowerCase())
+    )
+);
+
+function selectStudent(student) {
+    selectedStudent.value = student;
+    searchQuery.value = `${student.first_name} ${student.last_name}`;
+    dropdownIsOpen.value = false;
+    skipNextWatch = true;
+
+    // Auto-fill form with student data
+    manual.value.first_name = student.first_name || "";
+    manual.value.last_name = student.last_name || "";
+    manual.value.middle_name = ""; // Not in students table
+    manual.value.sex = ""; // Not in students table
+    manual.value.campus_id = student.campus_id || "";
+    manual.value.course_id = student.course_id || "";
+    manual.value.year = student.year_level || "";
+
+    // Parse birthdate if exists
+    if (student.birthdate) {
+        startDate.value = new Date(student.birthdate);
+    }
+
+    // Parse permanent_address if exists (assuming format: "street, municipality, province")
+    if (student.permanent_address) {
+        const addressParts = student.permanent_address.split(',').map(s => s.trim());
+        manual.value.street = addressParts[0] || "";
+        manual.value.municipality = addressParts[1] || "";
+        manual.value.province = addressParts[2] || "";
+    }
+}
+
+// Add this method to your existing methods section
+function clearFirstMatch() {
+    selectedStudent.value = null;
+    searchQuery.value = "";
+    dropdownIsOpen.value = false;
+
+    // Clear the form fields
+    manual.value = {}; // Reset the form data
+}
+
+function selectedStudent(student) {
+    selectedStudent.value = student;
+    form.user_id = student.id;
+    searchQuery.value = student.name;
+    dropdownIsOpen.value = false;
+    skipNextWatch = true;
+
+    // Auto-fill form with customer data directly from props
+    form.first_name = student.first_name || "";
+    form.last_name = student.last_name || "";
+    form.email = student.email || "";
+    form.contact = student.contact || "";
+    form.address = student.address || "";
+}
+
+function selectFirstMatch() {
+    if (filteredStudents.value.length > 0) {
+        selectStudent(filteredStudents.value[0]);
+    }
+}
 
 
 const closePanel = () => {
@@ -447,10 +552,24 @@ const closePanel = () => {
     entries.value = false;
 };
 
+const sex = [
+    { id: 'male', name: 'Male' },
+    { id: 'female', name: 'Female' },
+]
+
+const years = [
+    { id: '1', name: '1st Year' },
+    { id: '2', name: '2nd Year' },
+    { id: '3', name: '3rd Year' },
+    { id: '4', name: '4th Year' },
+]
+
+
 
 const manual = ref({
     grant: '',
     batch_id: '',
+    endorsed: '',
     hei_name: 'University of Rizal System',
     campus: '',
     course: '',
@@ -470,6 +589,7 @@ const manual = ref({
 });
 
 const submitManual = async () => {
+    console.log(manual.birthdate);
     try {
         router.post(`/scholarships/${props.scholarship.id}/manual-upload`, manual.value, {
             onSuccess: () => {
@@ -492,6 +612,7 @@ const resetManualForm = () => {
     manual.value = {
         grant: '',
         batch_id: '',
+        endorsed: '',
         hei_name: 'University of Rizal System',
         campus_id: '',
         course_id: '',
