@@ -102,7 +102,6 @@ class CashierController extends Controller
 
             // Redirect to the show method instead
             return $this->view_scholarship();
-
         }
 
         // Original code for other user types
@@ -785,7 +784,6 @@ class CashierController extends Controller
             ];
 
             return response()->json(['scholar' => $scholarData]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error retrieving scholar information: ' . $e->getMessage()], 500);
         }
@@ -868,7 +866,6 @@ class CashierController extends Controller
                     'status' => 'Claimed',
                 ]
             ]);
-
         } catch (\Exception $e) {
             return response()->json(['error' => 'Error processing claim: ' . $e->getMessage()], 500);
         }
@@ -963,7 +960,6 @@ class CashierController extends Controller
                 'scholar' => $scholarData,
                 'require_confirmation' => true
             ]);
-
         } catch (\Exception $e) {
             logger()->error('QR verification error: ' . $e->getMessage());
             return response()->json(['error' => 'Error processing QR code: ' . $e->getMessage()], 500);
@@ -1151,20 +1147,20 @@ class CashierController extends Controller
 
             $payout_schedule = PayoutSchedule::where('payout_id', $payout->id)
                 ->first();
+
+            $disbursements = Disbursement::where('payout_id', $payout->id)
+                ->where('batch_id', $batchId)
+                ->whereHas('scholar', function ($query) {
+                    $query->whereIn('student_status', ['Enrolled', 'Transferred']);
+                })
+                ->with([
+                    'scholar' => function ($subQuery) {
+                        $subQuery->with(['course', 'campus', 'user']);
+                    }
+                ])
+                ->get();
         }
 
-
-        $disbursements = Disbursement::where('payout_id', $payout->id)
-            ->where('batch_id', $batchId)
-            ->whereHas('scholar', function ($query) {
-                $query->whereIn('student_status', ['Enrolled', 'Transferred']);
-            })
-            ->with([
-                'scholar' => function ($subQuery) {
-                    $subQuery->with(['course', 'campus', 'user']);
-                }
-            ])
-            ->get();
 
         return Inertia::render('Cashier/Scholarships/Payouts', [
             'scholarship' => $scholarship,
@@ -1179,4 +1175,3 @@ class CashierController extends Controller
         ]);
     }
 }
-

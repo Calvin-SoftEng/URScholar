@@ -57,13 +57,5 @@ class ScholarshipSeeder extends Seeder
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
         ]);
-
-        // Scholarship::factory()->create([
-        //     'name' => 'DBP-RISE',
-        //     'sponsor_id' => 2,
-        //     'user_id' => 2,
-        //     'scholarshipType' => 'Grant-Based',
-        //     'status' => 'Pending',
-        // ]);
     }
 }
