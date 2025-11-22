@@ -336,7 +336,7 @@ class EmailController extends Controller
             'scheduled_date' => 'required|date',
             'scheduled_time' => 'required',
             'payout_id' => 'required',
-            'reminders' => 'required',
+            'reminders' => 'nullable',
         ]);
 
         // dd($validated);
