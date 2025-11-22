@@ -1159,6 +1159,18 @@ class CashierController extends Controller
                     }
                 ])
                 ->get();
+
+            return Inertia::render('Cashier/Scholarships/Payouts', [
+                'scholarship' => $scholarship,
+                'batch' => $batch,
+                'scholars' => $scholars,
+                'disbursements' => $disbursements,
+                'payout' => $payout,
+                'schoolyear' => $schoolyear,
+                'totalClaimed' => $totalClaimed ?? null,
+                'payout_schedule' => $payout_schedule ?? null,
+                'selectedSem' => $selectedSem,
+            ]);
         }
 
 
@@ -1166,7 +1178,6 @@ class CashierController extends Controller
             'scholarship' => $scholarship,
             'batch' => $batch,
             'scholars' => $scholars,
-            'disbursements' => $disbursements,
             'payout' => $payout,
             'schoolyear' => $schoolyear,
             'totalClaimed' => $totalClaimed ?? null,
