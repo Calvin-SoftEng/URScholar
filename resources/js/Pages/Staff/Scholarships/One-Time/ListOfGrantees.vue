@@ -30,7 +30,7 @@
                     </div>
                 </div>
 
-                <div class="w-full mt-5 rounded-xl space-y-10">
+                <div class="w-full mt-5 rounded-xl space-y-5">
                     <!-- Stats Section -->
                     <div class="w-full h-[1px] bg-gray-200"></div>
 

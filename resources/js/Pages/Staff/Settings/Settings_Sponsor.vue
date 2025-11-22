@@ -10,7 +10,10 @@
 
                 <div v-if="!isTableVisible && !UpdateMOA" class="flex justify-end items-center w-full gap-3">
                     <button @click="toggleTable"
-                        class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
+                        class="text-sm gap-1 font-medium text-gray-900 bg-white border border-gray-300 rounded-lg 
+                        focus:ring-blue-500 focus:border-blue-500 
+                        dark:bg-dprimary dark:text-dtext dark:border-gray-600 dark:placeholder-gray-400 
+                        dark:focus:border-blue-500 dark:hover:bg-primary flex items-center justify-center px-4 py-2">
                         <span class="material-symbols-rounded dark:text-dtext">
                             library_add
                         </span>
@@ -109,7 +112,10 @@
                                         </td>
                                         <td class="px-6 py-4">
                                             <button @click="ViewSponsor(sponsor)"
-                                                class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary">
+                                                class="text-sm gap-1 font-medium text-gray-900 bg-white border border-gray-300 rounded-lg 
+                                                focus:ring-blue-500 focus:border-blue-500 
+                                                dark:bg-dprimary dark:text-dtext dark:border-gray-600 dark:placeholder-gray-400 
+                                                dark:focus:border-blue-500 dark:hover:bg-primary flex items-center justify-center px-4 py-2">
                                                 View
                                             </button>
                                         </td>
@@ -128,7 +134,10 @@
                             <h2 class="text-lg font-semibold text-primary">Sponsor Information</h2>
                             <div class="flex items-center gap-2">
                                 <button @click="goback" type="button"
-                                    class="btn bg-white border dark:border-gray-600 dark:bg-dprimary dark:text-dtext dark:hover:bg-primary px-5">
+                                    class="text-sm gap-1 font-medium text-gray-900 bg-white border border-gray-300 rounded-lg 
+                                    focus:ring-blue-500 focus:border-blue-500 
+                                    dark:bg-dprimary dark:text-dtext dark:border-gray-600 dark:placeholder-gray-400 
+                                    dark:focus:border-blue-500 dark:hover:bg-primary flex items-center justify-center px-4 py-3">
                                     Go Back
                                 </button>
                                 <button v-if="form.created_id == $page.props.auth.user.id" @click="updateSponsor"

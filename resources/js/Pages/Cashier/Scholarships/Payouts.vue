@@ -26,8 +26,10 @@
 
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <span
-                                class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span><span>{{ scholarship.name }} </span>
+                            <button @click="goBack"
+                                                            class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
+                                                            < </button>
+                            <span>{{ scholarship.name }} </span>
                             <span> Grant</span>
                         </h1>
                         <span class="text-xl">SY {{ batch.school_year.year }} - {{ batch.semester }} Semester</span>
@@ -108,6 +110,10 @@ import Payout_List from '../../../Components/Cashier/Payouts/Payout_List.vue';
 
 const components = {
     Button
+};
+
+const goBack = () => {
+    window.history.back();
 };
 
 const addVisible = ref(false);
