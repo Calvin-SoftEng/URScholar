@@ -89,6 +89,7 @@
                       <th>Requirements</th>
                       <th>GWA</th>
                       <th class="text-center">Applicant Ranking</th>
+                      <th>Monthly Income</th>
                     </template>
                     <th></th>
                   </tr>
@@ -160,19 +161,21 @@
                           </div>
                         </td>
                         <td><span class="font-bold text-gray-800">{{ scholar.grade }}</span></td>
-                        <td>
-                          <span :class="{
-                            'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                            'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                            'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete',
-                            'bg-blue-100 text-blue-800 border border-blue-400': scholar.status === 'Submitted',
-                            'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Returned'
-                          }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
-                            {{ scholar.status }}
+                       
+                        <td class="text-center"><span class="font-bold text-gray-800">10,000 - 35,000</span></td>
+
+                         <td class="justify-center items-center text-center">
+                          <!-- Rank and Percentage -->
+                          <span class="font-bold text-lg">
+                            <span class="text-green-700" v-if="rank === 1">1st</span>
+                            <span class="text-green-500" v-if="rank === 2">2nd</span>
+                            <span class="text-green-400" v-if="rank === 3">3rd</span>
+                            <!-- <span class="text-gray-400" v-else>{{ rank }}th</span> -->
+                            <span class="text-sm ml-2">(95%)</span>
                           </span>
+
                         </td>
                       </template>
-
                       <td>
                         <Link :href="`/scholarships/scholar=${scholar.id}/one-time`">
                         <button
@@ -409,6 +412,8 @@ import { ref, computed, onMounted } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport } from 'radix-vue';
 import OneTimeScholarship from '@/Components/Staff/OneTimeScholars/OneTimeScholarship.vue';
+
+const rank = 1;
 
 // Props definition
 const props = defineProps({
