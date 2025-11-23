@@ -56,6 +56,7 @@ class StudentController extends Controller
     public function dashboard()
     {
 
+        set_time_limit(90);
         $scholar = Scholar::where('email', Auth::user()->email)
             ->with('campus')
             ->with('course')
@@ -336,8 +337,9 @@ class StudentController extends Controller
                 ? FamilyRecord::where('student_record_id', $studentRecord->id)->first()
                 : null;
 
-            $familyIncome = $familyRecord ? (float)$familyRecord->monthly_income : null;
+            $familyIncome = $familyRecord->monthly_income;
             $gwa = $grade ? (float)$grade->grade : null;
+
 
             // Prepare Scholar Data for API Payload
             $scholarData = [
@@ -348,28 +350,45 @@ class StudentController extends Controller
                 'family_monthly_income' => $familyIncome,
             ];
 
+            //dd($scholarData);
+
             // Prepare Scholarship Data for API Payload
             $scholarshipData = $scholarships->map(function ($scholarship) {
-                $criteriaData = $scholarship->criterias->first();
+                $firstCriteria = $scholarship->criterias->first();
 
                 return [
                     'id' => $scholarship->id,
                     'name' => $scholarship->scholarshipName,
                     'deadline' => $scholarship->requirements->first()->deadline ?? null,
-                    'required_grade_limit' => $criteriaData ? (float)$criteriaData->grade : null,
-                    'required_course_id' => $criteriaData ? $criteriaData->course_id : null,
-                    'monthly_income_limit' => $criteriaData ? (float)$criteriaData->monthly_income : null,
+                    'required_grade_limit' => $firstCriteria ? (float)$firstCriteria->grade : null,
+                    'required_course_id' => $firstCriteria ? $firstCriteria->course_id : null,
+
+                    // REVISED: Loop through criteria, find the related Form Data, and get the name
+                    'monthly_income_limits' => $scholarship->criterias->map(function ($criteria) {
+                        // Use the ID to find the actual string value in the other table
+                        $formData = ScholarshipFormData::find($criteria->scholarship_form_data_id);
+
+                        // Return the name as a string, or null if not found
+                        return $formData ? (string)$formData->name : null;
+                    })
+                        ->filter() // Optional: Removes nulls if a record wasn't found
+                        ->values() // Re-indexes the array keys
+                        ->toArray(),
+
                     'campus_recipient_ids' => $scholarship->campusRecipients
                         ->pluck('campus_id')
                         ->toArray(),
                 ];
             })->toArray();
 
+
             // Construct the full API Request Payload
             $payload = [
                 'scholar' => $scholarData,
                 'scholarships' => $scholarshipData,
             ];
+
+            //dd($payload);
 
             // Add detailed logging
             Log::info('🔍 Starting Eligibility Check');
@@ -384,9 +403,10 @@ class StudentController extends Controller
             try {
                 Log::info('📡 Calling FastAPI at http://127.0.0.1:8000/non-grantee/eligibility');
 
-                $response = Http::timeout(5) // 5 second timeout
-                    ->connectTimeout(3) // 3 second connection timeout
-                    ->post('http://127.0.0.1:8000/non-grantee/eligibility', $payload);
+                $response = Http::timeout(10)      // Increased from 5 to 10 seconds
+                    ->connectTimeout(5)             // Increased from 3 to 5 seconds
+                    ->retry(2, 100)                 // Retry 2 times with 100ms delay
+                    ->post('http://127.0.0.1:5000/non-grantee/eligibility', $payload);
 
                 Log::info('📥 FastAPI Response Status:', ['status' => $response->status()]);
                 Log::info('📥 FastAPI Response Body:', ['body' => $response->body()]);
@@ -448,6 +468,8 @@ class StudentController extends Controller
             $eligibleScholarships = $scholarships->whereIn('id', $eligibleScholarshipIds);
 
             Log::info('📊 Final Eligible Scholarships Count:', ['count' => $eligibleScholarships->count()]);
+
+            dd($eligibleScholarships);
 
             return Inertia::render('Student/Dashboard/Dashboard', [
                 'scholarships' => $eligibleScholarships,
