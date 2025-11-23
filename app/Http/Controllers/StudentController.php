@@ -469,7 +469,7 @@ class StudentController extends Controller
 
             Log::info('📊 Final Eligible Scholarships Count:', ['count' => $eligibleScholarships->count()]);
 
-            dd($eligibleScholarships);
+            //dd($eligibleScholarships);
 
             return Inertia::render('Student/Dashboard/Dashboard', [
                 'scholarships' => $eligibleScholarships,
