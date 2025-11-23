@@ -88,7 +88,7 @@
                     <template v-else>
                       <th>Requirements</th>
                       <th>GWA</th>
-                      <th>Status</th>
+                      <th class="text-center">Applicant Ranking</th>
                     </template>
                     <th></th>
                   </tr>
@@ -145,6 +145,18 @@
                           <div class="w-full bg-gray-200 rounded-full h-2">
                             <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }">
                             </div>
+                          </div>
+                          <!-- Status below progress bar -->
+                          <div class="mt-1">
+                            <span :class="{
+                              'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
+                              'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
+                              'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete',
+                              'bg-blue-100 text-blue-800 border border-blue-400': scholar.status === 'Submitted',
+                              'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Returned'
+                            }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full block text-center">
+                              {{ scholar.status }}
+                            </span>
                           </div>
                         </td>
                         <td><span class="font-bold text-gray-800">{{ scholar.grade }}</span></td>
