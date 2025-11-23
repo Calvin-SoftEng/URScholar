@@ -1,6 +1,8 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import logging
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
 
 # -----------------------------------------------------
 # CONFIG
@@ -12,7 +14,64 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # -----------------------------------------------------
-# DATA MODELS (structural validation)
+# AI ENGINE (Random Forest)
+# -----------------------------------------------------
+class ScholarshipRecommender:
+    def __init__(self):
+        self.model = None
+        # In a real app, you would load a saved file: model = joblib.load('scholar_model.pkl')
+        # Here, we train a dummy model on startup just to make the code work.
+        self._train_dummy_model()
+
+    def _train_dummy_model(self):
+        """
+        Trains a fake model so the API works immediately.
+        Features: [Grade (float), Income_Level (int)]
+        Target: 1 (High chance of winning), 0 (Low chance)
+        """
+        # Fake historical data: [Grade, Income_Level]
+        # Income Level: 1=Low, 2=Medium, 3=High
+        X_train = np.array([
+            [1.2, 1], [1.5, 1], [1.1, 1], # Good grades, Low income -> Won
+            [2.5, 3], [3.0, 3], [2.8, 2], # Low grades, High income -> Lost
+            [1.5, 2], [1.7, 1]            # Decent grades -> Won
+        ])
+        y_train = np.array([1, 1, 1, 0, 0, 0, 1, 1]) # 1 = Won, 0 = Lost
+
+        self.model = RandomForestClassifier(n_estimators=100, random_state=42)
+        self.model.fit(X_train, y_train)
+        logger.info("🤖 Random Forest Model initialized and trained on dummy data.")
+
+    def predict_score(self, grade, income_str):
+        """
+        Returns a probability score (0% to 100%) of winning the scholarship.
+        """
+        try:
+            # 1. Preprocess Grade
+            g_val = float(grade)
+            
+            # 2. Preprocess Income (Simple mapping for this demo)
+            # In production, use OneHotEncoder or LabelEncoder
+            income_map = {"Below 10k": 1, "10k-20k": 1, "20k-50k": 2, "Above 50k": 3}
+            i_val = income_map.get(income_str, 2) # Default to Medium if unknown
+
+            # 3. Predict Probability
+            # features must match X_train shape: [Grade, Income]
+            features = np.array([[g_val, i_val]])
+            
+            # predict_proba returns [[prob_loss, prob_win]]
+            score = self.model.predict_proba(features)[0][1] 
+            return round(score * 100, 2)
+            
+        except Exception as e:
+            logger.error(f"AI Prediction failed: {e}")
+            return 0.0
+
+# Initialize the AI
+ai_engine = ScholarshipRecommender()
+
+# -----------------------------------------------------
+# DATA MODELS
 # -----------------------------------------------------
 
 def validate_scholar(data):
@@ -20,27 +79,27 @@ def validate_scholar(data):
         "scholar_id": data.get("scholar_id"),
         "campus_id": data.get("campus_id"),
         "course_id": data.get("course_id"),
-        "grade": data.get("grade"),
-        # Ensure this is passed as a string from PHP
+        "grade": data.get("grade"), 
         "family_monthly_income": data.get("family_monthly_income"), 
     }
 
 def validate_scholarship(data):
+    grade_limit = data.get("required_grade_limit")
+    if grade_limit is None and "criteriaData" in data:
+        grade_limit = data["criteriaData"].get("grade")
+
     return {
         "id": data.get("id"),
         "name": data.get("name"),
         "deadline": data.get("deadline"),
-        "required_grade_limit": data.get("required_grade_limit"),
+        "required_grade_limit": grade_limit,
         "required_course_id": data.get("required_course_id"),
-        
-        # REVISED: Now accepts a list of strings, defaults to empty list
         "monthly_income_limits": data.get("monthly_income_limits", []), 
-        
         "campus_recipient_ids": data.get("campus_recipient_ids", []),
     }
 
 # -----------------------------------------------------
-# ELIGIBILITY CHECK LOGIC
+# ELIGIBILITY CHECK LOGIC (Hard Rules)
 # -----------------------------------------------------
 
 class EligibilityChecker:
@@ -54,64 +113,46 @@ class EligibilityChecker:
                 return {"eligible": False, "reason": "Campus not a recipient."}
 
         # 2. Grade
-        if scholarship["required_grade_limit"]:
-            if self.scholar["grade"] is None:
+        limit = scholarship["required_grade_limit"]
+        if limit is not None and limit != "":
+            scholar_grade = self.scholar.get("grade")
+            if scholar_grade is None:
                 return {"eligible": False, "reason": "No grade record."}
-            # Assuming lower is better (1.0 is better than 2.0), or standard logic
-            # If your logic is "Higher is better", flip this operator. 
-            # Usually scholarships require grade <= 2.5 (numeric value).
-            if self.scholar["grade"] > scholarship["required_grade_limit"]:
-                return {"eligible": False, "reason": "GWA does not meet required limit."}
+
+            try:
+                s_grade_float = float(scholar_grade)
+                limit_float = float(limit)
+                
+                # Logic: Lower is Better (1.0 > 2.0)
+                if s_grade_float > limit_float:
+                     return {"eligible": False, "reason": f"GWA ({s_grade_float}) lower than ({limit_float})."}
+            except ValueError:
+                return {"eligible": False, "reason": "Invalid grade format."}
 
         # 3. Course
         if scholarship["required_course_id"]:
             if self.scholar["course_id"] != scholarship["required_course_id"]:
-                return {"eligible": False, "reason": "Course does not match required course."}
+                return {"eligible": False, "reason": "Wrong course."}
 
-        # 4. Income (REVISED FOR STRING MATCHING)
+        # 4. Income
         income_limits = scholarship.get("monthly_income_limits", [])
-        
-        # Only check if the scholarship actually has income restrictions
         if income_limits:
             scholar_income = self.scholar.get("family_monthly_income")
-
             if not scholar_income:
-                return {"eligible": False, "reason": "No family income record."}
-
-            # Check if the scholar's specific income string exists in the allowed list
-            # Example: "Below 10,000" in ["Below 10,000", "10,000 - 20,000"]
+                return {"eligible": False, "reason": "No income record."}
             if scholar_income not in income_limits:
-                 return {"eligible": False, "reason": f"Income '{scholar_income}' is not allowed."}
+                 return {"eligible": False, "reason": "Income not allowed."}
 
         return {"eligible": True, "reason": "Eligible"}
 
 
 # -----------------------------------------------------
-# ROOT + HEALTH ENDPOINTS
+# ENDPOINTS
 # -----------------------------------------------------
 
 @app.route("/", methods=["GET"])
 def root():
-    logger.info("Root accessed")
-    return jsonify({
-        "status": "ok",
-        "message": "Flask Scholarship Filter is running",
-        "version": "1.1",
-        "endpoints": {
-            "health": "/health",
-            "eligibility": "/non-grantee/eligibility"
-        }
-    })
-
-
-@app.route("/health", methods=["GET"])
-def health():
-    return jsonify({"status": "healthy", "service": "scholarship-filter"})
-
-
-# -----------------------------------------------------
-# MAIN ELIGIBILITY ENDPOINT
-# -----------------------------------------------------
+    return jsonify({"status": "ok", "message": "Scholarship AI Filter Running"})
 
 @app.route("/non-grantee/eligibility", methods=["POST"])
 def filter_scholarships():
@@ -122,22 +163,15 @@ def filter_scholarships():
         scholar = validate_scholar(req.get("scholar", {}))
         scholarships = [validate_scholarship(s) for s in req.get("scholarships", [])]
 
-        logger.info("=" * 70)
-        logger.info("NEW ELIGIBILITY REQUEST")
-        logger.info(f"Scholar ID: {scholar.get('scholar_id')}")
-        logger.info(f"Scholar Income: {scholar.get('family_monthly_income')}")
-        logger.info(f"Scholarships to check: {len(scholarships)}")
-        logger.info("=" * 70)
-
         eligible = []
         not_eligible = []
 
+        # 1. HARD FILTERING (Rule Based)
         checker = EligibilityChecker(scholar)
 
-        for idx, scholarship in enumerate(scholarships, 1):
-            
+        for scholarship in scholarships:
             result = checker.check(scholarship)
-
+            
             base = {
                 "scholarship_id": scholarship["id"],
                 "name": scholarship["name"],
@@ -145,15 +179,26 @@ def filter_scholarships():
             }
 
             if result["eligible"]:
-                logger.info(f"[{idx}] {scholarship['name']} -> ELIGIBLE")
-                eligible.append({**base, "reason": "Eligible"})
+                # 2. AI SCORING (Random Forest)
+                # Only run expensive AI on people who actually passed the rules
+                match_score = ai_engine.predict_score(
+                    scholar.get("grade"), 
+                    scholar.get("family_monthly_income")
+                )
+
+                eligible.append({
+                    **base, 
+                    "reason": "Eligible", 
+                    "match_score": match_score # e.g., 85.50%
+                })
             else:
-                logger.info(f"[{idx}] {scholarship['name']} -> NOT ELIGIBLE ({result['reason']})")
                 not_eligible.append({**base, "reason": result["reason"]})
 
-        logger.info("=" * 70)
-        logger.info(f"Eligible Count: {len(eligible)}")
-        logger.info("=" * 70)
+        # 3. SORTING
+        # Sort eligible scholarships by match_score (Highest % first)
+        eligible.sort(key=lambda x: x["match_score"], reverse=True)
+
+        logger.info(f"Processed {len(scholarships)} items. {len(eligible)} eligible.")
 
         return jsonify({
             "eligible": eligible,
@@ -162,18 +207,7 @@ def filter_scholarships():
 
     except Exception as e:
         logger.error(f"ERROR: {str(e)}")
-        # Return strict JSON error so Laravel doesn't crash trying to parse HTML
-        return jsonify({"error": str(e), "eligible": [], "not_eligible": []}), 500
-
-
-# -----------------------------------------------------
-# RUN
-# -----------------------------------------------------
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == "__main__":
-    print("\n" + "=" * 70)
-    print("🚀 Flask Scholarship Filter Server STARTED")
-    print("📍 Server: http://127.0.0.1:5000")
-    print("=" * 70 + "\n")
-
     app.run(host="0.0.0.0", port=5000, debug=True)
