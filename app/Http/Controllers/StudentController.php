@@ -1915,6 +1915,12 @@ class StudentController extends Controller
 
         $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
 
+        $eligibles = Eligible::with('condition')
+            ->where("scholarship_id", $scholarship->id)
+            ->get();
+
+        $conditions = $eligibles->pluck('condition');
+
         return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipApplication', [
             'scholarship' => $scholarship,
             'sponsor' => $sponsor,
@@ -1924,6 +1930,7 @@ class StudentController extends Controller
             'criterias' => $criteria,
             'templates' => $templates,
             'grade' => $grade,
+            'conditions' => $conditions,
         ]);
     }
 

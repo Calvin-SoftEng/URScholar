@@ -72,11 +72,11 @@
                                                 <h4 class="text-md font-semibold text-gray-800 dark:text-gray-200 mb-3">
                                                     Scholarship Eligibility Criteria</h4>
                                                 <ul class="space-y-3">
-                                                    <li v-for="(criterion, index) in criteria" :key="index"
+                                                    <li v-for="(criterion, index) in conditions" :key="index"
                                                         class="flex items-center space-x-2">
                                                         <span class="text-blue-600 font-medium">✔</span>
-                                                        <span class="text-gray-700 dark:text-gray-300">{{ criterion
-                                                        }}</span>
+                                                        <span class="text-gray-700 dark:text-gray-300">{{ criterion.name
+                                                            }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -91,7 +91,7 @@
                                                         class="flex items-center space-x-2">
                                                         <span class="text-green-600">✅</span>
                                                         <span class="text-gray-700 dark:text-gray-300">{{ detail
-                                                        }}</span>
+                                                            }}</span>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -149,21 +149,25 @@
 
                                 <!-- Step Content -->
                                 <div v-if="activeStep === 2">
-                                    <div class="bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 rounded-lg items-start justify-start p-5 sm:p-6 md:p-8 xl:p-10">
+                                    <div
+                                        class="bg-white grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 rounded-lg items-start justify-start p-5 sm:p-6 md:p-8 xl:p-10">
 
                                         <!-- Header Section -->
                                         <div class="col-span-full">
-                                            <h3 class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
+                                            <h3
+                                                class="font-semibold text-gray-900 dark:text-white mb-2 py-1 pl-3 border-primary border-l-4">
                                                 Scholarship Requirements
                                             </h3>
-                                            <p class="font-semibold text-xs uppercase text-gray-400 dark:text-white mb-4">
+                                            <p
+                                                class="font-semibold text-xs uppercase text-gray-400 dark:text-white mb-4">
                                                 Upload the needed file requirements
                                             </p>
                                         </div>
 
                                         <!-- Error Message -->
                                         <div class="col-span-full">
-                                            <InputError v-if="errors?.files" :message="errors.files" class="text-2xs text-red-500" />
+                                            <InputError v-if="errors?.files" :message="errors.files"
+                                                class="text-2xs text-red-500" />
                                         </div>
 
                                         <!-- Upload Requirements Section -->
@@ -172,12 +176,15 @@
                                                 class="border rounded-lg p-4 bg-white shadow-sm">
                                                 <div class="flex justify-between items-center mb-2">
                                                     <div class="flex items-center space-x-2">
-                                                        <span class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
+                                                        <span
+                                                            class="bg-yellow-400 text-black font-bold px-2 py-1 rounded">
                                                             {{ String.fromCharCode(65 + index) }}
                                                         </span>
-                                                        <span class="font-semibold text-gray-800">{{ requirement.requirements }}</span>
+                                                        <span class="font-semibold text-gray-800">{{
+                                                            requirement.requirements }}</span>
                                                     </div>
-                                                    <label class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
+                                                    <label
+                                                        class="bg-blue-900 text-white px-3 py-1 rounded cursor-pointer text-sm">
                                                         Add File
                                                         <input type="file" class="hidden"
                                                             @change="(e) => handleFile(e, requirement.id, requirement.requirements)"
@@ -189,14 +196,18 @@
                                                 <div v-if="form.files[requirement.id]"
                                                     class="border border-dashed border-purple-400 rounded-lg p-3 mt-2 flex items-center justify-between">
                                                     <div class="flex items-center space-x-3">
-                                                        <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png" class="w-8 h-8" alt="PDF Icon">
+                                                        <img src="https://img.icons8.com/ios-filled/50/000000/pdf.png"
+                                                            class="w-8 h-8" alt="PDF Icon">
                                                         <div>
-                                                            <p class="text-sm font-medium truncate max-w-[150px]" :title="form.files[requirement.id].name">
+                                                            <p class="text-sm font-medium truncate max-w-[150px]"
+                                                                :title="form.files[requirement.id].name">
                                                                 {{ form.files[requirement.id].name.length > 30
-                                                                    ? form.files[requirement.id].name.substring(0, 30) + '...'
-                                                                    : form.files[requirement.id].name }}
+                                                                    ? form.files[requirement.id].name.substring(0, 30) +
+                                                                    '...'
+                                                                : form.files[requirement.id].name }}
                                                             </p>
-                                                            <p class="text-xs text-gray-500">{{ form.files[requirement.id].size }}</p>
+                                                            <p class="text-xs text-gray-500">{{
+                                                                form.files[requirement.id].size }}</p>
                                                         </div>
                                                     </div>
                                                     <button type="button" @click="removeFile(requirement.id)"
@@ -217,10 +228,12 @@
                                                     class="border rounded-lg p-3 bg-white shadow-sm">
                                                     <div class="flex justify-between items-center gap-4">
                                                         <div class="flex items-center space-x-2">
-                                                            <span class="bg-green-400 text-black font-bold px-2 py-1 rounded">
+                                                            <span
+                                                                class="bg-green-400 text-black font-bold px-2 py-1 rounded">
                                                                 {{ String.fromCharCode(65 + index) }}
                                                             </span>
-                                                            <span class="font-semibold text-gray-800">{{ template.filename }}</span>
+                                                            <span class="font-semibold text-gray-800">{{
+                                                                template.filename }}</span>
                                                         </div>
                                                         <a :href="`/storage/scholarship_templates/${template.requirement_id}/${template.filename}`"
                                                             target="_blank"
@@ -239,7 +252,7 @@
                                                 Submit
                                             </button>
                                         </div>
-                                        </div>
+                                    </div>
 
 
                                 </div>
@@ -284,6 +297,10 @@ const props = defineProps({
         required: true
     },
     criterias: {
+        type: Array,
+        required: true
+    },
+    conditions: {
         type: Array,
         required: true
     },
@@ -419,7 +436,7 @@ const criteria = ref([
 // User's Eligible Details (Dummy Data)
 const userDetails = ref([
     "You are a Filipino citizen",
-    "Your GWA is 1.2",
+    "Your GWA is " + props.grade.grade ?? 0,
     "Your household income is within the required range",
     "You are enrolled at University of Rizal System"
 ]);

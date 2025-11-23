@@ -38,6 +38,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class ScholarshipController extends Controller
 {
@@ -1331,19 +1333,21 @@ class ScholarshipController extends Controller
         $requirements = Requirements::where('scholarship_id', $scholarshipId)->get();
         $totalRequirements = $requirements->count();
 
+        // Get applicants
         $applicants = $scholarship->applicants()
             ->with('scholar.campus', 'scholar.course')
             ->get();
 
         $completeSubmissionsCount = 0;
 
-        $scholars = $applicants->map(function ($applicant) use ($totalRequirements, &$completeSubmissionsCount, $request) {
+        // ------------ BUILD SCHOLAR ARRAY ------------
+        $scholars = $applicants->map(function ($applicant) use ($totalRequirements, &$completeSubmissionsCount) {
+
             if (!$applicant->scholar) {
                 return null;
             }
 
             $scholar = $applicant->scholar;
-
             $grade = Grade::where('scholar_id', $scholar->id)->first();
             $userPicture = User::where('id', $scholar->user_id)->first();
 
@@ -1355,10 +1359,11 @@ class ScholarshipController extends Controller
                 ->where('status', 'Returned')
                 ->count();
 
-            $countRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)
-                ->count();
+            $countRequirements = SubmittedRequirements::where('scholar_id', $scholar->id)->count();
 
+            // Determine requirement status
             $status = 'No submission';
+
             if ($totalRequirements > 0) {
                 if ($countRequirements === 0) {
                     $status = 'No submission';
@@ -1400,31 +1405,65 @@ class ScholarshipController extends Controller
                 'grade_path' => $grade ? $grade->path : null,
                 'date_applied' => $applicant->created_at,
             ];
-        })->filter();
+        })->filter()->values();
+        
 
-        if ($currentUser->usertype !== 'super_admin') {
-            $scholars = $scholars->filter(function ($scholar) use ($currentUser) {
-                return $scholar['campus_id'] == $currentUser->campus_id;
-            })->values();
+        // ------------- ML API CALL FOR RANKING -------------
+        try {
+            $response = Http::post('http://127.0.0.1:5001/rank_onetime', [
+                'scholars' => $scholars->toArray()
+            ]);
+
+            $rankingData = $response->json()['ranking'] ?? [];
+        } catch (\Exception $e) {
+            $rankingData = [];
         }
 
+        // attach rank + percentage (STRING KEYS FIXED)
+        $scholars = $scholars->map(function ($s) use ($rankingData) {
+            $id = (string)$s['id'];   // convert to string to match Flask keys
+
+            $s['rank'] = $rankingData[$id]['rank'] ?? null;
+            $s['percentage'] = $rankingData[$id]['percentage'] ?? null;
+
+            return $s;
+        });
+
+
+
+        // filter campus for non-admin
+        if ($currentUser->usertype !== 'super_admin') {
+            $scholars = $scholars->filter(fn($s) => $s['campus_id'] == $currentUser->campus_id)->values();
+        }
+
+        // sort: ranked first, then by date
+        $scholars = $scholars->sort(function ($a, $b) {
+
+            $rankA = $a['rank'];
+            $rankB = $b['rank'];
+
+            if ($rankA && $rankB) return $rankA <=> $rankB;
+            if ($rankA && !$rankB) return -1;
+            if (!$rankA && $rankB) return 1;
+
+            return strtotime($a['date_applied']) <=> strtotime($b['date_applied']);
+        })->values();
+
+        // --------- OTHER FRONTEND DATA ----------
         $campusRecipients = CampusRecipients::where('scholarship_id', $scholarshipId)->get();
         $totalSlots = $campusRecipients->sum('slots');
-
-        // Get courses with their campus relationships
         $courses = Course::with('campus')->get();
 
-        // Get scholarship form data
         $scholarship_form = ScholarshipForm::find(2);
         $scholarship_form_data = ScholarshipFormData::where('scholarship_form_id', 2)->get();
         $eligibilities = Eligibility::all();
         $conditions = Condition::all();
 
-        // Get the current school year
         $schoolYear = $request->input('selectedYear')
             ? SchoolYear::find($request->input('selectedYear'))
             : null;
 
+        // --------- RETURN TO FRONTEND ----------
         return Inertia::render('Staff/Scholarships/One-Time/OneTime_Applicants', [
             'scholarship' => $scholarship,
             'applicantTrack' => $applicantTrack,
@@ -1446,10 +1485,10 @@ class ScholarshipController extends Controller
             'userType' => $userType,
             'userCampusId' => $userType == 'coordinator' ? $currentUser->campus_id : null,
             'selectedCampus' => $request->input('selectedCampus', ''),
-            // Add error handling
             'errors' => session('errors') ? session('errors')->getBag('default')->toArray() : [],
         ]);
     }
+
 
     public function publishApplicantList(Request $request, $scholarshipId)
     {

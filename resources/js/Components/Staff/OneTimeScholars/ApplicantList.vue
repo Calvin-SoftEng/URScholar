@@ -161,19 +161,24 @@
                           </div>
                         </td>
                         <td><span class="font-bold text-gray-800">{{ scholar.grade }}</span></td>
-                       
+
                         <td class="text-center"><span class="font-bold text-gray-800">10,000 - 35,000</span></td>
 
-                         <td class="justify-center items-center text-center">
+                        <td class="justify-center items-center text-center">
                           <!-- Rank and Percentage -->
-                          <span class="font-bold text-lg">
-                            <span class="text-green-700" v-if="rank === 1">1st</span>
-                            <span class="text-green-500" v-if="rank === 2">2nd</span>
-                            <span class="text-green-400" v-if="rank === 3">3rd</span>
-                            <!-- <span class="text-gray-400" v-else>{{ rank }}th</span> -->
-                            <span class="text-sm ml-2">(95%)</span>
-                          </span>
-
+                          <div v-if="scholar.rank && scholar.percentage">
+                            <span class="font-bold text-lg">
+                              <span class="text-green-700" v-if="scholar.rank === 1">1st</span>
+                              <span class="text-green-500" v-else-if="scholar.rank === 2">2nd</span>
+                              <span class="text-green-400" v-else-if="scholar.rank === 3">3rd</span>
+                              <span class="text-gray-700" v-else>{{ scholar.rank }}{{ getRankSuffix(scholar.rank)
+                              }}</span>
+                            </span>
+                            <span class="text-sm ml-2 text-gray-600">({{ scholar.percentage }}%)</span>
+                          </div>
+                          <div v-else>
+                            <span class="text-sm text-gray-400">N/A</span>
+                          </div>
                         </td>
                       </template>
                       <td>
@@ -187,13 +192,6 @@
                       </td>
                     </tr>
                   </template>
-
-                  <!-- Cut-Off Line - Always show if there are scholars outside limit, even when filtered -->
-                  <tr v-if="hasScholarsOutsideLimitFiltered">
-                    <td colspan="8" class="text-center font-semibold text-red-600 py-4 bg-red-50">
-                      Cut-Off Line: Below applicants are NOT within the required {{ recipientLimit }} recipients.
-                    </td>
-                  </tr>
 
                   <!-- Scholars below recipient limit -->
                   <template v-for="scholar in scholarsOutsideLimitFiltered" :key="scholar.id">
@@ -578,6 +576,19 @@ const filteredByStatus = computed(() => {
 
   return filtered;
 });
+
+// Add this function alongside your other helper functions like getYearSuffix
+function getRankSuffix(rank) {
+  if (rank === 1) return 'st';
+  if (rank === 2) return 'nd';
+  if (rank === 3) return 'rd';
+  if (rank >= 11 && rank <= 13) return 'th'; // Special case for 11th, 12th, 13th
+  const lastDigit = rank % 10;
+  if (lastDigit === 1) return 'st';
+  if (lastDigit === 2) return 'nd';
+  if (lastDigit === 3) return 'rd';
+  return 'th';
+}
 
 // Total number of scholars after filtering
 const totalScholars = computed(() => filteredByStatus.value.length);

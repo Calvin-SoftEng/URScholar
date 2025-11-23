@@ -287,8 +287,6 @@ class DatabaseSeeder extends Seeder
             'status' => 'Pending',
         ]);
 
-        $this->call(ScholarshipSeeder::class);
-
         //school year
         // SchoolYear::factory()->create([
         //     'year' => '2021-2022',
@@ -518,5 +516,6 @@ class DatabaseSeeder extends Seeder
         //sponsor 
         $this->call(FormTableSeeder::class);
         $this->call(StudentSeeder::class);
+        $this->call(ScholarshipSeeder::class);
     }
 }
