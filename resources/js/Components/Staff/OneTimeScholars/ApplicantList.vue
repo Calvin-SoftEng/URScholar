@@ -427,7 +427,7 @@ const props = defineProps({
   selectedCampus: String,
   itemsPerPage: {
     type: Number,
-    default: 10
+    default: 25
   },
 
   // Additional data props
