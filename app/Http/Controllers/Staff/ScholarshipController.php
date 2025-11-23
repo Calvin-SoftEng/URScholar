@@ -7,6 +7,7 @@ use App\Events\NewNotification;
 use App\Models\Condition;
 use App\Models\Course;
 use App\Models\Eligibility;
+use App\Models\FamilyRecord;
 use App\Models\Grantees;
 use Inertia\Inertia;
 use App\Models\Scholarship;
@@ -33,6 +34,7 @@ use App\Models\ScholarshipFormData;
 use App\Models\SubmittedRequirements;
 use App\Models\Sponsor;
 use App\Models\Student;
+use App\Models\StudentRecord;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -1383,6 +1385,14 @@ class ScholarshipController extends Controller
                 ? ($approvedRequirements / $totalRequirements) * 100
                 : 0;
 
+            $studentRecord = StudentRecord::where('scholar_id', $scholar->id)->first();
+            $familyRecord = $studentRecord
+                ? FamilyRecord::where('student_record_id', $studentRecord->id)->first()
+                : null;
+
+            $familyIncome = $familyRecord->monthly_income;
+
+
             return [
                 'id' => $scholar->id,
                 'picture' => $userPicture->picture ?? null,
@@ -1400,13 +1410,14 @@ class ScholarshipController extends Controller
                 'submittedRequirements' => $approvedRequirements,
                 'totalRequirements' => $totalRequirements,
                 'progress' => $progress,
+                'familyincome' => $familyIncome,
                 'grade' => $grade ? $grade->grade : null,
                 'cog' => $grade ? $grade->cog : null,
                 'grade_path' => $grade ? $grade->path : null,
                 'date_applied' => $applicant->created_at,
             ];
         })->filter()->values();
-        
+
 
         // ------------- ML API CALL FOR RANKING -------------
         try {

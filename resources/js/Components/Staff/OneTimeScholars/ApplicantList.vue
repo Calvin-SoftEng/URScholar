@@ -88,8 +88,8 @@
                     <template v-else>
                       <th>Requirements</th>
                       <th>GWA</th>
-                      <th class="text-center">Applicant Ranking</th>
-                      <th>Monthly Income</th>
+                      <th class="text-center">Monthly Income</th>
+                      <th>Applicant Ranking</th>
                     </template>
                     <th></th>
                   </tr>
@@ -162,7 +162,7 @@
                         </td>
                         <td><span class="font-bold text-gray-800">{{ scholar.grade }}</span></td>
 
-                        <td class="text-center"><span class="font-bold text-gray-800">10,000 - 35,000</span></td>
+                        <td class="text-center"><span class="font-bold text-gray-800">{{scholar.familyincome}}</span></td>
 
                         <td class="justify-center items-center text-center">
                           <!-- Rank and Percentage -->
