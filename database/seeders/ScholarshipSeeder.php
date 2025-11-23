@@ -33,13 +33,13 @@ class ScholarshipSeeder extends Seeder
         ]);
 
         Sponsor::factory()->create([
-            'name' => 'Samsung Scholraship',
+            'name' => 'Samsung Scholarship',
             'created_id' => 2,
             'assign_id' => 7,
-            'abbreviation' => 'SSS',
+            'abbreviation' => 'SNU',
             'since' => '2001',
             'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
-            'logo' => 'dbp.webp',
+            'logo' => 'samsung.webp',
         ]);
 
         SponsorMoa::factory()->create([

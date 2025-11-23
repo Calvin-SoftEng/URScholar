@@ -35,7 +35,9 @@
                     <div class="text-3xl font-semibold text-gray-700 flex flex-col gap-2">
                         <h1
                             class="text-4xl font-kanit uppercase font-extrabold text-[darkblue] dark:text-dtext text-left">
-                            <span class="mr-2 font-kanit font-bold text-blue-400 tracking-[-.1rem]">\\</span>
+                            <button @click="goBack"
+                                class="mr-2 font-poppins font-extrabold text-blue-400 hover:text-blue-500">
+                                < </button>
                             <span>{{ scholarship?.name }}</span>
                             <span>{{ scholarship?.type }}</span>
                         </h1>
@@ -176,6 +178,10 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrig
 import ApplicantList from '../../../../Components/Staff/OneTimeScholars/ApplicantList.vue';
 import PayrollTable from '@/Components/Staff/ScholarsTabs/PayrollTable.vue';
 import { cloneDeep, isEqual } from 'lodash';
+
+const goBack = () => {
+    window.history.back();
+};
 
 const props = defineProps({
     scholarship: Object,
