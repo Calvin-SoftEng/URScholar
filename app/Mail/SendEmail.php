@@ -31,9 +31,10 @@ class SendEmail extends Mailable
     {
         return new Envelope(
             from: new Address('urscholar@ursbinangonan.com', 'URS Scholarship Unit'),
-            subject: 'You are on your way to becoming a scholar!',
+            subject: $this->mailData['subject'] ?? 'Default Subject',
         );
     }
+
 
     /**
      * Get the message content definition.

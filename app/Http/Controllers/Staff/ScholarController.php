@@ -59,6 +59,7 @@ class ScholarController extends Controller
 
         $academicYear = AcademicYear::with('school_year')->get();
         $campus = Campus::all();
+        $scholarships = Scholarship::all();
 
         return Inertia::render('Staff/Scholars/Scholars', [
             'grantees' => $grantees, // Changed from 'scholars' to 'grantees'
@@ -66,6 +67,7 @@ class ScholarController extends Controller
             'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null,
             'academicYear' => $academicYear,
             'campus' => $campus,
+            'scholarships'=> $scholarships
         ]);
     }
 
@@ -689,6 +691,13 @@ class ScholarController extends Controller
         $campuses = Campus::all();
         $course = Course::all();
 
+
+
+        $getAcademicYear = AcademicYear::where('school_year_id', $selectedYear)->first();
+
+        $students = Student::where("academic_year_id", $getAcademicYear->id)->where("semester", $selectedSem)->get();
+
+
         return Inertia::render(
             'Staff/Scholarships/AddingScholars',
             [
@@ -699,6 +708,7 @@ class ScholarController extends Controller
                 'batch' => $batch,
                 'campuses' => $campuses,
                 'course' => $course,
+                'students' => $students,
             ]
         );
     }
@@ -1569,6 +1579,7 @@ class ScholarController extends Controller
         $request->validate([
             'grant' => 'required',
             'batch_id' => 'required',
+            'endorsed' => 'required',
             'hei_name' => 'required',
             'campus_id' => 'required',
             'course_id' => 'required',
@@ -1586,6 +1597,8 @@ class ScholarController extends Controller
             'semester' => 'required',
             'schoolyear' => 'required',
         ]);
+        
+        dd($request->all());
 
 
         $highestId = Scholar::where('urscholar_id', 'LIKE', 'URS-%')

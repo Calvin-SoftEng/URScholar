@@ -24,10 +24,10 @@
         <div class="w-full flex flex-col items-center space-y-4">
             <!-- Check if scholarships exist -->
             <template v-if="scholarships && scholarships.length > 0">
-                <div v-if="grade">
-                    <div v-for="scholarship in scholarships" :key="scholarship.id"
-                        class="p-6 w-full min-w-xl bg-white shadow-lg rounded-lg mb-4">
-                        <div v-if="scholarship.status == 'Active'">
+                <div v-if="grade" class="w-full flex flex-col items-center space-y-4">
+                    <template v-for="scholarship in scholarships" :key="scholarship.id">
+                        <div v-if="scholarship.status == 'Active'"
+                            class="p-6 w-full min-w-xl bg-white shadow-lg rounded-lg">
                             <div class="flex flex-row items-center gap-6 justify-between">
                                 <!-- Scholarship Image -->
                                 <img :src="`/storage/sponsor/logo/${getSponsorDetails(scholarship.sponsor_id).logo}`"
@@ -63,22 +63,6 @@
                                                         'numeric', month: 'long', day: 'numeric'
                                                 }) }}</span>
                                         </div>
-                                        <!-- Grade requirement display -->
-                                        <!-- <div class="flex flex-col items-start">
-                                            <span class="text-gray-500 text-sm">Min. Grade Required</span>
-                                            <span class="font-medium"
-                                                :class="meetsGradeRequirement(scholarship) ? 'text-green-600' : 'text-red-500'">
-                                                {{ getRequiredGrade(scholarship) }}
-                                            </span>
-                                        </div> -->
-                                        <!-- Campus requirement display -->
-                                        <!-- <div class="flex flex-col items-start">
-                                            <span class="text-gray-500 text-sm">Campus Eligibility</span>
-                                            <span class="font-medium"
-                                                :class="meetsCampusRequirement(scholarship) ? 'text-green-600' : 'text-red-500'">
-                                                {{ getCampusEligibilityLabel(scholarship) }}
-                                            </span>
-                                        </div> -->
                                     </div>
                                 </div>
 
@@ -94,14 +78,10 @@
                                         View More
                                     </button>
                                     </Link>
-                                    <!-- <button v-else
-                                        class="bg-gray-400 text-white px-10 py-2 rounded-lg shadow-md cursor-not-allowed">
-                                        Not Eligible
-                                    </button> -->
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </template>
                 </div>
                 <div v-else
                     class="max-w-4xl flex flex-col items-center justify-center p-10 text-center bg-white border border-gray-200 rounded-xl shadow-md">
@@ -210,14 +190,6 @@ const meetsCampusRequirement = (scholarship) => {
             }
         }
     }
-
-    // Check if student's campus is in any of the scholarship's campus recipients
-    // for (const recipient of scholarship.campusRecipients) {
-    //     if (recipient.selected_campus.includes('Bachelor of Science in Information Technology')) {
-    //         console.log('meron siya');
-    //         return true;
-    //     }
-    // }
 
     return false;
 };

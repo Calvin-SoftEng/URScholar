@@ -85,11 +85,11 @@ const submit = () => {
 const blockUser = () => {
     isBlocked.value = true;
     errorMessage.value = 'Too many failed attempts. Try again in 3 minutes.';
-    const unblockTime = Date.now() + 180000; // 3 minutes
+    const unblockTime = Date.now() + 10; // 3 minutes
 
     localStorage.setItem('blockEndTime', unblockTime);
     localStorage.setItem('errorMessage', errorMessage.value);
-    setTimeout(unblockUser, 180000);
+    setTimeout(unblockUser, 10);
 };
 
 const unblockUser = () => {

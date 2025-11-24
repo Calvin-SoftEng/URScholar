@@ -81,10 +81,15 @@ class SettingsController extends Controller
             'imgName' => 'required|string',
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
-            'sponsor_name' => 'required|string|max:255',
+            'sponsor_first_name' => 'required|string|max:255',
+            'sponsor_middle_name' => 'required|string|max:255',
+            'sponsor_last_name' => 'required|string|max:255',
+            'sponsor_number' => 'required|string|max:255',
             'email' => 'required|email',
             'validity' => 'required|date',
         ]);
+
+        //d($request);
 
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
@@ -112,15 +117,20 @@ class SettingsController extends Controller
         $password = Str::random(8);
 
         $user = User::create([
-            'name' => $request->sponsor_name,
+            'name' => $request->sponsor_first_name . " " . $request->sponsor_last_name,
+            'first_name' => $request->sponsor_first_name,
+            'middle_name' => $request->sponsor_middle_name,
+            'last_name' => $request->sponsor_last_name,
             'email' => $request->email,
+            'usertype' => 'sponsor',
             'password' => bcrypt($password),
         ]);
 
         // Sending Emails
         $mailData = [
+            'subject' => 'Welcome to URScholar, ' . $request->sponsor_first_name . '!',
             'title' => 'Welcome to the URScholar Portal',
-            'body' => "Dear " . $request->sponsor_name . ",\n\n" .
+            'body' => "Dear " . $request->sponsor_first_name . " " . $request->sponsor_last_name . ",\n\n" .
                 "Welcome to the URScholar Portal! We’re excited to have you on board as a valued sponsor in our scholarship program.\n\n" .
                 "Below are your login credentials to access the system:\n\n" .
                 "Email: " . $request->email . "\n" .
@@ -131,10 +141,9 @@ class SettingsController extends Controller
                 "URScholar Team"
         ];
 
-        // Create mailable instance
         $email = new SendEmail($mailData);
-
         Mail::to($request->email)->send($email);
+
 
         $sponsor = Sponsor::create([
             'name' => $request->name,
@@ -317,7 +326,6 @@ class SettingsController extends Controller
             $missingHeaders = array_diff($requiredHeaders, $headers);
 
             if (!empty($missingHeaders)) {
-                // return redirect()->back()->with('error', 'Missing required columns: ' . implode(', ', $missingHeaders));
                 return back()->withErrors([
                     'file' => 'Missing required columns: ' . implode(', ', $missingHeaders),
                 ])->withInput();
@@ -328,6 +336,8 @@ class SettingsController extends Controller
             $importErrors = [];
             $successCount = 0;
             $skipCount = 0;
+            $duplicateCount = 0;
+            $updatedCount = 0;
 
             // Get current academic year
             $current_year = AcademicYear::where('status', 'Active')->first();
@@ -337,6 +347,15 @@ class SettingsController extends Controller
 
             // Get the current user's campus ID
             $userCampusId = Auth::user()->campus_id;
+
+            // Get all existing student numbers for efficient duplicate checking
+            $existingStudents = Student::whereIn(
+                'student_number',
+                array_column(iterator_to_array($csv->getRecords()), 'student_number')
+            )->get()->keyBy('student_number');
+
+            // Reset CSV reader
+            $csv->setHeaderOffset(0);
 
             // Process each record for student import
             foreach ($csv->getRecords() as $index => $record) {
@@ -349,6 +368,16 @@ class SettingsController extends Controller
                         'errors' => $validationErrors
                     ];
                     $skipCount++;
+                    continue;
+                }
+
+                // Check if student already exists
+                if (isset($existingStudents[$record['student_number']])) {
+                    $importErrors[] = [
+                        'row' => $index + 2,
+                        'errors' => ["Student with number '{$record['student_number']}' already exists"]
+                    ];
+                    $duplicateCount++;
                     continue;
                 }
 
@@ -407,7 +436,11 @@ class SettingsController extends Controller
             if (!empty($insertData)) {
                 Student::insert($insertData);
             } else {
-                return redirect()->back()->with('error', 'No valid student records found for import.');
+                $errorMessage = 'No valid student records found for import.';
+                if ($duplicateCount > 0) {
+                    $errorMessage .= " {$duplicateCount} duplicate(s) were skipped.";
+                }
+                return redirect()->back()->with('error', $errorMessage);
             }
 
             // Get all the student numbers we just imported
@@ -493,20 +526,14 @@ class SettingsController extends Controller
             ActivityLog::create([
                 'user_id' => Auth::user()->id,
                 'activity' => 'Create',
-                'description' => "Imported {$successCount} students)",
+                'description' => "Imported {$successCount} students",
             ]);
 
             // Prepare success message
             $flashMessage = "Successfully imported {$successCount} students";
-            // if ($matchedScholars > 0) {
-            //     $flashMessage .= ", verified {$matchedScholars} scholars";
-            // }
-            // if ($unmatchedScholars > 0) {
-            //     $flashMessage .= ", {$unmatchedScholars} scholars remain unverified";
-            // }
-            // if ($skipCount > 0) {
-            //     $flashMessage .= " (Skipped {$skipCount} rows with errors)";
-            // }
+            if ($duplicateCount > 0) {
+                $flashMessage .= " ({$duplicateCount} duplicate(s) skipped)";
+            }
 
             // Prepare redirect with detailed information
             $redirect = redirect()->back()->with('success', $flashMessage);
@@ -517,7 +544,6 @@ class SettingsController extends Controller
             }
 
             return $redirect;
-
         } catch (\Exception $e) {
             // Log the full error for debugging
             \Log::error('Student import error: ' . $e->getMessage(), [
@@ -528,7 +554,6 @@ class SettingsController extends Controller
             return redirect()->back()->with('error', 'An unexpected error occurred during import: ' . $e->getMessage());
         }
     }
-
     /**
      * Helper method to update or create a grantee record
      */

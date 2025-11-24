@@ -39,6 +39,9 @@ use Inertia\Inertia;
 // })->name('welcome');
 
 Route::get('/', [LandingPageController::class, 'index'])->name('welcome');
+Route::get('/test-predict', [LandingPageController::class, 'predict']);
+Route::post('/predict', [LandingPageController::class, 'predict']);
+
 
 // Route::get('/dashboard', function () {
 //     return Inertia::render('Dashboard');
@@ -169,7 +172,10 @@ Route::middleware(['auth', 'usertype:super_admin,coordinator'])->group(function 
 
     Route::get('/scholarships', [ScholarshipController::class, 'scholarship'])->name('scholarships.index');
     // Route::post('/scholarships', [ScholarshipController::class, 'store'])->name('scholarships.store');
-    Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
+    //Route::put('/scholarships/{id}', [ScholarshipController::class, 'update'])->name('scholarships.update');
+    Route::put('/scholarships/{id}', [ScholarshipController::class, 'update_scholarship'])
+    ->name('scholarships.update');
+
 
 
     //Scholarship One-Time

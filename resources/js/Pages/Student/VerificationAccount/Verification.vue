@@ -465,86 +465,10 @@
                                                 Please fill-up missing required fields. Leave N/A if not applicable</p>
                                         </div>
 
-                                        <!-- gwa -->
-                                        <div
-                                            class="col-span-3 whitespace-nowrap gap-2 relative flex flex-row justify-center items-center mb-2">
-                                            <h3
-                                                class="font-semibold whitespace-nowrap text-[12px] text-blue-900 dark:text-white text-center">
-                                                General Weighted Average <span class="italic">(you can set this up
-                                                    later)</span>
-                                            </h3>
-                                            <div
-                                                class="pl-2 w-full h-0.5 bg-gray-200 rounded-lg relative flex items-center justify-center">
-
-                                            </div>
-                                        </div>
-
-                                        <div v-if="scholar" class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
-                                            <!-- <span class="text-sm text-gray-500 italic">* You can set this up
-                                                later</span> -->
-                                            <div
-                                                class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
-                                                <!-- GWA Input -->
-                                                <div
-                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
-                                                    <Label for="gwa">Enter General Weighted Average
-                                                        <span class="italic text-gray-500">*must be {{
-                                                            props.batch_semester }} semester {{ school_year.year
-                                                            }}
-                                                        </span>
-                                                    </Label>
-                                                    <input id="gwa" v-model="form.grade" type="text"
-                                                        placeholder="Enter your GWA (e.g., 2.0)"
-                                                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
-                                                </div>
-
-                                                <!-- File Upload -->
-                                                <div
-                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
-                                                    <Label for="file_upload">Upload Certificate of Grade</Label>
-                                                    <input id="file_upload" type="file" @change="handleFile"
-                                                        class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
-                                                        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div v-else class="col-span-3 md:col-span-2 lg:col-span-3 w-full">
-                                            <span class="text-sm text-red-500 italic ">* You can set this up
-                                                after verification</span>
-
-                                            <div
-                                                class="col-span-1 md:col-span-2 lg:col-span-3 w-full flex flex-col md:flex-row md:items-center gap-4">
-                                                <!-- GWA Input -->
-                                                <div
-                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-2/3 flex flex-col gap-1.5">
-                                                    <Label for="gwa">Enter General Weighted Average
-                                                        <span class="italic text-gray-500">*must be {{
-                                                            props.batch_semester }} semester {{ school_year.year
-                                                            }}
-                                                        </span>
-                                                    </Label>
-                                                    <input id="gwa" v-model="form.grade" type="text" disabled
-                                                        placeholder="Enter your GWA (e.g., 2.0)"
-                                                        class="w-full border border-gray-300 p-2 rounded-lg focus:ring focus:ring-blue-200" />
-                                                </div>
-
-                                                <!-- File Upload -->
-                                                <div
-                                                    class="col-span-1 md:col-span-2 lg:col-span-3 w-full md:w-1/3 flex flex-col gap-1.5">
-                                                    <Label for="file_upload">Upload Certificate of Grade</Label>
-                                                    <input id="file_upload" type="file" disabled
-                                                        class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 
-                                                        dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
-                                                </div>
-                                            </div>
-                                        </div>
-
-
 
                                         <!-- elementary -->
                                         <div
-                                            class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-4 mb-2">
+                                            class="col-span-3 gap-2 relative flex flex-row justify-center items-center mt-0 mb-2">
                                             <h3
                                                 class="font-semibold text-[12px] text-blue-900 dark:text-white text-center">
                                                 Elementary

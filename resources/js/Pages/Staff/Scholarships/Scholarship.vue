@@ -31,6 +31,7 @@
                         <span class="text-xl">SY {{ schoolyear?.year || '2024' }} - {{ props.selectedSem || 'Semester'
                             }} Semester</span>
                     </div>
+                    
                     <!--Condition for scholarship type-->
                     <div v-if="scholarship.scholarshipType == 'Grant-Based' && scholarship.user_id == $page.props.auth.user.id"
                         class="flex gap-2">
@@ -74,8 +75,8 @@
                                             ? 'Please validate all scholars before sending emails'
                                             : 'Send emails to validated scholars')" :disabled="students.length === 0"
                                         class="mt-2 px-4 py-2 text-sm text-primary dark:text-dtext bg-yellow-100 dark:bg-yellow-800 
-           border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
-           font-poppins flex items-center gap-2">
+                                        border border-yellow-300 dark:border-yellow-500 rounded-lg hover:bg-yellow-200 
+                                        font-poppins flex items-center gap-2">
                                         <i class="pi pi-exclamation-triangle text-yellow-600 dark:text-yellow-300"></i>
                                         <font-awesome-icon :icon="['far', 'envelope']"
                                             class="text-sm dark:text-dtext" />
@@ -83,8 +84,8 @@
                                     </button>
                                 </div>
                                 <div v-else>
-                                    <button @click="openSendEmail" :disabled="disableSendEmailButton" class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
-        border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2"
+                                    <button @click="openSendEmail"  class="px-4 py-2 text-sm text-primary dark:text-dtext bg-dirtywhite dark:bg-[#3b5998] 
+                                    border border-1-gray-100 rounded-lg hover:bg-gray-100 font-poppins flex items-center gap-2"
                                         :class="{ 'opacity-50 cursor-not-allowed': disableSendEmailButton }">
                                         <font-awesome-icon :icon="['far', 'envelope']"
                                             class="text-sm dark:text-dtext" />
@@ -93,9 +94,6 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                     </div>
                 </div>
 
@@ -912,7 +910,7 @@
                                                                 class="text-red-500 font-medium dark:text-dtext">
                                                                 *{{ parseInt(form.totalRecipients) - allocatedRecipients
                                                                 }}
-                                                                recipients still need to be allocated
+                                                                recipients needs to be allocated
                                                             </div>
                                                         </div>
                                                     </div>
@@ -960,24 +958,23 @@
                                         </div>
 
                                         <!-- Right Side: Course List Display Grouped by Campus -->
-                                        <div class="flex flex-col space-y-4">
-                                            <div v-for="campus in selectedCampuses" :key="campus.id"
-                                                class="py-3 px-4 bg-gray-50 dark:bg-dnavy border rounded-md">
+                                        <div class="flex flex-col space-y-4 overflow-y-auto flex-grow scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100 scrollbar-thumb-rounded"> <!-- You can adjust max-h based on your needs -->
+                                            <div v-for="campus in selectedCampuses" :key="campus.id" class="py-3 px-4 bg-gray-50 dark:bg-dnavy border rounded-md">
                                                 <!-- Selected Campus Name -->
                                                 <div class="text-sm font-semibold text-gray-700 mb-2 dark:text-dtext">
-                                                    {{ campus.name }}
+                                                {{ campus.name }}
                                                 </div>
 
                                                 <!-- Courses Offered for this Campus -->
                                                 <div v-for="course in campus.courses" :key="course" class="mt-1">
-                                                    <input type="checkbox" :id="`course-${campus.id}-${course}`"
-                                                        v-model="selectedCoursesMap[course]" class="rounded" />
-                                                    <label :for="`course-${campus.id}-${course}`"
-                                                        class="text-sm ml-2 cursor-pointer dark:text-dtext">{{
-                                                            course }}</label>
+                                                <input type="checkbox" :id="`course-${campus.id}-${course}`" v-model="selectedCoursesMap[course]" class="rounded" />
+                                                <label :for="`course-${campus.id}-${course}`" class="text-sm ml-2 cursor-pointer dark:text-dtext">
+                                                    {{ course }}
+                                                </label>
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
 
 
@@ -985,90 +982,101 @@
 
                                     <h3 class="text-base font-medium text-black dark:text-dtext">List
                                         Criteria and Eligibility</h3>
-                                    <div class="grid grid-cols-2 space-x-2">
-                                        <div class="w-full flex flex-col p-2">
+                                        <div class="grid grid-cols-2 space-x-2">
+                                            <div class="w-full flex flex-col p-2">
 
-                                            <div class="space-y-4">
-                                                <div class="flex flex-col justify-center items-start">
-                                                    <span
-                                                        class="text-sm font-medium text-black whitespace-nowrap mb-2 dark:text-dtext">General
-                                                        Weighted Average must be:
-                                                    </span>
+                                                <div class="space-y-4">
+                                                    <div class="flex flex-col justify-center items-start">
+                                                        <div class="flex flex-row space-x-3 items-start">
+                                                            <span
+                                                                class="text-sm font-medium text-black whitespace-nowrap mb-2 dark:text-dtext">General
+                                                                Weighted Average must be:
+                                                            </span>
+                                                            
+                                                        <InputError v-if="errors?.conditions" :message="errors.conditions"
+                                                            class="text-2xs text-red-500" />
+                                                        </div>  
 
-                                                    <input v-model="form.grade" type="text" id="name"
-                                                        placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
+                                                        <input v-model="form.grade" type="text" id="name"
+                                                            placeholder="Enter Grade Criteria (e.g., GWA 95 1.1)"
+                                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600" />
 
+                                                    </div>
+
+                                                    <div class="flex flex-col space-y-2 justify-center items-start">
+                                                        <span
+                                                            class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
+                                                            Must be enrolled in:
+                                                        </span>
+
+                                                        <textarea v-model="selectedCoursesText" id="name" rows="3"
+                                                            placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
+                                                            class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
+                                                            readonly>
+                                                    </textarea>
+                                                    </div>
+
+                                                    <InputError v-if="errors?.conditions" :message="errors.conditions"
+                                                        class="text-2xs text-red-500" />
+                                                    <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
+                                                        class="flex flex-col justify-center space-y-2 items-start">
+                                                        <span
+                                                            class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
+                                                            {{ eligiblity.name }}
+                                                        </span>
+                                                        <div v-for="conditions in getFormData(eligiblity.id)"
+                                                            :key="conditions.id" class="flex items-center space-x-2 mb-1">
+                                                            <input id="accept-terms-{{ conditions.id }}" type="checkbox"
+                                                                class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                                                                :checked="conditionIncludes(conditions.id)"
+                                                                @change="toggleCondition(conditions.id)">
+                                                            <label
+                                                                class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
+                                                                {{ conditions.name }}
+                                                            </label>
+                                                        </div>
+                                                    </div>
                                                 </div>
+                                            </div>
 
-                                                <div class="flex flex-col space-y-2 justify-center items-start">
-                                                    <span
-                                                        class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
-                                                        Must be enrolled in:
-                                                    </span>
+                                            <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
+                                                <div class="p-4 ">
+                                                    <div class="flex flex-row space-x-3 items-center mb-2">
+                                                    <h4 class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
+                                                            {{ scholarship_form.name }}</h4>
+                                                        <InputError v-if="errors?.criteria" :message="errors.criteria"
+                                                        class="text-2xs text-red-500" />
+                                                    </div>
 
-                                                    <textarea v-model="selectedCoursesText" id="name" rows="3"
-                                                        placeholder="Specific courses will appear here if there are any selected... If none, will show for All Courses"
-                                                        class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-base w-full resize-none dark:text-dtext dark:border dark:bg-dsecondary dark:border-gray-600"
-                                                        readonly>
-                                    </textarea>
-                                                </div>
-
-                                                <InputError v-if="errors?.conditions" :message="errors.conditions"
-                                                    class="text-2xs text-red-500" />
-                                                <div v-for="eligiblity in eligibilities" :key="eligiblity.id"
-                                                    class="flex flex-col justify-center space-y-2 items-start">
-                                                    <span
-                                                        class="text-sm font-medium text-black whitespace-nowrap dark:text-dtext">
-                                                        {{ eligiblity.name }}
-                                                    </span>
-                                                    <div v-for="conditions in getFormData(eligiblity.id)"
-                                                        :key="conditions.id" class="flex items-center space-x-2 mb-1">
-                                                        <input id="accept-terms-{{ conditions.id }}" type="checkbox"
+                                                    <div v-for="data in scholarship_form_data" :key="data.id"
+                                                        class="flex items-center space-x-2 mb-1">
+                                                        <input id="accept-terms-{{ data.id }}" type="checkbox"
                                                             class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                            :checked="conditionIncludes(conditions.id)"
-                                                            @change="toggleCondition(conditions.id)">
-                                                        <label
-                                                            class="text-base font-medium text-gray-700 dark:text-gray-300 cursor-pointer">
-                                                            {{ conditions.name }}
+                                                            :checked="criteriaIncludes(data.id)"
+                                                            @change="toggleCriteria(data.id)">
+                                                        <label :for="'accept-terms-' + data.id"
+                                                            class="text-sm font-medium text-gray-700 cursor-pointer dark:text-dtext">
+                                                            {{ data.name }}
                                                         </label>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <InputError v-if="errors?.criteria" :message="errors.criteria"
-                                            class="text-2xs text-red-500" />
-                                        <div class="grid grid-cols-1 md:grid-cols-1 gap-4 mt-4">
-                                            <div class="p-4 ">
-                                                <h4 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-2">
-                                                    {{ scholarship_form.name }}</h4>
-
-                                                <div v-for="data in scholarship_form_data" :key="data.id"
-                                                    class="flex items-center space-x-2 mb-1">
-                                                    <input id="accept-terms-{{ data.id }}" type="checkbox"
-                                                        class="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                                                        :checked="criteriaIncludes(data.id)"
-                                                        @change="toggleCriteria(data.id)">
-                                                    <label :for="'accept-terms-' + data.id"
-                                                        class="text-sm font-medium text-gray-700 cursor-pointer dark:text-dtext">
-                                                        {{ data.name }}
-                                                    </label>
-                                                </div>
-                                            </div>
+                                        
                                         </div>
-                                    </div>
 
                                     <div class="w-full border-t border-gray-200 my-4"></div>
 
                                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                         <div class="w-full">
-                                            <label for="totalRecipients"
-                                                class="text-sm font-medium text-gray-700 dark:text-dtext">
-                                                List Requirements
-                                            </label>
-                                            <InputError v-if="errors?.requirements" :message="errors.requirements"
-                                                class="text-2xs text-red-500" />
+                                            <div class="flex flex-row space-x-3 items-start mb-2">
+                                                <label for="totalRecipients"
+                                                    class="text-sm font-medium text-gray-700 dark:text-dtext">
+                                                    List Requirements
+                                                </label>
+                                                <InputError v-if="errors?.requirements" :message="errors.requirements"
+                                                    class="text-2xs text-red-500" />
+                                            </div>
                                             <ul class="w-full text-sm font-medium text-gray-900 dark:text-white">
                                                 <div class="flex items-center mb-4 w-full">
                                                     <form @submit.prevent="addItem" class="flex items-center w-full">

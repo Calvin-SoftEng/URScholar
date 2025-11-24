@@ -1,8 +1,23 @@
 <template>
   <div class="w-full mt-5 bg-white rounded-xl">
+    <div v-if="EditOneTime">
+      <OneTimeScholarship :editonetime="EditOneTime" :scholarship="scholarship" :schoolyear="schoolyear"
+        :selectedSem="selectedSem" :selectedYear="selectedYear" :selectedCampus="selectedCampus" :campuses="campuses"
+        :courses="courses" :scholarship_form="scholarship_form" :scholarship_form_data="scholarship_form_data"
+        :eligibilities="eligibilities" :conditions="conditions" :requirements="requirements"
+        :campusRecipients="campusRecipients" :totalSlots="totalSlots" :errors="errors" :userType="userType"
+        :userCampusId="userCampusId" @update-editonetime="updateEditonetime" />
+    </div>
+
     <!-- Header section with buttons remains unchanged -->
-    <div class="px-4 pt-4 flex flex-row justify-between items-center">
+    <div v-if="OneTimeApplicants" class="px-4 pt-4 flex flex-row justify-between items-center">
       <div class="flex flex-row gap-2">
+        <!-- edit scholarship -->
+        <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="toggleEdit" class="flex items-center gap-2 border border-blue-600 bg-primary font-poppins text-white px-4 py-2 rounded-lg transition duration-200
+                  hover:bg-white hover:text-white disabled:opacity-50 disabled:cursor-not-allowed">
+          <font-awesome-icon :icon="['fas', 'graduation-cap']" class="text-base" />
+          <span class="font-normal">Edit <span class="font-semibold">Scholarship</span></span>
+        </button>
         <!-- Publish Button -->
         <button v-if="$page.props.auth.user.usertype == 'super_admin'" @click="togglePublish" class="flex items-center gap-2 border border-blue-600 font-poppins text-primary px-4 py-2 rounded-lg transition duration-200
                   hover:bg-blue-300 disabled:opacity-50 disabled:cursor-not-allowed">
@@ -73,7 +88,8 @@
                     <template v-else>
                       <th>Requirements</th>
                       <th>GWA</th>
-                      <th>Status</th>
+                      <th class="text-center">Monthly Income</th>
+                      <th>Applicant Ranking</th>
                     </template>
                     <th></th>
                   </tr>
@@ -131,21 +147,40 @@
                             <div class="bg-yellow-300 h-full rounded-full" :style="{ width: scholar.progress + '%' }">
                             </div>
                           </div>
+                          <!-- Status below progress bar -->
+                          <div class="mt-1">
+                            <span :class="{
+                              'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
+                              'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
+                              'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete',
+                              'bg-blue-100 text-blue-800 border border-blue-400': scholar.status === 'Submitted',
+                              'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Returned'
+                            }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full block text-center">
+                              {{ scholar.status }}
+                            </span>
+                          </div>
                         </td>
                         <td><span class="font-bold text-gray-800">{{ scholar.grade }}</span></td>
-                        <td>
-                          <span :class="{
-                            'bg-green-100 text-green-800 border border-green-400': scholar.status === 'Complete',
-                            'bg-gray-200 text-gray-500 border border-gray-400': scholar.status === 'No submission',
-                            'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Incomplete',
-                            'bg-blue-100 text-blue-800 border border-blue-400': scholar.status === 'Submitted',
-                            'bg-red-100 text-red-800 border border-red-400': scholar.status === 'Returned'
-                          }" class="text-xs font-medium px-2.5 py-0.5 rounded w-full">
-                            {{ scholar.status }}
-                          </span>
+
+                        <td class="text-center"><span class="font-bold text-gray-800">{{scholar.familyincome}}</span></td>
+
+                        <td class="justify-center items-center text-center">
+                          <!-- Rank and Percentage -->
+                          <div v-if="scholar.rank && scholar.percentage">
+                            <span class="font-bold text-lg">
+                              <span class="text-green-700" v-if="scholar.rank === 1">1st</span>
+                              <span class="text-green-500" v-else-if="scholar.rank === 2">2nd</span>
+                              <span class="text-green-400" v-else-if="scholar.rank === 3">3rd</span>
+                              <span class="text-gray-700" v-else>{{ scholar.rank }}{{ getRankSuffix(scholar.rank)
+                              }}</span>
+                            </span>
+                            <span class="text-sm ml-2 text-gray-600">({{ scholar.percentage }}%)</span>
+                          </div>
+                          <div v-else>
+                            <span class="text-sm text-gray-400">N/A</span>
+                          </div>
                         </td>
                       </template>
-
                       <td>
                         <Link :href="`/scholarships/scholar=${scholar.id}/one-time`">
                         <button
@@ -157,13 +192,6 @@
                       </td>
                     </tr>
                   </template>
-
-                  <!-- Cut-Off Line - Always show if there are scholars outside limit, even when filtered -->
-                  <tr v-if="hasScholarsOutsideLimitFiltered">
-                    <td colspan="8" class="text-center font-semibold text-red-600 py-4 bg-red-50">
-                      Cut-Off Line: Below applicants are NOT within the required {{ recipientLimit }} recipients.
-                    </td>
-                  </tr>
 
                   <!-- Scholars below recipient limit -->
                   <template v-for="scholar in scholarsOutsideLimitFiltered" :key="scholar.id">
@@ -381,21 +409,100 @@
 import { ref, computed, onMounted } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import { ToastProvider, ToastRoot, ToastTitle, ToastDescription, ToastViewport } from 'radix-vue';
+import OneTimeScholarship from '@/Components/Staff/OneTimeScholars/OneTimeScholarship.vue';
+
+const rank = 1;
 
 // Props definition
 const props = defineProps({
+  // Core props (original)
   scholars: Array,
   scholarship: Object,
   totalSlots: Number,
   campusRecipients: Array,
   currentUser: Object,
   schoolyear: Object,
-  selectedSem: Object,
+  selectedSem: String,
+  selectedYear: String,
+  selectedCampus: String,
   itemsPerPage: {
     type: Number,
-    default: 10
-  }
+    default: 25
+  },
+
+  // Additional data props
+  batches: Array,
+  requirements: Array,
+  payout: Array,
+  payouts: Object,
+  payoutsByCampus: Array,
+  applicants: Array,
+  applicantTrack: Object,
+  campuses: Array,
+  courses: Array,
+
+  // Form & eligibility data
+  scholarship_form: Object,
+  scholarship_form_data: Array,
+  eligibilities: Array,
+  conditions: Array,
+
+  // User data
+  userType: String,
+  userCampusId: Number,
+
+  // Batch data
+  totalBatches: Number,
+  batchesByCampus: Array,
+  completedBatches: Array,
+  payoutBatches: Array,
+  allBatches: Array,
+  activeBatches: Array,
+  allBatchesAccomplished: Array,
+
+  // Grantees & scholars data
+  grantees: Array,
+  students: Array,
+  total_approved: Array,
+  total_scholars: Array,
+  total_verified_grantees: Number,
+  total_unverified_grantees: Number,
+
+  // Status flags
+  allBatchesInactive: [Object, Boolean],
+  disableSendEmailButton: Boolean,
+  noScholars: Boolean,
+  inactiveBatches: Boolean,
+  accomplishedBatches: Boolean,
+  inactivePayouts: Boolean,
+  hasActiveGrantees: Boolean,
+  valitedScholars: Boolean,
+  myInactive: Boolean,
+  allInactive: Boolean,
+  valitedBatches: Boolean,
+  myvalidated: Boolean,
+  checkValidated: Boolean,
+  granteeInactive: Boolean,
+  validationStatus: Boolean,
+  AllvalidationStatus: Boolean,
+
+  // Other props
+  errors: Object,
+  totalSubTotal: Number,
+  approvedCount: Number,
 });
+
+const EditOneTime = ref(false);
+const OneTimeApplicants = ref(true);
+
+const toggleEdit = () => {
+  EditOneTime.value = !EditOneTime.value;
+  OneTimeApplicants.value = false;
+};
+
+const updateEditonetime = (newValue) => {
+  EditOneTime.value = newValue; // Sync changes from child to parent
+}
 
 // State variables
 const loading = ref(false);
@@ -469,6 +576,19 @@ const filteredByStatus = computed(() => {
 
   return filtered;
 });
+
+// Add this function alongside your other helper functions like getYearSuffix
+function getRankSuffix(rank) {
+  if (rank === 1) return 'st';
+  if (rank === 2) return 'nd';
+  if (rank === 3) return 'rd';
+  if (rank >= 11 && rank <= 13) return 'th'; // Special case for 11th, 12th, 13th
+  const lastDigit = rank % 10;
+  if (lastDigit === 1) return 'st';
+  if (lastDigit === 2) return 'nd';
+  if (lastDigit === 3) return 'rd';
+  return 'th';
+}
 
 // Total number of scholars after filtering
 const totalScholars = computed(() => filteredByStatus.value.length);

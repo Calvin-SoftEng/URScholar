@@ -197,7 +197,6 @@ class SponsorController extends Controller
         ]);
 
 
-
         // Store the logo file in the local directory with a known path
         $logoFile = $request->file('img');
         // $logoFileName = $request->imgName;

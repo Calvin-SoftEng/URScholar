@@ -15,7 +15,7 @@
         </div>
 
         <!-- Header section with title and search -->
-        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
           <div class="flex flex-row items-center gap-4">
             <div class="bg-white w-full sm:w-auto border border-gray-200 rounded-lg p-5 flex items-center gap-4">
               <!-- Icon -->
@@ -46,17 +46,40 @@
 
           <div class="flex flex-row items-center gap-4">
             <div class="flex flex-row items-center gap-3 w-full sm:w-auto">
-              <span class="mb-2">Filter:</span>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+              <span class="mb-2 text-xs">Filter:</span>
+              <div class="grid grid-cols-4 gap-4 mb-4">
+                <div>
+                  <label for="scholarship-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    Scholarship
+                  </label>
+                  <Select v-model="selectedScholarship">
+                    <SelectTrigger class="w-full border">
+                      <SelectValue :placeholder="displayedScholarshipName" />
+                    </SelectTrigger>
+
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="all">All Scholarships</SelectItem>
+                        <SelectItem v-for="scholarship in props.scholarships" :key="scholarship.id"
+                          :value="scholarship.id">
+                          {{ scholarship.name }}
+                        </SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div>
                   <label for="year-select" class="block text-sm font-medium text-gray-700 dark:text-gray-300">School
                     Year</label>
                   <Select v-model="selectedSchoolYear">
                     <SelectTrigger class="w-full border">
-                      <SelectValue :placeholder="selectedSchoolYear || 'Select year'" />
+                      <SelectValue
+                        :placeholder="selectedSchoolYear ? getAcademicYearName(selectedSchoolYear) : 'All Years'" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
+                        <SelectItem value="null">All Years</SelectItem>
                         <SelectItem v-for="year in academicYearOptions" :key="year.id" :value="year.id">
                           {{ year.name }}
                         </SelectItem>
@@ -70,10 +93,12 @@
                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Semester</label>
                   <Select v-model="selectedSemester">
                     <SelectTrigger class="w-full border">
-                      <SelectValue :placeholder="selectedSemester || 'Select Semester'" />
+                      <SelectValue
+                        :placeholder="selectedSemester ? (selectedSemester === '1st' ? 'First Semester' : 'Second Semester') : 'All Semesters'" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
+                        <SelectItem value="null">All Semesters</SelectItem>
                         <SelectItem value="1st">First Semester</SelectItem>
                         <SelectItem value="2nd">Second Semester</SelectItem>
                       </SelectGroup>
@@ -85,10 +110,11 @@
                     class="block text-sm font-medium text-gray-700 dark:text-gray-300">Campus</label>
                   <Select v-model="selectedCampus">
                     <SelectTrigger class="w-full border">
-                      <SelectValue :placeholder="selectedCampus || 'Select Campus'" />
+                      <SelectValue :placeholder="selectedCampus ? getCampusName(selectedCampus) : 'All Campuses'" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>
+                        <SelectItem value="null">All Campuses</SelectItem>
                         <SelectItem v-for="camp in props.campus" :key="camp.id" :value="camp.id">
                           {{ camp.name }}
                         </SelectItem>
@@ -121,8 +147,7 @@
         <div class="w-full mt-5">
           <div v-if="!filteredGrantees || filteredGrantees.length === 0"
             class="flex flex-col items-center justify-center py-12 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
-            <font-awesome-icon :icon="['fas', 'award']"
-              class="text-blue-600 text-2xl flex-shrink-0 w-16 h-16" />
+            <font-awesome-icon :icon="['fas', 'award']" class="text-blue-600 text-2xl flex-shrink-0 w-16 h-16" />
             <h3 class="text-xl font-medium text-gray-700 dark:text-gray-300 mb-2">No Grantees Available</h3>
           </div>
 
@@ -163,7 +188,8 @@
                         </div>
                         <div>
                           <div class="font-normal">
-                            {{ grantee.scholar?.last_name }}, {{ grantee.scholar?.first_name }} {{ grantee.scholar?.middle_name }}
+                            {{ grantee.scholar?.last_name }}, {{ grantee.scholar?.first_name }} {{
+                              grantee.scholar?.middle_name }}
                             <font-awesome-icon v-if="grantee.scholar?.sex === 'Male'" :icon="['fas', 'mars']"
                               class="text-blue-500" />
                             <font-awesome-icon v-if="grantee.scholar?.sex === 'Female'" :icon="['fas', 'venus']"
@@ -215,7 +241,7 @@
                       </span>
                       <br>
                       <span class="text-xs font-medium mt-1 inline-block">
-                        Scholar Status: 
+                        Scholar Status:
                         <span :class="{
                           'text-green-600': grantee.scholar?.status === 'Verified',
                           'text-red-600': grantee.scholar?.status !== 'Verified'
@@ -275,6 +301,7 @@ const props = defineProps({
   grantees: Array,
   academicYear: Array,
   campus: Array,
+  scholarships: Array,
   userType: {
     type: String,
     required: true,
@@ -288,33 +315,62 @@ const props = defineProps({
 });
 
 // Filter state variables
-const selectedSchoolYear = ref(null);
-const selectedSemester = ref('1st')
-const selectedCampus = ref(props.coordinatorCampus ? parseInt(props.coordinatorCampus) : null);
+
+const selectedScholarship = ref('');
+const selectedSchoolYear = ref('');
+const selectedSemester = ref('');
+const selectedCampus = ref(props.coordinatorCampus ? parseInt(props.coordinatorCampus) : '');
 const searchQuery = ref('');
 
-// Create academic year options
+// helper to find the display text
+const displayedScholarshipName = computed(() => {
+  if (selectedScholarship.value === 'all') return 'All Scholarships'
+  const found = props.scholarships.find(
+    s => s.id === selectedScholarship.value
+  )
+  return found ? found.name : 'Select Scholarship'
+})
+
+const displayedSchoolYear = computed(() => {
+  if (!selectedSchoolYear.value) return 'All Years'
+  return getAcademicYearName(selectedSchoolYear.value)
+})
+
+const displayedSemester = computed(() => {
+  if (!selectedSemester.value) return 'All Semesters'
+  return selectedSemester.value === '1st' ? 'First Semester' : 'Second Semester'
+})
+
+const displayedCampus = computed(() => {
+  if (!selectedCampus.value) return 'All Campuses'
+  return getCampusName(selectedCampus.value)
+})
+
 // Create academic year options
 const academicYearOptions = computed(() => {
   if (!props.academicYear || props.academicYear.length === 0) return [];
-  
-  return props.academicYear.map(year => ({
-    id: year.school_year_id,
-    name: year.school_year ? year.school_year.year : 'Unknown Year'
-  })).filter((v, i, a) => a.findIndex(t => t.id === v.id) === i); // Remove duplicates
+
+  // Make sure we're properly accessing the school year data
+  return props.academicYear
+    .filter(year => year.school_year) // Make sure school_year exists
+    .map(year => ({
+      id: year.school_year_id,
+      name: year.school_year.name || year.school_year.year || `${year.school_year_id}`
+    }))
+    .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i); // Remove duplicates
 });
 
 // Count of unique scholars
 const uniqueScholarsCount = computed(() => {
   if (!props.grantees) return 0;
-  
+
   const uniqueScholarIds = new Set();
   props.grantees.forEach(grantee => {
     if (grantee.scholar?.id) {
       uniqueScholarIds.add(grantee.scholar.id);
     }
   });
-  
+
   return uniqueScholarIds.size;
 });
 
@@ -324,11 +380,28 @@ const getAcademicYearName = (schoolYearId) => {
   return year?.school_year?.name || 'Unknown Academic Year';
 };
 
+// Get campus name by ID
+const getCampusName = (campusId) => {
+  const campus = props.campus.find(camp => camp.id === campusId);
+  return campus?.name || 'Unknown Campus';
+};
+
+// Get scholarship name by ID
+const getScholarshipName = (scholarshipId) => {
+  const scholarship = props.scholarships.find(s => s.id === scholarshipId);
+  return scholarship?.name || 'Unknown Scholarship';
+};
+
 // Filtered grantees based on all criteria
 const filteredGrantees = computed(() => {
   if (!props.grantees) return [];
 
   let filtered = props.grantees;
+
+  // Apply scholarship filter
+  if (selectedScholarship.value) {
+    filtered = filtered.filter(grantee => grantee.scholarship_id === selectedScholarship.value);
+  }
 
   // Apply school year filter
   if (selectedSchoolYear.value) {
@@ -483,7 +556,7 @@ const clearPreview = () => {
 
 const onUpload = async (event) => {
   form.file = event.files[0];
-  
+
   try {
     await form.post(`/grantees/upload`);
     headers.value = [];

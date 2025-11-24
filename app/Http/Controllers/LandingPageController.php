@@ -13,9 +13,39 @@ use Inertia\Response;
 use App\Models\Scholarship;
 use App\Models\Sponsor;
 use App\Models\SchoolYear;
+use Illuminate\Http\Request;
+use Symfony\Component\Process\Process;
 
 class LandingPageController extends Controller
 {
+
+    public function test(): Response
+    {
+
+        return Inertia::render('Predict', []);
+    }
+
+    public function predict(Request $request)
+    {
+        $inputData = [
+            (int) $request->age,
+            (int) $request->salary
+        ];
+
+        $process = new Process([
+            base_path('venv/Scripts/python.exe'),
+            base_path('ml/ml_model.py'),
+            json_encode($inputData)
+        ]);
+        $process->run();
+
+        if (!$process->isSuccessful()) {
+            return response()->json(['error' => $process->getErrorOutput()], 500);
+        }
+
+        return response()->json(json_decode($process->getOutput(), true));
+    }
+
     public function index(): Response
     {
         $scholarships = Scholarship::where('scholarshipType', 'One-time Payment')->get();
@@ -35,6 +65,7 @@ class LandingPageController extends Controller
             'branding' => $branding,
         ]);
     }
+
     public function scholarship_apply_details(Scholarship $scholarship): Response
     {
 

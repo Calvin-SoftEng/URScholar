@@ -61,9 +61,9 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('scholarship_id')->constrained()->onDelete('cascade');
             $table->foreignId('campus_id')->constrained();
-            $table->json('selected_campus');
+            $table->json('selected_campus')->nullable();
             $table->integer('slots');
-            $table->integer('remaining_slots');
+            $table->integer('remaining_slots')->nullable();
             $table->timestamps();
         });
 

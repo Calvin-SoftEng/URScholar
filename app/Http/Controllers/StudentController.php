@@ -47,12 +47,16 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use chillerlan\QRCode\QRCode;
 use chillerlan\QRCode\QROptions;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class StudentController extends Controller
 {
+
     public function dashboard()
     {
 
+        set_time_limit(90);
         $scholar = Scholar::where('email', Auth::user()->email)
             ->with('campus')
             ->with('course')
@@ -92,6 +96,11 @@ class StudentController extends Controller
     
     
             if ($pendingRequirements->isNotEmpty()) {
+
+                if (empty($submittedRequirementIds)) {
+                    return redirect()->route('student.confirmation');
+                }
+
                 return redirect()->route('student.resubmission');
             }
     
@@ -173,7 +182,6 @@ class StudentController extends Controller
                     ->whereIn('requirement_id', $requirementIds)
                     ->get();
 
-
                 return Inertia::render('Student/Dashboard/Dashboard', [
                     'grantee' => $grantee,
                     'oldestGrantee' => $oldestGrantee,
@@ -193,7 +201,24 @@ class StudentController extends Controller
             }
         }
 
-        // For non-grantees
+        // Get the authenticated scholar
+        $scholar = Scholar::where('email', Auth::user()->email)
+            ->with('campus')
+            ->with('course')
+            ->first();
+
+        // Ensure scholar record is found
+        if (!$scholar) {
+            return redirect()->route('login')->with('error', 'Scholar record not found.');
+        }
+
+        // Get scholar's supporting data for eligibility checks
+        $studentRecord = StudentRecord::where('scholar_id', $scholar->id)->first();
+        $familyRecord = $studentRecord ? FamilyRecord::where('student_record_id', $studentRecord->id)->first() : null;
+
+        // Get latest academic year and activity data
+        $academic_year = AcademicYear::where('status', 'Active')->first();
+
         // Get the scholar's latest grade
         $grade = Grade::where('scholar_id', $scholar->id)
             ->orderBy('created_at', 'desc')
@@ -205,27 +230,31 @@ class StudentController extends Controller
             ->where('status', 'Active')
             ->get();
 
-        // Get all criteria for these scholarships
+        // Eager load and attach criteria/recipients data for easier filtering
         $criteria = Criteria::whereIn('scholarship_id', $scholarships->pluck('id'))->get();
-
-        // Get campus recipients for these scholarships
         $campusRecipients = CampusRecipients::whereIn('scholarship_id', $scholarships->pluck('id'))->get();
 
-        // Add criteria to each scholarship
         foreach ($scholarships as $scholarship) {
+            // Attach single criteria record
             $scholarship->criteriaData = $criteria->where('scholarship_id', $scholarship->id)->first();
+            // Attach collection of campus recipients
             $scholarship->campusRecipients = $campusRecipients->where('scholarship_id', $scholarship->id)->values();
         }
 
-        // Get all campuses and courses
+        // Get all campuses and courses, and sponsors (for dropdowns/display)
         $campuses = Campus::all();
         $courses = Course::all();
         $sponsors = Sponsor::all();
         $schoolyear = SchoolYear::all();
-        $applicant = Applicant::where('scholar_id', $scholar->id)
-            ->first() ?? null;
 
+        // Check if scholar has an existing application
+        $applicant = Applicant::where('scholar_id', $scholar->id)->first() ?? null;
+
+        // -------------------------------------------------------------------------
+        // --- PART 1: Scholar Has an Existing Application ---
+        // -------------------------------------------------------------------------
         if ($applicant) {
+            // ... (Your existing logic for applicants) ...
             $scholarship = Scholarship::where('id', $applicant->scholarship_id)->with('sponsor')->first();
 
             if ($scholarship) {
@@ -278,8 +307,8 @@ class StudentController extends Controller
                     ->whereIn('requirement_id', $requirementIds)
                     ->get();
 
-
                 return Inertia::render('Student/Dashboard/Dashboard', [
+                    // Send all scholarships, as the applicant is focused on their current status
                     'scholarships' => $scholarships,
                     'sponsors' => $sponsors,
                     'schoolyears' => $schoolyear,
@@ -298,20 +327,168 @@ class StudentController extends Controller
                 ]);
             }
         }
+        // --- PART B.2: Scholar Has NO Existing Application (Filter Scholarships) ---
+        else {
+
+            // Get necessary data collections
+            $campuses = Campus::all();
+            $courses = Course::all();
+            $sponsors = Sponsor::all();
+            $schoolyear = SchoolYear::all();
+
+            // Load student + family data
+            $studentRecord = StudentRecord::where('scholar_id', $scholar->id)->first();
+            $familyRecord = $studentRecord
+                ? FamilyRecord::where('student_record_id', $studentRecord->id)->first()
+                : null;
+
+            $familyIncome = $familyRecord->monthly_income;
+            $gwa = $grade ? (float)$grade->grade : null;
 
 
-        return Inertia::render('Student/Dashboard/Dashboard', [
-            'scholarships' => $scholarships,
-            'sponsors' => $sponsors,
-            'schoolyears' => $schoolyear,
-            'scholar' => $scholar,
-            'applicant' => $applicant,
-            'grade' => $grade,
-            'campuses' => $campuses,
-            'courses' => $courses,
-            'academic_year' => $academic_year,
-            'activity' => $activity,
-        ]);
+            // Prepare Scholar Data for API Payload
+            $scholarData = [
+                'scholar_id' => $scholar->id,
+                'campus_id' => $scholar->campus_id,
+                'course_id' => $scholar->course_id,
+                'grade' => $gwa,
+                'family_monthly_income' => $familyIncome,
+            ];
+
+            //dd($scholarData);
+
+            // Prepare Scholarship Data for API Payload
+            $scholarshipData = $scholarships->map(function ($scholarship) {
+                $firstCriteria = $scholarship->criterias->first();
+
+                return [
+                    'id' => $scholarship->id,
+                    'name' => $scholarship->scholarshipName,
+                    'deadline' => $scholarship->requirements->first()->deadline ?? null,
+                    'required_grade_limit' => $firstCriteria ? (float)$firstCriteria->grade : null,
+                    'required_course_id' => $firstCriteria ? $firstCriteria->course_id : null,
+
+                    // REVISED: Loop through criteria, find the related Form Data, and get the name
+                    'monthly_income_limits' => $scholarship->criterias->map(function ($criteria) {
+                        // Use the ID to find the actual string value in the other table
+                        $formData = ScholarshipFormData::find($criteria->scholarship_form_data_id);
+
+                        // Return the name as a string, or null if not found
+                        return $formData ? (string)$formData->name : null;
+                    })
+                        ->filter() // Optional: Removes nulls if a record wasn't found
+                        ->values() // Re-indexes the array keys
+                        ->toArray(),
+
+                    'campus_recipient_ids' => $scholarship->campusRecipients
+                        ->pluck('campus_id')
+                        ->toArray(),
+                ];
+            })->toArray();
+
+
+            // Construct the full API Request Payload
+            $payload = [
+                'scholar' => $scholarData,
+                'scholarships' => $scholarshipData,
+            ];
+
+            //dd($payload);
+
+            // Add detailed logging
+            Log::info('🔍 Starting Eligibility Check');
+            Log::info('Scholar Data:', $scholarData);
+            Log::info('Scholarships Count:', ['count' => count($scholarshipData)]);
+            Log::info('Full Payload:', $payload);
+
+            // Send Request to FastAPI Endpoint with proper timeout
+            $eligibleScholarshipIds = [];
+            $apiError = null;
+
+            try {
+                Log::info('📡 Calling FastAPI at http://127.0.0.1:8000/non-grantee/eligibility');
+
+                $response = Http::timeout(10)      // Increased from 5 to 10 seconds
+                    ->connectTimeout(5)             // Increased from 3 to 5 seconds
+                    ->retry(2, 100)                 // Retry 2 times with 100ms delay
+                    ->post('http://127.0.0.1:5000/non-grantee/eligibility', $payload);
+
+                Log::info('📥 FastAPI Response Status:', ['status' => $response->status()]);
+                Log::info('📥 FastAPI Response Body:', ['body' => $response->body()]);
+
+                if ($response->successful()) {
+                    $apiResult = $response->json();
+                    $eligibleScholarshipIds = collect($apiResult['eligible'])
+                        ->pluck('scholarship_id')
+                        ->toArray();
+
+                    Log::info('✅ Eligible Scholarship IDs:', ['ids' => $eligibleScholarshipIds]);
+                    Log::info('❌ Not Eligible:', ['not_eligible' => $apiResult['not_eligible']]);
+                } else {
+                    $apiError = 'FastAPI returned error: ' . $response->status();
+                    Log::error('❌ FastAPI Eligibility Check Failed', [
+                        'status' => $response->status(),
+                        'response' => $response->body()
+                    ]);
+                }
+            } catch (\Illuminate\Http\Client\ConnectionException $e) {
+                $apiError = 'Cannot connect to FastAPI. Is it running on port 8000?';
+                Log::critical('🔌 FastAPI Connection Error: ' . $e->getMessage());
+
+                // Return ALL scholarships if API is down
+                return Inertia::render('Student/Dashboard/Dashboard', [
+                    'scholarships' => $scholarships, // Show all if API is down
+                    'sponsors' => $sponsors,
+                    'schoolyears' => $schoolyear,
+                    'scholar' => $scholar,
+                    'applicant' => $applicant,
+                    'grade' => $grade,
+                    'campuses' => $campuses,
+                    'courses' => $courses,
+                    'academic_year' => $academic_year,
+                    'activity' => $activity,
+                    'api_error' => $apiError,
+                ]);
+            } catch (\Exception $e) {
+                $apiError = 'Unexpected error: ' . $e->getMessage();
+                Log::critical('💥 FastAPI Unexpected Error: ' . $e->getMessage());
+
+                // Return ALL scholarships if error occurs
+                return Inertia::render('Student/Dashboard/Dashboard', [
+                    'scholarships' => $scholarships, // Show all if error
+                    'sponsors' => $sponsors,
+                    'schoolyears' => $schoolyear,
+                    'scholar' => $scholar,
+                    'applicant' => $applicant,
+                    'grade' => $grade,
+                    'campuses' => $campuses,
+                    'courses' => $courses,
+                    'academic_year' => $academic_year,
+                    'activity' => $activity,
+                    'api_error' => $apiError,
+                ]);
+            }
+
+            // Filter the original Eloquent Collection by the returned IDs
+            $eligibleScholarships = $scholarships->whereIn('id', $eligibleScholarshipIds);
+
+            Log::info('📊 Final Eligible Scholarships Count:', ['count' => $eligibleScholarships->count()]);
+
+            //dd($eligibleScholarships);
+
+            return Inertia::render('Student/Dashboard/Dashboard', [
+                'scholarships' => $eligibleScholarships,
+                'sponsors' => $sponsors,
+                'schoolyears' => $schoolyear,
+                'scholar' => $scholar,
+                'applicant' => $applicant,
+                'grade' => $grade,
+                'campuses' => $campuses,
+                'courses' => $courses,
+                'academic_year' => $academic_year,
+                'activity' => $activity,
+            ]);
+        }
     }
 
     public function scholarship_details(Scholarship $scholarship)
@@ -368,6 +545,7 @@ class StudentController extends Controller
         $eligibles = Eligible::where('scholarship_id', $scholarship->id)
             ->with('condition')
             ->get();
+
 
         return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipDetail', [
             'scholarship' => $scholarship,
@@ -501,7 +679,6 @@ class StudentController extends Controller
         ]);
 
         return redirect()->back()->with('success', 'Grade Uploaded Successfully');
-
     }
 
     public function updateProfile(Request $request)
@@ -589,6 +766,12 @@ class StudentController extends Controller
             'province' => $request->input('province'),
         ]);
 
+        $MayScholarship = false;
+
+        if ($request->input('scholarornot') == 'Yes') {
+            $MayScholarship = true;
+        }
+
         // Update or create student record
         $studentRecord = StudentRecord::updateOrCreate(
             ['scholar_id' => $scholar->id],
@@ -605,9 +788,9 @@ class StudentController extends Controller
                 'religion' => $request->input('religion'),
                 'guardian' => $request->input('guardian_name'),
                 'relationship' => $request->input('relationship'),
-                'scholarornot' => $request->input('scholarornot'),
-                'scholarship_name' => $request->input('scholarship_name'),
-                'scholarship_get' => $request->input('scholarship_get'),
+                'has_other_scholarship' => $MayScholarship,
+                'other_scholarship_name' => $request->input('scholarship_name'),
+                'other_scholarship_amount' => $request->input('scholarship_get'),
             ]
         );
 
@@ -764,8 +947,8 @@ class StudentController extends Controller
             'guardian_name' => ['required', 'string', 'max:255'],
             'relationship' => ['required', 'string', 'max:255'],
             'scholarornot' => ['string', 'max:255'],
-            'scholarship_name' => ['string', 'max:255'],
-            'scholarship_get' => ['numeric'],
+            'scholarship_name' => ['nullable', 'string', 'max:255'],
+            'scholarship_get' => ['nullable', 'numeric'],
 
             //Grade Information
             'grade' => [''],
@@ -832,11 +1015,9 @@ class StudentController extends Controller
 
         // dd($request->all());
 
-        // Custom error message handling to combine related fields
         if ($validator->fails()) {
             $errors = $validator->errors();
 
-            // Check if any elementary education fields failed validation
             if (
                 $errors->has('education.elementary.name') ||
                 $errors->has('education.elementary.years')
@@ -1211,8 +1392,6 @@ class StudentController extends Controller
         } else {
             return redirect()->route('student.dashboard'); // or any default fallback
         }
-
-
     }
 
     public function scholarship()
@@ -1371,9 +1550,8 @@ class StudentController extends Controller
 
             //generate qr_code
             // Check if the scholar already has a QR code
-                // if ($scholar->qr_code) {
-
-                // }
+            if ($scholar->qr_code) {
+            }
 
                 // // Set up QR code options
                 // $options = new QROptions([
@@ -1646,11 +1824,20 @@ class StudentController extends Controller
     public function applicationUpload(Request $request)
     {
         $request->validate([
+            'application_location' => 'required',
+            'endorser' => 'required',
             'files.*' => 'required|file',
             'requirements' => 'array'
         ]);
 
+        //dd($request);
+
         $scholar = Scholar::where('email', Auth::user()->email)->first();
+
+        $scholar->update([
+            "apply_scholarship" => $request->application_location,
+            "endorsed_scholarship" => $request->endorser,
+        ]);
 
         // Process each uploaded file
         foreach ($request->file('files') as $requirementId => $file) {
@@ -1733,6 +1920,12 @@ class StudentController extends Controller
 
         $templates = ScholarshipTemplate::where('scholarship_id', $scholarship->id)->get();
 
+        $eligibles = Eligible::with('condition')
+            ->where("scholarship_id", $scholarship->id)
+            ->get();
+
+        $conditions = $eligibles->pluck('condition');
+
         return Inertia::render('Student/Dashboard/Non_Scholar/ScholarshipApplication', [
             'scholarship' => $scholarship,
             'sponsor' => $sponsor,
@@ -1742,6 +1935,7 @@ class StudentController extends Controller
             'criterias' => $criteria,
             'templates' => $templates,
             'grade' => $grade,
+            'conditions' => $conditions,
         ]);
     }
 
@@ -1762,6 +1956,7 @@ class StudentController extends Controller
             'files.*.file' => 'Each uploaded item must be a valid file.',
         ]);
 
+        //dd($request->all());
 
         $scholar = Scholar::where('user_id', Auth::user()->id)->first();
 

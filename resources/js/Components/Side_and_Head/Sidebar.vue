@@ -76,17 +76,15 @@
             </span>
           </div>
 
-          <!-- Notification Badge -->
-          <span v-if="dataOpenSideBar"
+          <!-- <span v-if="dataOpenSideBar"
             class="bg-red-600 whitespace-nowrap text-white text-xs font-bold px-2 py-0.5 rounded-full">
             +1 New
           </span>
 
-          <!-- "1" Badge at Top-Right Corner -->
           <span v-else
             class="absolute top-3 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full translate-x-1/2 -translate-y-1/2">
             1
-          </span>
+          </span> -->
         </div>
         </Link>
 

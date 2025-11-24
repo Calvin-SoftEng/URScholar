@@ -249,7 +249,7 @@ class DatabaseSeeder extends Seeder
         SponsorMoa::factory()->create([
             'sponsor_id' => '1',
             'moa' => 'moa1.pdf',
-            'validity' => '2025-09-03',
+            'validity' => '2026-11-03',
             'status' => 'Active',
         ]);
 
@@ -266,7 +266,7 @@ class DatabaseSeeder extends Seeder
         SponsorMoa::factory()->create([
             'sponsor_id' => '2',
             'moa' => 'moa1.pdf',
-            'validity' => '2025-09-03',
+            'validity' => '2026-11-03',
             'status' => 'Active',
         ]);
 
@@ -455,8 +455,21 @@ class DatabaseSeeder extends Seeder
         AcademicYear::factory()->create([
             'school_year_id' => '2',
             'semester' => '1st',
+            'status' => 'Inactive'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '2',
+            'semester' => '2nd',
+            'status' => 'Inactive'
+        ]);
+
+        AcademicYear::factory()->create([
+            'school_year_id' => '3',
+            'semester' => '1st',
             'status' => 'Active'
         ]);
+
 
         StaffGroup::factory()->create([
             'name' => 'Scholarship Coordinators',
@@ -483,7 +496,7 @@ class DatabaseSeeder extends Seeder
             'user_id' => '4',
             'staff_group_id' => '1',
         ]);
-        
+
         \App\Models\StaffGroupUser::factory()->create([
             'user_id' => '6',
             'staff_group_id' => '2',
@@ -503,5 +516,6 @@ class DatabaseSeeder extends Seeder
         //sponsor 
         $this->call(FormTableSeeder::class);
         $this->call(StudentSeeder::class);
+        $this->call(ScholarshipSeeder::class);
     }
 }

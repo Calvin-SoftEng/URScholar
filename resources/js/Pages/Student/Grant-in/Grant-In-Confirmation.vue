@@ -39,10 +39,10 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <!-- Where did you apply? -->
                         <div class="flex flex-col space-y-1">
-                            <Label for="application_location" class="font-semibold text-gray-800">
+                            <label for="application_location" class="font-semibold text-gray-800">
                                 Where did you apply for the scholarship?
-                            </Label>
-                            <Input
+                            </label>
+                            <input
                                 id="application_location"
                                 type="text"
                                 placeholder="e.g., Campus Office, Online Portal, External Organization"
@@ -53,10 +53,10 @@
 
                         <!-- Who endorsed your application? -->
                         <div class="flex flex-col space-y-1">
-                            <Label for="endorser" class="font-semibold text-gray-800">
+                            <label for="endorser" class="font-semibold text-gray-800">
                                 Who endorsed your scholarship application?
-                            </Label>
-                            <Input
+                            </label>
+                            <input
                                 id="endorser"
                                 type="text"
                                 placeholder="e.g., Professor's Name, Organization, Agency"
@@ -211,7 +211,9 @@ const props = defineProps({
 
 const form = useForm({
     files: {},
-    requirements: []
+    requirements: [],
+    application_location: '',
+    endorser: '',
 });
 
 const handleFile = (event, requirementId, requirementName) => {
@@ -235,32 +237,23 @@ const removeFile = (requirementId) => {
 };
 
 const isFormValid = computed(() => {
-    return Object.keys(form.files).length === props.requirements.length;
+    return Object.keys(form.files).length === props.requirements.length &&
+           form.application_location.trim() !== '' &&
+           form.endorser.trim() !== '';
 });
 
-const submitRequirements = async () => {
-    try {
-        const formData = new FormData();
-
-        // Append each file with its requirement ID
-        Object.entries(form.files).forEach(([requirementId, file]) => {
-            formData.append(`files[${requirementId}]`, file);
-        });
-
-        // Append requirements data
-        formData.append('requirements', JSON.stringify(form.requirements));
-
-        form.post('/student/application/upload', {
-            forceFormData: true,
-            preserveScroll: true,
-            preserveState: true,
-            onSuccess: () => {
-                form.files = {};
-                form.requirements = [];
-            },
-        });
-    } catch (error) {
-        console.error('Error submitting form:', error);
-    }
+const submitRequirements = () => {
+    // Inertia's useForm handles FormData automatically when files are present
+    form.post('/student/application/upload', {
+        forceFormData: true,
+        preserveScroll: true,
+        onSuccess: () => {
+            console.log('Form submitted successfully!');
+            form.reset();
+        },
+        onError: (errors) => {
+            console.error('Validation errors:', errors);
+        }
+    });
 };
 </script>
