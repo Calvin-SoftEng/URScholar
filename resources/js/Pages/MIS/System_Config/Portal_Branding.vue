@@ -41,12 +41,12 @@
         <div class="mb-5 flex items-center gap-4">
           <div
             class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-            <img v-if="tempLogoLight" :src="tempLogoLight" alt="Light Mode Logo"
+            <img v-if="tempLogoDark" :src="tempLogoDark" alt="Light Mode Logo"
               class="object-cover w-full h-full">
             <img v-else src="../../../../assets/images/main_logo.png" alt="Light Mode Logo">
           </div>
           <div class="w-full">
-            <input type="file" ref="logoLightInput" @change="previewLogo('light', $event)" accept="image/*"
+            <input type="file" ref="logoDarkInput" @change="previewLogo('dark', $event)" accept="image/*"
               class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
           </div>
         </div>
@@ -56,11 +56,11 @@
         <div class="mb-5 flex items-center gap-4">
           <div
             class="w-40 h-32 p-2 border rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
-            <img v-if="tempLogoDark" :src="tempLogoDark" alt="Dark Mode Logo" class="object-cover w-full h-full">
+            <img v-if="tempLogoLight" :src="tempLogoLight" alt="Dark Mode Logo" class="object-cover w-full h-full">
             <img v-else src="../../../../assets/images/main_logo_white.png" alt="Light Mode Logo">
           </div>
           <div class="w-full">
-            <input type="file" ref="logoDarkInput" @change="previewLogo('dark', $event)" accept="image/*"
+            <input type="file" ref="logoLightInput" @change="previewLogo('light', $event)" accept="image/*"
               class="block w-full text-sm border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400">
           </div>
         </div>

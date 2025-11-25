@@ -30,12 +30,12 @@
                     </div>
                 </div>
 
-                <div class="w-full mt-5 rounded-xl space-y-10">
+                <div class="w-full mt-5 rounded-xl space-y-5">
                     <!-- Stats Section -->
                     <div class="w-full h-[1px] bg-gray-200"></div>
 
                     <div class="grid grid-cols-2">
-                        <div class="flex flex-col items-start py-4 px-10 border-r border-gray-300">
+                        <div class="flex flex-col items-start py-0 px-10 border-r border-gray-300">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['fas', 'users']" class="text-primary text-base" />
                                 <p class="text-gray-500 text-sm">Total Qualified Applicants</p>
@@ -45,7 +45,7 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col items-start py-4 px-10">
+                        <div class="flex flex-col items-start py-0 px-10">
                             <div class="flex flex-row space-x-3 items-center">
                                 <font-awesome-icon :icon="['far', 'circle-check']" class="text-primary text-base" />
                                 <p class="text-gray-500 text-sm">Completed Payouts</p>
