@@ -51,6 +51,8 @@ class RegisteredUserController extends Controller
 
         $campus = Campus::where('id', $request['campus'])->first();
 
+        //dd($campus);
+
         // Check if student exists with the provided email
         $studentEmail = Student::where('email', $request->email)->first();
 
@@ -84,6 +86,8 @@ class RegisteredUserController extends Controller
             'campus' => 'required',
         ]);
 
+        dd($request);
+
         $campus = Campus::where('id', $request['campus'])->first();
 
         // Check if student exists with the provided email
@@ -101,6 +105,8 @@ class RegisteredUserController extends Controller
                     'existing' => 'You have already registered for the scholarship program. Please check your email for login credentials.',
                 ])->withInput();
             }
+
+            dd($campus->id);
 
             // Create user account
             User::create([

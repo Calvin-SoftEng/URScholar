@@ -445,7 +445,7 @@ class EmailController extends Controller
                 'email' => $studentEmail['email'],
                 'first_name' => $studentEmail['first_name'],
                 'last_name' => $studentEmail['last_name'],
-                'campus' => $campus->id,
+                'campus_id' => $campus->id,
                 'password' => Hash::make($password),
             ]);
 
