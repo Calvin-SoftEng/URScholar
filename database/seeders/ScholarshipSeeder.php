@@ -207,6 +207,7 @@ class ScholarshipSeeder extends Seeder
                 'address' => $fullAddress,
                 'contact' => '09' . $faker->numberBetween(100000000, 999999999),
                 'status' => 'Active',
+                'picture' => 'men.png',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
