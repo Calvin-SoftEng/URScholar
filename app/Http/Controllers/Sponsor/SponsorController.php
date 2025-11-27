@@ -40,30 +40,45 @@ class SponsorController extends Controller
 {
     public function sponsor_dashboard()
     {
-        //Scholarships Listing
-        $sponsor = Sponsor::where('assign_id', Auth::user()->id)
-            ->first();
+        // Get sponsor with error handling
+        $sponsor = Sponsor::where('assign_id', Auth::user()->id)->first();
 
+        // Handle case where sponsor doesn't exist
+        if (!$sponsor) {
+            abort(404, 'Sponsor profile not found');
+            // Or redirect: return redirect()->route('home')->with('error', 'Sponsor profile not found');
+        }
+
+        // Load scholarships relationship
         $scholarships = $sponsor->scholarship;
+
+        // Handle case where sponsor has no scholarships
+        if (!$scholarships || $scholarships->isEmpty()) {
+            return Inertia::render('Sponsor/Dashboard', [
+                'sponsor' => $sponsor,
+                'scholarships' => collect([]),
+                'scholarshipData' => [],
+                'uniqueCampusesCount' => 0,
+                'payouts' => collect([]),
+                'campuses' => collect([]),
+                'schoolyears' => SchoolYear::with('academic_year')->orderBy('id', 'asc')->get(),
+                'scholars' => collect([]),
+                'allscholars' => collect([]),
+                'academicYear' => AcademicYear::where('status', 'Active')->with('school_year')->first(),
+            ]);
+        }
 
         // Count batches for each scholarship and collect unique campuses
         $scholarshipData = [];
         $uniqueCampuses = [];
 
         foreach ($scholarships as $scholarship) {
-            // Get batches for this scholarship
             $batches = Batch::where('scholarship_id', $scholarship->id)->get();
-
-            // Count batches
             $batchCount = $batches->count();
-
-            // Get unique campus IDs from these batches
             $campusIds = $batches->pluck('campus_id')->unique()->toArray();
 
-            // Add to unique campuses collection
             $uniqueCampuses = array_merge($uniqueCampuses, $campusIds);
 
-            // Store data for this scholarship
             $scholarshipData[] = [
                 'scholarship_id' => $scholarship->id,
                 'scholarship_name' => $scholarship->name,
@@ -72,24 +87,15 @@ class SponsorController extends Controller
             ];
         }
 
-        // Get unique campuses count across all batches
         $uniqueCampusesCount = count(array_unique($uniqueCampuses));
 
         // Disbursement Listing
         $payout = Payout::whereIn('scholarship_id', $sponsor->scholarship->pluck('id'))
-            ->with([
-                'campus',
-                'scholarship',
-                'disbursement',
-                'school_year'
-            ])
+            ->with(['campus', 'scholarship', 'disbursement', 'school_year'])
             ->get()
             ->map(function ($payout) {
-                // Count disbursements by status
                 $disbursementCounts = $payout->disbursement->groupBy('status')
-                    ->map(function ($group) {
-                    return $group->count();
-                });
+                    ->map(fn($group) => $group->count());
 
                 return array_merge($payout->toArray(), [
                     'claimed_count' => $disbursementCounts['Claimed'] ?? 0,
@@ -98,29 +104,19 @@ class SponsorController extends Controller
                 ]);
             });
 
-        // Get all unique campuses
-        $campuses = Campus::whereIn('id', $payout->pluck('campus_id')->unique())
-            ->get();
-
-        $school_year = SchoolYear::with('academic_year')
-            ->orderBy('id', 'asc')
-            ->get();
-
-        $academicYear = AcademicYear::where('status', 'Active')
-            ->with('school_year')
-            ->first();
-
+        $campuses = Campus::whereIn('id', $payout->pluck('campus_id')->unique())->get();
+        $school_year = SchoolYear::with('academic_year')->orderBy('id', 'asc')->get();
+        $academicYear = AcademicYear::where('status', 'Active')->with('school_year')->first();
 
         $scholars = Scholar::with('user', 'campus', 'course', 'batch')
             ->whereHas('grantees', function ($query) use ($academicYear) {
                 $query->where('status', 'Accomplished')
                     ->where('semester', $academicYear->semester)
-                    ->where('school_year_id', $academicYear->school_year_id); // Changed from school_year_id to academic_year_id
+                    ->where('school_year_id', $academicYear->school_year_id);
             })
             ->where('status', 'Verified')
             ->whereIn('student_status', ['Enrolled', 'Transferred'])
             ->get();
-
 
         $allscholars = Scholar::with('user', 'campus', 'course', 'batch')
             ->whereHas('grantees', function ($query) use ($academicYear) {
@@ -129,7 +125,6 @@ class SponsorController extends Controller
             ->where('status', 'Verified')
             ->whereIn('student_status', ['Enrolled', 'Transferred'])
             ->get();
-
 
         return Inertia::render('Sponsor/Dashboard', [
             'sponsor' => $sponsor,
@@ -420,7 +415,6 @@ class SponsorController extends Controller
                         'semester' => $grantee->semester, // Include semester from grantee
                     ];
                 }
-
             })->filter()->values();
 
             // Update the batch to mark as read
