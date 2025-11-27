@@ -29,7 +29,7 @@ class PayoutEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('urscholar@ursbinangonan.com', 'URS Scholarship Unit'),
+            from: new Address('uurscholar@smis.live', 'URS Scholarship Unit'),
             subject: 'Heads Up! Your Scholarship Payout is on the Way!',
         );
     }

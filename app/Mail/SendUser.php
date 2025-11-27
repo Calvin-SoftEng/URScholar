@@ -29,7 +29,7 @@ class SendUser extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('urscholar@ursbinangonan.com', 'URS Scholarship Unit'),
+            from: new Address('urscholar@smis.live', 'URS Scholarship Unit'),
             subject: 'URScholar Account Registration Successful',
         );
     }
