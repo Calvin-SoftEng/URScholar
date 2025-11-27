@@ -42,7 +42,7 @@
                                     <p v-if="props.criterias.find(c => c.grade)">
                                         Student General Weighted Average must be at least
                                         <span class="font-semibold">{{props.criterias.find(c => c.grade).grade
-                                            }}</span>
+                                        }}</span>
                                     </p>
 
                                     <!-- Income criteria -->
@@ -119,7 +119,7 @@
                             <template v-if="Array.isArray(parsedCourses) && parsedCourses.length">
                                 <ul class="list-disc pl-5">
                                     <li v-for="(course, index) in parsedCourses" :key="index">
-                                        {{ course?.course ?? 'All Courses' }}
+                                        
                                     </li>
                                 </ul>
                             </template>
@@ -223,10 +223,6 @@ const formattedDate = new Date(props.deadline.date_end).toLocaleDateString("en-U
 
 // For grade requirement check
 const meetsGradeRequirement = (scholarship) => {
-    // // If no criteria are available, student is eligible
-    // if (!props.criterias || props.criterias.length === 0) return true;
-
-    // Get the first criteria with a grade requirement
     const gradeCriteria = props.criterias.find(criteria => criteria.grade);
     if (!gradeCriteria) return true;
 
@@ -237,68 +233,80 @@ const meetsGradeRequirement = (scholarship) => {
         return true
     }
 
-    // Check if student grade is null or undefined (but NOT 0.00)
     if (studentGrade === null || studentGrade === undefined) return false;
 
-    // Compare grades (assuming lower is better)
     return studentGrade <= requiredGrade;
 };
 
 const meetsCampusRequirement = (scholarship) => {
-    // Check if there are any selected campuses
-    // if (!props.selectedCampus || props.selectedCampus.length === 0) {
-    //     return false;
-    // }
-    // if (props.scholar.campus_id === props.selectedCampus.campus_id) {
-    //     if (props.selectedCampus.selected_campus.includes('')) {
-    //         return true;
-    //     }
-    //     if (props.selectedCampus.selected_campus.includes(props.scholar.course.name)) {
-    //         console.log('meron siya');
-    //         return true;
-    //     }
-
-    // }
+    // Check if selectedCampus array exists and has items
+    if (!props.selectedCampus || props.selectedCampus.length === 0) {
+        return false;
+    }
 
     // Look for a matching campus in the selectedCampus array
-    for (const campus of props.selectedCampus ?? []) {
-        if (campus?.campus_id === props.scholar?.campus_id) {
-            // If selected_campus array is empty or missing, any course at this campus is eligible
-            if ((campus.selected_campus ?? []).includes('')) {
+    for (const campus of props.selectedCampus) {
+        // Skip if campus_id doesn't match
+        if (campus.campus_id !== props.scholar.campus_id) {
+            continue;
+        }
+
+        // Check if selected_campus exists and is not null
+        if (!campus.selected_campus) {
+            continue;
+        }
+
+        // Parse selected_campus if it's a string
+        let selectedCampusData;
+        try {
+            selectedCampusData = typeof campus.selected_campus === 'string' 
+                ? JSON.parse(campus.selected_campus) 
+                : campus.selected_campus;
+        } catch (e) {
+            console.error('Error parsing selected_campus:', e);
+            continue;
+        }
+
+        // Handle if it's an array
+        if (Array.isArray(selectedCampusData)) {
+            // If array is empty or contains empty string, any course is eligible
+            if (selectedCampusData.length === 0 || selectedCampusData.includes('')) {
                 return true;
             }
 
-            // If scholar's course is in the selected_campus array, they're eligible
-            if ((campus.selected_campus ?? []).includes(props.scholar?.course?.name)) {
+            // Check if scholar's course is in the array
+            if (selectedCampusData.some(item => 
+                item === props.scholar.course.name || 
+                (item.course && item.course === props.scholar.course.name)
+            )) {
+                return true;
+            }
+        }
+        // Handle if it's a string
+        else if (typeof selectedCampusData === 'string') {
+            if (selectedCampusData === '' || selectedCampusData === props.scholar.course.name) {
                 return true;
             }
         }
     }
-
 
     return false;
 };
 
 // For income criteria
 const meetsCriteria = (scholarship) => {
-    // If no criteria are available, student is eligible
     if (!props.criterias || props.criterias.length === 0) return true;
 
-    // Find income criteria
     const incomeCriteria = props.criterias.find(criteria =>
         criteria.scholarship_form_data && criteria.scholarship_form_data.name);
 
     if (!incomeCriteria) return true;
 
-    // Check if scholar's income matches the required range
     return props.scholar.monthly_income === incomeCriteria.scholarship_form_data.name;
 };
 
 // Overall eligibility check
 const isEligible = (scholarship) => {
-    //return meetsGradeRequirement(scholarship);
-
-    // Uncomment the following if you implement the campus requirement check
     return meetsGradeRequirement(scholarship) && meetsCampusRequirement(scholarship) && meetsCriteria(scholarship);
 };
 </script>

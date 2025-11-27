@@ -44,7 +44,7 @@ class ScholarshipSeeder extends Seeder
             'abbreviation' => 'SNU',
             'since' => '2001',
             'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
-            'logo' => 'samsung.webp',
+            'logo' => 'bts.png',
         ]);
 
         SponsorMoa::factory()->create([
@@ -95,6 +95,7 @@ class ScholarshipSeeder extends Seeder
         $campusReceipientsM = DB::table('campus_recipients')->insertGetId([
             'scholarship_id' => 4,
             'campus_id' => 1,
+            'selected_campus' => json_encode([]), // convert array to JSON
             'slots' => 25,
             'created_at' => now(),
             'updated_at' => now(),
@@ -103,10 +104,12 @@ class ScholarshipSeeder extends Seeder
         $campusReceipientsP = DB::table('campus_recipients')->insertGetId([
             'scholarship_id' => 4,
             'campus_id' => 4,
+            'selected_campus' => json_encode([]), // convert array to JSON
             'slots' => 25,
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
 
         $criterias = DB::table('criterias')->insertGetId([
             'scholarship_id' => 4,
