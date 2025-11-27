@@ -636,50 +636,56 @@ class StudentController extends Controller
             'scholarship_form_data' => $scholarship_form_data,
         ]);
     }
-    public function uploadGrade($urscholar_id, Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'grade' => [''],
-            'cog' => [''],
-            'school_year' => [''],
-            'semester' => [''],
-        ]);
+public function uploadGrade($urscholar_id, Request $request)
+{
+    $validator = Validator::make($request->all(), [
+        'grade' => ['required'],
+        'cog' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
+        'school_year' => [''],
+        'semester' => [''],
+    ]);
 
-
-        $scholar = Scholar::where('id', $urscholar_id)->first();
-
-        $originalFileName = $request->file('cog')->getClientOriginalName();
-        $extension = $request->file('cog')->getClientOriginalExtension();
-        // Format: URS-0001[1st(2024-2025)]
-        $newFileName = $scholar->urscholar_id . '[' . $request->semester . '(' . $request->school_year . ')].' . $extension;
-
-
-        $filePath = Storage::disk('public')->putFileAs(
-            'scholar/grade',
-            $request->file('cog'),
-            $newFileName
-        );
-
-        $academic_year = AcademicYear::where('status', 'Active')->first();
-
-        $testing = Grade::create([
-            'scholar_id' => $scholar->id,
-            'academic_year_id' => $academic_year->id,
-            'grade' => $request->grade,
-            'cog' => $originalFileName,
-            'path' => $filePath,
-            'school_year_id' => $request->school_year,
-            'semester' => $request->semester,
-        ]);
-
-        ActivityLog::create([
-            'user_id' => Auth::user()->id,
-            'activity' => 'Upload Grade',
-            'description' => 'Uploaded GWA and Certificate of Grade',
-        ]);
-
-        return redirect()->back()->with('success', 'Grade Uploaded Successfully');
+    if ($validator->fails()) {
+        return redirect()->back()
+            ->withErrors($validator)
+            ->withInput();
     }
+
+    $scholar = Scholar::where('id', $urscholar_id)->first();
+
+    $originalFileName = $request->file('cog')->getClientOriginalName();
+    $extension = $request->file('cog')->getClientOriginalExtension();
+
+    // Format: URS-0001[1st(2024-2025)]
+    $newFileName = $scholar->urscholar_id . '[' . $request->semester . '(' . $request->school_year . ')].' . $extension;
+
+    $filePath = Storage::disk('public')->putFileAs(
+        'scholar/grade',
+        $request->file('cog'),
+        $newFileName
+    );
+
+    $academic_year = AcademicYear::where('status', 'Active')->first();
+
+    Grade::create([
+        'scholar_id' => $scholar->id,
+        'academic_year_id' => $academic_year->id,
+        'grade' => $request->grade,
+        'cog' => $originalFileName,
+        'path' => $filePath,
+        'school_year_id' => $request->school_year,
+        'semester' => $request->semester,
+    ]);
+
+    ActivityLog::create([
+        'user_id' => Auth::user()->id,
+        'activity' => 'Upload Grade',
+        'description' => 'Uploaded GWA and Certificate of Grade',
+    ]);
+
+    return redirect()->back()->with('success', 'Grade Uploaded Successfully');
+}
+
 
     public function updateProfile(Request $request)
     {
