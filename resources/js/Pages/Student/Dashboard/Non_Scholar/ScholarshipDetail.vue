@@ -42,7 +42,7 @@
                                     <p v-if="props.criterias.find(c => c.grade)">
                                         Student General Weighted Average must be at least
                                         <span class="font-semibold">{{props.criterias.find(c => c.grade).grade
-                                        }}</span>
+                                            }}</span>
                                     </p>
 
                                     <!-- Income criteria -->
@@ -119,7 +119,7 @@
                             <template v-if="Array.isArray(parsedCourses) && parsedCourses.length">
                                 <ul class="list-disc pl-5">
                                     <li v-for="(course, index) in parsedCourses" :key="index">
-                                        {{ course.course }}
+                                        {{ course?.course ?? 'All Courses' }}
                                     </li>
                                 </ul>
                             </template>
@@ -261,19 +261,20 @@ const meetsCampusRequirement = (scholarship) => {
     // }
 
     // Look for a matching campus in the selectedCampus array
-    for (const campus of props.selectedCampus) {
-        if (campus.campus_id === props.scholar.campus_id) {
-            // If selected_campus array is empty, any course at this campus is eligible
-            if (campus.selected_campus.includes('')) {
+    for (const campus of props.selectedCampus ?? []) {
+        if (campus?.campus_id === props.scholar?.campus_id) {
+            // If selected_campus array is empty or missing, any course at this campus is eligible
+            if ((campus.selected_campus ?? []).includes('')) {
                 return true;
             }
 
             // If scholar's course is in the selected_campus array, they're eligible
-            if (campus.selected_campus.includes(props.scholar.course.name)) {
+            if ((campus.selected_campus ?? []).includes(props.scholar?.course?.name)) {
                 return true;
             }
         }
     }
+
 
     return false;
 };
