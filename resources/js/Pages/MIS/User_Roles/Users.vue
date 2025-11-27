@@ -94,7 +94,7 @@
 
                                             <!-- Campus -->
                                             <td class="px-6 py-4">
-                                                {{ user.campus.name }}
+                                                {{ user.campus?.name || 'No Campus' }}
                                             </td>
 
                                             <!-- Actions -->
