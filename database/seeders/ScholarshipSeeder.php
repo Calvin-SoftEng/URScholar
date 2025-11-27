@@ -40,7 +40,7 @@ class ScholarshipSeeder extends Seeder
         Sponsor::factory()->create([
             'name' => 'Samsung Scholarship',
             'created_id' => 2,
-            'assign_id' => 7,
+            'assign_id' => 11,
             'abbreviation' => 'SNU',
             'since' => '2001',
             'description' => 'A flagship CSR initiative of the Development Bank of the Philippines (DBP), provides financial assistance to underprivileged high school graduates, aiming to improve their lives and contribute to their development as productive members of society.',
@@ -57,7 +57,7 @@ class ScholarshipSeeder extends Seeder
         //scholarship
         Scholarship::factory()->create([
             'name' => 'Samsung Scholarship Program',
-            'sponsor_id' => 1,
+            'sponsor_id' => 3,
             'user_id' => 2,
             'scholarshipType' => 'Grant-Based',
             'status' => 'Pending',
@@ -65,7 +65,7 @@ class ScholarshipSeeder extends Seeder
 
         Scholarship::factory()->create([
             'name' => 'Kim Jin Foundation',
-            'sponsor_id' => 1,
+            'sponsor_id' => 3,
             'user_id' => 2,
             'scholarshipType' => 'One-time Payment',
             'status' => 'Active',
