@@ -31,7 +31,7 @@ class SendEmail extends Mailable
     {
         return new Envelope(
             from: new Address('urscholar@smis.live', 'URS Scholarship Unit'),
-            subject: $this->mailData['subject'] ?? 'Default Subject',
+            subject: $this->mailData['subject'] ?? 'URScholar Account Registration Successful',
         );
     }
 
