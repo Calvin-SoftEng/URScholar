@@ -218,7 +218,7 @@
             <div class="bg-white dark:bg-dprimary shadow-md p-6 rounded-lg text-center">
                 <div class="flex flex-col sm:flex-row items-center justify-center space-x-4">
                     <!-- Logo -->
-                    <img src="../../../../../assets/images/CHED.png" alt="CHED Logo"
+                    <img :src="`/storage/sponsor/logo/${scholarship.sponsor.logo}`" alt="logo"
                         class="w-16 h-16 object-contain mb-4 sm:mb-0">
 
                     <!-- Scholarship Info -->
