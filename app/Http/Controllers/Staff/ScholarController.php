@@ -49,7 +49,7 @@ class ScholarController extends Controller
                 })
                 ->get();
         } else {
-            $grantees = Grantees::with('scholar', 'scholar.user', 'scholar.campus', 'scholar.course', 'batch')
+            $grantees = Grantees::with('scholar', 'scholar.user', 'scholar.campus', 'scholar.course', 'batch', 'scholarship')
                 ->whereIn('status', ['Accomplished', 'Active'])
                 ->get();
         }
