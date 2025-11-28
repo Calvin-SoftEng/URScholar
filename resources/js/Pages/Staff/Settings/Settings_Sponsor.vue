@@ -409,7 +409,8 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor First
                                                     Name</h3>
-                                                <InputError v-if="errors?.sponsor_first_name" :message="errors.sponsor_first_name"
+                                                <InputError v-if="errors?.sponsor_first_name"
+                                                    :message="errors.sponsor_first_name"
                                                     class="text-2xs text-red-500" />
                                                 <input v-model="form.sponsor_first_name" type="text" id="name"
                                                     placeholder="First Name"
@@ -418,7 +419,8 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Middle
                                                     Name</h3>
-                                                <InputError v-if="errors?.sponsor_middle_name" :message="errors.sponsor_middle_name"
+                                                <InputError v-if="errors?.sponsor_middle_name"
+                                                    :message="errors.sponsor_middle_name"
                                                     class="text-2xs text-red-500" />
                                                 <input v-model="form.sponsor_middle_name" type="text" id="name"
                                                     placeholder="Middle Name"
@@ -427,8 +429,8 @@
                                             <div class="w-full">
                                                 <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Last
                                                     Name</h3>
-                                                <InputError v-if="errors?.sponsor_last_name" :message="errors.sponsor_last_name"
-                                                    class="text-2xs text-red-500" />
+                                                <InputError v-if="errors?.sponsor_last_name"
+                                                    :message="errors.sponsor_last_name" class="text-2xs text-red-500" />
                                                 <input v-model="form.sponsor_last_name" type="text" id="name"
                                                     placeholder="Last Name"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -443,10 +445,11 @@
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
                                             </div>
                                             <div class="w-full">
-                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Contact No.
+                                                <h3 class="font-semibold text-gray-900 dark:text-white">Sponsor Contact
+                                                    No.
                                                 </h3>
-                                                <InputError v-if="errors?.sponsor_number" :message="errors.sponsor_number"
-                                                    class="text-2xs text-red-500" />
+                                                <InputError v-if="errors?.sponsor_number"
+                                                    :message="errors.sponsor_number" class="text-2xs text-red-500" />
                                                 <input v-model="form.sponsor_number" type="text" id="name"
                                                     placeholder="e.g. 09XXXXXXXXX"
                                                     class="bg-gray-50 border border-gray-300 rounded-lg p-2.5 text-gray-900 text-sm w-full dark:bg-gray-900 dark:text-dtext" />
@@ -565,7 +568,7 @@
                                                         alt="Document Icon" class="h-32 mb-2" />
                                                 </template>
                                                 <p class="text-sm text-gray-500">{{ form.fileName || 'Current MOA File'
-                                                }}</p>
+                                                    }}</p>
                                             </div>
                                             <input id="update-dropzone-file" type="file" class="hidden"
                                                 accept=".svg, .png, .jpg, .docx, .doc, .pdf"
@@ -589,7 +592,7 @@
                                         <div class="w-full md:col-span-1 flex items-center">
                                             <span class="font-semibold text-gray-900 dark:text-white">{{
                                                 formatDate(moaItem.created_at)
-                                            }}</span>
+                                                }}</span>
                                         </div>
 
                                         <!-- File name column -->
@@ -995,15 +998,54 @@ const editScholarship = (scholarship) => {
 
 
 const submitForm = async () => {
-    form.value.validity = formattedStartDate.value; // Use .value to get the actual computed value
+    form.value.validity = formattedStartDate.value;
+
     try {
-        if (UpdateMOA.value) {
-            router.put(`/settings/sponsors/${form.value.id}`, form.value);
-        } else {
-            router.post("/settings/sponsors/create", form.value);
+        // Create FormData for file uploads
+        const formData = new FormData();
+
+        // Append all form fields
+        formData.append('name', form.value.name || '');
+        formData.append('abbreviation', form.value.abbreviation || '');
+        formData.append('since', form.value.since || '');
+        formData.append('description', form.value.description || '');
+
+        // Append files if they exist
+        if (form.value.file instanceof File) {
+            formData.append('moa_file', form.value.file);
         }
 
-        closeModal();
+        if (form.value.img instanceof File) {
+            formData.append('logo', form.value.img);
+        }
+
+        // Append focal person details for new sponsors
+        if (!UpdateMOA.value) {
+            formData.append('sponsor_first_name', form.value.sponsor_first_name || '');
+            formData.append('sponsor_middle_name', form.value.sponsor_middle_name || '');
+            formData.append('sponsor_last_name', form.value.sponsor_last_name || '');
+            formData.append('sponsor_number', form.value.sponsor_number || '');
+            formData.append('email', form.value.email || '');
+            formData.append('validity', form.value.validity || '');
+        }
+
+        if (UpdateMOA.value && isEditMode.value) {
+            // For updates, use POST with _method spoofing
+            formData.append('_method', 'PUT');
+            router.post(`/settings/sponsors/${form.value.id}`, formData, {
+                onSuccess: () => {
+                    isEditMode.value = false;
+                    UpdateMOA.value = false;
+                }
+            });
+        } else {
+            router.post("/settings/sponsors/create", formData, {
+                onSuccess: () => {
+                    isTableVisible.value = false;
+                    resetForm();
+                }
+            });
+        }
     } catch (error) {
         console.error("Error submitting form:", error);
     }

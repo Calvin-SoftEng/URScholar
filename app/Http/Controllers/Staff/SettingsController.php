@@ -75,47 +75,33 @@ class SettingsController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'file' => 'required|file',
+            'moa_file' => 'required|file|mimes:svg,png,jpg,jpeg,docx,doc,pdf|max:4096',
             'description' => 'required|string',
-            'img' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'imgName' => 'required|string',
+            'logo' => 'required|image|mimes:jpeg,png,jpg|max:2048',
             'abbreviation' => 'required|string|max:255',
             'since' => 'required|string|max:255',
             'sponsor_first_name' => 'required|string|max:255',
-            'sponsor_middle_name' => 'required|string|max:255',
+            'sponsor_middle_name' => 'nullable|string|max:255',
             'sponsor_last_name' => 'required|string|max:255',
             'sponsor_number' => 'required|string|max:255',
             'email' => 'required|email',
-            'validity' => 'required|date',
+            'validity' => 'required|string',
         ]);
 
-        //d($request);
-
-        // Store the logo file in the local directory with a known path
-        $logoFile = $request->file('img');
-
-        // $logoFileName = $request->imgName;
-        $originalFileName = $logoFile->getClientOriginalName();
-
-
-        Storage::disk('public')->putFileAs('sponsor/logo', $logoFile, $originalFileName);
-
-        $moaFile = $request->file('file');
-        $moa = $moaFile->getClientOriginalName();
+        // Store the logo file
+        $logoFile = $request->file('logo');
+        $logoFileName = time() . '_' . $logoFile->getClientOriginalName();
+        Storage::disk('public')->putFileAs('sponsor/logo', $logoFile, $logoFileName);
 
         // Store the MOA file
+        $moaFile = $request->file('moa_file');
+        $moaFileName = time() . '_' . $moaFile->getClientOriginalName();
+        Storage::disk('public')->putFileAs('sponsor/moa', $moaFile, $moaFileName);
 
-        $filePath = Storage::disk('public')->putFileAs(
-            'sponsor/moa',
-            $request->file('file'),
-            $moa
-        );
-
-        // dd($originalFileName);
-        // Save sponsor record in the database
-
+        // Generate random password
         $password = Str::random(8);
 
+        // Create user account for sponsor
         $user = User::create([
             'name' => $request->sponsor_first_name . " " . $request->sponsor_last_name,
             'first_name' => $request->sponsor_first_name,
@@ -126,12 +112,12 @@ class SettingsController extends Controller
             'password' => bcrypt($password),
         ]);
 
-        // Sending Emails
+        // Send welcome email
         $mailData = [
             'subject' => 'Welcome to URScholar, ' . $request->sponsor_first_name . '!',
             'title' => 'Welcome to the URScholar Portal',
             'body' => "Dear " . $request->sponsor_first_name . " " . $request->sponsor_last_name . ",\n\n" .
-                "Welcome to the URScholar Portal! We’re excited to have you on board as a valued sponsor in our scholarship program.\n\n" .
+                "Welcome to the URScholar Portal! We're excited to have you on board as a valued sponsor in our scholarship program.\n\n" .
                 "Below are your login credentials to access the system:\n\n" .
                 "Email: " . $request->email . "\n" .
                 "Password: " . $password . "\n\n" .
@@ -144,7 +130,7 @@ class SettingsController extends Controller
         $email = new SendEmail($mailData);
         Mail::to($request->email)->send($email);
 
-
+        // Create sponsor record
         $sponsor = Sponsor::create([
             'name' => $request->name,
             'created_id' => Auth::user()->id,
@@ -152,20 +138,21 @@ class SettingsController extends Controller
             'abbreviation' => $request->abbreviation,
             'since' => $request->since,
             'description' => $request->description,
-            'logo' => $originalFileName, // Save only the filename in the database
+            'logo' => $logoFileName,
         ]);
 
+        // Create MOA record
         SponsorMoa::create([
             'sponsor_id' => $sponsor->id,
-            'moa' => $moa,
+            'moa' => $moaFileName,
             'validity' => $request->validity,
             'status' => 'Active',
         ]);
 
-
+        // Log activity
         ActivityLog::create([
             'user_id' => Auth::user()->id,
-            'activity' => 'Create',
+            'activity' => 'Create Sponsor',
             'description' => 'Created a new sponsor: ' . $request->name,
         ]);
 
@@ -225,6 +212,8 @@ class SettingsController extends Controller
             'moa_file' => 'nullable|file|mimes:svg,png,jpg,jpeg,docx,doc,pdf|max:4096',
             'logo' => 'nullable|file|mimes:svg,png,jpg,jpeg|max:4096',
         ]);
+
+        //dd($validated);
 
         // Update basic sponsor information
         $sponsor->name = $validated['name'];
