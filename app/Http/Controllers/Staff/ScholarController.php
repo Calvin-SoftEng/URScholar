@@ -49,7 +49,7 @@ class ScholarController extends Controller
                 })
                 ->get();
         } else {
-            $grantees = Grantees::with('scholar', 'scholar.user', 'scholar.campus', 'scholar.course', 'batch', 'scholarship')
+            $grantees = Grantees::with('scholar', 'scholar.user', 'scholar.campus', 'scholar.course', 'batch', 'scholarship', 'school_year')
                 ->whereIn('status', ['Accomplished', 'Active'])
                 ->get();
         }
@@ -58,6 +58,8 @@ class ScholarController extends Controller
         // we'll keep the grantees collection and pass it directly
 
         $academicYear = AcademicYear::with('school_year')->get();
+        $schoolYear = SchoolYear::all();
+
         $campus = Campus::all();
         $scholarships = Scholarship::all();
 
@@ -67,7 +69,8 @@ class ScholarController extends Controller
             'coordinatorCampus' => Auth::user()->usertype === 'coordinator' ? Auth::user()->campus : null,
             'academicYear' => $academicYear,
             'campus' => $campus,
-            'scholarships'=> $scholarships
+            'scholarships'=> $scholarships,
+            'schoolYear' => $schoolYear,
         ]);
     }
 

@@ -300,6 +300,7 @@ const openGranteeDetails = (grantee) => {
 const props = defineProps({
   grantees: Array,
   academicYear: Array,
+  schoolYear: Array,
   campus: Array,
   scholarships: Array,
   userType: {
@@ -376,8 +377,30 @@ const uniqueScholarsCount = computed(() => {
 
 // Get academic year name by ID
 const getAcademicYearName = (schoolYearId) => {
-  const year = props.academicYear.find(year => year.school_year_id === schoolYearId);
-  return year?.school_year?.name || 'Unknown Academic Year';
+  if (!schoolYearId || !props.academicYear) return 'Unknown Academic Year';
+
+  // Find the academic year entry
+  const yearEntry = props.schoolYear.find(year => year.id === schoolYearId);
+
+  console.log(yearEntry);
+
+  // Return the name from the academicYear object directly
+  if (yearEntry?.year) {
+    return yearEntry.year;
+  }
+
+  // Fallback: check nested school_year object
+  if (yearEntry?.school_year?.year) {
+    return yearEntry.school_year.year;
+  }
+
+  // Last fallback: try direct id match
+  const directMatch = props.schoolYear.find(year => year.id === schoolYearId);
+  if (directMatch?.year) {
+    return directMatch.year;
+  }
+
+  return `Academic Year ${schoolYearId}`;
 };
 
 // Get campus name by ID
