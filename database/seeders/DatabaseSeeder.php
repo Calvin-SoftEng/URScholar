@@ -191,6 +191,22 @@ class DatabaseSeeder extends Seeder
             'picture' => 'men.png',
         ]);
 
+        User::factory()->create([
+            'name' => 'cashier3',
+            'email' => 'pcashier@gmail.com',
+            'first_name' => 'Vincent',
+            'last_name' => 'Carl',
+            'middle_name' => 'N/A',
+            'password' => bcrypt('password'),
+            'usertype' => 'cashier',
+            'campus_id' => '4',
+            'age' => '25',
+            'address' => 'Pililla, Rizal',
+            'contact' => '09999999999',
+            'status' => 'Active',
+            'picture' => 'men.png',
+        ]);
+
         //student
         User::factory()->create([
             'name' => 'student1',
