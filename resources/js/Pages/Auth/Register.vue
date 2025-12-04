@@ -73,7 +73,7 @@ const resendEmail = async () => {
             <div class="relative flex items-center justify-center w-full px-10 py-2">
                 <Link :href="(route('welcome'))">
                     <div class="flex flex-row items-center justify-center gap-2 p-2" v-tooltip="'Back to Home Page'">
-                        <img :src="`/storage/branding/logos/${branding.logo_light}`" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
+                        <img :src="`/storage/branding/logos/${branding.logo_dark}`" alt="Light Mode Logo" class="w-[40px] h-[40px] dark:hidden">
 
                         <span class="font-poppins text-3xl font-bold text-navy tracking-tight">{{branding.branding_name}}</span>
                     </div>
